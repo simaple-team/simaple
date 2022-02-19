@@ -1,0 +1,82 @@
+[tool.poe.tasks]
+_black-check = "black --check ."
+_isort-check = "isort --check-only ."
+formatting-check = ["_black-check", "_isort-check"]
+
+_black = "black ."
+_isort = "isort ."
+format = ["_black", "_isort"]
+
+_pylint = "pylint solution tests"
+lint = ["_pylint"]
+
+coverage = "pytest --cov=simaple"
+coverage-unittest = "pytest --cov=simaple"
+coverage-report = "pytest --cov=simaple --cov-report=xml"
+
+unittest = "pytest -vv -x"
+typetest = "mypy solution tests"
+
+test = ["coverage", "typetest", "lint", "formatting-check"]
+
+[tool.black]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+skip = "third_party"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+[tool.coverage.xml]
+output = "coverage-reports/coverage.xml"
+
+[tool.mypy]
+warn_return_any = true
+warn_unused_configs = true
+incremental = false
+plugins = ["sqlalchemy.ext.mypy.plugin"]
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+
+[tool.poetry]
+name = "simaple"
+version = "0.0.0"
+description = ""
+authors = ["meson324 <meson324@gmail.com>"]
+readme = "README.md"
+repository = "https://github.com/oleneyl/simaple"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pydantic = {extras = ["dotenv"], version = "^1.8.2"}
+dependency-injector = "^4.36.2"
+loguru = "^0.5.3"
+SQLAlchemy = {extras = ["mypy"], version = "^1.4.25"}
+PyMySQL = "^1.0.2"
+fastapi = "^0.70.0"
+uvicorn = "^0.15.0"
+pymongo = "^3.12.1"
+poethepoet = "^0.10.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+isort = "^5.9.3"
+coverage = "^6.0.2"
+pylint = "^2.11.1"
+mypy = "^0.910"
+black = "^21.9b0"
+pytest-cov = "^3.0.0"
+requests = "^2.26.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
