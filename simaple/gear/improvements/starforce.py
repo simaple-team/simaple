@@ -174,13 +174,6 @@ class Starforce(BaseModel):
         return current_improvement
 
     def get_single_starforce_improvement(self, gear: Gear, target_star: int, current_improvement: Stat) -> Stat:
-        """
-        Apply single star and corresponding stats.
-        :param amazing_scroll: True to apply blue star; False to apply yellow star.
-        :param bonus: True to apply bonus stat to blue star; False otherwise.
-        :return: True if applied; False otherwise.
-        :raises AttributeError: If gear is not set.
-        """
         if target_star >= self.max_star(gear):
             raise TypeError('Starforce improvement cannot exceed item constraint')
 
@@ -190,6 +183,7 @@ class Starforce(BaseModel):
         current_gear_stat = current_improvement + gear.stat
         improvement_stat = Stat()
 
+        # Add Basis stats (STR, DEX, INT, LUK)
         job_stat = [
             [StatProps.STR, StatProps.DEX],
             [StatProps.INT, StatProps.LUK],
@@ -207,11 +201,12 @@ class Starforce(BaseModel):
                     for prop_type in job_stat[i]:
                         stat_set.add(prop_type)
 
-
         for prop_type in (StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK):
             if prop_type in stat_set or (target_star > 15 and current_gear_stat.get(prop_type.value) > 0):
                 improvement_stat += Stat.parse_obj({prop_type.value: stat_starforce_increment})
 
+
+        # Add attack props (attack_power, magic_attack)
         if self.gear_starforce_type_is_weapon(gear):
             use_mad = gear.req_job == 0 or gear.req_job // 2 % 2 == 1 or current_gear_stat.magic_attack > 0
             if target_star > 15:
@@ -239,6 +234,7 @@ class Starforce(BaseModel):
                         attack_power=get_glove_starforce_bonus(target_star),
                     )
 
+        # Add MHP, MMP
         mhp_types = [GearType.cap, GearType.coat, GearType.longcoat, GearType.pants, GearType.cape, GearType.ring,
                         GearType.pendant, GearType.belt, GearType.shoulder_pad, GearType.shield]
         
@@ -249,7 +245,6 @@ class Starforce(BaseModel):
             improvement_stat += Stat(MHP=get_mhp_starforce_bonus(target_star))
 
         return improvement_stat
-
 
     def apply_superior_star(self, gear: Gear, target_star: int) -> Stat:
         if target_star >= gear.max_star:
