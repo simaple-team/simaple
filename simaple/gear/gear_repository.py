@@ -50,22 +50,18 @@ class GearRepository:
 
     def _get_gear(self, gear_id: int) -> Stat:
         dumped_gear = self._bare_gears[str(gear_id)]
-
-        ability = {
+        stat = {
             'STR': dumped_gear.get('STR', 0),
             'INT': dumped_gear.get('INT', 0),
             'DEX': dumped_gear.get('DEX', 0),
             'LUK': dumped_gear.get('LUK', 0),
         }
 
-        stat = {}
         for k, v in dumped_gear.items():
             for variable_name, simaple_name in GEAR_VARIABLE_NAMES:
                 if variable_name == k:
                     stat[simaple_name] = v
                     continue
-
-        stat['ability'] = ability
 
         gear_opt = {
             'stat': stat,
