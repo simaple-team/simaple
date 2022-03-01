@@ -15,12 +15,12 @@ TEST_CASES_ARMOR = [
     (1102794, 1, Stat(INT=2, LUK=2, MHP=5)),
     (1102794, 3, Stat(INT=2, LUK=2, MHP=5) ),
     (1102794, 6, Stat(INT=3, LUK=3, MHP=15) ),
-    (1102794, 18, Stat(INT=13, LUK=13, attack_power=12, magic_attack=12)),
+    (1102794, 18, Stat(INT=13, LUK=13, STR=13, DEX=13, attack_power=12, magic_attack=12)),
 
     (1102942, 1, Stat(DEX=2, STR=2, MHP=5)),
     (1102942, 3, Stat(DEX=2, STR=2, MHP=5) ),
     (1102942, 5, Stat(DEX=2, STR=2, MHP=10) ),
-    (1102942, 18, Stat(DEX=15, STR=15, attack_power=14, magic_attack=14)),
+    (1102942, 18, Stat(DEX=15, STR=15, INT=15, LUK=15, attack_power=14, magic_attack=14)),
 ]
 
 
