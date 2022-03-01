@@ -122,9 +122,18 @@ def get_starforce_increment(gear: Gear, target_star: int, amazing_scroll: bool, 
     raise ValueError("Given setting not available")
 
 
-class Starforce(BaseModel):
-    type: Literal['Starforce'] = 'Starforce'
+class Enhancement(GearImprovement):
+    type: Literal['Enhancement'] = 'Enhancement'
     star: int
+    enhancement_type: Literal['Starforce', 'Amazing']
+
+    def gear_starforce_type_is_weapon(self, gear) -> bool:
+        return gear.is_weapon() or gear.type == GearType.katara
+
+
+
+class Starforce(Enhancement):
+    enhancement_type: Literal['Starforce'] = 'Starforce'
 
     def max_star(self, gear: Gear) -> int:
         """
@@ -155,27 +164,32 @@ class Starforce(BaseModel):
             return 0
         return data[2 if gear.superior_eqp else 1]
 
-    def gear_starforce_type_is_weapon(self, gear) -> bool:
-        return gear.is_weapon() or gear.type == GearType.katara
-
     def calculate_improvement(self, gear) -> int:
-        """
-        Apply multiple stars and corresponding stats.
-        :param count: Number for stars to apply.
-        :param amazing_scroll: True to apply blue star; False to apply yellow star.
-        :param bonus: True to apply bonus stat to blue star; False otherwise.
-        :return: Number of increased stars.
-        :raises AttributeError: If gear is not set.
-        """
         current_improvement = Stat()
         for i in range(1, self.star + 1):
             current_improvement = current_improvement + self.get_single_starforce_improvement(gear, i, current_improvement)
         
         return current_improvement
 
+    def get_single_superior_starforce_improvement(self, gear: Gear, target_star: int) -> Stat:
+        stat_starforce_increment = get_starforce_increment(gear, target_star, amazing_scroll=True, att=False)
+        att_starforce_increment = get_starforce_increment(gear, target_star, amazing_scroll=True, att=True)
+
+        return Stat(
+            attack_power=att_starforce_increment,
+            magic_attack=att_starforce_increment,
+            LUK=stat_starforce_increment,
+            STR=stat_starforce_increment,
+            INT=stat_starforce_increment,
+            DEX=stat_starforce_increment,
+        )
+
     def get_single_starforce_improvement(self, gear: Gear, target_star: int, current_improvement: Stat) -> Stat:
         if target_star >= self.max_star(gear):
             raise TypeError('Starforce improvement cannot exceed item constraint')
+
+        if gear.superior_eqp:
+            return self.get_single_superior_starforce_improvement(gear, target_star)
 
         stat_starforce_increment = get_starforce_increment(gear, target_star, amazing_scroll=False, att=False)
         att_starforce_increment = get_starforce_increment(gear, target_star, amazing_scroll=False, att=True)
@@ -246,50 +260,38 @@ class Starforce(BaseModel):
 
         return improvement_stat
 
+
+class AmazingEnhancement(Enhancement):
+    enhancement_type: Literal['Amazing'] = 'Amazing'
+
+    def stat_bonus(self, gear, target_star):
+        return (2 if target_star > 5 else 1) if bonus and Gear.is_accessory(gear.type) else 0
+
+    def att_bonus(self, gear, target_star):
+        return 1 if bonus and (is_weapon or gear.type == GearType.shield) else 0
+
     def apply_superior_star(self, gear: Gear, target_star: int) -> Stat:
-        if target_star >= gear.max_star:
+        if target_star >= self.max_star(gear):
             raise TypeError('Starforce improvement cannot exceed item constraint')
 
-        star = target_star
+        current_gear_stat = current_improvement + gear.stat
+        improvement_stat = Stat()
 
-        stat_data = get_starforce_increment(gear, target_star, amazing_scroll=False, att=False)
-        att_data = get_starforce_increment(gear, target_star, amazing_scroll=False, att=True)
+        stat_enhancement_increment = get_starforce_increment(gear, target_star, amazing_scroll=True, att=False) + self.stat_bonus(gear, target_star)
+        att_enhancement_increment = get_starforce_increment(gear, target_star, amazing_scroll=True, att=True) + self.att_bonus(gear, target_star)
 
-        is_weapon = gear.is_weapon() or gear.type == GearType.katara
+        for prop_type in (StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK):
+            if current_gear_stat.get(prop_type) > 0:
+                improvement_stat += Stat.parse_obj({
+                    prop_type.value: stat_enhancement_increment
+                })
 
-        if gear.superior_eqp:
-            for prop_type in (StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK):
-                gear.star_stat[prop_type] += stat_data[star]
-            for att_type in (StatProps.att, StatProps.matt):
-                gear.star_stat[att_type] += att_data[star]
-            # pdd = (gear.base_stat[StatProps.incPDD] +
-            #        gear.scroll_stat[StatProps.incPDD] +
-            #        gear.star_stat[StatProps.incPDD])
-            # gear.star_stat[StatProps.incPDD] += pdd // 20 + 1
-        else:
-            stat_bonus = (2 if star > 5 else 1) if bonus and Gear.is_accessory(gear.type) else 0
-            for prop_type in (StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK):
-                if (gear.base_stat[prop_type] +
-                        gear.additional_stat[prop_type] +
-                        gear.scroll_stat[prop_type] +
-                        gear.star_stat[prop_type] > 0):
-                    gear.star_stat[prop_type] += stat_data[star] + stat_bonus
-
-            att_bonus = 1 if bonus and (is_weapon or gear.type == GearType.shield) else 0
-            for att_type in (StatProps.att, StatProps.matt):
-                att = (gear.base_stat[att_type] +
-                       gear.additional_stat[att_type] +
-                       gear.scroll_stat[att_type] +
-                       gear.star_stat[att_type])
-                if att > 0:
-                    gear.star_stat[att_type] += att_data[star] + att_bonus
-                    if is_weapon:
-                        gear.star_stat[att_type] += att // 50 + 1
-            # pdd = (gear.base_stat[StatProps.incPDD] +
-            #        gear.additional_stat[StatProps.incPDD] +
-            #        gear.scroll_stat[StatProps.incPDD] +
-            #        gear.star_stat[StatProps.incPDD])
-            # gear.star_stat[StatProps.incPDD] += pdd // 20 + 1
-            # if bonus and Gear.is_armor(gear.type):
-            #     gear.star_stat[StatProps.incPDD] += 50
-            gear.amazing_scroll = True
+        for att_type in (StatProps.att, StatProps.matt):
+            if current_gear_stat.get(att_type) > 0:
+                improvement_stat += Stat.parse_obj({
+                    prop_type.value: att_enhancement_increment
+                })
+                if self.gear_starforce_type_is_weapon(gear):
+                    improvement_stat += Stat.parse_obj({
+                        prop_type.value: current_gear_stat.get(att_type) // 50 + 1
+                    })
