@@ -71,11 +71,12 @@ class GearRepository:
             'stat': stat,
             'req_level': dumped_gear['req_level'],
             'name': dumped_gear['name'],
-            'scroll_chance_left': dumped_gear.get('tuc', 0),
+            'scroll_chance': dumped_gear.get('tuc', 0),
             'type': self.get_gear_type(gear_id),
             'id': gear_id,
             'boss_reward': dumped_gear.get('boss_reward', False),
-            'superior_eqp': dumped_gear.get('superior_eqp', False)
+            'superior_eqp': dumped_gear.get('superior_eqp', False),
+            'req_job': dumped_gear.get('req_job', 0),
         }
 
         gear = Gear.parse_obj(gear_opt)

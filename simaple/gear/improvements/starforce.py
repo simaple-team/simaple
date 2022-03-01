@@ -1,9 +1,10 @@
-from simaple.core.base import Stat, Ability
+from simaple.core.base import Stat, StatProps
 from pydantic import BaseModel, conint
 from simaple.gear.gear_type import GearType
 from simaple.gear.gear import Gear
 from simaple.gear.improvements.base import GearImprovement
-from typing import Literal
+
+from typing import Literal, List
 
 import enum
 import math
@@ -18,7 +19,7 @@ class Starforce(BaseModel):
         Returns the number of gear's max star.
         :return: The number of gear's max star.
         """
-        if gear.tuc <= 0:
+        if gear.scroll_chance <= 0:
             return 0
         if gear.is_mechanic_gear() or gear.is_dragon_gear():
             return 0
@@ -43,7 +44,7 @@ class Starforce(BaseModel):
         return data[2 if gear.superior_eqp else 1]
 
 
-    def apply_stars(self, count: int, amazing_scroll: bool = False, bonus: bool = False) -> int:
+    def calculate_improvement(self, gear) -> int:
         """
         Apply multiple stars and corresponding stats.
         :param count: Number for stars to apply.
@@ -52,13 +53,12 @@ class Starforce(BaseModel):
         :return: Number of increased stars.
         :raises AttributeError: If gear is not set.
         """
-        suc = 0
-        for i in range(0, count):
-            suc += 1 if self.apply_star(amazing_scroll, bonus) else 0
-        return suc
+        current_improvement = Stat()
+        for i in range(1, self.star + 1):
+            current_improvement = current_improvement + self.get_single_starforce_improvement(gear, i, current_improvement)
+        return current_improvement
 
-
-    def apply_star(self, gear: Gear, current_star: int) -> Stat:
+    def get_single_starforce_improvement(self, gear: Gear, target_star: int, current_improvement: Stat) -> Stat:
         """
         Apply single star and corresponding stats.
         :param amazing_scroll: True to apply blue star; False to apply yellow star.
@@ -66,126 +66,129 @@ class Starforce(BaseModel):
         :return: True if applied; False otherwise.
         :raises AttributeError: If gear is not set.
         """
-        if current_star >= gear.max_star:
+        if target_star >= self.max_star(gear):
             raise TypeError('Starforce improvement cannot exceed item constraint')
 
-        star = current_star
+        stat_data = _get_star_data(gear, amazing_scroll=False, att=False)
+        att_data = _get_star_data(gear, amazing_scroll=False, att=True)
+        current_gear_stat = current_improvement + gear.stat
 
-        stat_data = _get_star_data(self.gear, amazing_scroll=False, att=False)
-        att_data = _get_star_data(self.gear, amazing_scroll=False, att=True)
 
         is_weapon = gear.is_weapon() or gear.type == GearType.katara
 
-        if self.gear.superior_eqp:
-            for prop_type in (GearPropType.STR, GearPropType.DEX, GearPropType.INT, GearPropType.LUK):
-                self.gear.star_stat[prop_type] += stat_data[star]
-            for att_type in (GearPropType.att, GearPropType.matt):
-                self.gear.star_stat[att_type] += att_data[star]
-            # pdd = (self.gear.base_stat[GearPropType.incPDD] +
-            #        self.gear.scroll_stat[GearPropType.incPDD] +
-            #        self.gear.star_stat[GearPropType.incPDD])
-            # self.gear.star_stat[GearPropType.incPDD] += pdd // 20 + 1
-        elif not amazing_scroll:
-            job_stat = [
-                [GearPropType.STR, GearPropType.DEX],
-                [GearPropType.INT, GearPropType.LUK],
-                [GearPropType.DEX, GearPropType.STR],
-                [GearPropType.LUK, GearPropType.DEX],
-                [GearPropType.STR, GearPropType.DEX],
-            ]
-            stat_set: Set[GearPropType]
-            req_job = self.gear.req_job
-            if req_job == 0:
-                stat_set = {GearPropType.STR, GearPropType.DEX, GearPropType.INT, GearPropType.LUK}
-            else:
-                stat_set = set()
-                for i in range(0, 5):
-                    if req_job & (1 << i) != 0:
-                        for prop_type in job_stat[i]:
-                            stat_set.add(prop_type)
-            for prop_type in (GearPropType.STR, GearPropType.DEX, GearPropType.INT, GearPropType.LUK):
-                if prop_type in stat_set:
-                    self.gear.star_stat[prop_type] += stat_data[star]
-                elif star > 15 and self.gear.base_stat[prop_type] + self.gear.scroll_stat[prop_type] > 0:
-                    self.gear.star_stat[prop_type] += stat_data[star]
+        job_stat = [
+            [StatProps.STR, StatProps.DEX],
+            [StatProps.INT, StatProps.LUK],
+            [StatProps.DEX, StatProps.STR],
+            [StatProps.LUK, StatProps.DEX],
+            [StatProps.STR, StatProps.DEX],
+        ]
+        stat_set: Set[StatProps]
 
-            if is_weapon:
-                use_mad = req_job == 0 or req_job // 2 % 2 == 1 or self.gear.scroll_stat[GearPropType.matt] > 0
-                if star > 15:
-                    self.gear.star_stat[GearPropType.att] += att_data[star]
-                    if use_mad:
-                        self.gear.star_stat[GearPropType.matt] += att_data[star]
-                else:
-                    pad = (self.gear.base_stat[GearPropType.att] +
-                           self.gear.scroll_stat[GearPropType.att] +
-                           self.gear.star_stat[GearPropType.att])
-                    self.gear.star_stat[GearPropType.att] += pad // 50 + 1
-                    if use_mad:
-                        mad = (self.gear.base_stat[GearPropType.matt] +
-                               self.gear.scroll_stat[GearPropType.matt] +
-                               self.gear.star_stat[GearPropType.matt])
-                        self.gear.star_stat[GearPropType.matt] += mad // 50 + 1
-            else:
-                self.gear.star_stat[GearPropType.att] += att_data[star]
-                self.gear.star_stat[GearPropType.matt] += att_data[star]
-                if self.gear.type == GearType.glove:
-                    glove_bonus = [0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                    if req_job == 0:
-                        self.gear.star_stat[GearPropType.att] += glove_bonus[star]
-                        self.gear.star_stat[GearPropType.matt] += glove_bonus[star]
-                    elif req_job // 2 % 2 == 1:
-                        self.gear.star_stat[GearPropType.matt] += glove_bonus[star]
-                    else:
-                        self.gear.star_stat[GearPropType.att] += glove_bonus[star]
+        improvement_stat = Stat()
 
-            if not is_weapon and self.gear.type != GearType.machine_heart:
-                # pdd = (self.gear.base_stat[GearPropType.incPDD] +
-                #        self.gear.scroll_stat[GearPropType.incPDD] +
-                #        self.gear.star_stat[GearPropType.incPDD])
-                # self.gear.star_stat[GearPropType.incPDD] += pdd // 20 + 1
-                pass
-
-            mhp_data = [0, 5, 5, 5, 10, 10, 15, 15, 20, 20, 25, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            mhp_types = [GearType.cap, GearType.coat, GearType.longcoat, GearType.pants, GearType.cape, GearType.ring,
-                         GearType.pendant, GearType.belt, GearType.shoulder_pad, GearType.shield]
-            if is_weapon:
-                self.gear.star_stat[GearPropType.MHP] += mhp_data[star]
-                self.gear.star_stat[GearPropType.MMP] += mhp_data[star]
-            elif self.gear.type in mhp_types:
-                self.gear.star_stat[GearPropType.MHP] += mhp_data[star]
-
-            # if self.gear.type == GearType.shoes:
-                # speed_jump_data = [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                # self.gear.star_stat[GearPropType.incSpeed] += speed_jump_data[star]
-                # self.gear.star_stat[GearPropType.incJump] += speed_jump_data[star]
+        req_job = gear.req_job
+        if req_job == 0:
+            stat_set = {StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK}
         else:
-            stat_bonus = (2 if star > 5 else 1) if bonus and Gear.is_accessory(self.gear.type) else 0
-            for prop_type in (GearPropType.STR, GearPropType.DEX, GearPropType.INT, GearPropType.LUK):
-                if (self.gear.base_stat[prop_type] +
-                        self.gear.additional_stat[prop_type] +
-                        self.gear.scroll_stat[prop_type] +
-                        self.gear.star_stat[prop_type] > 0):
-                    self.gear.star_stat[prop_type] += stat_data[star] + stat_bonus
+            stat_set = set()
+            for i in range(0, 5):
+                if req_job & (1 << i) != 0:
+                    for prop_type in job_stat[i]:
+                        stat_set.add(prop_type)
 
-            att_bonus = 1 if bonus and (is_weapon or self.gear.type == GearType.shield) else 0
-            for att_type in (GearPropType.att, GearPropType.matt):
-                att = (self.gear.base_stat[att_type] +
-                       self.gear.additional_stat[att_type] +
-                       self.gear.scroll_stat[att_type] +
-                       self.gear.star_stat[att_type])
+
+        for prop_type in (StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK):
+            if prop_type in stat_set or (target_star > 15 and current_gear_stat.get(prop_type.value) > 0):
+                improvement_stat += Stat.parse_obj({prop_type.value: stat_data[target_star]})
+
+        if is_weapon:
+            use_mad = req_job == 0 or req_job // 2 % 2 == 1 or current_gear_stat.magic_attack > 0
+            if target_star > 15:
+                improvement_stat += Stat(attack_power=att_data[target_star])
+                if use_mad:
+                    improvement_stat += Stat(magic_attack=att_data[target_star])
+            else:
+                improvement_stat += Stat(attack_power=current_gear_stat.attack_power // 50 + 1)
+                if use_mad:
+                    improvement_stat += Stat(magic_attack=current_gear_stat.magic_attack // 50 + 1)
+        else:
+            improvement_stat += Stat(attack_power=att_data[target_star], magic_attack=att_data[target_star])
+            if gear.type == GearType.glove:
+                glove_bonus = [0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                if req_job == 0:
+                    improvement_stat += Stat(
+                        attack_power=glove_bonus[target_star],
+                        magic_attack=glove_bonus[target_star],
+                    )
+                elif req_job // 2 % 2 == 1:
+                    improvement_stat += Stat(
+                        magic_attack=glove_bonus[target_star],
+                    )
+                else:
+                    improvement_stat += Stat(
+                        attack_power=glove_bonus[target_star],
+                    )
+
+        mhp_data = [0, 5, 5, 5, 10, 10, 15, 15, 20, 20, 25, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        mhp_types = [GearType.cap, GearType.coat, GearType.longcoat, GearType.pants, GearType.cape, GearType.ring,
+                        GearType.pendant, GearType.belt, GearType.shoulder_pad, GearType.shield]
+        if is_weapon:
+            improvement_stat += Stat(MHP=mhp_data[target_star])
+            improvement_stat += Stat(MMP=mhp_data[target_star])
+        elif gear.type in mhp_types:
+            improvement_stat += Stat(MHP=mhp_data[target_star])
+
+        return improvement_stat
+
+
+    def apply_superior_star(self, gear: Gear, target_star: int) -> Stat:
+        if target_star >= gear.max_star:
+            raise TypeError('Starforce improvement cannot exceed item constraint')
+
+        star = target_star
+
+        stat_data = _get_star_data(gear, amazing_scroll=False, att=False)
+        att_data = _get_star_data(gear, amazing_scroll=False, att=True)
+
+        is_weapon = gear.is_weapon() or gear.type == GearType.katara
+
+        if gear.superior_eqp:
+            for prop_type in (StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK):
+                gear.star_stat[prop_type] += stat_data[star]
+            for att_type in (StatProps.att, StatProps.matt):
+                gear.star_stat[att_type] += att_data[star]
+            # pdd = (gear.base_stat[StatProps.incPDD] +
+            #        gear.scroll_stat[StatProps.incPDD] +
+            #        gear.star_stat[StatProps.incPDD])
+            # gear.star_stat[StatProps.incPDD] += pdd // 20 + 1
+        else:
+            stat_bonus = (2 if star > 5 else 1) if bonus and Gear.is_accessory(gear.type) else 0
+            for prop_type in (StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK):
+                if (gear.base_stat[prop_type] +
+                        gear.additional_stat[prop_type] +
+                        gear.scroll_stat[prop_type] +
+                        gear.star_stat[prop_type] > 0):
+                    gear.star_stat[prop_type] += stat_data[star] + stat_bonus
+
+            att_bonus = 1 if bonus and (is_weapon or gear.type == GearType.shield) else 0
+            for att_type in (StatProps.att, StatProps.matt):
+                att = (gear.base_stat[att_type] +
+                       gear.additional_stat[att_type] +
+                       gear.scroll_stat[att_type] +
+                       gear.star_stat[att_type])
                 if att > 0:
-                    self.gear.star_stat[att_type] += att_data[star] + att_bonus
+                    gear.star_stat[att_type] += att_data[star] + att_bonus
                     if is_weapon:
-                        self.gear.star_stat[att_type] += att // 50 + 1
-            # pdd = (self.gear.base_stat[GearPropType.incPDD] +
-            #        self.gear.additional_stat[GearPropType.incPDD] +
-            #        self.gear.scroll_stat[GearPropType.incPDD] +
-            #        self.gear.star_stat[GearPropType.incPDD])
-            # self.gear.star_stat[GearPropType.incPDD] += pdd // 20 + 1
-            # if bonus and Gear.is_armor(self.gear.type):
-            #     self.gear.star_stat[GearPropType.incPDD] += 50
-            self.gear.amazing_scroll = True
-        return True
+                        gear.star_stat[att_type] += att // 50 + 1
+            # pdd = (gear.base_stat[StatProps.incPDD] +
+            #        gear.additional_stat[StatProps.incPDD] +
+            #        gear.scroll_stat[StatProps.incPDD] +
+            #        gear.star_stat[StatProps.incPDD])
+            # gear.star_stat[StatProps.incPDD] += pdd // 20 + 1
+            # if bonus and Gear.is_armor(gear.type):
+            #     gear.star_stat[StatProps.incPDD] += 50
+            gear.amazing_scroll = True
 
 
 
@@ -197,7 +200,7 @@ def _get_star_data(gear: Gear, amazing_scroll: bool, att: bool) -> List[int]:
             data = __superior_stat_data
     elif not amazing_scroll:
         if att:
-            if Gear.is_weapon(gear.type) or gear.type == GearType.katara:
+            if gear.is_weapon() or gear.type == GearType.katara:
                 data = __starforce_weapon_att_data
             else:
                 data = __starforce_att_data

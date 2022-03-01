@@ -1,22 +1,22 @@
 from simaple.gear.improvements.bonus import BonusType, Bonus
 from simaple.gear.gear_repository import GearRepository
-from simaple.core.base import Stat, Ability
+from simaple.core.base import Stat
 
 import pytest
 from loguru import logger
 
 TEST_CASES_ARMOR = [
-    (1005197, BonusType.DEX, 3, Stat(ability=Ability(DEX=24))),
-    (1005197, BonusType.DEX, 7, Stat(ability=Ability(DEX=56))),
-    (1005197, BonusType.STR_DEX, 3, Stat(ability=Ability(DEX=12, STR=12))),
+    (1005197, BonusType.DEX, 3, Stat(DEX=24)),
+    (1005197, BonusType.DEX, 7, Stat(DEX=56)),
+    (1005197, BonusType.STR_DEX, 3, Stat(DEX=12, STR=12)),
 
-    (1102794, BonusType.DEX, 3, Stat(ability=Ability(DEX=27))),
-    (1102794, BonusType.DEX, 7, Stat(ability=Ability(DEX=63))),
-    (1102794, BonusType.STR_DEX, 3, Stat(ability=Ability(DEX=15, STR=15))),
+    (1102794, BonusType.DEX, 3, Stat(DEX=27)),
+    (1102794, BonusType.DEX, 7, Stat(DEX=63)),
+    (1102794, BonusType.STR_DEX, 3, Stat(DEX=15, STR=15)),
 
-    (1102942, BonusType.DEX, 3, Stat(ability=Ability(DEX=33))),
-    (1102942, BonusType.DEX, 7, Stat(ability=Ability(DEX=77))),
-    (1102942, BonusType.STR_DEX, 3, Stat(ability=Ability(DEX=18, STR=18))),
+    (1102942, BonusType.DEX, 3, Stat(DEX=33)),
+    (1102942, BonusType.DEX, 7, Stat(DEX=77)),
+    (1102942, BonusType.STR_DEX, 3, Stat(DEX=18, STR=18)),
 
     (1005197, BonusType.magic_attack, 3, Stat(magic_attack=3)),
     (1005197, BonusType.attack_power, 5, Stat(attack_power=5)),

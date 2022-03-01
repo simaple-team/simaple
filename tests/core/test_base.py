@@ -1,29 +1,23 @@
 import pytest
-from simaple.core.base import Ability, Stat
+from simaple.core.base import Stat
 
-ABILITY_TEST_CASE = [
+
+TEST_CASES = [
+
     ("STR", 3, 4, 7),
     ("LUK", 3, 4, 7),
     ("INT", 3, 4, 7),
     ("DEX", 3, 4, 7),
-]
 
-@pytest.mark.parametrize("stat_name, a, b, c", ABILITY_TEST_CASE)
-def test_ability(stat_name, a, b, c):
-    ability_a = Ability(**{stat_name: a})
-    ability_b = Ability(**{stat_name: b})
+    ("STR_multiplier", 3, 4, 7),
+    ("LUK_multiplier", 3, 4, 7),
+    ("INT_multiplier", 3, 4, 7),
+    ("DEX_multiplier", 3, 4, 7),
 
-    ability_c = Ability(**{stat_name: c})
-
-    result = ability_a + ability_b
-    
-    assert getattr(result, stat_name) == getattr(ability_c, stat_name)
-
-
-TEST_CASES = [
-    ("ability", Ability(STR=3), Ability(STR=4), Ability(STR=7)),
-    ("ability_multiplier", Ability(STR=3), Ability(STR=4), Ability(STR=7)),
-    ("ability_static", Ability(STR=3), Ability(STR=4), Ability(STR=7)),
+    ("STR_static", 3, 4, 7),
+    ("LUK_static", 3, 4, 7),
+    ("INT_static", 3, 4, 7),
+    ("DEX_static", 3, 4, 7),
 
     ("attack_power", 3, 4, 7),
     ("magic_attack", 3, 4, 7),

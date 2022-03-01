@@ -1,4 +1,4 @@
-from simaple.core.base import Stat, Ability
+from simaple.core.base import Stat
 from pydantic import BaseModel, conint
 from simaple.gear.gear_type import GearType
 from simaple.gear.gear import Gear
@@ -51,7 +51,7 @@ class Bonus(GearImprovement):
             BonusType.STR, BonusType.DEX, BonusType.INT, BonusType.LUK
         ):
             value = ((gear.req_level // 20 + 1) * self.grade)
-            return Stat(ability=Ability.parse_obj({self.bonus_type.value: value}))
+            return Stat.parse_obj({self.bonus_type.value: value})
 
         if self.bonus_type in (
             BonusType.STR_DEX, BonusType.STR_INT, BonusType.STR_LUK, BonusType.DEX_INT, BonusType.DEX_LUK, BonusType.INT_LUK
@@ -59,7 +59,7 @@ class Bonus(GearImprovement):
             value = ((gear.req_level // 40 + 1) * self.grade)
             ability_a, ability_b = str(self.bonus_type.value).split('_')
             
-            return Stat(ability=Ability.parse_obj({ability_a: value, ability_b: value}))
+            return Stat.parse_obj({ability_a: value, ability_b: value})
 
         if self.bonus_type == BonusType.boss_damage_multiplier:
             return Stat(boss_damage_multiplier=self.grade * 2)

@@ -13,9 +13,10 @@ class Gear(BaseModel):
     name: str
     type: GearType
     req_level: int
-    scroll_chance_left: int
+    scroll_chance: int
     boss_reward: bool
     superior_eqp: bool
+    req_job: int = 0
 
     def is_weapon(self) -> bool:
         return GearType.is_weapon(self.type)
