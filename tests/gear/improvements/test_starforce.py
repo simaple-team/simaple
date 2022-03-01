@@ -82,7 +82,7 @@ def test_get_starforce_improvement(gear_id, star, scroll, target):
 
     gear = repository.get_by_id(gear_id)
     gear.stat += scroll
-    starforce = Starforce(star=star)  # For single-starforce test, set as maximum
+    starforce = Starforce(star=star)
 
     starforce_stat = starforce.calculate_improvement(gear)
     logger.info(starforce_stat)
