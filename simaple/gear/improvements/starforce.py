@@ -82,6 +82,18 @@ __amazing_stat_increments = [
 ]
 
 
+__glove_starforce_bonus = [0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+__mhp_starforce_bonus = [0, 5, 5, 5, 10, 10, 15, 15, 20, 20, 25, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+
+def get_glove_starforce_bonus(target_star: int):
+    return __glove_starforce_bonus[target_star]
+
+
+def get_mhp_starforce_bonus(target_star: int):
+    return __mhp_starforce_bonus[target_star]
+
 
 def get_starforce_increment(gear: Gear, target_star: int, amazing_scroll: bool, att: bool) -> int:
     if gear.superior_eqp:
@@ -143,6 +155,8 @@ class Starforce(BaseModel):
             return 0
         return data[2 if gear.superior_eqp else 1]
 
+    def gear_starforce_type_is_weapon(self, gear) -> bool:
+        return gear.is_weapon() or gear.type == GearType.katara
 
     def calculate_improvement(self, gear) -> int:
         """
@@ -156,6 +170,7 @@ class Starforce(BaseModel):
         current_improvement = Stat()
         for i in range(1, self.star + 1):
             current_improvement = current_improvement + self.get_single_starforce_improvement(gear, i, current_improvement)
+        
         return current_improvement
 
     def get_single_starforce_improvement(self, gear: Gear, target_star: int, current_improvement: Stat) -> Stat:
@@ -171,10 +186,9 @@ class Starforce(BaseModel):
 
         stat_starforce_increment = get_starforce_increment(gear, target_star, amazing_scroll=False, att=False)
         att_starforce_increment = get_starforce_increment(gear, target_star, amazing_scroll=False, att=True)
+        
         current_gear_stat = current_improvement + gear.stat
-
-
-        is_weapon = gear.is_weapon() or gear.type == GearType.katara
+        improvement_stat = Stat()
 
         job_stat = [
             [StatProps.STR, StatProps.DEX],
@@ -183,17 +197,13 @@ class Starforce(BaseModel):
             [StatProps.LUK, StatProps.DEX],
             [StatProps.STR, StatProps.DEX],
         ]
-        stat_set: Set[StatProps]
+        stat_set: Set[StatProps] = set()
 
-        improvement_stat = Stat()
-
-        req_job = gear.req_job
-        if req_job == 0:
+        if gear.req_job == 0:
             stat_set = {StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK}
         else:
-            stat_set = set()
             for i in range(0, 5):
-                if req_job & (1 << i) != 0:
+                if gear.req_job & (1 << i) != 0:
                     for prop_type in job_stat[i]:
                         stat_set.add(prop_type)
 
@@ -202,8 +212,8 @@ class Starforce(BaseModel):
             if prop_type in stat_set or (target_star > 15 and current_gear_stat.get(prop_type.value) > 0):
                 improvement_stat += Stat.parse_obj({prop_type.value: stat_starforce_increment})
 
-        if is_weapon:
-            use_mad = req_job == 0 or req_job // 2 % 2 == 1 or current_gear_stat.magic_attack > 0
+        if self.gear_starforce_type_is_weapon(gear):
+            use_mad = gear.req_job == 0 or gear.req_job // 2 % 2 == 1 or current_gear_stat.magic_attack > 0
             if target_star > 15:
                 improvement_stat += Stat(attack_power=att_starforce_increment)
                 if use_mad:
@@ -215,29 +225,28 @@ class Starforce(BaseModel):
         else:
             improvement_stat += Stat(attack_power=att_starforce_increment, magic_attack=att_starforce_increment)
             if gear.type == GearType.glove:
-                glove_bonus = [0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                if req_job == 0:
+                if gear.req_job == 0:
                     improvement_stat += Stat(
-                        attack_power=glove_bonus[target_star],
-                        magic_attack=glove_bonus[target_star],
+                        attack_power=get_glove_starforce_bonus(target_star),
+                        magic_attack=get_glove_starforce_bonus(target_star),
                     )
-                elif req_job // 2 % 2 == 1:
+                elif gear.req_job // 2 % 2 == 1:
                     improvement_stat += Stat(
-                        magic_attack=glove_bonus[target_star],
+                        magic_attack=get_glove_starforce_bonus(target_star),
                     )
                 else:
                     improvement_stat += Stat(
-                        attack_power=glove_bonus[target_star],
+                        attack_power=get_glove_starforce_bonus(target_star),
                     )
 
-        mhp_data = [0, 5, 5, 5, 10, 10, 15, 15, 20, 20, 25, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         mhp_types = [GearType.cap, GearType.coat, GearType.longcoat, GearType.pants, GearType.cape, GearType.ring,
                         GearType.pendant, GearType.belt, GearType.shoulder_pad, GearType.shield]
-        if is_weapon:
-            improvement_stat += Stat(MHP=mhp_data[target_star])
-            improvement_stat += Stat(MMP=mhp_data[target_star])
+        
+        if self.gear_starforce_type_is_weapon(gear):
+            improvement_stat += Stat(MHP=get_mhp_starforce_bonus(target_star))
+            improvement_stat += Stat(MMP=get_mhp_starforce_bonus(target_star))
         elif gear.type in mhp_types:
-            improvement_stat += Stat(MHP=mhp_data[target_star])
+            improvement_stat += Stat(MHP=get_mhp_starforce_bonus(target_star))
 
         return improvement_stat
 
