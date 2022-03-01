@@ -127,14 +127,6 @@ class Enhancement(GearImprovement):
     star: int
     enhancement_type: Literal['Starforce', 'Amazing']
 
-    def gear_starforce_type_is_weapon(self, gear) -> bool:
-        return gear.is_weapon() or gear.type == GearType.katara
-
-
-
-class Starforce(Enhancement):
-    enhancement_type: Literal['Starforce'] = 'Starforce'
-
     def max_star(self, gear: Gear) -> int:
         """
         Returns the number of gear's max star.
@@ -163,6 +155,14 @@ class Starforce(Enhancement):
         if data is None:
             return 0
         return data[2 if gear.superior_eqp else 1]
+
+    def gear_starforce_type_is_weapon(self, gear) -> bool:
+        return gear.is_weapon() or gear.type == GearType.katara
+
+
+
+class Starforce(Enhancement):
+    enhancement_type: Literal['Starforce'] = 'Starforce'
 
     def calculate_improvement(self, gear) -> int:
         current_improvement = Stat()
@@ -263,35 +263,44 @@ class Starforce(Enhancement):
 
 class AmazingEnhancement(Enhancement):
     enhancement_type: Literal['Amazing'] = 'Amazing'
+    bonus: bool = False
 
     def stat_bonus(self, gear, target_star):
-        return (2 if target_star > 5 else 1) if bonus and Gear.is_accessory(gear.type) else 0
+        return (2 if target_star > 5 else 1) if self.bonus and gear.is_accessory() else 0
 
     def att_bonus(self, gear, target_star):
-        return 1 if bonus and (is_weapon or gear.type == GearType.shield) else 0
+        return 1 if self.bonus and (gear.is_weapon() or gear.type == GearType.shield) else 0
 
-    def apply_superior_star(self, gear: Gear, target_star: int) -> Stat:
+    def calculate_improvement(self, gear) -> int:
+        current_improvement = Stat()
+        for i in range(1, self.star + 1):
+            current_improvement = current_improvement + self.get_single_amazing_enhancement(gear, i)
+        
+        return current_improvement
+
+    def get_single_amazing_enhancement(self, gear: Gear, target_star: int) -> Stat:
         if target_star >= self.max_star(gear):
             raise TypeError('Starforce improvement cannot exceed item constraint')
 
-        current_gear_stat = current_improvement + gear.stat
         improvement_stat = Stat()
 
         stat_enhancement_increment = get_starforce_increment(gear, target_star, amazing_scroll=True, att=False) + self.stat_bonus(gear, target_star)
         att_enhancement_increment = get_starforce_increment(gear, target_star, amazing_scroll=True, att=True) + self.att_bonus(gear, target_star)
 
         for prop_type in (StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK):
-            if current_gear_stat.get(prop_type) > 0:
+            if gear.stat.get(prop_type.value) > 0:
                 improvement_stat += Stat.parse_obj({
                     prop_type.value: stat_enhancement_increment
                 })
 
-        for att_type in (StatProps.att, StatProps.matt):
-            if current_gear_stat.get(att_type) > 0:
+        for att_type in (StatProps.attack_power, StatProps.magic_attack):
+            if gear.stat.get(att_type.value) > 0:
                 improvement_stat += Stat.parse_obj({
-                    prop_type.value: att_enhancement_increment
+                    att_type.value: att_enhancement_increment
                 })
                 if self.gear_starforce_type_is_weapon(gear):
                     improvement_stat += Stat.parse_obj({
-                        prop_type.value: current_gear_stat.get(att_type) // 50 + 1
+                        att_type.value: gear.stat.get(att_type) // 50 + 1
                     })
+
+        return improvement_stat
