@@ -1,0 +1,104 @@
+{
+    "given": {
+        "gear_id": 1214018,
+        "spell_traces": [
+            {
+                "type": "SpellTrace",
+                "probability": 30,
+                "stat_prop_type": "DEX",
+                "order": 1
+            },
+            {
+                "type": "SpellTrace",
+                "probability": 30,
+                "stat_prop_type": "DEX",
+                "order": 2
+            },
+            {
+                "type": "SpellTrace",
+                "probability": 30,
+                "stat_prop_type": "DEX",
+                "order": 3
+            },
+            {
+                "type": "SpellTrace",
+                "probability": 30,
+                "stat_prop_type": "DEX",
+                "order": 4
+            },
+            {
+                "type": "SpellTrace",
+                "probability": 30,
+                "stat_prop_type": "DEX",
+                "order": 5
+            },
+            {
+                "type": "SpellTrace",
+                "probability": 30,
+                "stat_prop_type": "DEX",
+                "order": 6
+            },
+            {
+                "type": "SpellTrace",
+                "probability": 30,
+                "stat_prop_type": "DEX",
+                "order": 7
+            },
+            {
+                "type": "SpellTrace",
+                "probability": 30,
+                "stat_prop_type": "DEX",
+                "order": 8
+            },
+            {
+                "type": "SpellTrace",
+                "probability": 30,
+                "stat_prop_type": "DEX",
+                "order": 9
+            }
+        ],
+        "scrolls": [],
+        "starforce": {
+            "type": "Enhancement",
+            "star": 19,
+            "enhancement_type": "Starforce"
+        },
+        "bonuses": []
+    },
+    "expected": {
+        "id": 1214018,
+        "stat": {
+            "STR": 200.0,
+            "LUK": 0.0,
+            "INT": 0.0,
+            "DEX": 227.0,
+            "STR_multiplier": 0.0,
+            "LUK_multiplier": 0.0,
+            "INT_multiplier": 0.0,
+            "DEX_multiplier": 0.0,
+            "STR_static": 0.0,
+            "LUK_static": 0.0,
+            "INT_static": 0.0,
+            "DEX_static": 0.0,
+            "attack_power": 519.0,
+            "magic_attack": 0.0,
+            "attack_power_multiplier": 0.0,
+            "magic_attack_multiplier": 0.0,
+            "critical_rate": 0.0,
+            "critical_damage": 0.0,
+            "boss_damage_multiplier": 30.0,
+            "damage_multiplier": 0.0,
+            "final_damage_multiplier": 0.0,
+            "ignored_defence": 20.0,
+            "MHP": 255.0,
+            "MMP": 255.0
+        },
+        "name": "\uc544\ucf00\uc778\uc170\uc774\ub4dc \ube0c\ub808\uc2a4 \uc288\ud130",
+        "type": 1214,
+        "req_level": 200,
+        "scroll_chance": 8,
+        "boss_reward": true,
+        "superior_eqp": false,
+        "req_job": 4
+    }
+}

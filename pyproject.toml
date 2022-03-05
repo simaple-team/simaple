@@ -7,7 +7,7 @@ _black = "black ."
 _isort = "isort ."
 format = ["_black", "_isort"]
 
-_pylint = "pylint solution tests"
+_pylint = "pylint simaple tests"
 lint = ["_pylint"]
 
 coverage = "pytest --cov=simaple"
@@ -15,7 +15,7 @@ coverage-unittest = "pytest --cov=simaple"
 coverage-report = "pytest --cov=simaple --cov-report=xml"
 
 unittest = "pytest -vv -x"
-typetest = "mypy solution tests"
+typetest = "mypy simaple tests"
 
 test = ["coverage", "typetest", "lint", "formatting-check"]
 
