@@ -41,3 +41,30 @@ class Gear(BaseModel):
 
     def is_dragon_gear(self) -> bool:
         return GearType.is_dragon_gear(self.type)
+
+    def show(self) -> str:
+        job_string = "[" + ("] [").join([(" V " if self.req_job & (1 << i) != 0 else "   ") for i in range(5)]) + "]"
+        output = f"""
+        ===================================
+        name: {self.name}
+        type: {self.type.name} (type number {self.type})
+        req_level: {self.req_level}
+                 [WAR] [MAG] [ARC] [THF] [PIR]
+        req_job: {job_string}
+        ===================================
+        Basis Stats
+
+        STR: {self.stat.STR}
+        DEX: {self.stat.DEX}
+        INT: {self.stat.INT}
+        LUK: {self.stat.LUK}
+        
+        MaxHP: {self.stat.MHP}
+        MaxMP: {self.stat.MMP}
+
+        ATT: {self.stat.attack_power}
+        MAT: {self.stat.magic_attack}
+
+        ===================================
+        """
+        return output
