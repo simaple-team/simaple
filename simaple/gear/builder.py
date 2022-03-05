@@ -1,22 +1,14 @@
-from simaple.gear.improvements.spell_trace import SpellTrace
-from simaple.gear.improvements.scroll import Scroll
-from simaple.gear.improvements.starforce import Starforce
-from simaple.gear.improvements.bonus import Bonus
-from simaple.gear.gear_repository import GearRepository
-from simaple.core.base import Stat
-from pydantic import BaseModel, conint
-from simaple.gear.gear_type import GearType
-from simaple.gear.gear import Gear
-from simaple.gear.improvements.base import GearImprovement
-from typing import Literal, List
-
-import enum
-import math
-
-from loguru import logger
 from typing import List, Optional
 
 from pydantic import BaseModel, Field
+
+from simaple.core.base import Stat
+from simaple.gear.gear import Gear
+from simaple.gear.gear_repository import GearRepository
+from simaple.gear.improvements.bonus import Bonus
+from simaple.gear.improvements.scroll import Scroll
+from simaple.gear.improvements.spell_trace import SpellTrace
+from simaple.gear.improvements.starforce import Starforce
 
 
 class GearMetadata(BaseModel):
@@ -42,17 +34,20 @@ class GearBuilder:
     def build(self, gear_metadata: GearMetadata) -> Gear:
         gear = self._gear_repository.get_by_id(gear_metadata.gear_id)
 
-        bonus_stat = sum([
-            bonus.calculate_improvement(gear) for bonus in gear_metadata.bonuses
-        ], Stat()
+        bonus_stat = sum(
+            [bonus.calculate_improvement(gear) for bonus in gear_metadata.bonuses],
+            Stat(),
         )
         # Apply spell trace and scroll.
         spell_trace_and_scoll_stat = sum(
-            [spell_trace.calculate_improvement(gear) for spell_trace in gear_metadata.spell_traces],
-            Stat()
+            [
+                spell_trace.calculate_improvement(gear)
+                for spell_trace in gear_metadata.spell_traces
+            ],
+            Stat(),
         ) + sum(
             [scroll.calculate_improvement(gear) for scroll in gear_metadata.scrolls],
-            Stat()
+            Stat(),
         )
 
         gear.stat += spell_trace_and_scoll_stat

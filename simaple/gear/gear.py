@@ -1,10 +1,7 @@
-from simaple.gear.gear_type import GearType
 from pydantic import BaseModel
+
 from simaple.core.base import Stat
-from typing import List
-import enum
-import json
-import os
+from simaple.gear.gear_type import GearType
 
 
 class Gear(BaseModel):
@@ -43,7 +40,13 @@ class Gear(BaseModel):
         return GearType.is_dragon_gear(self.type)
 
     def show(self) -> str:
-        job_string = "[" + ("] [").join([(" V " if self.req_job & (1 << i) != 0 else "   ") for i in range(5)]) + "]"
+        job_string = (
+            "["
+            + ("] [").join(
+                [(" V " if self.req_job & (1 << i) != 0 else "   ") for i in range(5)]
+            )
+            + "]"
+        )
         output = f"""
         ===================================
         name: {self.name}
