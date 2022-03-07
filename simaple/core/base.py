@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import enum
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra
 
 
 class StatProps(enum.Enum):
@@ -71,6 +71,9 @@ class Stat(BaseModel):
 
     MHP: float = 0.0
     MMP: float = 0.0
+
+    class Config:
+        extra = Extra.forbid
 
     @classmethod
     def all_stat(cls, v):
@@ -159,3 +162,17 @@ class Stat(BaseModel):
 
     def get(self, prop: StatProps):
         return getattr(self, prop.value)
+
+
+class ActionStat(BaseModel):
+    cooltime_reduce: float = 0.0
+
+    class Config:
+        extra = Extra.forbid
+
+    def __add__(self, arg: ActionStat) -> ActionStat:
+        return ActionStat(cooltime_reduce=self.cooltime_reduce + arg.cooltime_reduce)
+
+    def __iadd__(self, arg: ActionStat) -> ActionStat:
+        self.cooltime_reduce += arg.cooltime_reduce
+        return self

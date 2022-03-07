@@ -1,7 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from simaple.core.base import Stat
 from simaple.gear.gear_type import GearType
+from simaple.gear.potential import AdditionalPotential, Potential
 
 
 class Gear(BaseModel):
@@ -16,6 +17,10 @@ class Gear(BaseModel):
     req_job: int = 0
     set_item_id: int = 0
     joker_to_set_item: bool = False
+    potential: Potential = Field(default_factory=Potential)
+    additional_potential: AdditionalPotential = Field(
+        default_factory=AdditionalPotential
+    )
 
     def is_weapon(self) -> bool:
         return GearType.is_weapon(self.type)
