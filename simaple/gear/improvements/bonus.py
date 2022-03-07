@@ -1,6 +1,6 @@
 import enum
 import math
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import conint
 
@@ -37,7 +37,7 @@ class BonusType(enum.Enum):
 
 class Bonus(GearImprovement):
     type: Literal["bonus"] = "bonus"
-    grade: conint(ge=1, le=7)
+    grade: Annotated[int, conint(ge=1, le=7)]
     bonus_type: BonusType
 
     def calculate_improvement(self, gear: Gear) -> Stat:
@@ -118,7 +118,7 @@ class Bonus(GearImprovement):
                         elif basis == 337:
                             basis = 342
                         else:
-                            print("Not implemented weapon:\n" + str(self.gear))
+                            print("Not implemented weapon:\n" + str(gear))
                     level_multiplier = (
                         6
                         if gear.req_level > 180

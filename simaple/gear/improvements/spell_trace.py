@@ -105,7 +105,7 @@ class SpellTrace(GearImprovement):
             raise TypeError("Invalid probability: " + str(self.probability))
 
         if self.stat_prop_type not in STAT_PROP_TYPES:
-            raise TypeError("Invalid prop_type: " + self.stat_prop_type)
+            raise TypeError(f"Invalid prop_type: {self.stat_prop_type.value}")
 
         req_job: int = gear.req_job
 

@@ -105,6 +105,7 @@
         "scroll_chance": 8,
         "boss_reward": true,
         "superior_eqp": false,
-        "req_job": 1
+        "req_job": 1,
+        "set_item_id": 617
     }
 }

@@ -14,6 +14,8 @@ class Gear(BaseModel):
     boss_reward: bool
     superior_eqp: bool
     req_job: int = 0
+    set_item_id: int = 0
+    joker_to_set_item: bool = False
 
     def is_weapon(self) -> bool:
         return GearType.is_weapon(self.type)
