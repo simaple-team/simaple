@@ -92,14 +92,14 @@ class KMSSetItemRepository(SetItemRepository):
             attack_power=raw_stat.get("att", 0),
             magic_attack=raw_stat.get("matt", 0),
             MHP=raw_stat.get("MHP", 0),
-            crit_damage=raw_stat.get("crit_damage", 0),
-            armor_ignore=raw_stat.get("armor_ignore", 0),
+            critical_damage=raw_stat.get("crit_damage", 0),
             STR=raw_stat.get("STR", 0),
             DEX=raw_stat.get("DEX", 0),
             INT=raw_stat.get("INT", 0),
             LUK=raw_stat.get("LUK", 0),
-            boss_pdamage=raw_stat.get("boss_damage_multiplier", 0),
-            ignored_defence=raw_stat.get("ignored_defence", 0),
+            boss_damage_multiplier=raw_stat.get("boss_pdamage", 0),
+            ignored_defence=raw_stat.get("armor_ignore", 0),
+            damage_multiplier=raw_stat.get("pdamage", 0),
         )
         return stat
 
