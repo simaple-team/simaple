@@ -116,7 +116,7 @@ class Stat(BaseModel):
             - 0.01 * ((100 - self.ignored_defence) * (100 - arg.ignored_defence)),
         )
 
-    def __iadd__(self, arg):
+    def __iadd__(self, arg: Stat):
         self.STR += arg.STR
         self.LUK += arg.LUK
         self.INT += arg.INT
@@ -158,4 +158,4 @@ class Stat(BaseModel):
         return self
 
     def get(self, prop: StatProps):
-        return getattr(self, prop)
+        return getattr(self, prop.value)

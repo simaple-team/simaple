@@ -1,7 +1,6 @@
 import json
 import os
 
-from simaple.core.base import Stat
 from simaple.gear.gear import Gear
 from simaple.gear.gear_type import GearType
 
@@ -29,6 +28,9 @@ class GearRepository:
         with open(GEAR_RESOURCE_PATH, encoding="utf-8") as f:
             self._bare_gears = json.load(f)
 
+    def exists(self, gear_id: int):
+        return str(gear_id) in self._bare_gears
+
     def get_gear_type(self, gear_id: int):
         value = gear_id // 1000
         if value == 1098:
@@ -52,7 +54,7 @@ class GearRepository:
             return GearType(gear_id // 10)
         return GearType(gear_id // 10000)
 
-    def _get_gear(self, gear_id: int) -> Stat:
+    def _get_gear(self, gear_id: int) -> Gear:
         dumped_gear = self._bare_gears[str(gear_id)]
         stat = {
             "STR": dumped_gear.get("STR", 0),
@@ -69,7 +71,7 @@ class GearRepository:
 
         gear_opt = {
             "stat": stat,
-            "req_level": dumped_gear["req_level"],
+            "req_level": dumped_gear.get("req_level", 0),
             "name": dumped_gear["name"],
             "scroll_chance": dumped_gear.get("tuc", 0),
             "type": self.get_gear_type(gear_id),
@@ -77,15 +79,13 @@ class GearRepository:
             "boss_reward": dumped_gear.get("boss_reward", False),
             "superior_eqp": dumped_gear.get("superior_eqp", False),
             "req_job": dumped_gear.get("req_job", 0),
+            "set_item_id": dumped_gear.get("set_item_id", 0),
+            "joker_to_set_item": dumped_gear.get("joker_to_set_item", False),
         }
 
         gear = Gear.parse_obj(gear_opt)
         return gear
 
-    def get_by_id(self, gear_id: int):
+    def get_by_id(self, gear_id: int) -> Gear:
         gear = self._get_gear(gear_id)
-        return gear
-
-    def get(self, gear_name: str):
-        gear = self._get_gear(gear_name)
         return gear

@@ -162,7 +162,7 @@ class Enhancement(GearImprovement):
 class Starforce(Enhancement):
     enhancement_type: Literal["Starforce"] = "Starforce"
 
-    def calculate_improvement(self, gear) -> int:
+    def calculate_improvement(self, gear) -> Stat:
         current_improvement = Stat()
         for i in range(1, self.star + 1):
             current_improvement = (
@@ -230,7 +230,7 @@ class Starforce(Enhancement):
 
         for prop_type in (StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK):
             if prop_type in stat_set or (
-                target_star > 15 and current_gear_stat.get(prop_type.value) > 0
+                target_star > 15 and current_gear_stat.get(prop_type) > 0
             ):
                 improvement_stat += Stat.parse_obj(
                     {prop_type.value: stat_starforce_increment}
@@ -314,7 +314,7 @@ class AmazingEnhancement(Enhancement):
             else 0
         )
 
-    def calculate_improvement(self, gear) -> int:
+    def calculate_improvement(self, gear) -> Stat:
         current_improvement = Stat()
         for i in range(1, self.star + 1):
             current_improvement = (
@@ -337,13 +337,13 @@ class AmazingEnhancement(Enhancement):
         ) + self.att_bonus(gear, target_star)
 
         for prop_type in (StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK):
-            if gear.stat.get(prop_type.value) > 0:
+            if gear.stat.get(prop_type) > 0:
                 improvement_stat += Stat.parse_obj(
                     {prop_type.value: stat_enhancement_increment}
                 )
 
         for att_type in (StatProps.attack_power, StatProps.magic_attack):
-            if gear.stat.get(att_type.value) > 0:
+            if gear.stat.get(att_type) > 0:
                 improvement_stat += Stat.parse_obj(
                     {att_type.value: att_enhancement_increment}
                 )
