@@ -5,7 +5,7 @@ from json import JSONEncoder
 import pytest
 
 from simaple.core.base import StatProps
-from simaple.gear.builder import GeneralizedGearBlueprint
+from simaple.gear.blueprint import GeneralizedGearBlueprint
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository
 from simaple.gear.improvements.bonus import BonusType
@@ -38,7 +38,7 @@ class MetadataJsonJSONEncoder(JSONEncoder):
 )
 def test_absolab_17_p30_full(test_case_file):
     gear_repository = GearRepository()
-    base_path = "tests/gear/improvements/builder_test_cases/"
+    base_path = "tests/gear/improvements/blueprint_test_cases/"
 
     with open(os.path.join(base_path, test_case_file), encoding="utf-8") as f:
         test_case = json.load(f)
