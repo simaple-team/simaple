@@ -23,7 +23,9 @@ class Gear(BaseModel):
     )
 
     def sum_stat(self) -> Stat:
-        return self.stat + self.potential.get_stat() + self.additional_potential.get_stat()
+        return (
+            self.stat + self.potential.get_stat() + self.additional_potential.get_stat()
+        )
 
     def is_weapon(self) -> bool:
         return GearType.is_weapon(self.type)

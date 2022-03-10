@@ -95,6 +95,6 @@ class GearRepository:
         if self._indexed_by_name is None:
             self._indexed_by_name = {}
             for item_id, item_value in self._bare_gears.items():
-                self._indexed_by_name[item_value['name']] = int(item_id)
+                self._indexed_by_name[item_value["name"]] = int(item_id)
 
         return self.get_by_id(self._indexed_by_name[gear_name])

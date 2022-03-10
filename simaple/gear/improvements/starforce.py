@@ -195,7 +195,9 @@ class Starforce(Enhancement):
         self, gear: Gear, target_star: int, current_improvement: Stat
     ) -> Stat:
         if target_star > self.max_star(gear):
-            raise TypeError(f"Starforce improvement cannot exceed item constraint. Given {target_star} but maximum {self.max_star(gear)}")
+            raise TypeError(
+                f"Starforce improvement cannot exceed item constraint. Given {target_star} but maximum {self.max_star(gear)}"
+            )
 
         if gear.superior_eqp:
             return self.get_single_superior_starforce_improvement(gear, target_star)

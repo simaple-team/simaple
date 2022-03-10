@@ -1,27 +1,10 @@
+from typing import List, Tuple
+
 from pydantic import BaseModel
-from typing import Optional, List, Tuple, Dict, Union
+
 from simaple.core.base import Stat
-from simaple.gear.gear import Gear
-from simaple.gear.gear_type import GearType
 from simaple.gear.blueprint import PracticalGearBlueprint
 from simaple.gear.gear_repository import GearRepository
-
-import yaml
-import enum
-
-
-class Slot(BaseModel):
-    gear: Optional[Gear] = None
-    gear_type: GearType
-
-    def is_equipable(self, gear):
-        return gear.type == self.gear_type
-
-    def equip(self, gear: Gear):
-        if not self.is_equipable(gear):
-            raise ValueError
-
-        self.gear = gear
 
 
 class UserGearsetBlueprint(BaseModel):
@@ -61,12 +44,12 @@ class UserGearsetBlueprint(BaseModel):
     emblem: PracticalGearBlueprint
 
     heart: PracticalGearBlueprint
-    
+
     title: Stat
 
     def build(self, gear_repository: GearRepository) -> Stat:
         output = Stat()
-        
+
         output += self.head.build(gear_repository=gear_repository).sum_stat()
         output += self.top.build(gear_repository=gear_repository).sum_stat()
         output += self.bottom.build(gear_repository=gear_repository).sum_stat()

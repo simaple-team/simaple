@@ -1,6 +1,7 @@
+from abc import ABCMeta, abstractmethod
 from typing import List, Optional, Union
 
-from pydantic import BaseModel, Field, Extra
+from pydantic import BaseModel, Extra, Field
 
 from simaple.core.base import Stat
 from simaple.gear.gear import Gear
@@ -9,9 +10,7 @@ from simaple.gear.improvements.bonus import Bonus
 from simaple.gear.improvements.scroll import Scroll
 from simaple.gear.improvements.spell_trace import SpellTrace
 from simaple.gear.improvements.starforce import Starforce
-from simaple.gear.potential import Potential, AdditionalPotential
-
-from abc import ABCMeta, abstractmethod
+from simaple.gear.potential import AdditionalPotential, Potential
 
 
 class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):
@@ -30,7 +29,9 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
     starforce: Starforce
     bonuses: List[Bonus] = Field(default_factory=list)
     potential: Potential = Field(default_factory=Potential)
-    additional_potential: AdditionalPotential = Field(default_factory=AdditionalPotential)
+    additional_potential: AdditionalPotential = Field(
+        default_factory=AdditionalPotential
+    )
 
     def build(self, gear_repository: GearRepository) -> Gear:
         gear = gear_repository.get_by_id(self.gear_id)
@@ -72,13 +73,19 @@ class PracticalGearBlueprint(AbstractGearBlueprint):
     star: int = 0
     bonuses: List[Bonus] = Field(default_factory=list)
     potential: Potential = Field(default_factory=Potential)
-    additional_potential: AdditionalPotential = Field(default_factory=AdditionalPotential)
+    additional_potential: AdditionalPotential = Field(
+        default_factory=AdditionalPotential
+    )
 
     def build(self, gear_repository):
-        generalized_gear_blueprint = self.translate_into_generalized_gear_blueprint(gear_repository)
+        generalized_gear_blueprint = self.translate_into_generalized_gear_blueprint(
+            gear_repository
+        )
         return generalized_gear_blueprint.build(gear_repository)
 
-    def translate_into_generalized_gear_blueprint(self, gear_repository: GearRepository) -> Gear:
+    def translate_into_generalized_gear_blueprint(
+        self, gear_repository: GearRepository
+    ) -> GeneralizedGearBlueprint:
         if isinstance(self.gear_id, str):
             gear = gear_repository.get_by_name(self.gear_id)
         else:
@@ -88,18 +95,11 @@ class PracticalGearBlueprint(AbstractGearBlueprint):
         scrolls = []
 
         if self.spell_trace is not None:
-            spell_traces = [
-                self.spell_trace for i in range(gear.scroll_chance)
-            ]
+            spell_traces = [self.spell_trace for i in range(gear.scroll_chance)]
         elif self.scroll is not None:
-            scrolls = [
-                self.scroll for i in range(gear.scroll_chance)
-            ]
+            scrolls = [self.scroll for i in range(gear.scroll_chance)]
 
-        starforce = Starforce(
-            enhancement_type='Starforce',
-            star=self.star
-        )
+        starforce = Starforce(enhancement_type="Starforce", star=self.star)
 
         return GeneralizedGearBlueprint(
             gear_id=gear.id,
@@ -108,5 +108,5 @@ class PracticalGearBlueprint(AbstractGearBlueprint):
             starforce=starforce,
             bonuses=self.bonuses,
             potential=self.potential,
-            additional_potential=self.additional_potential
+            additional_potential=self.additional_potential,
         )

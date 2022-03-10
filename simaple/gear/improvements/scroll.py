@@ -1,6 +1,6 @@
 from typing import List, Literal, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from simaple.core.base import Stat
 from simaple.gear.gear import Gear
