@@ -10,6 +10,11 @@ def test_gear_repository():
     repository.get_by_id(gear_id)
 
 
+def test_gear_repository_by_name():
+    repository = GearRepository()
+    repository.get_by_name("아케인셰이드 메이지글러브")
+
+
 @pytest.mark.parametrize(
     "gear_id, exists",
     [
