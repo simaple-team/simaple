@@ -123,7 +123,7 @@ def get_starforce_increment(
 
 class Enhancement(GearImprovement):
     type: Literal["Enhancement"] = "Enhancement"
-    star: int
+    star: int = 0
     enhancement_type: Literal["Starforce", "Amazing"]
 
     def max_star(self, gear: Gear) -> int:
@@ -194,8 +194,8 @@ class Starforce(Enhancement):
     def get_single_starforce_improvement(
         self, gear: Gear, target_star: int, current_improvement: Stat
     ) -> Stat:
-        if target_star >= self.max_star(gear):
-            raise TypeError("Starforce improvement cannot exceed item constraint")
+        if target_star > self.max_star(gear):
+            raise TypeError(f"Starforce improvement cannot exceed item constraint. Given {target_star} but maximum {self.max_star(gear)}")
 
         if gear.superior_eqp:
             return self.get_single_superior_starforce_improvement(gear, target_star)

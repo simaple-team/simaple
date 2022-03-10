@@ -189,3 +189,14 @@ def test_get_starforce_improvement(gear_id, star, scroll, target):
     logger.info(starforce_stat)
 
     assert starforce_stat == target
+
+
+def test_default_starforce():
+    repository = GearRepository()
+
+    gear = repository.get_by_id(1005197)
+    starforce = Starforce()
+
+    starforce_stat = starforce.calculate_improvement(gear)
+
+    assert starforce_stat == Stat()
