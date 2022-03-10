@@ -66,6 +66,7 @@ fastapi = "^0.70.0"
 uvicorn = "^0.15.0"
 pymongo = "^3.12.1"
 poethepoet = "^0.10.0"
+PyYAML = "^6.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
