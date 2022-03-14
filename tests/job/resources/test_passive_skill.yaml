@@ -1,0 +1,24 @@
+kind: PassiveSkill 
+version: v1
+metadata:
+  group: test_group
+data:
+  - name: test_passive_1
+    stat:
+      INT: 40
+  - name: test_passive_2
+    stat:
+      magic_attack: 10
+  - name: test_passive_3
+    passive_skill_enabled: true
+    combat_orders_enabled: true
+    default_skill_level: 10
+    stat:
+      attack_power: 3 * lv
+      INT: 5 * lv
+  - name: test_passive_4
+    passive_skill_enabled: false
+    combat_orders_enabled: true
+    default_skill_level: 10
+    stat:
+      ignored_defence: 20 + math.ceil(lv / 2)

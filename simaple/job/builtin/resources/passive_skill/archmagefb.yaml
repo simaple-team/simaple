@@ -1,0 +1,30 @@
+kind: PassiveSkill 
+version: v1
+metadata:
+  group: archmagefb
+data:
+  - name: 하이 위즈덤
+    stat:
+      INT: 40
+  - name: 스펠 마스터리
+    stat:
+      magic_attack: 10
+  - name: 매직 크리티컬
+    stat:
+      critical_rate: 30
+      critical_damage: 13
+  - name: 엘리멘트 엠플리피케이션
+    stat:
+      damage_multiplier: 50
+  - name: 엘리멘탈 리셋
+    stat:
+      final_damage_multiplier: 50
+  - name: 마스터 매직
+    passive_skill_enabled: true
+    combat_orders_enabled: true
+    default_skill_level: 10
+    stat:
+      magic_attack: 3 * lv
+      buff_rem: 5 * lv
+  - name: 아케인 에임
+    ignored_defence: 20 + math.ceil(passive_level / 2)
