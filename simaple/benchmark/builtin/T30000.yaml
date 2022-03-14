@@ -1,0 +1,203 @@
+---
+summary:
+  - 1아2카5앱 / 3보장 / 탈벨12성 / 칠요
+  - 데벤은 5보장 분자벨22성
+  - 스타포스 - 무기 22성 / 방어구 22성
+  - 추옵 - 무기 공1추 / 방어구, 악세 추옵 120급
+  - 잠재능력
+  - 무기류 윗잠 9줄유효 에디 공21%
+  - 방어구, 악세 레전27% / 에디 에픽2.5줄
+  - 장갑 크뎀2줄
+  - 아케인심볼 고정주스탯 13200
+  - 어센틱심볼 고정주스탯 900
+  - 마라벨 풀셋, 프펫공작
+
+anchors:
+  armor: &armor
+    bonuses:
+      - grade: 4
+        bonus_type: first_stat_second_stat
+      - grade: 4
+        bonus_type: first_stat_third_stat
+      - grade: 6
+        bonus_type: first_stat
+    spell_trace:
+      probability: 30
+      stat_prop_type: first_stat
+    star: 22
+    potential:
+      options:
+        - first_stat_multiplier: 9
+        - first_stat_multiplier: 9
+        - first_stat_multiplier: 9
+    additional_potential:
+      options:
+        - first_stat_multiplier: 4
+        - first_stat_multiplier: 4
+        - first_att: 10
+  acc: &acc
+    bonuses: &acc_bonus
+      - grade: 4
+        bonus_type: first_stat_second_stat
+      - grade: 4
+        bonus_type: first_stat_third_stat
+      - grade: 6
+        bonus_type: all_stat_multiplier
+    scroll:
+      name: 악공
+      stat:
+        first_att: 4
+    potential:
+      options:
+        - first_stat_multiplier: 9
+        - first_stat_multiplier: 9
+        - first_stat_multiplier: 9
+    additional_potential:
+      options:
+        - first_stat_multiplier: 4
+        - all_stat_multiplier: 2
+        - first_att: 10
+    star: 22
+default:
+  arcane_symbol_levels: 
+    - 20
+    - 20
+    - 20
+    - 20
+    - 20
+    - 20
+  authentic_symbol_levels:
+    - 10
+    - 8
+  pet_equip:
+    first_stat: 124 # 프펫공, 루나 드림 2세트(5+4*9)*2, 루나 쁘띠 1세트(10+4*8)
+  pet_set: 
+    first_stat: 24 # 루나 드림 2세트(7+9), 루나 쁘띠 1세트(8)
+  cash:
+    first_stat: 75
+    second_stat: 75
+    third_stat: 75
+    first_att: 40
+  weapon_stat:
+    - 4
+    - 9
+  head:
+    gear_id: 앱솔랩스 모자
+    <<: *armor
+  top:
+    gear_id: 카루타 상의
+    <<: *armor
+  bottom:
+    gear_id: 카루타 하의
+    <<: *armor
+  shoes:
+    gear_id: 앱솔랩스 신발
+    <<: *armor
+  glove:
+    gear_id: 앱솔랩스 장갑
+    <<: *armor
+    potential:
+      options:
+        - critical_damage: 8
+        - critical_damage: 8
+  cape:
+    gear_id: 앱솔랩스 망토
+    <<: *armor
+  shoulder:
+    gear_id: 앱솔랩스 숄더
+    <<: *acc
+    scroll:
+      name: 혼줌
+      stat:
+        first_att: 5
+  face:
+    gear_id: 응축된 힘의 결정석
+    <<: *acc
+    star: 10
+  eye:
+    gear_id: 파풀라투스 마크
+    <<: *acc
+  ear:
+    gear_id: 마이스터 이어링
+    <<: *acc
+  belt:
+    gear_id: 골든 클로버 벨트
+    <<: *acc
+    star: 21
+  ring1:
+    gear_id: 마이스터링
+    star: 22
+  ring2:
+    gear_id: 이터널 플레임 링
+    <<: *acc
+    exclude: 
+      - bonuses
+      - star
+  ring3:
+    gear_id: 이터널 플레임 링
+    <<: *acc
+    exclude: 
+      - bonus
+      - star
+  ring4:
+    gear_id: 이터널 플레임 링
+    <<: *acc
+    exclude: 
+      - bonuses
+      - star
+  pendant1:
+    gear_id: 130펜던
+    <<: *acc
+    bonuses:
+      - grade: 4
+        bonus_type: first_stat
+      - grade: 3
+        bonus_type: all_stat_multiplier
+    star: 20
+  pendant2:
+    gear_id: 도미네이터 펜던트
+    <<: *acc
+    scroll:
+      name: 파편
+      stat:
+        all_stat: 3
+        all_att: 3
+  pocket:
+    gear_id: 핑크빛 성배
+    bonuses: *acc_bonus
+  badge:
+    gear_id: 칠요의 뱃지
+  medal:
+    gear_id: 칠요의 몬스터파커
+  weapon:
+    gear_id: 아케인셰이드 튜너
+    bonuses:
+      - grade: 7
+        bonus_type: first_att
+    spell_trace:
+      probability: 15
+      stat_prop_type: first_stat
+    star: 22
+    additional_potential:
+      patt: 21
+  subweapon:
+    gear_id: 노블 브레이슬릿
+    additional_potential:
+      patt: 21
+  emblem:
+    gear_id: 골드 나이트 엠블렘
+    additional_potential:
+      patt: 21
+  heart:
+    gear_id: 티타늄 하트
+    <<: *acc
+    scroll:
+      name: 매지컬
+      stat:
+        first_att: 9.5
+    star: 8
+  title:
+    # 핑아일체
+    all_stat: 10
+    all_att: 5
+    boss_damage_multiplier: 10

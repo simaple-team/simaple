@@ -22,6 +22,7 @@ GEAR_VARIABLE_NAMES = [
 class GearRepository:
     def __init__(self):
         self._bare_gears = {}
+        self._indexed_by_name = None
         self._load()
 
     def _load(self):
@@ -89,3 +90,11 @@ class GearRepository:
     def get_by_id(self, gear_id: int) -> Gear:
         gear = self._get_gear(gear_id)
         return gear
+
+    def get_by_name(self, gear_name: str) -> Gear:
+        if self._indexed_by_name is None:
+            self._indexed_by_name = {}
+            for item_id, item_value in self._bare_gears.items():
+                self._indexed_by_name[item_value["name"]] = int(item_id)
+
+        return self.get_by_id(self._indexed_by_name[gear_name])
