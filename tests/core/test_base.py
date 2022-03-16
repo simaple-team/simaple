@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.core.base import Stat
+from simaple.core.base import Stat, BaseStatType, AttackType
 
 TEST_CASES = [
     ("STR", 3, 4, 7),
@@ -38,3 +38,22 @@ def test_ability(stat_name, a, b, c):
     result = stat_a + stat_b
 
     assert getattr(result, stat_name) == getattr(stat_c, stat_name)
+
+
+
+@pytest.mark.parametrize("stat, label, expected", [
+    (Stat(STR=3, STR_multiplier=100, STR_static=4), BaseStatType.STR, 10),
+    (Stat(DEX=3, DEX_multiplier=100, DEX_static=4), BaseStatType.DEX, 10),
+    (Stat(INT=3, INT_multiplier=100, INT_static=4), BaseStatType.INT, 10),
+    (Stat(LUK=3, LUK_multiplier=100, LUK_static=4), BaseStatType.LUK, 10),
+])
+def test_get_base_stat_coefficient(stat, label, expected):
+    assert stat.get_base_stat_coefficient(label) == expected
+
+
+@pytest.mark.parametrize("stat, label, expected", [
+    (Stat(magic_attack=5, magic_attack_multiplier=100), AttackType.magic_attack, 10),
+    (Stat(attack_power=5, attack_power_multiplier=100), AttackType.attack_power, 10),
+])
+def test_get_attack_coefficient(stat, label, expected):
+    assert stat.get_attack_coefficient(label) == expected

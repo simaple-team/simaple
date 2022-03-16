@@ -5,6 +5,18 @@ import enum
 from pydantic import BaseModel, Extra
 
 
+class BaseStatType(enum.Enum):
+    STR = "STR"
+    LUK = "LUK"
+    INT = "INT"
+    DEX = "DEX"
+
+
+class AttackType(enum.Enum):
+    attack_power = "attack_power"
+    magic_attack = "magic_attack"
+
+
 class StatProps(enum.Enum):
     STR = "STR"
     LUK = "LUK"
@@ -162,6 +174,26 @@ class Stat(BaseModel):
 
     def get(self, prop: StatProps):
         return getattr(self, prop.value)
+
+    def get_base_stat_coefficient(self, base_stat_type: BaseStatType) -> float:
+        if base_stat_type == BaseStatType.STR:
+            return self.STR * (self.STR_multiplier * 0.01 + 1) + self.STR_static
+        if base_stat_type == BaseStatType.DEX:
+            return self.DEX * (self.DEX_multiplier * 0.01 + 1) + self.DEX_static
+        if base_stat_type == BaseStatType.INT:
+            return self.INT * (self.INT_multiplier * 0.01 + 1) + self.INT_static
+        if base_stat_type == BaseStatType.LUK:
+            return self.LUK * (self.LUK_multiplier * 0.01 + 1) + self.LUK_static
+        
+        raise ValueError
+
+    def get_attack_coefficient(self, attack_type: AttackType) -> float:
+        if attack_type == AttackType.attack_power:
+            return self.attack_power * (1 + 0.01 * self.attack_power_multiplier)
+        if attack_type == AttackType.magic_attack:
+            return self.magic_attack * (1 + 0.01 * self.magic_attack_multiplier)
+
+        raise ValueError
 
 
 class ActionStat(BaseModel):
