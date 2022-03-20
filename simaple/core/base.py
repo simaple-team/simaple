@@ -207,8 +207,8 @@ class ActionStat(BaseModel):
     def __add__(self, arg: ActionStat) -> ActionStat:
         return ActionStat(
             cooltime_reduce=self.cooltime_reduce + arg.cooltime_reduce,
-            summon_duration=self.summon_duration + arg.summon_duration
-            buff_duration=self.buff_duration + arg.buff_duration
+            summon_duration=self.summon_duration + arg.summon_duration,
+            buff_duration=self.buff_duration + arg.buff_duration,
             cooltime_reduce_rate=self.cooltime_reduce_rate + arg.cooltime_reduce_rate
             )
 
