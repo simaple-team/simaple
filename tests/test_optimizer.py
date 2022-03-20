@@ -15,17 +15,16 @@ class TestJob(Job):
     def get_attack_type_factor(self, stat: Stat) -> float:
         return stat.get_base_stat_coefficient(AttackType.magic_attack)
 
-
-def test_optimizer():
+@pytest.mark.parametrize('maximum_cost', [50, 100])
+def test_optimizer(maximum_cost):
     optimization_target = HyperstatStepwizeOptimizationTarget(
         Stat(INT=40000, LUK=5000, magic_attack=3000, critical_rate=80, critical_damage=100, damage_multiplier=300, ignored_defence=90),
         TestJob()
     )
-    for maximum_cost in [300, 1200]: 
-        optimizer = StepwizeOptimizer(
-            optimization_target, maximum_cost, 1
-        )
-        start = time.time()
-        output = optimizer.optimize()
-        elapsed = time.time() - start
-        logger.info(f"Optimization output {str(output.state)}; spent: {elapsed:.02f}s")
+    optimizer = StepwizeOptimizer(
+        optimization_target, maximum_cost, 1
+    )
+    start = time.time()
+    output = optimizer.optimize()
+    elapsed = time.time() - start
+    logger.info(f"Optimization output {str(output.state)}; spent: {elapsed:.02f}s")
