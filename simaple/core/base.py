@@ -198,13 +198,23 @@ class Stat(BaseModel):
 
 class ActionStat(BaseModel):
     cooltime_reduce: float = 0.0
-
+    summon_duration: float = 0.0
+    buff_duration: float = 0.0
+    cooltime_reduce_rate: float = 0.0
     class Config:
         extra = Extra.forbid
 
     def __add__(self, arg: ActionStat) -> ActionStat:
-        return ActionStat(cooltime_reduce=self.cooltime_reduce + arg.cooltime_reduce)
+        return ActionStat(
+            cooltime_reduce=self.cooltime_reduce + arg.cooltime_reduce,
+            summon_duration=self.summon_duration + arg.summon_duration
+            buff_duration=self.buff_duration + arg.buff_duration
+            cooltime_reduce_rate=self.cooltime_reduce_rate + arg.cooltime_reduce_rate
+            )
 
     def __iadd__(self, arg: ActionStat) -> ActionStat:
         self.cooltime_reduce += arg.cooltime_reduce
+        self.summon_duration += arg.summon_duration
+        self.buff_duration += arg.buff_duration
+        self.cooltime_reduce_rate += arg.cooltime_reduce_rate
         return self
