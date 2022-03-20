@@ -33,6 +33,11 @@ class JobType(enum.Enum):
     demonavenger = 'demonavenger'
     demonslayer = 'demonslayer'
 
+    battlemage = 'battlemage'
+    wildhunter = 'wildhunter'
+    mechanic = 'mechanic'
+    zenon = 'zenon'
+
     evan = 'evan'
     luminous = 'luminous'
     mercedes = 'mercedes'
@@ -54,3 +59,5 @@ class JobType(enum.Enum):
 
     zero = 'zero'
     kinesis = 'kinesis'
+
+    virtual_maplestory_m = 'virtual_maplestory_m'
