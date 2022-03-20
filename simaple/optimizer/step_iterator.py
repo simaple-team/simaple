@@ -1,9 +1,10 @@
 import itertools
 
+
 class Iterator:
     def single_iterator(self, length):
         for i in range(length):
-            yield (i, )
+            yield (i,)
 
     def double_iterator(self, length):
         for i in range(length):
@@ -33,7 +34,9 @@ class Iterator:
             yield (i, i, j, j)
 
         for i in range(length):
-            for j, k in itertools.combinations([idx for idx in range(length) if idx != i], 2):
+            for j, k in itertools.combinations(
+                [idx for idx in range(length) if idx != i], 2
+            ):
                 yield (i, i, j, k)
 
         for v in itertools.combinations(range(length), 4):
@@ -44,11 +47,11 @@ class Iterator:
             for v in self.single_iterator(length):
                 yield v
         if maximum_depth >= 2:
-            for v in  self.double_iterator(length):
+            for v in self.double_iterator(length):
                 yield v
         if maximum_depth >= 3:
-            for v in  self.triple_iterator(length):
+            for v in self.triple_iterator(length):
                 yield v
         if maximum_depth >= 4:
-            for v in  self.quadruple_iterator(length):
+            for v in self.quadruple_iterator(length):
                 yield v

@@ -1,9 +1,10 @@
 from __future__ import annotations
+
+from abc import ABCMeta, abstractmethod
+from typing import Iterable, List, Tuple
+
 from simaple.hyperstat import Hyperstat
 from simaple.optimizer.step_iterator import Iterator
-import math
-from abc import ABCMeta, abstractmethod
-from typing import List, Dict, Optional, Iterable
 
 
 class StepwizeOptimizationTarget(metaclass=ABCMeta):
@@ -14,7 +15,7 @@ class StepwizeOptimizationTarget(metaclass=ABCMeta):
     @abstractmethod
     def get_value(self) -> float:
         ...
-    
+
     @abstractmethod
     def get_cost(self) -> float:
         ...
@@ -30,10 +31,10 @@ class StepwizeOptimizationTarget(metaclass=ABCMeta):
         self.state = [0 for i in range(self.state_length)]
 
     def get_stepped_target(self, steps: Iterable[int]) -> StepwizeOptimizationTarget:
-        new_state = [v for v in self.state]
+        new_state = list(self.state)
         for step in steps:
             new_state[step] += 1
-        
+
         new_target = self.clone()
         new_target.set_state(new_state)
 
@@ -64,7 +65,7 @@ class HyperstatStepwizeOptimizationTarget(StepwizeOptimizationTarget):
             job=self.job,
         )
         target.set_state(self.state)
-        
+
         return target
 
 
@@ -72,7 +73,13 @@ class StepwizeOptimizer:
     class MaximumOptimizationStepExceed(Exception):
         ...
 
-    def __init__(self, target_prototype: StepwizeOptimizationTarget, maximum_cost: int, step_size: int = 2, maximum_iteration_count=999):
+    def __init__(
+        self,
+        target_prototype: StepwizeOptimizationTarget,
+        maximum_cost: int,
+        step_size: int = 2,
+        maximum_iteration_count=999,
+    ):
         # step_size larger than 2 is EXTREMELY expensive. Be careful.
         self.step_size = step_size
         self.target_prototype = target_prototype
@@ -81,8 +88,7 @@ class StepwizeOptimizer:
 
     def get_increment_iterator(self) -> Iterable:
         return Iterator().cumulated_iterator(
-            self.target_prototype.state_length,
-            self.step_size
+            self.target_prototype.state_length, self.step_size
         )
 
     def get_reward(self, target, increments, original_cost=None, original_value=None):
@@ -111,7 +117,7 @@ class StepwizeOptimizer:
             optimal_increments = self.get_optimal_increment(target)
             if len(optimal_increments) == 0:
                 break
-            
+
             target = target.get_stepped_target(optimal_increments)
 
             # While phrase protection logic
@@ -121,18 +127,19 @@ class StepwizeOptimizer:
 
         return target
 
-    def get_optimal_increment(self, target: StepwizeOptimizationTarget) -> Iterable[int]:
+    def get_optimal_increment(self, target: StepwizeOptimizationTarget) -> Tuple:
         original_cost = target.get_cost()
         original_value = target.get_value()
 
-        best_increments = tuple()
+        best_increments: Tuple = tuple()
         best_reward = 0
 
         for increments in self.get_increment_iterator():
             reward = self.get_reward(
-                target, increments,
+                target,
+                increments,
                 original_cost=original_cost,
-                original_value=original_value
+                original_value=original_value,
             )
             if reward > best_reward:
                 best_reward = reward

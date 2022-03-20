@@ -184,7 +184,7 @@ class Stat(BaseModel):
             return self.INT * (self.INT_multiplier * 0.01 + 1) + self.INT_static
         if base_stat_type == BaseStatType.LUK:
             return self.LUK * (self.LUK_multiplier * 0.01 + 1) + self.LUK_static
-        
+
         raise ValueError
 
     def get_attack_coefficient(self, attack_type: AttackType) -> float:
@@ -201,6 +201,7 @@ class ActionStat(BaseModel):
     summon_duration: float = 0.0
     buff_duration: float = 0.0
     cooltime_reduce_rate: float = 0.0
+
     class Config:
         extra = Extra.forbid
 
@@ -209,8 +210,8 @@ class ActionStat(BaseModel):
             cooltime_reduce=self.cooltime_reduce + arg.cooltime_reduce,
             summon_duration=self.summon_duration + arg.summon_duration,
             buff_duration=self.buff_duration + arg.buff_duration,
-            cooltime_reduce_rate=self.cooltime_reduce_rate + arg.cooltime_reduce_rate
-            )
+            cooltime_reduce_rate=self.cooltime_reduce_rate + arg.cooltime_reduce_rate,
+        )
 
     def __iadd__(self, arg: ActionStat) -> ActionStat:
         self.cooltime_reduce += arg.cooltime_reduce
