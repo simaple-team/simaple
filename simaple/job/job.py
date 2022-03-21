@@ -46,4 +46,6 @@ class Job(metaclass=ABCMeta):
             self.get_general_damage_factor(stat)
             * self.get_armor_factor(stat, armor)
             * self.get_critical_factor(stat)
+            * self.get_base_stat_factor(stat)
+            * self.get_attack_type_factor(stat)
         )

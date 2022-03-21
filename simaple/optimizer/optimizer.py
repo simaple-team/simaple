@@ -1,14 +1,20 @@
 from __future__ import annotations
 
 from abc import ABCMeta, abstractmethod
-from typing import Iterable, List, Tuple
+from typing import Iterable, List, Optional, Tuple
 
 from simaple.hyperstat import Hyperstat
 from simaple.optimizer.step_iterator import Iterator
 
 
 class StepwizeOptimizationTarget(metaclass=ABCMeta):
-    def __init__(self, state_length):
+    NO_MAXIMUM_STEP = 999999
+
+    def __init__(self, state_length, maximum_step=-1):
+        self.maximum_step = maximum_step
+        if maximum_step == -1:
+            self.maximum_step = self.NO_MAXIMUM_STEP
+
         self.state_length = state_length
         self.state: List[int] = [0 for i in range(state_length)]
 
@@ -30,10 +36,14 @@ class StepwizeOptimizationTarget(metaclass=ABCMeta):
     def reset_state(self):
         self.state = [0 for i in range(self.state_length)]
 
-    def get_stepped_target(self, steps: Iterable[int]) -> StepwizeOptimizationTarget:
+    def get_stepped_target(
+        self, steps: Iterable[int]
+    ) -> Optional[StepwizeOptimizationTarget]:
         new_state = list(self.state)
         for step in steps:
             new_state[step] += 1
+            if new_state[step] > self.maximum_step:
+                return None
 
         new_target = self.clone()
         new_target.set_state(new_state)
@@ -99,6 +109,8 @@ class StepwizeOptimizer:
             original_value = target.get_value()
 
         new_target = target.get_stepped_target(increments)
+        if new_target is None:
+            return 0.0
 
         cost = new_target.get_cost()
         if cost > self.maximum_cost:
@@ -119,6 +131,8 @@ class StepwizeOptimizer:
                 break
 
             target = target.get_stepped_target(optimal_increments)
+            if target is None:
+                raise TypeError
 
             # While phrase protection logic
             iteration_count += 1
