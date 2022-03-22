@@ -215,15 +215,16 @@ def get_empty_block_sizes():
 
 def get_union_occupation_values():
     return [
-        [Stat(boss_damage_multiplier=v) for v in range(41)],
-        [Stat(ignored_defence=v) for v in range(41)],
-        [Stat(critical_damage=v) for v in range(41)],
-        [Stat(critical_rate=v) for v in range(41)],
-        [ActionStat(buff_duration=v) for v in range(41)],
+        [(Stat(boss_damage_multiplier=v), ActionStat()) for v in range(41)],
+        [(Stat(ignored_defence=v), ActionStat()) for v in range(41)],
+        [(Stat(critical_damage=v), ActionStat()) for v in range(41)],
+        [(Stat(critical_rate=v), ActionStat()) for v in range(41)],
+        [(Stat(), ActionStat(buff_duration=v)) for v in range(41)],
     ]
 
 
 UNION_LENGTH = len(get_all_blocks())
+UNION_OCCUPATION_LENGTH = len(get_union_occupation_values())
 
 
 class UnionBlockstat(BaseModel):
@@ -269,9 +270,15 @@ class UnionBlockstat(BaseModel):
         return stat
 
 
-class UnionOccupationStat:
+class UnionOccupationStat(BaseModel):
     occupation_state: List[int]
-    occupation_value: List[List[Tuple[Stat, ActionStat]]]
+    occupation_value: List[List[Tuple[Stat, ActionStat]]] = Field(
+        default_factory=get_union_occupation_values
+    )
+
+    @classmethod
+    def length(cls):
+        return UNION_OCCUPATION_LENGTH
 
     def get_stat(self) -> Stat:
         return sum(
