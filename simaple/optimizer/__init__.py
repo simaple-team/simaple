@@ -1,6 +1,6 @@
 from simaple.optimizer.optimizer import (
-    HyperstatStepwizeOptimizationTarget,
-    StepwizeOptimizationTarget,
+    DiscreteTarget,
+    HyperstatTarget,
     StepwizeOptimizer,
 )
 from simaple.optimizer.step_iterator import Iterator

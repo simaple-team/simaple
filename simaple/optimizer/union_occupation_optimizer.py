@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from simaple.optimizer.optimizer import StepwizeOptimizationTarget
+from simaple.optimizer.optimizer import DiscreteTarget
 from simaple.union import UnionOccupationStat
 
 
-class UnionOccupationStepwizeOptimizationTarget(StepwizeOptimizationTarget):
+class UnionOccupationTarget(DiscreteTarget):
     def __init__(self, default_stat, job, armor=300):
         super().__init__(UnionOccupationStat.length(), 40)
         self.default_stat = default_stat
@@ -20,8 +20,8 @@ class UnionOccupationStepwizeOptimizationTarget(StepwizeOptimizationTarget):
     def get_cost(self) -> float:
         return sum(self.state)
 
-    def clone(self) -> UnionOccupationStepwizeOptimizationTarget:
-        target = UnionOccupationStepwizeOptimizationTarget(
+    def clone(self) -> UnionOccupationTarget:
+        target = UnionOccupationTarget(
             default_stat=self.default_stat,
             job=self.job,
         )

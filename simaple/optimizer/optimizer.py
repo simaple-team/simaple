@@ -7,7 +7,7 @@ from simaple.hyperstat import Hyperstat
 from simaple.optimizer.step_iterator import Iterator
 
 
-class StepwizeOptimizationTarget(metaclass=ABCMeta):
+class DiscreteTarget(metaclass=ABCMeta):
     NO_MAXIMUM_STEP = 999999
 
     def __init__(self, state_length, maximum_step=-1):
@@ -36,9 +36,7 @@ class StepwizeOptimizationTarget(metaclass=ABCMeta):
     def reset_state(self):
         self.state = [0 for i in range(self.state_length)]
 
-    def get_stepped_target(
-        self, steps: Iterable[int]
-    ) -> Optional[StepwizeOptimizationTarget]:
+    def get_stepped_target(self, steps: Iterable[int]) -> Optional[DiscreteTarget]:
         new_state = list(self.state)
         for step in steps:
             new_state[step] += 1
@@ -51,7 +49,7 @@ class StepwizeOptimizationTarget(metaclass=ABCMeta):
         return new_target
 
 
-class HyperstatStepwizeOptimizationTarget(StepwizeOptimizationTarget):
+class HyperstatTarget(DiscreteTarget):
     def __init__(self, default_stat, job, armor=300):
         super().__init__(Hyperstat.length())
         self.default_stat = default_stat
@@ -69,8 +67,8 @@ class HyperstatStepwizeOptimizationTarget(StepwizeOptimizationTarget):
 
         return hyperstat.get_current_cost()
 
-    def clone(self) -> HyperstatStepwizeOptimizationTarget:
-        target = HyperstatStepwizeOptimizationTarget(
+    def clone(self) -> HyperstatTarget:
+        target = HyperstatTarget(
             default_stat=self.default_stat,
             job=self.job,
         )
@@ -85,7 +83,7 @@ class StepwizeOptimizer:
 
     def __init__(
         self,
-        target_prototype: StepwizeOptimizationTarget,
+        target_prototype: DiscreteTarget,
         maximum_cost: int,
         step_size: int = 2,
         maximum_iteration_count=999,
@@ -121,7 +119,7 @@ class StepwizeOptimizer:
         total_increment = value / original_value - 1
         return total_increment / (cost - original_cost)
 
-    def optimize(self) -> StepwizeOptimizationTarget:
+    def optimize(self) -> DiscreteTarget:
         target = self.target_prototype.clone()
         iteration_count = 0
 
@@ -141,7 +139,7 @@ class StepwizeOptimizer:
 
         return target
 
-    def get_optimal_increment(self, target: StepwizeOptimizationTarget) -> Tuple:
+    def get_optimal_increment(self, target: DiscreteTarget) -> Tuple:
         original_cost = target.get_cost()
         original_value = target.get_value()
 

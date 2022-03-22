@@ -7,7 +7,7 @@ from simaple.core.base import AttackType, BaseStatType, Stat
 from simaple.core.jobtype import JobType
 from simaple.job.job import Job
 from simaple.optimizer import StepwizeOptimizer
-from simaple.optimizer.union_optimizer import UnionBlockStepwizeOptimizationTarget
+from simaple.optimizer.union_optimizer import UnionBlockTarget
 
 
 class TestJob(Job):
@@ -25,7 +25,7 @@ class TestJob(Job):
 
 @pytest.mark.parametrize("maximum_cost", [5, 10, 15, 30])
 def test_optimizer(maximum_cost):
-    optimization_target = UnionBlockStepwizeOptimizationTarget(
+    optimization_target = UnionBlockTarget(
         Stat(
             INT=40000,
             LUK=5000,
