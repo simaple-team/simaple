@@ -206,6 +206,10 @@ def get_all_blocks():
             job=JobType.virtual_maplestory_m,
             options=[Stat(magic_attack=v, attack_power=v) for v in (5, 10, 15, 20, 20)],
         ),
+        UnionBlock(
+            job=JobType.blaster,
+            options=[Stat(armor=v) for v in (1, 2, 3, 5, 6)],
+        ),
     ]
 
 

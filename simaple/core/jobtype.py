@@ -37,6 +37,7 @@ class JobType(enum.Enum):
     wildhunter = "wildhunter"
     mechanic = "mechanic"
     zenon = "zenon"
+    blaster = "blaster"
 
     evan = "evan"
     luminous = "luminous"
