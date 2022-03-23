@@ -208,7 +208,7 @@ def get_all_blocks():
         ),
         UnionBlock(
             job=JobType.blaster,
-            options=[Stat(armor=v) for v in (1, 2, 3, 5, 6)],
+            options=[Stat(ignored_defence=v) for v in (1, 2, 3, 5, 6)],
         ),
     ]
 
