@@ -1,13 +1,9 @@
 name: Tests
 on: 
   push:
-    branches:
-      - master
-      - 'feature/*'
+    branches: [ master ]
   pull_request:
-    branches:
-      - master
-      - 'feature/*'
+    branches: [ master ]
 jobs:
   build:
     runs-on: ubuntu-latest
