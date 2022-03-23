@@ -5,7 +5,7 @@ from loguru import logger
 
 from simaple.core.base import AttackType, BaseStatType, Stat
 from simaple.job.job import Job
-from simaple.optimizer import HyperstatStepwizeOptimizationTarget, StepwizeOptimizer
+from simaple.optimizer import HyperstatTarget, StepwizeOptimizer
 
 
 class TestJob(Job):
@@ -23,7 +23,7 @@ class TestJob(Job):
 
 @pytest.mark.parametrize("maximum_cost", [50, 100])
 def test_optimizer(maximum_cost):
-    optimization_target = HyperstatStepwizeOptimizationTarget(
+    optimization_target = HyperstatTarget(
         Stat(
             INT=40000,
             LUK=5000,

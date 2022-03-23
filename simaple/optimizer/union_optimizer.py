@@ -3,11 +3,11 @@ from __future__ import annotations
 from typing import List, Optional
 
 from simaple.core.jobtype import JobType
-from simaple.optimizer.optimizer import StepwizeOptimizationTarget
+from simaple.optimizer.optimizer import DiscreteTarget
 from simaple.union import UnionBlockstat
 
 
-class UnionBlockStepwizeOptimizationTarget(StepwizeOptimizationTarget):
+class UnionBlockTarget(DiscreteTarget):
     def __init__(
         self,
         default_stat,
@@ -42,8 +42,8 @@ class UnionBlockStepwizeOptimizationTarget(StepwizeOptimizationTarget):
     def get_cost(self) -> float:
         return sum(self.state)
 
-    def clone(self) -> UnionBlockStepwizeOptimizationTarget:
-        target = UnionBlockStepwizeOptimizationTarget(
+    def clone(self) -> UnionBlockTarget:
+        target = UnionBlockTarget(
             default_stat=self.default_stat,
             job=self.job,
             preempted_jobs=list(self.preempted_jobs),
