@@ -1,5 +1,7 @@
 from pydantic import BaseModel
+
 from simaple.core import BaseStatType, Stat
+
 
 class AuthenticSymbol(BaseModel):
     level: int
@@ -10,9 +12,9 @@ class AuthenticSymbol(BaseModel):
             return Stat()
 
         if self.stat_type.value in ["INT", "LUK", "DEX", "STR"]:
-            return Stat.parse_obj({
-                self.stat_type.value: (self.level * 2 + 3) * 100
-            })
+            return Stat.parse_obj(
+                {self.stat_type.value + "_static": (self.level * 2 + 3) * 100}
+            )
 
-    def get_force(self):        
+    def get_force(self):
         return self.level * 10
