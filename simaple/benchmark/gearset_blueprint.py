@@ -3,10 +3,11 @@ from typing import List, Tuple
 from pydantic import BaseModel
 
 from simaple.core import Stat
+from simaple.gear.arcane_symbol import ArcaneSymbol
+from simaple.gear.authentic_symbol import AuthenticSymbol
 from simaple.gear.blueprint import PracticalGearBlueprint
 from simaple.gear.gear_repository import GearRepository
-from simaple.gear.authentic_symbol import AuthenticSymbol
-from simaple.gear.arcane_symbol import ArcaneSymbol
+from simaple.gear.gearset import Gearset
 
 
 class UserGearsetBlueprint(BaseModel):
@@ -17,16 +18,16 @@ class UserGearsetBlueprint(BaseModel):
     cash: Stat
     weapon_stat: Tuple[int, int]
 
-    head: PracticalGearBlueprint
-    top: PracticalGearBlueprint
-    bottom: PracticalGearBlueprint
+    cap: PracticalGearBlueprint
+    coat: PracticalGearBlueprint
+    pants: PracticalGearBlueprint
     shoes: PracticalGearBlueprint
     glove: PracticalGearBlueprint
     cape: PracticalGearBlueprint
-    shoulder: PracticalGearBlueprint
-    face: PracticalGearBlueprint
-    eye: PracticalGearBlueprint
-    ear: PracticalGearBlueprint
+    shoulder_pad: PracticalGearBlueprint
+    face_accessory: PracticalGearBlueprint
+    eye_accessory: PracticalGearBlueprint
+    earrings: PracticalGearBlueprint
     belt: PracticalGearBlueprint
 
     ring1: PracticalGearBlueprint
@@ -45,42 +46,59 @@ class UserGearsetBlueprint(BaseModel):
     subweapon: PracticalGearBlueprint
     emblem: PracticalGearBlueprint
 
-    heart: PracticalGearBlueprint
+    machine_heart: PracticalGearBlueprint
 
     title: Stat
 
-    def build(self, gear_repository: GearRepository) -> Stat:
-        output = Stat()
+    def build(self, gear_repository: GearRepository) -> Gearset:
+        gearset = Gearset()
 
-        output += self.head.build(gear_repository=gear_repository).sum_stat()
-        output += self.top.build(gear_repository=gear_repository).sum_stat()
-        output += self.bottom.build(gear_repository=gear_repository).sum_stat()
-        output += self.shoes.build(gear_repository=gear_repository).sum_stat()
-        output += self.glove.build(gear_repository=gear_repository).sum_stat()
-        output += self.cape.build(gear_repository=gear_repository).sum_stat()
-        output += self.shoulder.build(gear_repository=gear_repository).sum_stat()
-        output += self.face.build(gear_repository=gear_repository).sum_stat()
-        output += self.eye.build(gear_repository=gear_repository).sum_stat()
-        output += self.ear.build(gear_repository=gear_repository).sum_stat()
-        output += self.belt.build(gear_repository=gear_repository).sum_stat()
+        gearset.equip(self.cap.build(gear_repository=gear_repository), "cap")
+        gearset.equip(self.coat.build(gear_repository=gear_repository), "coat")
+        gearset.equip(self.pants.build(gear_repository=gear_repository), "pants")
+        gearset.equip(self.shoes.build(gear_repository=gear_repository), "shoes")
+        gearset.equip(self.glove.build(gear_repository=gear_repository), "glove")
+        gearset.equip(self.cape.build(gear_repository=gear_repository), "cape")
+        gearset.equip(
+            self.shoulder_pad.build(gear_repository=gear_repository), "shoulder_pad"
+        )
+        gearset.equip(
+            self.face_accessory.build(gear_repository=gear_repository), "face_accessory"
+        )
+        gearset.equip(
+            self.eye_accessory.build(gear_repository=gear_repository), "eye_accessory"
+        )
+        gearset.equip(self.earrings.build(gear_repository=gear_repository), "earrings")
+        gearset.equip(self.belt.build(gear_repository=gear_repository), "belt")
 
-        output += self.ring1.build(gear_repository=gear_repository).sum_stat()
-        output += self.ring2.build(gear_repository=gear_repository).sum_stat()
-        output += self.ring3.build(gear_repository=gear_repository).sum_stat()
-        output += self.ring4.build(gear_repository=gear_repository).sum_stat()
+        gearset.equip(self.ring1.build(gear_repository=gear_repository), "ring1")
+        gearset.equip(self.ring2.build(gear_repository=gear_repository), "ring2")
+        gearset.equip(self.ring3.build(gear_repository=gear_repository), "ring3")
+        gearset.equip(self.ring4.build(gear_repository=gear_repository), "ring4")
 
-        output += self.pendant1.build(gear_repository=gear_repository).sum_stat()
-        output += self.pendant2.build(gear_repository=gear_repository).sum_stat()
+        gearset.equip(self.pendant1.build(gear_repository=gear_repository), "pendant1")
+        gearset.equip(self.pendant2.build(gear_repository=gear_repository), "pendant2")
 
-        output += self.pocket.build(gear_repository=gear_repository).sum_stat()
-        output += self.badge.build(gear_repository=gear_repository).sum_stat()
-        output += self.medal.build(gear_repository=gear_repository).sum_stat()
+        gearset.equip(self.pocket.build(gear_repository=gear_repository), "pocket")
+        gearset.equip(self.badge.build(gear_repository=gear_repository), "badge")
+        gearset.equip(self.medal.build(gear_repository=gear_repository), "medal")
 
-        output += self.weapon.build(gear_repository=gear_repository).sum_stat()
-        output += self.subweapon.build(gear_repository=gear_repository).sum_stat()
-        output += self.emblem.build(gear_repository=gear_repository).sum_stat()
+        gearset.equip(self.weapon.build(gear_repository=gear_repository), "weapon")
+        gearset.equip(
+            self.subweapon.build(gear_repository=gear_repository), "subweapon"
+        )
+        gearset.equip(self.emblem.build(gear_repository=gear_repository), "emblem")
+        gearset.equip(
+            self.machine_heart.build(gear_repository=gear_repository), "machine_heart"
+        )
 
-        output += self.heart.build(gear_repository=gear_repository).sum_stat()
-        output += self.title
+        gearset.set_title_stat(self.title)
 
-        return output
+        gearset.set_arcane_symbols(self.arcane_symbols)
+        gearset.set_authentic_symbols(self.authentic_symbols)
+
+        gearset.set_pet_equip_stat(self.pet_equip)
+        gearset.set_pet_set_option(self.pet_set)
+        gearset.set_cash_item_stat(self.cash)
+
+        return gearset

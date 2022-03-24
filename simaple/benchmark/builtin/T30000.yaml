@@ -89,13 +89,13 @@ default:
   weapon_stat:
     - 4
     - 9
-  head:
+  cap:
     gear_id: 앱솔랩스 모자
     <<: *armor
-  top:
+  coat:
     gear_id: 카루타 상의
     <<: *armor
-  bottom:
+  pants:
     gear_id: 카루타 하의
     <<: *armor
   shoes:
@@ -111,21 +111,21 @@ default:
   cape:
     gear_id: 앱솔랩스 망토
     <<: *armor
-  shoulder:
+  shoulder_pad:
     gear_id: 앱솔랩스 숄더
     <<: *acc
     scroll:
       name: 혼줌
       stat:
         first_att: 5
-  face:
+  face_accessory:
     gear_id: 응축된 힘의 결정석
     <<: *acc
     star: 10
-  eye:
+  eye_accessory:
     gear_id: 파풀라투스 마크
     <<: *acc
-  ear:
+  earrings:
     gear_id: 마이스터 이어링
     <<: *acc
   belt:
@@ -196,7 +196,7 @@ default:
     gear_id: 골드 나이트 엠블렘
     additional_potential:
       patt: 21
-  heart:
+  machine_heart:
     gear_id: 티타늄 하트
     <<: *acc
     scroll:
