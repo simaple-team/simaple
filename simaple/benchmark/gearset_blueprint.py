@@ -5,11 +5,13 @@ from pydantic import BaseModel
 from simaple.core import Stat
 from simaple.gear.blueprint import PracticalGearBlueprint
 from simaple.gear.gear_repository import GearRepository
+from simaple.gear.authentic_symbol import AuthenticSymbol
+from simaple.gear.arcane_symbol import ArcaneSymbol
 
 
 class UserGearsetBlueprint(BaseModel):
-    arcane_symbol_levels: List[int]
-    authentic_symbol_levels: List[int]
+    arcane_symbols: List[ArcaneSymbol]
+    authentic_symbols: List[AuthenticSymbol]
     pet_equip: Stat
     pet_set: Stat
     cash: Stat

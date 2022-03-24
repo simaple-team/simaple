@@ -59,16 +59,24 @@ anchors:
         - first_att: 10
     star: 22
 default:
-  arcane_symbol_levels: 
-    - 20
-    - 20
-    - 20
-    - 20
-    - 20
-    - 20
-  authentic_symbol_levels:
-    - 10
-    - 8
+  arcane_symbols: 
+    - level: 20
+      stat_type: first_stat
+    - level: 20
+      stat_type: first_stat
+    - level: 20
+      stat_type: first_stat
+    - level: 20
+      stat_type: first_stat
+    - level: 20
+      stat_type: first_stat
+    - level: 20
+      stat_type: first_stat
+  authentic_symbols:
+    - level: 10
+      stat_type: first_stat
+    - level: 8
+      stat_type: first_stat
   pet_equip:
     first_stat: 124 # 프펫공, 루나 드림 2세트(5+4*9)*2, 루나 쁘띠 1세트(10+4*8)
   pet_set: 
