@@ -6,7 +6,7 @@ from typing import Iterable, List, Optional, Set, Tuple
 
 from pydantic import BaseModel, Field
 
-from simaple.core.base import Stat
+from simaple.core import Stat
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository
 

@@ -4,7 +4,7 @@ import os
 import pytest
 import yaml
 
-from simaple.core.base import Stat
+from simaple.core import Stat
 from simaple.job.passive_skill import (
     PassiveSkillArgument,
     PassiveSkillDescription,

@@ -1,7 +1,7 @@
 import pytest
 from loguru import logger
 
-from simaple.core.base import Stat, StatProps
+from simaple.core import Stat, StatProps
 from simaple.gear.gear_repository import GearRepository
 from simaple.gear.improvements.spell_trace import SpellTrace
 

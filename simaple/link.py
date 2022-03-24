@@ -2,8 +2,7 @@ from typing import List
 
 from pydantic import BaseModel, Field
 
-from simaple.core.base import Stat
-from simaple.core.jobtype import JobType
+from simaple.core import JobType, Stat
 
 
 def empty_options(length):

@@ -2,7 +2,7 @@ from typing import List, Tuple
 
 from pydantic import BaseModel
 
-from simaple.core.base import Stat
+from simaple.core import Stat
 from simaple.gear.blueprint import PracticalGearBlueprint
 from simaple.gear.gear_repository import GearRepository
 

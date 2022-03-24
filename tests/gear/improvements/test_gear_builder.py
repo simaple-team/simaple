@@ -4,7 +4,7 @@ from json import JSONEncoder
 
 import pytest
 
-from simaple.core.base import StatProps
+from simaple.core import StatProps
 from simaple.gear.blueprint import GeneralizedGearBlueprint
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository

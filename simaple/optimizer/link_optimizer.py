@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import List, Optional
 
-from simaple.core.jobtype import JobType
+from simaple.core import JobType, Stat
+from simaple.job.job import Job
 from simaple.link import LinkSkillset
 from simaple.optimizer.optimizer import DiscreteTarget
 
@@ -10,8 +11,8 @@ from simaple.optimizer.optimizer import DiscreteTarget
 class LinkSkillTarget(DiscreteTarget):
     def __init__(
         self,
-        default_stat,
-        job,
+        default_stat: Stat,
+        job: Job,
         preempted_jobs: List[JobType],
         armor: int = 300,
         link_skillset: Optional[LinkSkillset] = None,

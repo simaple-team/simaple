@@ -3,9 +3,9 @@ import time
 import pytest
 from loguru import logger
 
-from simaple.core.base import AttackType, BaseStatType, Stat
+from simaple.core import AttackType, BaseStatType, Stat
 from simaple.job.job import Job
-from simaple.optimizer import HyperstatTarget, StepwizeOptimizer
+from simaple.optimizer import StepwizeOptimizer, UnionOccupationTarget
 
 
 class TestJob(Job):
@@ -21,9 +21,9 @@ class TestJob(Job):
         return stat.get_attack_coefficient(AttackType.magic_attack)
 
 
-@pytest.mark.parametrize("maximum_cost", [50, 100])
+@pytest.mark.parametrize("maximum_cost", [20, 40, 60])
 def test_optimizer(maximum_cost):
-    optimization_target = HyperstatTarget(
+    optimization_target = UnionOccupationTarget(
         Stat(
             INT=40000,
             LUK=5000,

@@ -4,7 +4,7 @@ from typing import Annotated, Literal
 
 from pydantic import conint
 
-from simaple.core.base import Stat
+from simaple.core import Stat
 from simaple.gear.gear import Gear
 from simaple.gear.gear_type import GearType
 from simaple.gear.improvements.base import GearImprovement

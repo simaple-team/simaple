@@ -2,7 +2,7 @@ from typing import List, Union
 
 from pydantic import BaseModel, Field
 
-from simaple.core.base import ActionStat, Stat
+from simaple.core import ActionStat, Stat
 
 
 class AbstractPotential(BaseModel):

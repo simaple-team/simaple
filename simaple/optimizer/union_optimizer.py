@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import List, Optional
 
-from simaple.core.jobtype import JobType
+from simaple.core import JobType, Stat
+from simaple.job.job import Job
 from simaple.optimizer.optimizer import DiscreteTarget
 from simaple.union import UnionBlockstat
 
@@ -10,8 +11,8 @@ from simaple.union import UnionBlockstat
 class UnionBlockTarget(DiscreteTarget):
     def __init__(
         self,
-        default_stat,
-        job,
+        default_stat: Stat,
+        job: Job,
         preempted_jobs: List[JobType],
         armor: int = 300,
         union_blocks: Optional[UnionBlockstat] = None,

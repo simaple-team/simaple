@@ -1,4 +1,4 @@
-from simaple.core.base import Stat
+from simaple.core import Stat
 from simaple.gear.gear_type import GearType
 from simaple.gear.improvements.scroll import Scroll
 

@@ -1,7 +1,7 @@
 import pytest
 from loguru import logger
 
-from simaple.core.base import Stat
+from simaple.core import Stat
 from simaple.gear.gear_repository import GearRepository
 from simaple.gear.improvements.starforce import AmazingEnhancement
 

@@ -2,18 +2,18 @@ import itertools
 
 
 class Iterator:
-    def single_iterator(self, length):
+    def single_iterator(self, length: int):
         for i in range(length):
             yield (i,)
 
-    def double_iterator(self, length):
+    def double_iterator(self, length: int):
         for i in range(length):
             yield (i, i)
 
         for v in itertools.combinations(range(length), 2):
             yield v
 
-    def triple_iterator(self, length):
+    def triple_iterator(self, length: int):
         for i in range(length):
             yield (i, i, i)
 
@@ -23,7 +23,7 @@ class Iterator:
         for v in itertools.combinations(range(length), 3):
             yield v
 
-    def quadruple_iterator(self, length):
+    def quadruple_iterator(self, length: int):
         for i in range(length):
             yield (i, i, i, i)
 
@@ -42,7 +42,7 @@ class Iterator:
         for v in itertools.combinations(range(length), 4):
             yield v
 
-    def cumulated_iterator(self, length, maximum_depth):
+    def cumulated_iterator(self, length: int, maximum_depth: int):
         if maximum_depth >= 1:
             for v in self.single_iterator(length):
                 yield v
