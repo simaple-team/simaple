@@ -16,5 +16,7 @@ class AuthenticSymbol(BaseModel):
                 {self.stat_type.value + "_static": (self.level * 2 + 3) * 100}
             )
 
+        raise ValueError
+
     def get_force(self):
         return self.level * 10

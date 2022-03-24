@@ -1,9 +1,7 @@
 import pytest
 
 from simaple.core import Stat
-from simaple.gear.gear import Gear
-from simaple.gear.gear_type import GearType
-from simaple.gear.gearset import Gearset, GearSlot
+from simaple.gear.gearset import Gearset
 
 
 @pytest.fixture(name="default_gearset")

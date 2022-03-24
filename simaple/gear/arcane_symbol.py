@@ -16,6 +16,8 @@ class ArcaneSymbol(BaseModel):
                 {self.stat_type.value + "_static": (self.level + 2) * 100}
             )
 
+        raise ValueError
+
     def get_force(self):
         if self.level == 0:
             return 0

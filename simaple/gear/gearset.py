@@ -1,5 +1,4 @@
-import enum
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -130,7 +129,7 @@ class Gearset(BaseModel):
 
         return True
 
-    def _get_eqiuppable_slots(self, gear) -> List[int]:
+    def _get_eqiuppable_slots(self, gear) -> List[GearSlot]:
         return [
             slot for slot in self.gear_slots if gear.type in slot.enabled_gear_types
         ]
@@ -142,12 +141,5 @@ class Gearset(BaseModel):
 
         raise KeyError
 
-    def equip(self, gear, slot_name):
+    def equip(self, gear: Gear, slot_name: str) -> None:
         self.get_slot(slot_name).equip(gear)
-
-    def search_name(self, gear) -> Optional[str]:
-        for slot in equippable_slots:
-            if slot.name == slot_name:
-                return slot.name
-
-        return None
