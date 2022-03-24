@@ -3,7 +3,7 @@ from typing import List, Optional, Union
 
 from pydantic import BaseModel, Extra, Field
 
-from simaple.core.base import Stat
+from simaple.core import Stat
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository
 from simaple.gear.improvements.bonus import Bonus

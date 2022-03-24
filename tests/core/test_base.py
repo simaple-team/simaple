@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.core.base import AttackType, BaseStatType, Stat
+from simaple.core import AttackType, BaseStatType, Stat
 
 TEST_CASES = [
     ("STR", 3, 4, 7),

@@ -2,7 +2,7 @@ from typing import List, Literal
 
 from pydantic import BaseModel
 
-from simaple.core.base import Stat
+from simaple.core import Stat
 from simaple.gear.gear import Gear
 from simaple.gear.gear_type import GearType
 

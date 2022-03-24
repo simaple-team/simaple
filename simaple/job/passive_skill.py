@@ -8,7 +8,7 @@ from typing import Any, Dict, List
 import yaml
 from pydantic import BaseModel
 
-from simaple.core.base import Stat
+from simaple.core import Stat
 from simaple.resource import Description, DescriptionArgument, SimapleResource
 
 

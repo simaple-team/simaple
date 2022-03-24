@@ -1,6 +1,6 @@
 from typing import Literal, Set
 
-from simaple.core.base import Stat, StatProps
+from simaple.core import Stat, StatProps
 from simaple.gear.gear import Gear
 from simaple.gear.gear_type import GearType
 from simaple.gear.improvements.base import GearImprovement

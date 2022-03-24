@@ -2,7 +2,7 @@ from typing import List
 
 from pydantic import BaseModel, Field
 
-from simaple.core.base import Stat
+from simaple.core import Stat
 
 HYPERSTAT_BASIS = {
     "STR_static": [i * 30 for i in range(16)],
@@ -45,7 +45,7 @@ class Hyperstat(BaseModel):
     def length(cls):
         return len(HYPERSTAT_BASIS)
 
-    def get_cost_for_level(self, level) -> int:
+    def get_cost_for_level(self, level: int) -> int:
         return sum(self.cost[:level])
 
     def get_current_cost(self) -> int:

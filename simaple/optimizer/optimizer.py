@@ -3,14 +3,13 @@ from __future__ import annotations
 from abc import ABCMeta, abstractmethod
 from typing import Iterable, List, Optional, Tuple
 
-from simaple.hyperstat import Hyperstat
 from simaple.optimizer.step_iterator import Iterator
 
 
 class DiscreteTarget(metaclass=ABCMeta):
     NO_MAXIMUM_STEP = 999999
 
-    def __init__(self, state_length, maximum_step=-1):
+    def __init__(self, state_length: int, maximum_step: int = -1):
         self.maximum_step = maximum_step
         if maximum_step == -1:
             self.maximum_step = self.NO_MAXIMUM_STEP
@@ -49,34 +48,6 @@ class DiscreteTarget(metaclass=ABCMeta):
         return new_target
 
 
-class HyperstatTarget(DiscreteTarget):
-    def __init__(self, default_stat, job, armor=300):
-        super().__init__(Hyperstat.length())
-        self.default_stat = default_stat
-        self.job = job
-        self.armor = armor
-
-    def get_value(self) -> float:
-        hyperstat = Hyperstat(levels=self.state)
-
-        resulted_stat = self.default_stat + hyperstat.get_stat()
-        return self.job.get_damage_factor(resulted_stat, armor=self.armor)
-
-    def get_cost(self) -> float:
-        hyperstat = Hyperstat(levels=self.state)
-
-        return hyperstat.get_current_cost()
-
-    def clone(self) -> HyperstatTarget:
-        target = HyperstatTarget(
-            default_stat=self.default_stat,
-            job=self.job,
-        )
-        target.set_state(self.state)
-
-        return target
-
-
 class StepwizeOptimizer:
     class MaximumOptimizationStepExceed(Exception):
         ...
@@ -99,7 +70,13 @@ class StepwizeOptimizer:
             self.target_prototype.state_length, self.step_size
         )
 
-    def get_reward(self, target, increments, original_cost=None, original_value=None):
+    def get_reward(
+        self,
+        target: DiscreteTarget,
+        increments: Tuple,
+        original_cost: Optional[float] = None,
+        original_value: Optional[float] = None,
+    ):
         # Caching
         if original_cost is None:
             original_cost = target.get_cost()

@@ -1,4 +1,4 @@
-from simaple.core.base import ActionStat, Stat
+from simaple.core import ActionStat, Stat
 from simaple.gear.potential import AdditionalPotential, Potential
 
 

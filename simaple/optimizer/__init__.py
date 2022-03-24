@@ -1,6 +1,6 @@
-from simaple.optimizer.optimizer import (
-    DiscreteTarget,
-    HyperstatTarget,
-    StepwizeOptimizer,
-)
+from simaple.optimizer.hyperstat_optimizer import HyperstatTarget
+from simaple.optimizer.link_optimizer import LinkSkillTarget
+from simaple.optimizer.optimizer import DiscreteTarget, StepwizeOptimizer
 from simaple.optimizer.step_iterator import Iterator
+from simaple.optimizer.union_occupation_optimizer import UnionOccupationTarget
+from simaple.optimizer.union_optimizer import UnionBlockTarget

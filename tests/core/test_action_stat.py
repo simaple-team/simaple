@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.core.base import ActionStat
+from simaple.core import ActionStat
 
 TEST_CASES = [
     ("cooltime_reduce", 3, 4, 7),
