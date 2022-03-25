@@ -23,7 +23,7 @@ class LinkSkill(BaseModel):
 
 
 def get_all_blocks(
-    theif_cunning_utilization_rate: float = 0.5,
+    thief_cunning_utilization_rate: float = 0.5,
     cadena_link_stack: int = 2,
     ark_link_stack: int = 5,
     adele_link_membder_count: int = 4,
@@ -56,7 +56,7 @@ def get_all_blocks(
         LinkSkill(
             providing_jobs=[JobType.shadower, JobType.corsair, JobType.dualblade],
             options=[
-                Stat(damage_multiplier=(v + 1) * 3 * theif_cunning_utilization_rate)
+                Stat(damage_multiplier=(v + 1) * 3 * thief_cunning_utilization_rate)
                 for v in range(6)
             ],
         ),
