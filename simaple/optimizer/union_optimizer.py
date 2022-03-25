@@ -37,7 +37,7 @@ class UnionBlockTarget(DiscreteTarget):
             self.state[self._union_blocks.get_index(job)] = 1
 
     def get_value(self) -> float:
-        resulted_stat = self.default_stat + self._union_blocks.get_stat(self.state)
+        resulted_stat = self.default_stat + self._union_blocks.get_masked(self.state).get_stat()
         return self.job.get_damage_factor(resulted_stat, armor=self.armor)
 
     def get_cost(self) -> float:

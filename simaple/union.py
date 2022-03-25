@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List, Tuple
 
 from pydantic import BaseModel, Field
@@ -229,7 +231,7 @@ def get_union_occupation_values():
 UNION_LENGTH = len(get_all_blocks())
 UNION_OCCUPATION_LENGTH = len(get_union_occupation_values())
 
-
+# TODO: att / stat occupation
 class UnionBlockstat(BaseModel):
     block_size: List[int] = Field(default_factory=get_empty_block_sizes)
     blocks: List[UnionBlock] = Field(default_factory=get_all_blocks)
@@ -256,11 +258,16 @@ class UnionBlockstat(BaseModel):
 
         raise KeyError
 
-    def get_stat(self, mask: List[int]) -> Stat:
+    def get_masked(self, mask: List[int]) -> UnionBlockstat:
+        return UnionBlockstat(
+            block_size=[size for enabled, size in zip(mask, self.block_size) if enabled],
+            blocks=[block for enabled, block in zip(mask, self.blocks) if enabled]
+        )
+
+    def get_stat(self) -> Stat:
         stat = Stat()
-        for enabled, block, size in zip(mask, self.blocks, self.block_size):
-            if enabled:
-                stat += block.get_stat(size)
+        for block, size in zip(self.blocks, self.block_size):
+            stat += block.get_stat(size)
 
         return stat
 
