@@ -1,10 +1,8 @@
-from abc import abstractmethod, ABCMeta
-from pydantic import BaseModel
-from simaple.core.base import Stat, BaseStatType, AttackType
-
 from abc import ABCMeta, abstractmethod
-from typing import List
+
 from pydantic import BaseModel
+
+from simaple.core.base import AttackType, BaseStatType, Stat
 
 
 class DamageLogic(BaseModel, metaclass=ABCMeta):

@@ -1,5 +1,6 @@
 import enum
 
+
 class JobCategory(enum.IntEnum):
     warrior = 0
     mage = 1

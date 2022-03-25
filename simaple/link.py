@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from typing import List
 
 from pydantic import BaseModel, Field
@@ -174,8 +175,10 @@ class LinkSkillset(BaseModel):
 
     def get_masked(self, mask: List[int]) -> LinkSkillset:
         return LinkSkillset(
-            link_levels=[level for enabled, level in zip(mask, self.link_levels) if enabled],
-            links=[link for enabled, link in zip(mask, self.links) if enabled]
+            link_levels=[
+                level for enabled, level in zip(mask, self.link_levels) if enabled
+            ],
+            links=[link for enabled, link in zip(mask, self.links) if enabled],
         )
 
     def get_stat(self) -> Stat:

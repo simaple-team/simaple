@@ -21,10 +21,7 @@ def test_optimizer(maximum_cost):
             ignored_defence=90,
             INT_static=10000,
         ),
-        INTBasedDamageLogic(
-            attack_range_constant=1.0,
-            mastery=0.95
-        ),
+        INTBasedDamageLogic(attack_range_constant=1.0, mastery=0.95),
         preempted_jobs=[JobType.archmagefb],
     )
     optimizer = StepwizeOptimizer(optimization_target, maximum_cost, 1)

@@ -260,8 +260,10 @@ class UnionBlockstat(BaseModel):
 
     def get_masked(self, mask: List[int]) -> UnionBlockstat:
         return UnionBlockstat(
-            block_size=[size for enabled, size in zip(mask, self.block_size) if enabled],
-            blocks=[block for enabled, block in zip(mask, self.blocks) if enabled]
+            block_size=[
+                size for enabled, size in zip(mask, self.block_size) if enabled
+            ],
+            blocks=[block for enabled, block in zip(mask, self.blocks) if enabled],
         )
 
     def get_stat(self) -> Stat:

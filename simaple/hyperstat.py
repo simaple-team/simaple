@@ -42,20 +42,27 @@ class Hyperstat(BaseModel):
     levels: List[int] = Field(default_factory=get_empty_hyperstat_levels)
 
     @classmethod
-    def get_maximum_cost_from_level(self, character_level: int) -> int:
+    def get_maximum_cost_from_level(cls, character_level: int) -> int:
         def get_character_level_point(character_level: int) -> int:
-            return (character_level // 10 - 11)
-        
+            return character_level // 10 - 11
+
         def get_sumation_with_ten_step_unit(character_level: int) -> int:
             return (
-                get_character_level_point(140) 
-                + get_character_level_point(character_level) - 1
-            ) * (character_level // 10  - 14)* 5
+                (
+                    get_character_level_point(140)
+                    + get_character_level_point(character_level)
+                    - 1
+                )
+                * (character_level // 10 - 14)
+                * 5
+            )
 
         if character_level < 140:
             return 0
 
-        return get_sumation_with_ten_step_unit(character_level) + get_character_level_point(character_level) * (character_level % 10 + 1)
+        return get_sumation_with_ten_step_unit(
+            character_level
+        ) + get_character_level_point(character_level) * (character_level % 10 + 1)
 
     @classmethod
     def length(cls):

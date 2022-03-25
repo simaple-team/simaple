@@ -20,10 +20,7 @@ def test_optimizer(maximum_cost):
             damage_multiplier=300,
             ignored_defence=90,
         ),
-        INTBasedDamageLogic(
-            attack_range_constant=1.0,
-            mastery=0.95
-        ),
+        INTBasedDamageLogic(attack_range_constant=1.0, mastery=0.95),
     )
     optimizer = StepwizeOptimizer(optimization_target, maximum_cost, 1)
     start = time.time()

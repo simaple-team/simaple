@@ -2,7 +2,7 @@ from simaple.benchmark.interpreter import (
     BenchmarkConfigurationInterpreter,
     BenchmarkInterpreterOption,
 )
-from simaple.core import BaseStatType
+from simaple.core import BaseStatType, JobCategory
 from simaple.gear.gear_repository import GearRepository
 
 
@@ -10,7 +10,7 @@ def test_interpreter_get_gearset():
     interpreter_option = BenchmarkInterpreterOption(
         stat_priority=["STR", "DEX", "INT", "LUK"],
         attack_priority=["attack_power", "magic_attack"],
-        job_index=0,
+        job_category=JobCategory.warrior,
     )
 
     interpreter = BenchmarkConfigurationInterpreter()
@@ -26,7 +26,7 @@ def test_gearset_ok():
     interpreter_option = BenchmarkInterpreterOption(
         stat_priority=["STR", "DEX", "INT", "LUK"],
         attack_priority=["attack_power", "magic_attack"],
-        job_index=0,
+        job_category=JobCategory.warrior,
     )
 
     interpreter = BenchmarkConfigurationInterpreter()
