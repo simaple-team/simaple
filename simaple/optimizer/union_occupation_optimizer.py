@@ -30,3 +30,6 @@ class UnionOccupationTarget(DiscreteTarget):
         target.set_state(self.state)
 
         return target
+
+    def get_result(self) -> UnionOccupationStat:
+        return UnionOccupationStat(occupation_state=self.state)

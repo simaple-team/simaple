@@ -32,3 +32,6 @@ class HyperstatTarget(DiscreteTarget):
         target.set_state(self.state)
 
         return target
+
+    def get_result(self) -> Hyperstat:
+        return Hyperstat(levels=self.state)

@@ -18,6 +18,10 @@ class DiscreteTarget(metaclass=ABCMeta):
         self.state: List[int] = [0 for i in range(state_length)]
 
     @abstractmethod
+    def get_result(self) -> Any:
+        ...
+
+    @abstractmethod
     def get_value(self) -> float:
         ...
 

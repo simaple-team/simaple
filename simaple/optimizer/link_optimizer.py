@@ -51,3 +51,6 @@ class LinkSkillTarget(DiscreteTarget):
         target.set_state(self.state)
 
         return target
+
+    def get_result(self) -> LinkSkillset:
+        return self._candidate_link_skillset.get_masked(self.state)

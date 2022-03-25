@@ -53,3 +53,6 @@ class UnionBlockTarget(DiscreteTarget):
         target.set_state(self.state)
 
         return target
+
+    def get_result(self) -> UnionBlockstat:
+        return self._union_blocks.get_masked(self.state)
