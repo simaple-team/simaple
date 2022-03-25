@@ -8,6 +8,7 @@ from simaple.gear.authentic_symbol import AuthenticSymbol
 from simaple.gear.blueprint import PracticalGearBlueprint
 from simaple.gear.gear_repository import GearRepository
 from simaple.gear.gearset import Gearset
+from simaple.gear.potential import PotentialTier
 
 
 class UserGearsetBlueprint(BaseModel):
@@ -16,7 +17,9 @@ class UserGearsetBlueprint(BaseModel):
     pet_equip: Stat
     pet_set: Stat
     cash: Stat
-    weapon_stat: Tuple[int, int]
+    weapon_potential_tiers: Tuple[
+        List[PotentialTier], List[PotentialTier], List[PotentialTier],
+    ]
 
     cap: PracticalGearBlueprint
     coat: PracticalGearBlueprint

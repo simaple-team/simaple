@@ -86,9 +86,16 @@ default:
     second_stat: 75
     third_stat: 75
     first_att: 40
-  weapon_stat:
-    - 4
-    - 9
+  weapon_potential_tiers:
+    - - 4
+      - 3
+      - 3
+    - - 4
+      - 3
+      - 3
+    - - 4
+      - 3
+      - 3
   cap:
     gear_id: 앱솔랩스 모자
     <<: *armor
