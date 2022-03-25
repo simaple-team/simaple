@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import List
 
 from pydantic import BaseModel, Field
@@ -171,10 +172,15 @@ class LinkSkillset(BaseModel):
 
         raise KeyError
 
-    def get_stat(self, mask: List[int]) -> Stat:
+    def get_masked(self, mask: List[int]) -> LinkSkillset:
+        return LinkSkillset(
+            link_levels=[level for enabled, level in zip(mask, self.link_levels) if enabled],
+            links=[link for enabled, link in zip(mask, self.links) if enabled]
+        )
+
+    def get_stat(self) -> Stat:
         stat = Stat()
-        for enabled, block, size in zip(mask, self.links, self.link_levels):
-            if enabled:
-                stat += block.get_stat(size)
+        for block, size in zip(self.links, self.link_levels):
+            stat += block.get_stat(size)
 
         return stat

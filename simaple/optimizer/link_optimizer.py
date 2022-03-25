@@ -15,7 +15,7 @@ class LinkSkillTarget(DiscreteTarget):
         job: Job,
         preempted_jobs: List[JobType],
         armor: int = 300,
-        link_skillset: Optional[LinkSkillset] = None,
+        candidate_link_skillset: Optional[LinkSkillset] = None,
     ):
         super().__init__(LinkSkillset.get_length(), maximum_step=1)
         self.preempted_jobs = preempted_jobs
@@ -23,19 +23,19 @@ class LinkSkillTarget(DiscreteTarget):
         self.job = job
         self.armor = armor
 
-        if link_skillset is None:
-            self._link_skillset = LinkSkillset()
+        if candidate_link_skillset is None:
+            self._candidate_link_skillset = LinkSkillset()
         else:
-            self._link_skillset = link_skillset
+            self._candidate_link_skillset = candidate_link_skillset
 
         self.initialize_state_from_preempted_jobs(preempted_jobs)
 
     def initialize_state_from_preempted_jobs(self, preempted_jobs: List[JobType]):
         for job in preempted_jobs:
-            self.state[self._link_skillset.get_index(job)] = 1
+            self.state[self._candidate_link_skillset.get_index(job)] = 1
 
     def get_value(self) -> float:
-        resulted_stat = self.default_stat + self._link_skillset.get_stat(self.state)
+        resulted_stat = self.default_stat + self._candidate_link_skillset.get_masked(self.state).get_stat()
         return self.job.get_damage_factor(resulted_stat, armor=self.armor)
 
     def get_cost(self) -> float:
@@ -46,7 +46,7 @@ class LinkSkillTarget(DiscreteTarget):
             default_stat=self.default_stat,
             job=self.job,
             preempted_jobs=list(self.preempted_jobs),
-            link_skillset=self._link_skillset,
+            candidate_link_skillset=self._candidate_link_skillset,
         )
         target.set_state(self.state)
 
