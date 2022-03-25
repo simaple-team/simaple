@@ -4,3 +4,4 @@ from simaple.optimizer.optimizer import DiscreteTarget, StepwizeOptimizer
 from simaple.optimizer.step_iterator import Iterator
 from simaple.optimizer.union_occupation_optimizer import UnionOccupationTarget
 from simaple.optimizer.union_optimizer import UnionBlockTarget
+from simaple.optimizer.weapon_potential_optimizer import WeaponPotentialOptimizer
