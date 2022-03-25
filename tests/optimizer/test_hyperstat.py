@@ -21,7 +21,7 @@ class TestJob(Job):
         return stat.get_attack_coefficient(AttackType.magic_attack)
 
 
-@pytest.mark.parametrize("maximum_cost", [50, 100])
+@pytest.mark.parametrize("maximum_cost", [50, 300])
 def test_optimizer(maximum_cost):
     optimization_target = HyperstatTarget(
         Stat(

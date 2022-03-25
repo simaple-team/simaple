@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from typing import Optional
 from simaple.core import Stat
 from simaple.job.job import Job
 from simaple.optimizer.optimizer import DiscreteTarget
@@ -7,14 +7,20 @@ from simaple.union import UnionOccupationStat
 
 
 class UnionOccupationTarget(DiscreteTarget):
-    def __init__(self, default_stat: Stat, job: Job, armor=300):
+    def __init__(self, default_stat: Stat, job: Job, armor=300, union_occupation_prototype: Optional[UnionOccupationStat] = None):
         super().__init__(UnionOccupationStat.length(), 40)
         self.default_stat = default_stat
         self.job = job
         self.armor = armor
+        self._union_occupation_prototype = union_occupation_prototype
+        if self._union_occupation_prototype is None:
+            self._union_occupation_prototype = UnionOccupationStat(occupation_state=self.state)
 
     def get_value(self) -> float:
-        union_occupation_stat = UnionOccupationStat(occupation_state=self.state)
+        union_occupation_stat = UnionOccupationStat(
+            occupation_state=self.state,
+            occupation_value=self._union_occupation_prototype.occupation_value
+        )
 
         resulted_stat = self.default_stat + union_occupation_stat.get_stat()
         return self.job.get_damage_factor(resulted_stat, armor=self.armor)
@@ -26,6 +32,7 @@ class UnionOccupationTarget(DiscreteTarget):
         target = UnionOccupationTarget(
             default_stat=self.default_stat,
             job=self.job,
+            union_occupation_prototype=self._union_occupation_prototype
         )
         target.set_state(self.state)
 

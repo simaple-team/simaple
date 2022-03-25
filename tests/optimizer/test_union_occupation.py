@@ -35,7 +35,7 @@ def test_optimizer(maximum_cost):
         ),
         TestJob(),
     )
-    optimizer = StepwizeOptimizer(optimization_target, maximum_cost, 1)
+    optimizer = StepwizeOptimizer(optimization_target, maximum_cost, 2)
     start = time.time()
     output = optimizer.optimize()
     elapsed = time.time() - start
