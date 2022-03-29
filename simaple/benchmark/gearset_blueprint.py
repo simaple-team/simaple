@@ -18,7 +18,9 @@ class UserGearsetBlueprint(BaseModel):
     pet_set: Stat
     cash: Stat
     weapon_potential_tiers: Tuple[
-        List[PotentialTier], List[PotentialTier], List[PotentialTier],
+        List[PotentialTier],
+        List[PotentialTier],
+        List[PotentialTier],
     ]
 
     cap: PracticalGearBlueprint

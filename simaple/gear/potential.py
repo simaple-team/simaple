@@ -1,7 +1,7 @@
 import enum
 from typing import List, Union
 
-from pydantic import BaseModel, Field, Extra
+from pydantic import BaseModel, Extra, Field
 
 from simaple.core import ActionStat, Stat
 
