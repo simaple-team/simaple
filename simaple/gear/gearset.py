@@ -27,7 +27,7 @@ class GearSlot(BaseModel):
         self.gear = gear
 
     def get_gear(self) -> Gear:
-        if gear is None:
+        if self.gear is None:
             raise ValueError
 
         return self.gear
