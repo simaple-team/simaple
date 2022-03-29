@@ -153,11 +153,18 @@ class PresetOptimizer(BaseModel):
 
         return potentials
 
-    def get_static_reference_stat(self, gearset: Gearset) -> Stat:
-        return gearset.get_total_stat() + self.level_stat + self.default_stat
-
     def create_optimal_preset_from_gearset(self, gearset_prototype: Gearset) -> Preset:
         gearset = gearset_prototype.copy()
+
+        preset = Preset(
+            gearset=gearset,
+            hyperstat=Hyperstat.empty(),
+            links=LinkSkillset.empty(),
+            union_blocks=UnionBlockstat.empty(),
+            union_occupation=UnionOccupationStat.empty(),
+            level=self.level,
+            level_stat=self.level_stat,
+        )
 
         # Cleanse gearset weapon potentials
         for slot_name in ("weapon", "subweapon", "emblem"):
@@ -166,29 +173,28 @@ class PresetOptimizer(BaseModel):
                 raise ValueError(f"item not set for {slot_name}")
             target_gear.potential = Potential()
 
-        reference_stat_collection = StatCollection()
-        reference_stat_collection.set("static", self.get_static_reference_stat(gearset))
+        
 
-        links = self.calculate_optimal_links(reference_stat_collection.sum())
-        reference_stat_collection.set("links", links.get_stat())
-
-        union_blocks = self.calculate_optimal_union_blocks(
-            reference_stat_collection.sum()
+        preset.links = self.calculate_optimal_links(
+            preset.get_total_stat() + self.default_stat
         )
-        reference_stat_collection.set("union_blocks", union_blocks.get_stat())
 
+        preset.union_blocks = self.calculate_optimal_union_blocks(
+            preset.get_total_stat() + self.default_stat
+        )
         # Iteratively - optimization
 
-        hyperstat = self.calculate_optimal_hyperstat(reference_stat_collection.sum())
-        reference_stat_collection.set("hyperstat", hyperstat.get_stat())
-
-        union_occupation = self.calculate_optimal_union_occupation(
-            reference_stat_collection.sum(), union_blocks.get_occupation_count()
+        preset.hyperstat = self.calculate_optimal_hyperstat(
+            preset.get_total_stat() + self.default_stat
         )
-        reference_stat_collection.set("union_occupation", union_occupation.get_stat())
+
+        preset.union_occupation = self.calculate_optimal_union_occupation(
+            preset.get_total_stat() + self.default_stat,
+            preset.union_blocks.get_occupation_count()
+        )
 
         optimal_potentials = self.calculate_optimal_weapon_potential(
-            reference_stat_collection.sum()
+            preset.get_total_stat() + self.default_stat
         )
 
         # Apply potential to gearset
@@ -199,12 +205,4 @@ class PresetOptimizer(BaseModel):
 
             target_gear.potential = optimal_potentials[idx]
 
-        return Preset(
-            gearset=gearset,
-            hyperstat=hyperstat,
-            links=links,
-            union_blocks=union_blocks,
-            union_occupation=union_occupation,
-            level=self.level,
-            level_stat=self.level_stat,
-        )
+        return preset

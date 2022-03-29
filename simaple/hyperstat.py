@@ -44,6 +44,14 @@ class Hyperstat(BaseModel):
     levels: List[int]
 
     @classmethod
+    def empty(cls) -> Hyperstat:
+        return Hyperstat(
+            options=[],
+            cost=[],
+            levels=[],
+        )
+
+    @classmethod
     def KMS(cls) -> Hyperstat:
         return Hyperstat(
             options=get_hyperstat_lists(),

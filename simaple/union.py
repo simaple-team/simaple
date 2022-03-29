@@ -237,6 +237,13 @@ class UnionBlockstat(BaseModel):
     blocks: List[UnionBlock]
 
     @classmethod
+    def empty(cls):
+        return UnionBlockstat(
+            block_size=[],
+            blocks=[],
+        )
+
+    @classmethod
     def create_with_some_large_blocks(
         cls, large_block_jobs: List[JobType], default_size: int = 4, large_size: int = 5
     ):
@@ -287,6 +294,13 @@ class UnionBlockstat(BaseModel):
 class UnionOccupationStat(BaseModel):
     occupation_state: List[int]
     occupation_value: List[List[Tuple[Stat, ActionStat]]]
+
+    @classmethod
+    def empty(cls):
+        return UnionOccupationStat(
+            occupation_state=[],
+            occupation_value=[],
+        )
 
     @classmethod
     def KMS(cls):

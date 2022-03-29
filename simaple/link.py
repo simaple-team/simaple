@@ -163,6 +163,13 @@ class LinkSkillset(BaseModel):
     links: List[LinkSkill]
 
     @classmethod
+    def empty(cls):
+        return LinkSkillset(
+            link_levels=[],
+            links=[],
+        )
+
+    @classmethod
     def KMS(cls):
         return LinkSkillset(
             link_levels=get_maximum_level(),
