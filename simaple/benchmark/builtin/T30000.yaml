@@ -194,15 +194,21 @@ default:
       stat_prop_type: first_stat
     star: 22
     additional_potential:
-      patt: 21
+      options:
+        - first_att_multiplier: 12
+        - first_att_multiplier: 9
   subweapon:
     gear_id: 노블 브레이슬릿
     additional_potential:
-      patt: 21
+      options:
+        - first_att_multiplier: 12
+        - first_att_multiplier: 9
   emblem:
     gear_id: 골드 나이트 엠블렘
     additional_potential:
-      patt: 21
+      options:
+        - first_att_multiplier: 12
+        - first_att_multiplier: 9
   machine_heart:
     gear_id: 티타늄 하트
     <<: *acc
