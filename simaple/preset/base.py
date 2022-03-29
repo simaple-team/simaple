@@ -17,11 +17,11 @@ from simaple.optimizer import (
     HyperstatTarget,
     LinkSkillTarget,
     StepwizeOptimizer,
-    UnionSquadTarget,
     UnionOccupationTarget,
+    UnionSquadTarget,
     WeaponPotentialOptimizer,
 )
-from simaple.union import UnionSquad, UnionOccupation
+from simaple.union import UnionOccupation, UnionSquad
 from simaple.util import Timer
 
 
@@ -152,12 +152,9 @@ class PresetOptimizer(BaseModel):
             level_stat=self.level_stat,
         )
 
-        # Cleanse gearset weapon potentials
-        for slot_name in ("weapon", "subweapon", "emblem"):
-            target_gear = gearset.get_slot(slot_name).gear
-            if target_gear is None:
-                raise ValueError(f"item not set for {slot_name}")
-            target_gear.potential = Potential()
+        # Cleanse gearset weapon potentials for further optimization.
+        for slot in gearset.get_weaponry_slots():
+            slot.get_gear().potential = Potential()
 
         preset.links = self.calculate_optimal_links(
             preset.get_total_stat() + self.default_stat
@@ -166,7 +163,6 @@ class PresetOptimizer(BaseModel):
         preset.union_squad = self.calculate_optimal_union_squad(
             preset.get_total_stat() + self.default_stat
         )
-        # Iteratively - optimization
 
         preset.hyperstat = self.calculate_optimal_hyperstat(
             preset.get_total_stat() + self.default_stat
@@ -177,16 +173,10 @@ class PresetOptimizer(BaseModel):
             preset.union_squad.get_occupation_count(),
         )
 
-        optimal_potentials = self.calculate_optimal_weapon_potential(
-            preset.get_total_stat() + self.default_stat
+        gearset.change_weaponry_potentials(
+            self.calculate_optimal_weapon_potential(
+                preset.get_total_stat() + self.default_stat
+            )
         )
-
-        # Apply potential to gearset
-        for idx, slot_name in enumerate(("weapon", "subweapon", "emblem")):
-            target_gear = gearset.get_slot(slot_name).gear
-            if target_gear is None:
-                raise ValueError(f"item not set for {slot_name}")
-
-            target_gear.potential = optimal_potentials[idx]
 
         return preset

@@ -11,6 +11,7 @@ from simaple.gear.gearset import Gearset
 from simaple.gear.potential import PotentialTier
 
 
+# TODO: weapon potential optimizer (stand-alone)
 class UserGearsetBlueprint(BaseModel):
     arcane_symbols: List[ArcaneSymbol]
     authentic_symbols: List[AuthenticSymbol]

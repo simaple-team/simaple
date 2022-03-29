@@ -7,6 +7,7 @@ from simaple.gear.arcane_symbol import ArcaneSymbol
 from simaple.gear.authentic_symbol import AuthenticSymbol
 from simaple.gear.gear import Gear
 from simaple.gear.gear_type import GearType
+from simaple.gear.potential import Potential
 
 
 class GearSlot(BaseModel):
@@ -149,3 +150,19 @@ class Gearset(BaseModel):
 
     def equip(self, gear: Gear, slot_name: str) -> None:
         self.get_slot(slot_name).equip(gear)
+
+    def get_weaponry_slots(self) -> List[GearSlot]:
+        get_weaponry_slots = []
+        for slot in self.gear_slots:
+            for gear_type in slot.enabled_gear_types:
+                if GearType.is_weaponry(gear_type):
+                    get_weaponry_slots.append(slot)
+                    break
+
+        return get_weaponry_slots
+
+    def change_weaponry_potentials(self, weaponry_potentials: List[Potential]) -> None:
+        weaponry_slots = self.get_weaponry_slots()
+
+        for idx, potential in enumerate(weaponry_potentials):
+            weaponry_slots[idx].get_gear().potential = potential
