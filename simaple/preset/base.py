@@ -21,7 +21,7 @@ from simaple.optimizer import (
     UnionOccupationTarget,
     WeaponPotentialOptimizer,
 )
-from simaple.union import UnionBlockstat, UnionOccupation
+from simaple.union import UnionOccupation, UnionSquad
 from simaple.util import Timer
 
 
@@ -30,7 +30,7 @@ class Preset(BaseModel):
     hyperstat: Hyperstat
     links: LinkSkillset
 
-    union_blocks: UnionBlockstat
+    union_blocks: UnionSquad
     union_occupation: UnionOccupation
 
     # inner_ability: InnerAbility
@@ -90,12 +90,12 @@ class PresetOptimizer(BaseModel):
 
         return output.get_result()
 
-    def calculate_optimal_union_blocks(self, reference_stat: Stat) -> UnionBlockstat:
+    def calculate_optimal_union_blocks(self, reference_stat: Stat) -> UnionSquad:
         with Timer("union_blocks"):
             union_block_optimization_target = UnionBlockTarget(
                 reference_stat,
                 self.damage_logic,
-                UnionBlockstat.create_with_some_large_blocks(
+                UnionSquad.create_with_some_large_blocks(
                     large_block_jobs=[self.character_job_type]
                     + self.alternate_character_job_types,
                 ),
@@ -160,7 +160,7 @@ class PresetOptimizer(BaseModel):
             gearset=gearset,
             hyperstat=Hyperstat(),
             links=LinkSkillset.empty(),
-            union_blocks=UnionBlockstat.empty(),
+            union_blocks=UnionSquad.empty(),
             union_occupation=UnionOccupation(),
             level=self.level,
             level_stat=self.level_stat,

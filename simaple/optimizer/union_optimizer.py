@@ -4,7 +4,7 @@ from typing import List
 
 from simaple.core import DamageLogic, JobType, Stat
 from simaple.optimizer.optimizer import DiscreteTarget
-from simaple.union import UnionBlockstat
+from simaple.union import UnionSquad
 
 
 class UnionBlockTarget(DiscreteTarget):
@@ -12,7 +12,7 @@ class UnionBlockTarget(DiscreteTarget):
         self,
         default_stat: Stat,
         damage_logic: DamageLogic,
-        union_blocks: UnionBlockstat,
+        union_blocks: UnionSquad,
         preempted_jobs: List[JobType],
         armor: int = 300,
     ):
@@ -49,5 +49,5 @@ class UnionBlockTarget(DiscreteTarget):
 
         return target
 
-    def get_result(self) -> UnionBlockstat:
+    def get_result(self) -> UnionSquad:
         return self._union_blocks.get_masked(self.state)

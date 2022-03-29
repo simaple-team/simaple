@@ -6,7 +6,7 @@ from loguru import logger
 from simaple.core import AttackType, BaseStatType, JobType, Stat
 from simaple.core.damage import INTBasedDamageLogic
 from simaple.optimizer import StepwizeOptimizer, UnionBlockTarget
-from simaple.union import UnionBlockstat
+from simaple.union import UnionSquad
 
 
 @pytest.mark.parametrize("maximum_cost", [5, 10, 15, 30])
@@ -23,7 +23,7 @@ def test_optimizer(maximum_cost):
             INT_static=10000,
         ),
         INTBasedDamageLogic(attack_range_constant=1.0, mastery=0.95),
-        UnionBlockstat.create_with_some_large_blocks([JobType.archmagefb]),
+        UnionSquad.create_with_some_large_blocks([JobType.archmagefb]),
         preempted_jobs=[JobType.archmagefb],
     )
     optimizer = StepwizeOptimizer(optimization_target, maximum_cost, 1)

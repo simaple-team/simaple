@@ -236,13 +236,13 @@ UNION_LENGTH = len(get_all_blocks())
 UNION_OCCUPATION_LENGTH = len(get_union_occupation_values())
 
 # TODO: att / stat occupation
-class UnionBlockstat(BaseModel):
+class UnionSquad(BaseModel):
     block_size: List[int]
     blocks: List[UnionBlock]
 
     @classmethod
     def empty(cls):
-        return UnionBlockstat(
+        return UnionSquad(
             block_size=[],
             blocks=[],
         )
@@ -256,7 +256,7 @@ class UnionBlockstat(BaseModel):
             (default_size if block.job in large_block_jobs else large_size)
             for block in blocks
         ]
-        return UnionBlockstat(blocks=blocks, block_size=size)
+        return UnionSquad(blocks=blocks, block_size=size)
 
     def length(self):
         return len(self.blocks)
@@ -268,8 +268,8 @@ class UnionBlockstat(BaseModel):
 
         raise KeyError
 
-    def get_masked(self, mask: List[int]) -> UnionBlockstat:
-        return UnionBlockstat(
+    def get_masked(self, mask: List[int]) -> UnionSquad:
+        return UnionSquad(
             block_size=[
                 size for enabled, size in zip(mask, self.block_size) if enabled
             ],
