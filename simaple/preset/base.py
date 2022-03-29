@@ -21,7 +21,7 @@ from simaple.optimizer import (
     UnionOccupationTarget,
     WeaponPotentialOptimizer,
 )
-from simaple.union import UnionBlockstat, UnionOccupationStat
+from simaple.union import UnionBlockstat, UnionOccupation
 from simaple.util import Timer
 
 
@@ -31,7 +31,7 @@ class Preset(BaseModel):
     links: LinkSkillset
 
     union_blocks: UnionBlockstat
-    union_occupation: UnionOccupationStat
+    union_occupation: UnionOccupation
 
     # inner_ability: InnerAbility
 
@@ -111,12 +111,12 @@ class PresetOptimizer(BaseModel):
 
     def calculate_optimal_union_occupation(
         self, reference_stat: Stat, occupation_count: int
-    ) -> UnionOccupationStat:
+    ) -> UnionOccupation:
         with Timer("union_occupation"):
             union_occupation_target = UnionOccupationTarget(
                 reference_stat,
                 self.damage_logic,
-                UnionOccupationStat(),
+                UnionOccupation(),
             )
             optimizer = StepwizeOptimizer(union_occupation_target, occupation_count, 2)
             output = optimizer.optimize()
@@ -161,7 +161,7 @@ class PresetOptimizer(BaseModel):
             hyperstat=Hyperstat(),
             links=LinkSkillset.empty(),
             union_blocks=UnionBlockstat.empty(),
-            union_occupation=UnionOccupationStat(),
+            union_occupation=UnionOccupation(),
             level=self.level,
             level_stat=self.level_stat,
         )

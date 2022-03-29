@@ -295,7 +295,7 @@ class UnionBlockstat(BaseModel):
         return sum(self.block_size)
 
 
-class UnionOccupationStat(BaseModel):
+class UnionOccupation(BaseModel):
     occupation_state: List[int] = Field(
         default_factory=get_empty_union_occupation_state
     )
@@ -303,10 +303,10 @@ class UnionOccupationStat(BaseModel):
         default_factory=get_union_occupation_values
     )
 
-    def get_occupation_rearranged(self, state: List[int]) -> UnionOccupationStat:
+    def get_occupation_rearranged(self, state: List[int]) -> UnionOccupation:
         assert len(state) == self.length()
 
-        return UnionOccupationStat(
+        return UnionOccupation(
             occupation_value=self.occupation_value,
             occupation_state=state,
         )

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from simaple.core import DamageLogic, Stat
 from simaple.optimizer.optimizer import DiscreteTarget
-from simaple.union import UnionOccupationStat
+from simaple.union import UnionOccupation
 
 
 class UnionOccupationTarget(DiscreteTarget):
@@ -10,7 +10,7 @@ class UnionOccupationTarget(DiscreteTarget):
         self,
         default_stat: Stat,
         damage_logic: DamageLogic,
-        union_occupation_prototype: UnionOccupationStat,
+        union_occupation_prototype: UnionOccupation,
         armor=300,
     ):
         super().__init__(union_occupation_prototype.length(), 40)
@@ -19,7 +19,7 @@ class UnionOccupationTarget(DiscreteTarget):
         self.armor = armor
         self._union_occupation_prototype = union_occupation_prototype
 
-    def _get_union_occupation(self) -> UnionOccupationStat:
+    def _get_union_occupation(self) -> UnionOccupation:
         return self._union_occupation_prototype.get_occupation_rearranged(self.state)
 
     def get_value(self) -> float:
@@ -39,5 +39,5 @@ class UnionOccupationTarget(DiscreteTarget):
 
         return target
 
-    def get_result(self) -> UnionOccupationStat:
+    def get_result(self) -> UnionOccupation:
         return self._get_union_occupation()
