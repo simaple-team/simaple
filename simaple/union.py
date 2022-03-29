@@ -286,13 +286,17 @@ class UnionBlockstat(BaseModel):
 
 class UnionOccupationStat(BaseModel):
     occupation_state: List[int]
-    occupation_value: List[List[Tuple[Stat, ActionStat]]] = Field(
-        default_factory=get_union_occupation_values
-    )
+    occupation_value: List[List[Tuple[Stat, ActionStat]]]
 
     @classmethod
-    def length(cls):
-        return UNION_OCCUPATION_LENGTH
+    def KMS(cls):
+        return UnionOccupationStat(
+            occupation_value=get_union_occupation_values(),
+            occupation_state=[0 for i in range(5)],
+        )
+
+    def length(self):
+        return len(self.occupation_value)
 
     def get_stat(self) -> Stat:
         return sum(
