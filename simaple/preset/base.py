@@ -49,6 +49,20 @@ class Preset(BaseModel):
         )
 
 
+class StatCollection:
+    def __init__(self):
+        self._stats = {}
+
+    def set(self, name: str, stat: Stat):
+        self._stats[name] = stat
+
+    def sum(self) -> Stat:
+        return sum(self._stats.values(), Stat())
+
+    def get(self, name: str) -> Stat:
+        return self._stats[name]
+
+
 class PresetOptimizer(BaseModel):
     union_block_count: int
     default_stat: Stat
@@ -65,6 +79,7 @@ class PresetOptimizer(BaseModel):
             hyperstat_optimization_target = HyperstatTarget(
                 reference_stat,
                 self.damage_logic,
+                Hyperstat.KMS(),
             )
             optimizer = StepwizeOptimizer(
                 hyperstat_optimization_target,
@@ -80,6 +95,10 @@ class PresetOptimizer(BaseModel):
             union_block_optimization_target = UnionBlockTarget(
                 reference_stat,
                 self.damage_logic,
+                UnionBlockstat.create_with_some_large_blocks(
+                    large_block_jobs=[self.character_job_type]
+                    + self.alternate_character_job_types,
+                ),
                 preempted_jobs=[self.character_job_type]
                 + self.alternate_character_job_types,
             )
@@ -97,6 +116,7 @@ class PresetOptimizer(BaseModel):
             union_occupation_target = UnionOccupationTarget(
                 reference_stat,
                 self.damage_logic,
+                UnionOccupationStat.KMS(),
             )
             optimizer = StepwizeOptimizer(union_occupation_target, occupation_count, 2)
             output = optimizer.optimize()
@@ -108,6 +128,7 @@ class PresetOptimizer(BaseModel):
             optimization_target = LinkSkillTarget(
                 reference_stat,
                 self.damage_logic,
+                LinkSkillset.KMS(),
                 preempted_jobs=[self.character_job_type],
             )
             optimizer = StepwizeOptimizer(optimization_target, self.link_count, 1)
@@ -145,29 +166,29 @@ class PresetOptimizer(BaseModel):
                 raise ValueError(f"item not set for {slot_name}")
             target_gear.potential = Potential()
 
-        reference_stat = self.get_static_reference_stat(gearset)
+        reference_stat_collection = StatCollection()
+        reference_stat_collection.set("static", self.get_static_reference_stat(gearset))
 
-        links = self.calculate_optimal_links(reference_stat)
-        union_blocks = self.calculate_optimal_union_blocks(reference_stat)
+        links = self.calculate_optimal_links(reference_stat_collection.sum())
+        reference_stat_collection.set("links", links.get_stat())
 
-        intermediate_stat = reference_stat + links.get_stat() + union_blocks.get_stat()
+        union_blocks = self.calculate_optimal_union_blocks(
+            reference_stat_collection.sum()
+        )
+        reference_stat_collection.set("union_blocks", union_blocks.get_stat())
 
         # Iteratively - optimization
 
-        hyperstat = self.calculate_optimal_hyperstat(intermediate_stat)
-        hyperstat_stat = hyperstat.get_stat()
+        hyperstat = self.calculate_optimal_hyperstat(reference_stat_collection.sum())
+        reference_stat_collection.set("hyperstat", hyperstat.get_stat())
 
-        union_occupation_count = union_blocks.get_occupation_count()
         union_occupation = self.calculate_optimal_union_occupation(
-            intermediate_stat + hyperstat_stat, union_occupation_count
+            reference_stat_collection.sum(), union_blocks.get_occupation_count()
         )
-        union_occupation_stat = union_occupation.get_stat()
+        reference_stat_collection.set("union_occupation", union_occupation.get_stat())
 
         optimal_potentials = self.calculate_optimal_weapon_potential(
-            intermediate_stat + hyperstat_stat + union_occupation_stat
-        )
-        optimal_potential_stat = sum(
-            [potential.get_stat() for potential in optimal_potentials], Stat()
+            reference_stat_collection.sum()
         )
 
         # Apply potential to gearset

@@ -12,7 +12,7 @@ class HyperstatTarget(DiscreteTarget):
         self,
         default_stat: Stat,
         damage_logic: DamageLogic,
-        hyperstat_prototype: Optional[Hyperstat] = None,
+        hyperstat_prototype: Hyperstat,
         armor=300,
     ):
         super().__init__(hyperstat_prototype.length())
