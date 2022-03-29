@@ -233,8 +233,8 @@ UNION_OCCUPATION_LENGTH = len(get_union_occupation_values())
 
 # TODO: att / stat occupation
 class UnionBlockstat(BaseModel):
-    block_size: List[int] = Field(default_factory=get_empty_block_sizes)
-    blocks: List[UnionBlock] = Field(default_factory=get_all_blocks)
+    block_size: List[int]
+    blocks: List[UnionBlock]
 
     @classmethod
     def create_with_some_large_blocks(
@@ -247,9 +247,8 @@ class UnionBlockstat(BaseModel):
         ]
         return UnionBlockstat(blocks=blocks, block_size=size)
 
-    @classmethod
-    def get_length(cls):
-        return UNION_LENGTH
+    def length(self):
+        return len(self.blocks)
 
     def get_index(self, jobtype: JobType):
         for idx, block in enumerate(self.blocks):

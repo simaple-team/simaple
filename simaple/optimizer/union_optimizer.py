@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import List
 
 from simaple.core import DamageLogic, JobType, Stat
 from simaple.optimizer.optimizer import DiscreteTarget
@@ -12,22 +12,16 @@ class UnionBlockTarget(DiscreteTarget):
         self,
         default_stat: Stat,
         damage_logic: DamageLogic,
+        union_blocks: UnionBlockstat,
         preempted_jobs: List[JobType],
         armor: int = 300,
-        union_blocks: Optional[UnionBlockstat] = None,
     ):
-        super().__init__(UnionBlockstat.get_length(), maximum_step=1)
+        super().__init__(union_blocks.length(), maximum_step=1)
         self.preempted_jobs = preempted_jobs
         self.default_stat = default_stat
         self.damage_logic = damage_logic
         self.armor = armor
-
-        if union_blocks is None:
-            self._union_blocks = UnionBlockstat.create_with_some_large_blocks(
-                self.preempted_jobs
-            )
-        else:
-            self._union_blocks = union_blocks
+        self._union_blocks = union_blocks
 
         self.initialize_state_from_preempted_jobs(preempted_jobs)
 
