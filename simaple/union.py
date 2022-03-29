@@ -281,6 +281,9 @@ class UnionBlockstat(BaseModel):
 
         return stat
 
+    def get_occupation_count(self) -> int:
+        return sum(self.block_size)
+
 
 class UnionOccupationStat(BaseModel):
     occupation_state: List[int]
