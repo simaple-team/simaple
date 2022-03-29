@@ -12,37 +12,28 @@ class HyperstatTarget(DiscreteTarget):
         self,
         default_stat: Stat,
         damage_logic: DamageLogic,
-        armor=300,
         hyperstat_prototype: Optional[Hyperstat] = None,
+        armor=300,
     ):
-        super().__init__(Hyperstat.length())
+        super().__init__(hyperstat_prototype.length())
         self.default_stat = default_stat
         self.damage_logic = damage_logic
         self.armor = armor
+        self._hyperstat_prototype = hyperstat_prototype
 
-        if hyperstat_prototype is None:
-            self._hyperstat_prototype = Hyperstat()
-        else:
-            self._hyperstat_prototype = hyperstat_prototype
-
-    def get_value(self) -> float:
-        hyperstat = Hyperstat(
+    def get_hyperstat(self) -> Hyperstat:
+        return Hyperstat(
             options=self._hyperstat_prototype.options,
             cost=self._hyperstat_prototype.cost,
             levels=self.state,
         )
 
-        resulted_stat = self.default_stat + hyperstat.get_stat()
+    def get_value(self) -> float:
+        resulted_stat = self.default_stat + self.get_hyperstat().get_stat()
         return self.damage_logic.get_damage_factor(resulted_stat, armor=self.armor)
 
     def get_cost(self) -> float:
-        hyperstat = Hyperstat(
-            options=self._hyperstat_prototype.options,
-            cost=self._hyperstat_prototype.cost,
-            levels=self.state,
-        )
-
-        return hyperstat.get_current_cost()
+        return self.get_hyperstat().get_current_cost()
 
     def clone(self) -> HyperstatTarget:
         target = HyperstatTarget(
@@ -55,4 +46,4 @@ class HyperstatTarget(DiscreteTarget):
         return target
 
     def get_result(self) -> Hyperstat:
-        return Hyperstat(levels=self.state)
+        return self.get_hyperstat()

@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from typing import List
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from simaple.core import Stat
 
@@ -37,9 +39,17 @@ def get_empty_hyperstat_levels() -> List[int]:
 
 
 class Hyperstat(BaseModel):
-    options: List[List[Stat]] = Field(default_factory=get_hyperstat_lists)
-    cost: List[int] = Field(default_factory=get_hyperstat_cost)
-    levels: List[int] = Field(default_factory=get_empty_hyperstat_levels)
+    options: List[List[Stat]]
+    cost: List[int]
+    levels: List[int]
+
+    @classmethod
+    def KMS(cls) -> Hyperstat:
+        return Hyperstat(
+            options=get_hyperstat_lists(),
+            cost=get_hyperstat_cost(),
+            levels=get_empty_hyperstat_levels(),
+        )
 
     @classmethod
     def get_maximum_cost_from_level(cls, character_level: int) -> int:
@@ -64,9 +74,8 @@ class Hyperstat(BaseModel):
             character_level
         ) + get_character_level_point(character_level) * (character_level % 10 + 1)
 
-    @classmethod
-    def length(cls):
-        return len(HYPERSTAT_BASIS)
+    def length(self):
+        return len(self.options)
 
     def get_cost_for_level(self, level: int) -> int:
         return sum(self.cost[:level])
