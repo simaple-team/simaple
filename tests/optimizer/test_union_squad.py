@@ -5,13 +5,13 @@ from loguru import logger
 
 from simaple.core import AttackType, BaseStatType, JobType, Stat
 from simaple.core.damage import INTBasedDamageLogic
-from simaple.optimizer import StepwizeOptimizer, UnionBlockTarget
+from simaple.optimizer import StepwizeOptimizer, UnionSquadTarget
 from simaple.union import UnionSquad
 
 
 @pytest.mark.parametrize("maximum_cost", [5, 10, 15, 30])
 def test_optimizer(maximum_cost):
-    optimization_target = UnionBlockTarget(
+    optimization_target = UnionSquadTarget(
         Stat(
             INT=40000,
             LUK=5000,

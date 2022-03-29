@@ -17,11 +17,11 @@ from simaple.optimizer import (
     HyperstatTarget,
     LinkSkillTarget,
     StepwizeOptimizer,
-    UnionBlockTarget,
+    UnionSquadTarget,
     UnionOccupationTarget,
     WeaponPotentialOptimizer,
 )
-from simaple.union import UnionOccupation, UnionSquad
+from simaple.union import UnionSquad, UnionOccupation
 from simaple.util import Timer
 
 
@@ -30,7 +30,7 @@ class Preset(BaseModel):
     hyperstat: Hyperstat
     links: LinkSkillset
 
-    union_blocks: UnionSquad
+    union_squad: UnionSquad
     union_occupation: UnionOccupation
 
     # inner_ability: InnerAbility
@@ -43,7 +43,7 @@ class Preset(BaseModel):
             self.gearset.get_total_stat()
             + self.hyperstat.get_stat()
             + self.links.get_stat()
-            + self.union_blocks.get_stat()
+            + self.union_squad.get_stat()
             + self.union_occupation.get_stat()
             + self.level_stat
         )
@@ -90,9 +90,9 @@ class PresetOptimizer(BaseModel):
 
         return output.get_result()
 
-    def calculate_optimal_union_blocks(self, reference_stat: Stat) -> UnionSquad:
-        with Timer("union_blocks"):
-            union_block_optimization_target = UnionBlockTarget(
+    def calculate_optimal_union_squad(self, reference_stat: Stat) -> UnionSquad:
+        with Timer("union_squad"):
+            union_squad_optimization_target = UnionSquadTarget(
                 reference_stat,
                 self.damage_logic,
                 UnionSquad.create_with_some_large_blocks(
@@ -103,7 +103,7 @@ class PresetOptimizer(BaseModel):
                 + self.alternate_character_job_types,
             )
             optimizer = StepwizeOptimizer(
-                union_block_optimization_target, self.union_block_count, 2
+                union_squad_optimization_target, self.union_block_count, 2
             )
             output = optimizer.optimize()
 
@@ -160,7 +160,7 @@ class PresetOptimizer(BaseModel):
             gearset=gearset,
             hyperstat=Hyperstat(),
             links=LinkSkillset.empty(),
-            union_blocks=UnionSquad.empty(),
+            union_squad=UnionSquad.empty(),
             union_occupation=UnionOccupation(),
             level=self.level,
             level_stat=self.level_stat,
@@ -177,7 +177,7 @@ class PresetOptimizer(BaseModel):
             preset.get_total_stat() + self.default_stat
         )
 
-        preset.union_blocks = self.calculate_optimal_union_blocks(
+        preset.union_squad = self.calculate_optimal_union_squad(
             preset.get_total_stat() + self.default_stat
         )
         # Iteratively - optimization
@@ -188,7 +188,7 @@ class PresetOptimizer(BaseModel):
 
         preset.union_occupation = self.calculate_optimal_union_occupation(
             preset.get_total_stat() + self.default_stat,
-            preset.union_blocks.get_occupation_count(),
+            preset.union_squad.get_occupation_count(),
         )
 
         optimal_potentials = self.calculate_optimal_weapon_potential(

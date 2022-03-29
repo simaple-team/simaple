@@ -56,8 +56,8 @@ def test_preset(test_gearset):
 
     print("links")
     print(preset.links.get_stat().show())
-    print("union_blocks")
-    print(preset.union_blocks.get_stat().show())
+    print("union_squad")
+    print(preset.union_squad.get_stat().show())
     print("union_occupation")
 
     print(preset.union_occupation.get_stat().show())
