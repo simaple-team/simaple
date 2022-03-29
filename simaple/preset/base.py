@@ -79,7 +79,7 @@ class PresetOptimizer(BaseModel):
             hyperstat_optimization_target = HyperstatTarget(
                 reference_stat,
                 self.damage_logic,
-                Hyperstat.KMS(),
+                Hyperstat(),
             )
             optimizer = StepwizeOptimizer(
                 hyperstat_optimization_target,
@@ -158,7 +158,7 @@ class PresetOptimizer(BaseModel):
 
         preset = Preset(
             gearset=gearset,
-            hyperstat=Hyperstat.empty(),
+            hyperstat=Hyperstat(),
             links=LinkSkillset.empty(),
             union_blocks=UnionBlockstat.empty(),
             union_occupation=UnionOccupationStat.empty(),

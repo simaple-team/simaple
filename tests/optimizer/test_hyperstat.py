@@ -9,7 +9,7 @@ from simaple.hyperstat import Hyperstat
 from simaple.optimizer import HyperstatTarget, StepwizeOptimizer
 
 
-@pytest.mark.parametrize("maximum_cost", [50, 300])
+@pytest.mark.parametrize("maximum_cost", [50, 300, 1200])
 def test_optimizer(maximum_cost):
     optimization_target = HyperstatTarget(
         Stat(
@@ -22,7 +22,7 @@ def test_optimizer(maximum_cost):
             ignored_defence=90,
         ),
         INTBasedDamageLogic(attack_range_constant=1.0, mastery=0.95),
-        Hyperstat.KMS(),
+        Hyperstat(),
     )
     optimizer = StepwizeOptimizer(optimization_target, maximum_cost, 1)
     start = time.time()
