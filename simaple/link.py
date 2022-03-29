@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import List
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from simaple.core import JobType, Stat
 
@@ -159,12 +159,18 @@ LINK_TYPES = len(get_all_blocks())
 
 
 class LinkSkillset(BaseModel):
-    link_levels: List[int] = Field(default_factory=get_maximum_level)
-    links: List[LinkSkill] = Field(default_factory=get_all_blocks)
+    link_levels: List[int]
+    links: List[LinkSkill]
 
     @classmethod
-    def get_length(cls):
-        return LINK_TYPES
+    def KMS(cls):
+        return LinkSkillset(
+            link_levels=get_maximum_level(),
+            links=get_all_blocks(),
+        )
+
+    def length(self):
+        return len(self.links)
 
     def get_index(self, jobtype: JobType):
         for idx, link in enumerate(self.links):

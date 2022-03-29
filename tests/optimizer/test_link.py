@@ -5,6 +5,7 @@ from loguru import logger
 
 from simaple.core import AttackType, BaseStatType, JobType, Stat
 from simaple.core.damage import INTBasedDamageLogic
+from simaple.link import LinkSkillset
 from simaple.optimizer import LinkSkillTarget, StepwizeOptimizer
 
 
@@ -22,6 +23,7 @@ def test_optimizer(maximum_cost):
             INT_static=10000,
         ),
         INTBasedDamageLogic(attack_range_constant=1.0, mastery=0.95),
+        LinkSkillset.KMS(),
         preempted_jobs=[JobType.archmagefb],
     )
     optimizer = StepwizeOptimizer(optimization_target, maximum_cost, 1)
