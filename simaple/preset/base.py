@@ -49,20 +49,6 @@ class Preset(BaseModel):
         )
 
 
-class StatCollection:
-    def __init__(self):
-        self._stats = {}
-
-    def set(self, name: str, stat: Stat):
-        self._stats[name] = stat
-
-    def sum(self) -> Stat:
-        return sum(self._stats.values(), Stat())
-
-    def get(self, name: str) -> Stat:
-        return self._stats[name]
-
-
 class PresetOptimizer(BaseModel):
     union_block_count: int
     default_stat: Stat
