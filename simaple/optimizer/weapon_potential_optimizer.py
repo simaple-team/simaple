@@ -76,24 +76,24 @@ class WeaponPotentialOptimizer(BaseModel):
 
             yield Potential(options=list(stats))
 
-    def get_cost(self, potential_stat: Stat) -> float:
+    def get_reward(self, potential_stat: Stat) -> float:
         stat = self.default_stat + potential_stat
         return self.damage_logic.get_damage_factor(stat, armor=self.armor)
 
     def get_optimal_potential(self) -> Potential:
         optimal_potential = Potential()
-        optimal_cost = 0.0
+        maximum_reward = 0.0
 
         for potential in self.get_potential_candidates(self.tiers):
-            cost = self.get_cost(potential.get_stat())
-            if cost > optimal_cost:
-                optimal_cost, optimal_potential = cost, potential
+            reward = self.get_reward(potential.get_stat())
+            if reward > maximum_reward:
+                maximum_reward, optimal_potential = reward, potential
 
         return optimal_potential
 
     def get_full_optimal_potential(self) -> Tuple[Potential, Potential, Potential]:
         optimal_potential = (Potential(), Potential(), Potential())
-        optimal_cost = 0.0
+        maximum_reward = 0.0
 
         iter_count = 0
 
@@ -108,12 +108,12 @@ class WeaponPotentialOptimizer(BaseModel):
                     layer1_cached_stat + sub_weapon_potential.get_stat()
                 )
                 for emblem_potential in emblem_potential_candidates:
-                    cost = self.get_cost(
+                    reward = self.get_reward(
                         layer2_cached_stat + emblem_potential.get_stat()
                     )
                     iter_count += 1
-                    if cost > optimal_cost:
-                        optimal_cost, optimal_potential = cost, (
+                    if reward > maximum_reward:
+                        maximum_reward, optimal_potential = reward, (
                             weapon_potential,
                             sub_weapon_potential,
                             emblem_potential,
