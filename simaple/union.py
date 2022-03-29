@@ -228,6 +228,10 @@ def get_union_occupation_values():
     ]
 
 
+def get_empty_union_occupation_state():
+    return [0, 0, 0, 0, 0]
+
+
 UNION_LENGTH = len(get_all_blocks())
 UNION_OCCUPATION_LENGTH = len(get_union_occupation_values())
 
@@ -292,21 +296,19 @@ class UnionBlockstat(BaseModel):
 
 
 class UnionOccupationStat(BaseModel):
-    occupation_state: List[int]
-    occupation_value: List[List[Tuple[Stat, ActionStat]]]
+    occupation_state: List[int] = Field(
+        default_factory=get_empty_union_occupation_state
+    )
+    occupation_value: List[List[Tuple[Stat, ActionStat]]] = Field(
+        default_factory=get_union_occupation_values
+    )
 
-    @classmethod
-    def empty(cls):
-        return UnionOccupationStat(
-            occupation_state=[],
-            occupation_value=[],
-        )
+    def get_occupation_rearranged(self, state: List[int]) -> UnionOccupationStat:
+        assert len(state) == self.length()
 
-    @classmethod
-    def KMS(cls):
         return UnionOccupationStat(
-            occupation_value=get_union_occupation_values(),
-            occupation_state=[0 for i in range(5)],
+            occupation_value=self.occupation_value,
+            occupation_state=state,
         )
 
     def length(self):

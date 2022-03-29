@@ -116,7 +116,7 @@ class PresetOptimizer(BaseModel):
             union_occupation_target = UnionOccupationTarget(
                 reference_stat,
                 self.damage_logic,
-                UnionOccupationStat.KMS(),
+                UnionOccupationStat(),
             )
             optimizer = StepwizeOptimizer(union_occupation_target, occupation_count, 2)
             output = optimizer.optimize()
@@ -161,7 +161,7 @@ class PresetOptimizer(BaseModel):
             hyperstat=Hyperstat(),
             links=LinkSkillset.empty(),
             union_blocks=UnionBlockstat.empty(),
-            union_occupation=UnionOccupationStat.empty(),
+            union_occupation=UnionOccupationStat(),
             level=self.level,
             level_stat=self.level_stat,
         )
@@ -172,8 +172,6 @@ class PresetOptimizer(BaseModel):
             if target_gear is None:
                 raise ValueError(f"item not set for {slot_name}")
             target_gear.potential = Potential()
-
-        
 
         preset.links = self.calculate_optimal_links(
             preset.get_total_stat() + self.default_stat
@@ -190,7 +188,7 @@ class PresetOptimizer(BaseModel):
 
         preset.union_occupation = self.calculate_optimal_union_occupation(
             preset.get_total_stat() + self.default_stat,
-            preset.union_blocks.get_occupation_count()
+            preset.union_blocks.get_occupation_count(),
         )
 
         optimal_potentials = self.calculate_optimal_weapon_potential(

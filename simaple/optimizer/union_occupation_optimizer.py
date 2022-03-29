@@ -20,10 +20,7 @@ class UnionOccupationTarget(DiscreteTarget):
         self._union_occupation_prototype = union_occupation_prototype
 
     def _get_union_occupation(self) -> UnionOccupationStat:
-        return UnionOccupationStat(
-            occupation_state=self.state,
-            occupation_value=self._union_occupation_prototype.occupation_value,
-        )
+        return self._union_occupation_prototype.get_occupation_rearranged(self.state)
 
     def get_value(self) -> float:
         resulted_stat = self.default_stat + self._get_union_occupation().get_stat()

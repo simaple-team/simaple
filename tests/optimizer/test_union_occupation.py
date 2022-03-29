@@ -22,7 +22,7 @@ def test_optimizer(maximum_cost):
             ignored_defence=90,
         ),
         INTBasedDamageLogic(attack_range_constant=1.0, mastery=0.95),
-        UnionOccupationStat.KMS(),
+        UnionOccupationStat(),
     )
     optimizer = StepwizeOptimizer(optimization_target, maximum_cost, 2)
     start = time.time()
