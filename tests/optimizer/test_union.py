@@ -30,6 +30,8 @@ def test_optimizer(maximum_cost):
     start = time.time()
     output = optimizer.optimize()
     elapsed = time.time() - start
+
+    assert sum(output.state) == maximum_cost
     logger.info(
         f"Optimization output {str(output.state)}; size {sum(output.state)}; spent: {elapsed:.02f}s"
     )

@@ -53,6 +53,10 @@ class DiscreteTarget(metaclass=ABCMeta):
 
 
 class StepwizeOptimizer:
+    NO_TARGET_REWARD = -999
+    COST_EXCEED = -999
+    INITIAL_REWARD = -1
+
     class MaximumOptimizationStepExceed(Exception):
         ...
 
@@ -89,11 +93,11 @@ class StepwizeOptimizer:
 
         new_target = target.get_stepped_target(increments)
         if new_target is None:
-            return 0.0
+            return StepwizeOptimizer.NO_TARGET_REWARD
 
         cost = new_target.get_cost()
         if cost > self.maximum_cost:
-            return 0.0
+            return StepwizeOptimizer.COST_EXCEED
 
         value = new_target.get_value()
 
@@ -125,7 +129,7 @@ class StepwizeOptimizer:
         original_value = target.get_value()
 
         best_increments: Tuple = tuple()
-        best_reward = 0
+        best_reward = StepwizeOptimizer.INITIAL_REWARD
 
         for increments in self.get_increment_iterator():
             reward = self.get_reward(

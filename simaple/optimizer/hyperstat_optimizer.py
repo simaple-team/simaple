@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 from simaple.core import DamageLogic, Stat
 from simaple.hyperstat import Hyperstat
 from simaple.optimizer.optimizer import DiscreteTarget
