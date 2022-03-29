@@ -26,6 +26,12 @@ class GearSlot(BaseModel):
 
         self.gear = gear
 
+    def get_gear(self) -> Gear:
+        if gear is None:
+            raise ValueError
+
+        return self.gear
+
 
 def get_default_empty_slots():
     return [
