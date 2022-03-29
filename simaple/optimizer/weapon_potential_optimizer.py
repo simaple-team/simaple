@@ -36,16 +36,32 @@ _WEAPON_POTENTIALS = {
 }
 
 
+# TODO: change into triple-brute-force.
 class WeaponPotentialOptimizer(BaseModel):
     default_stat: Stat
     tiers: Tuple[PotentialTier, PotentialTier, PotentialTier]
     damage_logic: DamageLogic
     armor: int = 300
+    emblem: bool = False
 
     def get_potential_candidates(
         self, tiers: Tuple[PotentialTier, PotentialTier, PotentialTier]
     ) -> Iterable[Potential]:
         for stats in product(*[_WEAPON_POTENTIALS[tier] for tier in tiers]):
+            boss_damage_multiplier_count = 0
+            ignored_defence_count = 0
+            for stat in stats:
+                if stat.boss_damage_multiplier > 0:
+                    boss_damage_multiplier_count += 1
+                if stat.ignored_defence > 0:
+                    ignored_defence_count += 1
+
+            if self.emblem and boss_damage_multiplier_count > 0:
+                continue
+            
+            if boss_damage_multiplier_count > 3 or ignored_defence_count > 3:
+                continue
+
             yield Potential(options=list(stats))
 
     def get_cost(self, potential: Potential) -> float:
