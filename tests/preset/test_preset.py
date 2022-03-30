@@ -51,17 +51,6 @@ def test_preset(test_gearset):
 
     preset = optimizer.create_optimal_preset_from_gearset(test_gearset)
 
-    print("hyperstat")
-    print(preset.hyperstat.get_stat().show())
-
-    print("links")
-    print(preset.links.get_stat().show())
-    print("union_squad")
-    print(preset.union_squad.get_stat().show())
-    print("union_occupation")
-
-    print(preset.union_occupation.get_stat().show())
-    print("get_total_stat")
     print(preset.get_total_stat().show())
 
     expected = Stat(
