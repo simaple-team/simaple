@@ -152,24 +152,26 @@ class Gearset(BaseModel):
         self.get_slot(slot_name).equip(gear)
 
     def get_weaponry_slots(self) -> Tuple[GearSlot, GearSlot, GearSlot]:
-        weaponry_slots = [None, None, None]
+        weapon_slot, sub_weapon_slot, emblem_slot = None, None, None
         for slot in self.gear_slots:
             for gear_type in slot.enabled_gear_types:
                 if GearType.is_weapon(gear_type):
-                    weaponry_slots[0] = slot
+                    weapon_slot = slot
                     break
                 if GearType.is_sub_weapon(gear_type):
-                    weaponry_slots[1] = slot
+                    sub_weapon_slot = slot
                     break
                 if GearType.emblem == gear_type:
-                    weaponry_slots[2] = slot
+                    emblem_slot = slot
                     break
 
-        if None in weaponry_slots:
+        if None in (weapon_slot, sub_weapon_slot, emblem_slot):
             raise ValueError
 
-        return weaponry_slots
+        return (weapon_slot, sub_weapon_slot, emblem_slot)
 
-    def change_weaponry_potentials(self, weaponry_potentials: Tuple[Potential, Potential, Potential]) -> None:
+    def change_weaponry_potentials(
+        self, weaponry_potentials: Tuple[Potential, Potential, Potential]
+    ) -> None:
         for slot, potential in zip(self.get_weaponry_slots(), weaponry_potentials):
             slot.get_gear().potential = potential

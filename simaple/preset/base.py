@@ -58,7 +58,7 @@ class PresetOptimizer(BaseModel):
     character_job_type: JobType
     alternate_character_job_types: List[JobType]
     link_count: int
-    weapon_potential_tiers: List[Tuple[PotentialTier, PotentialTier, PotentialTier]]
+    weapon_potential_tier: Tuple[PotentialTier, PotentialTier, PotentialTier]
 
     def calculate_optimal_hyperstat(self, reference_stat: Stat) -> Hyperstat:
         with Timer("hyperstat"):
@@ -124,18 +124,13 @@ class PresetOptimizer(BaseModel):
 
     def calculate_optimal_weapon_potential(
         self, reference_stat: Stat
-    ) -> List[Potential]:
+    ) -> Tuple[Potential, Potential, Potential]:
         with Timer("weapon potential"):
-            potentials: List[Potential] = []
-
-            for tiers in self.weapon_potential_tiers:
-                potential = WeaponPotentialOptimizer(
-                    default_stat=reference_stat
-                    + sum([potential.get_stat() for potential in potentials], Stat()),
-                    tiers=tiers,
-                    damage_logic=self.damage_logic,
-                )
-                potentials.append(potential.get_optimal_potential())
+            potentials = WeaponPotentialOptimizer(
+                default_stat=reference_stat,
+                tiers=self.weapon_potential_tier,
+                damage_logic=self.damage_logic,
+            ).get_full_optimal_potential()
 
         return potentials
 
