@@ -45,11 +45,14 @@ class WeaponPotentialOptimizer(BaseModel):
     armor: int = 300
 
     def get_useful_candidates(self, tier):
+        PROTECTION_STAT = Stat(ignored_defence=90)
         candidates = [
             stat
             for stat in _WEAPON_POTENTIALS[tier]
-            if self.damage_logic.get_damage_factor(stat + self.default_stat)
-            - self.damage_logic.get_damage_factor(self.default_stat)
+            if self.damage_logic.get_damage_factor(
+                stat + self.default_stat + PROTECTION_STAT
+            )
+            - self.damage_logic.get_damage_factor(self.default_stat + PROTECTION_STAT)
             > 0
         ]
         return candidates
@@ -71,7 +74,7 @@ class WeaponPotentialOptimizer(BaseModel):
             if emblem and boss_damage_multiplier_count > 0:
                 continue
 
-            if boss_damage_multiplier_count > 3 or ignored_defence_count > 3:
+            if boss_damage_multiplier_count > 2 or ignored_defence_count > 2:
                 continue
 
             yield Potential(options=list(stats))
@@ -98,9 +101,13 @@ class WeaponPotentialOptimizer(BaseModel):
         iter_count = 0
 
         weapon_potential_candidates = list(self.get_potential_candidates(self.tiers))
-        sub_weapon_potential_candidates = list(self.get_potential_candidates(self.tiers))
-        emblem_potential_candidates = list(self.get_potential_candidates(self.tiers, emblem=True))
-        
+        sub_weapon_potential_candidates = list(
+            self.get_potential_candidates(self.tiers)
+        )
+        emblem_potential_candidates = list(
+            self.get_potential_candidates(self.tiers, emblem=True)
+        )
+
         for weapon_potential in weapon_potential_candidates:
             layer1_cached_stat = weapon_potential.get_stat()
             for sub_weapon_potential in sub_weapon_potential_candidates:
