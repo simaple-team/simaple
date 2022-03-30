@@ -147,31 +147,39 @@ class PresetOptimizer(BaseModel):
             level_stat=self.level_stat,
         )
 
+        for i in range(2):
+            self._optimize_step(preset)
+
+        return preset
+
+    def _optimize_step(self, preset):
         # Cleanse gearset weapon potentials for further optimization.
-        for slot in gearset.get_weaponry_slots():
+        for slot in preset.gearset.get_weaponry_slots():
             slot.get_gear().potential = Potential()
 
-        preset.links = self.calculate_optimal_links(
-            preset.get_total_stat() + self.default_stat
-        )
-
-        preset.union_squad = self.calculate_optimal_union_squad(
-            preset.get_total_stat() + self.default_stat
-        )
-
-        preset.hyperstat = self.calculate_optimal_hyperstat(
-            preset.get_total_stat() + self.default_stat
-        )
-
-        preset.union_occupation = self.calculate_optimal_union_occupation(
-            preset.get_total_stat() + self.default_stat,
-            preset.union_squad.get_occupation_count(),
-        )
-
-        gearset.change_weaponry_potentials(
+        preset.gearset.change_weaponry_potentials(
             self.calculate_optimal_weapon_potential(
                 preset.get_total_stat() + self.default_stat
             )
         )
 
-        return preset
+        preset.links = LinkSkillset.empty()
+        preset.links = self.calculate_optimal_links(
+            preset.get_total_stat() + self.default_stat
+        )
+
+        preset.union_squad = UnionSquad.empty()
+        preset.union_squad = self.calculate_optimal_union_squad(
+            preset.get_total_stat() + self.default_stat
+        )
+
+        preset.hyperstat = Hyperstat()
+        preset.hyperstat = self.calculate_optimal_hyperstat(
+            preset.get_total_stat() + self.default_stat
+        )
+
+        preset.union_occupation = UnionOccupation()
+        preset.union_occupation = self.calculate_optimal_union_occupation(
+            preset.get_total_stat() + self.default_stat,
+            preset.union_squad.get_occupation_count(),
+        )
