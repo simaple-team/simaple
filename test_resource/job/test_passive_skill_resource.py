@@ -32,7 +32,7 @@ def passive_skill_argument():
 )
 def test_passive_skill(resource_file_name, passive_skill_argument):
 
-    skill_set = PassiveSkillset.from_file(
+    skill_set = PassiveSkillset.from_resource_file(
         os.path.join(RESOURCE_DIR, resource_file_name)
     )
 

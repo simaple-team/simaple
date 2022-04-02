@@ -74,7 +74,7 @@ def test_passive_skill_description_interpret(
     ["test_passive_1", "test_passive_2", "test_passive_3", "test_passive_4"],
 )
 def test_passive_skill_repository(test_passive_skill_resource_filename, skill_name):
-    skill_set = PassiveSkillset.from_file(test_passive_skill_resource_filename)
+    skill_set = PassiveSkillset.from_resource_file(test_passive_skill_resource_filename)
     argument = PassiveSkillArgument(
         combat_orders_level=2,
         passive_skill_level=1,

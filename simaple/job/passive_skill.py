@@ -72,7 +72,7 @@ class PassiveSkillset:
         self._indexed_by_name = {d.name: d for d in resource.data}
 
     @classmethod
-    def from_file(cls, fname: str):
+    def from_resource_file(cls, fname: str):
         with open(fname, "r", encoding="utf-8") as f:
             raw_configuration = yaml.safe_load(f)
         resource = PassiveSkillResource.parse_obj(raw_configuration)
