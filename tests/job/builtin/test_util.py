@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from simaple.job.builtin.KMS.util import parse_resource_path
+from simaple.job.builtin.util import parse_resource_path
 
 
 def test_parse_resource():
