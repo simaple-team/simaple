@@ -25,6 +25,7 @@ def passive_skill_argument():
 @pytest.mark.parametrize("resource_file_name", [
     "archmagefb.yaml",
     "archmagetc.yaml",
+    "bishop.yaml",
 ])
 def test_passive_skill(resource_file_name, passive_skill_argument):
 
