@@ -86,4 +86,4 @@ class PassiveSkillset:
             yield resource.interpret(argument)
 
     def all(self, argument: PassiveSkillArgument) -> Iterator[PassiveSkill]:
-        return list(self.iterate())
+        return list(self.iterate(argument))
