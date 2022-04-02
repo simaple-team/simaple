@@ -1,4 +1,4 @@
-kind: PassiveSkill 
+kind: PassiveSkill
 version: v1
 metadata:
   type: DefaultActiveSkill

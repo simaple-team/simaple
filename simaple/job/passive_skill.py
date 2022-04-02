@@ -3,7 +3,7 @@ Passive is no-state no-change property of user-class.
 """
 
 import math  # pylint: disable=W0611
-from typing import Any, Dict, Iterator, List
+from typing import Any, Dict, Iterator, List, Literal
 
 import yaml
 from pydantic import BaseModel, Field
@@ -63,7 +63,7 @@ class PassiveSkillDescription(Description[PassiveSkill, PassiveSkillArgument]):
 
 class PassiveSkillResource(SimapleResource[PassiveSkillDescription]):
     data: List[PassiveSkillDescription]
-
+    kind: Literal['PassiveSkill']
 
 class PassiveSkillRepository:
     def __init__(self, resource: PassiveSkillResource):
