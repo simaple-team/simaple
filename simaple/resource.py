@@ -28,6 +28,9 @@ class SimapleMetadata(BaseModel):
 
 
 class SimapleResource(BaseModel, Generic[D]):
+    class Config:
+        extra = Extra.forbid
+
     kind: str
     version: str
     metadata: SimapleMetadata
