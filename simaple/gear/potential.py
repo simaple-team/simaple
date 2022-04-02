@@ -1,11 +1,24 @@
+import enum
 from typing import List, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Extra, Field
 
 from simaple.core import ActionStat, Stat
 
 
+class PotentialTier(enum.IntEnum):
+    empty = -1
+    normal = 0
+    rare = 1
+    epic = 2
+    unique = 3
+    legendary = 4
+
+
 class AbstractPotential(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
     options: List[Union[Stat, ActionStat]] = Field(default_factory=list)
 
     def get_stat(self) -> Stat:

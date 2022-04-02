@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List, Tuple
 
 from pydantic import BaseModel, Field
@@ -226,13 +228,24 @@ def get_union_occupation_values():
     ]
 
 
+def get_empty_union_occupation_state():
+    return [0, 0, 0, 0, 0]
+
+
 UNION_LENGTH = len(get_all_blocks())
 UNION_OCCUPATION_LENGTH = len(get_union_occupation_values())
 
+# TODO: att / stat occupation
+class UnionSquad(BaseModel):
+    block_size: List[int]
+    blocks: List[UnionBlock]
 
-class UnionBlockstat(BaseModel):
-    block_size: List[int] = Field(default_factory=get_empty_block_sizes)
-    blocks: List[UnionBlock] = Field(default_factory=get_all_blocks)
+    @classmethod
+    def empty(cls):
+        return UnionSquad(
+            block_size=[],
+            blocks=[],
+        )
 
     @classmethod
     def create_with_some_large_blocks(
@@ -243,11 +256,10 @@ class UnionBlockstat(BaseModel):
             (default_size if block.job in large_block_jobs else large_size)
             for block in blocks
         ]
-        return UnionBlockstat(blocks=blocks, block_size=size)
+        return UnionSquad(blocks=blocks, block_size=size)
 
-    @classmethod
-    def get_length(cls):
-        return UNION_LENGTH
+    def length(self):
+        return len(self.blocks)
 
     def get_index(self, jobtype: JobType):
         for idx, block in enumerate(self.blocks):
@@ -256,11 +268,18 @@ class UnionBlockstat(BaseModel):
 
         raise KeyError
 
-    def get_stat(self, mask: List[int]) -> Stat:
+    def get_masked(self, mask: List[int]) -> UnionSquad:
+        return UnionSquad(
+            block_size=[
+                size for enabled, size in zip(mask, self.block_size) if enabled
+            ],
+            blocks=[block for enabled, block in zip(mask, self.blocks) if enabled],
+        )
+
+    def get_stat(self) -> Stat:
         stat = Stat()
-        for enabled, block, size in zip(mask, self.blocks, self.block_size):
-            if enabled:
-                stat += block.get_stat(size)
+        for block, size in zip(self.blocks, self.block_size):
+            stat += block.get_stat(size)
 
         return stat
 
@@ -272,16 +291,28 @@ class UnionBlockstat(BaseModel):
 
         return stat
 
+    def get_occupation_count(self) -> int:
+        return sum(self.block_size)
 
-class UnionOccupationStat(BaseModel):
-    occupation_state: List[int]
+
+class UnionOccupation(BaseModel):
+    occupation_state: List[int] = Field(
+        default_factory=get_empty_union_occupation_state
+    )
     occupation_value: List[List[Tuple[Stat, ActionStat]]] = Field(
         default_factory=get_union_occupation_values
     )
 
-    @classmethod
-    def length(cls):
-        return UNION_OCCUPATION_LENGTH
+    def get_occupation_rearranged(self, state: List[int]) -> UnionOccupation:
+        assert len(state) == self.length()
+
+        return UnionOccupation(
+            occupation_value=self.occupation_value,
+            occupation_state=state,
+        )
+
+    def length(self):
+        return len(self.occupation_value)
 
     def get_stat(self) -> Stat:
         return sum(

@@ -4,21 +4,9 @@ import pytest
 from loguru import logger
 
 from simaple.core import AttackType, BaseStatType, JobType, Stat
-from simaple.job.job import Job
+from simaple.core.damage import INTBasedDamageLogic
+from simaple.link import LinkSkillset
 from simaple.optimizer import LinkSkillTarget, StepwizeOptimizer
-
-
-class TestJob(Job):
-    attack_range_constant: float = 1.0
-    mastery: float = 0.95
-
-    def get_base_stat_factor(self, stat: Stat) -> float:
-        return stat.get_base_stat_coefficient(
-            BaseStatType.INT
-        ) * 4 + stat.get_base_stat_coefficient(BaseStatType.LUK)
-
-    def get_attack_type_factor(self, stat: Stat) -> float:
-        return stat.get_attack_coefficient(AttackType.magic_attack)
 
 
 @pytest.mark.parametrize("maximum_cost", [3, 6, 12, 13])
@@ -34,7 +22,8 @@ def test_optimizer(maximum_cost):
             ignored_defence=90,
             INT_static=10000,
         ),
-        TestJob(),
+        INTBasedDamageLogic(attack_range_constant=1.0, mastery=0.95),
+        LinkSkillset.KMS(),
         preempted_jobs=[JobType.archmagefb],
     )
     optimizer = StepwizeOptimizer(optimization_target, maximum_cost, 1)

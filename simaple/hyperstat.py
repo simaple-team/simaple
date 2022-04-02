@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List
 
 from pydantic import BaseModel, Field
@@ -28,12 +30,12 @@ def get_hyperstat_lists() -> List[List[Stat]]:
     ]
 
 
-def get_hyperstat_cost() -> List[int]:
-    return HYPERSTAT_COST
-
-
 def get_empty_hyperstat_levels() -> List[int]:
-    return [0 for i in range(len(HYPERSTAT_BASIS))]
+    return [0 for i in HYPERSTAT_COST]
+
+
+def get_hyperstat_cost() -> List[int]:
+    return list(HYPERSTAT_COST)
 
 
 class Hyperstat(BaseModel):
@@ -42,8 +44,30 @@ class Hyperstat(BaseModel):
     levels: List[int] = Field(default_factory=get_empty_hyperstat_levels)
 
     @classmethod
-    def length(cls):
-        return len(HYPERSTAT_BASIS)
+    def get_maximum_cost_from_level(cls, character_level: int) -> int:
+        def get_character_level_point(character_level: int) -> int:
+            return character_level // 10 - 11
+
+        def get_sumation_with_ten_step_unit(character_level: int) -> int:
+            return (
+                (
+                    get_character_level_point(140)
+                    + get_character_level_point(character_level)
+                    - 1
+                )
+                * (character_level // 10 - 14)
+                * 5
+            )
+
+        if character_level < 140:
+            return 0
+
+        return get_sumation_with_ten_step_unit(
+            character_level
+        ) + get_character_level_point(character_level) * (character_level % 10 + 1)
+
+    def length(self):
+        return len(self.options)
 
     def get_cost_for_level(self, level: int) -> int:
         return sum(self.cost[:level])
@@ -54,4 +78,13 @@ class Hyperstat(BaseModel):
     def get_stat(self) -> Stat:
         return sum(
             [option[lv] for option, lv in zip(self.options, self.levels)], Stat()
+        )
+
+    def get_level_rearranged(self, levels: List[int]) -> Hyperstat:
+        assert len(levels) == self.length()
+
+        return Hyperstat(
+            options=self.options,
+            cost=self.cost,
+            levels=levels,
         )

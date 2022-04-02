@@ -195,6 +195,35 @@ class Stat(BaseModel):
 
         raise ValueError
 
+    def show(self) -> str:
+        output = f"""
+        ===================================
+        Basis Stats
+
+        STR: {self.get_base_stat_coefficient(BaseStatType.STR):8.2f} | Basis {self.STR:7.1f} | {self.STR_multiplier:5.1f} % | static {self.STR_static:7.1f} |
+        DEX: {self.get_base_stat_coefficient(BaseStatType.DEX):8.2f} | Basis {self.DEX:7.1f} | {self.DEX_multiplier:5.1f} % | static {self.DEX_static:7.1f} |
+        INT: {self.get_base_stat_coefficient(BaseStatType.INT):8.2f} | Basis {self.INT:7.1f} | {self.INT_multiplier:5.1f} % | static {self.INT_static:7.1f} |
+        LUK: {self.get_base_stat_coefficient(BaseStatType.LUK):8.2f} | Basis {self.LUK:7.1f} | {self.LUK_multiplier:5.1f} % | static {self.LUK_static:7.1f} |
+        
+        MaxHP: {self.MHP:10.2f}
+        MaxMP: {self.MMP:10.2f}
+
+        ATT: {self.attack_power:6.1f} | {self.attack_power_multiplier:5.1f} % |
+        MAT: {self.magic_attack:6.1f} | {self.magic_attack_multiplier:5.1f} % |
+
+        ===================================
+
+        critical_rate          : {self.critical_rate:7.2f}
+        critical_damage        : {self.critical_damage:7.2f}
+
+        boss_damage_multiplier : {self.boss_damage_multiplier:7.2f}
+        damage_multiplier      : {self.damage_multiplier:7.2f}
+        final_damage_multiplier: {self.final_damage_multiplier:7.2f}
+
+        ignored_defence        : {self.ignored_defence:7.2f}
+        """
+        return output
+
 
 class ActionStat(BaseModel):
     cooltime_reduce: float = 0.0

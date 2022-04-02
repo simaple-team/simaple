@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from typing import List
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from simaple.core import JobType, Stat
 
@@ -157,12 +159,25 @@ LINK_TYPES = len(get_all_blocks())
 
 
 class LinkSkillset(BaseModel):
-    link_levels: List[int] = Field(default_factory=get_maximum_level)
-    links: List[LinkSkill] = Field(default_factory=get_all_blocks)
+    link_levels: List[int]
+    links: List[LinkSkill]
 
     @classmethod
-    def get_length(cls):
-        return LINK_TYPES
+    def empty(cls):
+        return LinkSkillset(
+            link_levels=[],
+            links=[],
+        )
+
+    @classmethod
+    def KMS(cls):
+        return LinkSkillset(
+            link_levels=get_maximum_level(),
+            links=get_all_blocks(),
+        )
+
+    def length(self):
+        return len(self.links)
 
     def get_index(self, jobtype: JobType):
         for idx, link in enumerate(self.links):
@@ -171,10 +186,17 @@ class LinkSkillset(BaseModel):
 
         raise KeyError
 
-    def get_stat(self, mask: List[int]) -> Stat:
+    def get_masked(self, mask: List[int]) -> LinkSkillset:
+        return LinkSkillset(
+            link_levels=[
+                level for enabled, level in zip(mask, self.link_levels) if enabled
+            ],
+            links=[link for enabled, link in zip(mask, self.links) if enabled],
+        )
+
+    def get_stat(self) -> Stat:
         stat = Stat()
-        for enabled, block, size in zip(mask, self.links, self.link_levels):
-            if enabled:
-                stat += block.get_stat(size)
+        for block, size in zip(self.links, self.link_levels):
+            stat += block.get_stat(size)
 
         return stat

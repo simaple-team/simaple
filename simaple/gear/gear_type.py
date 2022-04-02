@@ -116,6 +116,14 @@ class GearType(IntEnum):
     title = 200
 
     @staticmethod
+    def is_weaponry(gear_type: GearType) -> bool:
+        return (
+            GearType.is_weapon(gear_type)
+            or GearType.is_sub_weapon(gear_type)
+            or gear_type == GearType.emblem
+        )
+
+    @staticmethod
     def is_weapon(gear_type: GearType) -> bool:
         return GearType.is_left_weapon(gear_type) or GearType.is_double_hand_weapon(
             gear_type

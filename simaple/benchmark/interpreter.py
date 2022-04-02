@@ -6,6 +6,7 @@ import yaml
 from pydantic import BaseModel
 
 from simaple.benchmark.gearset_blueprint import UserGearsetBlueprint
+from simaple.core import JobCategory
 
 INTERPETER_RESOURCE_PATH = os.path.join(os.path.dirname(__file__), "resources")
 
@@ -13,7 +14,7 @@ INTERPETER_RESOURCE_PATH = os.path.join(os.path.dirname(__file__), "resources")
 class BenchmarkInterpreterOption(BaseModel):
     stat_priority: Tuple[str, str, str, str]
     attack_priority: Tuple[str, str]
-    job_index: int
+    job_category: JobCategory
 
     class Macro:
         first_stat = "first_stat"
@@ -102,9 +103,9 @@ class BenchmarkConfigurationInterpreter:
 
         raise TypeError()
 
-    def interpret_gear_id(self, name: str, job_index: int) -> str:
+    def interpret_gear_id(self, name: str, job_category: JobCategory) -> str:
         if name in self.item_name_alias:
-            return self.item_name_alias[name][job_index]
+            return self.item_name_alias[name][job_category.value]
 
         return name
 
@@ -127,7 +128,7 @@ class BenchmarkConfigurationInterpreter:
                 interpreted[k] = self._interpret(v, opt)
             else:
                 if k == "gear_id":
-                    interpreted["gear_id"] = self.interpret_gear_id(v, opt.job_index)
+                    interpreted["gear_id"] = self.interpret_gear_id(v, opt.job_category)
                 elif BenchmarkInterpreterOption.Macro.all_stat in k:
                     interpreted.update(opt.translate_all_stat(k, v))
                 elif BenchmarkInterpreterOption.Macro.all_att in k:
