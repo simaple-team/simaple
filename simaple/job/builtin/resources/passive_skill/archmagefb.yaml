@@ -25,6 +25,10 @@ data:
     default_skill_level: 10
     stat:
       magic_attack: 3 * lv
-      buff_rem: 5 * lv
+    action_stat:
+      buff_duration: 5 * lv
   - name: 아케인 에임
-    ignored_defence: 20 + math.ceil(passive_level / 2)
+    passive_skill_enabled: true
+    default_skill_level: 10
+    stat:
+      ignored_defence: 5 + math.ceil(lv / 2)
