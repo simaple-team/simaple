@@ -65,7 +65,8 @@ class PassiveSkillResource(SimapleResource[PassiveSkillDescription]):
     data: List[PassiveSkillDescription]
     kind: Literal['PassiveSkill']
 
-class PassiveSkillRepository:
+
+class PassiveSkillset:
     def __init__(self, resource: PassiveSkillResource):
         self.resource = resource
         self._indexed_by_name = {d.name: d for d in resource.data}
@@ -75,7 +76,7 @@ class PassiveSkillRepository:
         with open(fname, "r", encoding="utf-8") as f:
             raw_configuration = yaml.safe_load(f)
         resource = PassiveSkillResource.parse_obj(raw_configuration)
-        return PassiveSkillRepository(resource)
+        return PassiveSkillset(resource)
 
     def get(self, skill_name: str, argument: PassiveSkillArgument) -> PassiveSkill:
         return self._indexed_by_name[skill_name].interpret(argument)

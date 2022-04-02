@@ -6,7 +6,7 @@ from loguru import logger
 from simaple.job.passive_skill import (
     PassiveSkillArgument,
     PassiveSkillDescription,
-    PassiveSkillRepository,
+    PassiveSkillset,
     PassiveSkillResource,
 )
 
@@ -29,9 +29,9 @@ def passive_skill_argument():
 ])
 def test_passive_skill(resource_file_name, passive_skill_argument):
 
-    repository = PassiveSkillRepository.from_file(
+    skill_set = PassiveSkillset.from_file(
         os.path.join(RESOURCE_DIR, resource_file_name)
     )
 
-    for passive_skill in repository.iterate(passive_skill_argument):
+    for passive_skill in skill_set.iterate(passive_skill_argument):
         logger.info(passive_skill.name)
