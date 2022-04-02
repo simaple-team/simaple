@@ -1,6 +1,7 @@
 kind: PassiveSkill 
 version: v1
 metadata:
+  type: PassiveSkill
   group: archmagefb
 data:
   - name: 하이 위즈덤
