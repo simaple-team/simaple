@@ -63,7 +63,7 @@ class PassiveSkillDescription(Description[PassiveSkill, PassiveSkillArgument]):
 
 class PassiveSkillResource(SimapleResource[PassiveSkillDescription]):
     data: List[PassiveSkillDescription]
-    kind: Literal['PassiveSkill']
+    kind: Literal["PassiveSkill"]
 
 
 class PassiveSkillset:
@@ -84,3 +84,6 @@ class PassiveSkillset:
     def iterate(self, argument: PassiveSkillArgument) -> Iterator[PassiveSkill]:
         for resource in self._indexed_by_name.values():
             yield resource.interpret(argument)
+
+    def all(self, argument: PassiveSkillArgument) -> Iterator[PassiveSkill]:
+        return list(self.iterate())

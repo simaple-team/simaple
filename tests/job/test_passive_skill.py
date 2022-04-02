@@ -8,8 +8,8 @@ from simaple.core import Stat
 from simaple.job.passive_skill import (
     PassiveSkillArgument,
     PassiveSkillDescription,
-    PassiveSkillset,
     PassiveSkillResource,
+    PassiveSkillset,
 )
 
 

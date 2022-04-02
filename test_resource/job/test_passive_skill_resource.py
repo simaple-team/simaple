@@ -6,8 +6,8 @@ from loguru import logger
 from simaple.job.passive_skill import (
     PassiveSkillArgument,
     PassiveSkillDescription,
-    PassiveSkillset,
     PassiveSkillResource,
+    PassiveSkillset,
 )
 
 RESOURCE_DIR = "./simaple/job/builtin/resources/passive_skill"
@@ -22,11 +22,14 @@ def passive_skill_argument():
     )
 
 
-@pytest.mark.parametrize("resource_file_name", [
-    "archmagefb.yaml",
-    "archmagetc.yaml",
-    "bishop.yaml",
-])
+@pytest.mark.parametrize(
+    "resource_file_name",
+    [
+        "archmagefb.yaml",
+        "archmagetc.yaml",
+        "bishop.yaml",
+    ],
+)
 def test_passive_skill(resource_file_name, passive_skill_argument):
 
     skill_set = PassiveSkillset.from_file(
