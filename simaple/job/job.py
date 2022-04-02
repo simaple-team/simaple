@@ -1,5 +1,4 @@
 from abc import ABCMeta
-from typing import List
 
 from pydantic import BaseModel
 
