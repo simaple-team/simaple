@@ -7,6 +7,7 @@ from pydantic import BaseModel
 
 from simaple.benchmark.gearset_blueprint import UserGearsetBlueprint
 from simaple.core import JobCategory
+from simaple.gear.improvements.bonus import BonusType
 
 INTERPETER_RESOURCE_PATH = os.path.join(os.path.dirname(__file__), "resources")
 
@@ -54,6 +55,7 @@ class BenchmarkInterpreterOption(BaseModel):
         interpreted_key = interpreted_key.replace(
             self.Macro.second_att, self.attack_priority[1]
         )
+        interpreted_key = BonusType.refine_double_key(interpreted_key)
 
         return interpreted_key
 
