@@ -84,5 +84,5 @@ class PassiveSkillset:
         for resource in self._indexed_by_name.values():
             yield resource.interpret(argument)
 
-    def all(self, argument: PassiveSkillArgument) -> Iterator[PassiveSkill]:
+    def all(self, argument: PassiveSkillArgument) -> List[PassiveSkill]:
         return list(self.iterate(argument))
