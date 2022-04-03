@@ -9,6 +9,7 @@ import yaml
 from pydantic import BaseModel, Field
 
 from simaple.core import ActionStat, Stat
+from simaple.job.description import GeneralJobArgument
 from simaple.resource import Description, DescriptionArgument, SimapleResource
 
 
@@ -18,10 +19,8 @@ class PassiveSkill(BaseModel):
     name: str
 
 
-class PassiveSkillArgument(DescriptionArgument):
-    combat_orders_level: int
-    passive_skill_level: int
-    character_level: int
+class PassiveSkillArgument(GeneralJobArgument):
+    ...
 
 
 class PassiveSkillDescription(Description[PassiveSkill, PassiveSkillArgument]):

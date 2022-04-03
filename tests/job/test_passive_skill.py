@@ -55,6 +55,7 @@ def test_passive_skill_description_interpret(
         PassiveSkillArgument(
             combat_orders_level=combat_orders_level,
             passive_skill_level=passive_skill_level,
+            character_level=260,
         )
     )
 
@@ -78,5 +79,6 @@ def test_passive_skill_repository(test_passive_skill_resource_filename, skill_na
     argument = PassiveSkillArgument(
         combat_orders_level=2,
         passive_skill_level=1,
+        character_level=260,
     )
     skill_set.get(skill_name, argument)
