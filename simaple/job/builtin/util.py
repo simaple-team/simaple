@@ -1,6 +1,6 @@
 import os
 
-_ABS_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources")
+_ABS_PATH = os.path.join(os.path.dirname(__file__), "resources")
 
 
 def parse_resource_path(pathlike: str, default_file_format="yaml"):
