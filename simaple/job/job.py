@@ -22,7 +22,11 @@ class Job(BaseModel, metaclass=ABCMeta):
     type: JobType
 
     def get_default_stat(self) -> Stat:
-        return (
-            self.passive_skillset.total_stat()
-            + self.default_active_skillset.total_stat()
+        return sum(
+            [
+                passive_skill.stat
+                for passive_skill in self.passive_skillset
+                + self.default_active_skillset
+            ],
+            Stat(),
         )
