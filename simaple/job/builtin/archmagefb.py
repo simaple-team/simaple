@@ -1,4 +1,6 @@
+from simaple.core import Stat
 from simaple.core.damage import INTBasedDamageLogic
+from simaple.core.jobtype import JobType
 from simaple.job.builtin.util import parse_resource_path
 from simaple.job.description import GeneralJobArgument
 from simaple.job.job import Job
@@ -17,4 +19,12 @@ def job_archmagefb(argument: PassiveSkillArgument):
             attack_range_constant=1.2,
             mastery=0.95 + 0.01 * (argument.combat_orders_level // 2),
         ),
+        level=argument.character_level,
+        level_stat=Stat(
+            INT=(18 + 5 * argument.character_level),
+            LUK=4,
+            STR=4,
+            DEX=4,
+        ),
+        type=JobType.archmagefb,
     )
