@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field
 
 from simaple.core import ActionStat, Stat
 from simaple.job.description import GeneralJobArgument
-from simaple.resource import Description, DescriptionArgument, SimapleResource
+from simaple.resource import Description, SimapleResource
 
 
 class PassiveSkill(BaseModel):

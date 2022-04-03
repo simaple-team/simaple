@@ -1,13 +1,12 @@
 from abc import ABCMeta
-from typing import Callable, List, Type
+from typing import List
 
 from pydantic import BaseModel
 
 from simaple.core import Stat
 from simaple.core.damage import DamageLogic
 from simaple.core.jobtype import JobType
-from simaple.job.description import GeneralJobArgument
-from simaple.job.passive_skill import PassiveSkill, PassiveSkillset
+from simaple.job.passive_skill import PassiveSkill
 
 
 class Job(BaseModel, metaclass=ABCMeta):

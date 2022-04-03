@@ -2,7 +2,6 @@ from simaple.core import Stat
 from simaple.core.damage import INTBasedDamageLogic
 from simaple.core.jobtype import JobType
 from simaple.job.builtin.util import parse_resource_path
-from simaple.job.description import GeneralJobArgument
 from simaple.job.job import Job
 from simaple.job.passive_skill import PassiveSkillArgument, PassiveSkillset
 
