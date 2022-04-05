@@ -28,6 +28,7 @@ multi_line_output = 3
 skip = "third_party"
 
 [tool.pytest.ini_options]
+addopts = "-vv -x"
 testpaths = ["tests"]
 
 [tool.coverage.run]
