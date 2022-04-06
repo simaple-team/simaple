@@ -31,13 +31,13 @@ def get_test_gearset():
 
 def test_preset(test_gearset):
     optimizer = PresetOptimizer(
-        union_block_count=37,
+        union_block_count=7,
         default_stat=Stat(
             boss_damage_multiplier=150,
             ignored_defence=28,
         ),
-        level=275,
-        level_stat=Stat(STR=274 * 5 + 23, DEX=4),
+        level=200,
+        level_stat=Stat(STR=200 * 5 + 18, DEX=4),
         damage_logic=STRBasedDamageLogic(attack_range_constant=1.2, mastery=0.95),
         character_job_type=JobType.adele,
         alternate_character_job_types=[],
