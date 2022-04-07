@@ -15,6 +15,7 @@ coverage-unittest = "pytest --cov=simaple"
 coverage-report = "pytest --cov=simaple --cov-report=xml"
 
 unittest = "pytest -vv -x"
+rsctest = "pytest -vv -x test_resource/"
 typetest = "mypy simaple tests"
 
 test = ["coverage", "typetest", "lint", "formatting-check"]
@@ -27,6 +28,7 @@ multi_line_output = 3
 skip = "third_party"
 
 [tool.pytest.ini_options]
+addopts = "-vv -x"
 testpaths = ["tests"]
 
 [tool.coverage.run]

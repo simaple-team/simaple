@@ -34,6 +34,22 @@ class BonusType(enum.Enum):
     boss_damage_multiplier = "boss_damage_multiplier"
     damage_multiplier = "damage_multiplier"
 
+    @classmethod
+    def refine_double_key(cls, maybe_reversed: str):
+        for bonus_type in (
+            BonusType.STR_DEX,
+            BonusType.STR_INT,
+            BonusType.STR_LUK,
+            BonusType.DEX_INT,
+            BonusType.DEX_LUK,
+            BonusType.INT_LUK,
+        ):
+            reversed_key = "_".join(reversed(bonus_type.value.split("_")))
+            if maybe_reversed == reversed_key:
+                return bonus_type.value
+
+        return maybe_reversed
+
 
 class Bonus(GearImprovement):
     type: Literal["bonus"] = "bonus"

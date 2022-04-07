@@ -253,7 +253,7 @@ class UnionSquad(BaseModel):
     ):
         blocks = get_all_blocks()
         size = [
-            (default_size if block.job in large_block_jobs else large_size)
+            (large_size if block.job in large_block_jobs else default_size)
             for block in blocks
         ]
         return UnionSquad(blocks=blocks, block_size=size)

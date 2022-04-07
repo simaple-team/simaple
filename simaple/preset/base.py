@@ -12,6 +12,7 @@ from simaple.core import DamageLogic, JobType, Stat
 from simaple.gear.gearset import Gearset
 from simaple.gear.potential import Potential, PotentialTier
 from simaple.hyperstat import Hyperstat
+from simaple.job.job import Job
 from simaple.link import LinkSkillset
 from simaple.optimizer import (
     HyperstatTarget,
@@ -59,6 +60,27 @@ class PresetOptimizer(BaseModel):
     alternate_character_job_types: List[JobType]
     link_count: int
     weapon_potential_tier: Tuple[PotentialTier, PotentialTier, PotentialTier]
+
+    @classmethod
+    def based_on_job(
+        cls,
+        job: Job,
+        union_block_count: int,
+        alternate_character_job_types: List[JobType],
+        link_count: int,
+        weapon_potential_tier: Tuple[PotentialTier, PotentialTier, PotentialTier],
+    ):
+        return PresetOptimizer(
+            default_stat=job.get_default_stat(),
+            level=job.level,
+            level_stat=job.level_stat,
+            damage_logic=job.damage_logic,
+            character_job_type=job.type,
+            union_block_count=union_block_count,
+            alternate_character_job_types=alternate_character_job_types,
+            link_count=link_count,
+            weapon_potential_tier=weapon_potential_tier,
+        )
 
     def calculate_optimal_hyperstat(self, reference_stat: Stat) -> Hyperstat:
         with Timer("hyperstat"):

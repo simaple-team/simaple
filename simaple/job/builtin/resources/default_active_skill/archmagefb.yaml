@@ -1,0 +1,12 @@
+kind: PassiveSkill
+version: v1
+metadata:
+  type: DefaultActiveSkill
+  group: archmagefb
+data:
+  - name: 메디테이션
+    stat:
+      magic_attack: 30
+  - name: 메이플 용사
+    stat:
+      INT: math.floor((18 + 5 * character_level) * 0.15)
