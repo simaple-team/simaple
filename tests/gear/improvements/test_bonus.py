@@ -3,7 +3,7 @@ from loguru import logger
 
 from simaple.core import Stat
 from simaple.gear.gear_repository import GearRepository
-from simaple.gear.improvements.bonus import Bonus, BonusType
+from simaple.gear.improvements.bonus import Bonus, BonusType, BonusFactory
 
 TEST_CASES_ARMOR = [
     (1005197, BonusType.DEX, 3, Stat(DEX=24)),
@@ -43,7 +43,7 @@ def test_armor_bonus(gear_id, bonus_type, grade, target):
     repository = GearRepository()
 
     gear = repository.get_by_id(gear_id)
-    bonus = Bonus(grade=grade, bonus_type=bonus_type)
+    bonus = BonusFactory().create(grade=grade, bonus_type=bonus_type)
 
     bonus_stat = bonus.calculate_improvement(gear)
     logger.info(gear)
