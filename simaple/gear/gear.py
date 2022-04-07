@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, Extra
 
 from simaple.core import Stat
 from simaple.gear.gear_type import GearType
@@ -21,6 +21,9 @@ class Gear(BaseModel):
     additional_potential: AdditionalPotential = Field(
         default_factory=AdditionalPotential
     )
+
+    class Config:
+        extra = Extra.forbid
 
     def sum_stat(self) -> Stat:
         return (
