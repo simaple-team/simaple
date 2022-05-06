@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from simaple.core import Stat
 from simaple.gear.arcane_symbol import ArcaneSymbol
@@ -13,8 +13,8 @@ from simaple.gear.potential import PotentialTier
 
 # TODO: weapon potential optimizer (stand-alone)
 class UserGearsetBlueprint(BaseModel):
-    arcane_symbols: List[ArcaneSymbol]
-    authentic_symbols: List[AuthenticSymbol]
+    arcane_symbols: List[ArcaneSymbol] = Field(default_factory=list)
+    authentic_symbols: List[AuthenticSymbol] = Field(default_factory=list)
     pet_equip: Stat
     pet_set: Stat
     cash: Stat
