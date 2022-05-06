@@ -191,6 +191,9 @@ class Starforce(Enhancement):
             DEX=stat_starforce_increment,
         )
 
+    def apply_star_cutoff(self, gear: Gear):
+        self.star = min(self.star, self.max_star(gear))
+
     def get_single_starforce_improvement(
         self, gear: Gear, target_star: int, current_improvement: Stat
     ) -> Stat:
