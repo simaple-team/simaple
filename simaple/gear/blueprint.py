@@ -100,6 +100,7 @@ class PracticalGearBlueprint(AbstractGearBlueprint):
             scrolls = [self.scroll for i in range(gear.scroll_chance)]
 
         starforce = Starforce(enhancement_type="Starforce", star=self.star)
+        starforce.apply_star_cutoff(gear)
 
         return GeneralizedGearBlueprint(
             gear_id=gear.id,
