@@ -30,7 +30,7 @@ class SingleStatBonus(Bonus):
         return Stat.parse_obj({self.stat_type.value: increment})
 
 
-class DoubleStatBonus(Bonus):
+class DualStatBonus(Bonus):
     stat_type_pair: Tuple[BaseStatType, BaseStatType]
 
     def calculate_improvement(self, gear: Gear) -> Stat:

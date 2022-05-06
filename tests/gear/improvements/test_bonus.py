@@ -9,7 +9,7 @@ from simaple.gear.improvements.bonus import (
     AttackTypeBonus,
     BossDamageMultiplierBonus,
     DamageMultiplierBonus,
-    DoubleStatBonus,
+    DualStatBonus,
     SingleStatBonus,
 )
 
@@ -18,21 +18,21 @@ TEST_CASES_ARMOR = [
     (1005197, SingleStatBonus(stat_type=BaseStatType.DEX, grade=7), Stat(DEX=56)),
     (
         1005197,
-        DoubleStatBonus(stat_type_pair=(BaseStatType.STR, BaseStatType.DEX), grade=3),
+        DualStatBonus(stat_type_pair=(BaseStatType.STR, BaseStatType.DEX), grade=3),
         Stat(DEX=12, STR=12),
     ),
     (1102794, SingleStatBonus(stat_type=BaseStatType.DEX, grade=3), Stat(DEX=27)),
     (1102794, SingleStatBonus(stat_type=BaseStatType.DEX, grade=7), Stat(DEX=63)),
     (
         1102794,
-        DoubleStatBonus(stat_type_pair=(BaseStatType.STR, BaseStatType.DEX), grade=3),
+        DualStatBonus(stat_type_pair=(BaseStatType.STR, BaseStatType.DEX), grade=3),
         Stat(DEX=15, STR=15),
     ),
     (1102942, SingleStatBonus(stat_type=BaseStatType.DEX, grade=3), Stat(DEX=33)),
     (1102942, SingleStatBonus(stat_type=BaseStatType.DEX, grade=7), Stat(DEX=77)),
     (
         1102942,
-        DoubleStatBonus(stat_type_pair=(BaseStatType.STR, BaseStatType.DEX), grade=3),
+        DualStatBonus(stat_type_pair=(BaseStatType.STR, BaseStatType.DEX), grade=3),
         Stat(DEX=18, STR=18),
     ),
     (

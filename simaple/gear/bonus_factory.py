@@ -9,7 +9,7 @@ from simaple.gear.improvements.bonus import (
     Bonus,
     BossDamageMultiplierBonus,
     DamageMultiplierBonus,
-    DoubleStatBonus,
+    DualStatBonus,
     ResourcePointBonus,
     SingleStatBonus,
 )
@@ -68,22 +68,22 @@ class BonusFactory:
             BonusType.LUK: SingleStatBonus(stat_type=BaseStatType.LUK, grade=1),
             BonusType.DEX: SingleStatBonus(stat_type=BaseStatType.DEX, grade=1),
             BonusType.INT: SingleStatBonus(stat_type=BaseStatType.INT, grade=1),
-            BonusType.STR_DEX: DoubleStatBonus(
+            BonusType.STR_DEX: DualStatBonus(
                 stat_type_pair=[BaseStatType.STR, BaseStatType.DEX], grade=1
             ),
-            BonusType.STR_INT: DoubleStatBonus(
+            BonusType.STR_INT: DualStatBonus(
                 stat_type_pair=[BaseStatType.STR, BaseStatType.INT], grade=1
             ),
-            BonusType.STR_LUK: DoubleStatBonus(
+            BonusType.STR_LUK: DualStatBonus(
                 stat_type_pair=[BaseStatType.STR, BaseStatType.LUK], grade=1
             ),
-            BonusType.DEX_INT: DoubleStatBonus(
+            BonusType.DEX_INT: DualStatBonus(
                 stat_type_pair=[BaseStatType.DEX, BaseStatType.INT], grade=1
             ),
-            BonusType.DEX_LUK: DoubleStatBonus(
+            BonusType.DEX_LUK: DualStatBonus(
                 stat_type_pair=[BaseStatType.DEX, BaseStatType.LUK], grade=1
             ),
-            BonusType.INT_LUK: DoubleStatBonus(
+            BonusType.INT_LUK: DualStatBonus(
                 stat_type_pair=[BaseStatType.INT, BaseStatType.LUK], grade=1
             ),
             BonusType.all_stat_multiplier: AllstatBonus(grade=1),
