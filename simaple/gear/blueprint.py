@@ -4,9 +4,9 @@ from typing import List, Optional, Union
 from pydantic import BaseModel, Extra, Field
 
 from simaple.core import Stat
+from simaple.gear.bonus_factory import BonusFactory, BonusSpec
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository
-from simaple.gear.improvements.bonus import Bonus, BonusType, BonusFactory
 from simaple.gear.improvements.scroll import Scroll
 from simaple.gear.improvements.spell_trace import SpellTrace
 from simaple.gear.improvements.starforce import Starforce
@@ -20,11 +20,6 @@ class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):
     @abstractmethod
     def build(self, gear_repository: GearRepository) -> Gear:
         ...
-
-
-class BonusSpec(BaseModel):
-    bonus_type: BonusType
-    grade: int
 
 
 class GeneralizedGearBlueprint(AbstractGearBlueprint):
@@ -45,7 +40,10 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
         gear.additional_potential = self.additional_potential.copy()
 
         bonus_factory = BonusFactory()
-        bonuses = [bonus_factory.create(bonus_type=spec.bonus_type, grade=spec.grade) for spec in self.bonuses]
+        bonuses = [
+            bonus_factory.create(bonus_type=spec.bonus_type, grade=spec.grade)
+            for spec in self.bonuses
+        ]
 
         bonus_stat = sum(
             [bonus.calculate_improvement(gear) for bonus in bonuses],

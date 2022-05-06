@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, Extra
+from pydantic import BaseModel, Extra, Field
 
 from simaple.core import Stat
 from simaple.gear.gear_type import GearType

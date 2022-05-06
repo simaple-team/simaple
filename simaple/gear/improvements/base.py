@@ -1,5 +1,6 @@
-from typing import List, Literal
 from abc import ABCMeta, abstractmethod
+from typing import List, Literal
+
 from pydantic import BaseModel
 
 from simaple.core import Stat

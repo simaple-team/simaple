@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.gear.improvements.bonus import BonusType
+from simaple.gear.bonus_factory import BonusType
 
 
 @pytest.mark.parametrize(
