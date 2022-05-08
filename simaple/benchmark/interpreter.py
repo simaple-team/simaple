@@ -7,7 +7,7 @@ from pydantic import BaseModel
 
 from simaple.benchmark.gearset_blueprint import UserGearsetBlueprint
 from simaple.core import JobCategory
-from simaple.gear.improvements.bonus import BonusType
+from simaple.gear.bonus_factory import BonusType
 
 INTERPETER_RESOURCE_PATH = os.path.join(os.path.dirname(__file__), "resources")
 
