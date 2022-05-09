@@ -90,7 +90,7 @@ class BenchmarkInterpreterOption(BaseModel):
 
 class BenchmarkConfigurationInterpreter:
     def __init__(self):
-        self.item_name_alias = self.load_interpreter_data(
+        self.item_name_alias: Dict[str, List[str]] = self.load_interpreter_data(
             os.path.join(INTERPETER_RESOURCE_PATH, "item_name_alias.json")
         )
 

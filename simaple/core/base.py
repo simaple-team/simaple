@@ -88,16 +88,16 @@ class Stat(BaseModel):
         extra = Extra.forbid
 
     @classmethod
-    def all_stat(cls, v):
+    def all_stat(cls, v) -> Stat:
         return Stat(STR=v, LUK=v, INT=v, DEX=v)
 
     @classmethod
-    def all_stat_multiplier(cls, v):
+    def all_stat_multiplier(cls, v) -> Stat:
         return Stat(
             STR_multiplier=v, LUK_multiplier=v, INT_multiplier=v, DEX_multiplier=v
         )
 
-    def __add__(self, arg: Stat):
+    def __add__(self, arg: Stat) -> Stat:
         return Stat(
             STR=self.STR + arg.STR,
             LUK=self.LUK + arg.LUK,

@@ -156,7 +156,7 @@ class Enhancement(GearImprovement):
         return data[2 if gear.superior_eqp else 1]
 
     def gear_starforce_type_is_weapon(self, gear) -> bool:
-        return gear.is_weapon() or gear.type == GearType.katara
+        return bool(gear.is_weapon() or gear.type == GearType.katara)
 
 
 class Starforce(Enhancement):

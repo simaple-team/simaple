@@ -50,4 +50,5 @@ class RegressionMetric(Metric):
         target_x = self._get_scale(stat)
         target_y = model.predict([[target_x]])
 
-        return target_y[0]
+        score = float(target_y[0])
+        return score

@@ -3,8 +3,8 @@ _black-check = "black --check ."
 _isort-check = "isort --check-only ."
 formatting-check = ["_black-check", "_isort-check"]
 
-_black = "black ."
-_isort = "isort ."
+_black = "black simaple tests"
+_isort = "isort simaple tests"
 format = ["_black", "_isort"]
 
 _pylint = "pylint simaple tests"
@@ -48,6 +48,11 @@ plugins = ["sqlalchemy.ext.mypy.plugin"]
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
+module = [
+    "sklearn.linear_model",
+    "sklearn.pipeline",
+    "sklearn.preprocessing"
+]
 
 [tool.poetry]
 name = "simaple"
@@ -70,6 +75,8 @@ pymongo = "^3.12.1"
 poethepoet = "^0.10.0"
 PyYAML = "^6.0"
 types-PyYAML = "^6.0.4"
+numpy = "^1.22.3"
+scikit-learn = "^1.0.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
