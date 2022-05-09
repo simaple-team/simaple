@@ -56,7 +56,7 @@ class DamageLogic(BaseModel, metaclass=ABCMeta):
 
 class STRBasedDamageLogic(DamageLogic):
     def get_major_stat(self, stat: Stat) -> float:
-        return stat.STR
+        return stat.get_base_stat_coefficient(BaseStatType.STR)
 
     def get_base_stat_factor(self, stat: Stat) -> float:
         return stat.get_base_stat_coefficient(
@@ -69,7 +69,7 @@ class STRBasedDamageLogic(DamageLogic):
 
 class INTBasedDamageLogic(DamageLogic):
     def get_major_stat(self, stat: Stat) -> float:
-        return stat.INT
+        return stat.get_base_stat_coefficient(BaseStatType.INT)
 
     def get_base_stat_factor(self, stat: Stat) -> float:
         return stat.get_base_stat_coefficient(
@@ -82,7 +82,7 @@ class INTBasedDamageLogic(DamageLogic):
 
 class DEXBasedDamageLogic(DamageLogic):
     def get_major_stat(self, stat: Stat) -> float:
-        return stat.DEX
+        return stat.get_base_stat_coefficient(BaseStatType.DEX)
 
     def get_base_stat_factor(self, stat: Stat) -> float:
         return stat.get_base_stat_coefficient(
@@ -95,7 +95,7 @@ class DEXBasedDamageLogic(DamageLogic):
 
 class LUKBasedDamageLogic(DamageLogic):
     def get_major_stat(self, stat: Stat) -> float:
-        return stat.LUK
+        return stat.get_base_stat_coefficient(BaseStatType.LUK)
 
     def get_base_stat_factor(self, stat: Stat) -> float:
         return stat.get_base_stat_coefficient(

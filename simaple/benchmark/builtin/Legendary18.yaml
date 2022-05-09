@@ -1,63 +1,51 @@
 ---
 summary:
-  - 1아2카5앱 / 3보장 / 탈벨12성 / 칠요
-  - 데벤은 5보장 분자벨22성
-  - 스타포스 - 무기 22성 / 방어구 22성
-  - 추옵 - 무기 공1추 / 방어구, 악세 추옵 120급
-  - 잠재능력
-  - 무기류 윗잠 9줄유효 에디 공21%
-  - 방어구, 악세 레전27% / 에디 에픽2.5줄
-  - 장갑 크뎀2줄
-  - 아케인심볼 고정주스탯 13200
-  - 어센틱심볼 고정주스탯 900
-  - 마라벨 풀셋, 프펫공작
-
+  - 18레전둘둘
+spec_hint:
+  union_block_count: 32
+  character_level: 260
 anchors:
   armor: &armor
     bonuses:
-      - grade: 4
+      - grade: 5
         bonus_type: first_stat_second_stat
-      - grade: 4
-        bonus_type: first_stat_third_stat
-      - grade: 6
+      - grade: 5
         bonus_type: first_stat
+      - grade: 5
+        bonus_type: all_stat_multiplier
     spell_trace:
       probability: 30
       stat_prop_type: first_stat
-    star: 22
+    star: 18
     potential:
       options:
-        - first_stat_multiplier: 9
-        - first_stat_multiplier: 9
+        - first_stat_multiplier: 12
         - first_stat_multiplier: 9
     additional_potential:
       options:
-        - first_stat_multiplier: 4
-        - first_stat_multiplier: 4
         - first_att: 10
+        - first_stat_multiplier: 4
   acc: &acc
     bonuses: &acc_bonus
-      - grade: 4
+      - grade: 5
         bonus_type: first_stat_second_stat
-      - grade: 4
-        bonus_type: first_stat_third_stat
-      - grade: 6
+      - grade: 5
+        bonus_type: first_stat
+      - grade: 5
         bonus_type: all_stat_multiplier
     scroll:
       name: 악공
       stat:
-        first_att: 4
+        first_att: 2.5
     potential:
       options:
-        - first_stat_multiplier: 9
-        - first_stat_multiplier: 9
+        - first_stat_multiplier: 12
         - first_stat_multiplier: 9
     additional_potential:
       options:
-        - first_stat_multiplier: 4
-        - all_stat_multiplier: 2
         - first_att: 10
-    star: 22
+        - first_stat_multiplier: 4
+    star: 18
 default:
   arcane_symbols: 
     - level: 20
@@ -73,14 +61,12 @@ default:
     - level: 20
       stat_type: first_stat
   authentic_symbols:
-    - level: 10
-      stat_type: first_stat
-    - level: 8
+    - level: 4
       stat_type: first_stat
   pet_equip:
-    first_stat: 124 # 프펫공, 루나 드림 2세트(5+4*9)*2, 루나 쁘띠 1세트(10+4*8)
+    first_stat: 0
   pet_set: 
-    first_stat: 24 # 루나 드림 2세트(7+9), 루나 쁘띠 1세트(8)
+    first_stat: 0
   cash:
     first_stat: 75
     second_stat: 75
@@ -90,15 +76,24 @@ default:
     - - 4
       - 3
       - 3
-    - - 4
-      - 3
-      - 3
-    - - 4
-      - 3
-      - 3
+    - - 3
+      - 2
+      - 2
+    - - 3
+      - 2
+      - 2
   cap:
     gear_id: 앱솔랩스 모자
     <<: *armor
+    potential:
+      options:
+        - first_stat_multiplier: 12
+        - first_stat_multiplier: 9
+        - first_stat_multiplier: 9
+    additional_potential:
+      options:
+        - first_att: 10
+        - first_stat_multiplier: 4
   coat:
     gear_id: 카루타 상의
     <<: *armor
@@ -121,27 +116,23 @@ default:
   shoulder_pad:
     gear_id: 앱솔랩스 숄더
     <<: *acc
-    scroll:
-      name: 혼줌
-      stat:
-        first_att: 5
   face_accessory:
     gear_id: 응축된 힘의 결정석
     <<: *acc
-    star: 10
   eye_accessory:
-    gear_id: 파풀라투스 마크
+    gear_id: 블랙빈 마크
     <<: *acc
   earrings:
-    gear_id: 마이스터 이어링
+    gear_id: 데아 시두스 이어링
     <<: *acc
   belt:
     gear_id: 골든 클로버 벨트
     <<: *acc
-    star: 21
   ring1:
-    gear_id: 마이스터링
-    star: 22
+    gear_id: 실버블라썸 링
+    <<: *acc
+    exclude: 
+      - bonuses
   ring2:
     gear_id: 이터널 플레임 링
     <<: *acc
@@ -161,15 +152,6 @@ default:
       - bonuses
       - star
   pendant1:
-    gear_id: 130펜던
-    <<: *acc
-    bonuses:
-      - grade: 4
-        bonus_type: first_stat
-      - grade: 3
-        bonus_type: all_stat_multiplier
-    star: 20
-  pendant2:
     gear_id: 도미네이터 펜던트
     <<: *acc
     scroll:
@@ -177,22 +159,27 @@ default:
       stat:
         all_stat: 3
         all_att: 3
+  pendant2:
+    gear_id: 매커네이터 펜던트
+    <<: *acc
   pocket:
     gear_id: 핑크빛 성배
     bonuses: *acc_bonus
   badge:
-    gear_id: 칠요의 뱃지
+    gear_id: 크리스탈 웬투스 뱃지
   medal:
     gear_id: 칠요의 몬스터파커
   weapon:
     gear_id: 아케인셰이드 튜너
     bonuses:
-      - grade: 7
+      - grade: 6
         bonus_type: first_att
+      - grade: 5
+        bonus_type: boss_damage_multiplier
     spell_trace:
       probability: 15
       stat_prop_type: first_stat
-    star: 22
+    star: 17
     additional_potential:
       options:
         - first_att_multiplier: 12
@@ -210,12 +197,12 @@ default:
         - first_att_multiplier: 12
         - first_att_multiplier: 9
   machine_heart:
-    gear_id: 티타늄 하트
+    gear_id: 리튬 하트
     <<: *acc
     scroll:
-      name: 매지컬
+      name: 주문의 흔적
       stat:
-        first_att: 9.5
+        first_att: 5
     star: 8
   title:
     # 핑아일체
