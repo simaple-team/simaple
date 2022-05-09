@@ -1,5 +1,6 @@
 import itertools
-from typing import Iterable, Any
+from typing import Any, Iterable
+
 
 class Iterator:
     def single_iterator(self, length: int):
