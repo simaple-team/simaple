@@ -103,7 +103,7 @@ class BonusFactory:
         if bonus_type not in self._bonus_prototypes:
             raise ValueError
 
-        bonus_prototype = self._bonus_prototypes[bonus_type]
+        bonus_prototype: Bonus = self._bonus_prototypes[bonus_type]
         bonus = bonus_prototype.copy()
         bonus.grade = grade
 

@@ -96,7 +96,8 @@ class PresetOptimizer(BaseModel):
             )
             output = optimizer.optimize()
 
-        return output.get_result()
+        result: Hyperstat = output.get_result()
+        return result
 
     def calculate_optimal_union_squad(self, reference_stat: Stat) -> UnionSquad:
         with Timer("union_squad"):
@@ -115,7 +116,8 @@ class PresetOptimizer(BaseModel):
             )
             output = optimizer.optimize()
 
-        return output.get_result()
+        result: UnionSquad = output.get_result()
+        return result
 
     def calculate_optimal_union_occupation(
         self, reference_stat: Stat, occupation_count: int
@@ -129,7 +131,8 @@ class PresetOptimizer(BaseModel):
             optimizer = StepwizeOptimizer(union_occupation_target, occupation_count, 2)
             output = optimizer.optimize()
 
-        return output.get_result()
+        result: UnionOccupation = output.get_result()
+        return result
 
     def calculate_optimal_links(self, reference_stat: Stat) -> LinkSkillset:
         with Timer("links"):
@@ -142,7 +145,8 @@ class PresetOptimizer(BaseModel):
             optimizer = StepwizeOptimizer(optimization_target, self.link_count, 1)
             output = optimizer.optimize()
 
-        return output.get_result()
+        result: LinkSkillset = output.get_result()
+        return result
 
     def calculate_optimal_weapon_potential(
         self, reference_stat: Stat
