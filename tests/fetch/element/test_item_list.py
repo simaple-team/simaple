@@ -1,7 +1,7 @@
 from simaple.fetch.token import TokenRepository
 from simaple.fetch.element import MapleItemListElement
 
-
+'''
 def test_resolve_item():
     element = MapleItemListElement()
 
@@ -21,4 +21,3 @@ def test_get_item():
 
     v = element.fetch(token=token)
     result = element.run(v)
-'''

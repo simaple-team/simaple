@@ -7,10 +7,14 @@ from urllib import parse
 from simaple.fetch.cookie import get_cookie
 from bs4 import BeautifulSoup
 from urllib import parse
-
+import json
 
 class Query(BaseModel):
     path: str
+
+    @property
+    def url(self) -> str:
+        return f"https://maplestory.nexon.com/{self.path}"
 
     def get(self) -> str:
         ...
@@ -27,7 +31,7 @@ class CookiedQuery(Query):
         }
 
         return requests.get(
-            self.path,
+            self.url,
             params={
                 "p": self.token,
             },
@@ -37,14 +41,19 @@ class CookiedQuery(Query):
 
 
 class NoredirectXMLQuery(Query):
+    token: str
+    path: str
+
     def get(self):
         header = {
             'Connection': 'keep-alive',
             'X-Requested-With': 'XMLHttpRequest',
         }
 
-        return requests.get(
-            self.path,
+        response = requests.get(
+            self.url,
             headers=header,
             allow_redirects=False
         )
+        text = json.loads(response.text)["view"]
+        return text

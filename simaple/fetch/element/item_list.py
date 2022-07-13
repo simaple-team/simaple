@@ -19,7 +19,7 @@ class MapleItemListElement(Element):
 
     def fetch(self, token):
         query = CookiedQuery(
-            path="https://maplestory.nexon.com/Common/Character/Detail/123/Equipment",
+            path="/Common/Character/Detail/123/Equipment",
             token=token,
         )
 
