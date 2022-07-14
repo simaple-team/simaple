@@ -1,19 +1,19 @@
 import math
-from typing import Literal, Tuple, Union, List
+from typing import Tuple, Union, List
 
 from simaple.core import Stat, StatProps
-from simaple.gear.bonus_factory import BonusFactory, BonusType
 from simaple.gear.gear import Gear
-from simaple.gear.gear_repository import GearRepository
 from simaple.gear.gear_type import GearType
 from simaple.gear.improvements.starforce import Starforce
 from simaple.gear.improvements.spell_trace import SpellTrace, PROBABILITIES
 from simaple.gear.compute.base import GearImprovementCalculator
 
 
-class ScrollStarforceImprovementCalculator(GearImprovementCalculator):
+class ScrollStarforceCalculator(GearImprovementCalculator):
 
-    def compute(self, enhance_stat: Stat, gear: Gear, scroll_up: int, star: int) -> Tuple[Union[List[SpellTrace], Stat], Starforce]:
+    def compute(
+        self, enhance_stat: Stat, gear: Gear, scroll_up: int, star: int
+    ) -> Tuple[Union[List[SpellTrace], Stat], Starforce]:
         """
         특정 주흔작이면 (SpellTrace list, Starforce), 주흔작으로 판별하지 못하면 (stat, Starforce)
         :param enhance_stat: Stat object of gear's scroll + star stat
