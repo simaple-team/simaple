@@ -1,16 +1,19 @@
-from pydantic import BaseModel
+import json
+from urllib import parse
 
 import requests
 from bs4 import BeautifulSoup
-from urllib import parse
+from pydantic import BaseModel
 
 from simaple.fetch.cookie import get_cookie
-from bs4 import BeautifulSoup
-from urllib import parse
 
 
 class Query(BaseModel):
     path: str
+
+    @property
+    def url(self) -> str:
+        return f"https://maplestory.nexon.com/{self.path}"
 
     def get(self) -> str:
         ...
@@ -21,13 +24,13 @@ class CookiedQuery(Query):
 
     def get(self) -> str:
         header = {
-            'Connection': 'keep-alive',
-            'Cache-Control': 'max-age=0',
-            'Upgrade-Insecure-Requests': '1',
+            "Connection": "keep-alive",
+            "Cache-Control": "max-age=0",
+            "Upgrade-Insecure-Requests": "1",
         }
 
         return requests.get(
-            self.path,
+            self.url,
             params={
                 "p": self.token,
             },
@@ -37,14 +40,15 @@ class CookiedQuery(Query):
 
 
 class NoredirectXMLQuery(Query):
+    token: str
+    path: str
+
     def get(self):
         header = {
-            'Connection': 'keep-alive',
-            'X-Requested-With': 'XMLHttpRequest',
+            "Connection": "keep-alive",
+            "X-Requested-With": "XMLHttpRequest",
         }
 
-        return requests.get(
-            self.path,
-            headers=header,
-            allow_redirects=False
-        )
+        response = requests.get(self.url, headers=header, allow_redirects=False)
+        text = json.loads(response.text)["view"]
+        return text
