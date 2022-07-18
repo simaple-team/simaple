@@ -1,5 +1,5 @@
-from simaple.fetch.token import TokenRepository
 from simaple.fetch.element import MapleItemListElement
+from simaple.fetch.token import TokenRepository
 
 
 def test_resolve_item():
@@ -10,15 +10,3 @@ def test_resolve_item():
 
     result = element.run(html_text)
     print(result)
-
-'''
-def test_get_item():
-    token_repository = TokenRepository()
-    name = "Backend"
-    token = token_repository.get(name)
-
-    element = MapleItemListElement()
-
-    v = element.fetch(token=token)
-    result = element.run(v)
-'''
