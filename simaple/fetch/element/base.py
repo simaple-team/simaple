@@ -1,6 +1,7 @@
+from abc import ABCMeta, abstractmethod
+
 from pydantic import BaseModel
 
-from abc import ABCMeta, abstractmethod
 
 class Element(BaseModel, metaclass=ABCMeta):
     @abstractmethod
