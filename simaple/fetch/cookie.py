@@ -35,7 +35,13 @@ def get_cookie() -> RequestsCookieJar:
     jar.set("introdayoff", "1")
     jar.set(
         "A2SR",
-        "https%253A%252F%252Fmaplestory.nexon.com%252FCommon%252FCharacter%252FDetail%252F%2525ec%252583%25259d%2525eb%2525b6%252584%2525ec%25259e%252590%252FEquipment%253Fp%253DmikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%25252fH30vgr7QFpImK2Gl2k%25252bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%25252feGMeahUGSOq2pA75n823dJ%25252bUKMsBl7fgrnAmgIt%25252boc37L50miIoCe9353MT%25252fWyUJFqW35HwAQ%25253d%3A1550653159926%3A0",
+        "https%253A%252F%252Fmaplestory.nexon.com%252FCommon\
+            %252FCharacter%252FDetail%252F%2525ec%252583%25259d%2525eb%2525b6%252584%2525ec%25259e%252590%252F\
+                Equipment%253Fp%253DmikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD\
+                    %25252fH30vgr7QFpImK2Gl2k%25252bs1OQHDhwMxbXKfkjVbdzEYe9wCRH\
+                        %25252feGMeahUGSOq2pA75n823dJ%25252bUKMsBl7fgrnAmgIt\
+                            %25252boc37L50miIoCe9353MT%25252fWyUJFqW35HwAQ\
+                                %25253d%3A1550653159926%3A0",
     )
 
     return jar

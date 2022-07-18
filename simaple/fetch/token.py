@@ -2,7 +2,6 @@ from urllib import parse
 
 import requests
 from bs4 import BeautifulSoup
-from pydantic import BaseModel
 
 
 class TokenRepository:
@@ -11,13 +10,13 @@ class TokenRepository:
         self._loaded_token = None
         self._any_number_for_query_detail = 0
 
-    def get(self, name) -> str:
+    def get(self, name: str) -> str:
         if self._loaded_token is None:
             self.load(name)
 
         return self._loaded_token
 
-    def load(self, name) -> str:
+    def load(self, name: str) -> str:
         data = requests.get(
             self._url, params={"c": name, "w": self._any_number_for_query_detail}
         )

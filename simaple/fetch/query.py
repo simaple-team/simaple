@@ -1,8 +1,6 @@
 import json
-from urllib import parse
 
 import requests
-from bs4 import BeautifulSoup
 from pydantic import BaseModel
 
 from simaple.fetch.cookie import get_cookie
@@ -43,7 +41,7 @@ class NoredirectXMLQuery(Query):
     token: str
     path: str
 
-    def get(self):
+    def get(self) -> str:
         header = {
             "Connection": "keep-alive",
             "X-Requested-With": "XMLHttpRequest",
