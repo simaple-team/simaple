@@ -20,3 +20,7 @@ class StatType(enum.Enum):
     increment = "increment"
     potential = "potential"
     additional_potential = "additional_potential"
+    name = "name"
+    soulweapon = "soulweapon"
+    starforce = "starforce"
+    image = "image"
