@@ -5,7 +5,7 @@ import pydantic
 from bs4 import BeautifulSoup
 
 from simaple.core.base import StatProps
-from simaple.fetch.element.base import Element
+from simaple.fetch.element.base import Element, ElementWrapper
 from simaple.fetch.element.namespace import Namespace, PropertyNamespace, StatType
 from simaple.fetch.element.provider import (
     DomElementProvider,
@@ -77,6 +77,9 @@ class ItemElement(Element):
     providers: Dict[str, DomElementProvider] = pydantic.Field(
         default_factory=kms_homepage_providers
     )
+    global_providers: Dict[str, DomElementProvider] = pydantic.Field(
+        default_factory=dict
+    )
     names: Dict[str, Namespace] = pydantic.Field(default_factory=korean_names)
 
     def run(self, html_text):
@@ -86,7 +89,7 @@ class ItemElement(Element):
         stacks: Dict[StatType, Dict[str, int]] = defaultdict(list)
         for dom_element in dom_elements:
             provided = self._extract_from_dom_element(dom_element)
-            print(provided)
+            # print(provided)
             for k, v in provided.items():
                 stacks[k].append(v)
 
@@ -108,7 +111,9 @@ class ItemElement(Element):
 
         return {}
 
-    def fetch(self, token, path):
-        query = NoredirectXMLQuery(token=token, path=path)
 
-        return query.get()
+def item_promise():
+    return ElementWrapper(
+        element=ItemElement(),
+        query=NoredirectXMLQuery(),
+    )

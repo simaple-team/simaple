@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from simaple.fetch.element.base import Element
+from simaple.fetch.element.base import Element, ElementWrapper
 from simaple.fetch.query import CookiedQuery
 
 
@@ -14,12 +14,12 @@ class MapleItemListElement(Element):
             map(lambda element: element["href"] if element else "", item_links)
         )
 
-        return item_urls
+        return {idx: url for idx, url in enumerate(item_urls) if len(url) > 0}
 
-    def fetch(self, token):
-        query = CookiedQuery(
-            path="/Common/Character/Detail/123/Equipment",
-            token=token,
-        )
 
-        return query.get()
+def maple_item_list_promise():
+    return ElementWrapper(
+        element=MapleItemListElement(),
+        query=CookiedQuery(),
+        reserved_path="/Common/Character/Detail/123/Equipment",
+    )
