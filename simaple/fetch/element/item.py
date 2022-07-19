@@ -10,7 +10,10 @@ from simaple.fetch.element.provider import (
     DomElementProvider,
     MultiplierProvider,
     PotentialProvider,
+    SoulWeaponProvider,
+    StarforceProvider,
     StatKeywordProvider,
+    GlobalProvider,
 )
 from simaple.fetch.query import NoredirectXMLQuery
 
@@ -41,6 +44,9 @@ def kms_homepage_providers() -> Dict[str, DomElementProvider]:
     for k in [f"에디셔널잠재옵션({option}아이템)" for option in grades]:
         providers[k] = PotentialProvider(type="additional_potential")
 
+    providers["기타"] = StarforceProvider()
+    providers["소울옵션"] = SoulWeaponProvider()
+
     return providers
 
 
@@ -49,7 +55,9 @@ class ItemElement(Element):
         default_factory=kms_homepage_providers
     )
     names: Dict[str, Namespace] = pydantic.Field(default_factory=korean_names)
-    global_provider: Optional[DomElementProvider]
+    global_provider: Optional[DomElementProvider] = pydantic.Field(
+        default_factory=GlobalProvider,
+    )
 
     def run(self, html_text):
         soup = BeautifulSoup(html_text, "html.parser")
