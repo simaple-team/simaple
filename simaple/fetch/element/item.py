@@ -1,15 +1,11 @@
 from collections import defaultdict
-from typing import Dict
+from typing import Dict, Optional
 
 import pydantic
 from bs4 import BeautifulSoup
 
 from simaple.fetch.element.base import Element, ElementWrapper
-from simaple.fetch.element.namespace import (
-    Namespace,
-    StatType,
-    korean_names,
-)
+from simaple.fetch.element.namespace import Namespace, StatType, korean_names
 from simaple.fetch.element.provider import (
     DomElementProvider,
     MultiplierProvider,
@@ -53,6 +49,7 @@ class ItemElement(Element):
         default_factory=kms_homepage_providers
     )
     names: Dict[str, Namespace] = pydantic.Field(default_factory=korean_names)
+    global_provider: Optional[DomElementProvider]
 
     def run(self, html_text):
         soup = BeautifulSoup(html_text, "html.parser")
@@ -62,6 +59,11 @@ class ItemElement(Element):
         for dom_element in dom_elements:
             provided = self._extract_from_dom_element(dom_element)
             for k, v in provided.items():
+                stacks[k].append(v)
+
+        if self.global_provider:
+            global_provided = self.global_provider.get_value("", soup)
+            for k, v in global_provided.items():
                 stacks[k].append(v)
 
         return stacks

@@ -8,6 +8,7 @@ from simaple.core.base import StatProps
 from simaple.fetch.element.namespace import StatType
 from simaple.fetch.element.provider import (
     DomElementProvider,
+    GlobalProvider,
     MultiplierProvider,
     PotentialProvider,
     SoulWeaponProvider,
@@ -116,3 +117,16 @@ def test_provider(
 
     result = provider.get_value(name, value_element)
     assert result == expected
+
+
+def test_global_provider():
+    with open("tests/fetch/resources/item/12.html") as f:
+        html = f.read()
+
+    dom_element = BeautifulSoup(html, "html.parser")
+    provider = GlobalProvider()
+    result = provider.get_value("", dom_element)
+    assert result == {
+        StatType.name: "아쿠아틱 레터 눈장식",
+        StatType.image: "https://avatar.maplestory.nexon.com/ItemIcon/KEPAJFNA.png",
+    }

@@ -158,3 +158,25 @@ class SoulWeaponProvider(DomElementProvider):
             raise ValueError("Parsing soul option failed.")
 
         return {keyword: value}
+
+
+class GlobalProvider(DomElementProvider):
+    def get_value(self, name: str, value_element) -> Dict[StatType, Dict[str, int]]:
+        return {
+            StatType.name: self.get_name(value_element),
+            StatType.image: self.get_image(value_element),
+        }
+
+    def get_image(self, value_element) -> str:
+        image_url = value_element.find(class_="item_img").find("img")["src"]
+
+        return image_url
+
+    def get_name(self, value_element) -> str:
+        text = value_element.find(class_="item_img").find("img")["alt"]
+
+        improved_regex = re.compile(r"(.+)\(\+[0-9]\)")
+        if improved_regex.match(text):
+            return improved_regex.match(text).group(1).strip()
+
+        return text
