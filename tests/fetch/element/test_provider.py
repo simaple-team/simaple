@@ -4,11 +4,14 @@ from typing import Dict
 import pytest
 from bs4 import BeautifulSoup
 
+from simaple.core.base import StatProps
 from simaple.fetch.element.namespace import StatType
 from simaple.fetch.element.provider import (
     DomElementProvider,
     MultiplierProvider,
     PotentialProvider,
+    SoulWeaponProvider,
+    StarforceProvider,
     StatKeywordProvider,
 )
 
@@ -78,6 +81,21 @@ fixtures = [
         <div class="point_td">마력 : +6%<br/>공격 시 10% 확률로 2레벨 슬로우효과 적용<br/>DEX : +3%</div>
     </li>
     """,
+    ),
+    (
+        StarforceProvider(),
+        {StatType.starforce: 0},
+        """<li><div class="stet_th"><span>기타</span></div><div class="point_td"><font color='Orange'>고유 아이템<br>월드 내 나의 캐릭터 간 1회 이동 가능 (이동 후 교환불가)<br></font><font color='Orange'>어드벤쳐 크리티컬링, 어드벤쳐 다크 크리티컬링, 제로 그라테스링, 다크 어드벤쳐 크리티컬링, 어드벤처 딥다크 크리티컬링은 중복 착용이 불가능합니다.</font></div></li>""",
+    ),
+    (
+        StarforceProvider(),
+        {StatType.starforce: 12},
+        """<li><div class="stet_th"><span>기타</span></div><div class="point_td"><font color='Orange'>교환 불가<br></font>12성 강화 적용 최대 25성까지 강화 가능<br/><font color='Orange'><font color='#D57300'>플래티넘 카르마의 가위를 사용하면 1회 교환이 가능하게 할 수 있습니다.</font></font></div></li>""",
+    ),
+    (
+        SoulWeaponProvider(),
+        {StatType.soulweapon: {"name": "위대한 벨룸의 소울", "option": {"몬스터방어율무시%": 7}}},
+        """<li><div class="stet_th"><span>소울옵션</span></div><div class="point_td"><font color=Gold>위대한 벨룸의 소울 적용</font><br>몬스터 방어율 무시 : +7%<br><font color=Orange>소울 충전 시 '주니어 벨룸 소환!' 사용가능</font></div></li>""",
     ),
 ]
 

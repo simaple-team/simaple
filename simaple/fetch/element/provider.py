@@ -85,7 +85,7 @@ class PotentialProvider(DomElementProvider):
         )
 
     def match_simple(self, target):
-        simple_regex = re.compile(r"(.+):\+([0-9])^")
+        simple_regex = re.compile(r"(.+):\+([0-9]+)^")
         match = simple_regex.match(target)
         if match is None:
             return None
@@ -93,7 +93,7 @@ class PotentialProvider(DomElementProvider):
         return {match.group(1): int(match.group(2))}
 
     def match_mutiplier(self, target):
-        multiplier_regex = re.compile(r"(.+):\+([0-9])%")
+        multiplier_regex = re.compile(r"(.+):\+([0-9]+)%")
         match = multiplier_regex.match(target)
         if match is None:
             return None
@@ -102,3 +102,59 @@ class PotentialProvider(DomElementProvider):
 
     def no_match(self, target):
         return {target: None}
+
+
+class StarforceProvider(DomElementProvider):
+    def get_value(self, name: str, value_element) -> Dict[StatType, Dict[str, int]]:
+        starforce = self._get_starforce(value_element)
+        return {StatType.starforce: starforce}
+
+    def _get_starforce(self, value_element) -> int:
+        regex = re.compile("([0-9]+)성 강화 적용")
+        match = re.search(regex, value_element.text)
+
+        if not match:
+            return 0
+
+        return int(match.group(1))
+
+
+class SoulWeaponProvider(DomElementProvider):
+    def get_value(self, name: str, value_element) -> Dict[StatType, Dict[str, int]]:
+        return {
+            StatType.soulweapon: {
+                "name": self.get_name(value_element),
+                "option": self.get_option(value_element),
+            }
+        }
+
+    def get_name(self, value_element):
+        regex = re.compile("^(.+) 적용")
+        match = re.search(regex, value_element.text)
+
+        return match.group(1)
+
+    def get_option(self, value_element):
+        soul_option_element = [
+            el
+            for el in value_element.children
+            if isinstance(el, bs4.element.NavigableString)
+        ][0]
+
+        normal_match = re.search(
+            re.compile(r"^(.+): \+([0-9])+$"), soul_option_element.text
+        )
+        percent_match = re.search(
+            re.compile(r"^(.+): \+([0-9])+%"), soul_option_element.text
+        )
+
+        if normal_match:
+            keyword = normal_match.group(1).replace(" ", "")
+            value = int(normal_match.group(2))
+        elif percent_match:
+            keyword = percent_match.group(1).replace(" ", "") + "%"
+            value = int(percent_match.group(2))
+        else:
+            raise ValueError("Parsing soul option failed.")
+
+        return {keyword: value}
