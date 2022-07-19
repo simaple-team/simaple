@@ -4,9 +4,12 @@ from typing import Dict
 import pydantic
 from bs4 import BeautifulSoup
 
-from simaple.core.base import StatProps
 from simaple.fetch.element.base import Element, ElementWrapper
-from simaple.fetch.element.namespace import Namespace, PropertyNamespace, StatType
+from simaple.fetch.element.namespace import (
+    Namespace,
+    StatType,
+    korean_names,
+)
 from simaple.fetch.element.provider import (
     DomElementProvider,
     MultiplierProvider,
@@ -45,40 +48,9 @@ def kms_homepage_providers() -> Dict[str, DomElementProvider]:
     return providers
 
 
-def korean_names() -> Dict[str, Namespace]:
-    return {
-        "STR": StatProps.STR,
-        "DEX": StatProps.DEX,
-        "LUK": StatProps.LUK,
-        "INT": StatProps.INT,
-        "STR%": StatProps.STR_multiplier,
-        "DEX%": StatProps.DEX_multiplier,
-        "LUK%": StatProps.LUK_multiplier,
-        "INT%": StatProps.INT_multiplier,
-        "STRF": StatProps.STR_static,
-        "DEXF": StatProps.DEX_static,
-        "LUKF": StatProps.LUK_static,
-        "INTF": StatProps.INT_static,
-        "MaxHP": StatProps.MHP,
-        "MaxMP": StatProps.MMP,
-        "공격력": StatProps.attack_power,
-        "마력": StatProps.magic_attack,
-        "보스몬스터공격시데미지": StatProps.boss_damage_multiplier,
-        "올스탯%": PropertyNamespace.all_stat_multiplier,
-        "올스탯": PropertyNamespace.all_stat,
-        "데미지": StatProps.damage_multiplier,
-        "몬스터방어력무시": StatProps.ignored_defence,
-        "크리티컬확률": StatProps.critical_rate,
-        "크리티컬데미지": StatProps.critical_damage,
-    }
-
-
 class ItemElement(Element):
     providers: Dict[str, DomElementProvider] = pydantic.Field(
         default_factory=kms_homepage_providers
-    )
-    global_providers: Dict[str, DomElementProvider] = pydantic.Field(
-        default_factory=dict
     )
     names: Dict[str, Namespace] = pydantic.Field(default_factory=korean_names)
 
@@ -89,7 +61,6 @@ class ItemElement(Element):
         stacks: Dict[StatType, Dict[str, int]] = defaultdict(list)
         for dom_element in dom_elements:
             provided = self._extract_from_dom_element(dom_element)
-            # print(provided)
             for k, v in provided.items():
                 stacks[k].append(v)
 
