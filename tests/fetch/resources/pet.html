@@ -1,0 +1,556 @@
+
+
+
+<!doctype html>
+<html lang="ko">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>캐릭터정보 | 공통 | 메이플스토리</title>
+<link rel="stylesheet" href="https://ssl.nexon.com/s3/Game/Maplestory/char_info.css" type="text/css" />
+<link rel="stylesheet" href="https://ssl.nexon.com/s3/Game/Maplestory/jquery.mCustomScrollbar.css" type="text/css" />
+    <script src="https://ssl.nexon.com/s1/global/ngb_head.js"></script>
+
+<script src="https://ssl.nexon.com/s1/Game/Maplestory/jquery-1.12.4.min.js" type="text/javascript"></script>
+<script src="https://ssl.nexon.com/s1/Game/Maplestory/jquery-ui.js"></script>
+<script src="https://ssl.nexon.com/s1/Game/Maplestory/char_info.js" type="text/javascript"></script>
+<script src="https://ssl.nexon.com/s1/Game/Maplestory/jquery.mCustomScrollbar.concat.min.js" type="text/javascript"></script>
+
+<script src="/Scripts/Common/common.js?v=202207200620"></script>
+<script src="/Scripts/Common/webboard.js?v=202207200620"></script>
+
+<script>
+    var COMMON = (function () {
+        var instance;
+
+        function initiate() {
+            return {
+                site: 'nope',
+                domain: 'maplestory.nexon.com',
+                url: 'https://maplestory.nexon.com/Common/Character/Detail/123/Pet?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2FH30vgr7QFpImK2Gl2k%2Bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2FeGMeahUGRcle37bhvFSJidc30H1Vx3LwmKcmd5VUSfBRMT0%2BYmzZrtoLEZcaabGwluluuougo%3D',
+                oid: '0',
+                isLogin: false,
+                isMembership: false,
+                isParentLogin: false,
+                isParentMembershipLogin: false,
+                isChannelingNotAgree: false,
+                articleSearchDescriptor: {},
+                maxTitleLength: 0,
+                maxCommentLength: 0
+            };
+        }
+
+        if (!instance) instance = initiate();
+        return instance;
+    }());
+
+    $(window).load(function () {
+        var commonMessage = '';
+        if (commonMessage !== '')
+            alert(commonMessage);
+    });
+</script>
+
+
+
+<link rel="stylesheet" href="/Scripts/Common/font_NanumBarunGothic.css" type="text/css" />
+<!-- Facebook Pixel Code -->
+<script type="text/javascript">    
+    !function (f, b, e, v, n, t, s) {
+        if (f.fbq) return; n = f.fbq = function () {
+            n.callMethod ?
+            n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+        }; if (!f._fbq) f._fbq = n;
+        n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0;
+        t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s)
+    }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+
+     fbq('init', '268046720223120');
+    fbq('track', "PageView");
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=268046720223120&ev=PageView&noscript=1" /></noscript>
+<!-- End Facebook Pixel Code -->
+<!-- Twitter single-event website tag code -->
+<script src="//platform.twitter.com/oct.js" type="text/javascript"></script>
+<script type="text/javascript">twttr.conversion.trackPid('nx5i7', { tw_sale_amount: 0, tw_order_quantity: 0 });</script>
+<noscript>
+    <img height="1" width="1" style="display:none;" alt="" src="https://analytics.twitter.com/i/adsct?txn_id=nx5i7&p_id=Twitter&tw_sale_amount=0&tw_order_quantity=0" />
+    <img height="1" width="1" style="display:none;" alt="" src="//t.co/i/adsct?txn_id=nx5i7&p_id=Twitter&tw_sale_amount=0&tw_order_quantity=0" />
+</noscript>
+<!-- End Twitter single-event website tag code -->
+<script type="text/javascript">
+    (function (m, o, n, r, t, g) {
+        t = t + '?l=' + n + '&t=' + r + '&ref=' + encodeURIComponent(o.referrer) + '&loc=' + encodeURIComponent(o.location) + '&r=' + Math.floor(Math.random() * 99999999999);
+        o.write("<" + g + " src='" + t + "' style='display:none;'></" + g + ">");
+    })(window, document, 'CM_M_1042938', 'brand', 'https://rtb.clickmon.co.kr/RT_GATE/rt_gate.php', 'iframe');
+</script>
+
+        <!-- Google Analytics -->
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src=https://www.googletagmanager.com/gtag/js?id=UA-34233427-4></script>
+        <script async src=https://www.googletagmanager.com/gtag/js?id=AW-947932633></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'UA-34233427-4', { 'custom_map': { 'dimension1': 'oid' } });
+            gtag('config', 'G-12M3M6FCC2');
+            gtag('event', 'oid', { 'oid': 0 })
+            gtag('config', 'AW-947932633');
+            gtag('event', 'conversion', { 'send_to': 'AW-947932633/0AANCOGi_IkCENmbgcQD' });
+            function gtag_report_conversion(url) {
+                var callback = function () {
+                    if (typeof (url) != 'undefined') {
+                        window.location = url;
+                    }
+                };
+                gtag('event', 'conversion', {
+                    'send_to': 'AW-947932633/DKSpCOK-_IkCENmbgcQD',
+                    'event_callback': callback
+                });
+                return false;
+            }
+        </script>
+        <!-- End Google Analytics -->
+<!-- Kakao Pixel Code -->
+<script type="text/javascript" charset="UTF-8" src="//t1.daumcdn.net/adfit/static/kp.js"></script>
+<script type="text/javascript">
+    kakaoPixel('2830029952607077079').pageView();
+</script>
+<!-- End Kakao Pixel Code -->
+<!-- Criteo 홈페이지 태그 -->
+<script type="text/javascript" src="//dynamic.criteo.com/js/ld/ld.js?a=94120" async="true"></script>
+<script type="text/javascript">
+    window.criteo_q = window.criteo_q || [];
+    var deviceType = /iPad/.test(navigator.userAgent) ? "t" : /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Silk/.test(navigator.userAgent) ? "m" : "d";
+    window.criteo_q.push({ event: "setAccount", account: [94120, 95207] }, { event: "setSiteType", type: deviceType }, { event: "viewHome" });
+
+    function gameStart_Criteo() {
+        window.criteo_q.push(
+            { event: "setAccount", account: [94120, 95207] },
+            { event: "setSiteType", type: deviceType },            
+            {
+                event: "trackTransaction", id: Math.floor(Math.random() * 99999999999), item: [
+                    { id: "gameStart", price: 1, quantity: 1 }                    
+                ]
+            }
+        );
+    }
+</script>
+<!-- END Criteo 홈페이지 태그 -->
+
+
+<script>
+    var layer_open_idx = 0;
+    $(document).ready(function () {
+        $('.pet_item_list a').bind('click', function (e) {
+            e.preventDefault();
+            var url = $(e.currentTarget).attr('href');
+            if (url == '') return;
+
+            UTILITY.submitAsync2({
+                submitTo: url,
+                method: 'get',
+                callback: function (data) {
+                    if (data.Code == 0) {
+                        if(layer_open_idx == 0){
+				$('.item_info_popup').html(data.view);
+			}else{
+				$('.mCSB_container').html(data.view);
+			}
+                        open_popup();
+                    }
+                    else {
+                        alert('조회 중 오류!');
+                    }
+                },
+                useCache: false
+            });
+        });
+        $('.pet_item_list ul li h2').bind('click', function (e) {
+            e.preventDefault();
+            var url = $(this).find("span > a").attr('href');
+            if (url == '') return;
+
+            UTILITY.submitAsync2({
+                submitTo: url,
+                method: 'get',
+                callback: function (data) {
+                    if (data.Code == 0) {
+                        if(layer_open_idx == 0){
+				$('.item_info_popup').html(data.view);
+			}else{
+				$('.mCSB_container').html(data.view);
+			}
+                        open_popup();
+                    }
+                    else {
+                        alert('조회 중 오류!');
+                    }
+                },
+                useCache: false
+            });
+        });
+    });
+    function open_popup() {
+	layer_open_idx = layer_open_idx + 1;
+        $(".layer_wrap").fadeIn();
+        $(".item_info_popup").mCustomScrollbar({
+            autoHideScrollbar: false,
+            autoDraggerLength: true
+        });
+    }
+</script>
+</head>
+<body>
+    <div class="skip-navigation">
+        <ul>
+            <li><a class="skip-navigation-link" href="#container">본문 바로가기</a></li>
+            <li><a class="skip-navigation-link" href="#header">주 메뉴 바로가기</a></li>
+        </ul>
+    </div>
+
+
+
+
+    <div id="wrap">
+<div class="sub_menu_wrap">
+    <span class="sm_close"><a href="#a" onclick="close_sm_menu();"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/update/sm_menu_close.png" alt=""></a></span>
+    <span class="sub_home"><a href="/Home/Main"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/update/sub_home_btn.png" alt=""></a></span>
+    <div class="sm_list_wrap">
+<ul>
+    <li>
+        <span><a href="/News/Notice">뉴스</a></span>
+        <ul>
+            <li><a href="/News/Notice">공지사항</a></li>
+            <li><a href="/News/Update">업데이트</a></li>
+            <li><a href="/News/Event">이벤트</a></li>
+            <li><a href="/News/CashShop">캐시샵 공지</a></li>
+            
+            <li><a href="/News/NoticeMapleBoard">메이플 알림판</a></li>
+        </ul>
+    </li>
+    <li>
+        <span><a href="/Guide/GameInformation">가이드</a></span>
+        <ul>
+            <li><a href="/Guide/GameInformation">게임정보</a></li>
+            <li><a href="/Guide/Quest">퀘스트정보</a></li>
+            <li><a href="/Guide/Job" target="_blank">직업소개<span class="icon_window"></span></a></li>
+            <li><a href="/Guide/CashShop/Probability/RoyalStyle">확률형 아이템</a></li>
+            <li><a href="/Guide/ProbabilityResult/MonthData">확률형 아이템 결과</a></li>
+            <li><a href="https://now.nexon.com/service/maplestory" target="_blank">NEXON NOW<span class="icon_window"></span></a></li>
+        </ul>
+    </li>
+    <li>
+        <span><a href="/Ranking/World">랭킹</a></span>
+        <ul>
+            <li><a href="/Ranking/World">월드 랭킹</a></li>
+            <li><a href="/Ranking/Union">유니온 랭킹</a></li>
+            <li><a href="/Ranking/Achievement">업적 랭킹</a></li>
+            <li><a href="/Ranking/HallOfFame">명예의 전당</a></li>
+            <li><a href="/Ranking/UnionArena">유니온 아레나</a></li>
+        </ul>
+    </li>
+    <li>
+        <span><a href="/Community/Free">커뮤니티</a></span>
+        <ul>
+            <li><a href="/Community/Free">자유게시판</a></li>
+            <li><a href="/Community/Information">정보게시판</a></li>
+            <li><a href="/Community/Discussion">토론게시판</a></li>
+            <li><a href="/Community/Art">메이플 아트</a></li>
+            <li><a href="/Community/Coordination">메이플 코디</a></li>
+        </ul>
+    </li>
+    <li>
+        <span><a href="/Media/WebToon">미디어</a></span>
+        <ul>
+            <li><a href="/Media/WebToon">웹툰</a></li>
+            <li><a href="/Media/Font">메이플스토리 서체</a></li>
+            <li><a href="/Media/Video">영상</a></li>
+            <li><a href="/Media/Music">음악</a></li>
+            <li><a href="/Media/ArtWork">아트웍</a></li>
+        </ul>
+    </li>
+    <li>
+        <span><a href="/Support/UnSeal">고객지원</a></span>
+        <ul>
+                <li><a href="javascript:void(0);" onclick="window.open('https://cs.nexon.com/HelpBoard/Nexon?gamecode=18', '메이플스토리 고객센터', 'toolbar=no, scrollbars=yes, width=1024, height=800'); return false;">도움말/1:1문의<span class="icon_window"></span></a></li>
+                <li><a href="/Support/UnSeal">아이템 봉인해제</a></li>
+                <li><a href="/Support/BugReport">버그악용/불법프로그램 신고</a></li>
+        </ul>
+    </li>
+</ul>
+    </div>
+</div>
+<span class="sub_menu"><a href="#a" onclick="open_sm_menu();"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/update/sub_menu_btn.png" alt=""></a></span>
+<span class="sub_home"><a href="/Home/Main"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/update/sub_home_btn.png" alt=""></a></span>
+<h1 class="logo"><a href="/Home/Main"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/logo.png" alt="" /></a></h1>
+
+        <div class="center_wrap">
+
+
+<div class="char_info_top">
+    <div class="char_name">
+        <span>생분자님</span><br />캐릭터정보
+    </div>
+    <div class="char_info">
+        <!--레벨 정보-->
+        <dl>
+            <dt><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/lv_icon.png" alt="친구/길드원" /></dt>
+            <dd>LV.275</dd>
+        </dl>
+        <!--직업 정보-->
+        <dl>
+                <dt><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/job_icon02.png" alt="마법사" /></dt>
+            <dd>마법사/아크메이지(불,독)</dd>
+        </dl>
+        <!--서버 정보-->
+        <dl>
+            <dt><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/sv_icon.png" alt="친구/길드원" /></dt>
+            <dd><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/world_icon/icon_11.png" alt="" />크로아</dd>
+        </dl>
+        <!--경험치 / 인기도 수치-->
+        <div class="level_data">
+            <span><em>경험치</em>8,941,119,319,551</span>
+            <span class="pop_data"><em>인기도</em>1,860</span>
+        </div>
+        <div class="char_img">
+            <div>
+                
+                <img src="https://avatar.maplestory.nexon.com/Character/180/LBGFGFMBIBPMNHDEAPNLJKLNHJCCKMEMEMKPKLOBGLMFBLPLLKCHJFHKBOGBAOOPDANJGJIDAJLFOCCIEKJJCHENMJBLJPLDHONAMKEJGNPMPKGGFBDOBLNNHBLCJEOLNFINCJHDBHABMFHCBCKPLINNCBNBBOAKBENPFGNIPOOLPDMFMPLEOFDOEFNBCIFEGNKACLLHONLKPMJHNGDKAGIOICJPPCMDCHONONKDAOBHFCFABJNMKAMLGEKOKCMF.png" alt="" onerror="this.src='https://ssl.nexon.com/s2/game/maplestory/renewal/common/no_char_img_180.png'" />
+            </div>
+        </div>
+    </div>
+</div>
+            <div id="container">
+                <div class="top_bg"></div>
+                <div class="con_wrap">
+<div class="lnb_wrap">
+    <ul class="lnb_list">
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Ranking?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3Z0lKCtUablg18dHG2sp%2fVUGLQ0OjDb7pXPkmic5ygUg%3d">랭킹정보</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3Z0lKCtUablg18dHG2sp%2fVUGLQ0OjDb7pXPkmic5ygUg%3d">기본정보</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Equipment?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3Z0lKCtUablg18dHG2sp%2fVUGLQ0OjDb7pXPkmic5ygUg%3d">장비</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Inventory?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3Z0lKCtUablg18dHG2sp%2fVUGLQ0OjDb7pXPkmic5ygUg%3d">인벤토리</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Storage?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3Z0lKCtUablg18dHG2sp%2fVUGLQ0OjDb7pXPkmic5ygUg%3d">창고</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Collection?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3Z0lKCtUablg18dHG2sp%2fVUGLQ0OjDb7pXPkmic5ygUg%3d">컬렉션</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Skill?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3Z0lKCtUablg18dHG2sp%2fVUGLQ0OjDb7pXPkmic5ygUg%3d">스킬</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Riding?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3Z0lKCtUablg18dHG2sp%2fVUGLQ0OjDb7pXPkmic5ygUg%3d">라이딩</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Quest?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3Z0lKCtUablg18dHG2sp%2fVUGLQ0OjDb7pXPkmic5ygUg%3d">퀘스트</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Pet?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3Z0lKCtUablg18dHG2sp%2fVUGLQ0OjDb7pXPkmic5ygUg%3d">펫</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Guild?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3Z0lKCtUablg18dHG2sp%2fVUGLQ0OjDb7pXPkmic5ygUg%3d">길드</a></li>
+    </ul>
+</div>
+                    <div class="contents_wrap">
+                        <div class="container_wrap">
+                                <div class="tab_menu">
+                                    <ul>
+                                        <li><a href="#a" class="active" onmouseover="ch_png_on(this)" onmouseout="ch_png_off(this)" onclick="chg_tab(1)"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/tab04_menu01_on.png" alt="장비" /></a></li>
+                                        <li><a href="#a" onmouseover="ch_png_on(this)" onmouseout="ch_png_off(this)" onclick="chg_tab(2)"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/tab04_menu02_off.png" alt="캐시아이템" /></a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab01_con_wrap">
+                                    <div class="pet_list">
+                                            <ul>
+                                                    <li>
+                                                        <h2>
+                                                            <div class="pet_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAPCJGGJ.png" alt="" /></div>
+                                                            <div class="pet_info">
+                                                                <span class="pet_name">초크삐 <em>(Lv.16)</em></span>
+                                                                <div class="pet_level">
+                                                                    <span>포만감 <em>74</em></span><span>친밀도 <em>2201</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </h2>
+                                                        <div class="pet_info_wrap">
+                                                            <div class="pet_info_con">
+                                                                <ul>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHOB.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">아이템줍기</span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHOD.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">이동반경 확대</span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHOC.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">자동 줍기</span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHOE.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">특정 아이템 줍지 않기</span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHOA.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">HP 물약충전</span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHPB.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">버프 스킬 자동 사용</span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHPA.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">펫 훈련 스킬</span>
+                                                                                </li>
+
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <h2>
+                                                            <div class="pet_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAPCLDPH.png" alt="" /></div>
+                                                            <div class="pet_info">
+                                                                <span class="pet_name">Alanine (병약 오르카) <em>(Lv.22)</em></span>
+                                                                <div class="pet_level">
+                                                                    <span>포만감 <em>80</em></span><span>친밀도 <em>8866</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </h2>
+                                                        <div class="pet_info_wrap">
+                                                            <div class="pet_info_con">
+                                                                <ul>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHOB.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">아이템줍기</span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHOD.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">이동반경 확대</span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHOC.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">자동 줍기</span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHPB.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">버프 스킬 자동 사용</span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHPA.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">펫 훈련 스킬</span>
+                                                                                </li>
+
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <h2>
+                                                            <div class="pet_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAPCLEND.png" alt="" /></div>
+                                                            <div class="pet_info">
+                                                                <span class="pet_name">Valine (쁘띠 힐라) <em>(Lv.21)</em></span>
+                                                                <div class="pet_level">
+                                                                    <span>포만감 <em>62</em></span><span>친밀도 <em>8181</em></span>
+                                                                </div>
+                                                            </div>
+                                                        </h2>
+                                                        <div class="pet_info_wrap">
+                                                            <div class="pet_info_con">
+                                                                <ul>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHOB.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">아이템줍기</span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHOD.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">이동반경 확대</span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHOC.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">자동 줍기</span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHPB.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">버프 스킬 자동 사용</span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="pet_skill_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KAOLLHPA.png" alt="" /></span>
+                                                                                    <span class="pet_skill_name">펫 훈련 스킬</span>
+                                                                                </li>
+
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                            </ul>
+                                    </div>
+                                </div>
+                                <div class="tab02_con_wrap">
+                                    <div class="pet_item_list">
+                                                <ul>
+
+                                                        <li>
+                                                            <h2>
+                                                                <div class="pet_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KEHCJDIA.png" alt="힐라의 다크소울 (+10)" /></div>
+                                                                <div class="pet_info">
+                                                                    <span class="pet_name">힐라의 다크소울 (+10)</span>
+                                                                    <div class="pet_item_sel">
+                                                                        <span>펫장비</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span><a href="/Common/Resource/Item?p=ufLJEUIu7%2f0y9jJyTpI0%2b%2bA5dsW4%2b6gPH1ja5lz8WhOzFAqkeVZY8QLjLxnrs95PWMgk7SNF3EXia9bHzUhku0EjKCmlb8XtzMRoHHT48pmXjWJhxZu7GSEHEvjCezyFJv%2fHQsbIAkhSrkB8uclYMkF%2brEIC2BtwSGoTWOxbiJRiAhp9I6e%2fZegL%2b1l904Ek6LIsJfD8%2b6o7ZxYqxzQo1nzEc1lLe8XUf9WsoaGrsUIlZ7Lmz%2blf4XKCgzUkuX2u2N0N3Px01g%2bNNsLcDfm9A4PSmRg%2b%2fZz3ZbrQVPGTpxXfZNtEe0eqKHSTS%2bnqcb33By57kSyBzyuxCfiF73mgtQ%3d%3d"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/pet_item_open02_off.png" alt="열기" /></a></span>
+                                                            </h2>
+                                                            <div class="pet_item_info_wrap">
+                                                                <div class="pet_info_con"></div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <h2>
+                                                                <div class="pet_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KEHCJCPA.png" alt="오르카의 작은 링거 (+10)" /></div>
+                                                                <div class="pet_info">
+                                                                    <span class="pet_name">오르카의 작은 링거 (+10)</span>
+                                                                    <div class="pet_item_sel">
+                                                                        <span>펫장비</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span><a href="/Common/Resource/Item?p=ufLJEUIu7%2f0y9jJyTpI0%2b4vddLO9nTY2iUa7zYeDTa6%2ffZiwALtmByLl1w%2bTux0Yqih8Drl36z9Lj4iTt4BCJCw6sq3ub9IYkHL%2bytioDg0MWDwsOQXJc9Xv0sh9bisP9q0TjoGRF50DXfk8SApLCdKJKcYYGa4I45kvnFs94QFT1WSC94VUk4G65tXwbEmznQDyTuKk6NPG%2fcI1BXGTITOP2WuQhgl79iVyB72cImCg1pQ0fIwy1Lww0IulyHkkfXUuM8uZR9417M2JFcS2qywkFCu4MGaKYq8lnvHAG89a3RHXjBbYy4020vKVASUT7oOV11eJ0KqAk121015WEw%3d%3d"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/pet_item_open02_off.png" alt="열기" /></a></span>
+                                                            </h2>
+                                                            <div class="pet_item_info_wrap">
+                                                                <div class="pet_info_con"></div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <h2>
+                                                                <div class="pet_img"><img src="https://avatar.maplestory.nexon.com/ItemIcon/KEHCJAIG.png" alt="머리 위 초크베리 (+9)" /></div>
+                                                                <div class="pet_info">
+                                                                    <span class="pet_name">머리 위 초크베리 (+9)</span>
+                                                                    <div class="pet_item_sel">
+                                                                        <span>펫장비</span>
+                                                                    </div>
+                                                                </div>
+                                                                <span><a href="/Common/Resource/Item?p=ufLJEUIu7%2f0y9jJyTpI0%2b9b8Eyr%2f2mZot%2fDt9BKFR744mlS0LDDKI%2fZwWa%2bs7sc25SdVIMvrPSduOE4%2fodHz8BE2U0dCpsOwxEEKbtR%2bpoQaRv2GLtm6e2u29JQnXeH3IWH%2f1PVLwK3e0JHJ1m6GxtV2Do2vvKE5pP75bicHqO7lAv2FMOZhdXySMOB7GnRIjL6VDpNzosFLQ5UmBSgwY18BZTnPwj1dbCsLgB6pfUZPOwP4TEi9Eu40fcSP4aQUIIaSwfs2%2f4ceEUcAkDMTs6yaE3cLheFutdDN1tCMoFpFTywdXtsC9mFMn%2fLQRotIFBypL%2f7KWKJYaczDCkGTiw%3d%3d"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/pet_item_open02_off.png" alt="열기" /></a></span>
+                                                            </h2>
+                                                            <div class="pet_item_info_wrap">
+                                                                <div class="pet_info_con"></div>
+                                                            </div>
+                                                        </li>
+                                                </ul>
+
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/foot_img.png" alt="NEXON NEXON Corp All Rights Reserved" />
+        </div>
+    </div>
+
+<div class="layer_wrap">
+    <div class="item_info_pop">
+        <div class="item_pop_title">
+            <span><a href="#a" onclick="close_popup();"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/pop_close.png" alt="닫기" /></a></span>
+        </div>
+        <div class="item_info_popup">
+            
+        </div>
+        <div class="popup_bottom"></div>
+    </div>
+</div>
+    <script type="text/javascript" src="https://rs.nxfs.nexon.com/common/js/gnb.min.js" data-gamecode="589824" data-ispublicbanner="false"></script>
+
+</body>
+</html>
