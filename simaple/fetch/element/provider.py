@@ -71,8 +71,8 @@ class PotentialProvider(DomElementProvider):
             if isinstance(el, bs4.element.NavigableString)
         ]
         result = {}
-        for el in valid_elements:
-            result.update(self.parse_potential(el))
+        for idx, el in enumerate(valid_elements):
+            result[idx] = self.parse_potential(el)
 
         return {self.type: result}
 
@@ -85,7 +85,7 @@ class PotentialProvider(DomElementProvider):
         )
 
     def match_simple(self, target):
-        simple_regex = re.compile(r"(.+):\+([0-9]+)^")
+        simple_regex = re.compile(r"(.+):\+([0-9]+)")
         match = simple_regex.match(target)
         if match is None:
             return None
