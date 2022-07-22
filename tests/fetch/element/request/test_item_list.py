@@ -1,4 +1,4 @@
-from simaple.fetch.element import MapleItemListElement
+from simaple.fetch.query import CookiedQuery
 from simaple.fetch.token import TokenRepository
 
 
@@ -7,7 +7,8 @@ def test_get_item():
     name = "Backend"
     token = token_repository.get(name)
 
-    element = MapleItemListElement()
-
-    v = element.fetch(token=token)
-    element.run(v)
+    result = (
+        CookiedQuery()
+        .get("/Common/Character/Detail/123/Equipment", token)
+        .replace("\r\n", "\n")
+    )
