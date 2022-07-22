@@ -1,4 +1,3 @@
-from simaple.fetch.element import MapleItemListElement
 from simaple.fetch.query import CookiedQuery
 from simaple.fetch.token import TokenRepository
 
@@ -11,6 +10,3 @@ def test_get_item():
     result = (
         CookiedQuery().get("/Common/Character/Detail/123", token).replace("\r\n", "\n")
     )
-
-    with open("character.html", "w") as f:
-        f.write(result)

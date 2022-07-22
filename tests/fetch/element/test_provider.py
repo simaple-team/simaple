@@ -4,7 +4,6 @@ from typing import Dict
 import pytest
 from bs4 import BeautifulSoup
 
-from simaple.core.base import StatProps
 from simaple.fetch.element.namespace import StatType
 from simaple.fetch.element.provider import (
     DomElementProvider,
@@ -120,7 +119,7 @@ def test_provider(
 
 
 def test_global_provider():
-    with open("tests/fetch/resources/item/12.html") as f:
+    with open("tests/fetch/resources/item/12.html", encoding="euc-kr") as f:
         html = f.read()
 
     dom_element = BeautifulSoup(html, "html.parser")
