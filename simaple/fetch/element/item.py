@@ -10,7 +10,7 @@ from simaple.fetch.element.extractor import (
     SinglePropertyExtractor,
 )
 from simaple.fetch.element.fragment import ItemFragment
-from simaple.fetch.element.namespace import Namespace, StatType, korean_names
+from simaple.fetch.element.namespace import StatType
 from simaple.fetch.element.provider import (
     DomElementProvider,
     GlobalProvider,
@@ -80,10 +80,6 @@ def kms_stat_providers() -> Dict[str, DomElementProvider]:
 
 class ItemElement(Element):
     extractors: list[PropertyExtractor]
-    providers: Dict[str, DomElementProvider] = pydantic.Field(
-        default_factory=kms_homepage_providers
-    )
-    names: Dict[str, Namespace] = pydantic.Field(default_factory=korean_names)
     global_provider: Optional[DomElementProvider] = pydantic.Field(
         default_factory=GlobalProvider,
     )
