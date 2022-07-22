@@ -1,4 +1,3 @@
-from collections import defaultdict
 from typing import Dict, Optional
 
 import pydantic
@@ -12,6 +11,9 @@ from simaple.fetch.element.provider import (
     ItemFragment,
     MultiplierProvider,
     PotentialProvider,
+    PropertyExtractor,
+    ReduceExtractor,
+    SinglePropertyExtractor,
     SoulWeaponProvider,
     StarforceProvider,
     StatKeywordProvider,
@@ -51,7 +53,31 @@ def kms_homepage_providers() -> Dict[str, DomElementProvider]:
     return providers
 
 
+def kms_stat_providers() -> Dict[str, DomElementProvider]:
+    grades = ["레어", "에픽", "유니크", "레전드리"]
+    providers = {}
+    for k in [
+        "STR",
+        "DEX",
+        "LUK",
+        "INT",
+        "공격력",
+        "마력",
+        "MaxHP",
+        "MaxMP",
+        "공격력",
+        "마력",
+    ]:
+        providers[k] = StatKeywordProvider()
+
+    for k in ["보스몬스터공격시데미지", "올스탯"]:
+        providers[k] = MultiplierProvider()
+
+    return providers
+
+
 class ItemElement(Element):
+    extractors: list[PropertyExtractor]
     providers: Dict[str, DomElementProvider] = pydantic.Field(
         default_factory=kms_homepage_providers
     )
@@ -63,46 +89,46 @@ class ItemElement(Element):
     def run(self, html_text):
         soup = BeautifulSoup(html_text, "html.parser")
         dom_elements = soup.find(class_="stet_info").find_all("li")
+        fragments = [ItemFragment(html=dom_element) for dom_element in dom_elements]
+        result = {}
 
-        stacks: Dict[StatType, Dict[str, int]] = defaultdict(list)
-        for dom_element in dom_elements:
-            provided = self._extract_from_dom_element(dom_element)
-            for k, v in provided.items():
-                stacks[k].append(v)
+        for extractor in self.extractors:
+            result.update(extractor.extract(fragments))
 
         if self.global_provider:
-            global_provided = self.global_provider.get_value(soup)
-            for k, v in global_provided.items():
-                stacks[k].append(v)
+            result.update(self.global_provider.get_value(ItemFragment(html=soup)))
 
-        result = {}
-        for k, list_value in stacks.items():
-            if k not in (StatType.potential, StatType.additional_potential):
-                if len(list_value) == 1:
-                    contracted_value = list_value[0]
-                else:
-                    contracted_value = {}
-                    for value in list_value:
-                        contracted_value.update(value)
-            else:
-                contracted_value = list_value
-
-            result[k.value] = contracted_value
-
-        return result
-
-    def _extract_from_dom_element(self, dom_element) -> Dict[StatType, Dict[str, int]]:
-        fragment = ItemFragment(html=dom_element)
-        provider = self.providers.get(fragment.name)
-
-        if provider is not None:
-            return provider.get_value(fragment)
-
-        return {}
+        return {k.value: v for k, v in result.items()}
 
 
 def item_promise():
     return ElementWrapper(
-        element=ItemElement(),
+        element=ItemElement(
+            extractors=[
+                ReduceExtractor(providers=kms_stat_providers()),
+                SinglePropertyExtractor(
+                    target=StatType.potential,
+                    providers={
+                        f"잠재옵션({option}아이템)": PotentialProvider(type="potential")
+                        for option in ("레어", "에픽", "유니크", "레전드리")
+                    },
+                ),
+                SinglePropertyExtractor(
+                    target=StatType.additional_potential,
+                    providers={
+                        f"에디셔널잠재옵션({option}아이템)": PotentialProvider(
+                            type="additional_potential"
+                        )
+                        for option in ("레어", "에픽", "유니크", "레전드리")
+                    },
+                ),
+                SinglePropertyExtractor(
+                    target=StatType.starforce, providers={"기타": StarforceProvider()}
+                ),
+                SinglePropertyExtractor(
+                    target=StatType.soulweapon, providers={"소울옵션": SoulWeaponProvider()}
+                ),
+            ]
+        ),
         query=NoredirectXMLQuery(),
     )
