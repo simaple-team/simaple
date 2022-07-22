@@ -28,3 +28,11 @@ class KMSFetchApplication(Application):
                 )
             }
         )
+
+        character = character_promise()
+
+        pet = pet_list_promise().then({idx: item_promise() for idx in range(3)})
+
+        logger.info(item.resolve("", token))
+        logger.info(character.resolve("", token))
+        logger.info(pet.resolve("", token))
