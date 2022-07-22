@@ -8,6 +8,7 @@ from simaple.fetch.element.namespace import StatType
 from simaple.fetch.element.provider import (
     DomElementProvider,
     GlobalProvider,
+    ItemFragment,
     MultiplierProvider,
     PotentialProvider,
     SoulWeaponProvider,
@@ -68,7 +69,13 @@ fixtures = [
     ),
     (
         PotentialProvider(type=StatType.potential),
-        {StatType.potential: {"마력%": 6, "공격시10%확률로2레벨슬로우효과적용": None, "DEX%": 3}},
+        {
+            StatType.potential: {
+                0: {"마력%": 6},
+                1: {"공격시10%확률로2레벨슬로우효과적용": None},
+                2: {"DEX%": 3},
+            }
+        },
         """
     <li>
         <div class="stet_th">
@@ -105,16 +112,9 @@ def test_provider(
     provider: DomElementProvider, expected: Dict[StatType, Dict[str, int]], html: str
 ):
     dom_element = BeautifulSoup(html, "html.parser")
-    name = (
-        dom_element.find(class_="stet_th")
-        .find("span")
-        .text.strip()
-        .replace("\n", "")
-        .replace(" ", "")
-    )
-    value_element = dom_element.find(class_="point_td")
+    fragment = ItemFragment(html=dom_element)
 
-    result = provider.get_value(name, value_element)
+    result = provider.get_value(fragment)
     assert result == expected
 
 
@@ -123,8 +123,11 @@ def test_global_provider():
         html = f.read()
 
     dom_element = BeautifulSoup(html, "html.parser")
+    fragment = ItemFragment(html=dom_element)
+
     provider = GlobalProvider()
-    result = provider.get_value("", dom_element)
+    result = provider.get_value(fragment)
+
     assert result == {
         StatType.name: "아쿠아틱 레터 눈장식",
         StatType.image: "https://avatar.maplestory.nexon.com/ItemIcon/KEPAJFNA.png",

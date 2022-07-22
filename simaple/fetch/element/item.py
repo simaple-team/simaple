@@ -9,6 +9,7 @@ from simaple.fetch.element.namespace import Namespace, StatType, korean_names
 from simaple.fetch.element.provider import (
     DomElementProvider,
     GlobalProvider,
+    ItemFragment,
     MultiplierProvider,
     PotentialProvider,
     SoulWeaponProvider,
@@ -70,7 +71,7 @@ class ItemElement(Element):
                 stacks[k].append(v)
 
         if self.global_provider:
-            global_provided = self.global_provider.get_value("", soup)
+            global_provided = self.global_provider.get_value(soup)
             for k, v in global_provided.items():
                 stacks[k].append(v)
 
@@ -87,22 +88,15 @@ class ItemElement(Element):
                 contracted_value = list_value
 
             result[k.value] = contracted_value
-        
+
         return result
 
     def _extract_from_dom_element(self, dom_element) -> Dict[StatType, Dict[str, int]]:
-        name = (
-            dom_element.find(class_="stet_th")
-            .find("span")
-            .text.strip()
-            .replace("\n", "")
-            .replace(" ", "")
-        )
-        value_element = dom_element.find(class_="point_td")
+        fragment = ItemFragment(html=dom_element)
+        provider = self.providers.get(fragment.name)
 
-        provider = self.providers.get(name)
         if provider is not None:
-            return provider.get_value(name, value_element)
+            return provider.get_value(fragment)
 
         return {}
 

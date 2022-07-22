@@ -8,25 +8,58 @@ from pydantic import BaseModel
 from simaple.fetch.element.namespace import StatType
 
 
+class ItemFragment(BaseModel):
+    class Config:
+        arbitrary_types_allowed = True
+
+    html: bs4.element.Tag
+
+    @property
+    def name(self):
+        return (
+            self.html.find(class_="stet_th")
+            .find("span")
+            .text.strip()
+            .replace("\n", "")
+            .replace(" ", "")
+        )
+
+    @property
+    def children_text(self):
+        return [
+            el
+            for el in self.embedding.children
+            if isinstance(el, bs4.element.NavigableString)
+        ]
+
+    @property
+    def text(self):
+        return self.embedding.text
+
+    @property
+    def embedding(self):
+        return self.html.find(class_="point_td")
+
+
 class DomElementProvider(BaseModel, metaclass=ABCMeta):
     @abstractmethod
-    def get_value(self, name: str, value_element) -> Dict[StatType, Dict[str, int]]:
+    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Dict[str, int]]:
         ...
 
 
 class StatKeywordProvider(DomElementProvider):
-    def get_value(self, name, value_element) -> Dict[StatType, Dict[str, int]]:
-        sum_, base, bonus, increment = self._get_value(value_element)
+    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Dict[str, int]]:
+        sum_, base, bonus, increment = self._get_value(fragment)
         return {
-            StatType.sum: {name: sum_},
-            StatType.base: {name: base},
-            StatType.bonus: {name: bonus},
-            StatType.increment: {name: increment},
+            StatType.sum: {fragment.name: sum_},
+            StatType.base: {fragment.name: base},
+            StatType.bonus: {fragment.name: bonus},
+            StatType.increment: {fragment.name: increment},
         }
 
-    def _get_value(self, value_element) -> Tuple[int, int, int]:
+    def _get_value(self, fragment: ItemFragment) -> Tuple[int, int, int]:
         upgradable = re.compile(r"\+([0-9]+) \(([0-9]+) \+ ([0-9]+) \+ ([0-9]+)\)")
-        match = upgradable.match(value_element.text)
+        match = upgradable.match(fragment.text)
         if match is not None:
             return (
                 int(match.group(1)),
@@ -36,40 +69,36 @@ class StatKeywordProvider(DomElementProvider):
             )
 
         static = re.compile(r"\+([0-9]+)")
-        match = static.match(value_element.text)
+        match = static.match(fragment.text)
         return int(match.group(1)), int(match.group(1)), 0, 0
 
 
 class MultiplierProvider(DomElementProvider):
-    def get_value(self, name, value_element) -> Dict[StatType, Dict[str, int]]:
-        sum_, base, bonus, increment = self._get_value(value_element)
+    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Dict[str, int]]:
+        sum_, base, bonus, increment = self._get_value(fragment)
         return {
-            StatType.sum: {name: sum_},
-            StatType.base: {name: base},
-            StatType.bonus: {name: bonus},
-            StatType.increment: {name: increment},
+            StatType.sum: {fragment.name: sum_},
+            StatType.base: {fragment.name: base},
+            StatType.bonus: {fragment.name: bonus},
+            StatType.increment: {fragment.name: increment},
         }
 
-    def _get_value(self, value_element) -> Tuple[int, int, int]:
+    def _get_value(self, fragment: ItemFragment) -> Tuple[int, int, int]:
         upgradable = re.compile(r"\+([0-9]+)% \(([0-9]+)% \+ ([0-9]+)%\)")
-        match = upgradable.match(value_element.text)
+        match = upgradable.match(fragment.text)
         if match is not None:
             return int(match.group(1)), int(match.group(2)), int(match.group(3)), 0
 
         static = re.compile(r"\+([0-9]+)%")
-        match = static.match(value_element.text)
+        match = static.match(fragment.text)
         return int(match.group(1)), int(match.group(1)), 0, 0
 
 
 class PotentialProvider(DomElementProvider):
     type: StatType
 
-    def get_value(self, name, value_element) -> Dict[StatType, Dict[str, int]]:
-        valid_elements = [
-            el
-            for el in value_element.children
-            if isinstance(el, bs4.element.NavigableString)
-        ]
+    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Dict[str, int]]:
+        valid_elements = fragment.children_text
         result = {}
         for idx, el in enumerate(valid_elements):
             result[idx] = self.parse_potential(el)
@@ -79,8 +108,8 @@ class PotentialProvider(DomElementProvider):
     def parse_potential(self, target: str):
         target = target.strip().replace(" ", "")
         return (
-            self.match_simple(target)
-            or self.match_mutiplier(target)
+            self.match_mutiplier(target)
+            or self.match_simple(target)
             or self.no_match(target)
         )
 
@@ -105,13 +134,13 @@ class PotentialProvider(DomElementProvider):
 
 
 class StarforceProvider(DomElementProvider):
-    def get_value(self, name: str, value_element) -> Dict[StatType, Dict[str, int]]:
-        starforce = self._get_starforce(value_element)
+    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Dict[str, int]]:
+        starforce = self._get_starforce(fragment)
         return {StatType.starforce: starforce}
 
-    def _get_starforce(self, value_element) -> int:
+    def _get_starforce(self, fragment: ItemFragment) -> int:
         regex = re.compile("([0-9]+)성 강화 적용")
-        match = re.search(regex, value_element.text)
+        match = re.search(regex, fragment.text)
 
         if not match:
             return 0
@@ -120,26 +149,22 @@ class StarforceProvider(DomElementProvider):
 
 
 class SoulWeaponProvider(DomElementProvider):
-    def get_value(self, name: str, value_element) -> Dict[StatType, Dict[str, int]]:
+    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Dict[str, int]]:
         return {
             StatType.soulweapon: {
-                "name": self.get_name(value_element),
-                "option": self.get_option(value_element),
+                "name": self.get_soul_name(fragment),
+                "option": self.get_option(fragment),
             }
         }
 
-    def get_name(self, value_element):
+    def get_soul_name(self, fragment: ItemFragment):
         regex = re.compile("^(.+) 적용")
-        match = re.search(regex, value_element.text)
+        match = re.search(regex, fragment.text)
 
         return match.group(1)
 
-    def get_option(self, value_element):
-        soul_option_element = [
-            el
-            for el in value_element.children
-            if isinstance(el, bs4.element.NavigableString)
-        ][0]
+    def get_option(self, fragment: ItemFragment):
+        soul_option_element = fragment.children_text[0]
 
         normal_match = re.search(
             re.compile(r"^(.+): \+([0-9])+$"), soul_option_element.text
@@ -161,19 +186,19 @@ class SoulWeaponProvider(DomElementProvider):
 
 
 class GlobalProvider(DomElementProvider):
-    def get_value(self, name: str, value_element) -> Dict[StatType, Dict[str, int]]:
+    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Dict[str, int]]:
         return {
-            StatType.name: self.get_name(value_element),
-            StatType.image: self.get_image(value_element),
+            StatType.name: self.get_character_name(fragment),
+            StatType.image: self.get_image(fragment),
         }
 
-    def get_image(self, value_element) -> str:
-        image_url = value_element.find(class_="item_img").find("img")["src"]
+    def get_image(self, fragment) -> str:
+        image_url = fragment.html.find(class_="item_img").find("img")["src"]
 
         return image_url
 
-    def get_name(self, value_element) -> str:
-        text = value_element.find(class_="item_img").find("img")["alt"]
+    def get_character_name(self, fragment) -> str:
+        text = fragment.html.find(class_="item_img").find("img")["alt"]
 
         improved_regex = re.compile(r"(.+)\(\+[0-9]\)")
         if improved_regex.match(text):
