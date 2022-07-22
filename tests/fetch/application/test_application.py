@@ -1,5 +1,7 @@
-from simaple.fetch.application.base import KMSFetchApplication
 import json
+
+from simaple.fetch.application.base import KMSFetchApplication
+
 
 def test_app():
     app = KMSFetchApplication()

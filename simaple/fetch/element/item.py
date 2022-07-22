@@ -4,16 +4,18 @@ import pydantic
 from bs4 import BeautifulSoup
 
 from simaple.fetch.element.base import Element, ElementWrapper
+from simaple.fetch.element.extractor import (
+    PropertyExtractor,
+    ReduceExtractor,
+    SinglePropertyExtractor,
+)
+from simaple.fetch.element.fragment import ItemFragment
 from simaple.fetch.element.namespace import Namespace, StatType, korean_names
 from simaple.fetch.element.provider import (
     DomElementProvider,
     GlobalProvider,
-    ItemFragment,
     MultiplierProvider,
     PotentialProvider,
-    PropertyExtractor,
-    ReduceExtractor,
-    SinglePropertyExtractor,
     SoulWeaponProvider,
     StarforceProvider,
     StatKeywordProvider,
