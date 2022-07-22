@@ -45,5 +45,5 @@ class NoredirectXMLQuery(Query):
         }
         logger.info(f"Request to {self.url(path)}")
         response = requests.get(self.url(path), headers=header, allow_redirects=False)
-        text = json.loads(response.text)["view"]
+        text = json.loads(response.text)["view"].replace("\r\n", "\n")
         return text
