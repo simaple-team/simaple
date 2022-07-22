@@ -74,7 +74,21 @@ class ItemElement(Element):
             for k, v in global_provided.items():
                 stacks[k].append(v)
 
-        return stacks
+        result = {}
+        for k, list_value in stacks.items():
+            if k not in (StatType.potential, StatType.additional_potential):
+                if len(list_value) == 1:
+                    contracted_value = list_value[0]
+                else:
+                    contracted_value = {}
+                    for value in list_value:
+                        contracted_value.update(value)
+            else:
+                contracted_value = list_value
+
+            result[k.value] = contracted_value
+        
+        return result
 
     def _extract_from_dom_element(self, dom_element) -> Dict[StatType, Dict[str, int]]:
         name = (
