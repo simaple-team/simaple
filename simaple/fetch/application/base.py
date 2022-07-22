@@ -33,6 +33,12 @@ class KMSFetchApplication(Application):
 
         pet = pet_list_promise().then({idx: item_promise() for idx in range(3)})
 
-        logger.info(item.resolve("", token))
-        logger.info(character.resolve("", token))
-        logger.info(pet.resolve("", token))
+        item_info = item.resolve("", token)
+        character_info = character.resolve("", token)
+        pet_info = pet.resolve("", token)
+
+        return {
+            "character": character_info,
+            "item": item_info,
+            "pet": pet_info
+        }
