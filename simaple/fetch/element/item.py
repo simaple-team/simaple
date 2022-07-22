@@ -8,12 +8,12 @@ from simaple.fetch.element.base import Element, ElementWrapper
 from simaple.fetch.element.namespace import Namespace, StatType, korean_names
 from simaple.fetch.element.provider import (
     DomElementProvider,
+    GlobalProvider,
     MultiplierProvider,
     PotentialProvider,
     SoulWeaponProvider,
     StarforceProvider,
     StatKeywordProvider,
-    GlobalProvider,
 )
 from simaple.fetch.query import NoredirectXMLQuery
 
