@@ -47,6 +47,7 @@ class CookiedQuery(Query):
 
                 return text
 
+        raise ConnectionRefusedError("Connection Refused from homepage")
 
 class NoredirectXMLQuery(Query):
     max_retry: int = 3
@@ -74,3 +75,5 @@ class NoredirectXMLQuery(Query):
                     continue
 
                 return text
+
+        raise ConnectionRefusedError("Connection Refused from homepage")
