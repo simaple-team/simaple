@@ -2,7 +2,7 @@ from simaple.fetch.query import CookiedQuery, NoredirectXMLQuery
 from simaple.fetch.token import TokenRepository
 
 
-def test_get_pet_item_list():
+def test_get_pet_gearset():
     token_repository = TokenRepository()
     name = "생분자"
     token = token_repository.get(name)

@@ -4,9 +4,9 @@ from typing import Dict
 
 from pydantic import BaseModel
 
-from simaple.fetch.element.item.fragment import ItemFragment
-from simaple.fetch.element.item.namespace import StatType
-from simaple.fetch.element.item.provider import DomElementProvider
+from simaple.fetch.element.gear.fragment import ItemFragment
+from simaple.fetch.element.gear.namespace import StatType
+from simaple.fetch.element.gear.provider import DomElementProvider
 
 
 class PropertyExtractor(BaseModel, metaclass=ABCMeta):

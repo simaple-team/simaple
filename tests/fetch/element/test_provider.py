@@ -4,8 +4,8 @@ from typing import Dict
 import pytest
 from bs4 import BeautifulSoup
 
-from simaple.fetch.element.item.namespace import StatType
-from simaple.fetch.element.item.provider import (
+from simaple.fetch.element.gear.namespace import StatType
+from simaple.fetch.element.gear.provider import (
     DomElementProvider,
     ItemFragment,
     MultiplierProvider,

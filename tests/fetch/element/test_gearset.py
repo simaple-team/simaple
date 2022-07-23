@@ -1,8 +1,8 @@
-from simaple.fetch.element import MapleItemListElement
+from simaple.fetch.element import MapleGearsetElement
 
 
 def test_resolve_item():
-    element = MapleItemListElement()
+    element = MapleGearsetElement()
 
     with open("tests/fetch/item.html", encoding="euc-kr") as f:
         html_text = f.read()

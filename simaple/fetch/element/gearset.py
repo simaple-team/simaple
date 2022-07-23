@@ -4,7 +4,7 @@ from simaple.fetch.element.base import Element, ElementWrapper
 from simaple.fetch.query import CookiedQuery
 
 
-class MapleItemListElement(Element):
+class MapleGearsetElement(Element):
     def run(self, html_text: str):
         soup = BeautifulSoup(html_text, "html.parser")
 
@@ -57,9 +57,9 @@ class MapleItemListElement(Element):
         }
 
 
-def maple_item_list_promise():
+def maple_gearset_promise():
     return ElementWrapper(
-        element=MapleItemListElement(),
+        element=MapleGearsetElement(),
         query=CookiedQuery(),
         reserved_path="/Common/Character/Detail/123/Equipment",
     )

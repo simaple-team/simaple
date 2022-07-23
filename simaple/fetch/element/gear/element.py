@@ -4,14 +4,14 @@ from typing import Dict
 from bs4 import BeautifulSoup
 
 from simaple.fetch.element.base import Element, ElementWrapper
-from simaple.fetch.element.item.extractor import (
+from simaple.fetch.element.gear.extractor import (
     PropertyExtractor,
     ReduceExtractor,
     SinglePropertyExtractor,
 )
-from simaple.fetch.element.item.fragment import ItemFragment
-from simaple.fetch.element.item.namespace import StatType
-from simaple.fetch.element.item.provider import (
+from simaple.fetch.element.gear.fragment import ItemFragment
+from simaple.fetch.element.gear.namespace import StatType
+from simaple.fetch.element.gear.provider import (
     DomElementProvider,
     MultiplierProvider,
     PotentialProvider,
@@ -45,7 +45,7 @@ def kms_stat_providers() -> Dict[str, DomElementProvider]:
     return providers
 
 
-class ItemElement(Element):
+class GearElement(Element):
     extractors: list[PropertyExtractor]
 
     def run(self, html_text):
@@ -79,7 +79,7 @@ class ItemElement(Element):
 
 def item_promise():
     return ElementWrapper(
-        element=ItemElement(
+        element=GearElement(
             extractors=[
                 ReduceExtractor(providers=kms_stat_providers()),
                 SinglePropertyExtractor(

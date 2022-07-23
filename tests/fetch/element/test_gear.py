@@ -1,11 +1,11 @@
-from simaple.fetch.element import ItemElement
-from simaple.fetch.element.item.element import kms_stat_providers
-from simaple.fetch.element.item.extractor import (
+from simaple.fetch.element import GearElement
+from simaple.fetch.element.gear.element import kms_stat_providers
+from simaple.fetch.element.gear.extractor import (
     ReduceExtractor,
     SinglePropertyExtractor,
 )
-from simaple.fetch.element.item.namespace import StatType
-from simaple.fetch.element.item.provider import (
+from simaple.fetch.element.gear.namespace import StatType
+from simaple.fetch.element.gear.provider import (
     PotentialProvider,
     SoulWeaponProvider,
     StarforceProvider,
@@ -13,7 +13,7 @@ from simaple.fetch.element.item.provider import (
 
 
 def test_item_element():
-    element = ItemElement(
+    element = GearElement(
         extractors=[
             ReduceExtractor(providers=kms_stat_providers()),
             SinglePropertyExtractor(

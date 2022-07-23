@@ -8,7 +8,7 @@ class PetListElement(Element):
     def run(self, html_text: str) -> dict[int, str]:
         soup = BeautifulSoup(html_text, "html.parser")
 
-        class_element = soup.find(class_="pet_item_list").find_all("a")
+        class_element = soup.find(class_="pet_gearset").find_all("a")
         urls = [element["href"] for element in class_element]
 
         return dict(enumerate(urls))
