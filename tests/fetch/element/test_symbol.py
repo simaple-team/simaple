@@ -16,4 +16,5 @@ def test_item_element():
         "bonus": {"INT": 0},
         "increment": {"INT": 700},
         "starforce": 0,
+        "surprise": False,
     }
