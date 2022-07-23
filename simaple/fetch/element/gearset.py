@@ -28,7 +28,7 @@ class MapleGearsetElement(Element):
 
     @classmethod
     def expected_arcane_names(cls):
-        return [f"arcane_{idx}" for idx in range(6)]
+        return [f"arcane{idx}" for idx in range(1,7)]
 
     def normal_items(self, soup):
         item_elements = soup.find(class_="item_pot").find_all("li")
@@ -44,7 +44,7 @@ class MapleGearsetElement(Element):
         }
 
     def arcane_symbols(self, soup):
-        item_elements = soup.find(class_="arcane_weapon_wrap").find_all("ac_pot01")
+        item_elements = soup.find(class_="arcane_weapon_wrap").find_all("li")
         item_links = [item.find("a") for item in item_elements]
         item_urls = list(
             map(lambda element: element["href"] if element else "", item_links)
