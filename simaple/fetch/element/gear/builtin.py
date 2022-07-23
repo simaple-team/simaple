@@ -65,6 +65,9 @@ def standard_gear_element():
                 target=StatType.starforce, providers={"기타": StarforceProvider()}
             ),
             SinglePropertyExtractor(
+                target=StatType.surprise, providers={"기타": StarforceProvider()}
+            ),
+            SinglePropertyExtractor(
                 target=StatType.soulweapon, providers={"소울옵션": SoulWeaponProvider()}
             ),
         ]

@@ -107,7 +107,10 @@ class PotentialProvider(DomElementProvider):
 class StarforceProvider(DomElementProvider):
     def get_value(self, fragment: ItemFragment) -> Dict[StatType, Any]:
         starforce = self._get_starforce(fragment)
-        return {StatType.starforce: starforce}
+        return {
+            StatType.starforce: starforce,
+            StatType.surprise: self._detect_surprise_starforce(fragment)
+        }
 
     def _get_starforce(self, fragment: ItemFragment) -> int:
         regex = re.compile("([0-9]+)성 강화 적용")
@@ -117,6 +120,12 @@ class StarforceProvider(DomElementProvider):
             return 0
 
         return int(match.group(1))
+
+    def _detect_surprise_starforce(self, fragment: ItemFragment) -> int:
+        regex = re.compile("놀라운 장비강화 주문서가 사용되었습니다.")
+        match = re.search(regex, fragment.text)
+
+        return bool(match)
 
 
 class SoulWeaponProvider(DomElementProvider):

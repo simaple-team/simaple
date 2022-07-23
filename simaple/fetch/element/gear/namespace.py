@@ -24,6 +24,7 @@ class StatType(enum.Enum):
     soulweapon = "soulweapon"
     starforce = "starforce"
     image = "image"
+    surprise = "surprise"
 
 
 def korean_names() -> Dict[str, Namespace]:
