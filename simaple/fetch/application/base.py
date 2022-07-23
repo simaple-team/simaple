@@ -35,7 +35,7 @@ class KMSFetchApplication(Application):
         character = character_promise()
 
         pet = pet_list_promise().then(
-            {idx: standard_gear_promise() for idx in range(3)}
+            {str(idx): standard_gear_promise() for idx in range(3)}
         )
 
         futures = [
