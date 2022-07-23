@@ -36,6 +36,9 @@ def test_item_element():
                 target=StatType.starforce, providers={"기타": StarforceProvider()}
             ),
             SinglePropertyExtractor(
+                target=StatType.surprise, providers={"기타": StarforceProvider()}
+            ),
+            SinglePropertyExtractor(
                 target=StatType.soulweapon, providers={"소울옵션": SoulWeaponProvider()}
             ),
         ]
@@ -83,9 +86,18 @@ def test_item_element():
             "마력": 125,
             "보스몬스터공격시데미지": 0,
         },
-        "potential": [{"마력%": 6}, {"공격시10%확률로2레벨슬로우효과적용": None}, {"데미지%": 3}],
+        "potential": {
+            "option": [{"마력%": 6}, {"공격시10%확률로2레벨슬로우효과적용": None}, {"데미지%": 3}],
+            "raw": [
+                "마력 : +6%",
+                "공격 시 10% 확률로 2레벨 슬로우효과 적용",
+                "데미지 : +3%",
+            ],
+            "grade": "에픽",
+        },
         "soulweapon": {"name": "위대한 벨룸의 소울", "option": {"몬스터방어율무시%": 7}},
         "starforce": 12,
+        "surprise": False,
         "name": "앱솔랩스 샤이닝로드",
         "image": "https://avatar.maplestory.nexon.com/ItemIcon/KENDJGPE.png",
     }
