@@ -7,7 +7,6 @@ from bs4 import BeautifulSoup
 from simaple.fetch.element.namespace import StatType
 from simaple.fetch.element.provider import (
     DomElementProvider,
-    GlobalProvider,
     ItemFragment,
     MultiplierProvider,
     PotentialProvider,
@@ -116,19 +115,3 @@ def test_provider(
 
     result = provider.get_value(fragment)
     assert result == expected
-
-
-def test_global_provider():
-    with open("tests/fetch/resources/item/12.html", encoding="euc-kr") as f:
-        html = f.read()
-
-    dom_element = BeautifulSoup(html, "html.parser")
-    fragment = ItemFragment(html=dom_element)
-
-    provider = GlobalProvider()
-    result = provider.get_value(fragment)
-
-    assert result == {
-        StatType.name: "아쿠아틱 레터 눈장식",
-        StatType.image: "https://avatar.maplestory.nexon.com/ItemIcon/KEPAJFNA.png",
-    }

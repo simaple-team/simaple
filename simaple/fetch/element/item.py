@@ -1,6 +1,6 @@
-from typing import Dict, Optional
+import re
+from typing import Dict
 
-import pydantic
 from bs4 import BeautifulSoup
 
 from simaple.fetch.element.base import Element, ElementWrapper
@@ -13,7 +13,6 @@ from simaple.fetch.element.fragment import ItemFragment
 from simaple.fetch.element.namespace import StatType
 from simaple.fetch.element.provider import (
     DomElementProvider,
-    GlobalProvider,
     MultiplierProvider,
     PotentialProvider,
     SoulWeaponProvider,
@@ -21,38 +20,6 @@ from simaple.fetch.element.provider import (
     StatKeywordProvider,
 )
 from simaple.fetch.query import NoredirectXMLQuery
-
-
-def kms_homepage_providers() -> Dict[str, DomElementProvider]:
-    grades = ["레어", "에픽", "유니크", "레전드리"]
-    providers = {}
-    for k in [
-        "STR",
-        "DEX",
-        "LUK",
-        "INT",
-        "공격력",
-        "마력",
-        "MaxHP",
-        "MaxMP",
-        "공격력",
-        "마력",
-    ]:
-        providers[k] = StatKeywordProvider()
-
-    for k in ["보스몬스터공격시데미지", "올스탯"]:
-        providers[k] = MultiplierProvider()
-
-    for k in [f"잠재옵션({option}아이템)" for option in grades]:
-        providers[k] = PotentialProvider(type="potential")
-
-    for k in [f"에디셔널잠재옵션({option}아이템)" for option in grades]:
-        providers[k] = PotentialProvider(type="additional_potential")
-
-    providers["기타"] = StarforceProvider()
-    providers["소울옵션"] = SoulWeaponProvider()
-
-    return providers
 
 
 def kms_stat_providers() -> Dict[str, DomElementProvider]:
@@ -80,23 +47,34 @@ def kms_stat_providers() -> Dict[str, DomElementProvider]:
 
 class ItemElement(Element):
     extractors: list[PropertyExtractor]
-    global_provider: Optional[DomElementProvider] = pydantic.Field(
-        default_factory=GlobalProvider,
-    )
 
     def run(self, html_text):
         soup = BeautifulSoup(html_text, "html.parser")
         dom_elements = soup.find(class_="stet_info").find_all("li")
         fragments = [ItemFragment(html=dom_element) for dom_element in dom_elements]
-        result = {}
+        result = {
+            StatType.image: self.get_image(soup),
+            StatType.name: self.get_item_name(soup),
+        }
 
         for extractor in self.extractors:
             result.update(extractor.extract(fragments))
 
-        if self.global_provider:
-            result.update(self.global_provider.get_value(ItemFragment(html=soup)))
-
         return {k.value: v for k, v in result.items()}
+
+    def get_image(self, soup: BeautifulSoup) -> str:
+        image_url = soup.find(class_="item_img").find("img")["src"]
+
+        return image_url
+
+    def get_item_name(self, soup: BeautifulSoup) -> str:
+        text = soup.find(class_="item_img").find("img")["alt"]
+
+        improved_regex = re.compile(r"(.+)\(\+[0-9]\)")
+        if improved_regex.match(text):
+            return improved_regex.match(text).group(1).strip()
+
+        return text
 
 
 def item_promise():
