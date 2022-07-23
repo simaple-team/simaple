@@ -72,9 +72,22 @@ class PotentialProvider(DomElementProvider):
 
     def get_value(self, fragment: ItemFragment) -> Dict[StatType, Any]:
         valid_elements = fragment.children_text
-        result = [self.parse_potential(el) for el in valid_elements]
+        options = [self.parse_potential(el) for el in valid_elements]
 
-        return {self.type: result}
+        return {self.type: {
+            "option": options,
+            "raw": valid_elements,
+            "grade": self.get_grade(fragment.name)
+        }}        
+
+    def get_grade(self, name: str):
+        option_regex = re.compile(r"\((.+)아이템\)")
+        match = re.search(option_regex, name)
+
+        if match is None:
+            return "미감정"
+
+        return match.group(1)
 
     def parse_potential(self, target: str):
         target = target.strip().replace(" ", "")
