@@ -69,11 +69,11 @@ fixtures = [
     (
         PotentialProvider(type=StatType.potential),
         {
-            StatType.potential: {
-                0: {"마력%": 6},
-                1: {"공격시10%확률로2레벨슬로우효과적용": None},
-                2: {"DEX%": 3},
-            }
+            StatType.potential: [
+                {"마력%": 6},
+                {"공격시10%확률로2레벨슬로우효과적용": None},
+                {"DEX%": 3},
+            ]
         },
         """
     <li>

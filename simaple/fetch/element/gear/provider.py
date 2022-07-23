@@ -66,9 +66,7 @@ class PotentialProvider(DomElementProvider):
 
     def get_value(self, fragment: ItemFragment) -> Dict[StatType, Dict[str, int]]:
         valid_elements = fragment.children_text
-        result = {}
-        for idx, el in enumerate(valid_elements):
-            result[idx] = self.parse_potential(el)
+        result = [self.parse_potential(el) for el in valid_elements]
 
         return {self.type: result}
 
