@@ -1,5 +1,6 @@
 import re
 
+import bs4
 from bs4 import BeautifulSoup
 
 from simaple.fetch.element.base import Element
@@ -26,15 +27,22 @@ class GearElement(Element):
         return {k.value: v for k, v in result.items()}
 
     def get_image(self, soup: BeautifulSoup) -> str:
-        image_url = soup.find(class_="item_img").find("img")["src"]
+        image_url: str = self._get_common_element(soup)["src"]
 
         return image_url
 
     def get_item_name(self, soup: BeautifulSoup) -> str:
-        text = soup.find(class_="item_img").find("img")["alt"]
+        text: str = self._get_common_element(soup)["alt"]
 
         improved_regex = re.compile(r"(.+)\(\+[0-9]\)")
-        if improved_regex.match(text):
-            return improved_regex.match(text).group(1).strip()
+        match = improved_regex.match(text)
+        if match:
+            return match.group(1).strip()
 
         return text
+
+    def _get_common_element(self, soup: BeautifulSoup) -> bs4.element.Tag:
+        image_element_proto: bs4.element.Tag = soup.find(class_="item_img")
+        image_element: bs4.element.Tag = image_element_proto.find("img")
+
+        return image_element

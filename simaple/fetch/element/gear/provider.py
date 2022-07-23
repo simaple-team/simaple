@@ -1,6 +1,6 @@
 import re
 from abc import ABCMeta, abstractmethod
-from typing import Dict, Tuple
+from typing import Any, Dict, Tuple
 
 from pydantic import BaseModel
 
@@ -10,12 +10,12 @@ from simaple.fetch.element.gear.namespace import StatType
 
 class DomElementProvider(BaseModel, metaclass=ABCMeta):
     @abstractmethod
-    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Dict[str, int]]:
+    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Any]:
         ...
 
 
 class StatKeywordProvider(DomElementProvider):
-    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Dict[str, int]]:
+    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Any]:
         sum_, base, bonus, increment = self._get_value(fragment)
         return {
             StatType.sum: {fragment.name: sum_},
@@ -24,7 +24,7 @@ class StatKeywordProvider(DomElementProvider):
             StatType.increment: {fragment.name: increment},
         }
 
-    def _get_value(self, fragment: ItemFragment) -> Tuple[int, int, int]:
+    def _get_value(self, fragment: ItemFragment) -> Tuple[int, int, int, int]:
         upgradable = re.compile(r"\+([0-9]+) \(([0-9]+) \+ ([0-9]+) \+ ([0-9]+)\)")
         match = upgradable.match(fragment.text)
         if match is not None:
@@ -37,11 +37,14 @@ class StatKeywordProvider(DomElementProvider):
 
         static = re.compile(r"\+([0-9]+)")
         match = static.match(fragment.text)
+        if match is None:
+            raise ValueError("Inappropriate value parsing attempted")
+
         return int(match.group(1)), int(match.group(1)), 0, 0
 
 
 class MultiplierProvider(DomElementProvider):
-    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Dict[str, int]]:
+    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Any]:
         sum_, base, bonus, increment = self._get_value(fragment)
         return {
             StatType.sum: {fragment.name: sum_},
@@ -50,7 +53,7 @@ class MultiplierProvider(DomElementProvider):
             StatType.increment: {fragment.name: increment},
         }
 
-    def _get_value(self, fragment: ItemFragment) -> Tuple[int, int, int]:
+    def _get_value(self, fragment: ItemFragment) -> Tuple[int, int, int, int]:
         upgradable = re.compile(r"\+([0-9]+)% \(([0-9]+)% \+ ([0-9]+)%\)")
         match = upgradable.match(fragment.text)
         if match is not None:
@@ -58,13 +61,16 @@ class MultiplierProvider(DomElementProvider):
 
         static = re.compile(r"\+([0-9]+)%")
         match = static.match(fragment.text)
+        if match is None:
+            raise ValueError("Inappropriate value parsing attempted")
+
         return int(match.group(1)), int(match.group(1)), 0, 0
 
 
 class PotentialProvider(DomElementProvider):
     type: StatType
 
-    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Dict[str, int]]:
+    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Any]:
         valid_elements = fragment.children_text
         result = [self.parse_potential(el) for el in valid_elements]
 
@@ -99,7 +105,7 @@ class PotentialProvider(DomElementProvider):
 
 
 class StarforceProvider(DomElementProvider):
-    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Dict[str, int]]:
+    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Any]:
         starforce = self._get_starforce(fragment)
         return {StatType.starforce: starforce}
 
@@ -114,7 +120,7 @@ class StarforceProvider(DomElementProvider):
 
 
 class SoulWeaponProvider(DomElementProvider):
-    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Dict[str, int]]:
+    def get_value(self, fragment: ItemFragment) -> Dict[StatType, Any]:
         return {
             StatType.soulweapon: {
                 "name": self.get_soul_name(fragment),
@@ -125,6 +131,8 @@ class SoulWeaponProvider(DomElementProvider):
     def get_soul_name(self, fragment: ItemFragment):
         regex = re.compile("^(.+) 적용")
         match = re.search(regex, fragment.text)
+        if not match:
+            return "소울 없음"
 
         return match.group(1)
 

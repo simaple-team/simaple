@@ -11,7 +11,7 @@ from simaple.fetch.query import Query
 
 class Element(pydantic.BaseModel, metaclass=ABCMeta):
     @abstractmethod
-    def run(self, html_text):
+    def run(self, html_text) -> Dict[str, Any]:
         ...
 
 

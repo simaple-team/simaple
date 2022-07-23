@@ -55,5 +55,5 @@ class NoredirectXMLQuery(Query):
             )
             raw_text = await response.text()
 
-            text = json.loads(raw_text)["view"].replace("\r\n", "\n")
+            text: str = json.loads(raw_text)["view"].replace("\r\n", "\n")
             return text

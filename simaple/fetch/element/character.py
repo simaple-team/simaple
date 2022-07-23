@@ -27,9 +27,8 @@ class CharacterElement(Element):
 
         class_element = soup.find(class_="char_info_top")
 
-        character_overview_element = soup.find(class_="tab01_con_wrap").find_all(
-            "table"
-        )
+        first_tab: bs4.element.Tag = soup.find(class_="tab01_con_wrap")
+        character_overview_element = first_tab.find_all("table")
         assert len(character_overview_element) == 2
 
         overview_element, stat_view_element = character_overview_element

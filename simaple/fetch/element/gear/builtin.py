@@ -20,7 +20,7 @@ from simaple.fetch.query import NoredirectXMLQuery
 
 def kms_stat_providers() -> Dict[str, DomElementProvider]:
     grades = ["레어", "에픽", "유니크", "레전드리"]
-    providers = {}
+    providers: Dict[str, DomElementProvider] = {}
     for k in [
         "STR",
         "DEX",
