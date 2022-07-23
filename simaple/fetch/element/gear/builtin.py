@@ -42,34 +42,32 @@ def kms_stat_providers() -> Dict[str, DomElementProvider]:
 
 
 def standard_gear_element():
-    return (
-        GearElement(
-            extractors=[
-                ReduceExtractor(providers=kms_stat_providers()),
-                SinglePropertyExtractor(
-                    target=StatType.potential,
-                    providers={
-                        f"잠재옵션({option}아이템)": PotentialProvider(type="potential")
-                        for option in ("레어", "에픽", "유니크", "레전드리")
-                    },
-                ),
-                SinglePropertyExtractor(
-                    target=StatType.additional_potential,
-                    providers={
-                        f"에디셔널잠재옵션({option}아이템)": PotentialProvider(
-                            type="additional_potential"
-                        )
-                        for option in ("레어", "에픽", "유니크", "레전드리")
-                    },
-                ),
-                SinglePropertyExtractor(
-                    target=StatType.starforce, providers={"기타": StarforceProvider()}
-                ),
-                SinglePropertyExtractor(
-                    target=StatType.soulweapon, providers={"소울옵션": SoulWeaponProvider()}
-                ),
-            ]
-        ),
+    return GearElement(
+        extractors=[
+            ReduceExtractor(providers=kms_stat_providers()),
+            SinglePropertyExtractor(
+                target=StatType.potential,
+                providers={
+                    f"잠재옵션({option}아이템)": PotentialProvider(type="potential")
+                    for option in ("레어", "에픽", "유니크", "레전드리")
+                },
+            ),
+            SinglePropertyExtractor(
+                target=StatType.additional_potential,
+                providers={
+                    f"에디셔널잠재옵션({option}아이템)": PotentialProvider(
+                        type="additional_potential"
+                    )
+                    for option in ("레어", "에픽", "유니크", "레전드리")
+                },
+            ),
+            SinglePropertyExtractor(
+                target=StatType.starforce, providers={"기타": StarforceProvider()}
+            ),
+            SinglePropertyExtractor(
+                target=StatType.soulweapon, providers={"소울옵션": SoulWeaponProvider()}
+            ),
+        ]
     )
 
 
