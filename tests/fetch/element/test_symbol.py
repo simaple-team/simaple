@@ -2,7 +2,7 @@ from simaple.fetch.element import GearElement
 
 
 def test_item_element():
-    element = GearElement()
+    element = GearElement(extractors=[])
 
     with open("tests/fetch/resources/arcane_symbol.html", encoding="euc-kr") as f:
         html_text = f.read()

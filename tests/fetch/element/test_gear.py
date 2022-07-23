@@ -1,5 +1,5 @@
 from simaple.fetch.element import GearElement
-from simaple.fetch.element.gear.element import kms_stat_providers
+from simaple.fetch.element.gear.builtin import kms_stat_providers
 from simaple.fetch.element.gear.extractor import (
     ReduceExtractor,
     SinglePropertyExtractor,

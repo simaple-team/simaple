@@ -1,9 +1,9 @@
 from simaple.fetch.element import (
     MapleGearsetElement,
     character_promise,
-    item_promise,
     maple_gearset_promise,
     pet_list_promise,
+    standard_gear_promise,
 )
 from simaple.fetch.token import TokenRepository
 
@@ -19,7 +19,7 @@ class KMSFetchApplication(Application):
 
         item = maple_gearset_promise().then(
             {
-                idx: item_promise()
+                idx: standard_gear_promise()
                 for idx in set(
                     MapleGearsetElement.expected_normal_names()
                     + MapleGearsetElement.expected_arcane_names()
@@ -29,7 +29,9 @@ class KMSFetchApplication(Application):
 
         character = character_promise()
 
-        pet = pet_list_promise().then({idx: item_promise() for idx in range(3)})
+        pet = pet_list_promise().then(
+            {idx: standard_gear_promise() for idx in range(3)}
+        )
 
         item_info = item.resolve("", token)
         character_info = character.resolve("", token)
