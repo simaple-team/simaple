@@ -78,6 +78,7 @@ types-PyYAML = "^6.0.4"
 numpy = "^1.22.3"
 scikit-learn = "^1.0.2"
 beautifulsoup4 = "^4.11.1"
+aiohttp = "^3.8.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
