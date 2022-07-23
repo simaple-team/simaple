@@ -20,6 +20,8 @@ class Query(BaseModel, metaclass=ABCMeta):
 
 
 class CookiedQuery(Query):
+    max_retry: int = 3
+
     async def get(self, path, token) -> str:
         header = {
             "Connection": "keep-alive",
@@ -29,19 +31,26 @@ class CookiedQuery(Query):
         logger.info(f"Request to {self.url}")
 
         async with aiohttp.ClientSession() as session:
-            response = await session.get(
-                self.url(path),
-                params={
-                    "p": token,
-                },
-                headers=header,
-                cookies=get_cookie(),
-            )
-            text = await response.text()
-            return text
+            for _ in range(self.max_retry):
+                response = await session.get(
+                    self.url(path),
+                    params={
+                        "p": token,
+                    },
+                    headers=header,
+                    cookies=get_cookie(),
+                )
+                text = await response.text()
+                if len(text) == 0:
+                    logger.info(f"Retry {path}")
+                    continue
+
+                return text
 
 
 class NoredirectXMLQuery(Query):
+    max_retry: int = 3
+
     async def get(self, path, token) -> str:
         header = {
             "Connection": "keep-alive",
@@ -50,10 +59,18 @@ class NoredirectXMLQuery(Query):
         logger.info(f"Request to {self.url(path)}")
 
         async with aiohttp.ClientSession() as session:
-            response = await session.get(
-                self.url(path), headers=header, allow_redirects=False
-            )
-            raw_text = await response.text()
+            for _ in range(self.max_retry):
+                response = await session.get(
+                    self.url(path), headers=header, allow_redirects=False
+                )
+                raw_text = await response.text()
+                if len(raw_text) == 0:
+                    logger.info(f"Retry {path}")
+                    continue
 
-            text: str = json.loads(raw_text)["view"].replace("\r\n", "\n")
-            return text
+                text: str = json.loads(raw_text)["view"].replace("\r\n", "\n")
+                if len(text) == 0:
+                    logger.info(f"Retry {path}")
+                    continue
+
+                return text
