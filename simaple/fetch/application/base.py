@@ -28,6 +28,7 @@ class KMSFetchApplication(Application):
                 for idx in set(
                     MapleGearsetElement.expected_normal_names()
                     + MapleGearsetElement.expected_arcane_names()
+                    + MapleGearsetElement.expected_cash_names()
                 )
             }
         )

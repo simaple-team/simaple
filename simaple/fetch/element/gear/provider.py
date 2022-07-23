@@ -74,11 +74,13 @@ class PotentialProvider(DomElementProvider):
         valid_elements = fragment.children_text
         options = [self.parse_potential(el) for el in valid_elements]
 
-        return {self.type: {
-            "option": options,
-            "raw": valid_elements,
-            "grade": self.get_grade(fragment.name)
-        }}        
+        return {
+            self.type: {
+                "option": options,
+                "raw": valid_elements,
+                "grade": self.get_grade(fragment.name),
+            }
+        }
 
     def get_grade(self, name: str):
         option_regex = re.compile(r"\((.+)아이템\)")
@@ -122,7 +124,7 @@ class StarforceProvider(DomElementProvider):
         starforce = self._get_starforce(fragment)
         return {
             StatType.starforce: starforce,
-            StatType.surprise: self._detect_surprise_starforce(fragment)
+            StatType.surprise: self._detect_surprise_starforce(fragment),
         }
 
     def _get_starforce(self, fragment: ItemFragment) -> int:
