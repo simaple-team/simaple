@@ -9,24 +9,16 @@ from simaple.fetch.query import CookiedQuery
 
 class NumberString:
     @classmethod
-    def english_number_to_int(cls, number_string: str) -> int:
-        return int(number_string.replace(",", ""))
-
-    @classmethod
-    def percentile_number_to_int(cls, number_string: str) -> int:
-        return int(number_string.replace("%", ""))
-
-    @classmethod
     def number_string_to_int(cls, number_string: str) -> int:
         return int(cls.sanitize(number_string))
 
     @classmethod
-    def sanitize(cls, number_string: str) -> str:
-        return number_string.strip().replace(" ", "").replace(",", "").replace("%", "")
-
-    @classmethod
     def is_number(cls, number_string: str) -> bool:
         return str.isdigit(cls.sanitize(number_string))
+
+    @classmethod
+    def sanitize(cls, number_string: str) -> str:
+        return number_string.strip().replace(" ", "").replace(",", "").replace("%", "")
 
 
 class CharacterElement(Element):
