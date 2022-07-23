@@ -1,8 +1,11 @@
 from simaple.fetch.element import ItemElement
-from simaple.fetch.element.extractor import ReduceExtractor, SinglePropertyExtractor
-from simaple.fetch.element.item import kms_stat_providers
-from simaple.fetch.element.namespace import StatType
-from simaple.fetch.element.provider import (
+from simaple.fetch.element.item.element import kms_stat_providers
+from simaple.fetch.element.item.extractor import (
+    ReduceExtractor,
+    SinglePropertyExtractor,
+)
+from simaple.fetch.element.item.namespace import StatType
+from simaple.fetch.element.item.provider import (
     PotentialProvider,
     SoulWeaponProvider,
     StarforceProvider,

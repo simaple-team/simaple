@@ -1,5 +1,3 @@
-from loguru import logger
-
 from simaple.fetch.element import (
     MapleItemListElement,
     character_promise,
@@ -37,8 +35,4 @@ class KMSFetchApplication(Application):
         character_info = character.resolve("", token)
         pet_info = pet.resolve("", token)
 
-        return {
-            "character": character_info,
-            "item": item_info,
-            "pet": pet_info
-        }
+        return {"character": character_info, "item": item_info, "pet": pet_info}

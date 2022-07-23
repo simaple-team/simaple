@@ -4,14 +4,14 @@ from typing import Dict
 from bs4 import BeautifulSoup
 
 from simaple.fetch.element.base import Element, ElementWrapper
-from simaple.fetch.element.extractor import (
+from simaple.fetch.element.item.extractor import (
     PropertyExtractor,
     ReduceExtractor,
     SinglePropertyExtractor,
 )
-from simaple.fetch.element.fragment import ItemFragment
-from simaple.fetch.element.namespace import StatType
-from simaple.fetch.element.provider import (
+from simaple.fetch.element.item.fragment import ItemFragment
+from simaple.fetch.element.item.namespace import StatType
+from simaple.fetch.element.item.provider import (
     DomElementProvider,
     MultiplierProvider,
     PotentialProvider,

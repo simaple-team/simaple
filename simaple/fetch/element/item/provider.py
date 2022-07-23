@@ -4,8 +4,8 @@ from typing import Dict, Tuple
 
 from pydantic import BaseModel
 
-from simaple.fetch.element.fragment import ItemFragment
-from simaple.fetch.element.namespace import StatType
+from simaple.fetch.element.item.fragment import ItemFragment
+from simaple.fetch.element.item.namespace import StatType
 
 
 class DomElementProvider(BaseModel, metaclass=ABCMeta):
