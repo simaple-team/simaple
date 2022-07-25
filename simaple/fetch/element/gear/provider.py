@@ -167,7 +167,7 @@ class SoulWeaponProvider(DomElementProvider):
             re.compile(r"^(.+): \+([0-9])+$"), soul_option_element.text
         )
         percent_match = re.search(
-            re.compile(r"^(.+): \+([0-9])+%"), soul_option_element.text
+            re.compile(r"^(.+): \+([0-9])+%$"), soul_option_element.text
         )
 
         if normal_match:

@@ -1,8 +1,8 @@
-from simaple.fetch.element import CharacterElement
+from simaple.fetch.element.character import standard_character_element
 
 
 def test_item_element():
-    element = CharacterElement()
+    element = standard_character_element()
 
     with open("tests/fetch/resources/character.html", encoding="euc-kr") as f:
         html_text = f.read()
@@ -11,31 +11,35 @@ def test_item_element():
     assert result == {
         "name": "생분자",
         "level": 275,
-        "world": "크로아",
-        "job": "마법사/아크메이지(불,독)",
-        "pop": 1860,
-        "guild": "Shiny",
-        "meso": 169913574,
-        "point": 2735,
-        "min_damage_factor": 104185958,
-        "max_damage_factor": 108527036,
-        "MHP": 43438,
-        "MP": 106562,
-        "STR": 5044,
-        "DEX": 4535,
-        "INT": 52802,
-        "LUK": 8138,
-        "critical_damage": 75,
-        "boss_damage_multiplier": 303,
-        "ignored_defence": 96,
-        "immunity": 45,
-        "stance": 100,
-        "armor": 21769,
-        "speed": 140,
-        "jump": 123,
-        "starforce": 345,
-        "honor_point": 646603,
-        "arcaneforce": 1360,
+        "overview": {
+            "world": "크로아",
+            "job": "마법사/아크메이지(불,독)",
+            "pop": 1860,
+            "guild": "Shiny",
+            "meso": 169913574,
+            "point": 2735,
+        },
+        "stat": {
+            "min_damage_factor": 104185958,
+            "max_damage_factor": 108527036,
+            "MHP": 43438,
+            "MP": 106562,
+            "STR": 5044,
+            "DEX": 4535,
+            "INT": 52802,
+            "LUK": 8138,
+            "critical_damage": 75,
+            "boss_damage_multiplier": 303,
+            "ignored_defence": 96,
+            "immunity": 45,
+            "stance": 100,
+            "armor": 21769,
+            "speed": 140,
+            "jump": 123,
+            "starforce": 345,
+            "honor_point": 646603,
+            "arcaneforce": 1360,
+        },
         "ability": [
             "버프 스킬의 지속 시간 50% 증가",
             "상태 이상에 걸린 대상 공격 시 데미지 7% 증가",

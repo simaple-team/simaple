@@ -11,8 +11,7 @@ class ItemFragment(BaseModel):
     @property
     def name(self):
         return (
-            self.html.find(class_="stet_th")
-            .find("span")
+            self.html.select_one(".stet_th span")
             .text.strip()
             .replace("\n", "")
             .replace(" ", "")

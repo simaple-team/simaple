@@ -14,7 +14,7 @@ class GearElement(Element):
 
     def run(self, html_text):
         soup = BeautifulSoup(html_text, "html.parser")
-        dom_elements = soup.find(class_="stet_info").find_all("li")
+        dom_elements = soup.select(".stet_info li")
         fragments = [ItemFragment(html=dom_element) for dom_element in dom_elements]
         result = {
             StatType.image: self.get_image(soup),
@@ -42,7 +42,6 @@ class GearElement(Element):
         return text
 
     def _get_common_element(self, soup: BeautifulSoup) -> bs4.element.Tag:
-        image_element_proto: bs4.element.Tag = soup.find(class_="item_img")
-        image_element: bs4.element.Tag = image_element_proto.find("img")
+        image_element: bs4.element.Tag = soup.select_one(".item_img img")
 
         return image_element
