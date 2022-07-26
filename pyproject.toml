@@ -44,7 +44,6 @@ output = "coverage-reports/coverage.xml"
 warn_return_any = true
 warn_unused_configs = true
 incremental = false
-plugins = ["sqlalchemy.ext.mypy.plugin"]
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
@@ -66,10 +65,7 @@ repository = "https://github.com/oleneyl/simaple"
 [tool.poetry.dependencies]
 python = "^3.9"
 pydantic = {extras = ["dotenv"], version = "^1.8.2"}
-dependency-injector = "^4.36.2"
 loguru = "^0.5.3"
-SQLAlchemy = {extras = ["mypy"], version = "^1.4.25"}
-PyMySQL = "^1.0.2"
 fastapi = "^0.70.0"
 uvicorn = "^0.15.0"
 pymongo = "^3.12.1"
@@ -86,9 +82,9 @@ types-requests = "^2.28.3"
 pytest = "^6.2.5"
 isort = "^5.9.3"
 coverage = "^6.0.2"
-pylint = "^2.11.1"
+pylint = "=2.13.1"
 mypy = "^0.910"
-black = "^21.9b0"
+black = "^22.6"
 pytest-cov = "^3.0.0"
 requests = "^2.26.0"
 
