@@ -99,5 +99,8 @@ def test_item_element():
         "starforce": 12,
         "surprise": False,
         "name": "앱솔랩스 샤이닝로드",
-        "image": "https://avatar.maplestory.nexon.com/ItemIcon/KENDJGPE.png",
+        "image": {
+            "url": "https://avatar.maplestory.nexon.com/ItemIcon/KENDJGPE.png",
+            "gear_id": 1212115,
+        },
     }
