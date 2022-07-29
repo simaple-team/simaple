@@ -156,7 +156,7 @@ class Enhancement(GearImprovement):
         return data[2 if gear.superior_eqp else 1]
 
     def gear_starforce_type_is_weapon(self, gear) -> bool:
-        return gear.is_weapon() or gear.type == GearType.katara
+        return bool(gear.is_weapon() or gear.type == GearType.katara)
 
 
 class Starforce(Enhancement):
@@ -190,6 +190,9 @@ class Starforce(Enhancement):
             INT=stat_starforce_increment,
             DEX=stat_starforce_increment,
         )
+
+    def apply_star_cutoff(self, gear: Gear):
+        self.star = min(self.star, self.max_star(gear))
 
     def get_single_starforce_improvement(
         self, gear: Gear, target_star: int, current_improvement: Stat

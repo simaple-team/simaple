@@ -4,9 +4,9 @@ from typing import List, Optional, Union
 from pydantic import BaseModel, Extra, Field
 
 from simaple.core import Stat
+from simaple.gear.bonus_factory import BonusFactory, BonusSpec
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository
-from simaple.gear.improvements.bonus import Bonus
 from simaple.gear.improvements.scroll import Scroll
 from simaple.gear.improvements.spell_trace import SpellTrace
 from simaple.gear.improvements.starforce import Starforce
@@ -27,7 +27,7 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
     spell_traces: List[SpellTrace] = Field(default_factory=list)
     scrolls: List[Scroll] = Field(default_factory=list)
     starforce: Starforce
-    bonuses: List[Bonus] = Field(default_factory=list)
+    bonuses: List[BonusSpec] = Field(default_factory=list)
     potential: Potential = Field(default_factory=Potential)
     additional_potential: AdditionalPotential = Field(
         default_factory=AdditionalPotential
@@ -39,8 +39,14 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
         gear.potential = self.potential.copy()
         gear.additional_potential = self.additional_potential.copy()
 
+        bonus_factory = BonusFactory()
+        bonuses = [
+            bonus_factory.create(bonus_type=spec.bonus_type, grade=spec.grade)
+            for spec in self.bonuses
+        ]
+
         bonus_stat = sum(
-            [bonus.calculate_improvement(gear) for bonus in self.bonuses],
+            [bonus.calculate_improvement(gear) for bonus in bonuses],
             Stat(),
         )
         # Apply spell trace and scroll.
@@ -71,7 +77,7 @@ class PracticalGearBlueprint(AbstractGearBlueprint):
     spell_trace: Optional[SpellTrace] = None
     scroll: Optional[Scroll] = None
     star: int = 0
-    bonuses: List[Bonus] = Field(default_factory=list)
+    bonuses: List[BonusSpec] = Field(default_factory=list)
     potential: Potential = Field(default_factory=Potential)
     additional_potential: AdditionalPotential = Field(
         default_factory=AdditionalPotential
@@ -100,6 +106,7 @@ class PracticalGearBlueprint(AbstractGearBlueprint):
             scrolls = [self.scroll for i in range(gear.scroll_chance)]
 
         starforce = Starforce(enhancement_type="Starforce", star=self.star)
+        starforce.apply_star_cutoff(gear)
 
         return GeneralizedGearBlueprint(
             gear_id=gear.id,

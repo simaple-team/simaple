@@ -1,0 +1,592 @@
+
+
+
+<!doctype html>
+<html lang="ko">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>캐릭터정보 | 공통 | 메이플스토리</title>
+<link rel="stylesheet" href="https://ssl.nexon.com/s3/Game/Maplestory/char_info.css" type="text/css" />
+<link rel="stylesheet" href="https://ssl.nexon.com/s3/Game/Maplestory/jquery.mCustomScrollbar.css" type="text/css" />
+    <script src="https://ssl.nexon.com/s1/global/ngb_head.js"></script>
+
+<script src="https://ssl.nexon.com/s1/Game/Maplestory/jquery-1.12.4.min.js" type="text/javascript"></script>
+<script src="https://ssl.nexon.com/s1/Game/Maplestory/jquery-ui.js"></script>
+<script src="https://ssl.nexon.com/s1/Game/Maplestory/char_info.js" type="text/javascript"></script>
+<script src="https://ssl.nexon.com/s1/Game/Maplestory/jquery.mCustomScrollbar.concat.min.js" type="text/javascript"></script>
+
+<script src="/Scripts/Common/common.js?v=202207200254"></script>
+<script src="/Scripts/Common/webboard.js?v=202207200254"></script>
+
+<script>
+    var COMMON = (function () {
+        var instance;
+
+        function initiate() {
+            return {
+                site: 'nope',
+                domain: 'maplestory.nexon.com',
+                url: 'https://maplestory.nexon.com/Common/Character/Detail/123?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2FH30vgr7QFpImK2Gl2k%2Bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2FeGMeahUGRcle37bhvFSJidc30H1Vx3AKwHr9vkJyLxVaJU3xfzPj3Jole1luobeA1QqsZGTcI%3D',
+                oid: '0',
+                isLogin: false,
+                isMembership: false,
+                isParentLogin: false,
+                isParentMembershipLogin: false,
+                isChannelingNotAgree: false,
+                articleSearchDescriptor: {},
+                maxTitleLength: 0,
+                maxCommentLength: 0
+            };
+        }
+
+        if (!instance) instance = initiate();
+        return instance;
+    }());
+
+    $(window).load(function () {
+        var commonMessage = '';
+        if (commonMessage !== '')
+            alert(commonMessage);
+    });
+</script>
+
+
+
+<link rel="stylesheet" href="/Scripts/Common/font_NanumBarunGothic.css" type="text/css" />
+<!-- Facebook Pixel Code -->
+<script type="text/javascript">    
+    !function (f, b, e, v, n, t, s) {
+        if (f.fbq) return; n = f.fbq = function () {
+            n.callMethod ?
+            n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+        }; if (!f._fbq) f._fbq = n;
+        n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0;
+        t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s)
+    }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+
+     fbq('init', '268046720223120');
+    fbq('track', "PageView");
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=268046720223120&ev=PageView&noscript=1" /></noscript>
+<!-- End Facebook Pixel Code -->
+<!-- Twitter single-event website tag code -->
+<script src="//platform.twitter.com/oct.js" type="text/javascript"></script>
+<script type="text/javascript">twttr.conversion.trackPid('nx5i7', { tw_sale_amount: 0, tw_order_quantity: 0 });</script>
+<noscript>
+    <img height="1" width="1" style="display:none;" alt="" src="https://analytics.twitter.com/i/adsct?txn_id=nx5i7&p_id=Twitter&tw_sale_amount=0&tw_order_quantity=0" />
+    <img height="1" width="1" style="display:none;" alt="" src="//t.co/i/adsct?txn_id=nx5i7&p_id=Twitter&tw_sale_amount=0&tw_order_quantity=0" />
+</noscript>
+<!-- End Twitter single-event website tag code -->
+<script type="text/javascript">
+    (function (m, o, n, r, t, g) {
+        t = t + '?l=' + n + '&t=' + r + '&ref=' + encodeURIComponent(o.referrer) + '&loc=' + encodeURIComponent(o.location) + '&r=' + Math.floor(Math.random() * 99999999999);
+        o.write("<" + g + " src='" + t + "' style='display:none;'></" + g + ">");
+    })(window, document, 'CM_M_1042938', 'brand', 'https://rtb.clickmon.co.kr/RT_GATE/rt_gate.php', 'iframe');
+</script>
+
+        <!-- Google Analytics -->
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src=https://www.googletagmanager.com/gtag/js?id=UA-34233427-4></script>
+        <script async src=https://www.googletagmanager.com/gtag/js?id=AW-947932633></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'UA-34233427-4', { 'custom_map': { 'dimension1': 'oid' } });
+            gtag('config', 'G-12M3M6FCC2');
+            gtag('event', 'oid', { 'oid': 0 })
+            gtag('config', 'AW-947932633');
+            gtag('event', 'conversion', { 'send_to': 'AW-947932633/0AANCOGi_IkCENmbgcQD' });
+            function gtag_report_conversion(url) {
+                var callback = function () {
+                    if (typeof (url) != 'undefined') {
+                        window.location = url;
+                    }
+                };
+                gtag('event', 'conversion', {
+                    'send_to': 'AW-947932633/DKSpCOK-_IkCENmbgcQD',
+                    'event_callback': callback
+                });
+                return false;
+            }
+        </script>
+        <!-- End Google Analytics -->
+<!-- Kakao Pixel Code -->
+<script type="text/javascript" charset="UTF-8" src="//t1.daumcdn.net/adfit/static/kp.js"></script>
+<script type="text/javascript">
+    kakaoPixel('2830029952607077079').pageView();
+</script>
+<!-- End Kakao Pixel Code -->
+<!-- Criteo 홈페이지 태그 -->
+<script type="text/javascript" src="//dynamic.criteo.com/js/ld/ld.js?a=94120" async="true"></script>
+<script type="text/javascript">
+    window.criteo_q = window.criteo_q || [];
+    var deviceType = /iPad/.test(navigator.userAgent) ? "t" : /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Silk/.test(navigator.userAgent) ? "m" : "d";
+    window.criteo_q.push({ event: "setAccount", account: [94120, 95207] }, { event: "setSiteType", type: deviceType }, { event: "viewHome" });
+
+    function gameStart_Criteo() {
+        window.criteo_q.push(
+            { event: "setAccount", account: [94120, 95207] },
+            { event: "setSiteType", type: deviceType },            
+            {
+                event: "trackTransaction", id: Math.floor(Math.random() * 99999999999), item: [
+                    { id: "gameStart", price: 1, quantity: 1 }                    
+                ]
+            }
+        );
+    }
+</script>
+<!-- END Criteo 홈페이지 태그 -->
+
+
+</head>
+<body>
+    <div class="skip-navigation">
+        <ul>
+            <li><a class="skip-navigation-link" href="#container">본문 바로가기</a></li>
+            <li><a class="skip-navigation-link" href="#header">주 메뉴 바로가기</a></li>
+        </ul>
+    </div>
+
+
+
+
+    <div id="wrap">
+<div class="sub_menu_wrap">
+    <span class="sm_close"><a href="#a" onclick="close_sm_menu();"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/update/sm_menu_close.png" alt=""></a></span>
+    <span class="sub_home"><a href="/Home/Main"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/update/sub_home_btn.png" alt=""></a></span>
+    <div class="sm_list_wrap">
+<ul>
+    <li>
+        <span><a href="/News/Notice">뉴스</a></span>
+        <ul>
+            <li><a href="/News/Notice">공지사항</a></li>
+            <li><a href="/News/Update">업데이트</a></li>
+            <li><a href="/News/Event">이벤트</a></li>
+            <li><a href="/News/CashShop">캐시샵 공지</a></li>
+            
+            <li><a href="/News/NoticeMapleBoard">메이플 알림판</a></li>
+        </ul>
+    </li>
+    <li>
+        <span><a href="/Guide/GameInformation">가이드</a></span>
+        <ul>
+            <li><a href="/Guide/GameInformation">게임정보</a></li>
+            <li><a href="/Guide/Quest">퀘스트정보</a></li>
+            <li><a href="/Guide/Job" target="_blank">직업소개<span class="icon_window"></span></a></li>
+            <li><a href="/Guide/CashShop/Probability/RoyalStyle">확률형 아이템</a></li>
+            <li><a href="/Guide/ProbabilityResult/MonthData">확률형 아이템 결과</a></li>
+            <li><a href="https://now.nexon.com/service/maplestory" target="_blank">NEXON NOW<span class="icon_window"></span></a></li>
+        </ul>
+    </li>
+    <li>
+        <span><a href="/Ranking/World">랭킹</a></span>
+        <ul>
+            <li><a href="/Ranking/World">월드 랭킹</a></li>
+            <li><a href="/Ranking/Union">유니온 랭킹</a></li>
+            <li><a href="/Ranking/Achievement">업적 랭킹</a></li>
+            <li><a href="/Ranking/HallOfFame">명예의 전당</a></li>
+            <li><a href="/Ranking/UnionArena">유니온 아레나</a></li>
+        </ul>
+    </li>
+    <li>
+        <span><a href="/Community/Free">커뮤니티</a></span>
+        <ul>
+            <li><a href="/Community/Free">자유게시판</a></li>
+            <li><a href="/Community/Information">정보게시판</a></li>
+            <li><a href="/Community/Discussion">토론게시판</a></li>
+            <li><a href="/Community/Art">메이플 아트</a></li>
+            <li><a href="/Community/Coordination">메이플 코디</a></li>
+        </ul>
+    </li>
+    <li>
+        <span><a href="/Media/WebToon">미디어</a></span>
+        <ul>
+            <li><a href="/Media/WebToon">웹툰</a></li>
+            <li><a href="/Media/Font">메이플스토리 서체</a></li>
+            <li><a href="/Media/Video">영상</a></li>
+            <li><a href="/Media/Music">음악</a></li>
+            <li><a href="/Media/ArtWork">아트웍</a></li>
+        </ul>
+    </li>
+    <li>
+        <span><a href="/Support/UnSeal">고객지원</a></span>
+        <ul>
+                <li><a href="javascript:void(0);" onclick="window.open('https://cs.nexon.com/HelpBoard/Nexon?gamecode=18', '메이플스토리 고객센터', 'toolbar=no, scrollbars=yes, width=1024, height=800'); return false;">도움말/1:1문의<span class="icon_window"></span></a></li>
+                <li><a href="/Support/UnSeal">아이템 봉인해제</a></li>
+                <li><a href="/Support/BugReport">버그악용/불법프로그램 신고</a></li>
+        </ul>
+    </li>
+</ul>
+    </div>
+</div>
+<span class="sub_menu"><a href="#a" onclick="open_sm_menu();"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/update/sub_menu_btn.png" alt=""></a></span>
+<span class="sub_home"><a href="/Home/Main"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/update/sub_home_btn.png" alt=""></a></span>
+<h1 class="logo"><a href="/Home/Main"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/logo.png" alt="" /></a></h1>
+
+        <div class="center_wrap">
+
+
+<div class="char_info_top">
+    <div class="char_name">
+        <span>생분자님</span><br />캐릭터정보
+    </div>
+    <div class="char_info">
+        <!--레벨 정보-->
+        <dl>
+            <dt><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/lv_icon.png" alt="친구/길드원" /></dt>
+            <dd>LV.275</dd>
+        </dl>
+        <!--직업 정보-->
+        <dl>
+                <dt><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/job_icon02.png" alt="마법사" /></dt>
+            <dd>마법사/아크메이지(불,독)</dd>
+        </dl>
+        <!--서버 정보-->
+        <dl>
+            <dt><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/sv_icon.png" alt="친구/길드원" /></dt>
+            <dd><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/world_icon/icon_11.png" alt="" />크로아</dd>
+        </dl>
+        <!--경험치 / 인기도 수치-->
+        <div class="level_data">
+            <span><em>경험치</em>8,941,119,319,551</span>
+            <span class="pop_data"><em>인기도</em>1,860</span>
+        </div>
+        <div class="char_img">
+            <div>
+                
+                <img src="https://avatar.maplestory.nexon.com/Character/180/LBGFGFMBIBPMNHDEAPNLJKLNHJCCKMEMEMKPKLOBGLMFBLPLLKCHJFHKBOGBAOOPDANJGJIDAJLFOCCIEKJJCHENMJBLJPLDHONAMKEJGNPMPKGGFBDOBLNNHBLCJEOLNFINCJHDBHABMFHCBCKPLINNCBNBBOAKBENPFGNIPOOLPDMFMPLEOFDOEFNBCIFEGNKACLLHONLKPMJHNGDKAGIOICJPPCMDCHONONKDAOBHFCFABJNMKAMLGEKOKCMF.png" alt="" onerror="this.src='https://ssl.nexon.com/s2/game/maplestory/renewal/common/no_char_img_180.png'" />
+            </div>
+        </div>
+    </div>
+</div>
+            <div id="container">
+                <div class="top_bg"></div>
+                <div class="con_wrap">
+<div class="lnb_wrap">
+    <ul class="lnb_list">
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Ranking?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3tKhAdg1oReb9peFZXR6rlWptINpEX9Z9V0JRtYCNJww%3d">랭킹정보</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3tKhAdg1oReb9peFZXR6rlWptINpEX9Z9V0JRtYCNJww%3d">기본정보</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Equipment?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3tKhAdg1oReb9peFZXR6rlWptINpEX9Z9V0JRtYCNJww%3d">장비</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Inventory?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3tKhAdg1oReb9peFZXR6rlWptINpEX9Z9V0JRtYCNJww%3d">인벤토리</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Storage?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3tKhAdg1oReb9peFZXR6rlWptINpEX9Z9V0JRtYCNJww%3d">창고</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Collection?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3tKhAdg1oReb9peFZXR6rlWptINpEX9Z9V0JRtYCNJww%3d">컬렉션</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Skill?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3tKhAdg1oReb9peFZXR6rlWptINpEX9Z9V0JRtYCNJww%3d">스킬</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Riding?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3tKhAdg1oReb9peFZXR6rlWptINpEX9Z9V0JRtYCNJww%3d">라이딩</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Quest?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3tKhAdg1oReb9peFZXR6rlWptINpEX9Z9V0JRtYCNJww%3d">퀘스트</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Pet?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3tKhAdg1oReb9peFZXR6rlWptINpEX9Z9V0JRtYCNJww%3d">펫</a></li>
+        <li ><a href="/Common/Character/Detail/%ec%83%9d%eb%b6%84%ec%9e%90/Guild?p=mikO8qgdC4hElCwBGQ6GOx8CmO11EvduZkV0bRbPAhad5gzlD%2fH30vgr7QFpImK2Gl2k%2bs1OQHDhwMxbXKfkjVbdzEYe9wCRH%2feGMeahUGRcle37bhvFSJidc30H1Vx3tKhAdg1oReb9peFZXR6rlWptINpEX9Z9V0JRtYCNJww%3d">길드</a></li>
+    </ul>
+</div>
+                    <div class="contents_wrap">
+                        <div class="container_wrap">
+                                <div class="tab_menu">
+                                    <ul>
+                                        <li><a href="#a" class="active" onmouseover="ch_png_on(this)" onmouseout="ch_png_off(this)" onclick="chg_tab(1)"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/tab01_menu01_on.png" alt="기본/스탯" /></a></li>
+                                        <li><a href="#a" onmouseover="ch_png_on(this)" onmouseout="ch_png_off(this)" onclick="chg_tab(2)"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/tab01_menu02_off.png" alt="성향" /></a></li>
+                                        <li><a href="#a" onmouseover="ch_png_on(this)" onmouseout="ch_png_off(this)" onclick="chg_tab(3)"><img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/tab01_menu03_off.png" alt="기타" /></a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab01_con_wrap">
+                                    <h1>기본</h1>
+                                    <table class="table_style01">
+                                        <caption>캐릭터 기본정보에 대한 테이블입니다.</caption>
+                                        <colgroup>
+                                            <col width="159px" />
+                                            <col width="320px;" />
+                                            <col width="159px" />
+                                            <col width="*" />
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <th><span>월드</span></th>
+                                                <td><span>크로아</span></td>
+                                                <th><span>직업</span></th>
+                                                <td><span>마법사/아크메이지(불,독)</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th><span>인기도</span></th>
+                                                <td><span>1,860</span></td>
+                                                <th><span>길드</span></th>
+                                                
+                                                <td><span>Shiny</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th><span>메소</span></th>
+                                                <td><span>169,913,574</span></td>
+                                                <th><span>메이플포인트</span></th>
+                                                <td><span>2,735</span></td>
+                                            </tr>
+                                            
+                                        </tbody>
+                                    </table>
+                                    <h1>스탯</h1>
+                                    <table class="table_style01">
+                                        <caption>캐릭터 기본정보에 대한 테이블입니다.</caption>
+                                        <colgroup>
+                                            <col width="159px" />
+                                            <col width="320px;" />
+                                            <col width="159px" />
+                                            <col width="*" />
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <th><span>스탯공격력</span></th>
+                                                <td><span>104,185,958 ~ 108,527,036</span></td>
+                                                <th><span>HP</span></th>
+                                                <td><span>43,438</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th><span>MP</span></th>
+                                                <td><span>106,562</span></td>
+                                                <th><span>STR</span></th>
+                                                <td><span>5044</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th><span>DEX</span></th>
+                                                <td><span>4,535</span></td>
+                                                <th><span>INT</span></th>
+                                                <td><span>52,802</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th><span>LUK</span></th>
+                                                <td><span>8,138</span></td>
+                                                <th><span>크리티컬 데미지</span></th>
+                                                <td><span>75%</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th><span>보스공격력</span></th>
+                                                <td><span>303%</span></td>
+                                                <th><span>방어율무시</span></th>
+                                                <td><span>96%</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th><span>상태이상내성</span></th>
+                                                <td><span>45</span></td>
+                                                <th><span>스탠스</span></th>
+                                                <td><span>100%</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th><span>방어력</span></th>
+                                                <td><span>21769</span></td>
+                                                <th><span>이동속도</span></th>
+                                                <td><span>140%</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th><span>점프력</span></th>
+                                                <td><span>123%</span></td>
+                                                <th><span>스타포스</span></th>
+                                                <td><span>345</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th><span>명성치</span></th>
+                                                <td><span>646,603</span></td>
+                                                <th><span>아케인포스</span></th>
+                                                <td><span>1360</span></td>
+                                            </tr>
+                                            <tr>
+                                                    <th><span>레전드리 어빌리티</span></th>
+                                                <td colspan="3"><span>버프 스킬의 지속 시간 50% 증가<br>상태 이상에 걸린 대상 공격 시 데미지 7% 증가<br>크리티컬 확률 20% 증가<br></span></td>
+                                            </tr>
+                                            <tr>
+                                                <th><span>하이퍼스탯</span></th>
+                                                <td colspan="3"><span>공격력과 마력 18 증가<br>지력 150 증가<br>운 60 증가<br>크리티컬 확률 13% 증가<br>크리티컬 데미지 12% 증가<br>방어율 무시 36% 증가<br>데미지 36% 증가<br>보스 몬스터 공격 시 데미지 43% 증가<br></span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab02_con_wrap">
+                                    <div class="dispo_wrap">
+                                        <ul class="dispo_list">
+
+                                            <li>
+                                                <div class="dis_center">
+                                                    <h2>카리스마</h2>
+                                                    <div class="graph_wrap">
+                                                        <img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/graph.png" alt="" />
+                                                        <div class="lv">Lv. <span>100</span></div>
+                                                        <span><em>0</em>/0</span>
+                                                    </div>
+                                                    <div class="today_point">오늘 획득치</div>
+                                                    <div class="today_point_count"><em>0</em>/500</div>
+                                                    <div class="total_effect">
+                                                        <div class="total_effect_wrap">
+                                                            <ul>
+                                                                <li>몬스터 방어율 무시 10.0%</li>
+                                                                <li>사망 패널티 지속시간</li>
+                                                                <li></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="dis_center">
+                                                    <h2>통찰력</h2>
+                                                    <div class="graph_wrap">
+                                                        <img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/graph.png" alt="" />
+                                                        <div class="lv">Lv. <span>100</span></div>
+                                                        <span><em>0</em>/0</span>
+                                                    </div>
+                                                    <div class="today_point">오늘 획득치</div>
+                                                    <div class="today_point_count"><em>0</em>/500</div>
+                                                    <div class="total_effect">
+                                                        <div class="total_effect_wrap">
+                                                            <ul>
+                                                                <li>속성내성무시 5.0%</li>
+                                                                <li>감정능력 3 단계</li>
+                                                                <li></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="dis_center">
+                                                    <h2>의지</h2>
+                                                    <div class="graph_wrap">
+                                                        <img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/graph.png" alt="" />
+                                                        <div class="lv">Lv. <span>100</span></div>
+                                                        <span><em>0</em>/0</span>
+                                                    </div>
+                                                    <div class="today_point">오늘 획득치</div>
+                                                    <div class="today_point_count"><em>0</em>/500</div>
+                                                    <div class="total_effect">
+                                                        <div class="total_effect_wrap">
+                                                            <ul>
+                                                                <li>HP 최대치 2000 증가</li>
+                                                                <li>방어력 100 증가</li>
+                                                                <li>상태이상 내성 20</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="dis_center">
+                                                    <h2>손재주</h2>
+                                                    <div class="graph_wrap">
+                                                        <img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/graph.png" alt="" />
+                                                        <div class="lv">Lv. <span>100</span></div>
+                                                        <span><em>0</em>/0</span>
+                                                    </div>
+                                                    <div class="today_point">오늘 획득치</div>
+                                                    <div class="today_point_count"><em>0</em>/500</div>
+                                                    <div class="total_effect">
+                                                        <div class="total_effect_wrap">
+                                                            <ul>
+                                                                <li>숙련도 2배 획득 확률 20%</li>
+                                                                <li>주문서 성공확률 10.0% 증가</li>
+                                                                <li>(아래 주문서 종류는 제외)</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="dis_center">
+                                                    <h2>감성</h2>
+                                                    <div class="graph_wrap">
+                                                        <img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/graph.png" alt="" />
+                                                        <div class="lv">Lv. <span>100</span></div>
+                                                        <span><em>0</em>/0</span>
+                                                    </div>
+                                                    <div class="today_point">오늘 획득치</div>
+                                                    <div class="today_point_count"><em>0</em>/500</div>
+                                                    <div class="total_effect">
+                                                        <div class="total_effect_wrap">
+                                                            <ul>
+                                                                <li>MP 최대치 2000 증가</li>
+                                                                <li>버프 지속시간 10.0% 증가</li>
+                                                                <li></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="dis_center">
+                                                    <h2>매력</h2>
+                                                    <div class="graph_wrap">
+                                                        <img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/graph.png" alt="" />
+                                                        <div class="lv">Lv. <span>100</span></div>
+                                                        <span><em>0</em>/0</span>
+                                                    </div>
+                                                    <div class="today_point">오늘 획득치</div>
+                                                    <div class="today_point_count"><em>0</em>/5,000</div>
+                                                    <div class="total_effect">
+                                                        <div class="total_effect_wrap">
+                                                            <ul>
+                                                                <li>-</li>
+                                                                <li></li>
+                                                                <li></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="tab03_con_wrap">
+                                    <h1>결혼정보</h1>
+                                    <table class="table_style01">
+                                        <caption>캐릭터 결혼정보 대한 테이블입니다.</caption>
+                                        <colgroup>
+                                            <col width="159px" />
+                                            <col width="320px;" />
+                                            <col width="159px" />
+                                            <col width="*" />
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <th><span>배우자</span></th>
+                                                <td colspan="3"><span>-</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <h1>농장정보</h1>
+                                    <table class="table_style01">
+                                        <caption>캐릭터 농장정보 대한 테이블입니다.</caption>
+                                        <colgroup>
+                                            <col width="159px" />
+                                            <col width="320px;" />
+                                            <col width="159px" />
+                                            <col width="*" />
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <th><span>농장이름</span></th>
+                                                <td><span>식물분자농장</span></td>
+                                                <th><span>농장레벨</span></th>
+                                                <td><span>35</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th><span>와르</span></th>
+                                                <td><span>5,999,993</span></td>
+                                                <th><span>클로버</span></th>
+                                                <td><span>120,671</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th><span>젬</span></th>
+                                                <td><span>679</span></td>
+                                                <th><span>&nbsp;</span></th>
+                                                <td><span>&nbsp;</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <img src="https://ssl.nexon.com/s2/game/maplestory/renewal/common/char_info/foot_img.png" alt="NEXON NEXON Corp All Rights Reserved" />
+        </div>
+    </div>
+    <script type="text/javascript" src="https://rs.nxfs.nexon.com/common/js/gnb.min.js" data-gamecode="589824" data-ispublicbanner="false"></script>
+
+</body>
+</html>

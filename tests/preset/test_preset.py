@@ -22,7 +22,7 @@ def get_test_gearset():
     interpreter = BenchmarkConfigurationInterpreter()
 
     user_gearset_blueprint = interpreter.interpret_user_gearset_from_file(
-        "./simaple/benchmark/builtin/T30000.yaml", interpreter_option
+        "./simaple/benchmark/builtin/Legendary.yaml", interpreter_option
     )
     gear_repository = GearRepository()
     gearset = user_gearset_blueprint.build(gear_repository)

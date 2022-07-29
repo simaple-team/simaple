@@ -3,18 +3,18 @@ _black-check = "black --check ."
 _isort-check = "isort --check-only ."
 formatting-check = ["_black-check", "_isort-check"]
 
-_black = "black ."
-_isort = "isort ."
+_black = "black simaple tests"
+_isort = "isort simaple tests"
 format = ["_black", "_isort"]
 
 _pylint = "pylint simaple tests"
 lint = ["_pylint"]
 
-coverage = "pytest --cov=simaple"
-coverage-unittest = "pytest --cov=simaple"
+coverage = "pytest --cov=simaple --ignore tests/fetch/request"
+coverage-unittest = "pytest --cov=simaple --ignore tests/fetch/request"
 coverage-report = "pytest --cov=simaple --cov-report=xml"
 
-unittest = "pytest -vv -x"
+unittest = "pytest -vv -x --ignore tests/fetch/request"
 rsctest = "pytest -vv -x test_resource/"
 typetest = "mypy simaple tests"
 
@@ -44,10 +44,15 @@ output = "coverage-reports/coverage.xml"
 warn_return_any = true
 warn_unused_configs = true
 incremental = false
-plugins = ["sqlalchemy.ext.mypy.plugin"]
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
+module = [
+    "sklearn.linear_model",
+    "sklearn.pipeline",
+    "sklearn.preprocessing",
+    "bs4"
+]
 
 [tool.poetry]
 name = "simaple"
@@ -60,24 +65,26 @@ repository = "https://github.com/oleneyl/simaple"
 [tool.poetry.dependencies]
 python = "^3.9"
 pydantic = {extras = ["dotenv"], version = "^1.8.2"}
-dependency-injector = "^4.36.2"
 loguru = "^0.5.3"
-SQLAlchemy = {extras = ["mypy"], version = "^1.4.25"}
-PyMySQL = "^1.0.2"
 fastapi = "^0.70.0"
 uvicorn = "^0.15.0"
 pymongo = "^3.12.1"
 poethepoet = "^0.10.0"
 PyYAML = "^6.0"
 types-PyYAML = "^6.0.4"
+numpy = "^1.22.3"
+scikit-learn = "^1.0.2"
+beautifulsoup4 = "^4.11.1"
+aiohttp = "^3.8.1"
+types-requests = "^2.28.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 isort = "^5.9.3"
 coverage = "^6.0.2"
-pylint = "^2.11.1"
+pylint = "=2.13.1"
 mypy = "^0.910"
-black = "^21.9b0"
+black = "^22.6"
 pytest-cov = "^3.0.0"
 requests = "^2.26.0"
 

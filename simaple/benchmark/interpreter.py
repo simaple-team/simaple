@@ -7,7 +7,7 @@ from pydantic import BaseModel
 
 from simaple.benchmark.gearset_blueprint import UserGearsetBlueprint
 from simaple.core import JobCategory
-from simaple.gear.improvements.bonus import BonusType
+from simaple.gear.bonus_factory import BonusType
 
 INTERPETER_RESOURCE_PATH = os.path.join(os.path.dirname(__file__), "resources")
 
@@ -90,7 +90,7 @@ class BenchmarkInterpreterOption(BaseModel):
 
 class BenchmarkConfigurationInterpreter:
     def __init__(self):
-        self.item_name_alias = self.load_interpreter_data(
+        self.item_name_alias: Dict[str, List[str]] = self.load_interpreter_data(
             os.path.join(INTERPETER_RESOURCE_PATH, "item_name_alias.json")
         )
 

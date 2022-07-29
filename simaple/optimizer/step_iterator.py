@@ -1,4 +1,5 @@
 import itertools
+from typing import Any, Iterable
 
 
 class Iterator:
@@ -42,7 +43,7 @@ class Iterator:
         for v in itertools.combinations(range(length), 4):
             yield v
 
-    def cumulated_iterator(self, length: int, maximum_depth: int):
+    def cumulated_iterator(self, length: int, maximum_depth: int) -> Iterable[Any]:
         if maximum_depth >= 1:
             for v in self.single_iterator(length):
                 yield v

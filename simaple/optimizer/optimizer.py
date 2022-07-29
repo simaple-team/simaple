@@ -30,7 +30,7 @@ class DiscreteTarget(metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    def clone(self):
+    def clone(self) -> DiscreteTarget:
         ...
 
     def set_state(self, state: List[int]):
@@ -73,7 +73,7 @@ class StepwizeOptimizer:
         self.maximum_cost = maximum_cost
         self._maximum_iteration_count = maximum_iteration_count
 
-    def get_increment_iterator(self) -> Iterable:
+    def get_increment_iterator(self) -> Iterable[Any]:
         return Iterator().cumulated_iterator(
             self.target_prototype.state_length, self.step_size
         )
@@ -113,9 +113,11 @@ class StepwizeOptimizer:
             if len(optimal_increments) == 0:
                 break
 
-            target = target.get_stepped_target(optimal_increments)
-            if target is None:
+            new_target = target.get_stepped_target(optimal_increments)
+            if new_target is None:
                 raise TypeError
+
+            target = new_target
 
             # While phrase protection logic
             iteration_count += 1

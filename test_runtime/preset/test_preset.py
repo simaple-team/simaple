@@ -4,10 +4,9 @@ from simaple.benchmark.interpreter import (
     BenchmarkConfigurationInterpreter,
     BenchmarkInterpreterOption,
 )
-from simaple.core import BaseStatType, JobCategory, JobType, Stat
-from simaple.core.damage import STRBasedDamageLogic
+from simaple.core import JobCategory
 from simaple.gear.gear_repository import GearRepository
-from simaple.gear.potential import Potential, PotentialTier
+from simaple.gear.potential import PotentialTier
 from simaple.job.builtin.archmagefb import job_archmagefb
 from simaple.job.passive_skill import PassiveSkillArgument
 from simaple.preset.base import PresetOptimizer
@@ -24,7 +23,7 @@ def get_test_gearset():
     interpreter = BenchmarkConfigurationInterpreter()
 
     user_gearset_blueprint = interpreter.interpret_user_gearset_from_file(
-        "./simaple/benchmark/builtin/T30000.yaml", interpreter_option
+        "./simaple/benchmark/builtin/Legendary.yaml", interpreter_option
     )
     gear_repository = GearRepository()
     gearset = user_gearset_blueprint.build(gear_repository)
