@@ -254,13 +254,6 @@ class BonusCalculator(GearImprovementCalculator):
         arbitrary_types_allowed = True
 
     def compute(self, stat: Stat, gear: Gear) -> list[Bonus]:
-        """
-        * 실행 시 마다 결과가 달라질 수 있음
-        * _get_bonus_types() 함수가 항상 동일한 순서로 반환하도록 수정하면 일정한 결과를 반환함
-        :param stat: bonus stat
-        :param gear:
-        :return:
-        """
         # 환생의 불꽃 추가옵션 부여 확률이 높은 등급부터 계산
         grades = [5, 4, 6, 3, 7] if gear.boss_reward else [5, 4, 6, 3, 2, 1, 7]
         bonus_count_left = _MAX_BONUS
