@@ -67,20 +67,14 @@ class SDIL:
         return idx
 
 
-class FastBonusSdilFactory(pydantic.BaseModel):
-    lookup: dict[BonusType, list[Optional[SDIL]]]
-
-    class Config:
-        arbitrary_types_allowed = True
-
-    @classmethod
-    def build(cls, gear: Gear):
+class BonusSDILCacheBuilder(pydantic.BaseModel):
+    def build(self, gear: Gear):
         bf = BonusFactory()
-        lookup = {}
+        cache = {}
         grade_range = [3, 4, 5, 6, 7] if gear.boss_reward else [1, 2, 3, 4, 5, 6, 7]
         for t in _stat_types:
             sdil_list: list[list[int]] = []
-            lookup[t] = sdil_list
+            cache[t] = sdil_list
             for g in range(8):
                 if g not in grade_range:
                     sdil_list.append(None)
@@ -88,12 +82,7 @@ class FastBonusSdilFactory(pydantic.BaseModel):
                     stat = bf.create(t, g).calculate_improvement(gear)
                     sdil_list.append(SDIL.from_stat(stat))
 
-        return FastBonusSdilFactory(
-            lookup=lookup,
-        )
-
-    def get_sdil(self, bonus_type: BonusType, grade: int) -> list[int]:
-        return self.lookup[bonus_type][grade]
+        return cache
 
 
 class CachedBonusTypeProvider:
@@ -129,29 +118,36 @@ class CachedBonusTypeProvider:
 
 
 class StatBonusCalculator(pydantic.BaseModel):
-    grades: list[int]
-    bonus_factory: BonusFactory
-    fast_bonus_factory: Optional[FastBonusSdilFactory] = None
+    bonus_factory: BonusFactory = pydantic.Field(default_factory=BonusFactory)
+    bonus_sdil_cache_builder: BonusSDILCacheBuilder = pydantic.Field(
+        default_factory=BonusSDILCacheBuilder
+    )
     bonus_type_provider: CachedBonusTypeProvider = pydantic.Field(
         default_factory=CachedBonusTypeProvider
     )
-    total_bonus_count: int
+
+    _bonus_sdil_cache: dict[BonusType, list[Optional[SDIL]]]
+    _grades: list[int]
 
     class Config:
         arbitrary_types_allowed = True
+        underscore_attrs_are_private = True
 
-    def compute(self, stat: Stat) -> list[Bonus]:
-        reference_sdil = SDIL.from_stat(stat)
+    def compute(self, stat: Stat, gear: Gear, bonus_count_left: int) -> list[Bonus]:
+        self._bonus_sdil_cache = self.bonus_sdil_cache_builder.build(gear)
+        self._grades = [5, 4, 6, 3, 7] if gear.boss_reward else [5, 4, 6, 3, 2, 1, 7]
 
-        searched_bonus = self._search_bonus(
-            reference_sdil, self.total_bonus_count, forbidden_bonus_types=[]
+        target_sdil = SDIL.from_stat(stat)
+
+        bonus_list = self._search_bonus(
+            target_sdil, bonus_count_left, forbidden_bonus_types=[]
         )
-        if searched_bonus is None:
+        if bonus_list is None:
             raise ValueError(
                 "gear stat has invalid bonus value or has too many bonus values"
             )
 
-        return searched_bonus
+        return bonus_list
 
     def _search_bonus(
         self, remaining_sdil: SDIL, left: int, forbidden_bonus_types: list
@@ -167,8 +163,8 @@ class StatBonusCalculator(pydantic.BaseModel):
 
             appended_forbidden_bonus_types = forbidden_bonus_types + [bonus_type]
 
-            for grade in self.grades:
-                bonus_sdil = self.fast_bonus_factory.get_sdil(bonus_type, grade)
+            for grade in self._grades:
+                bonus_sdil = self._bonus_sdil_cache[bonus_type][grade]
                 decreased_sdil = remaining_sdil - bonus_sdil
 
                 bonus_candidate = self._search_bonus(
@@ -183,10 +179,10 @@ class StatBonusCalculator(pydantic.BaseModel):
 
 
 class BonusCalculator(GearImprovementCalculator):
-    # private fields
-    grades: list[int] = []
-    bonus_factory = BonusFactory()
-    bonus_types: list = []
+    bonus_factory: BonusFactory = pydantic.Field(default_factory=BonusFactory)
+    stat_bonus_calculator: StatBonusCalculator = pydantic.Field(
+        default_factory=StatBonusCalculator
+    )
 
     class Config:
         arbitrary_types_allowed = True
@@ -200,7 +196,7 @@ class BonusCalculator(GearImprovementCalculator):
         :return:
         """
         # 환생의 불꽃 추가옵션 부여 확률이 높은 등급부터 계산
-        self.grades = [5, 4, 6, 3, 7] if gear.boss_reward else [5, 4, 6, 3, 2, 1, 7]
+        grades = [5, 4, 6, 3, 7] if gear.boss_reward else [5, 4, 6, 3, 2, 1, 7]
         bonus_count_left = _MAX_BONUS
         bonus_list = []
 
@@ -218,7 +214,7 @@ class BonusCalculator(GearImprovementCalculator):
             stat_type, bonus_type = single_property
             if stat.get(stat_type) > 0:
                 error = True
-                for grade in self.grades:
+                for grade in grades:
                     bonus = self.bonus_factory.create(bonus_type, grade)
                     if bonus.calculate_improvement(gear).get(stat_type) == stat.get(
                         stat_type
@@ -233,14 +229,6 @@ class BonusCalculator(GearImprovementCalculator):
         if bonus_count_left < 0:
             raise ValueError("gear stat has too many bonus values")
 
-        stat_bonus_calculator = StatBonusCalculator(
-            grades=self.grades,
-            bonus_factory=self.bonus_factory,
-            fast_bonus_factory=FastBonusSdilFactory.build(gear),
-            bonus_type_provider=CachedBonusTypeProvider(),
-            total_bonus_count=bonus_count_left,
-        )
-
-        bonus_list += stat_bonus_calculator.compute(stat)
+        bonus_list += self.stat_bonus_calculator.compute(stat, gear, bonus_count_left)
 
         return bonus_list
