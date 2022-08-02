@@ -16,11 +16,12 @@ from simaple.gear.improvements import bonus
             "앱솔랩스 메이지케이프",
             Stat(STR=54 + 20 + 20 + 20, INT=20, DEX=20, LUK=20),
             [
+                bonus.SingleStatBonus(grade=6, stat_type=BaseStatType.STR),
                 bonus.DualStatBonus(
                     grade=4,
                     stat_type_pair=(
                         BaseStatType.STR,
-                        BaseStatType.LUK,
+                        BaseStatType.DEX,
                     ),
                 ),
                 bonus.DualStatBonus(
@@ -34,10 +35,9 @@ from simaple.gear.improvements import bonus
                     grade=4,
                     stat_type_pair=(
                         BaseStatType.STR,
-                        BaseStatType.DEX,
+                        BaseStatType.LUK,
                     ),
                 ),
-                bonus.SingleStatBonus(grade=6, stat_type=BaseStatType.STR),
             ],
         )
     ],
