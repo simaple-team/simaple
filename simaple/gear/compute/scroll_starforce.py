@@ -10,7 +10,6 @@ from simaple.gear.compute.base import GearImprovementCalculator
 
 
 class ScrollStarforceCalculator(GearImprovementCalculator):
-
     def compute(
         self, enhance_stat: Stat, gear: Gear, scroll_up: int, star: int
     ) -> Tuple[Union[List[SpellTrace], Stat], Starforce]:
@@ -52,7 +51,11 @@ class ScrollStarforceCalculator(GearImprovementCalculator):
             stat_type = StatProps.MHP
         # # 올스탯 주흔작 미구현
 
-        probs = PROBABILITIES if (gear.is_weapon() or gear.type == GearType.katara) else PROBABILITIES[:-1]
+        probs = (
+            PROBABILITIES
+            if (gear.is_weapon() or gear.type == GearType.katara)
+            else PROBABILITIES[:-1]
+        )
 
         # 동일한 주흔작만 사용했을 경우
         for prob in probs:
@@ -79,7 +82,9 @@ class ScrollStarforceCalculator(GearImprovementCalculator):
             for index, prob in enumerate(probs):
                 for _ in range(0, counts[index]):
                     order += 1
-                    st = SpellTrace(probability=prob, stat_prop_type=stat_type, order=order)
+                    st = SpellTrace(
+                        probability=prob, stat_prop_type=stat_type, order=order
+                    )
                     st_list.append(st)
                     st_stat += st.calculate_improvement(gear)
             if st_stat == scroll_stat:
