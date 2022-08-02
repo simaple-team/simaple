@@ -73,7 +73,7 @@ class SDILTableBuilder(pydantic.BaseModel):
         cache = {}
         grade_range = [3, 4, 5, 6, 7] if gear.boss_reward else [1, 2, 3, 4, 5, 6, 7]
         for t in _stat_types:
-            sdil_list: list[list[int]] = []
+            sdil_list = []
             cache[t] = sdil_list
             for g in range(8):
                 if g not in grade_range:
