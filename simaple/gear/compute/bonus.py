@@ -1,14 +1,13 @@
 from __future__ import annotations
 
-import time
-from itertools import product
-from typing import Dict, Iterable, List, Optional, Tuple
+from typing import Iterable, Optional
+
+import pydantic
 
 from simaple.core import Stat, StatProps
 from simaple.gear.bonus_factory import BonusFactory, BonusType
 from simaple.gear.compute.base import GearImprovementCalculator
 from simaple.gear.gear import Gear
-from simaple.gear.gear_repository import GearRepository
 from simaple.gear.improvements.bonus import Bonus
 
 _MAX_BONUS = 4
@@ -24,8 +23,6 @@ _stat_types = [
     BonusType.DEX_LUK,
     BonusType.INT_LUK,
 ]
-
-import pydantic
 
 
 class SDIL:
@@ -79,10 +76,10 @@ class FastBonusSdilFactory(pydantic.BaseModel):
     @classmethod
     def build(cls, gear: Gear):
         bf = BonusFactory()
-        lookup = dict()
+        lookup = {}
         grade_range = [3, 4, 5, 6, 7] if gear.boss_reward else [1, 2, 3, 4, 5, 6, 7]
         for t in _stat_types:
-            sdil_list: List[List[int]] = []
+            sdil_list: list[list[int]] = []
             lookup[t] = sdil_list
             for g in range(8):
                 if g not in grade_range:
@@ -95,12 +92,12 @@ class FastBonusSdilFactory(pydantic.BaseModel):
             lookup=lookup,
         )
 
-    def get_sdil(self, bonus_type: BonusType, grade: int) -> List[int]:
+    def get_sdil(self, bonus_type: BonusType, grade: int) -> list[int]:
         return self.lookup[bonus_type][grade]
 
 
 class CachedBonusTypeProvider:
-    lookup: List[Iterable[BonusType]]
+    lookup: list[Iterable[BonusType]]
 
     def __init__(self):
         self.lookup = []
@@ -131,21 +128,70 @@ class CachedBonusTypeProvider:
         return self.lookup[sdil.get_index()]
 
 
-class BonusCalculator(GearImprovementCalculator):
-    # private fields
-    grades: List[int] = []
-    bonus_factory = BonusFactory()
+class StatBonusCalculator(pydantic.BaseModel):
+    grades: list[int]
+    bonus_factory: BonusFactory
     fast_bonus_factory: Optional[FastBonusSdilFactory] = None
     bonus_type_provider: CachedBonusTypeProvider = pydantic.Field(
         default_factory=CachedBonusTypeProvider
     )
-    sdil_bonus_list: List[Tuple[BonusType, int]] = []
+    total_bonus_count: int
+
+    class Config:
+        arbitrary_types_allowed = True
+
+    def compute(self, stat: Stat) -> list[Bonus]:
+        reference_sdil = SDIL.from_stat(stat)
+
+        searched_bonus = self._search_bonus(
+            reference_sdil, self.total_bonus_count, forbidden_bonus_types=[]
+        )
+        if searched_bonus is None:
+            raise ValueError(
+                "gear stat has invalid bonus value or has too many bonus values"
+            )
+
+        return searched_bonus
+
+    def _search_bonus(
+        self, remaining_sdil: SDIL, left: int, forbidden_bonus_types: list
+    ) -> Optional[list[Bonus]]:
+        if remaining_sdil.is_zero():
+            return []
+        if left <= 0 or remaining_sdil.has_negative():
+            return None
+
+        for bonus_type in self.bonus_type_provider.get_types(remaining_sdil):
+            if bonus_type in forbidden_bonus_types:
+                continue
+
+            appended_forbidden_bonus_types = forbidden_bonus_types + [bonus_type]
+
+            for grade in self.grades:
+                bonus_sdil = self.fast_bonus_factory.get_sdil(bonus_type, grade)
+                decreased_sdil = remaining_sdil - bonus_sdil
+
+                bonus_candidate = self._search_bonus(
+                    decreased_sdil, left - 1, appended_forbidden_bonus_types
+                )
+                if bonus_candidate is not None:
+                    return bonus_candidate + [
+                        self.bonus_factory.create(bonus_type, grade)
+                    ]
+
+        return None
+
+
+class BonusCalculator(GearImprovementCalculator):
+    # private fields
+    grades: list[int] = []
+    bonus_factory = BonusFactory()
     bonus_types: list = []
 
     class Config:
         arbitrary_types_allowed = True
 
-    def compute(self, stat: Stat, gear: Gear) -> List[Bonus]:
+    def compute(self, stat: Stat, gear: Gear) -> list[Bonus]:
         """
         * 실행 시 마다 결과가 달라질 수 있음
         * _get_bonus_types() 함수가 항상 동일한 순서로 반환하도록 수정하면 일정한 결과를 반환함
@@ -187,43 +233,14 @@ class BonusCalculator(GearImprovementCalculator):
         if bonus_count_left < 0:
             raise ValueError("gear stat has too many bonus values")
 
-        self.fast_bonus_factory = FastBonusSdilFactory.build(gear)
-        self.sdil_bonus_list = []
-        self.bonus_types = []
+        stat_bonus_calculator = StatBonusCalculator(
+            grades=self.grades,
+            bonus_factory=self.bonus_factory,
+            fast_bonus_factory=FastBonusSdilFactory.build(gear),
+            bonus_type_provider=CachedBonusTypeProvider(),
+            total_bonus_count=bonus_count_left,
+        )
 
-        reference_sdil = SDIL.from_stat(stat)
-
-        if not self._search_bonus(reference_sdil, bonus_count_left):
-            raise ValueError(
-                "gear stat has invalid bonus value or has too many bonus values"
-            )
-
-        for a in self.sdil_bonus_list:
-            bonus_type, grade = a
-            bonus_list.append(self.bonus_factory.create(bonus_type, grade))
+        bonus_list += stat_bonus_calculator.compute(stat)
 
         return bonus_list
-
-    def _search_bonus(self, sdil: SDIL, left: int) -> bool:
-        if sdil.is_zero():
-            return True
-        if left <= 0 or sdil.has_negative():
-            return False
-
-        for bonus_type in self.bonus_type_provider.get_types(sdil):
-            if bonus_type in self.bonus_types:
-                continue
-
-            self.bonus_types.append(bonus_type)
-
-            for grade in self.grades:
-                bonus_sdil = self.fast_bonus_factory.get_sdil(bonus_type, grade)
-                decreased_sdil = sdil - bonus_sdil
-
-                if self._search_bonus(decreased_sdil, left - 1):
-                    self.sdil_bonus_list.append((bonus_type, grade))
-                    return True
-
-            self.bonus_types.pop(-1)
-
-        return False
