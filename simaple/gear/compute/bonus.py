@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Iterable, Optional
+from itertools import combinations, product
+from typing import Iterable, Optional, Generator
 
 import pydantic
 
@@ -139,8 +140,8 @@ class StatBonusCalculator(pydantic.BaseModel):
 
         target_sdil = SDIL.from_stat(stat)
 
-        bonus_list = self._search_bonus(
-            target_sdil, bonus_count_left, forbidden_bonus_types=[]
+        bonus_list = self._search_bonus_with_grade_list(
+            target_sdil, gear, bonus_count_left
         )
         if bonus_list is None:
             raise ValueError(
@@ -148,6 +149,71 @@ class StatBonusCalculator(pydantic.BaseModel):
             )
 
         return bonus_list
+
+    def _grade_combinations(
+        self, value: int, left: int, single_stat_increment: int, dual_stat_increment: int
+    ) -> Generator[tuple[int]]:
+        for count in range(1, left + 1):
+            for single_grade in self._grades:
+                dual_value = value - single_grade * single_stat_increment
+                if dual_value == 0:
+                    yield (single_grade,)
+                if dual_value % dual_stat_increment == 0:
+                    dual_grade_sum = dual_value // dual_stat_increment
+                    for dual_grade_tuple in product(self._grades, repeat=count - 1):
+                        if sum(dual_grade_tuple) == dual_grade_sum:
+                            yield (single_grade,) + dual_grade_tuple
+
+    def _search_bonus_with_grade_list(
+        self, target_sdil: SDIL, gear: Gear, left: int
+    ) -> Optional[list[Bonus]]:
+        _dual_bonus_types = {
+            BonusType.STR: (BonusType.STR_DEX, BonusType.STR_INT, BonusType.STR_LUK),
+            BonusType.DEX: (BonusType.STR_DEX, BonusType.DEX_INT, BonusType.DEX_LUK),
+            BonusType.INT: (BonusType.STR_INT, BonusType.DEX_INT, BonusType.INT_LUK),
+            BonusType.LUK: (BonusType.STR_LUK, BonusType.DEX_LUK, BonusType.INT_LUK),
+        }
+
+        if target_sdil.is_zero():
+            return []
+
+        single_stat_increment = gear.req_level // 20 + 1  # Calculate manually
+        dual_stat_increment = gear.req_level // 40 + 1
+        _max_index = target_sdil.value.index(max(target_sdil.value))
+        max_value = target_sdil.value[_max_index]
+        max_type = [BonusType.STR, BonusType.DEX, BonusType.INT, BonusType.LUK][_max_index]
+
+        for grade_list in self._grade_combinations(
+            max_value, left, single_stat_increment, dual_stat_increment
+        ):
+            left_count = left - len(grade_list)
+            max_type_grade = grade_list[0]
+            remaining_sdil = target_sdil - self._sdil_table[max_type][max_type_grade]
+            forbidden_types = [max_type]
+
+            if len(grade_list[1:]) == 0:
+                return self._search_bonus(remaining_sdil, left_count, forbidden_types) + [
+                    self.bonus_factory.create(max_type, max_type_grade)
+                ]
+            else:
+                for dual_type_tuple in combinations(
+                    _dual_bonus_types[max_type], len(grade_list[1:])
+                ):
+                    dual_remaining_sdil = remaining_sdil
+                    forbidden_types_dual = list(forbidden_types)
+                    for dual_type, dual_grade in zip(dual_type_tuple, grade_list[1:]):
+                        dual_remaining_sdil -= self._sdil_table[dual_type][dual_grade]
+                        forbidden_types_dual += [dual_type]
+                    result = self._search_bonus(
+                        dual_remaining_sdil, left_count, forbidden_types_dual
+                    )
+                    if result is not None:
+                        result.append(self.bonus_factory.create(max_type, max_type_grade))
+                        for dual_type, dual_grade in zip(dual_type_tuple, grade_list[1:]):
+                            result.append(self.bonus_factory.create(dual_type, dual_grade))
+                        return result
+
+        return None
 
     def _search_bonus(
         self, remaining_sdil: SDIL, left: int, forbidden_bonus_types: list
