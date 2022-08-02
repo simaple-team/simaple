@@ -67,7 +67,7 @@ class SDIL:
         return idx
 
 
-class BonusSDILCacheBuilder(pydantic.BaseModel):
+class SDILTableBuilder(pydantic.BaseModel):
     def build(self, gear: Gear):
         bf = BonusFactory()
         cache = {}
@@ -85,7 +85,7 @@ class BonusSDILCacheBuilder(pydantic.BaseModel):
         return cache
 
 
-class CachedBonusTypeProvider:
+class CachedBonusTypeTable:
     lookup: list[Iterable[BonusType]]
 
     def __init__(self):
@@ -119,14 +119,14 @@ class CachedBonusTypeProvider:
 
 class StatBonusCalculator(pydantic.BaseModel):
     bonus_factory: BonusFactory = pydantic.Field(default_factory=BonusFactory)
-    bonus_sdil_cache_builder: BonusSDILCacheBuilder = pydantic.Field(
-        default_factory=BonusSDILCacheBuilder
+    sdil_table_builder: SDILTableBuilder = pydantic.Field(
+        default_factory=SDILTableBuilder
     )
-    bonus_type_provider: CachedBonusTypeProvider = pydantic.Field(
-        default_factory=CachedBonusTypeProvider
+    bonus_type_table: CachedBonusTypeTable = pydantic.Field(
+        default_factory=CachedBonusTypeTable
     )
 
-    _bonus_sdil_cache: dict[BonusType, list[Optional[SDIL]]]
+    _sdil_table: dict[BonusType, list[Optional[SDIL]]]
     _grades: list[int]
 
     class Config:
@@ -134,7 +134,7 @@ class StatBonusCalculator(pydantic.BaseModel):
         underscore_attrs_are_private = True
 
     def compute(self, stat: Stat, gear: Gear, bonus_count_left: int) -> list[Bonus]:
-        self._bonus_sdil_cache = self.bonus_sdil_cache_builder.build(gear)
+        self._sdil_table = self.sdil_table_builder.build(gear)
         self._grades = [5, 4, 6, 3, 7] if gear.boss_reward else [5, 4, 6, 3, 2, 1, 7]
 
         target_sdil = SDIL.from_stat(stat)
@@ -157,14 +157,14 @@ class StatBonusCalculator(pydantic.BaseModel):
         if left <= 0 or remaining_sdil.has_negative():
             return None
 
-        for bonus_type in self.bonus_type_provider.get_types(remaining_sdil):
+        for bonus_type in self.bonus_type_table.get_types(remaining_sdil):
             if bonus_type in forbidden_bonus_types:
                 continue
 
             appended_forbidden_bonus_types = forbidden_bonus_types + [bonus_type]
 
             for grade in self._grades:
-                bonus_sdil = self._bonus_sdil_cache[bonus_type][grade]
+                bonus_sdil = self._sdil_table[bonus_type][grade]
                 decreased_sdil = remaining_sdil - bonus_sdil
 
                 bonus_candidate = self._search_bonus(
