@@ -1,12 +1,10 @@
-from simaple.gear.compute.bonus import BonusCalculator
-
-
-from simaple.gear.gear_repository import GearRepository
-from simaple.core import Stat
-
 import pytest
-from simaple.gear.improvements import bonus
+
+from simaple.core import Stat
 from simaple.core.base import AttackType, BaseStatType
+from simaple.gear.compute.bonus import BonusCalculator
+from simaple.gear.gear_repository import GearRepository
+from simaple.gear.improvements import bonus
 
 
 @pytest.mark.parametrize(

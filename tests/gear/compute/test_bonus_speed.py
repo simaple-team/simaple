@@ -1,15 +1,12 @@
-from simaple.gear.compute.bonus import BonusCalculator
-
-
-from simaple.gear.gear_repository import GearRepository
-from simaple.core import Stat
+import time
 
 import pytest
-from simaple.gear.improvements import bonus
+
+from simaple.core import Stat
 from simaple.core.base import AttackType, BaseStatType
-
-
-import time
+from simaple.gear.compute.bonus import BonusCalculator
+from simaple.gear.gear_repository import GearRepository
+from simaple.gear.improvements import bonus
 
 
 @pytest.mark.parametrize(
@@ -52,10 +49,12 @@ def test_bonus(gear_name, stat, expected):
 
     gear = gear_repository.get_by_name(gear_name)
 
-    for _ in range(10):
+    for _ in range(100):
         result = calculator.compute(stat, gear)
 
     end = time.time()
 
     assert expected == result
-    assert (end - start) / 10 < 0.1  # less-than-100ms
+    assert (end - start) / 100 < 0.1  # less-than-100ms
+
+    print((end - start) / 100)
