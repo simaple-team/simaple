@@ -5,7 +5,7 @@ from typing import Iterable, Optional, Generator
 
 import pydantic
 
-from simaple.core import Stat, StatProps, BaseStatType
+from simaple.core import Stat, StatProps
 from simaple.gear.bonus_factory import BonusFactory, BonusType
 from simaple.gear.compute.base import GearImprovementCalculator
 from simaple.gear.gear import Gear
