@@ -9,7 +9,7 @@ from simaple.core import Stat, StatProps, BaseStatType
 from simaple.gear.bonus_factory import BonusFactory, BonusType
 from simaple.gear.compute.base import GearImprovementCalculator
 from simaple.gear.gear import Gear
-from simaple.gear.improvements.bonus import Bonus, SingleStatBonus, DualStatBonus
+from simaple.gear.improvements.bonus import Bonus, bonus_key_func
 
 _MAX_BONUS = 4
 _stat_types = [
@@ -175,25 +175,7 @@ class StatBonusCalculator(pydantic.BaseModel):
                 "gear stat has invalid bonus value or has too many bonus values"
             )
 
-        def key_stat_bonus(bonus: Bonus):
-            types = [
-                BaseStatType.STR,
-                BaseStatType.STR,
-                BaseStatType.DEX,
-                BaseStatType.INT,
-                BaseStatType.LUK
-            ]
-            if isinstance(bonus, SingleStatBonus):
-                return types.index(bonus.stat_type) * 100 + bonus.grade
-            elif isinstance(bonus, DualStatBonus):
-                return 10000 + (
-                    types.index(bonus.stat_type_pair[0])
-                    + types.index(bonus.stat_type_pair[1])
-                ) * 100 + bonus.grade
-            else:
-                return 1000000
-
-        return sorted(bonus_list, key=key_stat_bonus)
+        return sorted(bonus_list, key=bonus_key_func)
 
     def _search_bonus(
         self, target_sdil: SDIL, gear: Gear, left: int

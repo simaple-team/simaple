@@ -142,3 +142,39 @@ class AttackTypeBonus(Bonus):
             value = self.grade
 
         return Stat.parse_obj({self.attack_type.value: value})
+
+
+def bonus_key_func(bonus: Bonus):
+    # STR_DEX: 2, STR_INT: 3, STR_LUK: 4, DEX_INT: 5, DEX_LUK: 6, INT_LUK: 7
+    stat_index = {
+        BaseStatType.STR: 0,
+        BaseStatType.DEX: 2,
+        BaseStatType.INT: 3,
+        BaseStatType.LUK: 4
+    }
+    resource_point_index = {
+        "MHP": 0,
+        "MMP": 1
+    }
+    attack_type_index = {
+        AttackType.attack_power: 0,
+        AttackType.magic_attack: 1
+    }
+    if isinstance(bonus, SingleStatBonus):
+        return stat_index[bonus.stat_type] * 100 + bonus.grade
+    elif isinstance(bonus, DualStatBonus):
+        return (10 ** 3) + (
+            stat_index[bonus.stat_type_pair[0]] + stat_index[bonus.stat_type_pair[1]]
+        ) * 100 + bonus.grade
+    elif isinstance(bonus, ResourcePointBonus):
+        return (10 ** 4) + resource_point_index[bonus.stat_type] * 100 + bonus.grade
+    elif isinstance(bonus, AttackTypeBonus):
+        return (10 ** 5) + attack_type_index[bonus.attack_type] * 100 + bonus.grade
+    elif isinstance(bonus, BossDamageMultiplierBonus):
+        return (10 ** 6) + bonus.grade
+    elif isinstance(bonus, DamageMultiplierBonus):
+        return (10 ** 7) + bonus.grade
+    elif isinstance(bonus, AllstatBonus):
+        return (10 ** 8) + bonus.grade
+    else:
+        return 10 ** 9
