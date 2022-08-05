@@ -9,7 +9,12 @@ from simaple.core import Stat, StatProps, BaseStatType
 from simaple.gear.bonus_factory import BonusFactory, BonusType
 from simaple.gear.compute.base import GearImprovementCalculator
 from simaple.gear.gear import Gear
-from simaple.gear.improvements.bonus import Bonus, bonus_key_func
+from simaple.gear.improvements.bonus import (
+    Bonus,
+    bonus_key_func,
+    SingleStatBonus,
+    DualStatBonus
+)
 
 _MAX_BONUS = 4
 _stat_types = [
@@ -33,6 +38,16 @@ class SDIL:
     @classmethod
     def from_stat(cls, stat: Stat):
         return cls(value=(stat.STR, stat.DEX, stat.INT, stat.LUK))
+
+    def __add__(self, arg: SDIL):
+        return SDIL(
+            value=(
+                self.value[0] + arg.value[0],
+                self.value[1] + arg.value[1],
+                self.value[2] + arg.value[2],
+                self.value[3] + arg.value[3],
+            )
+        )
 
     def __sub__(self, arg: SDIL):
         return SDIL(
@@ -202,26 +217,21 @@ class StatBonusCalculator(pydantic.BaseModel):
                     remaining_sdil, left_count, forbidden_types
                 )
                 if result is not None:
-                    return result + [
-                        self.bonus_factory.create(max_type, single_stat_grade)
-                    ]
+                    return result + [self.bonus_factory.create(max_type, single_stat_grade)]
             else:
                 for dual_stat_types in combinations(
                     _dual_bonus_types[max_type], len(dual_stat_grades)
                 ):
-                    dual_remaining_sdil = remaining_sdil
-                    forbidden_types_dual = list(forbidden_types)
-                    for dual_type, dual_grade in zip(dual_stat_types, dual_stat_grades):
-                        dual_remaining_sdil -= self._sdil_table[dual_type][dual_grade]
-                        forbidden_types_dual += [dual_type]
+                    sdil_dual = self._calculate_sdil(dual_stat_types, dual_stat_grades)
+                    remaining_sdil = remaining_sdil - sdil_dual
                     result = self._search_bonus_recursive(
-                        dual_remaining_sdil, left_count, forbidden_types_dual
+                        remaining_sdil, left_count, forbidden_types + list(dual_stat_types)
                     )
                     if result is not None:
-                        result.append(self.bonus_factory.create(max_type, single_stat_grade))
-                        for dual_type, dual_grade in zip(dual_stat_types, dual_stat_grades):
-                            result.append(self.bonus_factory.create(dual_type, dual_grade))
-                        return result
+                        return result + [self.bonus_factory.create(max_type, single_stat_grade)] + [
+                            self.bonus_factory.create(dual_type, dual_grade) for
+                            dual_type, dual_grade in zip(dual_stat_types, dual_stat_grades)
+                        ]
 
         return self._search_bonus_recursive(target_sdil, left, [])
 
@@ -252,6 +262,12 @@ class StatBonusCalculator(pydantic.BaseModel):
                     ]
 
         return None
+
+    def _calculate_sdil(self, bonus_types: tuple[BonusType], bonus_grades: tuple[int]) -> SDIL:
+        sdil = SDIL((0, 0, 0, 0))
+        for bonus_type, bonus_grade in zip(bonus_types, bonus_grades):
+            sdil += self._sdil_table[bonus_type][bonus_grade]
+        return sdil
 
 
 class BonusCalculator(GearImprovementCalculator):
