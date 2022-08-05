@@ -53,20 +53,16 @@ class SDIL:
         return [BonusType.STR, BonusType.DEX, BonusType.INT, BonusType.LUK][max_index]
 
     def decompose_into_grades(
-        self,
-        grades: list[int],
-        left: int,
-        single_stat_increment: int,
-        dual_stat_increment: int
+        self, grades: list[int], left: int, single_stat_basis: int, dual_stat_basis: int
     ) -> Generator[tuple[int, tuple[int]]]:
         max_value = self.max_value()
         for count in range(1, left + 1):
             for single_stat_grade in grades:
-                left_value = max_value - single_stat_grade * single_stat_increment
+                left_value = max_value - single_stat_grade * single_stat_basis
                 if left_value == 0:
                     yield (single_stat_grade, [])
-                if left_value % dual_stat_increment == 0:
-                    dual_stat_grade_sum = left_value // dual_stat_increment
+                if left_value % dual_stat_basis == 0:
+                    dual_stat_grade_sum = left_value // dual_stat_basis
                     for dual_stat_grade_tuple in product(grades, repeat=count - 1):
                         if sum(dual_stat_grade_tuple) == dual_stat_grade_sum:
                             yield (single_stat_grade, dual_stat_grade_tuple)
@@ -190,15 +186,12 @@ class StatBonusCalculator(pydantic.BaseModel):
         if target_sdil.is_zero():
             return []
 
-        single_stat_increment = gear.req_level // 20 + 1  # Calculate manually
-        dual_stat_increment = gear.req_level // 40 + 1
+        single_stat_basis = SingleStatBonus().calculate_basis(gear)
+        dual_stat_basis = DualStatBonus().calculate_basis(gear)
         max_type = target_sdil.max_type()
 
         for single_stat_grade, dual_stat_grades in target_sdil.decompose_into_grades(
-            self._grades,
-            left,
-            single_stat_increment,
-            dual_stat_increment
+            self._grades, left, single_stat_basis, dual_stat_basis
         ):
             left_count = left - (1 + len(dual_stat_grades))
             remaining_sdil = target_sdil - self._sdil_table[max_type][single_stat_grade]
