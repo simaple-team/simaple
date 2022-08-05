@@ -186,8 +186,8 @@ class StatBonusCalculator(pydantic.BaseModel):
         if target_sdil.is_zero():
             return []
 
-        single_stat_basis = SingleStatBonus().calculate_basis(gear)
-        dual_stat_basis = DualStatBonus().calculate_basis(gear)
+        single_stat_basis = SingleStatBonus.calculate_basis(gear.req_level)
+        dual_stat_basis = DualStatBonus.calculate_basis(gear.req_level)
         max_type = target_sdil.max_type()
 
         for single_stat_grade, dual_stat_grades in target_sdil.decompose_into_grades(

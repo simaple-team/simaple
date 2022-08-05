@@ -22,12 +22,13 @@ class Bonus(GearImprovement):
 class SingleStatBonus(Bonus):
     stat_type: BaseStatType
 
-    def calculate_basis(self, gear: Gear) -> int:
-        return gear.req_level // 20 + 1
+    @staticmethod
+    def calculate_basis(req_level: int) -> int:
+        return req_level // 20 + 1
 
     def calculate_improvement(self, gear: Gear) -> Stat:
         self.validate_grade(gear)
-        basis = self.calculate_basis(gear)
+        basis = self.calculate_basis(gear.req_level)
         increment = basis * self.grade
 
         return Stat.parse_obj({self.stat_type.value: increment})
@@ -36,13 +37,14 @@ class SingleStatBonus(Bonus):
 class DualStatBonus(Bonus):
     stat_type_pair: Tuple[BaseStatType, BaseStatType]
 
-    def calculate_basis(self, gear: Gear) -> int:
-        return gear.req_level // 40 + 1
+    @staticmethod
+    def calculate_basis(req_level: int) -> int:
+        return req_level // 40 + 1
 
     def calculate_improvement(self, gear: Gear) -> Stat:
         self.validate_grade(gear)
         first_type, second_type = self.stat_type_pair
-        basis = self.calculate_basis(gear)
+        basis = self.calculate_basis(gear.req_level)
         increment = basis * self.grade
 
         return Stat.parse_obj(
