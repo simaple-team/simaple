@@ -186,7 +186,7 @@ class StatBonusCalculator(pydantic.BaseModel):
                 "gear stat has invalid bonus value or has too many bonus values"
             )
 
-        return sorted(bonus_list, key=bonus_key_func)
+        return bonus_list
 
     def _search_bonus(
         self, target_sdil: SDIL, gear: Gear, left: int
@@ -316,4 +316,4 @@ class BonusCalculator(GearImprovementCalculator):
 
         bonus_list += self.stat_bonus_calculator.compute(stat, gear, bonus_count_left)
 
-        return bonus_list
+        return sorted(bonus_list, key=bonus_key_func)
