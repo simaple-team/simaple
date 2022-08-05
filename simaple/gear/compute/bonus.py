@@ -44,6 +44,33 @@ class SDIL:
             )
         )
 
+    def max_value(self):
+        max_index = self.value.index(max(self.value))
+        return self.value[max_index]
+
+    def max_type(self):
+        max_index = self.value.index(max(self.value))
+        return [BonusType.STR, BonusType.DEX, BonusType.INT, BonusType.LUK][max_index]
+
+    def decompose_into_grades(
+        self,
+        grades: list[int],
+        left: int,
+        single_stat_increment: int,
+        dual_stat_increment: int
+    ) -> Generator[tuple[int, tuple[int]]]:
+        max_value = self.max_value()
+        for count in range(1, left + 1):
+            for single_stat_grade in grades:
+                left_value = max_value - single_stat_grade * single_stat_increment
+                if left_value == 0:
+                    yield (single_stat_grade, [])
+                if left_value % dual_stat_increment == 0:
+                    dual_stat_grade_sum = left_value // dual_stat_increment
+                    for dual_stat_grade_tuple in product(grades, repeat=count - 1):
+                        if sum(dual_stat_grade_tuple) == dual_stat_grade_sum:
+                            yield (single_stat_grade, dual_stat_grade_tuple)
+
     def is_zero(self):
         return (
             self.value[0] == 0
@@ -140,7 +167,7 @@ class StatBonusCalculator(pydantic.BaseModel):
 
         target_sdil = SDIL.from_stat(stat)
 
-        bonus_list = self._search_bonus_with_grade_list(
+        bonus_list = self._search_bonus(
             target_sdil, gear, bonus_count_left
         )
         if bonus_list is None:
@@ -168,21 +195,7 @@ class StatBonusCalculator(pydantic.BaseModel):
 
         return sorted(bonus_list, key=key_stat_bonus)
 
-    def _grade_combinations(
-        self, value: int, left: int, single_stat_increment: int, dual_stat_increment: int
-    ) -> Generator[tuple[int]]:
-        for count in range(1, left + 1):
-            for single_grade in self._grades:
-                dual_value = value - single_grade * single_stat_increment
-                if dual_value == 0:
-                    yield (single_grade,)
-                if dual_value % dual_stat_increment == 0:
-                    dual_grade_sum = dual_value // dual_stat_increment
-                    for dual_grade_tuple in product(self._grades, repeat=count - 1):
-                        if sum(dual_grade_tuple) == dual_grade_sum:
-                            yield (single_grade,) + dual_grade_tuple
-
-    def _search_bonus_with_grade_list(
+    def _search_bonus(
         self, target_sdil: SDIL, gear: Gear, left: int
     ) -> Optional[list[Bonus]]:
         _dual_bonus_types = {
@@ -197,43 +210,43 @@ class StatBonusCalculator(pydantic.BaseModel):
 
         single_stat_increment = gear.req_level // 20 + 1  # Calculate manually
         dual_stat_increment = gear.req_level // 40 + 1
-        _max_index = target_sdil.value.index(max(target_sdil.value))
-        max_value = target_sdil.value[_max_index]
-        max_type = [BonusType.STR, BonusType.DEX, BonusType.INT, BonusType.LUK][_max_index]
+        max_type = target_sdil.max_type()
 
-        for grade_list in self._grade_combinations(
-            max_value, left, single_stat_increment, dual_stat_increment
+        for single_stat_grade, dual_stat_grades in target_sdil.decompose_into_grades(
+            self._grades,
+            left,
+            single_stat_increment,
+            dual_stat_increment
         ):
-            left_count = left - len(grade_list)
-            max_type_grade = grade_list[0]
-            remaining_sdil = target_sdil - self._sdil_table[max_type][max_type_grade]
+            left_count = left - (1 + len(dual_stat_grades))
+            remaining_sdil = target_sdil - self._sdil_table[max_type][single_stat_grade]
             forbidden_types = [max_type]
 
-            if len(grade_list[1:]) == 0:
-                return self._search_bonus(remaining_sdil, left_count, forbidden_types) + [
-                    self.bonus_factory.create(max_type, max_type_grade)
-                ]
+            if len(dual_stat_grades) == 0:
+                return self._search_bonus_recursive(
+                    remaining_sdil, left_count, forbidden_types
+                ) + [self.bonus_factory.create(max_type, single_stat_grade)]
             else:
-                for dual_type_tuple in combinations(
-                    _dual_bonus_types[max_type], len(grade_list[1:])
+                for dual_stat_types in combinations(
+                    _dual_bonus_types[max_type], len(dual_stat_grades)
                 ):
                     dual_remaining_sdil = remaining_sdil
                     forbidden_types_dual = list(forbidden_types)
-                    for dual_type, dual_grade in zip(dual_type_tuple, grade_list[1:]):
+                    for dual_type, dual_grade in zip(dual_stat_types, dual_stat_grades):
                         dual_remaining_sdil -= self._sdil_table[dual_type][dual_grade]
                         forbidden_types_dual += [dual_type]
-                    result = self._search_bonus(
+                    result = self._search_bonus_recursive(
                         dual_remaining_sdil, left_count, forbidden_types_dual
                     )
                     if result is not None:
-                        result.append(self.bonus_factory.create(max_type, max_type_grade))
-                        for dual_type, dual_grade in zip(dual_type_tuple, grade_list[1:]):
+                        result.append(self.bonus_factory.create(max_type, single_stat_grade))
+                        for dual_type, dual_grade in zip(dual_stat_types, dual_stat_grades):
                             result.append(self.bonus_factory.create(dual_type, dual_grade))
                         return result
 
         return None
 
-    def _search_bonus(
+    def _search_bonus_recursive(
         self, remaining_sdil: SDIL, left: int, forbidden_bonus_types: list
     ) -> Optional[list[Bonus]]:
         if remaining_sdil.is_zero():
@@ -251,7 +264,7 @@ class StatBonusCalculator(pydantic.BaseModel):
                 bonus_sdil = self._sdil_table[bonus_type][grade]
                 decreased_sdil = remaining_sdil - bonus_sdil
 
-                bonus_candidate = self._search_bonus(
+                bonus_candidate = self._search_bonus_recursive(
                     decreased_sdil, left - 1, appended_forbidden_bonus_types
                 )
                 if bonus_candidate is not None:
