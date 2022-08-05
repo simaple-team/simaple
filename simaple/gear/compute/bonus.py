@@ -198,9 +198,13 @@ class StatBonusCalculator(pydantic.BaseModel):
             forbidden_types = [max_type]
 
             if len(dual_stat_grades) == 0:
-                return self._search_bonus_recursive(
+                result = self._search_bonus_recursive(
                     remaining_sdil, left_count, forbidden_types
-                ) + [self.bonus_factory.create(max_type, single_stat_grade)]
+                )
+                if result is not None:
+                    return result + [
+                        self.bonus_factory.create(max_type, single_stat_grade)
+                    ]
             else:
                 for dual_stat_types in combinations(
                     _dual_bonus_types[max_type], len(dual_stat_grades)
@@ -219,7 +223,7 @@ class StatBonusCalculator(pydantic.BaseModel):
                             result.append(self.bonus_factory.create(dual_type, dual_grade))
                         return result
 
-        return None
+        return self._search_bonus_recursive(target_sdil, left, [])
 
     def _search_bonus_recursive(
         self, remaining_sdil: SDIL, left: int, forbidden_bonus_types: list
