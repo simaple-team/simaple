@@ -60,12 +60,12 @@ class SDIL:
         )
 
     @property
-    def max_value(self):
+    def max_value(self) -> int:
         max_index = self.value.index(max(self.value))
         return self.value[max_index]
 
     @property
-    def max_type(self):
+    def max_type(self) -> BonusType:
         max_index = self.value.index(max(self.value))
         return [BonusType.STR, BonusType.DEX, BonusType.INT, BonusType.LUK][max_index]
 
@@ -84,7 +84,7 @@ class SDIL:
                         if sum(dual_stat_grade_tuple) == dual_stat_grade_sum:
                             yield (single_stat_grade, dual_stat_grade_tuple)
 
-    def is_zero(self):
+    def is_zero(self) -> bool:
         return (
             self.value[0] == 0
             and self.value[1] == 0
@@ -100,7 +100,7 @@ class SDIL:
             or self.value[3] < 0
         )
 
-    def get_index(self):
+    def get_index(self) -> int:
         idx = 0
         for power in range(3):
             idx += 1 << power if self.value[power] else 0
@@ -127,14 +127,14 @@ class SDILTableBuilder(pydantic.BaseModel):
 
 
 class CachedBonusTypeTable:
-    lookup: list[Iterable[BonusType]]
+    lookup: list[list[BonusType]]
 
     def __init__(self):
         self.lookup = []
         for i in range(16):
             self.lookup.append(self._get_bonus_types(i))
 
-    def _get_bonus_types(self, i: int) -> Iterable[BonusType]:
+    def _get_bonus_types(self, i: int) -> list[BonusType]:
         bonus_types = set()
         if i & 1 << 0:
             bonus_types.update(
@@ -154,7 +154,7 @@ class CachedBonusTypeTable:
             )
         return sorted(list(bonus_types), key=lambda x: x.value)
 
-    def get_types(self, sdil: SDIL) -> Iterable[BonusType]:
+    def get_types(self, sdil: SDIL) -> list[BonusType]:
         return self.lookup[sdil.get_index()]
 
 
