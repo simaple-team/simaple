@@ -59,10 +59,12 @@ class SDIL:
             )
         )
 
+    @property
     def max_value(self):
         max_index = self.value.index(max(self.value))
         return self.value[max_index]
 
+    @property
     def max_type(self):
         max_index = self.value.index(max(self.value))
         return [BonusType.STR, BonusType.DEX, BonusType.INT, BonusType.LUK][max_index]
@@ -70,7 +72,7 @@ class SDIL:
     def decompose_into_grades(
         self, grades: list[int], left: int, single_stat_basis: int, dual_stat_basis: int
     ) -> Generator[tuple[int, tuple[int]]]:
-        max_value = self.max_value()
+        max_value = self.max_value
         for count in range(1, left + 1):
             for single_stat_grade in grades:
                 left_value = max_value - single_stat_grade * single_stat_basis
@@ -203,7 +205,7 @@ class StatBonusCalculator(pydantic.BaseModel):
 
         single_stat_basis = SingleStatBonus.calculate_basis(gear.req_level)
         dual_stat_basis = DualStatBonus.calculate_basis(gear.req_level)
-        max_type = target_sdil.max_type()
+        max_type = target_sdil.max_type
 
         for single_stat_grade, dual_stat_grades in target_sdil.decompose_into_grades(
             self._grades, left, single_stat_basis, dual_stat_basis
