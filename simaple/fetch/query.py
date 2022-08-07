@@ -7,6 +7,7 @@ from pydantic import BaseModel
 
 from simaple.fetch.cookie import get_cookie
 
+
 class Query(BaseModel, metaclass=ABCMeta):
     def url(self, path) -> str:
         if path[0] == "/":

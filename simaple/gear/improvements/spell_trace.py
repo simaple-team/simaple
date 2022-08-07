@@ -122,7 +122,9 @@ class SpellTrace(GearImprovement):
         elif gear.is_armor():
             attack_basis, stat_basis, additional_mhp = self.get_armor_improvement(gear)
         elif gear.is_accessory():
-            attack_basis, stat_basis, additional_mhp = self.get_accesory_improvement(gear)
+            attack_basis, stat_basis, additional_mhp = self.get_accesory_improvement(
+                gear
+            )
         elif gear.type == GearType.machine_heart:
             (
                 attack_basis,

@@ -6,12 +6,11 @@ from pydantic import BaseModel
 from simaple.core import Stat
 from simaple.gear.gear import Gear
 from simaple.gear.gear_type import GearType
-from simaple.gear.improvements.base import GearImprovement
 
 
 class GearImprovementCalculator(BaseModel, metaclass=ABCMeta):
     @abstractmethod
-    def compute(self, stat: Stat, gear: Gear) -> GearImprovement:
+    def compute(self, stat: Stat, gear: Gear):
         ...
 
 
