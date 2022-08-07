@@ -248,3 +248,28 @@ class ActionStat(BaseModel):
         self.buff_duration += arg.buff_duration
         self.cooltime_reduce_rate += arg.cooltime_reduce_rate
         return self
+
+
+class LevelStat(BaseModel):
+    STR: float = 0.0
+    LUK: float = 0.0
+    INT: float = 0.0
+    DEX: float = 0.0
+
+    attack_power: float = 0.0
+    magic_attack: float = 0.0
+
+
+    class Config:
+        extra = Extra.forbid
+
+    def get_stat(self, level: int) -> Stat:
+        multiplier = level // 10
+        return Stat(
+            STR=self.STR * multiplier,
+            LUK=self.LUK * multiplier,
+            INT=self.INT * multiplier,
+            DEX=self.DEX * multiplier,
+            attack_power=self.attack_power * multiplier,
+            magic_attack=self.magic_attack * multiplier,
+        )
