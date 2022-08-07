@@ -1,10 +1,10 @@
 import enum
+from abc import ABCMeta, abstractmethod
 from typing import List, Union
 
 from pydantic import BaseModel, Extra, Field
 
-from simaple.core import ActionStat, Stat, LevelStat
-from abc import abstractmethod, ABCMeta
+from simaple.core import ActionStat, LevelStat, Stat
 
 
 class PotentialTier(enum.IntEnum):
