@@ -18,7 +18,8 @@ from simaple.gear.improvements import bonus
             )
             + Stat.all_stat_multiplier(5),
             [
-                bonus.AllstatBonus(grade=5),
+                bonus.SingleStatBonus(grade=5, stat_type=BaseStatType.STR),
+                bonus.SingleStatBonus(grade=6, stat_type=BaseStatType.INT),
                 bonus.DualStatBonus(
                     grade=5,
                     stat_type_pair=(
@@ -26,8 +27,7 @@ from simaple.gear.improvements import bonus
                         BaseStatType.INT,
                     ),
                 ),
-                bonus.SingleStatBonus(grade=5, stat_type=BaseStatType.STR),
-                bonus.SingleStatBonus(grade=6, stat_type=BaseStatType.INT),
+                bonus.AllstatBonus(grade=5),
             ],
         ),
         (
@@ -37,6 +37,8 @@ from simaple.gear.improvements import bonus
                 INT=63 + 15,
             ),
             [
+                bonus.SingleStatBonus(grade=6, stat_type=BaseStatType.STR),
+                bonus.SingleStatBonus(grade=7, stat_type=BaseStatType.INT),
                 bonus.DualStatBonus(
                     grade=3,
                     stat_type_pair=(
@@ -44,8 +46,6 @@ from simaple.gear.improvements import bonus
                         BaseStatType.INT,
                     ),
                 ),
-                bonus.SingleStatBonus(grade=6, stat_type=BaseStatType.STR),
-                bonus.SingleStatBonus(grade=7, stat_type=BaseStatType.INT),
             ],
         ),
         (
@@ -82,8 +82,7 @@ from simaple.gear.improvements import bonus
             "파프니르 마나크래들",
             Stat(magic_attack=49, attack_power=83, INT=48 + 24, STR=24),
             [
-                bonus.AttackTypeBonus(attack_type=AttackType.attack_power, grade=7),
-                bonus.AttackTypeBonus(attack_type=AttackType.magic_attack, grade=5),
+                bonus.SingleStatBonus(grade=6, stat_type=BaseStatType.INT),
                 bonus.DualStatBonus(
                     grade=6,
                     stat_type_pair=(
@@ -91,7 +90,8 @@ from simaple.gear.improvements import bonus
                         BaseStatType.INT,
                     ),
                 ),
-                bonus.SingleStatBonus(grade=6, stat_type=BaseStatType.INT),
+                bonus.AttackTypeBonus(attack_type=AttackType.attack_power, grade=7),
+                bonus.AttackTypeBonus(attack_type=AttackType.magic_attack, grade=5),
             ],
         ),
     ],

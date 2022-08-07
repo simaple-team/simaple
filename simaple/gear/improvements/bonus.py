@@ -22,9 +22,13 @@ class Bonus(GearImprovement):
 class SingleStatBonus(Bonus):
     stat_type: BaseStatType
 
+    @staticmethod
+    def calculate_basis(req_level: int) -> int:
+        return req_level // 20 + 1
+
     def calculate_improvement(self, gear: Gear) -> Stat:
         self.validate_grade(gear)
-        basis = gear.req_level // 20 + 1
+        basis = self.calculate_basis(gear.req_level)
         increment = basis * self.grade
 
         return Stat.parse_obj({self.stat_type.value: increment})
@@ -33,10 +37,14 @@ class SingleStatBonus(Bonus):
 class DualStatBonus(Bonus):
     stat_type_pair: Tuple[BaseStatType, BaseStatType]
 
+    @staticmethod
+    def calculate_basis(req_level: int) -> int:
+        return req_level // 40 + 1
+
     def calculate_improvement(self, gear: Gear) -> Stat:
         self.validate_grade(gear)
         first_type, second_type = self.stat_type_pair
-        basis = gear.req_level // 40 + 1
+        basis = self.calculate_basis(gear.req_level)
         increment = basis * self.grade
 
         return Stat.parse_obj(
@@ -142,3 +150,38 @@ class AttackTypeBonus(Bonus):
             value = self.grade
 
         return Stat.parse_obj({self.attack_type.value: value})
+
+
+def bonus_key_func(bonus: Bonus):
+    # STR_DEX: 2, STR_INT: 3, STR_LUK: 4, DEX_INT: 5, DEX_LUK: 6, INT_LUK: 7
+    stat_index = {
+        BaseStatType.STR: 0,
+        BaseStatType.DEX: 2,
+        BaseStatType.INT: 3,
+        BaseStatType.LUK: 4
+    }
+    resource_point_index = {
+        "MHP": 0,
+        "MMP": 1
+    }
+    attack_type_index = {
+        AttackType.attack_power: 0,
+        AttackType.magic_attack: 1
+    }
+    if isinstance(bonus, SingleStatBonus):
+        return stat_index[bonus.stat_type] * 100 + bonus.grade
+    if isinstance(bonus, DualStatBonus):
+        return (10 ** 3) + (
+            stat_index[bonus.stat_type_pair[0]] + stat_index[bonus.stat_type_pair[1]]
+        ) * 100 + bonus.grade
+    if isinstance(bonus, ResourcePointBonus):
+        return (10 ** 4) + resource_point_index[bonus.stat_type] * 100 + bonus.grade
+    if isinstance(bonus, AttackTypeBonus):
+        return (10 ** 5) + attack_type_index[bonus.attack_type] * 100 + bonus.grade
+    if isinstance(bonus, BossDamageMultiplierBonus):
+        return (10 ** 6) + bonus.grade
+    if isinstance(bonus, DamageMultiplierBonus):
+        return (10 ** 7) + bonus.grade
+    if isinstance(bonus, AllstatBonus):
+        return (10 ** 8) + bonus.grade
+    return 10 ** 9
