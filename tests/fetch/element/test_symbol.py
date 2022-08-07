@@ -9,7 +9,10 @@ def test_item_element():
 
     result = element.run(html_text)
     assert result == {
-        "image": "https://avatar.maplestory.nexon.com/ItemIcon/KEIDJHOA.png",
+        "image": {
+            "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEIDJHOA.png",
+            "gear_id": 1712001,
+        },
         "name": "아케인심볼 : 소멸의 여로",
         "sum": {"INT": 700},
         "base": {"INT": 0},
