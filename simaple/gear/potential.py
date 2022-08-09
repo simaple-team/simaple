@@ -18,7 +18,7 @@ class PotentialTier(enum.IntEnum):
 
 class PotentialInterface(BaseModel, metaclass=ABCMeta):
     @abstractmethod
-    def get_stat(self, level: int = None) -> Stat:
+    def get_stat(self, level: int = 0) -> Stat:
         ...
 
     @abstractmethod

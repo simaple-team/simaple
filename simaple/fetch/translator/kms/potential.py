@@ -1,7 +1,7 @@
 import re
 
 from simaple.core import StatProps
-from simaple.fetch.translator.asset.potential import (
+from simaple.fetch.translator.asset.stat_provider import (
     ActionStatProvider,
     AllStatMultiplierProvider,
     AllStatProvider,
@@ -165,5 +165,5 @@ def kms_potential_provider_patterns() -> list[tuple[re.Pattern, AbstractStatProv
     ]
 
 
-def kms_potential_translator():
+def kms_potential_translator() -> PotentialTranslator:
     return PotentialTranslator(patterns=kms_potential_provider_patterns())

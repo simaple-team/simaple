@@ -1,24 +1,10 @@
 import re
-from abc import ABCMeta, abstractmethod
 
 import pydantic
 
 from simaple.core.base import AnyStat
+from simaple.fetch.translator.base import AbstractStatProvider, NoMatchedStringError
 from simaple.gear.potential import Potential
-
-
-class NoMatchedStringError(Exception):
-    ...
-
-
-class ItemElementTranslator:
-    ...
-
-
-class AbstractStatProvider(pydantic.BaseModel, metaclass=ABCMeta):
-    @abstractmethod
-    def provide(self, dependency: int) -> AnyStat:
-        ...
 
 
 class PotentialTranslator(pydantic.BaseModel):
@@ -32,7 +18,7 @@ class PotentialTranslator(pydantic.BaseModel):
             options=[self.translate_expression(expr) for expr in expressions]
         )
 
-    def translate_expression(self, expression: str):
+    def translate_expression(self, expression: str) -> AnyStat:
         for pattern, provider in self.patterns:
             match = pattern.match(expression)
             if match is not None:
