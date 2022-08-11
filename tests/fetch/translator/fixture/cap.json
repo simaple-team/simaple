@@ -1,0 +1,82 @@
+{
+    "image": "https://avatar.maplestory.nexon.com/ItemIcon/KEPCIAHI.png",
+    "name": "하이네스 레인져베레",
+    "sum": {
+      "STR": 113,
+      "DEX": 237,
+      "MaxHP": 2055,
+      "MaxMP": 360,
+      "공격력": 33,
+      "마력": 30,
+      "올스탯": 6,
+      "몬스터방어력무시%": 10
+    },
+    "base": {
+      "STR": 40,
+      "DEX": 40,
+      "MaxHP": 360,
+      "MaxMP": 360,
+      "공격력": 2,
+      "마력": 0,
+      "올스탯": 0,
+      "몬스터방어력무시%": 10
+    },
+    "bonus": {
+      "STR": 0,
+      "DEX": 40,
+      "MaxHP": 0,
+      "MaxMP": 0,
+      "공격력": 0,
+      "마력": 0,
+      "올스탯": 6
+    },
+    "increment": {
+      "STR": 73,
+      "DEX": 157,
+      "MaxHP": 1695,
+      "MaxMP": 0,
+      "공격력": 31,
+      "마력": 30,
+      "올스탯": 0
+    },
+    "potential": {
+      "option": [
+        {
+          "DEX%": 9
+        },
+        {
+          "DEX%": 6
+        },
+        {
+          "DEX%": 6
+        }
+      ],
+      "raw": [
+        "DEX : +9%",
+        "DEX : +6%",
+        "DEX : +6%"
+      ],
+      "grade": "유니크"
+    },
+    "additional_potential": {
+      "option": [
+        {
+          "DEX%": 4
+        },
+        {
+          "DEX": 10
+        },
+        {
+          "DEX%": 4
+        }
+      ],
+      "raw": [
+        "DEX : +4%",
+        "DEX : +10",
+        "DEX : +4%"
+      ],
+      "grade": "에픽"
+    },
+    "starforce": 18,
+    "surprise": false
+  }

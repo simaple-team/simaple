@@ -1,0 +1,84 @@
+{
+    "image": "https://avatar.maplestory.nexon.com/ItemIcon/KEODPEOC.png",
+    "name": "코스모스 링",
+    "sum": {
+      "STR": 20,
+      "DEX": 20,
+      "INT": 20,
+      "LUK": 20,
+      "MaxHP": 2000,
+      "MaxMP": 2000,
+      "공격력": 20,
+      "마력": 20
+    },
+    "base": {
+      "STR": 0,
+      "DEX": 0,
+      "INT": 0,
+      "LUK": 0,
+      "MaxHP": 0,
+      "MaxMP": 0,
+      "공격력": 0,
+      "마력": 0
+    },
+    "bonus": {
+      "STR": 0,
+      "DEX": 0,
+      "INT": 0,
+      "LUK": 0,
+      "MaxHP": 0,
+      "MaxMP": 0,
+      "공격력": 0,
+      "마력": 0
+    },
+    "increment": {
+      "STR": 20,
+      "DEX": 20,
+      "INT": 20,
+      "LUK": 20,
+      "MaxHP": 2000,
+      "MaxMP": 2000,
+      "공격력": 20,
+      "마력": 20
+    },
+    "potential": {
+      "option": [
+        {
+          "DEX%": 9
+        },
+        {
+          "INT%": 6
+        },
+        {
+          "DEX%": 6
+        }
+      ],
+      "raw": [
+        "DEX : +9%",
+        "INT : +6%",
+        "DEX : +6%"
+      ],
+      "grade": "유니크"
+    },
+    "additional_potential": {
+      "option": [
+        {
+          "공격력": 10
+        },
+        {
+          "LUK": 6
+        },
+        {
+          "점프력": 4
+        }
+      ],
+      "raw": [
+        "공격력 : +10",
+        "LUK : +6",
+        "점프력 : +4"
+      ],
+      "grade": "레어"
+    },
+    "starforce": 0,
+    "surprise": false
+  }

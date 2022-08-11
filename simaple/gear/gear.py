@@ -25,6 +25,9 @@ class Gear(BaseModel):
     class Config:
         extra = Extra.forbid
 
+    def add_stat(self, stat: Stat) -> None:
+        self.stat += stat
+
     def sum_stat(self) -> Stat:
         return (
             self.stat + self.potential.get_stat() + self.additional_potential.get_stat()

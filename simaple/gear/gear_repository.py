@@ -16,6 +16,8 @@ GEAR_VARIABLE_NAMES = [
     ("pdamage_indep", "final_damage_multiplier"),
     ("att", "attack_power"),
     ("matt", "magic_attack"),
+    ("MHP", "MHP"),
+    ("MMP", "MMP"),
 ]
 
 
@@ -68,7 +70,7 @@ class GearRepository:
             for variable_name, simaple_name in GEAR_VARIABLE_NAMES:
                 if variable_name == k:
                     stat[simaple_name] = v
-                    continue
+                    break
 
         gear_opt = {
             "stat": stat,
