@@ -82,128 +82,129 @@ default:
     - - 3
       - 2
       - 2
-  cap:
-    gear_id: 앱솔랩스 모자
-    <<: *armor
-    potential:
-      options:
-        - first_stat_multiplier: 12
-        - first_stat_multiplier: 9
-        - first_stat_multiplier: 9
-    additional_potential:
-      options:
-        - first_att: 10
-        - first_stat_multiplier: 4
-  coat:
-    gear_id: 카루타 상의
-    <<: *armor
-  pants:
-    gear_id: 카루타 하의
-    <<: *armor
-  shoes:
-    gear_id: 앱솔랩스 신발
-    <<: *armor
-  glove:
-    gear_id: 앱솔랩스 장갑
-    <<: *armor
-    potential:
-      options:
-        - critical_damage: 8
-        - critical_damage: 8
-  cape:
-    gear_id: 앱솔랩스 망토
-    <<: *armor
-  shoulder_pad:
-    gear_id: 앱솔랩스 숄더
-    <<: *acc
-  face_accessory:
-    gear_id: 응축된 힘의 결정석
-    <<: *acc
-  eye_accessory:
-    gear_id: 블랙빈 마크
-    <<: *acc
-  earrings:
-    gear_id: 데아 시두스 이어링
-    <<: *acc
-  belt:
-    gear_id: 골든 클로버 벨트
-    <<: *acc
-  ring1:
-    gear_id: 실버블라썸 링
-    <<: *acc
-    exclude: 
-      - bonuses
-  ring2:
-    gear_id: 이터널 플레임 링
-    <<: *acc
-    exclude: 
-      - bonuses
-      - star
-  ring3:
-    gear_id: 이터널 플레임 링
-    <<: *acc
-    exclude: 
-      - bonus
-      - star
-  ring4:
-    gear_id: 이터널 플레임 링
-    <<: *acc
-    exclude: 
-      - bonuses
-      - star
-  pendant1:
-    gear_id: 도미네이터 펜던트
-    <<: *acc
-    scroll:
-      name: 파편
-      stat:
-        all_stat: 3
-        all_att: 3
-  pendant2:
-    gear_id: 매커네이터 펜던트
-    <<: *acc
-  pocket:
-    gear_id: 핑크빛 성배
-    bonuses: *acc_bonus
-  badge:
-    gear_id: 크리스탈 웬투스 뱃지
-  medal:
-    gear_id: 칠요의 몬스터파커
-  weapon:
-    gear_id: 아케인셰이드 튜너
-    bonuses:
-      - grade: 6
-        bonus_type: first_att
-      - grade: 5
-        bonus_type: boss_damage_multiplier
-    spell_trace:
-      probability: 15
-      stat_prop_type: first_stat
-    star: 17
-    additional_potential:
-      options:
-        - first_att_multiplier: 12
-        - first_att_multiplier: 9
-  subweapon:
-    gear_id: 노블 브레이슬릿
-    additional_potential:
-      options:
-        - first_att_multiplier: 12
-        - first_att_multiplier: 9
-  emblem:
-    gear_id: 골드 나이트 엠블렘
-    additional_potential:
-      options:
-        - first_att_multiplier: 12
-        - first_att_multiplier: 9
-  machine_heart:
-    gear_id: 리튬 하트
-    <<: *acc
-    scroll:
-      name: 주문의 흔적
-      stat:
-        first_att: 5
-    star: 8
+  gears:
+    cap:
+      gear_id: 앱솔랩스 모자
+      <<: *armor
+      potential:
+        options:
+          - first_stat_multiplier: 12
+          - first_stat_multiplier: 9
+          - first_stat_multiplier: 9
+      additional_potential:
+        options:
+          - first_att: 10
+          - first_stat_multiplier: 4
+    coat:
+      gear_id: 카루타 상의
+      <<: *armor
+    pants:
+      gear_id: 카루타 하의
+      <<: *armor
+    shoes:
+      gear_id: 앱솔랩스 신발
+      <<: *armor
+    glove:
+      gear_id: 앱솔랩스 장갑
+      <<: *armor
+      potential:
+        options:
+          - critical_damage: 8
+          - critical_damage: 8
+    cape:
+      gear_id: 앱솔랩스 망토
+      <<: *armor
+    shoulder_pad:
+      gear_id: 앱솔랩스 숄더
+      <<: *acc
+    face_accessory:
+      gear_id: 응축된 힘의 결정석
+      <<: *acc
+    eye_accessory:
+      gear_id: 블랙빈 마크
+      <<: *acc
+    earrings:
+      gear_id: 데아 시두스 이어링
+      <<: *acc
+    belt:
+      gear_id: 골든 클로버 벨트
+      <<: *acc
+    ring1:
+      gear_id: 실버블라썸 링
+      <<: *acc
+      exclude: 
+        - bonuses
+    ring2:
+      gear_id: 이터널 플레임 링
+      <<: *acc
+      exclude: 
+        - bonuses
+        - star
+    ring3:
+      gear_id: 이터널 플레임 링
+      <<: *acc
+      exclude: 
+        - bonus
+        - star
+    ring4:
+      gear_id: 이터널 플레임 링
+      <<: *acc
+      exclude: 
+        - bonuses
+        - star
+    pendant1:
+      gear_id: 도미네이터 펜던트
+      <<: *acc
+      scroll:
+        name: 파편
+        stat:
+          all_stat: 3
+          all_att: 3
+    pendant2:
+      gear_id: 매커네이터 펜던트
+      <<: *acc
+    pocket:
+      gear_id: 핑크빛 성배
+      bonuses: *acc_bonus
+    badge:
+      gear_id: 크리스탈 웬투스 뱃지
+    medal:
+      gear_id: 칠요의 몬스터파커
+    weapon:
+      gear_id: 아케인셰이드 튜너
+      bonuses:
+        - grade: 6
+          bonus_type: first_att
+        - grade: 5
+          bonus_type: boss_damage_multiplier
+      spell_trace:
+        probability: 15
+        stat_prop_type: first_stat
+      star: 17
+      additional_potential:
+        options:
+          - first_att_multiplier: 12
+          - first_att_multiplier: 9
+    subweapon:
+      gear_id: 노블 브레이슬릿
+      additional_potential:
+        options:
+          - first_att_multiplier: 12
+          - first_att_multiplier: 9
+    emblem:
+      gear_id: 골드 나이트 엠블렘
+      additional_potential:
+        options:
+          - first_att_multiplier: 12
+          - first_att_multiplier: 9
+    machine_heart:
+      gear_id: 리튬 하트
+      <<: *acc
+      scroll:
+        name: 주문의 흔적
+        stat:
+          first_att: 5
+      star: 8
   title:
     # 핑아일체
     all_stat: 10
