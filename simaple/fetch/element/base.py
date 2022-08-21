@@ -63,6 +63,7 @@ class ElementWrapper(Promise):
     element: Element
     query: Query
     retry_when_html_error: int = 2
+    retry_await: float = 0.3
 
     reserved_path: Optional[str]
 
@@ -78,6 +79,7 @@ class ElementWrapper(Promise):
             except AttributeError as e:
                 if retry_count >= self.retry_when_html_error:
                     raise InvalidHTMLError from e
+                await asyncio.sleep(self.retry_await)
                 retry_count += 1
 
         raise InvalidHTMLError("Maximum Retry count exceed.")
