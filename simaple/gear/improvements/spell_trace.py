@@ -138,11 +138,7 @@ class SpellTrace(GearImprovement):
 
         improvement += Stat(MHP=additional_mhp)
 
-        if (
-            (gear.is_armor() or gear.is_accessory())
-            and self.order == 4
-            and gear.type != GearType.glove
-        ):
+        if (gear.is_armor()) and self.order == 4 and gear.type != GearType.glove:
             improvement += Stat(
                 magic_attack=int(
                     gear.req_job == 0 or math.floor(gear.req_job / 2) % 2 == 1

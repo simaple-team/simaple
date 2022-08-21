@@ -44,3 +44,34 @@ def test_armor_bonus(gear_id, prob, stat_prop, expected):
     logger.info(gear)
 
     assert improvement == expected
+
+
+FOURTH_ATTACK_TEST_CASE = (
+    ("앱솔랩스 메이지케이프", 70, StatProps.INT, Stat(INT=4, MHP=70, magic_attack=1)),
+    ("앱솔랩스 메이지글러브", 70, StatProps.INT, Stat(magic_attack=2)),
+    ("앱솔랩스 나이트글러브", 70, StatProps.MHP, Stat(attack_power=2)),
+    ("앱솔랩스 나이트케이프", 70, StatProps.MHP, Stat(attack_power=1, MHP=270)),
+    (
+        "데아 시두스 이어링",
+        70,
+        StatProps.INT,
+        Stat(
+            INT=3,
+        ),
+    ),
+)
+
+
+@pytest.mark.parametrize(
+    "gear_name, prob, stat_prop, expected", FOURTH_ATTACK_TEST_CASE
+)
+def test_fourth_att_bonus(gear_name, prob, stat_prop, expected):
+    repository = GearRepository()
+
+    gear = repository.get_by_name(gear_name)
+    spell_trace = SpellTrace(probability=prob, stat_prop_type=stat_prop, order=4)
+
+    improvement = spell_trace.calculate_improvement(gear)
+    logger.info(gear)
+
+    assert improvement == expected
