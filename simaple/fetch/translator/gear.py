@@ -6,9 +6,9 @@ from loguru import logger
 from simaple.core import Stat
 from simaple.fetch.translator.base import AbstractStatProvider, NoMatchedStringError
 from simaple.fetch.translator.potential import PotentialTranslator
-from simaple.gear.potential import AdditionalPotential
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository
+from simaple.gear.potential import AdditionalPotential
 
 
 class GearStatTranslator(pydantic.BaseModel):
