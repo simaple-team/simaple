@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 
 from simaple.fetch.element.base import Element, ElementWrapper
 from simaple.fetch.query import CookiedQuery
+from simaple.gear.slot_name import SlotName
 
 
 class MapleGearsetElement(Element):
@@ -15,34 +16,22 @@ class MapleGearsetElement(Element):
         return result
 
     @classmethod
-    def expected_normal_names(cls):
-        # fmt: off
+    def expected_normal_names(cls) -> list[str]:
         return [
-            "ring1", "", "cap", "", "emblem",
-            "ring2", "pendant2", "face_accessory", "", "badge",
-            "ring3", "pendant1", "eye_accessory", "earrings", "medal",
-            "ring4", "weapon", "coat", "shoulder_pad", "subweapon",
-            "pocket", "belt", "pants", "glove", "cape",
-            "", "", "shoes", "android", "machine_heart"
+            slot_name.value if slot_name else ""
+            for slot_name in sum(SlotName.normal_item_grid(), [])
         ]
-        # fmt: on
 
     @classmethod
-    def expected_cash_names(cls):
-        # fmt: off
-        return [f"cash-{name}" for name in [
-            "ring1", "", "cap", "", "hair",
-            "ring2", "", "face_accessory", "", "emotion",
-            "ring3", "", "eye_accessory", "earrings", "",
-            "ring4", "weapon", "coat", "", "subweapon",
-            "", "", "pants", "glove", "cape",
-            "", "", "shoes", "", ""
-        ]]
-        # fmt: on
+    def expected_cash_names(cls) -> list[str]:
+        return [
+            slot_name.value if slot_name else ""
+            for slot_name in sum(SlotName.cash_item_grid(), [])
+        ]
 
     @classmethod
     def expected_arcane_names(cls):
-        return [f"arcane{idx}" for idx in range(1, 7)]
+        return [slot_name.value for slot_name in SlotName.arcane_items()]
 
     def normal_items(self, soup):
         item_elements = soup.select(".tab01_con_wrap li")

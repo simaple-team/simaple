@@ -10,6 +10,7 @@ from simaple.gear.blueprint import PracticalGearBlueprint
 from simaple.gear.gear_repository import GearRepository
 from simaple.gear.gearset import Gearset
 from simaple.gear.potential import PotentialTier
+from simaple.gear.slot_name import SlotName
 
 
 # TODO: weapon potential optimizer (stand-alone)
@@ -26,7 +27,7 @@ class UserGearsetBlueprint(GearsetBlueprint):
     ]
     title: Stat
 
-    gears: dict[str, PracticalGearBlueprint]
+    gears: dict[SlotName, PracticalGearBlueprint]
 
     def build(self, gear_repository: GearRepository) -> Gearset:
         gearset = Gearset()

@@ -6,6 +6,7 @@ from loguru import logger
 from simaple.core import Stat
 from simaple.fetch.translator.base import AbstractStatProvider, NoMatchedStringError
 from simaple.fetch.translator.potential import PotentialTranslator
+from simaple.gear.potential import AdditionalPotential
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository
 
@@ -58,8 +59,10 @@ class GearTranslator(pydantic.BaseModel):
                 parsed["potential"]["raw"]
             )
         if "potential" in parsed:
-            base_gear.additional_potential = self.potential_translator.translate(
-                parsed["additional_potential"]["raw"]
+            base_gear.additional_potential = AdditionalPotential(
+                options=self.potential_translator.translate(
+                    parsed["additional_potential"]["raw"]
+                ).options
             )
 
         return base_gear

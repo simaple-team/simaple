@@ -48,7 +48,7 @@ class GearElement(Element):
     def get_item_name(self, soup: BeautifulSoup) -> str:
         text: str = self._get_common_element(soup)["alt"]
 
-        improved_regex = re.compile(r"(.+)\(\+[0-9]\)")
+        improved_regex = re.compile(r"(.+)\(\+[0-9]+\)")
         match = improved_regex.match(text)
         if match:
             return match.group(1).strip()
