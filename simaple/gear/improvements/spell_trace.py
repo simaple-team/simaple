@@ -119,7 +119,7 @@ class SpellTrace(GearImprovement):
             attack_basis, stat_basis, additional_mhp = self.get_weapon_improvement(gear)
         elif gear.type == GearType.glove:
             attack_basis, stat_basis, additional_mhp = self.get_glove_improvement(gear)
-        elif gear.is_armor():
+        elif gear.is_armor() or gear.type == GearType.shoulder_pad:
             attack_basis, stat_basis, additional_mhp = self.get_armor_improvement(gear)
         elif gear.is_accessory():
             attack_basis, stat_basis, additional_mhp = self.get_accesory_improvement(
@@ -138,11 +138,7 @@ class SpellTrace(GearImprovement):
 
         improvement += Stat(MHP=additional_mhp)
 
-        if (
-            (gear.is_armor() or gear.is_accessory())
-            and self.order == 4
-            and gear.type != GearType.glove
-        ):
+        if (gear.is_armor()) and self.order == 4 and gear.type != GearType.glove:
             improvement += Stat(
                 magic_attack=int(
                     gear.req_job == 0 or math.floor(gear.req_job / 2) % 2 == 1
