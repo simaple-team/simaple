@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.benchmark.interpreter import (
+from simaple.spec.interpreter import (
     BenchmarkConfigurationInterpreter,
     BenchmarkInterpreterOption,
 )
