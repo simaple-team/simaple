@@ -47,7 +47,7 @@ anchors:
         - first_att: 10
         - first_stat_multiplier: 4
     star: 18
-default:
+spec:
   arcane_symbols: 
     - level: 20
       stat_type: first_stat

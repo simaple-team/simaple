@@ -1,9 +1,9 @@
 ---
 summary:
-  - 에픽둘둘 + 일부 유니크
+  - 18레전둘둘
 spec_hint:
-  union_block_count: 30
-  character_level: 255
+  union_block_count: 32
+  character_level: 260
 anchors:
   armor: &armor
     bonuses:
@@ -16,11 +16,11 @@ anchors:
     spell_trace:
       probability: 30
       stat_prop_type: first_stat
-    star: 17
+    star: 18
     potential:
       options:
+        - first_stat_multiplier: 12
         - first_stat_multiplier: 9
-        - first_stat_multiplier: 6
     additional_potential:
       options:
         - first_att: 10
@@ -39,14 +39,14 @@ anchors:
         first_att: 2.5
     potential:
       options:
+        - first_stat_multiplier: 12
         - first_stat_multiplier: 9
-        - first_stat_multiplier: 6
     additional_potential:
       options:
         - first_att: 10
         - first_stat_multiplier: 4
-    star: 17
-default:
+    star: 18
+spec:
   arcane_symbols: 
     - level: 20
       stat_type: first_stat
@@ -60,22 +60,28 @@ default:
       stat_type: first_stat
     - level: 20
       stat_type: first_stat
+  authentic_symbols:
+    - level: 4
+      stat_type: first_stat
   pet_equip:
     first_stat: 0
   pet_set: 
     first_stat: 0
   cash:
-    first_stat: 0
+    first_stat: 75
+    second_stat: 75
+    third_stat: 75
+    first_att: 40
   weapon_potential_tiers:
     - - 4
       - 3
       - 3
-    - - 4
-      - 3
-      - 3
-    - - 4
-      - 3
-      - 3
+    - - 3
+      - 2
+      - 2
+    - - 3
+      - 2
+      - 2
   gears:
     cap:
       gear_id: 앱솔랩스 모자
@@ -104,7 +110,7 @@ default:
       potential:
         options:
           - critical_damage: 8
-          - first_stat_multiplier: 9
+          - critical_damage: 8
     cape:
       gear_id: 앱솔랩스 망토
       <<: *armor
@@ -177,20 +183,20 @@ default:
       star: 17
       additional_potential:
         options:
+          - first_att_multiplier: 12
           - first_att_multiplier: 9
-          - first_att_multiplier: 6
     subweapon:
       gear_id: 노블 브레이슬릿
       additional_potential:
         options:
+          - first_att_multiplier: 12
           - first_att_multiplier: 9
-          - first_att_multiplier: 6
     emblem:
       gear_id: 골드 나이트 엠블렘
       additional_potential:
         options:
+          - first_att_multiplier: 12
           - first_att_multiplier: 9
-          - first_att_multiplier: 6
     machine_heart:
       gear_id: 리튬 하트
       <<: *acc
