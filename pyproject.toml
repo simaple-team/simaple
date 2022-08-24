@@ -56,7 +56,7 @@ module = [
 
 [tool.poetry]
 name = "simaple"
-version = "0.0.0"
+version = "0.2.0"
 description = "Maplestory calculation / Simulation library"
 authors = ["meson324 <meson324@gmail.com>"]
 readme = "README.md"
