@@ -35,7 +35,7 @@ def kms_stat_providers() -> Dict[str, DomElementProvider]:
     ]:
         providers[k] = StatKeywordProvider()
 
-    for k in ["보스몬스터공격시데미지", "올스탯"]:
+    for k in ["보스몬스터공격시데미지", "올스탯", "몬스터방어력무시", "몬스터방어율무시"]:
         providers[k] = MultiplierProvider()
 
     return providers

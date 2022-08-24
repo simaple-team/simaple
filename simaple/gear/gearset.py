@@ -8,10 +8,11 @@ from simaple.gear.authentic_symbol import AuthenticSymbol
 from simaple.gear.gear import Gear
 from simaple.gear.gear_type import GearType
 from simaple.gear.potential import Potential
+from simaple.gear.slot_name import SlotName
 
 
 class GearSlot(BaseModel):
-    name: str
+    name: SlotName
     enabled_gear_types: List[GearType]
     gear: Optional[Gear]
 
@@ -36,37 +37,47 @@ class GearSlot(BaseModel):
 
 def get_default_empty_slots():
     return [
-        GearSlot(name="cap", enabled_gear_types=[GearType.cap]),
-        GearSlot(name="face_accessory", enabled_gear_types=[GearType.face_accessory]),
-        GearSlot(name="eye_accessory", enabled_gear_types=[GearType.eye_accessory]),
-        GearSlot(name="earrings", enabled_gear_types=[GearType.earrings]),
-        GearSlot(name="coat", enabled_gear_types=[GearType.coat, GearType.longcoat]),
-        GearSlot(name="pants", enabled_gear_types=[GearType.pants]),
-        GearSlot(name="shoes", enabled_gear_types=[GearType.shoes]),
-        GearSlot(name="glove", enabled_gear_types=[GearType.glove]),
-        GearSlot(name="cape", enabled_gear_types=[GearType.cape]),
-        GearSlot(name="ring1", enabled_gear_types=[GearType.ring]),
-        GearSlot(name="ring2", enabled_gear_types=[GearType.ring]),
-        GearSlot(name="ring3", enabled_gear_types=[GearType.ring]),
-        GearSlot(name="ring4", enabled_gear_types=[GearType.ring]),
-        GearSlot(name="pendant1", enabled_gear_types=[GearType.pendant]),
-        GearSlot(name="pendant2", enabled_gear_types=[GearType.pendant]),
-        GearSlot(name="belt", enabled_gear_types=[GearType.belt]),
-        GearSlot(name="medal", enabled_gear_types=[GearType.medal]),
-        GearSlot(name="shoulder_pad", enabled_gear_types=[GearType.shoulder_pad]),
-        GearSlot(name="pocket", enabled_gear_types=[GearType.pocket]),
-        GearSlot(name="badge", enabled_gear_types=[GearType.badge]),
-        GearSlot(name="android", enabled_gear_types=[GearType.android]),
-        GearSlot(name="machine_heart", enabled_gear_types=[GearType.machine_heart]),
+        GearSlot(name=SlotName.cap, enabled_gear_types=[GearType.cap]),
         GearSlot(
-            name="subweapon",
+            name=SlotName.face_accessory, enabled_gear_types=[GearType.face_accessory]
+        ),
+        GearSlot(
+            name=SlotName.eye_accessory, enabled_gear_types=[GearType.eye_accessory]
+        ),
+        GearSlot(name=SlotName.earrings, enabled_gear_types=[GearType.earrings]),
+        GearSlot(
+            name=SlotName.coat, enabled_gear_types=[GearType.coat, GearType.longcoat]
+        ),
+        GearSlot(name=SlotName.pants, enabled_gear_types=[GearType.pants]),
+        GearSlot(name=SlotName.shoes, enabled_gear_types=[GearType.shoes]),
+        GearSlot(name=SlotName.glove, enabled_gear_types=[GearType.glove]),
+        GearSlot(name=SlotName.cape, enabled_gear_types=[GearType.cape]),
+        GearSlot(name=SlotName.ring1, enabled_gear_types=[GearType.ring]),
+        GearSlot(name=SlotName.ring2, enabled_gear_types=[GearType.ring]),
+        GearSlot(name=SlotName.ring3, enabled_gear_types=[GearType.ring]),
+        GearSlot(name=SlotName.ring4, enabled_gear_types=[GearType.ring]),
+        GearSlot(name=SlotName.pendant1, enabled_gear_types=[GearType.pendant]),
+        GearSlot(name=SlotName.pendant2, enabled_gear_types=[GearType.pendant]),
+        GearSlot(name=SlotName.belt, enabled_gear_types=[GearType.belt]),
+        GearSlot(name=SlotName.medal, enabled_gear_types=[GearType.medal]),
+        GearSlot(
+            name=SlotName.shoulder_pad, enabled_gear_types=[GearType.shoulder_pad]
+        ),
+        GearSlot(name=SlotName.pocket, enabled_gear_types=[GearType.pocket]),
+        GearSlot(name=SlotName.badge, enabled_gear_types=[GearType.badge]),
+        GearSlot(name=SlotName.android, enabled_gear_types=[GearType.android]),
+        GearSlot(
+            name=SlotName.machine_heart, enabled_gear_types=[GearType.machine_heart]
+        ),
+        GearSlot(
+            name=SlotName.subweapon,
             enabled_gear_types=[
                 gear_type for gear_type in GearType if GearType.is_sub_weapon(gear_type)
             ],
         ),
-        GearSlot(name="emblem", enabled_gear_types=[GearType.emblem]),
+        GearSlot(name=SlotName.emblem, enabled_gear_types=[GearType.emblem]),
         GearSlot(
-            name="weapon",
+            name=SlotName.weapon,
             enabled_gear_types=[
                 gear_type for gear_type in GearType if GearType.is_weapon(gear_type)
             ],
@@ -141,14 +152,14 @@ class Gearset(BaseModel):
             slot for slot in self.gear_slots if gear.type in slot.enabled_gear_types
         ]
 
-    def get_slot(self, slot_name: str) -> GearSlot:
+    def get_slot(self, slot_name: SlotName) -> GearSlot:
         for slot in self.gear_slots:
             if slot.name == slot_name:
                 return slot
 
         raise KeyError
 
-    def equip(self, gear: Gear, slot_name: str) -> None:
+    def equip(self, gear: Gear, slot_name: SlotName) -> None:
         self.get_slot(slot_name).equip(gear)
 
     def _get_weapon_slot(self) -> GearSlot:

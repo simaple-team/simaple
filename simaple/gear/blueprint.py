@@ -61,13 +61,13 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
             Stat(),
         )
 
-        gear.stat += spell_trace_and_scoll_stat
+        gear.add_stat(spell_trace_and_scoll_stat)
 
         # Apply Starforce
-        gear.stat += self.starforce.calculate_improvement(gear)
+        gear.add_stat(self.starforce.calculate_improvement(gear))
 
         # Apply bonus
-        gear.stat += bonus_stat
+        gear.add_stat(bonus_stat)
 
         return gear
 

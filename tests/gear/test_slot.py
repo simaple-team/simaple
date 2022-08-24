@@ -4,6 +4,7 @@ from simaple.core import Stat
 from simaple.gear.gear import Gear
 from simaple.gear.gear_type import GearType
 from simaple.gear.gearset import GearSlot
+from simaple.gear.slot_name import SlotName
 
 
 class MetaTestcase:
@@ -29,8 +30,8 @@ class MetaTestcase:
 @pytest.mark.parametrize(
     "slot_name, enabled_gear_types, test_gear_type",
     [
-        ("single-type", [GearType.cape], GearType.cape),
-        ("multi-type", [GearType.cape, GearType.shoes], GearType.cape),
+        (SlotName.cape, [GearType.cape], GearType.cape),
+        (SlotName.shoes, [GearType.cape, GearType.shoes], GearType.cape),
     ],
 )
 class TestGoodCases(MetaTestcase):
@@ -53,8 +54,8 @@ class TestGoodCases(MetaTestcase):
 @pytest.mark.parametrize(
     "slot_name, enabled_gear_types, test_gear_type",
     [
-        ("single-type-reject", [GearType.shoes], GearType.glove),
-        ("multi-type-reject", [GearType.cape, GearType.shoes], GearType.glove),
+        (SlotName.shoes, [GearType.shoes], GearType.glove),
+        (SlotName.cape, [GearType.cape, GearType.shoes], GearType.glove),
     ],
 )
 class TestBadCases(MetaTestcase):

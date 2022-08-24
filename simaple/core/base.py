@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import enum
+from typing import Union
 
 from pydantic import BaseModel, Extra
 
@@ -50,6 +51,9 @@ class StatProps(enum.Enum):
     MHP = "MHP"
     MMP = "MMP"
 
+    MHP_multiplier = "MHP_multiplier"
+    MMP_multiplier = "MMP_multiplier"
+
 
 class Stat(BaseModel):
     STR: float = 0.0
@@ -83,6 +87,9 @@ class Stat(BaseModel):
 
     MHP: float = 0.0
     MMP: float = 0.0
+
+    MHP_multiplier: float = 0.0
+    MMP_multiplier: float = 0.0
 
     class Config:
         extra = Extra.forbid
@@ -124,6 +131,8 @@ class Stat(BaseModel):
             damage_multiplier=self.damage_multiplier + arg.damage_multiplier,
             MHP=self.MHP + arg.MHP,
             MMP=self.MMP + arg.MMP,
+            MHP_multiplier=self.MHP_multiplier + arg.MHP_multiplier,
+            MMP_multiplier=self.MMP_multiplier + arg.MMP_multiplier,
             final_damage_multiplier=self.final_damage_multiplier
             + arg.final_damage_multiplier
             + 0.01 * self.final_damage_multiplier * arg.final_damage_multiplier,
@@ -161,6 +170,9 @@ class Stat(BaseModel):
 
         self.MHP += arg.MHP
         self.MMP += arg.MMP
+
+        self.MHP_multiplier += arg.MHP_multiplier
+        self.MMP_multiplier += arg.MMP_multiplier
 
         self.final_damage_multiplier += (
             arg.final_damage_multiplier
@@ -205,8 +217,8 @@ class Stat(BaseModel):
         INT: {self.get_base_stat_coefficient(BaseStatType.INT):8.2f} | Basis {self.INT:7.1f} | {self.INT_multiplier:5.1f} % | static {self.INT_static:7.1f} |
         LUK: {self.get_base_stat_coefficient(BaseStatType.LUK):8.2f} | Basis {self.LUK:7.1f} | {self.LUK_multiplier:5.1f} % | static {self.LUK_static:7.1f} |
         
-        MaxHP: {self.MHP:10.2f}
-        MaxMP: {self.MMP:10.2f}
+        MaxHP: Basis {self.MHP:10.2f} | {self.MHP_multiplier:5.1f} % 
+        MaxMP: Basis {self.MMP:10.2f} | {self.MMP_multiplier:5.1f} % 
 
         ATT: {self.attack_power:6.1f} | {self.attack_power_multiplier:5.1f} % |
         MAT: {self.magic_attack:6.1f} | {self.magic_attack_multiplier:5.1f} % |
@@ -248,3 +260,30 @@ class ActionStat(BaseModel):
         self.buff_duration += arg.buff_duration
         self.cooltime_reduce_rate += arg.cooltime_reduce_rate
         return self
+
+
+class LevelStat(BaseModel):
+    STR: float = 0.0
+    LUK: float = 0.0
+    INT: float = 0.0
+    DEX: float = 0.0
+
+    attack_power: float = 0.0
+    magic_attack: float = 0.0
+
+    class Config:
+        extra = Extra.forbid
+
+    def get_stat(self, level: int) -> Stat:
+        multiplier = level // 10
+        return Stat(
+            STR=self.STR * multiplier,
+            LUK=self.LUK * multiplier,
+            INT=self.INT * multiplier,
+            DEX=self.DEX * multiplier,
+            attack_power=self.attack_power * multiplier,
+            magic_attack=self.magic_attack * multiplier,
+        )
+
+
+AnyStat = Union[Stat, ActionStat, LevelStat]

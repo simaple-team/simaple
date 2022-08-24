@@ -9,6 +9,10 @@ import pydantic
 from simaple.fetch.query import Query
 
 
+class InvalidHTMLError(Exception):
+    ...
+
+
 class Element(pydantic.BaseModel, metaclass=ABCMeta):
     @abstractmethod
     def run(self, html_text) -> Dict[str, Any]:
@@ -58,12 +62,24 @@ class Promise(pydantic.BaseModel, metaclass=ABCMeta):
 class ElementWrapper(Promise):
     element: Element
     query: Query
+    retry_when_html_error: int = 2
+    retry_await: float = 0.3
 
     reserved_path: Optional[str]
 
     async def fetch(self, path, token) -> Dict[str, Any]:
-        if self.reserved_path:
-            path = self.reserved_path
+        retry_count = 0
+        while True:
+            if self.reserved_path:
+                path = self.reserved_path
 
-        query_result = await self.query.get(path, token)
-        return self.element.run(query_result)
+            try:
+                query_result = await self.query.get(path, token)
+                return self.element.run(query_result)
+            except AttributeError as e:
+                if retry_count >= self.retry_when_html_error:
+                    raise InvalidHTMLError from e
+                await asyncio.sleep(self.retry_await)
+                retry_count += 1
+
+        raise InvalidHTMLError("Maximum Retry count exceed.")

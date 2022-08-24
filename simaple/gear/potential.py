@@ -1,9 +1,10 @@
 import enum
+from abc import ABCMeta, abstractmethod
 from typing import List, Union
 
 from pydantic import BaseModel, Extra, Field
 
-from simaple.core import ActionStat, Stat
+from simaple.core import ActionStat, LevelStat, Stat
 
 
 class PotentialTier(enum.IntEnum):
@@ -15,17 +16,29 @@ class PotentialTier(enum.IntEnum):
     legendary = 4
 
 
-class AbstractPotential(BaseModel):
+class PotentialInterface(BaseModel, metaclass=ABCMeta):
+    @abstractmethod
+    def get_stat(self, level: int = 0) -> Stat:
+        ...
+
+    @abstractmethod
+    def get_action_stat(self) -> ActionStat:
+        ...
+
+
+class AbstractPotential(PotentialInterface):
     class Config:
         extra = Extra.forbid
 
-    options: List[Union[Stat, ActionStat]] = Field(default_factory=list)
+    options: List[Union[Stat, ActionStat, LevelStat]] = Field(default_factory=list)
 
-    def get_stat(self) -> Stat:
+    def get_stat(self, level: int = 0) -> Stat:
         stat = Stat()
         for option in self.options:
             if isinstance(option, Stat):
                 stat += option
+            if isinstance(option, LevelStat):
+                stat += option.get_stat(level=level)
 
         return stat
 
