@@ -56,10 +56,11 @@ module = [
 
 [tool.poetry]
 name = "simaple"
-version = "0.0.0"
-description = ""
+version = "0.1.0"
+description = "Maplestory calculation / Simulation library"
 authors = ["meson324 <meson324@gmail.com>"]
 readme = "README.md"
+license = "MIT"
 repository = "https://github.com/oleneyl/simaple"
 
 [tool.poetry.dependencies]
@@ -78,6 +79,8 @@ beautifulsoup4 = "^4.11.1"
 aiohttp = "^3.8.1"
 types-requests = "^2.28.3"
 scipy = "^1.7.2"
+build = "^0.8.0"
+twine = "^4.0.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
