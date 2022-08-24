@@ -58,7 +58,7 @@ class GearTranslator(pydantic.BaseModel):
             base_gear.potential = self.potential_translator.translate(
                 parsed["potential"]["raw"]
             )
-        if "potential" in parsed:
+        if "additional_potential" in parsed:
             base_gear.additional_potential = AdditionalPotential(
                 options=self.potential_translator.translate(
                     parsed["additional_potential"]["raw"]
