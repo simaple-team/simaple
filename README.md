@@ -3,6 +3,9 @@
 - 메이플스토리에 관련된 다양한 연산을 지원하는 패키지.
 - Package for various calculation related with Maplestory.
 
+## Install
+- `pip install simaple`
+
 ## Functions
 
 ### 아이템 관련
