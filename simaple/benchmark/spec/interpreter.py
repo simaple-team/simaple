@@ -51,14 +51,14 @@ def benchmark_interpreter(job_category: JobCategory):
             attack_patch(
                 attack_priority=config["attack_priority"],
             ),
-            GearIdPatch(job_category=JobCategory.warrior),
+            GearIdPatch(job_category=job_category),
         ]
     )
 
 
 def builtin_blueprint(name: str, job_category: JobCategory):
     interpreter = benchmark_interpreter(
-        job_category=JobCategory.warrior,
+        job_category=job_category,
     )
     file_path = Path(__file__).parent / "builtin" / f"{name}.yaml"
 
