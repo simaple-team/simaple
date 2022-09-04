@@ -1,83 +1,101 @@
 ---
 summary:
-  - 에픽둘둘 + 일부 유니크
+  - 레전둘둘(절반)
 spec_hint:
-  union_block_count: 29
-  character_level: 250
+  union_block_count: 33
+  character_level: 270
 anchors:
   armor: &armor
     bonuses:
-      - grade: 4
+      - grade: 6
         bonus_type: first_stat_second_stat
       - grade: 5
-        bonus_type: first_stat_third_stat
-      - grade: 5
+        bonus_type: first_stat
+      - grade: 6
         bonus_type: all_stat_multiplier
     spell_trace:
       probability: 30
       stat_prop_type: first_stat
-    star: 12
+    star: 22
     potential:
       options:
+        - first_stat_multiplier: 12
+        - first_stat_multiplier: 9
         - first_stat_multiplier: 6
-        - first_stat_multiplier: 3
     additional_potential:
       options:
-        - first_att: 10
+        - first_stat_multiplier: 5
+        - first_stat_multiplier: 4
   acc: &acc
     bonuses: &acc_bonus
-      - grade: 4
+      - grade: 6
         bonus_type: first_stat_second_stat
       - grade: 5
-        bonus_type: first_stat_third_stat
-      - grade: 5
+        bonus_type: first_stat
+      - grade: 6
         bonus_type: all_stat_multiplier
     scroll:
       name: 악공
       stat:
-        first_att: 2.5
+        first_att:  4.2
     potential:
       options:
+        - first_stat_multiplier: 12
+        - first_stat_multiplier: 9
         - first_stat_multiplier: 6
-        - first_stat_multiplier: 3
     additional_potential:
       options:
-        - first_att: 10
-    star: 12
-default:
+        - first_stat_multiplier: 5
+        - first_stat_multiplier: 4
+    star: 18
+spec:
   arcane_symbols: 
-    - level: 18
+    - level: 20
       stat_type: first_stat
-    - level: 18
+    - level: 20
       stat_type: first_stat
-    - level: 18
+    - level: 20
       stat_type: first_stat
-    - level: 18
+    - level: 20
       stat_type: first_stat
-    - level: 18
+    - level: 20
       stat_type: first_stat
-    - level: 18
+    - level: 20
+      stat_type: first_stat
+  authentic_symbols:
+    - level: 7
+      stat_type: first_stat
+    - level: 3
       stat_type: first_stat
   pet_equip:
     first_stat: 0
   pet_set: 
     first_stat: 0
   cash:
-    first_stat: 0
+    first_stat: 75
+    second_stat: 75
+    third_stat: 75
+    first_att: 40
   weapon_potential_tiers:
     - - 4
       - 3
       - 3
-    - - 3
-      - 2
-      - 2
-    - - 3
-      - 2
-      - 2
+    - - 4
+      - 3
+      - 3
+    - - 4
+      - 3
+      - 3
+  title:
+    # 핑아일체
+    all_stat: 10
+    all_att: 5
+    boss_damage_multiplier: 10
   gears:
     cap:
       gear_id: 앱솔랩스 모자
       <<: *armor
+      star: 18
       potential:
         options:
           - first_stat_multiplier: 12
@@ -99,15 +117,10 @@ default:
     glove:
       gear_id: 앱솔랩스 장갑
       <<: *armor
-      star: 17
       potential:
         options:
           - critical_damage: 8
-          - first_stat_multiplier: 9
-      additional_potential:
-        options:
-          - first_att: 10
-          - first_stat_multiplier: 4
+          - critical_damage: 8
     cape:
       gear_id: 앱솔랩스 망토
       <<: *armor
@@ -115,10 +128,15 @@ default:
       gear_id: 앱솔랩스 숄더
       <<: *acc
     face_accessory:
-      gear_id: 응축된 힘의 결정석
+      gear_id: 130얼장
       <<: *acc
+      bonuses:
+        - grade: 4
+          bonus_type: first_stat
+        - grade: 3
+          bonus_type: all_stat_multiplier
     eye_accessory:
-      gear_id: 아쿠아틱 레터 눈장식
+      gear_id: 블랙빈 마크
       <<: *acc
     earrings:
       gear_id: 데아 시두스 이어링
@@ -127,10 +145,8 @@ default:
       gear_id: 골든 클로버 벨트
       <<: *acc
     ring1:
-      gear_id: 실버블라썸 링
+      gear_id: 마이스터링
       <<: *acc
-      exclude: 
-        - bonuses
     ring2:
       gear_id: 이터널 플레임 링
       <<: *acc
@@ -150,11 +166,21 @@ default:
         - bonuses
         - star
     pendant1:
-      gear_id: 매커네이터 펜던트
+      gear_id: 도미네이터 펜던트
       <<: *acc
+      scroll:
+        name: 파편
+        stat:
+          all_stat: 3
+          all_att: 3
     pendant2:
-      gear_id: 카오스 혼테일의 목걸이
+      gear_id: 130펜던
       <<: *acc
+      bonuses:
+        - grade: 4
+          bonus_type: first_stat
+        - grade: 3
+          bonus_type: all_stat_multiplier  
     pocket:
       gear_id: 핑크빛 성배
       bonuses: *acc_bonus
@@ -172,20 +198,23 @@ default:
       spell_trace:
         probability: 15
         stat_prop_type: first_stat
-      star: 17
+      star: 22
       additional_potential:
         options:
-          - first_att_multiplier: 6
+          - first_att_multiplier: 12
+          - first_att_multiplier: 9
     subweapon:
       gear_id: 노블 브레이슬릿
       additional_potential:
         options:
-          - first_att_multiplier: 6
+          - first_att_multiplier: 12
+          - first_att_multiplier: 9
     emblem:
       gear_id: 골드 나이트 엠블렘
       additional_potential:
         options:
-          - first_att_multiplier: 6
+          - first_att_multiplier: 12
+          - first_att_multiplier: 9
     machine_heart:
       gear_id: 리튬 하트
       <<: *acc
@@ -194,8 +223,3 @@ default:
         stat:
           first_att: 5
       star: 8
-  title:
-    # 핑아일체
-    all_stat: 10
-    all_att: 5
-    boss_damage_multiplier: 10

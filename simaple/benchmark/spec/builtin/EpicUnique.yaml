@@ -1,36 +1,35 @@
 ---
 summary:
-  - 18레전둘둘
+  - 에픽둘둘 + 일부 유니크
 spec_hint:
-  union_block_count: 32
-  character_level: 260
+  union_block_count: 29
+  character_level: 250
 anchors:
   armor: &armor
     bonuses:
-      - grade: 5
+      - grade: 4
         bonus_type: first_stat_second_stat
       - grade: 5
-        bonus_type: first_stat
+        bonus_type: first_stat_third_stat
       - grade: 5
         bonus_type: all_stat_multiplier
     spell_trace:
       probability: 30
       stat_prop_type: first_stat
-    star: 18
+    star: 12
     potential:
       options:
-        - first_stat_multiplier: 12
-        - first_stat_multiplier: 9
+        - first_stat_multiplier: 6
+        - first_stat_multiplier: 3
     additional_potential:
       options:
         - first_att: 10
-        - first_stat_multiplier: 4
   acc: &acc
     bonuses: &acc_bonus
-      - grade: 5
+      - grade: 4
         bonus_type: first_stat_second_stat
       - grade: 5
-        bonus_type: first_stat
+        bonus_type: first_stat_third_stat
       - grade: 5
         bonus_type: all_stat_multiplier
     scroll:
@@ -39,39 +38,32 @@ anchors:
         first_att: 2.5
     potential:
       options:
-        - first_stat_multiplier: 12
-        - first_stat_multiplier: 9
+        - first_stat_multiplier: 6
+        - first_stat_multiplier: 3
     additional_potential:
       options:
         - first_att: 10
-        - first_stat_multiplier: 4
-    star: 18
-default:
+    star: 12
+spec:
   arcane_symbols: 
-    - level: 20
+    - level: 18
       stat_type: first_stat
-    - level: 20
+    - level: 18
       stat_type: first_stat
-    - level: 20
+    - level: 18
       stat_type: first_stat
-    - level: 20
+    - level: 18
       stat_type: first_stat
-    - level: 20
+    - level: 18
       stat_type: first_stat
-    - level: 20
-      stat_type: first_stat
-  authentic_symbols:
-    - level: 4
+    - level: 18
       stat_type: first_stat
   pet_equip:
     first_stat: 0
   pet_set: 
     first_stat: 0
   cash:
-    first_stat: 75
-    second_stat: 75
-    third_stat: 75
-    first_att: 40
+    first_stat: 0
   weapon_potential_tiers:
     - - 4
       - 3
@@ -107,10 +99,15 @@ default:
     glove:
       gear_id: 앱솔랩스 장갑
       <<: *armor
+      star: 17
       potential:
         options:
           - critical_damage: 8
-          - critical_damage: 8
+          - first_stat_multiplier: 9
+      additional_potential:
+        options:
+          - first_att: 10
+          - first_stat_multiplier: 4
     cape:
       gear_id: 앱솔랩스 망토
       <<: *armor
@@ -121,7 +118,7 @@ default:
       gear_id: 응축된 힘의 결정석
       <<: *acc
     eye_accessory:
-      gear_id: 블랙빈 마크
+      gear_id: 아쿠아틱 레터 눈장식
       <<: *acc
     earrings:
       gear_id: 데아 시두스 이어링
@@ -153,15 +150,10 @@ default:
         - bonuses
         - star
     pendant1:
-      gear_id: 도미네이터 펜던트
-      <<: *acc
-      scroll:
-        name: 파편
-        stat:
-          all_stat: 3
-          all_att: 3
-    pendant2:
       gear_id: 매커네이터 펜던트
+      <<: *acc
+    pendant2:
+      gear_id: 카오스 혼테일의 목걸이
       <<: *acc
     pocket:
       gear_id: 핑크빛 성배
@@ -183,20 +175,17 @@ default:
       star: 17
       additional_potential:
         options:
-          - first_att_multiplier: 12
-          - first_att_multiplier: 9
+          - first_att_multiplier: 6
     subweapon:
       gear_id: 노블 브레이슬릿
       additional_potential:
         options:
-          - first_att_multiplier: 12
-          - first_att_multiplier: 9
+          - first_att_multiplier: 6
     emblem:
       gear_id: 골드 나이트 엠블렘
       additional_potential:
         options:
-          - first_att_multiplier: 12
-          - first_att_multiplier: 9
+          - first_att_multiplier: 6
     machine_heart:
       gear_id: 리튬 하트
       <<: *acc
