@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import cast
 
 import yaml
 
@@ -15,24 +16,24 @@ from simaple.spec.interpreter import Interpreter
 
 __JOB_STAT_PRIORITY = {
     JobCategory.warrior: {
-        "stat_priority": ["STR", "DEX", "INT", "LUK"],
-        "attack_priority": ["attack_power", "magic_attack"],
+        "stat_priority": ("STR", "DEX", "INT", "LUK"),
+        "attack_priority": ("attack_power", "magic_attack"),
     },
     JobCategory.mage: {
-        "stat_priority": ["INT", "LUK", "STR", "DEX"],
-        "attack_priority": ["magic_attack", "magic_attack"],
+        "stat_priority": ("INT", "LUK", "STR", "DEX"),
+        "attack_priority": ("magic_attack", "magic_attack"),
     },
     JobCategory.thief: {
-        "stat_priority": ["LUK", "DEX", "STR", "INT"],
-        "attack_priority": ["attack_power", "magic_attack"],
+        "stat_priority": ("LUK", "DEX", "STR", "INT"),
+        "attack_priority": ("attack_power", "magic_attack"),
     },
     JobCategory.archer: {
-        "stat_priority": ["DEX", "STR", "LUK", "INT"],
-        "attack_priority": ["attack_power", "magic_attack"],
+        "stat_priority": ("DEX", "STR", "LUK", "INT"),
+        "attack_priority": ("attack_power", "magic_attack"),
     },
     JobCategory.pirate: {
-        "stat_priority": ["STR", "DEX", "LUK", "INT"],
-        "attack_priority": ["attack_power", "magic_attack"],
+        "stat_priority": ("STR", "DEX", "LUK", "INT"),
+        "attack_priority": ("attack_power", "magic_attack"),
     },
 }
 
@@ -41,15 +42,18 @@ __JOB_STAT_PRIORITY = {
 
 def benchmark_interpreter(job_category: JobCategory):
     config = __JOB_STAT_PRIORITY[job_category]
+    stat_priority = cast(tuple[str, str, str, str], config["stat_priority"])
+    attack_priority = cast(tuple[str, str], config["attack_priority"])
+
     return Interpreter(
         patches=[
             all_stat_patch(),
             all_att_patch(),
             stat_patch(
-                stat_priority=config["stat_priority"],
+                stat_priority=stat_priority,
             ),
             attack_patch(
-                attack_priority=config["attack_priority"],
+                attack_priority=attack_priority,
             ),
             GearIdPatch(job_category=job_category),
         ]
