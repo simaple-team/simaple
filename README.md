@@ -7,7 +7,7 @@
 - `pip install simaple`
 
 ## Documentation
-- docs/ 참조.
+- https://simaple.readthedocs.io/en/latest/
 
 ## Functions
 
