@@ -7,8 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 import sys
 import os
-
-sys.path.insert(0, os.path.abspath('../'))
+import sphinx_rtd_theme
 
 project = 'simaple'
 copyright = '2022, meson3241'
@@ -22,7 +21,11 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.coverage",
     'sphinx_rtd_theme',
+    'readthedocs_ext.readthedocs',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.todo',
 ]
+
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
@@ -37,7 +40,6 @@ html_theme_options = {
     "collapse_navigation" : False
 }
 
-html_static_path = ["_static"]
+html_static_path = []
 
 master_doc = "index"
-
