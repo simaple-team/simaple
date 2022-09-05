@@ -1,6 +1,6 @@
 [tool.poe.tasks]
-_black-check = "black --check ."
-_isort-check = "isort --check-only ."
+_black-check = "black --check simaple tests"
+_isort-check = "isort --check-only simaple tests"
 formatting-check = ["_black-check", "_isort-check"]
 
 _black = "black simaple tests"
