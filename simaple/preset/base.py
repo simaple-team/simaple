@@ -51,6 +51,12 @@ class Preset(BaseModel):
 
 
 class PresetOptimizer(BaseModel):
+    """
+    An opitmization-target class, which yields optimized Preset object
+    via method ``create_optimal_preset_from_gearset``.
+
+    Optimzation may not optimal; also takes long time (more than 1 minute).
+    """
     union_block_count: int
     default_stat: Stat
     level: int
@@ -70,6 +76,10 @@ class PresetOptimizer(BaseModel):
         link_count: int,
         weapon_potential_tier: Tuple[PotentialTier, PotentialTier, PotentialTier],
     ):
+        """
+        Create Optimizer based on minimal information.
+        Acts as constructor overloading.
+        """
         return PresetOptimizer(
             default_stat=job.get_default_stat(),
             level=job.level,
@@ -161,6 +171,9 @@ class PresetOptimizer(BaseModel):
         return potentials
 
     def create_optimal_preset_from_gearset(self, gearset_prototype: Gearset) -> Preset:
+        """
+        Return optimal preset, based on given gearset ``gearset_prototype``.
+        """
         gearset = gearset_prototype.copy()
 
         preset = Preset(

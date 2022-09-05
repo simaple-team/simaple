@@ -6,6 +6,9 @@
 ## Install
 - `pip install simaple`
 
+## Documentation
+- docs/ 참조.
+
 ## Functions
 
 ### 아이템 관련
@@ -21,41 +24,3 @@
 
 - 홈페이지 데이터 불러오기 기능
 
-
-## Examples
-
-### Hompage data fetch
-
-- Fetch
-```python
-from simaple.fetch.application.base import KMSFetchApplication
-from simaple.gear.slot_name import SlotName
-
-app = KMSFetchApplication()
-
-character_response = app.run("Character-Name")
-```
-
-- Load Item information
-```python
-from simaple.fetch.application.base import KMSFetchApplication
-from simaple.gear.slot_name import SlotName
-
-app = KMSFetchApplication()
-
-character_response = app.run("Character-Name")
-cap = character_response.get_item(SlotName.cap)
-
-print(cap.show())
-```
-
-- Load raw-data for custom application
-
-```python
-from simaple.fetch.application.base import KMSFetchApplication
-
-character_response = app.run("Character-Name")
-raw_data = character_response.get_raw()
-
-print(raw_data)
-```
