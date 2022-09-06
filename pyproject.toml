@@ -1,6 +1,6 @@
 [tool.poe.tasks]
-_black-check = "black --check ."
-_isort-check = "isort --check-only ."
+_black-check = "black --check simaple tests"
+_isort-check = "isort --check-only simaple tests"
 formatting-check = ["_black-check", "_isort-check"]
 
 _black = "black simaple tests"
@@ -76,6 +76,8 @@ beautifulsoup4 = "^4.11.1"
 aiohttp = "^3.8.1"
 scipy = "^1.7.2"
 requests = "^2.26.0"
+Sphinx = "^5.1.1"
+sphinx-rtd-theme = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

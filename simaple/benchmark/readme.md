@@ -3,36 +3,6 @@ Benchmark
 
 - Provide Standardized item set for fair-comparison between jobs.
 
-
-Usage
-=====
-
-- benchmark는 단일 메서드 build만을 지원합니다.
-
-### using builtin benchmark
-
-- 아래와 같은 Builtin Benchmark를 지원합니다.
-  - Epic
-  - EpicUnique
-  - Unique
-  - LegendaryHalf
-  - Legendary18
-  - Legendary
-
-```python
-from simaple.benchmark.interpreter import builtin_blueprint
-from simaple.core import JobCategory
-from simaple.gear.gear_repository import GearRepository
-
-benchmark = builtin_blueprint("EpicUnique", JobCategory.warrior)
-gear_repository = GearRepository()
-
-gearset = user_gearset_blueprint.build(gear_repository)
-print(gearset.get_total_stat())
-```
-
-
-- Use builtin
 Ideation
 =======
 
