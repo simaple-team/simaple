@@ -1,0 +1,31 @@
+kind: PassiveSkill
+version: v1
+metadata:
+  type: PassiveSkill
+  group: paladin
+data:
+  - name: 웨폰 마스터리
+    stat:
+      final_damage_multiplier: 10
+  - name: 웨폰 액셀레이션
+    stat:
+      STR: 20
+  - name: 피지컬 트레이닝
+    stat:
+      STR: 30
+      DEX: 30
+  - name: 실드 마스터리
+    stat:
+      attack_power: 10
+  - name: 블레싱 아머
+    stat:
+      # attack_power: 20 (피격 시에만 적용)
+  # 4차: 컴뱃 오더스 적용 (쓸컴뱃 X)
+  - name: 팔라딘 엑스퍼트 (두손검)
+    combat_orders_enabled: false
+    default_skill_level: 32
+    stat:
+      critical_rate: 10 + lv
+      critical_damage: 5 + lv // 3 + (5)
+      ignored_defence: 15 + math.ceil(lv / 2)
+      final_damage_multiplier: 10 + lv

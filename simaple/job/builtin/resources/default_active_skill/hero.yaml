@@ -1,0 +1,12 @@
+kind: PassiveSkill
+version: v1
+metadata:
+  type: DefaultActiveSkill
+  group: hero
+data:
+  - name: 스피릿 블레이드
+    stat:
+      attack_power: 30
+  - name: 메이플 용사
+    stat:
+      STR: math.floor((18 + 5 * character_level) * 0.15)

@@ -1,0 +1,35 @@
+kind: PassiveSkill
+version: v1
+metadata:
+  type: PassiveSkill
+  group: hero
+data:
+  - name: 웨폰 마스터리
+    stat:
+      final_damage_multiplier: 10
+  - name: 웨폰 액셀레이션
+    stat:
+      STR: 20
+  - name: 피지컬 트레이닝
+    stat:
+      STR: 30
+      DEX: 30
+  - name: 찬스 어택
+    stat:
+      critical_rate: 20
+      final_damage_multiplier: 25
+  - name: 인레이지
+    combat_orders_enabled: true
+    default_skill_level: 30
+    stat:
+      final_damage_multiplier: 10 + lv // 2
+      critical_damage: 10 + lv // 3
+  - name: 컴뱃 마스터리
+    passive_skill_enabled: true
+    combat_orders_enabled: true
+    default_skill_level: 30
+    stat:
+      ignored_defence: 20 + lv
+  - name: 어드밴스드 파이널 어택
+    stat:
+      attack_power: 30 + lv

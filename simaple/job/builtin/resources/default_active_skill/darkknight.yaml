@@ -1,0 +1,16 @@
+kind: PassiveSkill
+version: v1
+metadata:
+  type: DefaultActiveSkill
+  group: darkknight
+data:
+  - name: 크로스 오버 체인 (액티브)
+    stat:
+      final_damage_multiplier: 20
+  - name: 비홀더스 버프
+    stat:
+      attack_power: 40
+      critical_rate: 10
+  - name: 메이플 용사
+    stat:
+      STR: math.floor((18 + 5 * character_level) * 0.15)

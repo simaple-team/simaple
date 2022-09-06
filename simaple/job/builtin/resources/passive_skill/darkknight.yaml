@@ -1,0 +1,43 @@
+kind: PassiveSkill
+version: v1
+metadata:
+  type: PassiveSkill
+  group: darkknight
+data:
+  - name: 웨폰 마스터리
+    stat:
+      damage_multiplier: 5
+  - name: 웨폰 액셀레이션
+    stat:
+      STR: 20
+  - name: 피지컬 트레이닝
+    stat:
+      STR: 30
+      DEX: 30
+  - name: 크로스 오버 체인 (패시브)
+    stat:
+      final_damage_multiplier: 50
+  - name: 로드 오브 다크니스
+    stat:
+      critical_rate: 30
+      critical_damage: 8
+  - name: 리인카네이션 (패시브)
+    passive_skill_enabled: true
+    combat_orders_enabled: true
+    default_skill_level: 30
+    stat:
+      final_damage_multiplier: lv
+      critical_rate: math.ceil(lv / 3)
+      critical_damage: 5 + lv // 3
+  - name: 다크 레조넌스 (패시브)
+    combat_orders_enabled: true
+    default_skill_level: 30
+    stat:
+      ignored_defence: lv
+  - name: 어드밴스드 웨폰 마스터리
+    passive_skill_enabled: true
+    combat_orders_enabled: true
+    default_skill_level: 30
+    stat:
+      attack_power: lv
+      critical_damage: 5 + lv // 3
