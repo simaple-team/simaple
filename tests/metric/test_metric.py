@@ -1,7 +1,8 @@
 import json
 
 from simaple.core import Stat
-from simaple.job.builtin.archmagefb import job_archmagefb
+from simaple.core.damage import INTBasedDamageLogic
+from simaple.job.builtin.archmagefb import archmagefb_static_property
 from simaple.job.passive_skill import PassiveSkillArgument
 from simaple.metric.metric import RegressionMetric
 
@@ -13,9 +14,12 @@ def test_metric():
         character_level=260,
     )
 
-    job = job_archmagefb(argument)
+    static_property = archmagefb_static_property(argument)
 
-    metric = RegressionMetric(job)
+    metric = RegressionMetric(
+        static_property,
+        INTBasedDamageLogic(attack_range_constant=1.2, mastery=0.95),
+    )
     reference_list = [
         "./tests/metric/refs/Epic.json",
         "./tests/metric/refs/EpicUnique.json",
