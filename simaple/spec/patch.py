@@ -12,7 +12,7 @@ class Patch(BaseModel, metaclass=ABCMeta):
 
 class DFSTraversePatch(Patch):
     @abstractmethod
-    def patch_list(self, value):
+    def patch_value(self, value):
         ...
 
     @abstractmethod
@@ -24,7 +24,7 @@ class DFSTraversePatch(Patch):
             return [self.apply(arg) for arg in raw]
 
         if isinstance(raw, (int, float, str)):
-            patch = self.patch_list(raw)
+            patch = self.patch_value(raw)
             return patch or raw
 
         interpreted = {}
@@ -56,7 +56,7 @@ class StringPatch(DFSTraversePatch):
             raise ValueError("As-is and To-be must be same length.")
         return v
 
-    def patch_list(self, value):
+    def patch_value(self, value):
         return self.translate(value)
 
     def patch_dict(self, k, v):
@@ -80,7 +80,7 @@ class KeywordExtendPatch(DFSTraversePatch):
     target_keyword: str
     extends: list[str]
 
-    def patch_list(self, value):
+    def patch_value(self, value):
         return None
 
     def patch_dict(self, k, v):
