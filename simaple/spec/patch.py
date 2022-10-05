@@ -1,8 +1,10 @@
+import math
+import re
 from abc import ABCMeta, abstractmethod
 from typing import Any, Union
 
 import pydantic
-from pydantic import BaseModel
+from pydantic import BaseModel, PrivateAttr
 
 
 class Patch(BaseModel, metaclass=ABCMeta):
@@ -91,3 +93,39 @@ class KeywordExtendPatch(DFSTraversePatch):
             }
 
         return None
+
+
+class EvalPatch(DFSTraversePatch):
+    _match_string: re.Pattern = PrivateAttr(default=re.compile(r"^\s*{{(.+)}}\s*$"))
+    injected_values: dict[str, Any]
+
+    def patch_value(self, value):
+        return self.evaluate(value)
+
+    def patch_dict(self, k, v):
+        return {self.evaluate(k): self.evaluate(v)}
+
+    def evaluate(self, value):
+        if not isinstance(value, str) or not self._is_target(value):
+            return value
+
+        evaluation_target = self._get_evaluation_target(value)
+        return self._evaluate_with_math(evaluation_target)
+
+    def _is_target(self, value) -> bool:
+        return self._match_string.search(value) is not None
+
+    def _get_evaluation_target(self, value):
+        match = self._match_string.search(value)
+        if match is None:
+            raise ValueError("No evaluation target exists")
+
+        return match.group(1)
+
+    def _evaluate_with_math(self, value):
+        global_variables = globals()
+        global_variables.update(self.injected_values)
+        global_variables["math"] = math
+
+        assert "import" not in value
+        return eval(value, global_variables)  # pylint: disable=W0123
