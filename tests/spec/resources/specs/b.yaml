@@ -1,0 +1,13 @@
+kind: PassiveSkill 
+version: simaple.io/test
+metadata:
+  label:
+    group: test_group
+    name: B
+data:
+  name: test_passive_4
+  passive_skill_enabled: false
+  combat_orders_enabled: true
+  default_skill_level: 10
+  stat:
+    ignored_defence: 20 + math.ceil(lv / 2)

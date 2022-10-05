@@ -1,14 +1,15 @@
-import copy
 from abc import ABCMeta, abstractmethod
 from pathlib import Path
-from typing import Any, Optional
+from typing import Optional
 
 import yaml
+
+from simaple.spec.spec import Spec
 
 
 class SpecRepository(metaclass=ABCMeta):
     @abstractmethod
-    def get(self, **kwargs) -> dict[Any, Any]:
+    def get(self, **kwargs) -> Spec:
         ...
 
 
@@ -21,11 +22,9 @@ class DirectorySpecRepository(SpecRepository):
         self,
         relative_location: str,
         index_key: Optional[str] = None,
-        metadata_key="metadata",
     ):
-        self._db = []
-        self._index: dict[str, dict[str, Any]] = {}
-        self._metadata_key = metadata_key
+        self._db: list[Spec] = []
+        self._index: dict[str, dict[str, Spec]] = {}
 
         self.load(relative_location)
 
@@ -39,9 +38,9 @@ class DirectorySpecRepository(SpecRepository):
     def create_index(self, index_key):
         index_map = {}
         for document in self._db:
-            if document[self._metadata_key][index_key] in index_map:
+            if document.metadata.label[index_key] in index_map:
                 raise KeyError("Index must unique")
-            index_map[document[self._metadata_key][index_key]] = document
+            index_map[document.metadata.label[index_key]] = document
 
         self._index[index_key] = index_map
 
@@ -52,16 +51,16 @@ class DirectorySpecRepository(SpecRepository):
         with open(file_path, "r", encoding="utf-8") as f:
             raw_configuration = yaml.safe_load(f)
 
-        return raw_configuration
+        return Spec.parse_obj(raw_configuration)
 
-    def get(self, **kwargs):
+    def get(self, **kwargs) -> Spec:
         for k, v in kwargs.items():
             if k in self._index:
-                value = self._index[k][v]
-                return copy.deepcopy(value)
+                spec = self._index[k][v]
+                return spec.copy()
 
-        for document in self._db:
-            if all(document[self._metadata_key].get(k) == v for k, v in kwargs.items()):
-                return document
+        for spec in self._db:
+            if spec.metadata.matches(**kwargs):
+                return spec.copy()
 
         return None

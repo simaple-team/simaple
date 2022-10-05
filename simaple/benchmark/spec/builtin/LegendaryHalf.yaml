@@ -1,6 +1,15 @@
 ---
-summary:
-  - 레전둘둘(절반)
+kind: UserGearsetBlueprint 
+version: simaple.io/blueprint
+metadata:
+  label: 
+    summary: 레전둘둘(절반)
+patch:
+  - KeywordExtendPatch
+  - KeywordExtendPatch
+  - StringPatch
+  - StringPatch
+  - GearIdPatch
 spec_hint:
   union_block_count: 33
   character_level: 260
@@ -47,7 +56,7 @@ anchors:
         - first_att: 10
         - first_stat_multiplier: 4
     star: 18
-spec:
+data:
   arcane_symbols: 
     - level: 20
       stat_type: first_stat

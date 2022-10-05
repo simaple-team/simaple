@@ -1,0 +1,10 @@
+kind: PassiveSkill 
+version: simaple.io/test
+metadata:
+  label:
+    group: test_group
+    name: A
+data:
+  name: test_passive_1
+  stat:
+    INT: 40

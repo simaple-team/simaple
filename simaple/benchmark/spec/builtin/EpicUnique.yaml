@@ -1,6 +1,15 @@
 ---
-summary:
-  - 에픽둘둘 + 일부 유니크
+kind: UserGearsetBlueprint 
+version: simaple.io/blueprint
+metadata:
+  label: 
+    summary: 에픽둘둘 + 일부 유니크
+patch:
+  - KeywordExtendPatch
+  - KeywordExtendPatch
+  - StringPatch
+  - StringPatch
+  - GearIdPatch
 spec_hint:
   union_block_count: 29
   character_level: 250
@@ -44,7 +53,7 @@ anchors:
       options:
         - first_att: 10
     star: 12
-spec:
+data:
   arcane_symbols: 
     - level: 18
       stat_type: first_stat
