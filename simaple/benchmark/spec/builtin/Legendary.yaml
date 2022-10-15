@@ -1,8 +1,9 @@
 ---
-kind: UserGearsetBlueprint 
-version: simaple.io/blueprint
+kind: blueprint 
+version: simaple.io/UserGearsetBlueprint
 metadata:
   label: 
+    name: Legendary
     summary: 레전둘둘(절반)
 patch:
   - KeywordExtendPatch

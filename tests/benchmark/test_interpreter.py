@@ -1,5 +1,6 @@
 import pytest
 
+from simaple.benchmark.gearset_blueprint import UserGearsetBlueprint
 from simaple.benchmark.spec.interpreter import builtin_blueprint
 from simaple.core import BaseStatType, JobCategory
 from simaple.gear.gear_repository import GearRepository
@@ -17,7 +18,7 @@ from simaple.gear.gear_repository import GearRepository
     ],
 )
 def test_interpreter_get_gearset(benchmark_name):
-    user_gearset_blueprint = builtin_blueprint(
+    user_gearset_blueprint: UserGearsetBlueprint = builtin_blueprint(
         benchmark_name,
         job_category=JobCategory.warrior,
     )

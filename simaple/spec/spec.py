@@ -4,8 +4,8 @@ import pydantic
 
 
 class SpecMetadata(pydantic.BaseModel):
-    label: Optional[dict[str, Any]]
-    annotation: Optional[dict[str, Any]]
+    label: dict[str, Any] = pydantic.Field(default_factory=dict)
+    annotation: dict[str, Any] = pydantic.Field(default_factory=dict)
 
     def matches(self, **labels) -> bool:
         return all(self.label.get(k) == v for k, v in labels.items())
@@ -45,6 +45,10 @@ class Spec(pydantic.BaseModel):
             raise PatchSpecificationMatchFailError()
 
         data = self.data.copy()
+
+        if patches is None:
+            return data
+
         for patch in patches:
             data = patch.apply(data)
 

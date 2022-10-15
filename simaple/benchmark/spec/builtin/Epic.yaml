@@ -1,8 +1,9 @@
 ---
-kind: UserGearsetBlueprint 
-version: simaple.io/blueprint
+kind: blueprint 
+version: simaple.io/UserGearsetBlueprint
 metadata:
   label: 
+    name: Epic
     summary: 에픽둘둘
 patch:
   - KeywordExtendPatch

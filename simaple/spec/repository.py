@@ -9,7 +9,7 @@ from simaple.spec.spec import Spec
 
 class SpecRepository(metaclass=ABCMeta):
     @abstractmethod
-    def get(self, **kwargs) -> Spec:
+    def get(self, **kwargs) -> Optional[Spec]:
         ...
 
 
@@ -33,7 +33,8 @@ class DirectorySpecRepository(SpecRepository):
 
     def load(self, base_path):
         for path in self._get_specification_paths(base_path):
-            self._db.append(self._load_specification(path))
+            for spec in self._load_specifications(path):
+                self._db.append(spec)
 
     def create_index(self, index_key):
         index_map = {}
@@ -47,13 +48,13 @@ class DirectorySpecRepository(SpecRepository):
     def _get_specification_paths(self, base_path: str):
         return Path(base_path).rglob("*.yaml")
 
-    def _load_specification(self, file_path: Path):
+    def _load_specifications(self, file_path: Path):
         with open(file_path, "r", encoding="utf-8") as f:
-            raw_configuration = yaml.safe_load(f)
+            raw_configurations = yaml.safe_load_all(f)
+            for raw_configuration in raw_configurations:
+                yield Spec.parse_obj(raw_configuration)
 
-        return Spec.parse_obj(raw_configuration)
-
-    def get(self, **kwargs) -> Spec:
+    def get(self, **kwargs) -> Optional[Spec]:
         for k, v in kwargs.items():
             if k in self._index:
                 spec = self._index[k][v]

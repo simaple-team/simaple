@@ -2,11 +2,13 @@ import os
 import pathlib
 from typing import Any
 
-from simaple.spec.repository import DirectorySpecRepository
-from simaple.spec.loadable import TaggedNamespacedABCMeta
-from simaple.spec.loader import SpecBasedLoader
 import pydantic
 
+from simaple.spec.loadable import (  # pylint:disable=unused-import
+    TaggedNamespacedABCMeta,
+)
+from simaple.spec.loader import SpecBasedLoader
+from simaple.spec.repository import DirectorySpecRepository
 
 CURRENT_PATH = pathlib.Path(os.path.dirname(__file__))
 
@@ -21,7 +23,6 @@ class BTestClass(pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta("TestClas
     passive_skill_enabled: bool
     combat_orders_enabled: bool
     default_skill_level: int
-    stat: dict[str, Any]
 
 
 def test_repository():
@@ -35,3 +36,14 @@ def test_repository():
 
     assert isinstance(loaded_class_a, ATestClass)
     assert isinstance(loaded_class_b, BTestClass)
+
+
+def test_list_yaml():
+    spec_path = CURRENT_PATH / "resources" / "specs"
+
+    repository = DirectorySpecRepository(spec_path)
+    loader = SpecBasedLoader(repository)
+
+    loaded_class_a_2 = loader.load(query={"group": "test_group", "name": "A_2"})
+
+    assert isinstance(loaded_class_a_2, ATestClass)

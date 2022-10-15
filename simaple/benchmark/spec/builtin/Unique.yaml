@@ -1,8 +1,9 @@
 ---
-kind: UserGearsetBlueprint 
-version: simaple.io/blueprint
+kind: blueprint 
+version: simaple.io/UserGearsetBlueprint
 metadata:
   label: 
+    name: Unique
     summary: 에픽둘둘 + 일부 유니크
 patch:
   - KeywordExtendPatch

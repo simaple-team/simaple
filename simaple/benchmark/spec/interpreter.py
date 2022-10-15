@@ -1,9 +1,6 @@
 from pathlib import Path
 from typing import cast
 
-import yaml
-
-from simaple.benchmark.gearset_blueprint import UserGearsetBlueprint
 from simaple.benchmark.spec.patch import (
     GearIdPatch,
     Patch,
@@ -13,7 +10,8 @@ from simaple.benchmark.spec.patch import (
     stat_patch,
 )
 from simaple.core import JobCategory
-from simaple.spec.spec import Spec
+from simaple.spec.loader import SpecBasedLoader
+from simaple.spec.repository import DirectorySpecRepository
 
 __JOB_STAT_PRIORITY = {
     JobCategory.warrior: {
@@ -63,14 +61,8 @@ def builtin_blueprint(name: str, job_category: JobCategory):
     patches = benchmark_patches(
         job_category=job_category,
     )
-    file_path = Path(__file__).parent / "builtin" / f"{name}.yaml"
 
-    with open(file_path, encoding="utf-8") as f:
-        raw_configuration = yaml.safe_load(f)
-        spec = Spec.parse_obj(raw_configuration)
+    repository = DirectorySpecRepository(str(Path(__file__).parent / "builtin"))
+    loader = SpecBasedLoader(repository)
 
-    user_gearset_blueprint_config = spec.interpret(patches)
-    user_gearset_blueprint = UserGearsetBlueprint.parse_obj(
-        user_gearset_blueprint_config
-    )
-    return user_gearset_blueprint
+    return loader.load(query={"name": name}, patches=patches)
