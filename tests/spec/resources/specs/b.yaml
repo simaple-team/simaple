@@ -1,5 +1,5 @@
-kind: PassiveSkill 
-version: simaple.io/test
+kind: TestClass 
+version: simaple.io/BTestClass
 metadata:
   label:
     group: test_group

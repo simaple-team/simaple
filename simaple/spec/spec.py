@@ -22,6 +22,9 @@ class Spec(pydantic.BaseModel):
     data: dict[str, Any]
     patch: Optional[list[str]]
 
+    def get_classname(self):
+        return self.version.split("/")[1]
+
     def is_patch_fits(self, patches: Optional[list] = None):
         if self.patch is None:
             return patches is None
