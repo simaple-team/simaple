@@ -58,21 +58,25 @@ class DirectorySpecRepository(SpecRepository):
             for raw_configuration in raw_configurations:
                 yield Spec.parse_obj(raw_configuration)
 
-    def get(self, **kwargs) -> Optional[Spec]:
+    def get(self, kind=None, **kwargs) -> Optional[Spec]:
         for k, v in kwargs.items():
             if k in self._index:
                 spec = self._index[k][v]
                 return spec.copy()
 
         for spec in self._db:
+            if kind is not None and spec.kind != kind:
+                continue
             if spec.metadata.matches(**kwargs):
                 return spec.copy()
 
         return None
 
-    def get_all(self, **kwargs) -> list[Spec]:
+    def get_all(self, kind=None, **kwargs) -> list[Spec]:
         specs = []
         for spec in self._db:
+            if kind is not None and spec.kind != kind:
+                continue
             if spec.metadata.matches(**kwargs):
                 specs.append(spec.copy())
 

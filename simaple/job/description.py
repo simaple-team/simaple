@@ -1,7 +1,7 @@
-from simaple.resource import DescriptionArgument
+from pydantic import BaseModel
 
 
-class GeneralJobArgument(DescriptionArgument):
+class GeneralJobArgument(BaseModel):
     combat_orders_level: int
     passive_skill_level: int
     character_level: int

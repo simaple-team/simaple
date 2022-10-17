@@ -1,7 +1,7 @@
 import math
 import re
 from abc import ABCMeta, abstractmethod
-from typing import Any, Union
+from typing import Any, Union, cast
 
 import pydantic
 from pydantic import BaseModel, PrivateAttr
@@ -14,19 +14,22 @@ class Patch(BaseModel, metaclass=ABCMeta):
 
 class DFSTraversePatch(Patch):
     @abstractmethod
-    def patch_value(self, value):
+    def patch_value(self, value, origin: dict):
         ...
 
     @abstractmethod
-    def patch_dict(self, k, v):
+    def patch_dict(self, k, v, origin: dict):
         ...
 
-    def apply(self, raw: Union[list, dict]) -> Any:
+    def apply(self, raw: dict) -> dict:
+        return cast(dict, self._apply(raw, raw))
+
+    def _apply(self, raw: Union[list, dict], origin: dict) -> Any:
         if isinstance(raw, list):
-            return [self.apply(arg) for arg in raw]
+            return [self._apply(arg, origin) for arg in raw]
 
         if isinstance(raw, (int, float, str)):
-            patch = self.patch_value(raw)
+            patch = self.patch_value(raw, origin)
             return patch or raw
 
         interpreted = {}
@@ -36,9 +39,9 @@ class DFSTraversePatch(Patch):
             if k in excluded_keys:
                 continue
             if isinstance(v, (dict, list)):
-                interpreted[k] = self.apply(v)
+                interpreted[k] = self._apply(v, origin)
             else:
-                patch = self.patch_dict(k, v)
+                patch = self.patch_dict(k, v, origin)
                 if patch is None:
                     interpreted[k] = v
                 else:
@@ -58,10 +61,10 @@ class StringPatch(DFSTraversePatch):
             raise ValueError("As-is and To-be must be same length.")
         return v
 
-    def patch_value(self, value):
+    def patch_value(self, value, origin: dict):
         return self.translate(value)
 
-    def patch_dict(self, k, v):
+    def patch_dict(self, k, v, origin: dict):
         return {self.translate(k): self.translate(v)}
 
     def translate(
@@ -82,10 +85,10 @@ class KeywordExtendPatch(DFSTraversePatch):
     target_keyword: str
     extends: list[str]
 
-    def patch_value(self, value):
+    def patch_value(self, value, origin: dict):
         return None
 
-    def patch_dict(self, k, v):
+    def patch_dict(self, k, v, origin: dict):
         if self.target_keyword in k:
             return {
                 k.replace(self.target_keyword, replacement): v
@@ -99,10 +102,10 @@ class EvalPatch(DFSTraversePatch):
     _match_string: re.Pattern = PrivateAttr(default=re.compile(r"^\s*{{(.+)}}\s*$"))
     injected_values: dict[str, Any]
 
-    def patch_value(self, value):
+    def patch_value(self, value, origin: dict):
         return self.evaluate(value)
 
-    def patch_dict(self, k, v):
+    def patch_dict(self, k, v, origin: dict):
         return {self.evaluate(k): self.evaluate(v)}
 
     def evaluate(self, value):

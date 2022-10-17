@@ -28,12 +28,8 @@ class SpecBasedLoader:
         specification = self._spec_repository.get(**query)
         if specification is None:
             raise SpecNotFoundError()
-        
-        return self.compile_object(
-            specification,
-            injects,
-            patches
-        )
+
+        return self.compile_object(specification, injects, patches)
 
     def load_all(
         self,
@@ -48,15 +44,16 @@ class SpecBasedLoader:
 
         specifications = self._spec_repository.get_all(**query)
 
-        return [self.compile_object(
-            specification,
-            injects,
-            patches
-        ) for specification in specifications]
+        return [
+            self.compile_object(specification, injects, patches)
+            for specification in specifications
+        ]
 
-    def compile_object(self, specification: Spec, 
+    def compile_object(
+        self,
+        specification: Spec,
         injects: dict[str, Any],
-        patches: list[Patch]
+        patches: Optional[list[Patch]],
     ):
         class_name = specification.get_classname()
         component_class = self._get_component_class(class_name, specification.kind)

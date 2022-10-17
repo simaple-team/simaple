@@ -21,6 +21,7 @@ def test_repository_index():
     assert repository.get(name="A").metadata.label.get("name") == "A"
     assert repository.get(name="B").metadata.label.get("name") == "B"
 
+
 def test_repository_all():
     spec_path = CURRENT_PATH / "resources" / "specs"
 

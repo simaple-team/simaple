@@ -1,12 +1,28 @@
-kind: PassiveSkill
-version: v1
+kind: DefaultActiveSkill
+version: simaple.io/DefaultActiveSkill
 metadata:
-  type: DefaultActiveSkill
-  group: archmagefb
+  label:
+    group: archmagefb
+    name: 메디테이션
+patch:
+  - SkillLevelPatch
+  - EvalPatch
 data:
-  - name: 메디테이션
-    stat:
-      magic_attack: 30
-  - name: 메이플 용사
-    stat:
-      INT: math.floor((18 + 5 * character_level) * 0.15)
+  name: 메디테이션
+  stat:
+    magic_attack: 30
+---
+kind: DefaultActiveSkill
+version: simaple.io/DefaultActiveSkill
+metadata:
+  label:
+    group: archmagefb
+    name: 메이플 용사
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 메이플 용사
+  default_skill_level: 30
+  stat:
+    INT: '{{ math.floor((18 + 5 * character_level) * 0.15) }}'
