@@ -45,7 +45,7 @@ class CookiedQuery(Query):
                 text = await response.text()
                 if len(text) == 0:
                     logger.info(f"Retry {path}")
-                    asyncio.sleep(self.retry_await)
+                    await asyncio.sleep(self.retry_await)
                     continue
 
                 return text
@@ -72,13 +72,13 @@ class NoredirectXMLQuery(Query):
                 raw_text = await response.text()
                 if len(raw_text) == 0:
                     logger.info(f"Retry {path}")
-                    asyncio.sleep(self.retry_await)
+                    await asyncio.sleep(self.retry_await)
                     continue
 
                 text: str = json.loads(raw_text)["view"].replace("\r\n", "\n")
                 if len(text) == 0:
                     logger.info(f"Retry {path}")
-                    asyncio.sleep(self.retry_await)
+                    await asyncio.sleep(self.retry_await)
                     continue
 
                 return text
