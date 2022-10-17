@@ -12,6 +12,10 @@ class SpecRepository(metaclass=ABCMeta):
     def get(self, **kwargs) -> Optional[Spec]:
         ...
 
+    @abstractmethod
+    def get_all(self, **kwargs) -> list[Spec]:
+        ...
+
 
 class DirectorySpecRepository(SpecRepository):
     """In-source defined specification repository interface.
@@ -65,3 +69,11 @@ class DirectorySpecRepository(SpecRepository):
                 return spec.copy()
 
         return None
+
+    def get_all(self, **kwargs) -> list[Spec]:
+        specs = []
+        for spec in self._db:
+            if spec.metadata.matches(**kwargs):
+                specs.append(spec.copy())
+
+        return specs
