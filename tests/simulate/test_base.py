@@ -1,9 +1,4 @@
-from simaple.simulate.base import (
-    Action,
-    AddressedStore,
-    ConcreteStore,
-    Reducer,
-)
+from simaple.simulate.base import Action, AddressedStore, ConcreteStore, Reducer
 from simaple.simulate.components.skill import AttackSkillComponent
 
 

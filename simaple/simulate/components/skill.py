@@ -1,8 +1,4 @@
-from simaple.simulate.base import (
-    Component,
-    State,
-    dispatcher_method,
-)
+from simaple.simulate.base import Component, State, dispatcher_method
 from simaple.simulate.event import damage_event
 
 

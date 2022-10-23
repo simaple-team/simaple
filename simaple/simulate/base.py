@@ -1,6 +1,6 @@
 import inspect
 from abc import ABCMeta, abstractmethod
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, List, Optional, Union
 
 from pydantic import BaseModel, Extra
 
@@ -145,6 +145,12 @@ class Reducer:
         return self.dispatchers[action.signature](action, local_store)
 
 
+class Dispatcher(metaclass=ABCMeta):
+    @abstractmethod
+    def __call__(self, action: Action, store: Store):
+        ...
+
+
 def dispatcher_method(func):
     input_state_names = [
         param.name for param in inspect.signature(func).parameters.values()
@@ -168,6 +174,69 @@ def dispatcher_method(func):
     func.set_states = set_states
 
     return func
+
+
+class DispatcherMethodWrappingDispatcher(Dispatcher):
+    def __init__(
+        self, methods: dict[str, Callable], default_state: dict[str, State], binds=None
+    ):
+        self._default_state = default_state
+        self._methods = methods
+        self._binds = binds
+
+    def __call__(self, action: Action, store: Store):
+        dispatcher = self.get_matching_dispatcher_method(action.method)
+
+        input_states = dispatcher.get_states(store, self._default_state)
+        output_states, maybe_events = dispatcher(action.payload, *input_states)
+
+        dispatcher.set_states(store, self.regularize_returned_state(output_states))
+
+        events = self.regularize_returned_event(maybe_events)
+
+        for event in events:
+            event.method = action.method
+            if event.tag is None:
+                event.tag = action.method
+
+        return self.tag_events_by_action(action, events)
+
+    def get_matching_dispatcher_method(self, method_name):
+        if method_name not in self._methods:
+            raise KeyError(f"Given dispatcher {method_name} not exist")
+
+        return self._methods[method_name]
+
+    def regularize_returned_event(
+        self, maybe_events: Optional[Union[Event, list[Event]]]
+    ) -> list[Event]:
+        if maybe_events is None:
+            return []
+
+        if isinstance(maybe_events, Event):
+            return [maybe_events]
+
+        return maybe_events
+
+    def regularize_returned_state(
+        self, maybe_state_tuple: Union[tuple[State], State]
+    ) -> tuple[State]:
+        if not isinstance(maybe_state_tuple, tuple):
+            return (maybe_state_tuple,)
+
+        return maybe_state_tuple
+
+    def tag_events_by_action(self, action: Action, events: list[Event]) -> list[Event]:
+        tagged_events = []
+        for event in events:
+            tagged_event = event.copy()
+            tagged_event.method = action.method
+            if tagged_event.tag is None:
+                tagged_event.tag = action.method
+
+            tagged_events.append(tagged_event)
+
+        return tagged_events
 
 
 def component_view(func):
@@ -220,41 +289,27 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     def get_default_state(self) -> dict[str, State]:
         ...
 
-    def get_dispatchers(self):
-        return getattr(self, "__dispatchers__")
-
     def event(self, tag=None) -> Event:
         return Event(
             name=self.name,
             tag=tag,
         )
 
-    def add_to_reducer(self, reducer: Reducer):
-        for method_name in self.get_dispatchers():
-            reducer.add_reducer(f"{self.name}.{method_name}", self.dispatch)
+    def add_to_reducer(self, reducer: Reducer, binds=None):
+        dispatcher = self.export_dispatcher(binds=binds)
+        for method_name in self.get_dispatcher_methods():
+            reducer.add_reducer(f"{self.name}.{method_name}", dispatcher)
 
-    def dispatch(self, action: Action, store: Store) -> List[Event]:
-        default_state = self.get_default_state()
-        dispatcher = getattr(self, action.method)
+    def export_dispatcher(self, binds=None) -> Dispatcher:
+        return DispatcherMethodWrappingDispatcher(
+            self.get_dispatcher_methods(), self.get_default_state(), binds=binds
+        )
 
-        input_states = dispatcher.get_states(store, default_state)
-        output_states, events = dispatcher(action.payload, *input_states)
-        if not isinstance(output_states, tuple):
-            output_states = (output_states,)
-        dispatcher.set_states(store, output_states)
-
-        if events is None:
-            return []
-
-        if isinstance(events, Event):
-            events = [events]
-
-        for event in events:
-            event.method = action.method
-            if event.tag is None:
-                event.tag = action.method
-
-        return events
+    def get_dispatcher_methods(self):
+        return {
+            method_name: getattr(self, method_name)
+            for method_name in getattr(self, "__dispatchers__")
+        }
 
 
 class Container:
