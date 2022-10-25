@@ -2,7 +2,7 @@ import inspect
 from abc import ABCMeta, abstractmethod
 from typing import Any, Callable, List, Optional, Union
 
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel
 
 from simaple.spec.loadable import TaggedNamespacedABCMeta
 
@@ -244,7 +244,7 @@ def component_view(func):
     return func
 
 
-class ComponentMetaclass(TaggedNamespacedABCMeta("component")):
+class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
     def __new__(mcs, name, bases, namespace, **kwargs):
         cls = super().__new__(mcs, name, bases, namespace, **kwargs)
 
@@ -281,7 +281,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     name: str
 
     class Config:
-        extra = Extra.forbid
+        # extra = Extra.forbid
         arbitrary_types_allowed = True
         underscore_attrs_are_private = True
 

@@ -1,6 +1,18 @@
 from simaple.simulate.base import Event
 
 
+def rejected_event(name: str):
+    return Event(name=name, tag="global.reject")
+
+
+def elapsed_event(name: str, time: float):
+    return Event(name=name, tag="global.elapsed", payload={"time": time})
+
+
+def action_delay_triggered(name: str, time: float):
+    return Event(name=name, tag="global.delay", payload={"time": time})
+
+
 def damage_event(name: str, damage: float, hit: float, delay: float):
     return Event(
         name=name,

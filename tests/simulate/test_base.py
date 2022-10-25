@@ -35,8 +35,6 @@ def test_scenario():
     )
     print(event)
 
-    print(store._concrete_store._states)
-
     event = reducer.resolve(
         Action(
             name="test-B",
@@ -45,5 +43,3 @@ def test_scenario():
         )
     )
     print(event)
-
-    print(store._concrete_store._states)

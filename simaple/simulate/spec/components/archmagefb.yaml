@@ -1,0 +1,98 @@
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 플레임 스윕
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  type: DamageSkill
+  name: 플레임 스윕
+  delay: 600
+  damage: '{{ 130 + 3 * skill_level }}'
+  hit: 8
+  enhanced_by_v: true
+  upgrade_priority: 1
+  v_increment: 2
+  v_crit: false
+  combat_orders_enabled: true
+  default_skill_level: 30
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 메테오
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  type: DamageSkill
+  name: 메테오
+  delay: 690
+  damage: '{{ 270 + 3 * skill_level }}'
+  hit: 12
+  enhanced_by_v: true
+  upgrade_priority: 5
+  v_increment: 2
+  v_crit: true
+  combat_orders_enabled: true
+  default_skill_level: 30
+  cooltime: 45000
+  red: true
+  rem: false
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 플레임 헤이즈
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 플레임 헤이즈
+  cooltime: 10000
+  delay: 1080
+  red: true
+  rem: false
+  damage: '{{ 112 + 3 * skill_level }}'
+  hit: 15
+  type: DamageSkill
+  enhanced_by_v: true
+  upgrade_priority: 2
+  v_increment: 2
+  v_crit: true
+  default_skill_level: 30
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 미스트 이럽션
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 미스트 이럽션
+  cooltime: 4000
+  delay: 720
+  red: true
+  rem: false
+  modifier:
+    pdamage: 10
+    pdamage_indep: 125
+    armor_ignore: 52.8
+  damage: '{{ 95 + skill_level }}'
+  hit: 20
+  type: DamageSkill
+  enhanced_by_v: true
+  upgrade_priority: 0
+  v_increment: 2
+  v_crit: false
+  default_skill_level: 30
