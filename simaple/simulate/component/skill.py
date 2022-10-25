@@ -1,11 +1,6 @@
 from simaple.core.base import Stat
-from simaple.simulate.base import Component, State, dispatcher_method
-from simaple.simulate.event import (
-    action_delay_triggered,
-    damage_event,
-    elapsed_event,
-    rejected_event,
-)
+from simaple.simulate.base import State
+from simaple.simulate.component.base import Component, dispatcher_method
 
 
 class DurationState(State):
@@ -42,7 +37,7 @@ class IntervalState(State):
     def elapse(self, time: float) -> int:
         self.time_left -= time
         if self.time_left < 0:
-            lapse_count = self.time_left // self.interval
+            lapse_count = int(self.time_left // self.interval)
             self.time_left = self.time_left % self.interval
             return lapse_count
 
@@ -65,20 +60,20 @@ class AttackSkillComponent(Component):
     def elapse(self, time: float, cooldown_state: CooldownState):
         cooldown_state = cooldown_state.copy()
         cooldown_state.elapse(time)
-        return cooldown_state, elapsed_event(self.name, time)
+        return cooldown_state, self.event_provider.elapsed(time)
 
     @dispatcher_method
     def use(self, _: None, cooldown_state: CooldownState):
         cooldown_state = cooldown_state.copy()
 
         if not cooldown_state.available:
-            return cooldown_state, rejected_event(self.name)
+            return cooldown_state, self.event_provider.rejected()
 
         cooldown_state.set_time_left(self.cooldown)
 
         return cooldown_state, [
-            damage_event(self.name, self.damage, self.hit, self.delay),
-            action_delay_triggered(self.name, self.delay),
+            self.event_provider.dealt(self.damage, self.hit, self.delay),
+            self.event_provider.delayed(self.delay),
         ]
 
 
@@ -102,14 +97,12 @@ class BuffSkillComponent(Component):
         duration_state = duration_state.copy()
 
         if not cooldown_state.available:
-            return cooldown_state, rejected_event(self.name)
+            return cooldown_state, self.event_provider.rejected()
 
         cooldown_state.set_time_left(self.cooldown)
         duration_state.set_time_left(self.duration)
 
-        return (cooldown_state, duration_state), action_delay_triggered(
-            self.name, self.delay
-        )
+        return (cooldown_state, duration_state), self.event_provider.delayed(self.delay)
 
     @dispatcher_method
     def elapse(
@@ -122,6 +115,5 @@ class BuffSkillComponent(Component):
         duration_state.elapse(time)
 
         return (cooldown_state, duration_state), [
-            elapsed_event(self.name, time),
-            action_delay_triggered(self.name, self.delay),
+            self.event_provider.elapsed(time),
         ]

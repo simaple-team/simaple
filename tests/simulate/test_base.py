@@ -1,5 +1,5 @@
 from simaple.simulate.base import Action, AddressedStore, ConcreteStore, Reducer
-from simaple.simulate.components.skill import AttackSkillComponent
+from simaple.simulate.component.skill import AttackSkillComponent
 
 
 def test_scenario():

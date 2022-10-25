@@ -1,4 +1,4 @@
-import simaple.simulate.components.skill  # pylint: disable=W0611
+import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.job.description import GeneralJobArgument
 from simaple.job.spec.patch import SkillLevelPatch
 from simaple.simulate.base import AddressedStore, ConcreteStore, Reducer
