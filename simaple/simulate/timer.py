@@ -30,7 +30,7 @@ class TimeState(State):
 
 def timer_delay_dispatcher(action: Action, store: Store) -> tuple[Event]:
     """A time-summation dispatcher, which calculates total passed time."""
-    if action.method != "elapse":
+    if action.method != "elapse" and action.name != "*":
         return []
 
     time_state, set_time_state = store.use_state("global.time", TimeState())

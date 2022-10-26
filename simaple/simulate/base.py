@@ -197,8 +197,9 @@ class Client:
         while len(actions) > 0:
             events = []
             for action in actions:
-                events += self.reducer.resolve(action)
-                all_events += self.reducer.resolve(action)
+                resolved_events = self.reducer.resolve(action)
+                all_events += resolved_events
+                events += resolved_events
             actions = []
             for event in events:
                 actions += self.actor.handle(event)
