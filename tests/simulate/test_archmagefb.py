@@ -1,7 +1,8 @@
 import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.job.description import GeneralJobArgument
 from simaple.job.spec.patch import SkillLevelPatch
-from simaple.simulate.base import AddressedStore, ConcreteStore, Reducer
+from simaple.simulate.base import Actor, AddressedStore, Client, ConcreteStore, Reducer
+from simaple.simulate.timer import install_timer
 from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.patch import EvalPatch
 from simaple.spec.repository import DirectorySpecRepository
@@ -37,8 +38,13 @@ def test_archmage_fb():
     for component in components:
         component.add_to_reducer(reducer)
 
+    actor = Actor()
+    client = Client(reducer, actor)
+
     actions = get_archmagefb_schedule()
+    install_timer(client)
 
     for action in actions:
-        events = reducer.resolve(action)
+        events = client.play(action)
+        print(client.reducer.store.read_state("global.time", None))
         print(events)

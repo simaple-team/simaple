@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 from simaple.simulate.base import Event
+from simaple.simulate.reserved_names import Tag
 
 
 class EventProvider(metaclass=ABCMeta):
@@ -26,18 +27,18 @@ class NamedEventProvider(EventProvider):
         self._name = name
 
     def elapsed(self, time) -> Event:
-        return Event(name=self._name, tag="global.elapsed", payload={"time": time})
+        return Event(name=self._name, tag=Tag.ELAPSED, payload={"time": time})
 
     def rejected(self) -> Event:
-        return Event(name=self._name, tag="global.reject")
+        return Event(name=self._name, tag=Tag.REJECT)
 
     def delayed(self, time) -> Event:
-        return Event(name=self._name, tag="global.delay", payload={"time": time})
+        return Event(name=self._name, tag=Tag.DELAY, payload={"time": time})
 
     def dealt(self, damage: float, hit: float, delay: float) -> Event:
         return Event(
             name=self._name,
-            tag="global.damage",
+            tag=Tag.DAMAGE,
             payload={
                 "damage": damage,
                 "hit": hit,

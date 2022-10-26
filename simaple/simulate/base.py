@@ -61,7 +61,7 @@ class EventHandler:
     EventHandler receives "Event" and create "Action" (maybe multiple).
     """
 
-    def emit(self, event: Event) -> Optional[list[Action]]:
+    def __call__(self, event: Event) -> Optional[list[Action]]:
         ...
 
 
@@ -70,7 +70,7 @@ class SignatureEventHandler(EventHandler):
         self.allowed_signatures = allowed_signatures
         self._action = action
 
-    def emit(self, event: Event) -> Optional[list[Action]]:
+    def __call__(self, event: Event) -> Optional[list[Action]]:
         if event.signature in self.allowed_signatures:
             return [self._action.copy()]
 
@@ -79,11 +79,14 @@ class SignatureEventHandler(EventHandler):
 
 class Store(metaclass=ABCMeta):
     def use_state(self, name: str, default: State):
-        return self.read_state(name, default=default), self.set_state
+        def state_setter(state):
+            self.set_state(name, state)
+
+        return self.read_state(name, default=default), state_setter
 
     @abstractmethod
     def read_state(self, name: str, default: State):
-        """This returns read-only state; changes will not affect stored state"""
+        ...
 
     @abstractmethod
     def set_state(self, name: str, state: State):
@@ -137,14 +140,17 @@ class AddressedStore(Store):
 
 class Actor:
     def __init__(self):
-        super().__init__()
         self._event_handlers = []
 
-    def add_dispatcher(self, event_handler: EventHandler):
+    def add_handler(self, event_handler: EventHandler):
         self._event_handlers.append(event_handler)
 
     def handle(self, event: Event) -> list[Action]:
-        ...
+        actions = []
+        for handler in self._event_handlers:
+            actions += handler(event)
+
+        return actions
 
 
 DispatcherType = Callable[[Action, Store], list[Event]]
@@ -176,3 +182,25 @@ class View(metaclass=ABCMeta):
     @abstractmethod
     def aggregate(self, components):
         ...
+
+
+class Client:
+    def __init__(self, reducer: Reducer, actor: Actor):
+        self.reducer = reducer
+        self.actor = actor
+
+    def play(self, base_action: Action) -> list[Event]:
+        actions = [base_action]
+        events = []
+        all_events = []
+
+        while len(actions) > 0:
+            events = []
+            for action in actions:
+                events += self.reducer.resolve(action)
+                all_events += self.reducer.resolve(action)
+            actions = []
+            for event in events:
+                actions += self.actor.handle(event)
+
+        return all_events
