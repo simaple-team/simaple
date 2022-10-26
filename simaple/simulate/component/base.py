@@ -8,6 +8,8 @@ from simaple.simulate.base import Action, Dispatcher, Event, Reducer, State, Sto
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.spec.loadable import TaggedNamespacedABCMeta
 
+WILD_CARD = "*"
+
 
 def dispatcher_method(func):
     input_state_names = [
@@ -36,19 +38,31 @@ def dispatcher_method(func):
 
 class DispatcherMethodWrappingDispatcher(Dispatcher):
     def __init__(
-        self, methods: dict[str, Callable], default_state: dict[str, State], binds=None
+        self,
+        name: str,
+        methods: dict[str, Callable],
+        default_state: dict[str, State],
+        binds=None,
     ):
+        self._name = name
         self._default_state = default_state
         self._methods = methods
         self._binds = binds
 
-    def __call__(self, action: Action, store: Store):
+    def __call__(self, action: Action, store: Store) -> list[Event]:
+        if not self.is_enabled_action(action):
+            return []
+
+        local_store = store.local(self._name)
+
         dispatcher = self.get_matching_dispatcher_method(action.method)
 
-        input_states = dispatcher.get_states(store, self._default_state)
+        input_states = dispatcher.get_states(local_store, self._default_state)
         output_states, maybe_events = dispatcher(action.payload, *input_states)
 
-        dispatcher.set_states(store, self.regularize_returned_state(output_states))
+        dispatcher.set_states(
+            local_store, self.regularize_returned_state(output_states)
+        )
 
         events = self.regularize_returned_event(maybe_events)
 
@@ -59,10 +73,12 @@ class DispatcherMethodWrappingDispatcher(Dispatcher):
 
         return self.tag_events_by_action(action, events)
 
-    def get_matching_dispatcher_method(self, method_name):
-        if method_name not in self._methods:
-            raise KeyError(f"Given dispatcher {method_name} not exist")
+    def is_enabled_action(self, action: Action):
+        return (
+            action.name in (WILD_CARD, self._name)
+        ) and action.method in self._methods
 
+    def get_matching_dispatcher_method(self, method_name: str):
         return self._methods[method_name]
 
     def regularize_returned_event(
@@ -153,12 +169,14 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
 
     def add_to_reducer(self, reducer: Reducer, binds=None):
         dispatcher = self.export_dispatcher(binds=binds)
-        for method_name in self.get_dispatcher_methods():
-            reducer.add_reducer(f"{self.name}.{method_name}", dispatcher)
+        reducer.add_reducer(dispatcher)
 
     def export_dispatcher(self, binds=None) -> Dispatcher:
         return DispatcherMethodWrappingDispatcher(
-            self.get_dispatcher_methods(), self.get_default_state(), binds=binds
+            self.name,
+            self.get_dispatcher_methods(),
+            self.get_default_state(),
+            binds=binds,
         )
 
     def get_dispatcher_methods(self):

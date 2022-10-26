@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from typing import Any, Callable, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra
 
 
 class State(BaseModel):
@@ -18,8 +18,14 @@ class Action(BaseModel):
     method: str
     payload: Any
 
+    class Config:
+        extra = Extra.forbid
+
     @property
     def signature(self) -> str:
+        if len(self.method) == 0:
+            return self.name
+
         return f"{self.name}.{self.method}"
 
 
@@ -37,10 +43,17 @@ class Event(BaseModel):
     method: Optional[str]
     tag: Optional[str]
     handler: Optional[str]
+    payload: Any
+
+    class Config:
+        extra = Extra.forbid
 
     @property
     def signature(self) -> str:
-        return f"{self.name}.{self.handler}"
+        if len(self.method) == 0:
+            return self.name
+
+        return f"{self.name}.{self.method}"
 
 
 class EventHandler:
@@ -48,7 +61,7 @@ class EventHandler:
     EventHandler receives "Event" and create "Action" (maybe multiple).
     """
 
-    def dispatch(self, event: Event) -> Optional[list[Action]]:
+    def emit(self, event: Event) -> Optional[list[Action]]:
         ...
 
 
@@ -57,7 +70,7 @@ class SignatureEventHandler(EventHandler):
         self.allowed_signatures = allowed_signatures
         self._action = action
 
-    def dispatch(self, event: Event) -> Optional[list[Action]]:
+    def emit(self, event: Event) -> Optional[list[Action]]:
         if event.signature in self.allowed_signatures:
             return [self._action.copy()]
 
@@ -76,6 +89,10 @@ class Store(metaclass=ABCMeta):
     def set_state(self, name: str, state: State):
         ...
 
+    @abstractmethod
+    def local(self, address: str):
+        ...
+
 
 class ConcreteStore(Store):
     def __init__(self):
@@ -87,6 +104,9 @@ class ConcreteStore(Store):
     def read_state(self, name: str, default: State):
         value = self._states.setdefault(name, default)
         return value.copy()
+
+    def local(self, address):
+        return self
 
 
 class AddressedStore(Store):
@@ -127,7 +147,7 @@ class Actor:
         ...
 
 
-DispatcherType = Callable[[Action, Store], tuple[Event]]
+DispatcherType = Callable[[Action, Store], list[Event]]
 
 
 class Dispatcher(metaclass=ABCMeta):
@@ -138,15 +158,18 @@ class Dispatcher(metaclass=ABCMeta):
 
 class Reducer:
     def __init__(self, store: AddressedStore):
-        self.dispatchers: dict[str, DispatcherType] = {}
+        self.dispatchers: list[DispatcherType] = []
         self.store = store
 
-    def add_reducer(self, signature: str, dispatcher: DispatcherType):
-        self.dispatchers[signature] = dispatcher
+    def add_reducer(self, dispatcher: DispatcherType):
+        self.dispatchers.append(dispatcher)
 
-    def resolve(self, action: Action) -> tuple[Event]:
-        local_store = self.store.local(action.name)
-        return self.dispatchers[action.signature](action, local_store)
+    def resolve(self, action: Action) -> list[Event]:
+        events = []
+        for dispatcher in self.dispatchers:
+            events += dispatcher(action, self.store)
+
+        return events
 
 
 class View(metaclass=ABCMeta):
