@@ -6,6 +6,10 @@ from simaple.simulate.reserved_names import Tag
 ACTION_SPENT_TIMER = "global.timer.spent"
 
 
+def time_elapsing_action(time: float):
+    return Action(name="*", method="elapse", payload=time)
+
+
 class TimerEventHandler(EventHandler):
     """
     Time Handler.
@@ -16,7 +20,7 @@ class TimerEventHandler(EventHandler):
 
     def __call__(self, event: Event) -> Optional[list[Action]]:
         if event.tag in (Tag.DELAY,):
-            return [Action(name="*", method="elapse", payload=event.payload["time"])]
+            return [time_elapsing_action(event.payload["time"])]
 
         return []
 
