@@ -47,6 +47,8 @@ patch:
   - EvalPatch
 data:
   name: 플레임 헤이즈
+  listening_actions: 
+    미스트 이럽션.use: reset_cooldown
   cooldown: 10000
   delay: 1080
   red: true

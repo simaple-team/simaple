@@ -76,6 +76,12 @@ class AttackSkillComponent(Component):
             self.event_provider.delayed(self.delay),
         ]
 
+    @dispatcher_method
+    def reset_cooldown(self, _: None, cooldown_state: CooldownState):
+        cooldown_state = cooldown_state.copy()
+        cooldown_state.set_time_left(0)
+        return cooldown_state, None
+
 
 class BuffSkillComponent(Component):
     stat: Stat
