@@ -72,7 +72,7 @@ class AttackSkillComponent(Component):
         cooldown_state.set_time_left(self.cooldown)
 
         return cooldown_state, [
-            self.event_provider.dealt(self.damage, self.hit, self.delay),
+            self.event_provider.dealt(self.damage, self.hit),
             self.event_provider.delayed(self.delay),
         ]
 
@@ -82,6 +82,7 @@ class BuffSkillComponent(Component):
     cooldown: float = 0.0
     delay: float
     duration: float
+    # TODO: use rem, red argument to apply cooltime reduction and buff remnance
 
     def get_default_state(self):
         return {

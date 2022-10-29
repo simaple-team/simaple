@@ -6,7 +6,7 @@ from simaple.simulate.reserved_names import Tag
 
 class EventProvider(metaclass=ABCMeta):
     @abstractmethod
-    def elapsed(self, time) -> Event:
+    def elapsed(self, time: float) -> Event:
         ...
 
     @abstractmethod
@@ -14,11 +14,11 @@ class EventProvider(metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    def delayed(self, time) -> Event:
+    def delayed(self, time: float) -> Event:
         ...
 
     @abstractmethod
-    def dealt(self, damage: float, hit: float, delay: float) -> Event:
+    def dealt(self, damage: float, hit: float) -> Event:
         ...
 
 
@@ -35,13 +35,12 @@ class NamedEventProvider(EventProvider):
     def delayed(self, time) -> Event:
         return Event(name=self._name, tag=Tag.DELAY, payload={"time": time})
 
-    def dealt(self, damage: float, hit: float, delay: float) -> Event:
+    def dealt(self, damage: float, hit: float) -> Event:
         return Event(
             name=self._name,
             tag=Tag.DAMAGE,
             payload={
                 "damage": damage,
                 "hit": hit,
-                "delay": delay,
             },
         )
