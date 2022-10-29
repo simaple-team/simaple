@@ -18,7 +18,7 @@ class TimerEventHandler(EventHandler):
     wholly, or spent partially maybe due to skill-cancelation predication.
     """
 
-    def __call__(self, event: Event) -> Optional[list[Action]]:
+    def __call__(self, event: Event, _: Store, __: list[Event]) -> Optional[list[Action]]:
         if event.tag in (Tag.DELAY,):
             return [time_elapsing_action(event.payload["time"])]
 

@@ -56,27 +56,6 @@ class Event(BaseModel):
         return f"{self.name}.{self.method}"
 
 
-class EventHandler:
-    """
-    EventHandler receives "Event" and create "Action" (maybe multiple).
-    """
-
-    def __call__(self, event: Event) -> Optional[list[Action]]:
-        ...
-
-
-class SignatureEventHandler(EventHandler):
-    def __init__(self, allowed_signatures: list, action: Action):
-        self.allowed_signatures = allowed_signatures
-        self._action = action
-
-    def __call__(self, event: Event) -> Optional[list[Action]]:
-        if event.signature in self.allowed_signatures:
-            return [self._action.copy()]
-
-        return None
-
-
 class Store(metaclass=ABCMeta):
     def use_state(self, name: str, default: State):
         def state_setter(state):
@@ -112,6 +91,17 @@ class ConcreteStore(Store):
         return self
 
 
+class EventHandler:
+    """
+    EventHandler receives "Event" and create "Action" (maybe multiple).
+    Eventhandler receives full context; to provide meaningful decision.
+    Handling given store is not recommended "strongly". Please use store with
+    read-only mode as possible as you can.
+    """
+    def __call__(self, event: Event, store: Store, all_events: list[Event]) -> Optional[list[Action]]:
+        ...
+
+
 class AddressedStore(Store):
     def __init__(self, concrete_store: ConcreteStore, current_address: str = ""):
         self._current_address = current_address
@@ -145,10 +135,10 @@ class Actor:
     def add_handler(self, event_handler: EventHandler):
         self._event_handlers.append(event_handler)
 
-    def handle(self, event: Event) -> list[Action]:
+    def handle(self, event: Event, store: Store, all_events: list[Event]) -> list[Action]:
         actions = []
         for handler in self._event_handlers:
-            actions += handler(event)
+            actions += handler(event, store, all_events)
 
         return actions
 
@@ -202,6 +192,6 @@ class Client:
                 events += resolved_events
             actions = []
             for event in events:
-                actions += self.actor.handle(event)
+                actions += self.actor.handle(event, self.reducer.store, events)
 
         return all_events
