@@ -13,10 +13,6 @@ data:
   delay: 600
   damage: '{{ 130 + 3 * skill_level }}'
   hit: 8
-  enhanced_by_v: true
-  upgrade_priority: 1
-  v_increment: 2
-  v_crit: false
   combat_orders_enabled: true
   default_skill_level: 30
 ---
@@ -37,13 +33,8 @@ data:
   hit: 12
   enhanced_by_v: true
   upgrade_priority: 5
-  v_increment: 2
-  v_crit: true
-  combat_orders_enabled: true
-  default_skill_level: 30
-  cooltime: 45000
+  cooldown: 45000
   red: true
-  rem: false
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -56,17 +47,13 @@ patch:
   - EvalPatch
 data:
   name: 플레임 헤이즈
-  cooltime: 10000
+  cooldown: 10000
   delay: 1080
   red: true
   rem: false
   damage: '{{ 112 + 3 * skill_level }}'
   hit: 15
   type: DamageSkill
-  enhanced_by_v: true
-  upgrade_priority: 2
-  v_increment: 2
-  v_crit: true
   default_skill_level: 30
 ---
 kind: Component
@@ -80,7 +67,7 @@ patch:
   - EvalPatch
 data:
   name: 미스트 이럽션
-  cooltime: 4000
+  cooldown: 4000
   delay: 720
   red: true
   rem: false
@@ -91,8 +78,81 @@ data:
   damage: '{{ 95 + skill_level }}'
   hit: 20
   type: DamageSkill
-  enhanced_by_v: true
-  upgrade_priority: 0
-  v_increment: 2
-  v_crit: false
   default_skill_level: 30
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 메디테이션
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 메디테이션
+  duration: 240000
+  delay: 0
+  red: true
+  rem: true
+  stat:
+    magic_attack: 30
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 에픽 어드벤처
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 에픽 어드벤처
+  cooldown: 120000
+  delay: 0
+  red: false
+  rem: false
+  duration: 60000
+  stat:
+    damage_multiplier: 10
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 텔레포트 마스터리
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 텔레포트 마스터리
+  cooldown: 0
+  delay: 0
+  damage: 272
+  hit: 1
+---
+kind: Component
+version: simaple.io/PoisonNovaComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 포이즌 노바
+  annotation:
+    rank: 5
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 포이즌 노바
+  cooldown: 25000
+  delay: 570
+  red: true
+  damage: '{{ 250 + 10 * skill_level }}'
+  hit: 12
+  type: DamageSkill
+
+  nova_damage: '{{ 225 + 9 * skill_level }}'
+  nova_single_hit: 12
+  nova_hit_count: 4
