@@ -179,7 +179,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     """
 
     name: str
-    listening_actions: dict[str, DispatcherType] = Field(default_factory=dict)
+    listening_actions: dict[str, str] = Field(default_factory=dict)
 
     class Config:
         # extra = Extra.forbid

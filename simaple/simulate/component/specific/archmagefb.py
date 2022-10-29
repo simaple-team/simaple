@@ -33,7 +33,7 @@ class PoisonNovaComponent(Component):
     nova_single_hit: int
     nova_hit_count: int
 
-    listening_actions: dict[str, DispatcherType] = {"미스트 이럽션.use": "trigger"}
+    listening_actions: dict[str, str] = {"미스트 이럽션.use": "trigger"}
 
     def get_default_state(self):
         return {
