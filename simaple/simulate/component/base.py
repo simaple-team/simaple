@@ -50,18 +50,26 @@ class ActionRouter(BaseModel, metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    def get_matching_dispatcher_method(self, action: Action):
+    def get_matching_dispatcher(self, action: Action) -> DispatcherType:
+        ...
+
+    @abstractmethod
+    def get_matching_method_name(self, action: Action) -> str:
         ...
 
 
 class ConcreteActionRouter(ActionRouter):
     mappings: dict[str, DispatcherType]
+    method_mappings: dict[str, str]
 
     def is_enabled_action(self, action: Action):
         return action.signature in self.mappings
 
-    def get_matching_dispatcher_method(self, action: Action):
+    def get_matching_dispatcher(self, action: Action) -> DispatcherType:
         return self.mappings[action.signature]
+
+    def get_matching_method_name(self, action: Action) -> str:
+        return self.method_mappings[action.signature]
 
 
 class DispatcherMethodWrappingDispatcher(Dispatcher):
@@ -83,7 +91,8 @@ class DispatcherMethodWrappingDispatcher(Dispatcher):
 
         local_store = store.local(self._name)
 
-        dispatcher = self._action_router.get_matching_dispatcher_method(action)
+        dispatcher = self._action_router.get_matching_dispatcher(action)
+        method_name = self._action_router.get_matching_method_name(action)
 
         input_states = dispatcher.get_states(local_store, self._default_state)
         output_states, maybe_events = dispatcher(action.payload, *input_states)
@@ -94,12 +103,7 @@ class DispatcherMethodWrappingDispatcher(Dispatcher):
 
         events = self.regularize_returned_event(maybe_events)
 
-        for event in events:
-            event.method = action.method
-            if event.tag is None:
-                event.tag = action.method
-
-        return self.tag_events_by_action(action, events)
+        return self.tag_events_by_method_name(method_name, events)
 
     def regularize_returned_event(
         self, maybe_events: Optional[Union[Event, list[Event]]]
@@ -120,13 +124,15 @@ class DispatcherMethodWrappingDispatcher(Dispatcher):
 
         return maybe_state_tuple
 
-    def tag_events_by_action(self, action: Action, events: list[Event]) -> list[Event]:
+    def tag_events_by_method_name(
+        self, method_name: str, events: list[Event]
+    ) -> list[Event]:
         tagged_events = []
         for event in events:
             tagged_event = event.copy()
-            tagged_event.method = action.method
+            tagged_event.method = method_name
             if tagged_event.tag is None:
-                tagged_event.tag = action.method
+                tagged_event.tag = method_name
 
             tagged_events.append(tagged_event)
 
@@ -196,23 +202,27 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         dispatcher_methods = self.get_dispatcher_methods()
 
         wild_card_mappings = {
-            f"{WILD_CARD}.{method}": dispatcher
-            for method, dispatcher in dispatcher_methods.items()
+            f"{WILD_CARD}.{method}": method for method in dispatcher_methods.keys()
         }
         default_mappings = {
-            f"{self.name}.{method}": dispatcher
-            for method, dispatcher in dispatcher_methods.items()
+            f"{self.name}.{method}": method for method in dispatcher_methods.keys()
         }
         explicit_mappings = {
-            signature: dispatcher_methods[method_name]
+            signature: method_name
             for signature, method_name in self.listening_actions.items()
         }
-        mappings = {}
-        mappings.update(default_mappings)
-        mappings.update(wild_card_mappings)
-        mappings.update(explicit_mappings)
+        method_mappings = {}
+        method_mappings.update(default_mappings)
+        method_mappings.update(wild_card_mappings)
+        method_mappings.update(explicit_mappings)
 
-        return ConcreteActionRouter(mappings=mappings)
+        dispatcher_mappings = {
+            k: dispatcher_methods[v] for k, v in method_mappings.items()
+        }
+
+        return ConcreteActionRouter(
+            method_mappings=method_mappings, mappings=dispatcher_mappings
+        )
 
     def export_dispatcher(self, binds=None) -> Dispatcher:
         return DispatcherMethodWrappingDispatcher(
