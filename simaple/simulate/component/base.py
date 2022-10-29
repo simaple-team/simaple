@@ -1,10 +1,18 @@
 import inspect
-from abc import abstractmethod
+from abc import ABCMeta, abstractmethod
 from typing import Callable, Optional, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-from simaple.simulate.base import Action, Dispatcher, Event, Reducer, State, Store
+from simaple.simulate.base import (
+    Action,
+    Dispatcher,
+    DispatcherType,
+    Event,
+    Reducer,
+    State,
+    Store,
+)
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.spec.loadable import TaggedNamespacedABCMeta
 
@@ -36,26 +44,46 @@ def dispatcher_method(func):
     return func
 
 
+class ActionRouter(BaseModel, metaclass=ABCMeta):
+    @abstractmethod
+    def is_enabled_action(self, action: Action):
+        ...
+
+    @abstractmethod
+    def get_matching_dispatcher_method(self, action: Action):
+        ...
+
+
+class ConcreteActionRouter(ActionRouter):
+    mappings: dict[str, DispatcherType]
+
+    def is_enabled_action(self, action: Action):
+        return action.signature in self.mappings
+
+    def get_matching_dispatcher_method(self, action: Action):
+        return self.mappings[action.signature]
+
+
 class DispatcherMethodWrappingDispatcher(Dispatcher):
     def __init__(
         self,
         name: str,
-        methods: dict[str, Callable],
+        action_router: ActionRouter,
         default_state: dict[str, State],
         binds=None,
     ):
         self._name = name
         self._default_state = default_state
-        self._methods = methods
+        self._action_router = action_router
         self._binds = binds
 
     def __call__(self, action: Action, store: Store) -> list[Event]:
-        if not self.is_enabled_action(action):
+        if not self._action_router.is_enabled_action(action):
             return []
 
         local_store = store.local(self._name)
 
-        dispatcher = self.get_matching_dispatcher_method(action.method)
+        dispatcher = self._action_router.get_matching_dispatcher_method(action)
 
         input_states = dispatcher.get_states(local_store, self._default_state)
         output_states, maybe_events = dispatcher(action.payload, *input_states)
@@ -72,14 +100,6 @@ class DispatcherMethodWrappingDispatcher(Dispatcher):
                 event.tag = action.method
 
         return self.tag_events_by_action(action, events)
-
-    def is_enabled_action(self, action: Action):
-        return (
-            action.name in (WILD_CARD, self._name)
-        ) and action.method in self._methods
-
-    def get_matching_dispatcher_method(self, method_name: str):
-        return self._methods[method_name]
 
     def regularize_returned_event(
         self, maybe_events: Optional[Union[Event, list[Event]]]
@@ -153,6 +173,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     """
 
     name: str
+    listening_actions: dict[str, DispatcherType] = Field(default_factory=dict)
 
     class Config:
         # extra = Extra.forbid
@@ -171,10 +192,32 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         dispatcher = self.export_dispatcher(binds=binds)
         reducer.add_reducer(dispatcher)
 
+    def get_action_router(self) -> ActionRouter:
+        dispatcher_methods = self.get_dispatcher_methods()
+
+        wild_card_mappings = {
+            f"{WILD_CARD}.{method}": dispatcher
+            for method, dispatcher in dispatcher_methods.items()
+        }
+        default_mappings = {
+            f"{self.name}.{method}": dispatcher
+            for method, dispatcher in dispatcher_methods.items()
+        }
+        explicit_mappings = {
+            signature: dispatcher_methods[method_name]
+            for signature, method_name in self.listening_actions.items()
+        }
+        mappings = {}
+        mappings.update(default_mappings)
+        mappings.update(wild_card_mappings)
+        mappings.update(explicit_mappings)
+
+        return ConcreteActionRouter(mappings=mappings)
+
     def export_dispatcher(self, binds=None) -> Dispatcher:
         return DispatcherMethodWrappingDispatcher(
             self.name,
-            self.get_dispatcher_methods(),
+            self.get_action_router(),
             self.get_default_state(),
             binds=binds,
         )
