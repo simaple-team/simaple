@@ -1,18 +1,6 @@
 import simaple.simulate.component.skill  # pylint: disable=W0611
-from simaple.job.description import GeneralJobArgument
-from simaple.job.spec.patch import SkillLevelPatch
-from simaple.simulate.base import (
-    Action,
-    Actor,
-    AddressedStore,
-    Client,
-    ConcreteStore,
-    Reducer,
-)
-from simaple.simulate.timer import TimeState, install_timer, time_elapsing_action
-from simaple.spec.loader import SpecBasedLoader
-from simaple.spec.patch import EvalPatch
-from simaple.spec.repository import DirectorySpecRepository
+from simaple.simulate.base import Action
+from simaple.simulate.timer import time_elapsing_action
 
 
 def test_archmage_fb(archmagefb_client):
@@ -35,8 +23,6 @@ def test_archmage_fb(archmagefb_client):
 
     for action in actions:
         events = archmagefb_client.play(action)
-        print(archmagefb_client.reducer.store.read_state("global.time", TimeState()))
-        print([e for e in events if e.tag not in ("global.elapsed",)])
 
 
 def test_poison_nova(archmagefb_client):

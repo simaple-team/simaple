@@ -1,6 +1,6 @@
 import inspect
 from abc import ABCMeta, abstractmethod
-from typing import Callable, Optional, Union
+from typing import Optional, Union
 
 from pydantic import BaseModel, Field
 
@@ -207,14 +207,10 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         default_mappings = {
             f"{self.name}.{method}": method for method in dispatcher_methods.keys()
         }
-        explicit_mappings = {
-            signature: method_name
-            for signature, method_name in self.listening_actions.items()
-        }
         method_mappings = {}
         method_mappings.update(default_mappings)
         method_mappings.update(wild_card_mappings)
-        method_mappings.update(explicit_mappings)
+        method_mappings.update(self.listening_actions)
 
         dispatcher_mappings = {
             k: dispatcher_methods[v] for k, v in method_mappings.items()

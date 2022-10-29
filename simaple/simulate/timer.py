@@ -18,7 +18,9 @@ class TimerEventHandler(EventHandler):
     wholly, or spent partially maybe due to skill-cancelation predication.
     """
 
-    def __call__(self, event: Event, _: Store, __: list[Event]) -> Optional[list[Action]]:
+    def __call__(
+        self, event: Event, _: Store, __: list[Event]
+    ) -> Optional[list[Action]]:
         if event.tag in (Tag.DELAY,):
             return [time_elapsing_action(event.payload["time"])]
 
@@ -42,6 +44,11 @@ def timer_delay_dispatcher(action: Action, store: Store) -> tuple[Event]:
     time_state.spent(action.payload)
     set_time_state(time_state)
     return []
+
+
+def get_current_time(store: Store) -> float:
+    time = store.read_state("global.time", TimeState()).current_time
+    return time
 
 
 def install_timer(client: Client):
