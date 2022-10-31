@@ -1,35 +1,99 @@
+---
 kind: PassiveSkill 
-version: v1
+version: simaple.io/PassiveSkill
 metadata:
-  type: PassiveSkill
-  group: archmagetc
+  label:
+    group: archmagetc
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:  
+  name: 하이 위즈덤
+  stat:
+    INT: 40
+---
+kind: PassiveSkill 
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: archmagetc
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:  
+  name: 스펠 마스터리
+  stat:
+    magic_attack: 10
+---
+kind: PassiveSkill 
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: archmagetc
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:  
+  name: 매직 크리티컬
+  stat:
+    critical_rate: 30
+    critical_damage: 13
+---
+kind: PassiveSkill 
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: archmagetc
+patch:
+  - SkillLevelPatch
+  - EvalPatch
 data:
-  - name: 하이 위즈덤
-    stat:
-      INT: 40
-  - name: 스펠 마스터리
-    stat:
-      magic_attack: 10
-  - name: 매직 크리티컬
-    stat:
-      critical_rate: 30
-      critical_damage: 13
-  - name: 엘리멘트 엠플리피케이션
-    stat:
-      damage_multiplier: 50
-  - name: 엘리멘탈 리셋
-    stat:
-      final_damage_multiplier: 50
-  - name: 마스터 매직
-    passive_skill_enabled: true
-    combat_orders_enabled: true
-    default_skill_level: 10
-    stat:
-      magic_attack: 3 * lv
-    action_stat:
-      buff_duration: 5 * lv
-  - name: 아케인 에임
-    passive_skill_enabled: true
-    default_skill_level: 10
-    stat:
-      ignored_defence: 5 + math.ceil(lv / 2)
+  name: 엘리멘트 엠플리피케이션
+  stat:
+    damage_multiplier: 50
+---
+kind: PassiveSkill 
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: archmagetc
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 엘리멘탈 리셋
+  stat:
+    final_damage_multiplier: 50
+---
+kind: PassiveSkill 
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: archmagetc
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 마스터 매직
+  passive_skill_enabled: true
+  combat_orders_enabled: true
+  default_skill_level: 10
+  stat:
+    magic_attack: '{{ 3 * skill_level }}'
+  action_stat:
+    buff_duration: '{{ 5 * skill_level }}'
+---
+kind: PassiveSkill 
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: archmagetc
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 아케인 에임
+  passive_skill_enabled: true
+  default_skill_level: 10
+  stat:
+    ignored_defence: '{{ 5 + math.ceil(skill_level / 2) }}'

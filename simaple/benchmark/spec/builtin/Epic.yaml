@@ -1,6 +1,16 @@
 ---
-summary:
-  - 에픽둘둘
+kind: blueprint 
+version: simaple.io/UserGearsetBlueprint
+metadata:
+  label: 
+    name: Epic
+    summary: 에픽둘둘
+patch:
+  - KeywordExtendPatch
+  - KeywordExtendPatch
+  - StringPatch
+  - StringPatch
+  - GearIdPatch
 spec_hint:
   union_block_count: 28
   character_level: 245
@@ -44,7 +54,7 @@ anchors:
       options:
         - first_att: 10
     star: 12
-spec:
+data:
   arcane_symbols: 
     - level: 12
       stat_type: first_stat

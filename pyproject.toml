@@ -44,6 +44,7 @@ output = "coverage-reports/coverage.xml"
 warn_return_any = true
 warn_unused_configs = true
 incremental = false
+disable_error_code = "misc"
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
@@ -84,7 +85,7 @@ pytest = "^6.2.5"
 isort = "^5.9.3"
 coverage = "^6.0.2"
 pylint = "=2.13.1"
-mypy = "^0.910"
+mypy = "^0.981"
 black = "^22.6"
 pytest-cov = "^3.0.0"
 build = "^0.8.0"

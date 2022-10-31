@@ -1,0 +1,21 @@
+kind: TestClass 
+version: simaple.io/ATestClass
+metadata:
+  label:
+    group: test_group
+    name: A_2
+data:
+  name: test_passive_1
+  stat:
+    INT: 40
+---
+kind: TestClass 
+version: simaple.io/ATestClass
+metadata:
+  label:
+    group: test_group
+    name: A_3
+data:
+  name: test_passive_1
+  stat:
+    INT: 40

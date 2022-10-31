@@ -2,19 +2,19 @@ import json
 
 from simaple.core import Stat
 from simaple.core.damage import INTBasedDamageLogic
-from simaple.job.builtin.archmagefb import archmagefb_static_property
-from simaple.job.passive_skill import PassiveSkillArgument
+from simaple.job.builtin.interpreter import get_static_propery
+from simaple.job.description import GeneralJobArgument
 from simaple.metric.metric import RegressionMetric
 
 
 def test_metric():
-    argument = PassiveSkillArgument(
+    argument = GeneralJobArgument(
         combat_orders_level=1,
         passive_skill_level=0,
         character_level=260,
     )
 
-    static_property = archmagefb_static_property(argument)
+    static_property = get_static_propery("archmagefb", argument)
 
     metric = RegressionMetric(
         static_property,

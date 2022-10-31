@@ -22,6 +22,6 @@ class PotentialTranslator(pydantic.BaseModel):
         for pattern, provider in self.patterns:
             match = pattern.match(expression)
             if match is not None:
-                return provider.provide(match.group(1))
+                return provider.provide(int(match.group(1)))
 
         raise NoMatchedStringError("No pattern matched")
