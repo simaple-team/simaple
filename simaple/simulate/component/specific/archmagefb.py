@@ -1,5 +1,5 @@
 from simaple.simulate.base import State
-from simaple.simulate.component.base import Component, DispatcherType, dispatcher_method
+from simaple.simulate.component.base import Component, reducer_method
 from simaple.simulate.component.skill import CooldownState
 
 
@@ -41,7 +41,7 @@ class PoisonNovaComponent(Component):
             "nova_state": PoisonNovaState(time_left=0, maximum_time_left=100 * 1000.0),
         }
 
-    @dispatcher_method
+    @reducer_method
     def elapse(
         self, time: float, cooldown_state: CooldownState, nova_state: PoisonNovaState
     ):
@@ -50,7 +50,7 @@ class PoisonNovaComponent(Component):
         nova_state.elapse(time)
         return (cooldown_state, nova_state), self.event_provider.elapsed(time)
 
-    @dispatcher_method
+    @reducer_method
     def use(self, _: None, cooldown_state: CooldownState, nova_state: PoisonNovaState):
         cooldown_state, nova_state = cooldown_state.copy(), nova_state.copy()
 
@@ -65,7 +65,7 @@ class PoisonNovaComponent(Component):
             self.event_provider.delayed(self.delay),
         ]
 
-    @dispatcher_method
+    @reducer_method
     def trigger(self, _: None, nova_state: PoisonNovaState):
         nova_state = nova_state.copy()
         triggered = nova_state.try_trigger_nova()

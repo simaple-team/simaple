@@ -40,7 +40,7 @@ class Event(BaseModel):
     """
 
     name: str
-    method: Optional[str]
+    method: str = ""
     tag: Optional[str]
     handler: Optional[str]
     payload: Any
@@ -159,12 +159,12 @@ class Dispatcher(metaclass=ABCMeta):
         ...
 
 
-class Reducer:
+class Environment:
     def __init__(self, store: AddressedStore):
         self.dispatchers: list[DispatcherType] = []
         self.store = store
 
-    def add_reducer(self, dispatcher: DispatcherType):
+    def add_dispatcher(self, dispatcher: DispatcherType):
         self.dispatchers.append(dispatcher)
 
     def resolve(self, action: Action) -> list[Event]:
@@ -182,23 +182,23 @@ class View(metaclass=ABCMeta):
 
 
 class Client:
-    def __init__(self, reducer: Reducer, actor: Actor):
-        self.reducer = reducer
+    def __init__(self, environment: Environment, actor: Actor):
+        self.environment = environment
         self.actor = actor
 
     def play(self, base_action: Action) -> list[Event]:
         actions = [base_action]
-        events = []
-        all_events = []
+        events: list[Event] = []
+        all_events: list[Event] = []
 
         while len(actions) > 0:
             events = []
             for action in actions:
-                resolved_events = self.reducer.resolve(action)
+                resolved_events = self.environment.resolve(action)
                 all_events += resolved_events
                 events += resolved_events
             actions = []
             for event in events:
-                actions += self.actor.handle(event, self.reducer.store, events)
+                actions += self.actor.handle(event, self.environment.store, events)
 
         return all_events

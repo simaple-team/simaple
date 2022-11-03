@@ -34,7 +34,7 @@ class TimeState(State):
         self.current_time += time
 
 
-def timer_delay_dispatcher(action: Action, store: Store) -> tuple[Event]:
+def timer_delay_dispatcher(action: Action, store: Store) -> list[Event]:
     """A time-summation dispatcher, which calculates total passed time."""
     if action.method != "elapse" and action.name != "*":
         return []
@@ -47,10 +47,10 @@ def timer_delay_dispatcher(action: Action, store: Store) -> tuple[Event]:
 
 
 def get_current_time(store: Store) -> float:
-    time = store.read_state("global.time", TimeState()).current_time
+    time: float = store.read_state("global.time", TimeState()).current_time
     return time
 
 
 def install_timer(client: Client):
-    client.reducer.add_reducer(timer_delay_dispatcher)
+    client.environment.add_dispatcher(timer_delay_dispatcher)
     client.actor.add_handler(TimerEventHandler())

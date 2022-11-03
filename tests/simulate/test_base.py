@@ -1,4 +1,4 @@
-from simaple.simulate.base import Action, AddressedStore, ConcreteStore, Reducer
+from simaple.simulate.base import Action, AddressedStore, ConcreteStore, Environment
 from simaple.simulate.component.skill import AttackSkillComponent
 
 
@@ -13,11 +13,11 @@ def test_scenario():
         name="test-B", damage=400, hit=6, cooldown=14.0, delay=0.0
     )
 
-    reducer = Reducer(store)
-    attack_skill_1.add_to_reducer(reducer)
-    attack_skill_2.add_to_reducer(reducer)
+    environment = Environment(store)
+    attack_skill_1.add_to_environment(environment)
+    attack_skill_2.add_to_environment(environment)
     print(".")
-    event = reducer.resolve(
+    event = environment.resolve(
         Action(
             name="test-A",
             method="use",
@@ -26,7 +26,7 @@ def test_scenario():
     )
     print(event)
 
-    event = reducer.resolve(
+    event = environment.resolve(
         Action(
             name="test-B",
             method="use",
@@ -35,7 +35,7 @@ def test_scenario():
     )
     print(event)
 
-    event = reducer.resolve(
+    event = environment.resolve(
         Action(
             name="test-B",
             method="elapse",

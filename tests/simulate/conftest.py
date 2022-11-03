@@ -5,7 +5,13 @@ import simaple.simulate.component.skill  # pylint: disable=W0611
 import simaple.simulate.component.specific  # pylint: disable=W0611
 from simaple.job.description import GeneralJobArgument
 from simaple.job.spec.patch import SkillLevelPatch
-from simaple.simulate.base import Actor, AddressedStore, Client, ConcreteStore, Reducer
+from simaple.simulate.base import (
+    Actor,
+    AddressedStore,
+    Client,
+    ConcreteStore,
+    Environment,
+)
 from simaple.simulate.timer import install_timer
 from simaple.simulate.util import EventDisplayHandler
 from simaple.spec.loader import SpecBasedLoader
@@ -41,13 +47,13 @@ def archmagefb_client(component_repository):
     )
 
     store = AddressedStore(ConcreteStore())
-    reducer = Reducer(store=store)
+    environment = Environment(store=store)
 
     for component in components:
-        component.add_to_reducer(reducer)
+        component.add_to_environment(environment)
 
     actor = Actor()
-    client = Client(reducer, actor)
+    client = Client(environment, actor)
 
     install_timer(client)
     actor.add_handler(EventDisplayHandler())

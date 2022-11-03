@@ -1,6 +1,6 @@
 from simaple.core.base import Stat
 from simaple.simulate.base import State
-from simaple.simulate.component.base import Component, dispatcher_method
+from simaple.simulate.component.base import Component, reducer_method
 
 
 class DurationState(State):
@@ -56,13 +56,13 @@ class AttackSkillComponent(Component):
             "cooldown_state": CooldownState(time_left=0),
         }
 
-    @dispatcher_method
+    @reducer_method
     def elapse(self, time: float, cooldown_state: CooldownState):
         cooldown_state = cooldown_state.copy()
         cooldown_state.elapse(time)
         return cooldown_state, self.event_provider.elapsed(time)
 
-    @dispatcher_method
+    @reducer_method
     def use(self, _: None, cooldown_state: CooldownState):
         cooldown_state = cooldown_state.copy()
 
@@ -76,7 +76,7 @@ class AttackSkillComponent(Component):
             self.event_provider.delayed(self.delay),
         ]
 
-    @dispatcher_method
+    @reducer_method
     def reset_cooldown(self, _: None, cooldown_state: CooldownState):
         cooldown_state = cooldown_state.copy()
         cooldown_state.set_time_left(0)
@@ -96,7 +96,7 @@ class BuffSkillComponent(Component):
             "duration_state": DurationState(time_left=0),
         }
 
-    @dispatcher_method
+    @reducer_method
     def use(
         self, _: None, cooldown_state: CooldownState, duration_state: DurationState
     ):
@@ -111,7 +111,7 @@ class BuffSkillComponent(Component):
 
         return (cooldown_state, duration_state), self.event_provider.delayed(self.delay)
 
-    @dispatcher_method
+    @reducer_method
     def elapse(
         self, time: float, cooldown_state: CooldownState, duration_state: DurationState
     ):

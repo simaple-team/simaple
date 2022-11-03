@@ -12,7 +12,7 @@ class EventDisplayHandler(EventHandler):
         self, event: Event, store: Store, __: list[Event]
     ) -> Optional[list[Action]]:
         if event.tag == Tag.ELAPSED:  # Elapsed log is too verbose
-            return
+            return None
 
         elapsed_second = get_current_time(store) * 0.001
         output = f"TIME [{elapsed_second:.3f}] |  {event.tag:<17}| {event.signature.replace('.', ' -> ')}  {event.payload}"
@@ -20,3 +20,5 @@ class EventDisplayHandler(EventHandler):
             logger.warning(output)
         else:
             logger.info(output)
+
+        return None
