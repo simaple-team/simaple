@@ -15,6 +15,7 @@ discover, simulate and optimize related with maplestory.
    :hidden:
 
    modules/examples
+   modules/simulate
 
 
 .. toctree::

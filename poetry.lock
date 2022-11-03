@@ -744,6 +744,19 @@ Pygments = ">=2.5.1"
 md = ["cmarkgfm (>=0.8.0)"]
 
 [[package]]
+name = "readthedocs-sphinx-ext"
+version = "2.2.0"
+description = "Sphinx extension for Read the Docs overrides"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+Jinja2 = ">=2.9"
+packaging = "*"
+requests = "*"
+
+[[package]]
 name = "requests"
 version = "2.28.1"
 description = "Python HTTP for Humans."
@@ -1154,7 +1167,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9, <3.11"
-content-hash = "8a1bb173580b5ea5b2468ac70d4091a5d9dd580701be7cadc83829c471ec2e9c"
+content-hash = "eda21863e1f735321879509d9b42e61b8f72429132fac868319ffa49bed67259"
 
 [metadata.files]
 aiohttp = [
@@ -1952,6 +1965,10 @@ PyYAML = [
 readme-renderer = [
     {file = "readme_renderer-37.2-py3-none-any.whl", hash = "sha256:d3f06a69e8c40fca9ab3174eca48f96d9771eddb43517b17d96583418427b106"},
     {file = "readme_renderer-37.2.tar.gz", hash = "sha256:e8ad25293c98f781dbc2c5a36a309929390009f902f99e1798c761aaf04a7923"},
+]
+readthedocs-sphinx-ext = [
+    {file = "readthedocs-sphinx-ext-2.2.0.tar.gz", hash = "sha256:e5effcd825816111a377ab7a897b819215138f8e5e8acc86f99218328f957240"},
+    {file = "readthedocs_sphinx_ext-2.2.0-py2.py3-none-any.whl", hash = "sha256:d801f0bfb125d2837f18f40451462528d4a97eefd8de8a12ad526b4f1ce14205"},
 ]
 requests = [
     {file = "requests-2.28.1-py3-none-any.whl", hash = "sha256:8fefa2a1a1365bf5520aac41836fbee479da67864514bdb821f31ce07ce65349"},
