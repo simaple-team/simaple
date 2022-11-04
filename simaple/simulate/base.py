@@ -1,3 +1,4 @@
+import copy
 from abc import ABCMeta, abstractmethod
 from typing import Any, Callable, Optional
 
@@ -186,6 +187,24 @@ class Client:
         self.environment = environment
         self.actor = actor
 
+    def wrap_actor_decision(self, event, actor_decision: list[Action]) -> list[Action]:
+        """Wrap-up actor's decision by built-in actionss
+        These decisions must provided; this is "forced action"
+        """
+        emiited_event_action = Action(
+            name=event.name,
+            method=f"{event.method}.emitted.{event.tag or ''}",
+            payload=copy.deepcopy(event.payload),
+        )
+
+        done_event_action = Action(
+            name=event.name,
+            method=f"{event.method}.done.{event.tag or ''}",
+            payload=copy.deepcopy(event.payload),
+        )
+
+        return [emiited_event_action] + actor_decision + [done_event_action]
+
     def play(self, base_action: Action) -> list[Event]:
         actions = [base_action]
         events: list[Event] = []
@@ -199,6 +218,8 @@ class Client:
                 events += resolved_events
             actions = []
             for event in events:
-                actions += self.actor.handle(event, self.environment.store, events)
+                actions += self.wrap_actor_decision(
+                    event, self.actor.handle(event, self.environment.store, events)
+                )
 
         return all_events

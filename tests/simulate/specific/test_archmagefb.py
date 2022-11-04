@@ -17,6 +17,7 @@ def test_archmage_fb(archmagefb_client):
         ("플레임 스윕", "use", 0),
         ("미스트 이럽션", "use", 0),
         ("플레임 헤이즈", "use", 0),
+        ("도트 퍼니셔", "use", 0),
     ]
 
     actions = [Action(name=name, method=method) for name, method, timing in schedule]

@@ -21,26 +21,6 @@ version: simaple.io/AttackSkillComponent
 metadata:
   label:
     group: archmagefb
-    name: 메테오
-patch:
-  - SkillLevelPatch
-  - EvalPatch
-data:
-  type: DamageSkill
-  name: 메테오
-  delay: 690
-  damage: '{{ 270 + 3 * skill_level }}'
-  hit: 12
-  enhanced_by_v: true
-  upgrade_priority: 5
-  cooldown: 45000
-  red: true
----
-kind: Component
-version: simaple.io/AttackSkillComponent
-metadata:
-  label:
-    group: archmagefb
     name: 플레임 헤이즈
 patch:
   - SkillLevelPatch
@@ -48,11 +28,10 @@ patch:
 data:
   name: 플레임 헤이즈
   listening_actions: 
-    미스트 이럽션.use: reset_cooldown
+    미스트 이럽션.use.emitted.global.damage: reset_cooldown
   cooldown: 10000
   delay: 1080
   red: true
-  rem: false
   damage: '{{ 112 + 3 * skill_level }}'
   hit: 15
   type: DamageSkill
@@ -72,14 +51,12 @@ data:
   cooldown: 4000
   delay: 720
   red: true
-  rem: false
   modifier:
     pdamage: 10
     pdamage_indep: 125
     armor_ignore: 52.8
   damage: '{{ 95 + skill_level }}'
   hit: 20
-  type: DamageSkill
   default_skill_level: 30
 ---
 kind: Component
@@ -153,8 +130,63 @@ data:
   red: true
   damage: '{{ 250 + 10 * skill_level }}'
   hit: 12
-  type: DamageSkill
-
   nova_damage: '{{ 225 + 9 * skill_level }}'
   nova_single_hit: 12
   nova_hit_count: 4
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 도트 퍼니셔
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 도트 퍼니셔
+  cooldown: 25000
+  delay: 690
+  hit: '{{ 5 * 25 }}'
+  red: true
+  cooltime: 25000
+  damage: '{{ (400 + 15 * skill_level) * (1 + 0.35 * 24) / 25 }}'
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 메테오
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 메테오
+  cooldown: 45000
+  delay: 690
+  rem: false
+  damage: '{{ 225 + 3 * skill_level }}'
+  hit: 12
+  default_skill_level: 30
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 메테오(패시브)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 메테오(패시브)
+  listening_actions: 
+    플레임 스윕.use.emitted.global.damage: use
+    플레임 헤이즈.use.emitted.global.damage: use
+    # TODO: entangle many
+  delay: 0
+  rem: false
+  damage: '{{ 100 + 4 * skill_level }}'
+  hit: '{{ 0.02 * skill_level }}'
+  default_skill_level: 30
