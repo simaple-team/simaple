@@ -94,6 +94,23 @@ class AttackSkillComponent(Component):
         return cooldown_state, None
 
 
+class MultipleAttackSkillComponent(AttackSkillComponent):
+    multiple: int
+
+    @reducer_method
+    def use(self, _: None, cooldown_state: CooldownState):
+        cooldown_state = cooldown_state.copy()
+
+        if not cooldown_state.available:
+            return cooldown_state, self.event_provider.rejected()
+
+        cooldown_state.set_time_left(self.cooldown)
+
+        return cooldown_state, [
+            self.event_provider.dealt(self.damage, self.hit) for _ in range(self.multiple)
+        ] + [self.event_provider.delayed(self.delay)]
+
+
 class BuffSkillComponent(Component):
     stat: Stat
     cooldown: float = 0.0
