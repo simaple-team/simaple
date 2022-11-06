@@ -43,7 +43,7 @@ class IntervalState(State):
         return self.interval_time_left > 0
 
     def elapse(self, time: float) -> int:
-        maximum_elapsed = int(self.interval_time_left // self.interval)
+        maximum_elapsed = max(0, int(self.interval_time_left // self.interval))
         self.interval_time_left -= time
         self.interval_counter -= time
 

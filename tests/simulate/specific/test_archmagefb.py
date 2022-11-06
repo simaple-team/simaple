@@ -6,6 +6,7 @@ from simaple.simulate.timer import time_elapsing_action
 def test_archmage_fb(archmagefb_client):
     schedule = [
         ("메디테이션", "use", 0),
+        ("이프리트", "use", 0),
         ("플레임 헤이즈", "use", 0),
         ("미스트 이럽션", "use", 0),
         ("플레임 헤이즈", "use", 0),
