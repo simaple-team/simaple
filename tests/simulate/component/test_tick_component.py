@@ -1,3 +1,4 @@
+# pylint: disable=W0621
 import pytest
 
 from simaple.simulate.component.skill import TickDamageConfiguratedAttackSkillComponent

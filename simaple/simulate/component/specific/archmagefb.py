@@ -2,7 +2,6 @@ from simaple.simulate.base import State
 from simaple.simulate.component.base import Component, reducer_method
 from simaple.simulate.component.skill import (
     CooldownState,
-    DurationState,
     IntervalState,
     StackState,
     TickDamageConfiguratedAttackSkillComponent,

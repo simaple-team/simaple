@@ -8,6 +8,8 @@ def test_archmage_fb(archmagefb_client):
     schedule = [
         ("메디테이션", "use", 0),
         ("이프리트", "use", 0),
+        ("퓨리 오브 이프리트", "use", 0),
+        ("포이즌 체인", "use", 0),
         ("플레임 헤이즈", "use", 0),
         ("미스트 이럽션", "use", 0),
         ("플레임 헤이즈", "use", 0),
@@ -20,6 +22,11 @@ def test_archmage_fb(archmagefb_client):
         ("미스트 이럽션", "use", 0),
         ("플레임 헤이즈", "use", 0),
         ("도트 퍼니셔", "use", 0),
+        ("포이즌 노바", "use", 0),
+        ("플레임 스윕", "use", 0),
+        ("플레임 스윕", "use", 0),
+        ("미스트 이럽션", "use", 0),
+        ("플레임 헤이즈", "use", 0),
     ]
 
     actions = [Action(name=name, method=method) for name, method, timing in schedule]
