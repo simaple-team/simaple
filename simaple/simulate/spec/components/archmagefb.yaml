@@ -280,3 +280,95 @@ data:
   tick_damage: 270
   tick_hit: 1
   duration: 22_000
+
+---
+kind: Component
+version: simaple.io/DOTSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 플레임 스윕(도트)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions: 
+    플레임 스윕.use.emitted.global.damage: apply
+  name: 플레임 스윕(도트)
+  tick_damage: '{{ 120 + 4 * skill_level }}'
+  duration: 10_000
+  default_skill_level: 30
+
+---
+kind: Component
+version: simaple.io/DOTSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 이프리트(도트)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions: 
+    이프리트.elapse.emitted.global.damage: apply
+  name: 이프리트(도트)
+  tick_damage: '{{ 120 + 4 * skill_level }}'
+  duration: 4_000
+  default_skill_level: 30
+
+
+---
+kind: Component
+version: simaple.io/DOTSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 플레임 헤이즈(도트)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions: 
+    플레임 헤이즈.use.emitted.global.damage: apply
+  name: 플레임 헤이즈(도트)
+  tick_damage: '{{ 110 + 3 * skill_level }}'
+  duration: 20_000
+  default_skill_level: 30
+
+
+---
+kind: Component
+version: simaple.io/DOTSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 포이즌 노바(도트)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions: 
+    포이즌 노바.use.emitted.global.damage: apply
+  name: 포이즌 노바(도트)
+  tick_damage: '{{ 300 + 12 * skill_level }}'
+  duration: 20_000
+
+
+---
+kind: Component
+version: simaple.io/DOTSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 도트 퍼니셔(도트)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions: 
+    도트 퍼니셔.use.emitted.global.damage: apply
+  name: 도트 퍼니셔(도트)
+  tick_damage: '{{ 200 + 3 * skill_level }}'
+  duration: 16_000
+

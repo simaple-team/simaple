@@ -204,3 +204,40 @@ class TickDamageConfiguratedAttackSkillComponent(Component):
             self.event_provider.dealt(self.damage, self.hit),
             self.event_provider.delayed(self.delay),
         ]
+
+
+class DOTSkillComponent(Component):
+    name: str
+
+    tick_interval: float = 1_000
+    tick_damage: float
+    tick_hit: int = 1
+    duration: float
+
+    def get_default_state(self):
+        return {
+            "interval_state": IntervalState(interval=self.tick_interval, time_left=0),
+        }
+
+    @reducer_method
+    def elapse(
+        self, time: float, interval_state: IntervalState
+    ):
+        interval_state = interval_state.copy()
+
+        lapse_count = interval_state.elapse(time)
+
+        return interval_state, [
+            self.event_provider.dealt(self.tick_damage, self.tick_hit)
+            for _ in range(lapse_count)
+        ]
+
+    @reducer_method
+    def apply(
+        self, _: None, interval_state: IntervalState
+    ):
+        interval_state = interval_state.copy()
+
+        interval_state.set_time_left(self.duration)
+
+        return interval_state, None
