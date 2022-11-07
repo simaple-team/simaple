@@ -28,13 +28,9 @@ def test_dot_damage_component_emit_after(dot_damage_component):
     default_state = dot_damage_component.get_default_state()
     interval_state = default_state.get("interval_state")
 
-    interval_state, _ = dot_damage_component.apply(
-        None, interval_state
-    )
+    interval_state, _ = dot_damage_component.apply(None, interval_state)
 
-    states, events = dot_damage_component.elapse(
-        120 * 8, interval_state
-    )
+    states, events = dot_damage_component.elapse(120 * 8, interval_state)
 
     dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
 
@@ -45,13 +41,9 @@ def test_dot_damage_component_partial_emit(dot_damage_component):
     default_state = dot_damage_component.get_default_state()
     interval_state = default_state.get("interval_state")
 
-    interval_state, _ = dot_damage_component.apply(
-        None, interval_state
-    )
+    interval_state, _ = dot_damage_component.apply(None, interval_state)
 
-    states, events = dot_damage_component.elapse(
-        120 * 8 + 60, interval_state
-    )
+    states, events = dot_damage_component.elapse(120 * 8 + 60, interval_state)
 
     dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
 
@@ -62,13 +54,9 @@ def test_dot_damage_component_full_emit(dot_damage_component):
     default_state = dot_damage_component.get_default_state()
     interval_state = default_state.get("interval_state")
 
-    interval_state, _ = dot_damage_component.apply(
-        None, interval_state
-    )
+    interval_state, _ = dot_damage_component.apply(None, interval_state)
 
-    states, events = dot_damage_component.elapse(
-        120 * 30, interval_state
-    )
+    states, events = dot_damage_component.elapse(120 * 30, interval_state)
 
     dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
 

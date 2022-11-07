@@ -372,3 +372,25 @@ data:
   tick_damage: '{{ 200 + 3 * skill_level }}'
   duration: 16_000
 
+
+---
+kind: Component
+version: simaple.io/PoisonChainComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 포이즌 체인
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 포이즌 체인
+  damage: '{{ 250 + 10 * skill_level }}'
+  delay: 600
+  hit: 0
+
+  tick_interval: 1_800
+  tick_damage: '{{ 150 + skill_level * 6 }}'
+  tick_hit: 5
+  duration: 18_000
+  tick_damage_increment: '{{ 30 + skill_level }}'

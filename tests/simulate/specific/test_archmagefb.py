@@ -1,5 +1,6 @@
 import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.simulate.base import Action
+from simaple.simulate.reserved_names import Tag
 from simaple.simulate.timer import time_elapsing_action
 
 
@@ -40,3 +41,25 @@ def test_poison_nova(archmagefb_client):
         events += archmagefb_client.play(action)
 
     assert "포이즌 노바.trigger" in [e.signature for e in events]
+
+
+def test_poison_chain(archmagefb_client):
+    actions = [
+        Action(name="포이즌 체인", method="use"),
+        time_elapsing_action(25000),
+    ]
+
+    events = []
+
+    for action in actions:
+        events += archmagefb_client.play(action)
+
+    damage_events = [e for e in events if e.tag == Tag.DAMAGE]
+
+    assert len(damage_events) == 9 + 1
+
+    for idx in range(1, 5):
+        assert (
+            damage_events[idx + 1].payload["damage"]
+            > damage_events[idx].payload["damage"]
+        )

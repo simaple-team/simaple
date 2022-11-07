@@ -54,6 +54,32 @@ class IntervalState(State):
 
         return 0
 
+    def resolving(self, time: float):
+        maximum_elapsed = max(0, int(self.interval_time_left // self.interval))
+
+        self.interval_time_left -= time
+        self.interval_counter -= time
+        elapse_count = 0
+
+        while self.interval_counter <= 0 and elapse_count < maximum_elapsed:
+            self.interval_counter += self.interval
+            elapse_count += 1
+            yield 1
+
+
+class StackState(State):
+    stack: int = 0
+    maximum_stack: int
+
+    def reset(self, value: int = 0):
+        self.stack = value
+
+    def increase(self, value: int = 1):
+        self.stack = min(self.maximum_stack, self.stack + value)
+
+    def get_stack(self) -> int:
+        return self.stack
+
 
 class AttackSkillComponent(Component):
     name: str
@@ -107,7 +133,8 @@ class MultipleAttackSkillComponent(AttackSkillComponent):
         cooldown_state.set_time_left(self.cooldown)
 
         return cooldown_state, [
-            self.event_provider.dealt(self.damage, self.hit) for _ in range(self.multiple)
+            self.event_provider.dealt(self.damage, self.hit)
+            for _ in range(self.multiple)
         ] + [self.event_provider.delayed(self.delay)]
 
 
@@ -220,9 +247,7 @@ class DOTSkillComponent(Component):
         }
 
     @reducer_method
-    def elapse(
-        self, time: float, interval_state: IntervalState
-    ):
+    def elapse(self, time: float, interval_state: IntervalState):
         interval_state = interval_state.copy()
 
         lapse_count = interval_state.elapse(time)
@@ -233,9 +258,7 @@ class DOTSkillComponent(Component):
         ]
 
     @reducer_method
-    def apply(
-        self, _: None, interval_state: IntervalState
-    ):
+    def apply(self, _: None, interval_state: IntervalState):
         interval_state = interval_state.copy()
 
         interval_state.set_time_left(self.duration)

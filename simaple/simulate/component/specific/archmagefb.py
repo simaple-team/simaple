@@ -1,6 +1,12 @@
 from simaple.simulate.base import State
 from simaple.simulate.component.base import Component, reducer_method
-from simaple.simulate.component.skill import CooldownState
+from simaple.simulate.component.skill import (
+    CooldownState,
+    DurationState,
+    IntervalState,
+    StackState,
+    TickDamageConfiguratedAttackSkillComponent,
+)
 
 
 class PoisonNovaState(State):
@@ -81,3 +87,63 @@ class PoisonNovaComponent(Component):
             ]
 
         return nova_state, None
+
+
+class PoisonChainComponent(TickDamageConfiguratedAttackSkillComponent):
+    tick_damage_increment: float
+
+    def get_default_state(self):
+        tick_states = super().get_default_state()
+        tick_states.update(
+            {
+                "stack_state": StackState(maximum_stack=5),
+            }
+        )
+        return tick_states
+
+    def get_tick_damage(self, stack_state: StackState):
+        return self.tick_damage + self.tick_damage_increment * stack_state.get_stack()
+
+    @reducer_method
+    def elapse(
+        self,
+        time: float,
+        cooldown_state: CooldownState,
+        interval_state: IntervalState,
+        stack_state: StackState,
+    ):
+        cooldown_state = cooldown_state.copy()
+        interval_state = interval_state.copy()
+        stack_state = stack_state.copy()
+
+        cooldown_state.elapse(time)
+
+        dealing_events = []
+
+        for _ in interval_state.resolving(time):
+            dealing_events.append(
+                self.event_provider.dealt(
+                    self.get_tick_damage(stack_state), self.tick_hit
+                )
+            )
+            stack_state.increase(1)
+
+        return (cooldown_state, interval_state, stack_state), [
+            self.event_provider.elapsed(time)
+        ] + dealing_events
+
+    @reducer_method
+    def use(
+        self,
+        _: None,
+        cooldown_state: CooldownState,
+        interval_state: IntervalState,
+        stack_state: StackState,
+    ):
+        stack_state = stack_state.copy()
+
+        (cooldown_state, interval_state), events = super().use(
+            None, cooldown_state, interval_state
+        )
+        stack_state.reset(1)
+        return (cooldown_state, interval_state, stack_state), events
