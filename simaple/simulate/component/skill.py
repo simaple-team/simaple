@@ -1,6 +1,7 @@
 from simaple.core.base import Stat
 from simaple.simulate.base import State
-from simaple.simulate.component.base import Component, reducer_method
+from simaple.simulate.component.base import Component, reducer_method, view_method
+from simaple.simulate.component.view import Validity
 
 
 class DurationState(State):
@@ -119,6 +120,14 @@ class AttackSkillComponent(Component):
         cooldown_state.set_time_left(0)
         return cooldown_state, None
 
+    @view_method
+    def validity(self, cooldown_state):
+        return Validity(
+            name=self.name,
+            time_left=max(0, cooldown_state.time_left),
+            valid=cooldown_state.available,
+        )
+
 
 class MultipleAttackSkillComponent(AttackSkillComponent):
     multiple: int
@@ -180,6 +189,14 @@ class BuffSkillComponent(Component):
             self.event_provider.elapsed(time),
         ]
 
+    @view_method
+    def validity(self, cooldown_state):
+        return Validity(
+            name=self.name,
+            time_left=max(0, cooldown_state.time_left),
+            valid=cooldown_state.available,
+        )
+
 
 class TickDamageConfiguratedAttackSkillComponent(Component):
     name: str
@@ -231,6 +248,14 @@ class TickDamageConfiguratedAttackSkillComponent(Component):
             self.event_provider.dealt(self.damage, self.hit),
             self.event_provider.delayed(self.delay),
         ]
+
+    @view_method
+    def validity(self, cooldown_state):
+        return Validity(
+            name=self.name,
+            time_left=max(0, cooldown_state.time_left),
+            valid=cooldown_state.available,
+        )
 
 
 class DOTSkillComponent(Component):
