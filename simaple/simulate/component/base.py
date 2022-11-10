@@ -14,13 +14,13 @@ WILD_CARD = "*"
 ReducerType = Callable[..., tuple[Union[tuple[State], State], Any]]
 
 
-class ComponentReducer:
-    def __init__(self, func: ReducerType):
+class ComponentMethodWrapper:
+    def __init__(self, func: ReducerType, skip_count=1):
         self._func = func
         self._input_state_names = [
             param.name for param in inspect.signature(func).parameters.values()
         ][
-            1:
+            skip_count:
         ]  # skip self, payload
 
     def __call__(self, *args, **kwargs) -> tuple[Union[tuple[State], State], Any]:
@@ -51,6 +51,12 @@ def reducer_method(func):
     return func
 
 
+def view_method(func):
+    func.__isview__ = True
+
+    return func
+
+
 class ActionRouter(BaseModel, metaclass=ABCMeta):
     class Config:
         arbitrary_types_allowed = True
@@ -60,7 +66,7 @@ class ActionRouter(BaseModel, metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    def get_matching_reducer(self, action: Action) -> ComponentReducer:
+    def get_matching_reducer(self, action: Action) -> ComponentMethodWrapper:
         ...
 
     @abstractmethod
@@ -69,13 +75,13 @@ class ActionRouter(BaseModel, metaclass=ABCMeta):
 
 
 class ConcreteActionRouter(ActionRouter):
-    mappings: dict[str, ComponentReducer]
+    mappings: dict[str, ComponentMethodWrapper]
     method_mappings: dict[str, str]
 
     def is_enabled_action(self, action: Action):
         return action.signature in self.mappings
 
-    def get_matching_reducer(self, action: Action) -> ComponentReducer:
+    def get_matching_reducer(self, action: Action) -> ComponentMethodWrapper:
         return self.mappings[action.signature]
 
     def get_matching_method_name(self, action: Action) -> str:
@@ -147,9 +153,27 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
         return tagged_events
 
 
-def component_view(func):
-    func.__component_view__ = True
-    return func
+class WrappedView:
+    def __init__(
+        self,
+        name: str,
+        wrapped_view_method: ComponentMethodWrapper,
+        default_state: dict[str, State],
+        binds=None,
+    ):
+        self._name = name
+        self._default_state = default_state
+        self._wrapped_view_method = wrapped_view_method
+        self._binds = binds
+
+    def __call__(self, store: Store):
+        local_store = store.local(self._name)
+        input_states = self._wrapped_view_method.get_states(
+            local_store, self._default_state
+        )
+        view = self._wrapped_view_method(*input_states)
+
+        return view
 
 
 class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
@@ -167,6 +191,19 @@ class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
         }
         reducers.update(previous_reducers)
         cls.__reducers__ = frozenset(reducers)
+
+        previous_views = set()
+        for base in bases:
+            previous_views.update(getattr(base, "__views__", {}))
+
+        views = {
+            name
+            for name, value in namespace.items()
+            if getattr(value, "__isview__", False)
+        }
+        views.update(previous_views)
+        cls.__views__ = frozenset(views)
+
         return cls
 
 
@@ -207,6 +244,9 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         dispatcher = self.export_dispatcher()
         environment.add_dispatcher(dispatcher)
 
+        for view_name, view in self.get_views().items():
+            environment.add_view(f"{self.name}.{view_name}", view)
+
     def get_action_router(self) -> ActionRouter:
         reducer_methods = self.get_reducer_methods()
 
@@ -237,6 +277,17 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
 
     def get_reducer_methods(self):
         return {
-            method_name: ComponentReducer(getattr(self, method_name))
+            method_name: ComponentMethodWrapper(getattr(self, method_name))
             for method_name in getattr(self, "__reducers__")
+        }
+
+    def get_views(self):
+        return {
+            method_name: WrappedView(
+                self.name,
+                ComponentMethodWrapper(getattr(self, method_name), skip_count=0),
+                self.get_default_state(),
+                binds=self.binds,
+            )
+            for method_name in getattr(self, "__views__")
         }

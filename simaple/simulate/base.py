@@ -1,4 +1,5 @@
 import copy
+import re
 from abc import ABCMeta, abstractmethod
 from typing import Any, Callable, Optional
 
@@ -160,13 +161,20 @@ class Dispatcher(metaclass=ABCMeta):
         ...
 
 
+View = Callable[[Store], Any]
+
+
 class Environment:
     def __init__(self, store: AddressedStore):
         self.dispatchers: list[DispatcherType] = []
         self.store = store
+        self._views = {}
 
     def add_dispatcher(self, dispatcher: DispatcherType):
         self.dispatchers.append(dispatcher)
+
+    def add_view(self, view_name: str, view: View):
+        self._views[view_name] = view
 
     def resolve(self, action: Action) -> list[Event]:
         events = []
@@ -175,11 +183,14 @@ class Environment:
 
         return events
 
+    def show(self, view_name: str):
+        return self._views[view_name](self.store)
 
-class View(metaclass=ABCMeta):
-    @abstractmethod
-    def aggregate(self, components):
-        ...
+    def get_views(self, view_name_pattern: str) -> list[View]:
+        regex = re.compile(view_name_pattern)
+        return [
+            view for view_name, view in self._views.items() if regex.match(view_name)
+        ]
 
 
 class Client:
