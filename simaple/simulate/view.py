@@ -1,7 +1,7 @@
-from abc import ABCMeta, abstractclassmethod, abstractmethod
+from abc import ABCMeta, abstractmethod
 from typing import Any
 
-from simaple.simulate.base import Environment, State, Store, View
+from simaple.simulate.base import Environment, Store, View
 
 
 class AggregationView(metaclass=ABCMeta):
@@ -16,7 +16,8 @@ class AggregationView(metaclass=ABCMeta):
     def aggregate(self, representations: list[Any]):
         ...
 
-    @abstractclassmethod
+    @abstractmethod
+    @classmethod
     def get_installation_pattern(cls) -> str:
         """A Template-method to specify which pattern may used for installation."""
 

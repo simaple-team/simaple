@@ -6,6 +6,7 @@ from simaple.simulate.component.skill import (
     StackState,
     TickDamageConfiguratedAttackSkillComponent,
 )
+from simaple.simulate.global_property import Dynamics
 
 
 class PoisonNovaState(State):
@@ -56,16 +57,22 @@ class PoisonNovaComponent(Component):
         return (cooldown_state, nova_state), self.event_provider.elapsed(time)
 
     @reducer_method
-    def use(self, _: None, cooldown_state: CooldownState, nova_state: PoisonNovaState):
+    def use(
+        self,
+        _: None,
+        cooldown_state: CooldownState,
+        nova_state: PoisonNovaState,
+        dynamics: Dynamics,
+    ):
         cooldown_state, nova_state = cooldown_state.copy(), nova_state.copy()
 
         if not cooldown_state.available:
             return (cooldown_state, nova_state), self.event_provider.rejected()
 
-        cooldown_state.set_time_left(self.cooldown)
+        cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
         nova_state.create_nova(self.nova_remaining_time)
 
-        return (cooldown_state, nova_state), [
+        return (cooldown_state, nova_state, dynamics), [
             self.event_provider.dealt(self.damage, self.hit),
             self.event_provider.delayed(self.delay),
         ]
@@ -134,15 +141,16 @@ class PoisonChainComponent(TickDamageConfiguratedAttackSkillComponent):
     @reducer_method
     def use(
         self,
-        _: None,
+        payload: None,
         cooldown_state: CooldownState,
         interval_state: IntervalState,
         stack_state: StackState,
+        dynamics: Dynamics,
     ):
         stack_state = stack_state.copy()
 
-        (cooldown_state, interval_state), events = super().use(
-            None, cooldown_state, interval_state
+        (cooldown_state, interval_state, dynamics), events = super().use(
+            payload, cooldown_state, interval_state, dynamics
         )
         stack_state.reset(1)
-        return (cooldown_state, interval_state, stack_state), events
+        return (cooldown_state, interval_state, stack_state, dynamics), events

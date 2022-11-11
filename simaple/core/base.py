@@ -261,6 +261,16 @@ class ActionStat(BaseModel):
         self.cooltime_reduce_rate += arg.cooltime_reduce_rate
         return self
 
+    def calculate_cooldown(self, original_cooldown):
+        # TODO - need to apply correct logic
+        return (
+            original_cooldown * (1 - self.cooltime_reduce_rate * 0.01)
+            - self.cooltime_reduce
+        )
+
+    def calculate_buff_duration(self, original_duration):
+        return original_duration * (1 + 0.01 * self.buff_duration)
+
 
 class LevelStat(BaseModel):
     STR: float = 0.0

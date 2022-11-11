@@ -1,7 +1,7 @@
 import copy
 import re
 from abc import ABCMeta, abstractmethod
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Optional, Union
 
 from pydantic import BaseModel, Extra
 
@@ -18,7 +18,7 @@ class Action(BaseModel):
 
     name: str
     method: str
-    payload: Any
+    payload: Optional[Union[int, str, dict]]
 
     class Config:
         extra = Extra.forbid
@@ -87,6 +87,10 @@ class ConcreteStore(Store):
 
     def read_state(self, name: str, default: State):
         value = self._states.setdefault(name, default)
+        if value is None:
+            raise ValueError(
+                "None-default only enabled for external-property binding. Maybe missing global proeperty installation?"
+            )
         return value.copy()
 
     def local(self, address):

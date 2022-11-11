@@ -6,31 +6,35 @@ from simaple.simulate.timer import time_elapsing_action
 
 
 def test_archmage_fb(archmagefb_client):
+    action_stat = None
     schedule = [
-        ("메디테이션", "use", 0),
-        ("이프리트", "use", 0),
-        ("퓨리 오브 이프리트", "use", 0),
-        ("포이즌 체인", "use", 0),
-        ("플레임 헤이즈", "use", 0),
-        ("미스트 이럽션", "use", 0),
-        ("플레임 헤이즈", "use", 0),
-        ("플레임 스윕", "use", 0),
-        ("플레임 스윕", "use", 0),
-        ("플레임 스윕", "use", 0),
-        ("플레임 스윕", "use", 0),
-        ("플레임 스윕", "use", 0),
-        ("플레임 스윕", "use", 0),
-        ("미스트 이럽션", "use", 0),
-        ("플레임 헤이즈", "use", 0),
-        ("도트 퍼니셔", "use", 0),
-        ("포이즌 노바", "use", 0),
-        ("플레임 스윕", "use", 0),
-        ("플레임 스윕", "use", 0),
-        ("미스트 이럽션", "use", 0),
-        ("플레임 헤이즈", "use", 0),
+        ("메디테이션", "use", action_stat),
+        ("이프리트", "use", action_stat),
+        ("퓨리 오브 이프리트", "use", action_stat),
+        ("포이즌 체인", "use", action_stat),
+        ("플레임 헤이즈", "use", action_stat),
+        ("미스트 이럽션", "use", action_stat),
+        ("플레임 헤이즈", "use", action_stat),
+        ("플레임 스윕", "use", action_stat),
+        ("플레임 스윕", "use", action_stat),
+        ("플레임 스윕", "use", action_stat),
+        ("플레임 스윕", "use", action_stat),
+        ("플레임 스윕", "use", action_stat),
+        ("플레임 스윕", "use", action_stat),
+        ("미스트 이럽션", "use", action_stat),
+        ("플레임 헤이즈", "use", action_stat),
+        ("도트 퍼니셔", "use", action_stat),
+        ("포이즌 노바", "use", action_stat),
+        ("플레임 스윕", "use", action_stat),
+        ("플레임 스윕", "use", action_stat),
+        ("미스트 이럽션", "use", action_stat),
+        ("플레임 헤이즈", "use", action_stat),
     ]
 
-    actions = [Action(name=name, method=method) for name, method, timing in schedule]
+    actions = [
+        Action(name=name, method=method, payload=payload)
+        for name, method, payload in schedule
+    ]
 
     for action in actions:
         events = archmagefb_client.play(action)

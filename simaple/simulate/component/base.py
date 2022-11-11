@@ -1,11 +1,12 @@
 import inspect
 from abc import ABCMeta, abstractmethod
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Optional, Type, Union
 
 from pydantic import BaseModel, Field
 
 from simaple.simulate.base import Action, Dispatcher, Environment, Event, State, Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
+from simaple.simulate.global_property import GlobalProperty
 from simaple.spec.loadable import TaggedNamespacedABCMeta
 
 WILD_CARD = "*"
@@ -17,32 +18,45 @@ ReducerType = Callable[..., tuple[Union[tuple[State], State], Any]]
 class ComponentMethodWrapper:
     def __init__(self, func: ReducerType, skip_count=1):
         self._func = func
+        self._has_payload = skip_count == 1
         self._input_state_names = [
             param.name for param in inspect.signature(func).parameters.values()
         ][
             skip_count:
         ]  # skip self, payload
+        self._payload_type: Type[BaseModel] = list(
+            inspect.signature(func).parameters.values()
+        )[0].annotation
 
     def __call__(self, *args, **kwargs) -> tuple[Union[tuple[State], State], Any]:
         return self._func(*args, **kwargs)
 
-    def get_bound_names(self, binds: Optional[dict[str, str]] = None) -> list[str]:
+    def translate_payload(self, payload: Optional[Union[int, str, dict]]):
+        if not self._has_payload:
+            raise ValueError("no skip_count do not support payload translation")
+
+        if not isinstance(payload, dict) or self._payload_type is None:
+            return payload
+
+        return self._payload_type.parse_obj(payload)
+
+    def get_states(self, store: Store, default_states, binds=None):
+        return [
+            store.read_state(name, default=default_states.get(name, None))
+            for name in self._get_bound_names(binds)
+        ]
+
+    def set_states(self, store: Store, states, binds=None):
+        for name, state in zip(self._get_bound_names(binds), states):
+            store.set_state(name, state)
+
+    def _get_bound_names(self, binds: Optional[dict[str, str]] = None) -> list[str]:
         if binds is None:
             binds = {}
 
         return [
             (binds[name] if name in binds else name) for name in self._input_state_names
         ]
-
-    def get_states(self, store: Store, default_states, binds=None):
-        return [
-            store.read_state(name, default=default_states[name])
-            for name in self.get_bound_names(binds)
-        ]
-
-    def set_states(self, store: Store, states, binds=None):
-        for name, state in zip(self.get_bound_names(binds), states):
-            store.set_state(name, state)
 
 
 def reducer_method(func):
@@ -99,6 +113,11 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
         self._name = name
         self._default_state = default_state
         self._action_router = action_router
+        if binds is None:
+            binds = {}
+
+        binds.update(GlobalProperty.get_default_binds())
+
         self._binds = binds
 
     def __call__(self, action: Action, store: Store) -> list[Event]:
@@ -110,10 +129,18 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
         reducer = self._action_router.get_matching_reducer(action)
         method_name = self._action_router.get_matching_method_name(action)
 
-        input_states = reducer.get_states(local_store, self._default_state)
-        output_states, maybe_events = reducer(action.payload, *input_states)
+        input_states = reducer.get_states(
+            local_store, self._default_state, binds=self._binds
+        )
+        output_states, maybe_events = reducer(
+            reducer.translate_payload(action.payload), *input_states
+        )
 
-        reducer.set_states(local_store, self.regularize_returned_state(output_states))
+        reducer.set_states(
+            local_store,
+            self.regularize_returned_state(output_states),
+            binds=self._binds,
+        )
 
         events = self.regularize_returned_event(maybe_events)
 

@@ -3,6 +3,7 @@ import pytest
 
 import simaple.simulate.component.skill  # pylint: disable=W0611
 import simaple.simulate.component.specific  # pylint: disable=W0611
+from simaple.core.base import ActionStat
 from simaple.job.description import GeneralJobArgument
 from simaple.job.spec.patch import SkillLevelPatch
 from simaple.simulate.base import (
@@ -12,6 +13,7 @@ from simaple.simulate.base import (
     ConcreteStore,
     Environment,
 )
+from simaple.simulate.global_property import GlobalProperty
 from simaple.simulate.timer import install_timer
 from simaple.simulate.util import EventDisplayHandler
 from simaple.spec.loader import SpecBasedLoader
@@ -25,7 +27,12 @@ def component_repository():
 
 
 @pytest.fixture
-def archmagefb_client(component_repository):
+def global_property():
+    return GlobalProperty(ActionStat())
+
+
+@pytest.fixture
+def archmagefb_client(component_repository, global_property):
     loader = SpecBasedLoader(component_repository)
 
     components = loader.load_all(
@@ -47,6 +54,7 @@ def archmagefb_client(component_repository):
     )
 
     store = AddressedStore(ConcreteStore())
+    global_property.install_global_properties(store)
     environment = Environment(store=store)
 
     for component in components:

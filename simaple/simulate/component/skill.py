@@ -2,6 +2,7 @@ from simaple.core.base import Stat
 from simaple.simulate.base import State
 from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.view import Validity
+from simaple.simulate.global_property import Dynamics
 
 
 class DurationState(State):
@@ -101,15 +102,15 @@ class AttackSkillComponent(Component):
         return cooldown_state, self.event_provider.elapsed(time)
 
     @reducer_method
-    def use(self, _: None, cooldown_state: CooldownState):
+    def use(self, _: None, cooldown_state: CooldownState, dynamics: Dynamics):
         cooldown_state = cooldown_state.copy()
 
         if not cooldown_state.available:
             return cooldown_state, self.event_provider.rejected()
 
-        cooldown_state.set_time_left(self.cooldown)
+        cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
 
-        return cooldown_state, [
+        return (cooldown_state, dynamics), [
             self.event_provider.dealt(self.damage, self.hit),
             self.event_provider.delayed(self.delay),
         ]
@@ -133,15 +134,15 @@ class MultipleAttackSkillComponent(AttackSkillComponent):
     multiple: int
 
     @reducer_method
-    def use(self, _: None, cooldown_state: CooldownState):
+    def use(self, _: None, cooldown_state: CooldownState, dynamics: Dynamics):
         cooldown_state = cooldown_state.copy()
 
         if not cooldown_state.available:
             return cooldown_state, self.event_provider.rejected()
 
-        cooldown_state.set_time_left(self.cooldown)
+        cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
 
-        return cooldown_state, [
+        return (cooldown_state, dynamics), [
             self.event_provider.dealt(self.damage, self.hit)
             for _ in range(self.multiple)
         ] + [self.event_provider.delayed(self.delay)]
@@ -162,7 +163,11 @@ class BuffSkillComponent(Component):
 
     @reducer_method
     def use(
-        self, _: None, cooldown_state: CooldownState, duration_state: DurationState
+        self,
+        _: None,
+        cooldown_state: CooldownState,
+        duration_state: DurationState,
+        dynamics: Dynamics,
     ):
         cooldown_state = cooldown_state.copy()
         duration_state = duration_state.copy()
@@ -170,10 +175,15 @@ class BuffSkillComponent(Component):
         if not cooldown_state.available:
             return cooldown_state, self.event_provider.rejected()
 
-        cooldown_state.set_time_left(self.cooldown)
-        duration_state.set_time_left(self.duration)
+        cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
 
-        return (cooldown_state, duration_state), self.event_provider.delayed(self.delay)
+        duration_state.set_time_left(
+            dynamics.stat.calculate_buff_duration(self.duration)
+        )
+
+        return (cooldown_state, duration_state, dynamics), self.event_provider.delayed(
+            self.delay
+        )
 
     @reducer_method
     def elapse(
@@ -233,7 +243,11 @@ class TickDamageConfiguratedAttackSkillComponent(Component):
 
     @reducer_method
     def use(
-        self, _: None, cooldown_state: CooldownState, interval_state: IntervalState
+        self,
+        _: None,
+        cooldown_state: CooldownState,
+        interval_state: IntervalState,
+        dynamics: Dynamics,
     ):
         cooldown_state = cooldown_state.copy()
         interval_state = interval_state.copy()
@@ -241,10 +255,10 @@ class TickDamageConfiguratedAttackSkillComponent(Component):
         if not cooldown_state.available:
             return (cooldown_state, interval_state), self.event_provider.rejected()
 
-        cooldown_state.set_time_left(self.cooldown)
+        cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
         interval_state.set_time_left(self.duration)
 
-        return (cooldown_state, interval_state), [
+        return (cooldown_state, interval_state, dynamics), [
             self.event_provider.dealt(self.damage, self.hit),
             self.event_provider.delayed(self.delay),
         ]
