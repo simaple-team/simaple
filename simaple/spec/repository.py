@@ -54,9 +54,12 @@ class DirectorySpecRepository(SpecRepository):
 
     def _load_specifications(self, file_path: Path):
         with open(file_path, "r", encoding="utf-8") as f:
-            raw_configurations = yaml.safe_load_all(f)
-            for raw_configuration in raw_configurations:
-                yield Spec.parse_obj(raw_configuration)
+            try:
+                raw_configurations = yaml.safe_load_all(f)
+                for raw_configuration in raw_configurations:
+                    yield Spec.parse_obj(raw_configuration)
+            except Exception as e:
+                raise ValueError(f"{file_path} loading failed.") from e
 
     def get(self, kind=None, **kwargs) -> Optional[Spec]:
         for k, v in kwargs.items():

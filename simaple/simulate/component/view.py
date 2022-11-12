@@ -1,5 +1,8 @@
+from typing import Optional
+
 import pydantic
 
+from simaple.core.base import Stat
 from simaple.simulate.view import AggregationView
 
 
@@ -21,3 +24,17 @@ class ValidityParentView(AggregationView):
     @classmethod
     def get_installation_pattern(cls):
         return r".*\.validity"
+
+
+class BuffParentView(AggregationView):
+    def aggregate(self, representations: list[Optional[Stat]]):
+        total_buff = Stat()
+        for buff_stat in representations:
+            if buff_stat is not None:
+                total_buff += buff_stat
+
+        return total_buff
+
+    @classmethod
+    def get_installation_pattern(cls):
+        return r".*\.buff"

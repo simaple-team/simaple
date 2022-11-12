@@ -16,8 +16,8 @@ class AggregationView(metaclass=ABCMeta):
     def aggregate(self, representations: list[Any]):
         ...
 
-    @abstractmethod
     @classmethod
+    @abstractmethod
     def get_installation_pattern(cls) -> str:
         """A Template-method to specify which pattern may used for installation."""
 

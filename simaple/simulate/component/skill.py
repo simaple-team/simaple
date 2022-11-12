@@ -1,3 +1,5 @@
+from typing import Optional
+
 from simaple.core.base import Stat
 from simaple.simulate.base import State
 from simaple.simulate.component.base import Component, reducer_method, view_method
@@ -200,12 +202,19 @@ class BuffSkillComponent(Component):
         ]
 
     @view_method
-    def validity(self, cooldown_state):
+    def validity(self, cooldown_state: CooldownState):
         return Validity(
             name=self.name,
             time_left=max(0, cooldown_state.time_left),
             valid=cooldown_state.available,
         )
+
+    @view_method
+    def buff(self, duration_state: DurationState) -> Optional[Stat]:
+        if duration_state.enabled():
+            return self.stat
+
+        return None
 
 
 class TickDamageConfiguratedAttackSkillComponent(Component):

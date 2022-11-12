@@ -1,34 +1,35 @@
 import simaple.simulate.component.skill  # pylint: disable=W0611
+from simaple.core.base import Stat
 from simaple.simulate.base import Action
-from simaple.simulate.component.view import Validity, ValidityParentView
+from simaple.simulate.component.view import BuffParentView, Validity, ValidityParentView
 from simaple.simulate.reserved_names import Tag
 from simaple.simulate.timer import time_elapsing_action
 
 
 def test_archmage_fb(archmagefb_client):
-    action_stat = None
+
     schedule = [
-        ("메디테이션", "use", action_stat),
-        ("이프리트", "use", action_stat),
-        ("퓨리 오브 이프리트", "use", action_stat),
-        ("포이즌 체인", "use", action_stat),
-        ("플레임 헤이즈", "use", action_stat),
-        ("미스트 이럽션", "use", action_stat),
-        ("플레임 헤이즈", "use", action_stat),
-        ("플레임 스윕", "use", action_stat),
-        ("플레임 스윕", "use", action_stat),
-        ("플레임 스윕", "use", action_stat),
-        ("플레임 스윕", "use", action_stat),
-        ("플레임 스윕", "use", action_stat),
-        ("플레임 스윕", "use", action_stat),
-        ("미스트 이럽션", "use", action_stat),
-        ("플레임 헤이즈", "use", action_stat),
-        ("도트 퍼니셔", "use", action_stat),
-        ("포이즌 노바", "use", action_stat),
-        ("플레임 스윕", "use", action_stat),
-        ("플레임 스윕", "use", action_stat),
-        ("미스트 이럽션", "use", action_stat),
-        ("플레임 헤이즈", "use", action_stat),
+        ("메디테이션", "use", None),
+        ("이프리트", "use", None),
+        ("퓨리 오브 이프리트", "use", None),
+        ("포이즌 체인", "use", None),
+        ("플레임 헤이즈", "use", None),
+        ("미스트 이럽션", "use", None),
+        ("플레임 헤이즈", "use", None),
+        ("플레임 스윕", "use", None),
+        ("플레임 스윕", "use", None),
+        ("플레임 스윕", "use", None),
+        ("플레임 스윕", "use", None),
+        ("플레임 스윕", "use", None),
+        ("플레임 스윕", "use", None),
+        ("미스트 이럽션", "use", None),
+        ("플레임 헤이즈", "use", None),
+        ("도트 퍼니셔", "use", None),
+        ("포이즌 노바", "use", None),
+        ("플레임 스윕", "use", None),
+        ("플레임 스윕", "use", None),
+        ("미스트 이럽션", "use", None),
+        ("플레임 헤이즈", "use", None),
     ]
 
     actions = [
@@ -48,6 +49,19 @@ def test_validity_view(archmagefb_client):
     views = archmagefb_client.environment.show("Validity")
     for v in views:
         assert isinstance(v, Validity)
+
+
+def test_buff_view(archmagefb_client):
+    archmagefb_client.environment.add_view(
+        "Buff", BuffParentView.build(archmagefb_client.environment)
+    )
+
+    current_buff_stat = archmagefb_client.environment.show("Buff")
+    assert current_buff_stat == Stat()
+
+    archmagefb_client.play(Action(name="에픽 어드벤처", method="use"))
+
+    assert archmagefb_client.environment.show("Buff") == Stat(damage_multiplier=10)
 
 
 def test_poison_nova(archmagefb_client):
