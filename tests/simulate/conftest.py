@@ -7,11 +7,11 @@ from simaple.core.base import ActionStat
 from simaple.job.description import GeneralJobArgument
 from simaple.job.spec.patch import SkillLevelPatch
 from simaple.simulate.base import (
-    Actor,
     AddressedStore,
     Client,
     ConcreteStore,
     Environment,
+    Relay,
 )
 from simaple.simulate.global_property import GlobalProperty
 from simaple.simulate.timer import TimerEventHandler, clock_view, install_timer
@@ -61,13 +61,13 @@ def archmagefb_client(component_repository, global_property):
     for component in components:
         component.add_to_environment(environment)
 
-    actor = Actor()
-    actor.add_handler(TimerEventHandler())
+    relay = Relay()
+    relay.add_handler(TimerEventHandler())
 
-    client = Client(environment, actor)
+    client = Client(environment, relay)
 
     install_timer(client)
 
-    # actor.add_handler(EventDisplayHandler())
+    # relay.add_handler(EventDisplayHandler())
 
     return client

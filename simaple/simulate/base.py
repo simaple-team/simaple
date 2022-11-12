@@ -178,7 +178,7 @@ class EventHandler:
         ...
 
 
-class Actor:
+class Relay:
     def __init__(self):
         self._event_handlers = []
 
@@ -198,9 +198,9 @@ class Actor:
 
 
 class Client:
-    def __init__(self, environment: Environment, actor: Actor):
+    def __init__(self, environment: Environment, relay: Relay):
         self.environment = environment
-        self.actor = actor
+        self.relay = relay
 
     def play(self, base_action: Action) -> list[Event]:
         actions = [base_action]
@@ -215,14 +215,14 @@ class Client:
                 events += resolved_events
             actions = []
             for event in events:
-                actions += self._wrap_actor_decision(
-                    event, self.actor.handle(event, self.environment, events)
+                actions += self._wrap_relay_decision(
+                    event, self.relay.handle(event, self.environment, events)
                 )
 
         return all_events
 
-    def _wrap_actor_decision(self, event, actor_decision: list[Action]) -> list[Action]:
-        """Wrap-up actor's decision by built-in actionss
+    def _wrap_relay_decision(self, event, relay_decision: list[Action]) -> list[Action]:
+        """Wrap-up relay's decision by built-in actionss
         These decisions must provided; this is "forced action"
         """
         emiited_event_action = Action(
@@ -237,4 +237,4 @@ class Client:
             payload=copy.deepcopy(event.payload),
         )
 
-        return [emiited_event_action] + actor_decision + [done_event_action]
+        return [emiited_event_action] + relay_decision + [done_event_action]
