@@ -14,8 +14,7 @@ from simaple.simulate.base import (
     Environment,
 )
 from simaple.simulate.global_property import GlobalProperty
-from simaple.simulate.timer import install_timer
-from simaple.simulate.util import EventDisplayHandler
+from simaple.simulate.timer import TimerEventHandler, clock_view, install_timer
 from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.patch import EvalPatch
 from simaple.spec.repository import DirectorySpecRepository
@@ -55,15 +54,20 @@ def archmagefb_client(component_repository, global_property):
 
     store = AddressedStore(ConcreteStore())
     global_property.install_global_properties(store)
+
     environment = Environment(store=store)
+    environment.add_view("clock", clock_view)
 
     for component in components:
         component.add_to_environment(environment)
 
     actor = Actor()
+    actor.add_handler(TimerEventHandler())
+
     client = Client(environment, actor)
 
     install_timer(client)
-    actor.add_handler(EventDisplayHandler())
+
+    # actor.add_handler(EventDisplayHandler())
 
     return client

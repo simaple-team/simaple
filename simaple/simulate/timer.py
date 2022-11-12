@@ -1,6 +1,13 @@
 from typing import Optional
 
-from simaple.simulate.base import Action, Client, Event, EventHandler, State, Store
+from simaple.simulate.base import (
+    Action,
+    Client,
+    Environment,
+    Event,
+    EventHandler,
+    Store,
+)
 from simaple.simulate.global_property import Clock
 from simaple.simulate.reserved_names import Tag
 
@@ -20,7 +27,7 @@ class TimerEventHandler(EventHandler):
     """
 
     def __call__(
-        self, event: Event, _: Store, __: list[Event]
+        self, event: Event, _: Environment, __: list[Event]
     ) -> Optional[list[Action]]:
         if event.tag in (Tag.DELAY,):
             return [time_elapsing_action(event.payload["time"])]
@@ -40,11 +47,10 @@ def timer_delay_dispatcher(action: Action, store: Store) -> list[Event]:
     return []
 
 
-def get_current_time(store: Store) -> float:
+def clock_view(store: Store) -> float:
     time: float = store.read_state("global.time", Clock()).current_time
     return time
 
 
 def install_timer(client: Client):
     client.environment.add_dispatcher(timer_delay_dispatcher)
-    client.actor.add_handler(TimerEventHandler())

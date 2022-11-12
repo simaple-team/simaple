@@ -97,20 +97,6 @@ class ConcreteStore(Store):
         return self
 
 
-class EventHandler:
-    """
-    EventHandler receives "Event" and create "Action" (maybe multiple).
-    Eventhandler receives full context; to provide meaningful decision.
-    Handling given store is not recommended "strongly". Please use store with
-    read-only mode as possible as you can.
-    """
-
-    def __call__(
-        self, event: Event, store: Store, all_events: list[Event]
-    ) -> Optional[list[Action]]:
-        ...
-
-
 class AddressedStore(Store):
     def __init__(self, concrete_store: ConcreteStore, current_address: str = ""):
         self._current_address = current_address
@@ -135,25 +121,6 @@ class AddressedStore(Store):
             return f"{self._current_address}.{name}"
 
         return name
-
-
-class Actor:
-    def __init__(self):
-        self._event_handlers = []
-
-    def add_handler(self, event_handler: EventHandler):
-        self._event_handlers.append(event_handler)
-
-    def handle(
-        self, event: Event, store: Store, all_events: list[Event]
-    ) -> list[Action]:
-        actions = []
-        for handler in self._event_handlers:
-            requested_actions = handler(event, store, all_events)
-            if requested_actions is not None:
-                actions += requested_actions
-
-        return actions
 
 
 DispatcherType = Callable[[Action, Store], list[Event]]
@@ -197,12 +164,64 @@ class Environment:
         ]
 
 
+class EventHandler:
+    """
+    EventHandler receives "Event" and create "Action" (maybe multiple).
+    Eventhandler receives full context; to provide meaningful decision.
+    Handling given store is not recommended "strongly". Please use store with
+    read-only mode as possible as you can.
+    """
+
+    def __call__(
+        self, event: Event, environment: Environment, all_events: list[Event]
+    ) -> Optional[list[Action]]:
+        ...
+
+
+class Actor:
+    def __init__(self):
+        self._event_handlers = []
+
+    def add_handler(self, event_handler: EventHandler):
+        self._event_handlers.append(event_handler)
+
+    def handle(
+        self, event: Event, environment: Environment, all_events: list[Event]
+    ) -> list[Action]:
+        actions = []
+        for handler in self._event_handlers:
+            requested_actions = handler(event, environment, all_events)
+            if requested_actions is not None:
+                actions += requested_actions
+
+        return actions
+
+
 class Client:
     def __init__(self, environment: Environment, actor: Actor):
         self.environment = environment
         self.actor = actor
 
-    def wrap_actor_decision(self, event, actor_decision: list[Action]) -> list[Action]:
+    def play(self, base_action: Action) -> list[Event]:
+        actions = [base_action]
+        events: list[Event] = []
+        all_events: list[Event] = []
+
+        while len(actions) > 0:
+            events = []
+            for action in actions:
+                resolved_events = self.environment.resolve(action)
+                all_events += resolved_events
+                events += resolved_events
+            actions = []
+            for event in events:
+                actions += self._wrap_actor_decision(
+                    event, self.actor.handle(event, self.environment, events)
+                )
+
+        return all_events
+
+    def _wrap_actor_decision(self, event, actor_decision: list[Action]) -> list[Action]:
         """Wrap-up actor's decision by built-in actionss
         These decisions must provided; this is "forced action"
         """
@@ -219,22 +238,3 @@ class Client:
         )
 
         return [emiited_event_action] + actor_decision + [done_event_action]
-
-    def play(self, base_action: Action) -> list[Event]:
-        actions = [base_action]
-        events: list[Event] = []
-        all_events: list[Event] = []
-
-        while len(actions) > 0:
-            events = []
-            for action in actions:
-                resolved_events = self.environment.resolve(action)
-                all_events += resolved_events
-                events += resolved_events
-            actions = []
-            for event in events:
-                actions += self.wrap_actor_decision(
-                    event, self.actor.handle(event, self.environment.store, events)
-                )
-
-        return all_events
