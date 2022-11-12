@@ -1,6 +1,7 @@
 from typing import Optional
 
 from simaple.simulate.base import Action, Client, Event, EventHandler, State, Store
+from simaple.simulate.global_property import Clock
 from simaple.simulate.reserved_names import Tag
 
 ACTION_SPENT_TIMER = "global.timer.spent"
@@ -27,19 +28,12 @@ class TimerEventHandler(EventHandler):
         return []
 
 
-class TimeState(State):
-    current_time: float = 0
-
-    def spent(self, time: float):
-        self.current_time += time
-
-
 def timer_delay_dispatcher(action: Action, store: Store) -> list[Event]:
     """A time-summation dispatcher, which calculates total passed time."""
     if action.method != "elapse" and action.name != "*":
         return []
 
-    time_state, set_time_state = store.use_state("global.time", TimeState())
+    time_state, set_time_state = store.use_state("global.time", Clock())
 
     time_state.spent(action.payload)
     set_time_state(time_state)
@@ -47,7 +41,7 @@ def timer_delay_dispatcher(action: Action, store: Store) -> list[Event]:
 
 
 def get_current_time(store: Store) -> float:
-    time: float = store.read_state("global.time", TimeState()).current_time
+    time: float = store.read_state("global.time", Clock()).current_time
     return time
 
 
