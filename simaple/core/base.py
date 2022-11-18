@@ -238,9 +238,7 @@ class Stat(BaseModel):
 
     def short_dict(self) -> dict[str, float]:
         long_dict = self.dict()
-        return {
-            k: v for k, v in long_dict.items() if v != 0
-        }
+        return {k: v for k, v in long_dict.items() if v != 0}
 
 
 class ActionStat(BaseModel):
