@@ -139,7 +139,7 @@ class Environment:
     def __init__(self, store: AddressedStore):
         self.dispatchers: list[DispatcherType] = []
         self.store = store
-        self._views = {}
+        self._views: dict[str, View] = {}
 
     def add_dispatcher(self, dispatcher: DispatcherType):
         self.dispatchers.append(dispatcher)
@@ -187,11 +187,10 @@ class Client:
         self._event_handlers: list[EventHandler] = []
         self._previous_callbacks: list[EventCallback] = []
 
-    def add_handler(self, event_handler: EventHandler):
+    def add_handler(self, event_handler: EventHandler) -> None:
         self._event_handlers.append(event_handler)
 
-    def play(self, action: Action) -> tuple[list[Event], list[EventCallback]]:
-
+    def play(self, action: Action) -> list[Event]:
         events: list[Event] = []
         action_queue = [action]
 
@@ -213,16 +212,16 @@ class Client:
 
         return events
 
-    def clean(self):
+    def clean(self) -> None:
         self._previous_callbacks = []
 
     def _handle(
         self, event: Event, environment: Environment, all_events: list[Event]
-    ) -> list[Action]:
+    ) -> None:
         for handler in self._event_handlers:
             handler(event, environment, all_events)
 
-    def _get_event_callbacks(self, event) -> EventCallback:
+    def _get_event_callbacks(self, event: Event) -> EventCallback:
         """Wrap-up relay's decision by built-in actionss
         These decisions must provided; this is "forced action"
         """

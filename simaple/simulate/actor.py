@@ -22,7 +22,7 @@ class ActionRecorder:
         self._fp.write(f"{timestamp}\t{action.json(ensure_ascii=False)}\n")
 
 
-def time_elapsing_action(time: float):
+def time_elapsing_action(time: float) -> Action:
     return Action(name="*", method="elapse", payload=time)
 
 
