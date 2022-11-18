@@ -6,14 +6,9 @@ import simaple.simulate.component.specific  # pylint: disable=W0611
 from simaple.core.base import ActionStat
 from simaple.job.description import GeneralJobArgument
 from simaple.job.spec.patch import SkillLevelPatch
-from simaple.simulate.base import (
-    AddressedStore,
-    Client,
-    ConcreteStore,
-    Environment,
-)
+from simaple.simulate.base import AddressedStore, Client, ConcreteStore, Environment
 from simaple.simulate.global_property import GlobalProperty
-from simaple.simulate.timer import TimerEventHandler, clock_view, install_timer
+from simaple.simulate.timer import clock_view, install_timer
 from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.patch import EvalPatch
 from simaple.spec.repository import DirectorySpecRepository
@@ -33,23 +28,26 @@ def global_property():
 def archmagefb_client(component_repository, global_property):
     loader = SpecBasedLoader(component_repository)
 
-    components = [loader.load_all(
-        query={"group": group},
-        patches=[
-            SkillLevelPatch(
-                job_argument=GeneralJobArgument(
-                    combat_orders_level=1,
-                    passive_skill_level=0,
-                    character_level=260,
+    components = [
+        loader.load_all(
+            query={"group": group},
+            patches=[
+                SkillLevelPatch(
+                    job_argument=GeneralJobArgument(
+                        combat_orders_level=1,
+                        passive_skill_level=0,
+                        character_level=260,
+                    ),
                 ),
-            ),
-            EvalPatch(
-                injected_values={
-                    "character_level": 260,
-                }
-            ),
-        ],
-    ) for group in ("archmagefb", "common", "adventurer.mage")]
+                EvalPatch(
+                    injected_values={
+                        "character_level": 260,
+                    }
+                ),
+            ],
+        )
+        for group in ("archmagefb", "common", "adventurer.mage")
+    ]
 
     components = sum(components, [])
 
@@ -63,7 +61,6 @@ def archmagefb_client(component_repository, global_property):
         component.add_to_environment(environment)
 
     client = Client(environment)
-    client.add_handler(TimerEventHandler())
 
     install_timer(client)
 

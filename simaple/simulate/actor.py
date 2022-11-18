@@ -4,6 +4,7 @@ from contextlib import contextmanager
 import pydantic
 
 from simaple.simulate.base import Action, Environment, Event
+from simaple.simulate.reserved_names import Tag
 
 
 class ActionRecorder:
@@ -13,7 +14,7 @@ class ActionRecorder:
 
     @contextmanager
     def start(self):
-        with open(self._file_name, "w") as fp:
+        with open(self._file_name, "w", encoding="utf-8") as fp:
             self._fp = fp
             yield self
 
@@ -21,15 +22,31 @@ class ActionRecorder:
         self._fp.write(f"{timestamp}\t{action.json(ensure_ascii=False)}\n")
 
 
+def time_elapsing_action(time: float):
+    return Action(name="*", method="elapse", payload=time)
+
+
 class Actor(metaclass=ABCMeta):
     def decide(self, environment: Environment, events: list[Event]) -> Action:
         ...
 
 
-class DefaultMDCActor(pydantic.BaseModel, Actor):
+class AlwaysDelayedActor(Actor):
+    def decide(self, environment: Environment, events: list[Event]) -> Action:
+        for event in events:
+            if event.tag in (Tag.DELAY,) and event.payload["time"] > 0:
+                return time_elapsing_action(event.payload["time"])
+
+        return self._decide(environment, events)
+
+    def _decide(self, environment: Environment, events: list[Event]) -> Action:
+        ...
+
+
+class DefaultMDCActor(pydantic.BaseModel, AlwaysDelayedActor):
     order: list[str]
 
-    def decide(self, environment: Environment, events: list[Event]) -> Action:
+    def _decide(self, environment: Environment, events: list[Event]) -> Action:
         validities = environment.show("validity")
         runnings = environment.show("running")
 

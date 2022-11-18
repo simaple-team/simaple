@@ -3,7 +3,7 @@ from typing import Optional
 from simaple.core.base import Stat
 from simaple.simulate.base import State
 from simaple.simulate.component.base import Component, reducer_method, view_method
-from simaple.simulate.component.view import Validity, Running
+from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.global_property import Dynamics
 
 
@@ -234,10 +234,7 @@ class BuffSkillComponent(SkillComponent):
 
     @view_method
     def running(self, duration_state: DurationState) -> Running:
-        return Running(
-            name=self.name,
-            time_left=duration_state.time_left
-        )
+        return Running(name=self.name, time_left=duration_state.time_left)
 
 
 class TickDamageConfiguratedAttackSkillComponent(SkillComponent):
@@ -307,10 +304,7 @@ class TickDamageConfiguratedAttackSkillComponent(SkillComponent):
 
     @view_method
     def running(self, interval_state: IntervalState) -> Running:
-        return Running(
-            name=self.name,
-            time_left=interval_state.interval_time_left
-        )
+        return Running(name=self.name, time_left=interval_state.interval_time_left)
 
 
 class DOTSkillComponent(Component):

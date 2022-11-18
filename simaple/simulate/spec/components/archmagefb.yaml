@@ -394,7 +394,7 @@ data:
   tick_interval: 1_800
   tick_damage: '{{ 150 + skill_level * 6 }}'
   tick_hit: 5
-  duration: 18_000
+  duration: 17_000
   tick_damage_increment: '{{ 30 + skill_level }}'
 
 ---

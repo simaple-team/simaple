@@ -1,9 +1,9 @@
 import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.core.base import Stat
+from simaple.simulate.actor import time_elapsing_action
 from simaple.simulate.base import Action
 from simaple.simulate.component.view import BuffParentView, Validity, ValidityParentView
 from simaple.simulate.reserved_names import Tag
-from simaple.simulate.timer import time_elapsing_action
 
 
 def test_archmage_fb(archmagefb_client):
@@ -47,7 +47,6 @@ def test_validity_view(archmagefb_client):
     )
 
     views = archmagefb_client.environment.show("validity")
-    print([v.name for v in views if v.valid])
 
     for v in views:
         assert isinstance(v, Validity)
@@ -84,6 +83,7 @@ def test_poison_nova(archmagefb_client):
 def test_poison_chain(archmagefb_client):
     actions = [
         Action(name="포이즌 체인", method="use"),
+        time_elapsing_action(25000),
         time_elapsing_action(25000),
     ]
 

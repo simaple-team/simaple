@@ -174,49 +174,55 @@ class EventHandler:
 
     def __call__(
         self, event: Event, environment: Environment, all_events: list[Event]
-    ) -> Optional[list[Action]]:
+    ) -> None:
         ...
+
+
+EventCallback = tuple[Action, Action]
 
 
 class Client:
     def __init__(self, environment: Environment):
         self.environment = environment
-        self._event_handlers = []
+        self._event_handlers: list[EventHandler] = []
+        self._previous_callbacks: list[EventCallback] = []
 
     def add_handler(self, event_handler: EventHandler):
         self._event_handlers.append(event_handler)
 
-    def handle(
+    def play(self, action: Action) -> tuple[list[Event], list[EventCallback]]:
+
+        events: list[Event] = []
+        action_queue = [action]
+
+        # Join proposed action with previous event's callback
+        for emitted_callback, done_callback in self._previous_callbacks:
+            action_queue = [emitted_callback] + action_queue + [done_callback]
+
+        for target_action in action_queue:
+            resolved_events = self.environment.resolve(target_action)
+            events += resolved_events
+
+        for event in events:
+            self._handle(event, self.environment, events)
+
+        # Save untriggered callbacks
+        self._previous_callbacks = [
+            self._get_event_callbacks(event) for event in events
+        ]
+
+        return events
+
+    def clean(self):
+        self._previous_callbacks = []
+
+    def _handle(
         self, event: Event, environment: Environment, all_events: list[Event]
     ) -> list[Action]:
-        actions = []
         for handler in self._event_handlers:
-            requested_actions = handler(event, environment, all_events)
-            if requested_actions is not None:
-                actions += requested_actions
+            handler(event, environment, all_events)
 
-        return actions
-
-    def play(self, base_action: Action) -> list[Event]:
-        actions = [base_action]
-        events: list[Event] = []
-        all_events: list[Event] = []
-
-        while len(actions) > 0:
-            events = []
-            for action in actions:
-                resolved_events = self.environment.resolve(action)
-                all_events += resolved_events
-                events += resolved_events
-            actions = []
-            for event in events:
-                actions += self._wrap_relay_decision(
-                    event, self.handle(event, self.environment, events)
-                )
-
-        return all_events
-
-    def _wrap_relay_decision(self, event, relay_decision: list[Action]) -> list[Action]:
+    def _get_event_callbacks(self, event) -> EventCallback:
         """Wrap-up relay's decision by built-in actionss
         These decisions must provided; this is "forced action"
         """
@@ -232,4 +238,4 @@ class Client:
             payload=copy.deepcopy(event.payload),
         )
 
-        return [emiited_event_action] + relay_decision + [done_event_action]
+        return (emiited_event_action, done_event_action)
