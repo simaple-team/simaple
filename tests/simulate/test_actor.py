@@ -1,11 +1,10 @@
 import simaple.simulate.component.skill  # pylint: disable=W0611
-from simaple.simulate.actor import ActionRecorder, DefaultMDCActor
+from simaple.simulate.actor import DefaultMDCActor
 from simaple.simulate.component.view import (
     BuffParentView,
     RunningParentView,
     ValidityParentView,
 )
-from simaple.simulate.report import Report, ReportEventHandler
 
 
 def test_actor(archmagefb_client):
@@ -33,7 +32,6 @@ def test_actor(archmagefb_client):
     ValidityParentView.build_and_install(environment, "validity")
     BuffParentView.build_and_install(environment, "buff")
     RunningParentView.build_and_install(environment, "running")
-
 
     events = []
     while environment.show("clock") < 50_000:
