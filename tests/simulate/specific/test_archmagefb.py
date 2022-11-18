@@ -43,25 +43,27 @@ def test_archmage_fb(archmagefb_client):
 
 def test_validity_view(archmagefb_client):
     archmagefb_client.environment.add_view(
-        "Validity", ValidityParentView.build(archmagefb_client.environment)
+        "validity", ValidityParentView.build(archmagefb_client.environment)
     )
 
-    views = archmagefb_client.environment.show("Validity")
+    views = archmagefb_client.environment.show("validity")
+    print([v.name for v in views if v.valid])
+
     for v in views:
         assert isinstance(v, Validity)
 
 
 def test_buff_view(archmagefb_client):
     archmagefb_client.environment.add_view(
-        "Buff", BuffParentView.build(archmagefb_client.environment)
+        "buff", BuffParentView.build(archmagefb_client.environment)
     )
 
-    current_buff_stat = archmagefb_client.environment.show("Buff")
+    current_buff_stat = archmagefb_client.environment.show("buff")
     assert current_buff_stat == Stat()
 
     archmagefb_client.play(Action(name="에픽 어드벤처", method="use"))
 
-    assert archmagefb_client.environment.show("Buff") == Stat(damage_multiplier=10)
+    assert archmagefb_client.environment.show("buff") == Stat(damage_multiplier=10)
 
 
 def test_poison_nova(archmagefb_client):

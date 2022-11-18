@@ -3,7 +3,7 @@ from typing import Optional
 from simaple.core.base import Stat
 from simaple.simulate.base import State
 from simaple.simulate.component.base import Component, reducer_method, view_method
-from simaple.simulate.component.view import Validity
+from simaple.simulate.component.view import Validity, Running
 from simaple.simulate.global_property import Dynamics
 
 
@@ -85,7 +85,19 @@ class StackState(State):
         return self.stack
 
 
-class AttackSkillComponent(Component):
+class SkillComponent(Component):
+    disable_validity: bool = False
+
+    def invalidate_if_disabled(self, validity: Validity):
+        if self.disable_validity:
+            validity = validity.copy()
+            validity.valid = False
+            return validity
+
+        return validity
+
+
+class AttackSkillComponent(SkillComponent):
     name: str
     damage: float
     hit: float
@@ -125,10 +137,12 @@ class AttackSkillComponent(Component):
 
     @view_method
     def validity(self, cooldown_state):
-        return Validity(
-            name=self.name,
-            time_left=max(0, cooldown_state.time_left),
-            valid=cooldown_state.available,
+        return self.invalidate_if_disabled(
+            Validity(
+                name=self.name,
+                time_left=max(0, cooldown_state.time_left),
+                valid=cooldown_state.available,
+            )
         )
 
 
@@ -150,7 +164,7 @@ class MultipleAttackSkillComponent(AttackSkillComponent):
         ] + [self.event_provider.delayed(self.delay)]
 
 
-class BuffSkillComponent(Component):
+class BuffSkillComponent(SkillComponent):
     stat: Stat
     cooldown: float = 0.0
     delay: float
@@ -203,10 +217,12 @@ class BuffSkillComponent(Component):
 
     @view_method
     def validity(self, cooldown_state: CooldownState):
-        return Validity(
-            name=self.name,
-            time_left=max(0, cooldown_state.time_left),
-            valid=cooldown_state.available,
+        return self.invalidate_if_disabled(
+            Validity(
+                name=self.name,
+                time_left=max(0, cooldown_state.time_left),
+                valid=cooldown_state.available,
+            )
         )
 
     @view_method
@@ -216,8 +232,15 @@ class BuffSkillComponent(Component):
 
         return None
 
+    @view_method
+    def running(self, duration_state: DurationState) -> Running:
+        return Running(
+            name=self.name,
+            time_left=duration_state.time_left
+        )
 
-class TickDamageConfiguratedAttackSkillComponent(Component):
+
+class TickDamageConfiguratedAttackSkillComponent(SkillComponent):
     name: str
     damage: float
     hit: float
@@ -274,10 +297,19 @@ class TickDamageConfiguratedAttackSkillComponent(Component):
 
     @view_method
     def validity(self, cooldown_state):
-        return Validity(
+        return self.invalidate_if_disabled(
+            Validity(
+                name=self.name,
+                time_left=max(0, cooldown_state.time_left),
+                valid=cooldown_state.available,
+            )
+        )
+
+    @view_method
+    def running(self, interval_state: IntervalState) -> Running:
+        return Running(
             name=self.name,
-            time_left=max(0, cooldown_state.time_left),
-            valid=cooldown_state.available,
+            time_left=interval_state.interval_time_left
         )
 
 

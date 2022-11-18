@@ -236,6 +236,12 @@ class Stat(BaseModel):
         """
         return output
 
+    def short_dict(self) -> dict[str, float]:
+        long_dict = self.dict()
+        return {
+            k: v for k, v in long_dict.items() if v != 0
+        }
+
 
 class ActionStat(BaseModel):
     cooltime_reduce: float = 0.0

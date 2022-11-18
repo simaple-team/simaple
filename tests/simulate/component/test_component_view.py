@@ -29,8 +29,8 @@ def test_view():
     component = ViewTestComponent(name="test_component")
     component.add_to_environment(environment)
 
-    ValidityParentView.build_and_install(environment, "Validity")
+    ValidityParentView.build_and_install(environment, "validity")
 
-    assert environment.show("Validity") == [
+    assert environment.show("validity") == [
         Validity(name="test_component", time_left=12.0, valid=False)
     ]

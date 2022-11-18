@@ -1,0 +1,18 @@
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: adventurer.mage
+    name: 메이플 여신의 축복
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 메이플 여신의 축복
+  duration: 60_000
+  delay: 450
+  red: true
+  rem: false
+  stat:
+    INT: '{{ math.floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}'
+    damage_multiplier: '{{ math.floor(5 + 0.5 * skill_level) }}'

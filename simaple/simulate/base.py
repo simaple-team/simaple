@@ -178,8 +178,9 @@ class EventHandler:
         ...
 
 
-class Relay:
-    def __init__(self):
+class Client:
+    def __init__(self, environment: Environment):
+        self.environment = environment
         self._event_handlers = []
 
     def add_handler(self, event_handler: EventHandler):
@@ -196,12 +197,6 @@ class Relay:
 
         return actions
 
-
-class Client:
-    def __init__(self, environment: Environment, relay: Relay):
-        self.environment = environment
-        self.relay = relay
-
     def play(self, base_action: Action) -> list[Event]:
         actions = [base_action]
         events: list[Event] = []
@@ -216,7 +211,7 @@ class Client:
             actions = []
             for event in events:
                 actions += self._wrap_relay_decision(
-                    event, self.relay.handle(event, self.environment, events)
+                    event, self.handle(event, self.environment, events)
                 )
 
         return all_events

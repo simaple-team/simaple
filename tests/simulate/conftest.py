@@ -11,7 +11,6 @@ from simaple.simulate.base import (
     Client,
     ConcreteStore,
     Environment,
-    Relay,
 )
 from simaple.simulate.global_property import GlobalProperty
 from simaple.simulate.timer import TimerEventHandler, clock_view, install_timer
@@ -34,8 +33,8 @@ def global_property():
 def archmagefb_client(component_repository, global_property):
     loader = SpecBasedLoader(component_repository)
 
-    components = loader.load_all(
-        query={"group": "archmagefb"},
+    components = [loader.load_all(
+        query={"group": group},
         patches=[
             SkillLevelPatch(
                 job_argument=GeneralJobArgument(
@@ -50,7 +49,9 @@ def archmagefb_client(component_repository, global_property):
                 }
             ),
         ],
-    )
+    ) for group in ("archmagefb", "common", "adventurer.mage")]
+
+    components = sum(components, [])
 
     store = AddressedStore(ConcreteStore())
     global_property.install_global_properties(store)
@@ -61,10 +62,8 @@ def archmagefb_client(component_repository, global_property):
     for component in components:
         component.add_to_environment(environment)
 
-    relay = Relay()
-    relay.add_handler(TimerEventHandler())
-
-    client = Client(environment, relay)
+    client = Client(environment)
+    client.add_handler(TimerEventHandler())
 
     install_timer(client)
 

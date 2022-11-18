@@ -12,6 +12,11 @@ class Validity(pydantic.BaseModel):
     valid: bool
 
 
+class Running(pydantic.BaseModel):
+    name: str
+    time_left: float
+
+
 class ValidityParentView(AggregationView):
     """A View for valid-skill set
     Gathers view name `validity`, returns each component's validity(which
@@ -24,6 +29,20 @@ class ValidityParentView(AggregationView):
     @classmethod
     def get_installation_pattern(cls):
         return r".*\.validity"
+
+
+class RunningParentView(AggregationView):
+    """A View for valid-skill set
+    Gathers view name `validity`, returns each component's validity(which
+     meant whether given component can dispatch `use` action by Player)
+    """
+
+    def aggregate(self, representations: list[Running]):
+        return representations
+
+    @classmethod
+    def get_installation_pattern(cls):
+        return r".*\.running"
 
 
 class BuffParentView(AggregationView):
