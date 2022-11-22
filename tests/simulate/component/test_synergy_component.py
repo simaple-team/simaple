@@ -2,18 +2,13 @@
 import pytest
 
 from simaple.core.base import Stat
-from simaple.simulate.global_property import Dynamics
-from simaple.simulate.reserved_names import Tag
-
 from simaple.simulate.component.complex_skill import SynergySkillComponent
-
+from simaple.simulate.reserved_names import Tag
 
 
 @pytest.fixture
 def synergy():
-    return Stat(
-        attack_power=10
-    )
+    return Stat(attack_power=10)
 
 
 @pytest.fixture
@@ -29,36 +24,26 @@ def synergy_component(synergy):
     )
 
 
-def test_using_synerge_component_provide_buff_and_damage(synergy_component, dynamics, synergy):
-    default_state = synergy_component.get_default_state()
+@pytest.fixture
+def compiled_synergy_component(synergy_component, bare_store):
+    return synergy_component.compile(bare_store)
 
-    cooldown_state = default_state.get("cooldown_state")
-    duration_state = default_state.get("duration_state")
 
-    (cooldown_state, duration_state, dynamics), events = synergy_component.use(
-        None, cooldown_state, duration_state, dynamics
-    )
+def test_using_frozen_synerge_component_provide_buff_and_damage(
+    compiled_synergy_component, synergy
+):
+    events = compiled_synergy_component.use(None)
 
     dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
 
     assert dealing_count == 1
-    assert synergy_component.buff(duration_state) == synergy
+    assert compiled_synergy_component.buff() == synergy
 
 
-def test_using_synerge_component_buff_do_not(synergy_component, dynamics, synergy):
-    default_state = synergy_component.get_default_state()
-
-    cooldown_state = default_state.get("cooldown_state")
-    duration_state = default_state.get("duration_state")
-
-    (cooldown_state, duration_state, dynamics), _ = synergy_component.use(
-        None, cooldown_state, duration_state, dynamics
-    )
-
-    (cooldown_state, duration_state), events = synergy_component.elapse(
-        30_000, cooldown_state, duration_state,
-    )
+def test_using_synerge_component_buff_do_not(compiled_synergy_component):
+    compiled_synergy_component.use(None)
+    events = compiled_synergy_component.elapse(30_000)
 
     dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
     assert dealing_count == 0
-    assert synergy_component.buff(duration_state) == Stat()
+    assert compiled_synergy_component.buff() == Stat()

@@ -25,7 +25,14 @@ def global_property():
 
 
 @pytest.fixture
-def archmagefb_client(component_repository, global_property):
+def bare_store(global_property):
+    store = AddressedStore(ConcreteStore())
+    global_property.install_global_properties(store)
+    return store
+
+
+@pytest.fixture
+def archmagefb_client(component_repository, bare_store):
     loader = SpecBasedLoader(component_repository)
 
     components = [
@@ -51,10 +58,7 @@ def archmagefb_client(component_repository, global_property):
 
     components = sum(components, [])
 
-    store = AddressedStore(ConcreteStore())
-    global_property.install_global_properties(store)
-
-    environment = Environment(store=store)
+    environment = Environment(store=bare_store)
     environment.add_view("clock", clock_view)
 
     for component in components:

@@ -1,14 +1,14 @@
-from simaple.simulate.component.skill import (
-    SkillComponent,
-    CooldownState,
-    DurationState,
-)
+from typing import Optional
 
 from simaple.core.base import Stat
-from simaple.simulate.component.base import Component, reducer_method, view_method
-from simaple.simulate.global_property import Dynamics
+from simaple.simulate.component.base import reducer_method, view_method
+from simaple.simulate.component.skill import (
+    CooldownState,
+    DurationState,
+    SkillComponent,
+)
 from simaple.simulate.component.view import Running, Validity
-from typing import Optional
+from simaple.simulate.global_property import Dynamics
 
 
 class SynergySkillComponent(SkillComponent):
@@ -28,17 +28,23 @@ class SynergySkillComponent(SkillComponent):
         }
 
     @reducer_method
-    def use(self, _: None, cooldown_state: CooldownState, duration_state: DurationState, dynamics: Dynamics):
+    def use(
+        self,
+        _: None,
+        cooldown_state: CooldownState,
+        duration_state: DurationState,
+        dynamics: Dynamics,
+    ):
         cooldown_state = cooldown_state.copy()
         duration_state = duration_state.copy()
 
         if not cooldown_state.available:
             return cooldown_state, self.event_provider.rejected()
 
-        cooldown_state.set_time_left(
-            dynamics.stat.calculate_cooldown(self.cooldown)
-        )
-        duration_state.set_time_left(self.duration)  # synerge do not works with dynamic duration.
+        cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
+        duration_state.set_time_left(
+            self.duration
+        )  # synerge do not works with dynamic duration.
 
         return (cooldown_state, duration_state, dynamics), [
             self.event_provider.dealt(self.damage, self.hit),
