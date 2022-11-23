@@ -1,15 +1,8 @@
 # pylint: disable=W0621
 import pytest
 
-from simaple.core.base import ActionStat
 from simaple.simulate.component.skill import TickDamageConfiguratedAttackSkillComponent
-from simaple.simulate.global_property import Dynamics
 from simaple.simulate.reserved_names import Tag
-
-
-@pytest.fixture
-def dynamics():
-    return Dynamics(stat=ActionStat())
 
 
 @pytest.fixture
@@ -27,69 +20,40 @@ def tick_damage_component():
     return component
 
 
-def test_tick_damage_component_emit_initial_damage(tick_damage_component, dynamics):
-    default_state = tick_damage_component.get_default_state()
-    cooldown_state = default_state.get("cooldown_state")
-    interval_state = default_state.get("interval_state")
-
-    states, events = tick_damage_component.use(
-        None, cooldown_state, interval_state, dynamics
-    )
-
-    assert events == [
-        tick_damage_component.event_provider.dealt(100.0, 1.0),
-        tick_damage_component.event_provider.delayed(30.0),
-    ]
+@pytest.fixture
+def compiled_tick_damage_component(tick_damage_component, bare_store):
+    return tick_damage_component.compile(bare_store)
 
 
-def test_tick_damage_component_emit_after(tick_damage_component, dynamics):
-    default_state = tick_damage_component.get_default_state()
-    cooldown_state = default_state.get("cooldown_state")
-    interval_state = default_state.get("interval_state")
+def test_tick_damage_component_emit_initial_damage(
+    tick_damage_component, compiled_tick_damage_component
+):
+    events = compiled_tick_damage_component.use(None)
+    assert events[0].payload == {"damage": 100, "hit": 1.0}
+    assert events[1].payload == {"time": 30.0}
 
-    (cooldown_state, interval_state, _dynamics), _ = tick_damage_component.use(
-        None, cooldown_state, interval_state, dynamics
-    )
 
-    states, events = tick_damage_component.elapse(
-        120 * 8, cooldown_state, interval_state
-    )
+def test_tick_damage_component_emit_after(compiled_tick_damage_component):
+    compiled_tick_damage_component.use(None)
+    events = compiled_tick_damage_component.elapse(120 * 8)
 
     dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
 
     assert dealing_count == 8 - 1
 
 
-def test_tick_damage_component_partial_emit(tick_damage_component, dynamics):
-    default_state = tick_damage_component.get_default_state()
-    cooldown_state = default_state.get("cooldown_state")
-    interval_state = default_state.get("interval_state")
-
-    (cooldown_state, interval_state, _dynamics), _ = tick_damage_component.use(
-        None, cooldown_state, interval_state, dynamics
-    )
-
-    states, events = tick_damage_component.elapse(
-        120 * 8 + 60, cooldown_state, interval_state
-    )
+def test_tick_damage_component_partial_emit(compiled_tick_damage_component):
+    compiled_tick_damage_component.use(None)
+    events = compiled_tick_damage_component.elapse(120 * 8 + 60)
 
     dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
 
     assert dealing_count == 8
 
 
-def test_tick_damage_component_full_emit(tick_damage_component, dynamics):
-    default_state = tick_damage_component.get_default_state()
-    cooldown_state = default_state.get("cooldown_state")
-    interval_state = default_state.get("interval_state")
-
-    (cooldown_state, interval_state, _dynamics), _ = tick_damage_component.use(
-        None, cooldown_state, interval_state, dynamics
-    )
-
-    states, events = tick_damage_component.elapse(
-        120 * 30, cooldown_state, interval_state
-    )
+def test_tick_damage_component_full_emit(compiled_tick_damage_component):
+    compiled_tick_damage_component.use(None)
+    events = compiled_tick_damage_component.elapse(120 * 30)
 
     dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
 
