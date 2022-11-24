@@ -335,9 +335,10 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         }
 
     def compile(self, initialized_store: Store) -> StoreEmbeddedObject:
-        '''
-        Return store-embedded object which supports contracted interface of current component. 
-        '''
+        """
+        Return store-embedded object which supports contracted interface of current component.
+        """
+
         def get_compiled_reducer(method_name, dispatcher, store):
             def compiled_reducer(payload):
                 action = Action(name=self.name, method=method_name, payload=payload)
