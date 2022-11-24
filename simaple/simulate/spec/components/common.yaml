@@ -1,0 +1,19 @@
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: common
+    name: 소울 컨트랙트
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 소울 컨트랙트
+  cooldown: 90_000
+  delay: 900
+  red: true
+  rem: true
+  duration: 10_000
+  stat:
+    damage_multiplier: 45

@@ -135,7 +135,7 @@ data:
   nova_hit_count: 4
 ---
 kind: Component
-version: simaple.io/AttackSkillComponent
+version: simaple.io/MultipleAttackSkillComponent
 metadata:
   label:
     group: archmagefb
@@ -147,7 +147,8 @@ data:
   name: 도트 퍼니셔
   cooldown: 25000
   delay: 690
-  hit: '{{ 5 * 25 }}'
+  hit: 5
+  multiple: 25
   red: true
   cooltime: 25000
   damage: '{{ (400 + 15 * skill_level) * (1 + 0.35 * 24) / 25 }}'
@@ -184,9 +185,272 @@ data:
   listening_actions: 
     플레임 스윕.use.emitted.global.damage: use
     플레임 헤이즈.use.emitted.global.damage: use
+    미스트 이럽션.use.emitted.global.damage: use
+    이그나이트.use.emitted.global.damage: use
+    이프리트.elapse.emitted.global.damage: use
     # TODO: entangle many
   delay: 0
   rem: false
   damage: '{{ 100 + 4 * skill_level }}'
   hit: '{{ 0.02 * skill_level }}'
   default_skill_level: 30
+  disable_validity: True
+---
+kind: Component
+version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 이프리트
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 이프리트
+  damage: 0
+  default_skill_level: 30
+  delay: 600
+  hit: 0
+
+  tick_interval: 3_030
+  tick_damage: '{{ 90 + skill_level * 2 }}'
+  tick_hit: 3
+  duration: '{{ (110 + skill_level * 5) * 1000 }}'
+---
+kind: Component
+version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 파이어 오라
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 파이어 오라
+  damage: 0
+  default_skill_level: 30
+  delay: 0
+  hit: 0
+
+  tick_interval: 3_000
+  tick_damage: 400
+  tick_hit: 2
+  duration: 999_999_999
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 이그나이트
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions: 
+    플레임 스윕.use.emitted.global.damage: use
+    플레임 헤이즈.use.emitted.global.damage: use
+    도트 퍼니셔.use.emitted.global.damage: use
+    퓨리 오브 이프리트.elapse.emitted.global.damage: use
+    이프리트.elapse.emitted.global.damage: use
+  type: DamageSkill
+  name: 이그나이트
+  delay: 0
+  damage: 40
+  hit: 4.5
+  disable_validity: True
+---
+kind: Component
+version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 포이즌 미스트
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions: 
+    플레임 헤이즈.use: use
+  name: 포이즌 미스트
+  damage: 0
+  delay: 0
+  hit: 0
+
+  tick_interval: 1_000
+  tick_damage: 270
+  tick_hit: 1
+  duration: 22_000
+
+---
+kind: Component
+version: simaple.io/DOTSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 플레임 스윕(도트)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions: 
+    플레임 스윕.use.emitted.global.damage: apply
+  name: 플레임 스윕(도트)
+  tick_damage: '{{ 120 + 4 * skill_level }}'
+  duration: 10_000
+  default_skill_level: 30
+
+---
+kind: Component
+version: simaple.io/DOTSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 이프리트(도트)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions: 
+    이프리트.elapse.emitted.global.damage: apply
+  name: 이프리트(도트)
+  tick_damage: '{{ 120 + 4 * skill_level }}'
+  duration: 4_000
+  default_skill_level: 30
+
+
+---
+kind: Component
+version: simaple.io/DOTSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 플레임 헤이즈(도트)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions: 
+    플레임 헤이즈.use.emitted.global.damage: apply
+  name: 플레임 헤이즈(도트)
+  tick_damage: '{{ 110 + 3 * skill_level }}'
+  duration: 20_000
+  default_skill_level: 30
+
+
+---
+kind: Component
+version: simaple.io/DOTSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 포이즌 노바(도트)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions: 
+    포이즌 노바.use.emitted.global.damage: apply
+  name: 포이즌 노바(도트)
+  tick_damage: '{{ 300 + 12 * skill_level }}'
+  duration: 20_000
+
+
+---
+kind: Component
+version: simaple.io/DOTSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 도트 퍼니셔(도트)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions: 
+    도트 퍼니셔.use.emitted.global.damage: apply
+  name: 도트 퍼니셔(도트)
+  tick_damage: '{{ 200 + 3 * skill_level }}'
+  duration: 16_000
+
+
+---
+kind: Component
+version: simaple.io/PoisonChainComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 포이즌 체인
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 포이즌 체인
+  damage: '{{ 250 + 10 * skill_level }}'
+  delay: 600
+  hit: 0
+
+  tick_interval: 1_800
+  tick_damage: '{{ 150 + skill_level * 6 }}'
+  tick_hit: 5
+  duration: 17_000
+  tick_damage_increment: '{{ 30 + skill_level }}'
+
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 메기도 플레임
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  type: DamageSkill
+  name: 메기도 플레임
+  delay: 690
+  cooldown: 50_000
+  damage: '{{ 380 * (1 + 0.55 * 10) / 11 }}'
+  hit: '{{ 4 * 11 }}'
+
+---
+kind: Component
+version: simaple.io/DOTSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 메기도 플레임(도트)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions: 
+    메기도 플레임.use.emitted.global.damage: apply
+  type: DamageSkill
+  name: 메기도 플레임(도트)
+  tick_damage: 700
+  duration: 30_000
+
+---
+kind: Component
+version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 퓨리 오브 이프리트
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 퓨리 오브 이프리트
+  damage: 0
+  delay: 360
+  hit: 0
+  cooldown: 75_000
+
+  tick_interval: 240
+  tick_damage: '{{ 200 + 8 * skill_level }}'
+  tick_hit: 6
+  duration: 6_000

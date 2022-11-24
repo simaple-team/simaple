@@ -236,6 +236,10 @@ class Stat(BaseModel):
         """
         return output
 
+    def short_dict(self) -> dict[str, float]:
+        long_dict = self.dict()
+        return {k: v for k, v in long_dict.items() if v != 0}
+
 
 class ActionStat(BaseModel):
     cooltime_reduce: float = 0.0
@@ -260,6 +264,16 @@ class ActionStat(BaseModel):
         self.buff_duration += arg.buff_duration
         self.cooltime_reduce_rate += arg.cooltime_reduce_rate
         return self
+
+    def calculate_cooldown(self, original_cooldown):
+        # TODO - need to apply correct logic
+        return (
+            original_cooldown * (1 - self.cooltime_reduce_rate * 0.01)
+            - self.cooltime_reduce
+        )
+
+    def calculate_buff_duration(self, original_duration):
+        return original_duration * (1 + 0.01 * self.buff_duration)
 
 
 class LevelStat(BaseModel):

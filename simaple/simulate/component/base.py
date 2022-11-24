@@ -1,11 +1,12 @@
 import inspect
 from abc import ABCMeta, abstractmethod
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Optional, Type, Union
 
 from pydantic import BaseModel, Field
 
 from simaple.simulate.base import Action, Dispatcher, Environment, Event, State, Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
+from simaple.simulate.global_property import GlobalProperty
 from simaple.spec.loadable import TaggedNamespacedABCMeta
 
 WILD_CARD = "*"
@@ -14,19 +15,42 @@ WILD_CARD = "*"
 ReducerType = Callable[..., tuple[Union[tuple[State], State], Any]]
 
 
-class ComponentReducer:
-    def __init__(self, func: ReducerType):
+class ComponentMethodWrapper:
+    def __init__(self, func: ReducerType, skip_count=1):
         self._func = func
+        self._has_payload = skip_count == 1
         self._input_state_names = [
             param.name for param in inspect.signature(func).parameters.values()
         ][
-            1:
+            skip_count:
         ]  # skip self, payload
+        self._payload_type: Type[BaseModel] = list(
+            inspect.signature(func).parameters.values()
+        )[0].annotation
 
     def __call__(self, *args, **kwargs) -> tuple[Union[tuple[State], State], Any]:
         return self._func(*args, **kwargs)
 
-    def get_bound_names(self, binds: Optional[dict[str, str]] = None) -> list[str]:
+    def translate_payload(self, payload: Optional[Union[int, str, dict]]):
+        if not self._has_payload:
+            raise ValueError("no skip_count do not support payload translation")
+
+        if not isinstance(payload, dict) or self._payload_type is None:
+            return payload
+
+        return self._payload_type.parse_obj(payload)
+
+    def get_states(self, store: Store, default_states, binds=None):
+        return [
+            store.read_state(name, default=default_states.get(name, None))
+            for name in self._get_bound_names(binds)
+        ]
+
+    def set_states(self, store: Store, states, binds=None):
+        for name, state in zip(self._get_bound_names(binds), states):
+            store.set_state(name, state)
+
+    def _get_bound_names(self, binds: Optional[dict[str, str]] = None) -> list[str]:
         if binds is None:
             binds = {}
 
@@ -34,19 +58,15 @@ class ComponentReducer:
             (binds[name] if name in binds else name) for name in self._input_state_names
         ]
 
-    def get_states(self, store: Store, default_states, binds=None):
-        return [
-            store.read_state(name, default=default_states[name])
-            for name in self.get_bound_names(binds)
-        ]
-
-    def set_states(self, store: Store, states, binds=None):
-        for name, state in zip(self.get_bound_names(binds), states):
-            store.set_state(name, state)
-
 
 def reducer_method(func):
     func.__isreducer__ = True
+
+    return func
+
+
+def view_method(func):
+    func.__isview__ = True
 
     return func
 
@@ -60,7 +80,7 @@ class ActionRouter(BaseModel, metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    def get_matching_reducer(self, action: Action) -> ComponentReducer:
+    def get_matching_reducer(self, action: Action) -> ComponentMethodWrapper:
         ...
 
     @abstractmethod
@@ -69,13 +89,13 @@ class ActionRouter(BaseModel, metaclass=ABCMeta):
 
 
 class ConcreteActionRouter(ActionRouter):
-    mappings: dict[str, ComponentReducer]
+    mappings: dict[str, ComponentMethodWrapper]
     method_mappings: dict[str, str]
 
     def is_enabled_action(self, action: Action):
         return action.signature in self.mappings
 
-    def get_matching_reducer(self, action: Action) -> ComponentReducer:
+    def get_matching_reducer(self, action: Action) -> ComponentMethodWrapper:
         return self.mappings[action.signature]
 
     def get_matching_method_name(self, action: Action) -> str:
@@ -93,6 +113,11 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
         self._name = name
         self._default_state = default_state
         self._action_router = action_router
+        if binds is None:
+            binds = {}
+
+        binds.update(GlobalProperty.get_default_binds())
+
         self._binds = binds
 
     def __call__(self, action: Action, store: Store) -> list[Event]:
@@ -104,10 +129,18 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
         reducer = self._action_router.get_matching_reducer(action)
         method_name = self._action_router.get_matching_method_name(action)
 
-        input_states = reducer.get_states(local_store, self._default_state)
-        output_states, maybe_events = reducer(action.payload, *input_states)
+        input_states = reducer.get_states(
+            local_store, self._default_state, binds=self._binds
+        )
+        output_states, maybe_events = reducer(
+            reducer.translate_payload(action.payload), *input_states
+        )
 
-        reducer.set_states(local_store, self.regularize_returned_state(output_states))
+        reducer.set_states(
+            local_store,
+            self.regularize_returned_state(output_states),
+            binds=self._binds,
+        )
 
         events = self.regularize_returned_event(maybe_events)
 
@@ -147,9 +180,27 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
         return tagged_events
 
 
-def component_view(func):
-    func.__component_view__ = True
-    return func
+class WrappedView:
+    def __init__(
+        self,
+        name: str,
+        wrapped_view_method: ComponentMethodWrapper,
+        default_state: dict[str, State],
+        binds=None,
+    ):
+        self._name = name
+        self._default_state = default_state
+        self._wrapped_view_method = wrapped_view_method
+        self._binds = binds
+
+    def __call__(self, store: Store):
+        local_store = store.local(self._name)
+        input_states = self._wrapped_view_method.get_states(
+            local_store, self._default_state
+        )
+        view = self._wrapped_view_method(*input_states)
+
+        return view
 
 
 class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
@@ -167,7 +218,35 @@ class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
         }
         reducers.update(previous_reducers)
         cls.__reducers__ = frozenset(reducers)
+
+        previous_views = set()
+        for base in bases:
+            previous_views.update(getattr(base, "__views__", {}))
+
+        views = {
+            name
+            for name, value in namespace.items()
+            if getattr(value, "__isview__", False)
+        }
+        views.update(previous_views)
+        cls.__views__ = frozenset(views)
+
         return cls
+
+
+class StoreEmbeddedObject:
+    def __init__(self, name, store: Store, default_states: dict):
+        self.name = name
+        self._store = store
+        self._default_states = default_states
+
+    def __getattr__(self, k):
+        if k in self._default_states:
+            return self._store.local(self.name).read_state(
+                k, default=self._default_states.get(k, None)
+            )
+
+        raise AttributeError
 
 
 class Component(BaseModel, metaclass=ComponentMetaclass):
@@ -207,6 +286,9 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         dispatcher = self.export_dispatcher()
         environment.add_dispatcher(dispatcher)
 
+        for view_name, view in self.get_views().items():
+            environment.add_view(f"{self.name}.{view_name}", view)
+
     def get_action_router(self) -> ActionRouter:
         reducer_methods = self.get_reducer_methods()
 
@@ -237,6 +319,58 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
 
     def get_reducer_methods(self):
         return {
-            method_name: ComponentReducer(getattr(self, method_name))
+            method_name: ComponentMethodWrapper(getattr(self, method_name))
             for method_name in getattr(self, "__reducers__")
         }
+
+    def get_views(self):
+        return {
+            method_name: WrappedView(
+                self.name,
+                ComponentMethodWrapper(getattr(self, method_name), skip_count=0),
+                self.get_default_state(),
+                binds=self.binds,
+            )
+            for method_name in getattr(self, "__views__")
+        }
+
+    def compile(self, initialized_store: Store) -> StoreEmbeddedObject:
+        """
+        Return store-embedded object which supports contracted interface of current component.
+        """
+
+        def get_compiled_reducer(method_name, dispatcher, store):
+            def compiled_reducer(payload):
+                action = Action(name=self.name, method=method_name, payload=payload)
+                return dispatcher(action, store)
+
+            return compiled_reducer
+
+        def get_compiled_view(view, store):
+            def compiled_view():
+                return view(store)
+
+            return compiled_view
+
+        compiled_component = StoreEmbeddedObject(
+            self.name, initialized_store, self.get_default_state()
+        )
+        exported_dispatcher = self.export_dispatcher()
+
+        for reducer_name in self.get_reducer_methods():
+            setattr(
+                compiled_component,
+                reducer_name,
+                get_compiled_reducer(
+                    reducer_name, exported_dispatcher, initialized_store
+                ),
+            )
+
+        for view_name, view in self.get_views().items():
+            setattr(
+                compiled_component,
+                view_name,
+                get_compiled_view(view, initialized_store),
+            )
+
+        return compiled_component

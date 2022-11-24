@@ -1,9 +1,13 @@
+from simaple.core.base import ActionStat
 from simaple.simulate.base import Action, AddressedStore, ConcreteStore, Environment
 from simaple.simulate.component.skill import AttackSkillComponent
+from simaple.simulate.global_property import GlobalProperty
 
 
 def test_scenario():
     store = AddressedStore(ConcreteStore())
+    global_property = GlobalProperty(ActionStat())
+    global_property.install_global_properties(store)
 
     attack_skill_1 = AttackSkillComponent(
         name="test-A", damage=300, hit=4, cooldown=14.0, delay=0.0
@@ -14,6 +18,7 @@ def test_scenario():
     )
 
     environment = Environment(store)
+
     attack_skill_1.add_to_environment(environment)
     attack_skill_2.add_to_environment(environment)
     print(".")
