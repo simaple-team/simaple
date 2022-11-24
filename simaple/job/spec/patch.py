@@ -8,6 +8,7 @@ from simaple.spec.patch import DFSTraversePatch
 class SkillLevelPatch(DFSTraversePatch):
     job_argument: GeneralJobArgument
     skill_level_representation: str = "skill_level"
+    default_skill_levels: dict[str, int]
 
     def patch_value(self, value, origin: dict):
         return self.translate(value, origin)
@@ -27,8 +28,11 @@ class SkillLevelPatch(DFSTraversePatch):
 
         return output
 
-    def get_skill_level(self, origin):
-        skill_level = origin.get("default_skill_level", 0)
+    def get_skill_level(self, origin: dict):
+        if origin.get("name") and self.default_skill_levels.get(origin["name"]):
+            skill_level = self.default_skill_levels.get(origin["name"])
+        else:
+            skill_level = origin.get("default_skill_level", 0)
         if origin.get("passive_skill_enabled", False):
             skill_level += self.job_argument.passive_skill_level
         if origin.get("combat_orders_enabled", False):
