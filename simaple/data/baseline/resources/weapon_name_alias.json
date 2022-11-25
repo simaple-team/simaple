@@ -1,0 +1,124 @@
+{
+    "앱솔랩스 무기": {
+        "hero": "앱솔랩스 브로드세이버",
+        "darkknight": "앱솔랩스 피어싱스피어",
+        "paladin": "앱솔랩스 브로드세이버",
+    
+        "bishop": "앱솔랩스 스펠링스태프",
+        "archmagefb": "앱솔랩스 스펠링스태프",
+        "archmagetc": "앱솔랩스 스펠링스태프",
+    
+        "nightlord": "앱솔랩스 리벤지가즈",
+        "shadower": "앱솔랩스 슬래셔",
+        "dualblade": "앱솔랩스 슬래셔",
+    
+        "bowmaster": "앱솔랩스 슈팅보우",
+        "sniper": "앱솔랩스 크로스보우",
+        "pathfinder": "앱솔랩스 에인션트 보우",
+    
+        "corsair": "앱솔랩스 포인팅건",
+        "buccaneer": "앱솔랩스 블로우너클",
+        "cannoneer": "앱솔랩스 블래스트캐논",
+    
+        "soulmaster": "앱솔랩스 브로드세이버",
+        "flamewizard": "앱솔랩스 스펠링스태프",
+        "windbreaker": "앱솔랩스 슈팅보우",
+        "nightwalker" : "앱솔랩스 리벤지가즈",
+        "striker": "앱솔랩스 블로우너클",
+    
+        "mihile": "앱솔랩스 세이버",
+    
+        "demonavenger": "앱솔랩스 데스페라도",
+        "demonslayer": "앱솔랩스 엑스",
+    
+        "battlemage": "앱솔랩스 스펠링스태프",
+        "wildhunter": "앱솔랩스 크로스보우",
+        "mechanic": "앱솔랩스 포인팅건",
+        "zenon": "앱솔랩스 에너지소드",
+        "blaster": "앱솔랩스 파일 갓",
+    
+        "evan": "앱솔랩스 스펠링스태프",
+        "luminous": "앱솔랩스 샤이닝로드",
+        "mercedes": "앱솔랩스 듀얼보우건",
+        "phantom": "앱솔랩스 핀쳐케인",
+        "eunwol": "앱솔랩스 블로우너클",
+        "aran": "앱솔랩스 핼버드",
+    
+        "kaiser": "앱솔랩스 브로드세이버",
+        "kain": "앱솔랩스 브레스 슈터",
+        "cadena": "앱솔랩스 체인",
+        "angelicbuster": "앱솔랩스 소울슈터",
+    
+        "adele": "앱솔랩스 튜너",
+        "illium": "앱솔랩스 매직건틀렛",
+        "ark": "앱솔랩스 블로우너클",
+    
+        "lara": "앱솔랩스 스펠링완드",
+        "hoyoung": "앱솔랩스 괴선",
+    
+        "zero": "라피스 8형",
+        "kinesis": "앱솔랩스 ESP리미터"
+    
+    },
+
+    "아케인셰이드 무기": {
+        "hero": "아케인셰이드 투핸드소드",
+        "darkknight": "아케인셰이드 스피어",
+        "paladin": "아케인셰이드 투핸드소드",
+    
+        "bishop": "아케인셰이드 스태프",
+        "archmagefb": "아케인셰이드 스태프",
+        "archmagetc": "아케인셰이드 스태프",
+    
+        "nightlord": "아케인셰이드 가즈",
+        "shadower": "아케인셰이드 대거",
+        "dualblade": "아케인셰이드 대거",
+    
+        "bowmaster": "아케인셰이드 보우",
+        "sniper": "아케인셰이드 크로스보우",
+        "pathfinder": "아케인셰이드 에인션트 보우",
+    
+        "corsair": "아케인셰이드 피스톨",
+        "buccaneer": "아케인셰이드 클로",
+        "cannoneer": "아케인셰이드 시즈건",
+    
+        "soulmaster": "아케인셰이드 투핸드소드",
+        "flamewizard": "아케인셰이드 스태프",
+        "windbreaker": "아케인셰이드 보우",
+        "nightwalker" : "아케인셰이드 가즈",
+        "striker": "아케인셰이드 클로",
+    
+        "mihile": "아케인셰이드 세이버",
+    
+        "demonavenger": "아케인셰이드 데스페라도",
+        "demonslayer": "아케인셰이드 해머",
+    
+        "battlemage": "아케인셰이드 스태프",
+        "wildhunter": "아케인셰이드 크로스보우",
+        "mechanic": "아케인셰이드 피스톨",
+        "zenon": "아케인셰이드 에너지체인",
+        "blaster": "아케인셰이드 엘라하",
+    
+        "evan": "아케인셰이드 스태프",
+        "luminous": "아케인셰이드 샤이닝로드",
+        "mercedes": "아케인셰이드 듀얼보우건",
+        "phantom": "아케인셰이드 케인",
+        "eunwol": "아케인셰이드 클로",
+        "aran": "아케인셰이드 폴암",
+    
+        "kaiser": "아케인셰이드 투핸드소드",
+        "kain": "아케인셰이드 브레스 슈터",
+        "cadena": "아케인셰이드 체인",
+        "angelicbuster": "아케인셰이드 소울슈터",
+    
+        "adele": "아케인셰이드 튜너",
+        "illium": "아케인셰이드 매직 건틀렛",
+        "ark": "아케인셰이드 클로",
+    
+        "lara": "아케인셰이드 완드",
+        "hoyoung": "아케인셰이드 초선",
+    
+        "zero": "라피스 9형",
+        "kinesis": "아케인셰이드 ESP리미터"
+    }
+}

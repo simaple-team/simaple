@@ -8,6 +8,7 @@ from simaple.gear.authentic_symbol import AuthenticSymbol
 from simaple.gear.gear import Gear
 from simaple.gear.gear_type import GearType
 from simaple.gear.potential import Potential
+from simaple.gear.setitem import SetItem
 from simaple.gear.slot_name import SlotName
 
 
@@ -95,6 +96,13 @@ class Gearset(BaseModel):
     gear_slots: List[GearSlot] = Field(default_factory=get_default_empty_slots)
 
     title: Stat = Field(default_factory=Stat)
+    set_items: list[SetItem] = Field(default_factory=list)
+
+    def set_set_items(self, set_items: list[SetItem]):
+        self.set_items = set_items
+
+    def get_gears(self):
+        return [slot.gear for slot in self.gear_slots if slot.gear is not None]
 
     def set_arcane_symbols(self, arcane_symbols: List[ArcaneSymbol]):
         self.arcane_symbols = list(arcane_symbols)
@@ -125,6 +133,14 @@ class Gearset(BaseModel):
         stat += self.pet_set_option
         stat += self.cash_item_stat
         stat += self.title
+
+        gears = self.get_gears()
+
+        for set_item in self.set_items:
+            effect = set_item.get_effect(
+                set_item.measure([st for st in self.set_items if st != set_item], gears)
+            )
+            stat += effect
 
         return stat
 

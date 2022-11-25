@@ -10,6 +10,7 @@ from simaple.gear.blueprint.gear_blueprint import PracticalGearBlueprint
 from simaple.gear.gear_repository import GearRepository
 from simaple.gear.gearset import Gearset
 from simaple.gear.potential import PotentialTier
+from simaple.gear.setitem import SetItemRepository
 from simaple.gear.slot_name import SlotName
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
@@ -18,7 +19,9 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 
 class GearsetBlueprint(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="blueprint")):
     @abstractmethod
-    def build(self, gear_repository: GearRepository) -> Gearset:
+    def build(
+        self, gear_repository: GearRepository, set_item_repository: SetItemRepository
+    ) -> Gearset:
         ...
 
 
@@ -38,7 +41,9 @@ class UserGearsetBlueprint(GearsetBlueprint):
 
     gears: dict[SlotName, PracticalGearBlueprint]
 
-    def build(self, gear_repository: GearRepository) -> Gearset:
+    def build(
+        self, gear_repository: GearRepository, set_item_repository: SetItemRepository
+    ) -> Gearset:
         gearset = Gearset()
 
         for slot_name, blueprint in self.gears.items():
@@ -52,5 +57,7 @@ class UserGearsetBlueprint(GearsetBlueprint):
         gearset.set_pet_equip_stat(self.pet_equip)
         gearset.set_pet_set_option(self.pet_set)
         gearset.set_cash_item_stat(self.cash)
+
+        gearset.set_set_items(set_item_repository.get_all(gearset.get_gears()))
 
         return gearset

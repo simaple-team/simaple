@@ -3,7 +3,7 @@ import os
 
 import pydantic
 
-from simaple.core import JobCategory
+from simaple.core import JobCategory, JobType
 from simaple.spec.patch import KeywordExtendPatch, Patch, StringPatch
 
 
@@ -15,15 +15,30 @@ def kms_item_alias():
         return json.load(f)
 
 
+def kms_weapon_alias():
+    INTERPETER_RESOURCE_PATH = os.path.join(os.path.dirname(__file__), "resources")
+    path = os.path.join(INTERPETER_RESOURCE_PATH, "weapon_name_alias.json")
+
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
 class GearIdPatch(Patch):
     job_category: JobCategory
+    job_type: JobType
     item_name_alias: dict[str, list[str]] = pydantic.Field(
         default_factory=kms_item_alias
+    )
+    weapon_name_alias: dict[str, dict[str, str]] = pydantic.Field(
+        default_factory=kms_weapon_alias
     )
 
     def interpret_gear_id(self, name: str) -> str:
         if name in self.item_name_alias:
             return self.item_name_alias[name][self.job_category.value]
+
+        if name in self.weapon_name_alias:
+            return self.weapon_name_alias[name][self.job_type.value]
 
         return name
 
