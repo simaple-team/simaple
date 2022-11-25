@@ -2,7 +2,7 @@ kind: Component
 version: simaple.io/BuffSkillComponent
 metadata:
   label:
-    group: adventurer.mage
+    group: adventurer.magician
     name: 메이플 여신의 축복
 patch:
   - SkillLevelPatch
