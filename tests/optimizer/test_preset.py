@@ -1,0 +1,86 @@
+import pytest
+
+from simaple.core import BaseStatType, JobCategory, JobType, Stat
+from simaple.core.damage import STRBasedDamageLogic
+from simaple.data.baseline import get_baseline_gearset
+from simaple.gear.gear_repository import GearRepository
+from simaple.gear.potential import Potential, PotentialTier
+from simaple.optimizer.preset import PresetOptimizer
+
+
+@pytest.fixture(name="test_gearset")
+def get_test_gearset():
+    gearset = get_baseline_gearset(
+        "Legendary",
+        job_category=JobCategory.warrior,
+    )
+
+    return gearset
+
+
+def test_preset(test_gearset):
+    optimizer = PresetOptimizer(
+        union_block_count=7,
+        default_stat=Stat(
+            boss_damage_multiplier=150,
+            ignored_defence=28,
+            critical_rate=60,
+        ),
+        level=200,
+        level_stat=Stat(STR=200 * 5 + 18, DEX=4),
+        damage_logic=STRBasedDamageLogic(attack_range_constant=1.2, mastery=0.95),
+        character_job_type=JobType.adele,
+        alternate_character_job_types=[],
+        link_count=12 + 1,
+        weapon_potential_tier=(
+            PotentialTier.legendary,
+            PotentialTier.unique,
+            PotentialTier.unique,
+        ),
+    )
+
+    preset = optimizer.create_optimal_preset_from_gearset(test_gearset)
+
+    print("hyperstat")
+    print(preset.hyperstat.get_stat().show())
+
+    print("links")
+    print(preset.links.get_stat().show())
+    print("union_blocks")
+    print(preset.union_squad.get_stat().show())
+    print("union_occupation")
+
+    print(preset.union_occupation.get_stat().show())
+    print("get_total_stat")
+    print(preset.get_total_stat().show())
+
+    """
+    expected = Stat(
+        STR=5029.0,
+        LUK=1141.0,
+        INT=1468.0,
+        DEX=2579.0,
+        STR_multiplier=613.0,
+        LUK_multiplier=89.0,
+        INT_multiplier=89.0,
+        DEX_multiplier=89.0,
+        STR_static=18350.0,
+        LUK_static=410.0,
+        INT_static=530.0,
+        DEX_static=640.0,
+        attack_power=2453.5,
+        magic_attack=1213.0,
+        attack_power_multiplier=81.0,
+        magic_attack_multiplier=0.0,
+        critical_rate=98.0,
+        critical_damage=76.0,
+        boss_damage_multiplier=222.0,
+        damage_multiplier=113.5,
+        final_damage_multiplier=0.0,
+        ignored_defence=94.28068497088,
+        MHP=13455.0,
+        MMP=255.0,
+    )
+
+    assert expected == preset.get_total_stat()
+    """
