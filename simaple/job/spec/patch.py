@@ -1,6 +1,8 @@
 import math  # pylint: disable=W0611
 from typing import Union
 
+import pydantic
+
 from simaple.job.description import GeneralJobArgument
 from simaple.spec.patch import DFSTraversePatch
 
@@ -8,7 +10,7 @@ from simaple.spec.patch import DFSTraversePatch
 class SkillLevelPatch(DFSTraversePatch):
     job_argument: GeneralJobArgument
     skill_level_representation: str = "skill_level"
-    default_skill_levels: dict[str, int]
+    default_skill_levels: dict[str, int] = pydantic.Field(default_factory=dict)
 
     def patch_value(self, value, origin: dict):
         return self.translate(value, origin)
