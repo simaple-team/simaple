@@ -1,11 +1,10 @@
 from pathlib import Path
 
-from simaple.benchmark.spec.patch import Patch
 from simaple.job.description import GeneralJobArgument
 from simaple.job.spec.patch import SkillLevelPatch
 from simaple.job.static_property import StaticProperty
 from simaple.spec.loader import SpecBasedLoader
-from simaple.spec.patch import EvalPatch
+from simaple.spec.patch import EvalPatch, Patch
 from simaple.spec.repository import DirectorySpecRepository
 
 

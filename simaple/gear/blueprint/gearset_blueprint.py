@@ -1,16 +1,25 @@
+from abc import abstractmethod
 from typing import List, Tuple
 
-from pydantic import Field
+from pydantic import BaseModel, Field
 
-from simaple.benchmark.base import GearsetBlueprint
 from simaple.core import Stat
 from simaple.gear.arcane_symbol import ArcaneSymbol
 from simaple.gear.authentic_symbol import AuthenticSymbol
-from simaple.gear.blueprint import PracticalGearBlueprint
+from simaple.gear.blueprint.gear_blueprint import PracticalGearBlueprint
 from simaple.gear.gear_repository import GearRepository
 from simaple.gear.gearset import Gearset
 from simaple.gear.potential import PotentialTier
 from simaple.gear.slot_name import SlotName
+from simaple.spec.loadable import (  # pylint:disable=unused-import
+    TaggedNamespacedABCMeta,
+)
+
+
+class GearsetBlueprint(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="blueprint")):
+    @abstractmethod
+    def build(self, gear_repository: GearRepository) -> Gearset:
+        ...
 
 
 # TODO: weapon potential optimizer (stand-alone)

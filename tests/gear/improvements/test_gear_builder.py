@@ -5,7 +5,7 @@ from json import JSONEncoder
 import pytest
 
 from simaple.core import StatProps
-from simaple.gear.blueprint import GeneralizedGearBlueprint
+from simaple.gear.blueprint.gear_blueprint import GeneralizedGearBlueprint
 from simaple.gear.bonus_factory import BonusType
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository

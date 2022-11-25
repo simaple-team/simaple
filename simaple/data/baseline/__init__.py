@@ -1,7 +1,8 @@
 from pathlib import Path
 from typing import cast
 
-from simaple.benchmark.spec.patch import (
+from simaple.core import JobCategory
+from simaple.data.baseline.patch import (
     GearIdPatch,
     Patch,
     all_att_patch,
@@ -9,7 +10,9 @@ from simaple.benchmark.spec.patch import (
     attack_patch,
     stat_patch,
 )
-from simaple.core import JobCategory
+from simaple.gear.blueprint.gearset_blueprint import GearsetBlueprint
+from simaple.gear.gear_repository import GearRepository
+from simaple.gear.gearset import Gearset
 from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.repository import DirectorySpecRepository
 
@@ -39,7 +42,7 @@ __JOB_STAT_PRIORITY = {
 # TODO: dex-pirate.
 
 
-def benchmark_patches(job_category: JobCategory) -> list[Patch]:
+def jobtype_patches(job_category: JobCategory) -> list[Patch]:
     config = __JOB_STAT_PRIORITY[job_category]
     stat_priority = cast(tuple[str, str, str, str], config["stat_priority"])
     attack_priority = cast(tuple[str, str], config["attack_priority"])
@@ -57,12 +60,14 @@ def benchmark_patches(job_category: JobCategory) -> list[Patch]:
     ]
 
 
-def builtin_blueprint(name: str, job_category: JobCategory):
-    patches = benchmark_patches(
+def get_baseline_gearset(name: str, job_category: JobCategory) -> Gearset:
+    patches = jobtype_patches(
         job_category=job_category,
     )
 
-    repository = DirectorySpecRepository(str(Path(__file__).parent / "builtin"))
+    repository = DirectorySpecRepository(str(Path(__file__).parent / "spec"))
     loader = SpecBasedLoader(repository)
+    gear_repository = GearRepository()
 
-    return loader.load(query={"name": name}, patches=patches)
+    blueprint: GearsetBlueprint = loader.load(query={"name": name}, patches=patches)
+    return blueprint.build(gear_repository)
