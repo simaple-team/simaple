@@ -3,7 +3,7 @@ import time
 import pytest
 from loguru import logger
 
-from simaple.core import AttackType, BaseStatType, Stat
+from simaple.core import Stat
 from simaple.core.damage import INTBasedDamageLogic
 from simaple.optimizer import StepwizeOptimizer, UnionOccupationTarget
 from simaple.union import UnionOccupation
