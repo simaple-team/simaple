@@ -11,7 +11,8 @@ from simaple.optimizer.preset import PresetOptimizer
 def get_test_gearset():
     gearset = get_baseline_gearset(
         "Legendary",
-        job_category=JobCategory.warrior,
+        JobCategory.warrior,
+        JobType.adele,
     )
 
     return gearset

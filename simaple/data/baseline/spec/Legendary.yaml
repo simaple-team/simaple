@@ -4,7 +4,7 @@ version: simaple.io/UserGearsetBlueprint
 metadata:
   label: 
     name: Legendary
-    summary: 레전둘둘(절반)
+    summary: 레전둘둘
 patch:
   - KeywordExtendPatch
   - KeywordExtendPatch
@@ -57,7 +57,7 @@ anchors:
       options:
         - first_stat_multiplier: 5
         - first_stat_multiplier: 4
-    star: 18
+    star: 21
 data:
   arcane_symbols: 
     - level: 20
@@ -105,7 +105,7 @@ data:
     cap:
       gear_id: 앱솔랩스 모자
       <<: *armor
-      star: 18
+      star: 22
       potential:
         options:
           - first_stat_multiplier: 12
@@ -136,10 +136,11 @@ data:
       <<: *armor
     shoulder_pad:
       gear_id: 앱솔랩스 숄더
-      <<: *acc
+      <<: *armor
     face_accessory:
       gear_id: 130얼장
       <<: *acc
+      star: 20
       bonuses:
         - grade: 4
           bonus_type: first_stat
@@ -157,6 +158,7 @@ data:
     ring1:
       gear_id: 마이스터링
       <<: *acc
+      star: 21
     ring2:
       gear_id: 이터널 플레임 링
       <<: *acc
@@ -186,6 +188,7 @@ data:
     pendant2:
       gear_id: 130펜던
       <<: *acc
+      star: 20
       bonuses:
         - grade: 4
           bonus_type: first_stat
@@ -199,7 +202,7 @@ data:
     medal:
       gear_id: 칠요의 몬스터파커
     weapon:
-      gear_id: 아케인셰이드 튜너
+      gear_id: 아케인셰이드 스태프
       bonuses:
         - grade: 6
           bonus_type: first_att

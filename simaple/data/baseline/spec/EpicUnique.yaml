@@ -173,7 +173,7 @@ data:
     medal:
       gear_id: 칠요의 몬스터파커
     weapon:
-      gear_id: 아케인셰이드 튜너
+      gear_id: 아케인셰이드 무기
       bonuses:
         - grade: 6
           bonus_type: first_att
