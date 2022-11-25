@@ -1,10 +1,9 @@
 import pytest
 
-from simaple.core import BaseStatType, JobCategory, JobType, Stat
+from simaple.core import JobCategory, JobType, Stat
 from simaple.core.damage import STRBasedDamageLogic
 from simaple.data.baseline import get_baseline_gearset
-from simaple.gear.gear_repository import GearRepository
-from simaple.gear.potential import Potential, PotentialTier
+from simaple.gear.potential import PotentialTier
 from simaple.optimizer.preset import PresetOptimizer
 
 
@@ -53,34 +52,3 @@ def test_preset(test_gearset):
     print(preset.union_occupation.get_stat().show())
     print("get_total_stat")
     print(preset.get_total_stat().show())
-
-    """
-    expected = Stat(
-        STR=5029.0,
-        LUK=1141.0,
-        INT=1468.0,
-        DEX=2579.0,
-        STR_multiplier=613.0,
-        LUK_multiplier=89.0,
-        INT_multiplier=89.0,
-        DEX_multiplier=89.0,
-        STR_static=18350.0,
-        LUK_static=410.0,
-        INT_static=530.0,
-        DEX_static=640.0,
-        attack_power=2453.5,
-        magic_attack=1213.0,
-        attack_power_multiplier=81.0,
-        magic_attack_multiplier=0.0,
-        critical_rate=98.0,
-        critical_damage=76.0,
-        boss_damage_multiplier=222.0,
-        damage_multiplier=113.5,
-        final_damage_multiplier=0.0,
-        ignored_defence=94.28068497088,
-        MHP=13455.0,
-        MMP=255.0,
-    )
-
-    assert expected == preset.get_total_stat()
-    """
