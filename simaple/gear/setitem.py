@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+from abc import ABCMeta, abstractmethod
 from typing import Iterable, List, Optional, Set, Tuple
 
 from pydantic import BaseModel, Field
@@ -71,8 +72,13 @@ class SetItem(BaseModel):
         return self.count(gears)
 
 
-class SetItemRepository:
+class SetItemRepository(metaclass=ABCMeta):
+    @abstractmethod
     def get(self, set_item_id) -> SetItem:
+        ...
+
+    @abstractmethod
+    def get_all(self, gears: Iterable[Gear]) -> list[SetItem]:
         ...
 
 
@@ -119,8 +125,18 @@ class KMSSetItemRepository(SetItemRepository):
             ],
             name=raw_set_item["set_item_name"],
             id=set_item_id,
-            joker_possible=raw_set_item["joker_possible"],
+            joker_possible=raw_set_item.get("joker_possible", False),
         )
+
+    def get_all(self, gears: Iterable[Gear]) -> list[SetItem]:
+        set_items = []
+
+        for set_item_id in self._set_items:
+            set_item = self.get(set_item_id)
+            if set_item.count(gears) > 0:
+                set_items.append(set_item)
+
+        return set_items
 
     def get(self, set_item_id: int) -> SetItem:
         return self._parse_from_raw(
