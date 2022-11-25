@@ -1,8 +1,8 @@
+import pydantic
+
+from simaple.core.base import Stat
 from simaple.simulate.base import Environment, Event, EventHandler
 from simaple.simulate.reserved_names import Tag
-from simaple.core.base import Stat
-
-import pydantic
 
 
 class DamageLog(pydantic.BaseModel):
@@ -13,7 +13,9 @@ class DamageLog(pydantic.BaseModel):
     buff: Stat
 
     def __str__(self):
-        return (f"{self.clock}ms\t\t{self.name}\t{self.damage:.3f}\t{self.hit}\t{self.buff}")
+        return (
+            f"{self.clock}ms\t\t{self.name}\t{self.damage:.3f}\t{self.hit}\t{self.buff}"
+        )
 
 
 class Report:
@@ -24,13 +26,17 @@ class Report:
         return iter(self._logs)
 
     def add(self, clock, event, buff):
+        buff_stat = buff
+        if event.payload["modifier"] is not None:
+            buff_stat = buff_stat + event.payload["modifier"]
+
         self._logs.append(
             DamageLog(
                 clock=clock,
                 name=event.name,
                 damage=event.payload["damage"],
                 hit=event.payload["hit"],
-                buff=buff.short_dict(),
+                buff=buff_stat.short_dict(),
             )
         )
 
