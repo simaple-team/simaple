@@ -40,7 +40,7 @@ class UserGearsetBlueprint(GearsetBlueprint):
     gears: dict[SlotName, PracticalGearBlueprint]
 
     def build(
-        self, gear_repository: GearRepository, set_item_repositpry: SetItemRepository
+        self, gear_repository: GearRepository, set_item_repository: SetItemRepository
     ) -> Gearset:
         gearset = Gearset()
 
@@ -56,6 +56,6 @@ class UserGearsetBlueprint(GearsetBlueprint):
         gearset.set_pet_set_option(self.pet_set)
         gearset.set_cash_item_stat(self.cash)
 
-        gearset.set_set_items(set_item_repositpry.get_all(gearset.get_gears()))
+        gearset.set_set_items(set_item_repository.get_all(gearset.get_gears()))
 
         return gearset
