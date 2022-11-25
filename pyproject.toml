@@ -17,6 +17,7 @@ coverage-report = "pytest --cov=simaple --cov-report=xml"
 unittest = "pytest -vv -x --ignore tests/fetch/request"
 rsctest = "pytest -vv -x test_resource/"
 typetest = "mypy simaple tests"
+fetchtest = "pytest -vv -x tests/fetch/request"
 
 test = ["coverage", "typetest", "lint", "formatting-check"]
 

@@ -1,3 +1,5 @@
+import asyncio
+
 import pytest
 
 from simaple.fetch.query import NoredirectXMLQuery
@@ -21,4 +23,4 @@ def test_get_item(path):
     name = "Backend"
     token = token_repository.get(name)
 
-    result = NoredirectXMLQuery().get(path, token).replace("\r\n", "\n")
+    asyncio.run(NoredirectXMLQuery().get(path, token))
