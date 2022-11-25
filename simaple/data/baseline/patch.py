@@ -29,7 +29,7 @@ class GearIdPatch(Patch):
     item_name_alias: dict[str, list[str]] = pydantic.Field(
         default_factory=kms_item_alias
     )
-    weapon_name_alias: dict[str, list[str]] = pydantic.Field(
+    weapon_name_alias: dict[str, dict[str, str]] = pydantic.Field(
         default_factory=kms_weapon_alias
     )
 

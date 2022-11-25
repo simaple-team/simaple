@@ -19,7 +19,9 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 
 class GearsetBlueprint(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="blueprint")):
     @abstractmethod
-    def build(self, gear_repository: GearRepository) -> Gearset:
+    def build(
+        self, gear_repository: GearRepository, set_item_repository: SetItemRepository
+    ) -> Gearset:
         ...
 
 
