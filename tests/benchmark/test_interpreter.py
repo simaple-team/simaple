@@ -1,9 +1,9 @@
 import pytest
 
-from simaple.benchmark.gearset_blueprint import UserGearsetBlueprint
-from simaple.benchmark.spec.interpreter import builtin_blueprint
 from simaple.core import BaseStatType, JobCategory
+from simaple.gear.blueprint.gearset_blueprint import UserGearsetBlueprint
 from simaple.gear.gear_repository import GearRepository
+from simaple.gear.spec.interpreter import builtin_blueprint
 
 
 @pytest.mark.parametrize(

@@ -1,7 +1,8 @@
 from pathlib import Path
 from typing import cast
 
-from simaple.benchmark.spec.patch import (
+from simaple.core import JobCategory
+from simaple.gear.spec.patch import (
     GearIdPatch,
     Patch,
     all_att_patch,
@@ -9,7 +10,6 @@ from simaple.benchmark.spec.patch import (
     attack_patch,
     stat_patch,
 )
-from simaple.core import JobCategory
 from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.repository import DirectorySpecRepository
 
