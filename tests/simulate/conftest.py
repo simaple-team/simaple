@@ -53,7 +53,7 @@ def archmagefb_client(component_repository, bare_store):
                 ),
             ],
         )
-        for group in ("archmagefb", "common", "adventurer.mage")
+        for group in ("archmagefb", "common", "adventurer.magician")
     ]
 
     components = sum(components, [])

@@ -18,7 +18,7 @@ __JOB_STAT_PRIORITY = {
         "stat_priority": ("STR", "DEX", "INT", "LUK"),
         "attack_priority": ("attack_power", "magic_attack"),
     },
-    JobCategory.mage: {
+    JobCategory.magician: {
         "stat_priority": ("INT", "LUK", "STR", "DEX"),
         "attack_priority": ("magic_attack", "magic_attack"),
     },
