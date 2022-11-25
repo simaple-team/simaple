@@ -25,7 +25,7 @@ discover, simulate and optimize related with maplestory.
 
    modules/core
    modules/gear
-   modules/benchmark
+   modules/baseline
    modules/metric
    modules/fetch
    modules/preset

@@ -22,19 +22,16 @@ Benchmark는 제시된 직업에 알맞은, 설정된 장비 수준의 ``Geatset
 - Legendary
 
 
-Create Gearset From Benchmark
+Create Gearset From Baseline
 -----------------------------
 
 ::
 
-    from simaple.benchmark.spec.interpreter import builtin_blueprint
+    from simaple.data.baseline import get_baseline_gearset
     from simaple.core import JobCategory
     from simaple.gear.gear_repository import GearRepository
 
-    benchmark = builtin_blueprint("EpicUnique", JobCategory.warrior)
-    gear_repository = GearRepository()
-
-    gearset = benchmark.build(gear_repository)
+    gearset = get_baseline_gearset("EpicUnique", JobCategory.warrior)
     print(gearset.get_total_stat().show())
 
 

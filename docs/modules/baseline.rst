@@ -10,12 +10,12 @@ simaple.benchmark.spec
 
 Builtin benchmarks.
 
-.. autofunction:: simaple.benchmark.spec.interpreter.builtin_blueprint
+.. autofunction:: simaple.data.baseline.get_baseline_gearset
 
 
 simaple.benchmark.gearset_blueprint
 ===================================
 
-.. automodule:: simaple.benchmark.gearset_blueprint
+.. automodule:: simaple.data.baseline
     :members:
     :undoc-members:

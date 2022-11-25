@@ -12,7 +12,7 @@ simaple.fetch
 simaple.fetch.application
 =========================
 
-Builtin benchmarks.
+Builtin baselines.
 
 .. autoclass:: simaple.fetch.application.base.KMSFetchApplication
     :members:
