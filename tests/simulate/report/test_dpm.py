@@ -1,4 +1,5 @@
 import simaple.simulate.component.skill  # pylint: disable=W0611
+from simaple.core.damage import INTBasedDamageLogic
 from simaple.simulate.actor import ActionRecorder, DefaultMDCActor
 from simaple.simulate.component.view import (
     BuffParentView,
@@ -6,17 +7,13 @@ from simaple.simulate.component.view import (
     ValidityParentView,
 )
 from simaple.simulate.report.base import Report, ReportEventHandler
+from simaple.simulate.report.dpm import DPMCalculator, LevelAdvantage
 
 
-import pytest
-
-@pytest.fixture
-def character_spec():
-    ...
-
-def test_actor(archmagefb_client):
+def test_actor(archmagefb_client, character_stat):
     actor = DefaultMDCActor(
         order=[
+            "오버로드 마나",
             "이프리트",
             "파이어 오라",
             "소울 컨트랙트",
@@ -45,6 +42,14 @@ def test_actor(archmagefb_client):
 
     archmagefb_client.add_handler(ReportEventHandler(report))
 
+    dpm_calculator = DPMCalculator(
+        character_spec=character_stat,
+        damage_logic=INTBasedDamageLogic(attack_range_constant=1.2, mastery=0.95),
+        armor=300,
+        level=LevelAdvantage().get_advantage(250, 260),
+        force_advantage=1.5,
+    )
+
     events = []
     with recorder.start() as rec:
         while environment.show("clock") < 50_000:
@@ -52,4 +57,4 @@ def test_actor(archmagefb_client):
             events = archmagefb_client.play(action)
             rec.write(action, environment.show("clock"))
 
-    report.save("report.tsv")
+    print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")
