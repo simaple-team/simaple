@@ -63,7 +63,7 @@ patch:
 data:
   name: 엘리멘탈 리셋
   stat:
-    final_damage_multiplier: 50
+    final_damage_multiplier: 40
 ---
 kind: PassiveSkill 
 version: simaple.io/PassiveSkill
@@ -94,6 +94,6 @@ patch:
 data:
   name: 아케인 에임
   passive_skill_enabled: true
-  default_skill_level: 10
+  default_skill_level: 30
   stat:
     ignored_defence: '{{ 5 + math.ceil(skill_level / 2) }}'
