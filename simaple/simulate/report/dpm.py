@@ -1,8 +1,8 @@
-from simaple.simulate.report.base import Report, DamageLog
+import pydantic
+
 from simaple.core.base import Stat
 from simaple.core.damage import DamageLogic
-
-import pydantic
+from simaple.simulate.report.base import DamageLog, Report
 
 
 class DPMCalculator(pydantic.BaseModel):
@@ -13,7 +13,7 @@ class DPMCalculator(pydantic.BaseModel):
     def get_damage(self, log: DamageLog):
         buffed_stat = self.character_spec + log.buff
         damage_factor = self.damage_logic.get_damage_factor(buffed_stat, self.armor)
-        return log.damage * log.hit * damage_factor * 0.01
+        return (log.damage * 0.01) * log.hit * damage_factor
 
     def calculate_damage(self, damage_report: Report):
         total_damage = 0
@@ -23,4 +23,6 @@ class DPMCalculator(pydantic.BaseModel):
         return total_damage
 
     def calculate_dpm(self, damage_report: Report):
-        return self.calculate_damage(damage_report) / damage_report.total_time() * 60_000
+        return (
+            self.calculate_damage(damage_report) / damage_report.total_time() * 60_000
+        )
