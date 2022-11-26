@@ -43,7 +43,10 @@ class Spec(pydantic.BaseModel):
 
     def interpret(self, patches: Optional[list] = None):
         if self.ignore_overflowing_patch:
-            patches = patches[: len(self.patch)]
+            if self.patch:
+                patches = patches[: len(self.patch)]
+            else:
+                patches = None
 
         if not self.is_patch_fits(patches):
             raise PatchSpecificationMatchFailError()
