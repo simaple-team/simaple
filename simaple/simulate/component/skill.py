@@ -4,6 +4,7 @@ from simaple.core.base import Stat
 from simaple.simulate.base import State
 from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.view import Running, Validity
+from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import Dynamics
 
 
@@ -87,6 +88,11 @@ class StackState(State):
 
 class SkillComponent(Component):
     disable_validity: bool = False
+    modifier: Optional[Stat]
+
+    @property
+    def event_provider(self) -> EventProvider:
+        return NamedEventProvider(self.name, self.modifier)
 
     def invalidate_if_disabled(self, validity: Validity):
         if self.disable_validity:

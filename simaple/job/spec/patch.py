@@ -1,10 +1,12 @@
+import copy
 import math  # pylint: disable=W0611
 from typing import Union
 
 import pydantic
 
+from simaple.core import Stat
 from simaple.job.description import GeneralJobArgument
-from simaple.spec.patch import DFSTraversePatch
+from simaple.spec.patch import DFSTraversePatch, Patch
 
 
 class SkillLevelPatch(DFSTraversePatch):
@@ -41,3 +43,25 @@ class SkillLevelPatch(DFSTraversePatch):
             skill_level += self.job_argument.combat_orders_level
 
         return skill_level
+
+
+class VSkillImprovementPatch(Patch):
+    improvements: dict[str, int] = pydantic.Field(default_factory=dict)
+
+    def apply(self, raw: dict) -> dict:
+        output = copy.deepcopy(raw)
+        try:
+            improvement_scale = output.pop("v_improvement")
+        except KeyError as e:
+            raise KeyError(
+                "VSkillImprovementPatch assigned but no `v_improvement`."
+            ) from e
+
+        previous_modifier = Stat.parse_obj(output.get("modifier", {}))
+        new_modifier = previous_modifier + Stat(
+            final_damage_multiplier=improvement_scale
+            * self.improvements.get(output["name"], 0)
+        )
+        output["modifier"] = new_modifier.short_dict()
+
+        return output

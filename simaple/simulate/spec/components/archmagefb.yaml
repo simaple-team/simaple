@@ -7,6 +7,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - VSkillImprovementPatch
 data:
   type: DamageSkill
   name: 플레임 스윕
@@ -15,6 +16,7 @@ data:
   hit: 8
   combat_orders_enabled: true
   default_skill_level: 30
+  v_improvement: 2
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -25,6 +27,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - VSkillImprovementPatch
 data:
   name: 플레임 헤이즈
   listening_actions: 
@@ -36,6 +39,7 @@ data:
   hit: 15
   type: DamageSkill
   default_skill_level: 30
+  v_improvement: 2
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -46,18 +50,20 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - VSkillImprovementPatch
 data:
   name: 미스트 이럽션
   cooldown: 4000
   delay: 720
   red: true
   modifier:
-    pdamage: 10
-    pdamage_indep: 125
-    armor_ignore: 52.8
+    damage_multiplier: 10
+    final_damage_multiplier: 125
+    ignored_defence: 52.8
   damage: '{{ 95 + skill_level }}'
   hit: 20
   default_skill_level: 30
+  v_improvement: 2
 ---
 kind: Component
 version: simaple.io/BuffSkillComponent
@@ -162,6 +168,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - VSkillImprovementPatch
 data:
   name: 메테오
   cooldown: 45000
@@ -170,6 +177,7 @@ data:
   damage: '{{ 225 + 3 * skill_level }}'
   hit: 12
   default_skill_level: 30
+  v_improvement: 2
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -205,6 +213,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - VSkillImprovementPatch
 data:
   name: 이프리트
   damage: 0
@@ -216,6 +225,8 @@ data:
   tick_damage: '{{ 90 + skill_level * 2 }}'
   tick_hit: 3
   duration: '{{ (110 + skill_level * 5) * 1000 }}'
+
+  v_improvement: 2
 ---
 kind: Component
 version: simaple.io/TickDamageConfiguratedAttackSkillComponent
@@ -226,10 +237,10 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - VSkillImprovementPatch
 data:
   name: 파이어 오라
   damage: 0
-  default_skill_level: 30
   delay: 0
   hit: 0
 
@@ -237,6 +248,8 @@ data:
   tick_damage: 400
   tick_hit: 2
   duration: 999_999_999
+
+  v_improvement: 2
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -247,6 +260,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - VSkillImprovementPatch
 data:
   listening_actions: 
     플레임 스윕.use.emitted.global.damage: use
@@ -260,6 +274,7 @@ data:
   damage: 40
   hit: 4.5
   disable_validity: True
+  v_improvement: 4
 ---
 kind: Component
 version: simaple.io/TickDamageConfiguratedAttackSkillComponent
@@ -407,6 +422,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - VSkillImprovementPatch
 data:
   type: DamageSkill
   name: 메기도 플레임
@@ -414,6 +430,7 @@ data:
   cooldown: 50_000
   damage: '{{ 380 * (1 + 0.55 * 10) / 11 }}'
   hit: '{{ 4 * 11 }}'
+  v_improvement: 2
 
 ---
 kind: Component
@@ -454,3 +471,21 @@ data:
   tick_damage: '{{ 200 + 8 * skill_level }}'
   tick_hit: 6
   duration: 6_000
+
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 오버로드 마나
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 오버로드 마나
+  cooldown: 0
+  delay: 0
+  duration: 999_999_999
+  stat:
+    final_damage_multiplier: '{{ 8 + skill_level // 10 }}'
