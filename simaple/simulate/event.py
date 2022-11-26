@@ -27,8 +27,9 @@ class EventProvider(metaclass=ABCMeta):
 
 
 class NamedEventProvider(EventProvider):
-    def __init__(self, name: str):
+    def __init__(self, name: str, default_modifier: Optional[Stat] = None):
         self._name = name
+        self._default_modifier = default_modifier
 
     def elapsed(self, time) -> Event:
         return Event(name=self._name, tag=Tag.ELAPSED, payload={"time": time})
@@ -42,12 +43,22 @@ class NamedEventProvider(EventProvider):
     def dealt(
         self, damage: float, hit: float, modifier: Optional[Stat] = None
     ) -> Event:
+        if self._default_modifier is None and modifier is None:
+            total_modifier = None
+        else:
+            if self._default_modifier is None:
+                total_modifier = modifier
+            elif modifier is None:
+                total_modifier = self._default_modifier
+            else:
+                total_modifier = modifier + self._default_modifier
+
         return Event(
             name=self._name,
             tag=Tag.DAMAGE,
             payload={
                 "damage": damage,
                 "hit": hit,
-                "modifier": modifier,
+                "modifier": total_modifier,
             },
         )
