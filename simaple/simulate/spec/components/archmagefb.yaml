@@ -71,9 +71,6 @@ metadata:
   label:
     group: archmagefb
     name: 메디테이션
-patch:
-  - SkillLevelPatch
-  - EvalPatch
 data:
   name: 메디테이션
   duration: 240000
@@ -89,9 +86,6 @@ metadata:
   label:
     group: archmagefb
     name: 에픽 어드벤처
-patch:
-  - SkillLevelPatch
-  - EvalPatch
 data:
   name: 에픽 어드벤처
   cooldown: 120000
@@ -282,9 +276,6 @@ metadata:
   label:
     group: archmagefb
     name: 포이즌 미스트
-patch:
-  - SkillLevelPatch
-  - EvalPatch
 data:
   listening_actions: 
     플레임 헤이즈.use: use
@@ -315,7 +306,6 @@ data:
   tick_damage: '{{ 120 + 4 * skill_level }}'
   duration: 10_000
   default_skill_level: 30
-
 ---
 kind: Component
 version: simaple.io/DOTSkillComponent
