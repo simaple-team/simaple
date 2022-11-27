@@ -1,6 +1,5 @@
 import pytest
 
-from simaple.job.description import GeneralJobArgument
 from simaple.job.spec.patch import SkillLevelPatch
 
 
@@ -30,13 +29,10 @@ def test_passive_skill_description_interpret(
     combat_orders_level = 2
     passive_skill_level = 1
 
-    job_argument = GeneralJobArgument(
+    patch = SkillLevelPatch(
         combat_orders_level=combat_orders_level,
         passive_skill_level=passive_skill_level,
-        character_level=0,
     )
-
-    patch = SkillLevelPatch(job_argument=job_argument)
 
     parsed_value = patch.apply(
         get_skill_info(passive_skill_enabled, combat_orders_enabled)
