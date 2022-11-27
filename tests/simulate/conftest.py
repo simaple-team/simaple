@@ -4,7 +4,8 @@ import pytest
 import simaple.simulate.component.skill  # pylint: disable=W0611
 import simaple.simulate.component.specific  # pylint: disable=W0611
 from simaple.core.base import ActionStat
-from simaple.data.passive.patch import SkillLevelPatch, VSkillImprovementPatch
+from simaple.data.passive.patch import SkillLevelPatch
+from simaple.data.skill.patch import VSkillImprovementPatch
 from simaple.simulate.base import AddressedStore, Client, ConcreteStore, Environment
 from simaple.simulate.global_property import GlobalProperty
 from simaple.simulate.timer import clock_view, install_timer
@@ -15,7 +16,7 @@ from simaple.spec.repository import DirectorySpecRepository
 
 @pytest.fixture(scope="package")
 def component_repository():
-    return DirectorySpecRepository("simaple/simulate/spec/components")
+    return DirectorySpecRepository("simaple/data/skill/resources/components")
 
 
 @pytest.fixture
