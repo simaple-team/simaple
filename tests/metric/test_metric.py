@@ -2,12 +2,12 @@ import json
 
 from simaple.core import Stat
 from simaple.core.damage import INTBasedDamageLogic
-from simaple.job.builtin.interpreter import get_job_dependent_stat
+from simaple.data.passive import get_passive_and_default_active_stat
 from simaple.metric.metric import RegressionMetric
 
 
 def test_metric():
-    item_independent_stat = get_job_dependent_stat(
+    item_independent_stat = get_passive_and_default_active_stat(
         "archmagefb",
         combat_orders_level=1,
         passive_skill_level=0,

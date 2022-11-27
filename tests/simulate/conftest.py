@@ -4,7 +4,7 @@ import pytest
 import simaple.simulate.component.skill  # pylint: disable=W0611
 import simaple.simulate.component.specific  # pylint: disable=W0611
 from simaple.core.base import ActionStat
-from simaple.job.spec.patch import SkillLevelPatch, VSkillImprovementPatch
+from simaple.data.passive.patch import SkillLevelPatch, VSkillImprovementPatch
 from simaple.simulate.base import AddressedStore, Client, ConcreteStore, Environment
 from simaple.simulate.global_property import GlobalProperty
 from simaple.simulate.timer import clock_view, install_timer

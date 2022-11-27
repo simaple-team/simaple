@@ -1,8 +1,8 @@
 from pathlib import Path
 
+from simaple.character.passive_skill import DefaultActiveSkill, PassiveSkill
 from simaple.core import Stat
-from simaple.job.passive_skill import DefaultActiveSkill, PassiveSkill
-from simaple.job.spec.patch import SkillLevelPatch
+from simaple.data.passive.patch import SkillLevelPatch
 from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.patch import EvalPatch, Patch
 from simaple.spec.repository import DirectorySpecRepository
@@ -47,7 +47,7 @@ def get_default_active_skills(
     )
 
 
-def get_job_dependent_stat(
+def get_passive_and_default_active_stat(
     group: str, combat_orders_level: int, passive_skill_level: int, character_level: int
 ) -> Stat:
     passive_skills = get_passive_skills(

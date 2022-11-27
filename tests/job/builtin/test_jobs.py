@@ -1,9 +1,9 @@
 from simaple.core import Stat
-from simaple.job.builtin.interpreter import get_job_dependent_stat
+from simaple.data.passive import get_passive_and_default_active_stat
 
 
 def test_archmagefb():
-    static_property_stat = get_job_dependent_stat(
+    static_property_stat = get_passive_and_default_active_stat(
         "archmagefb",
         combat_orders_level=1,
         passive_skill_level=0,

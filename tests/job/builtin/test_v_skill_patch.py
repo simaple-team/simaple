@@ -1,4 +1,4 @@
-from simaple.job.spec.patch import VSkillImprovementPatch
+from simaple.data.passive.patch import VSkillImprovementPatch
 
 
 def test_v_patch():
