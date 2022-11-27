@@ -1,11 +1,12 @@
-from simaple.job.builtin.interpreter import get_static_propery
+from simaple.core import Stat
+from simaple.job.builtin.interpreter import get_job_dependent_stat
 
 
 def test_archmagefb():
-    static_property = get_static_propery(
+    static_property_stat = get_job_dependent_stat(
         "archmagefb",
         combat_orders_level=1,
         passive_skill_level=0,
         character_level=260,
     )
-    stat = static_property.get_default_stat()
+    assert isinstance(static_property_stat, Stat)

@@ -1,7 +1,8 @@
 from pathlib import Path
 
+from simaple.core import Stat
+from simaple.job.passive_skill import DefaultActiveSkill, PassiveSkill
 from simaple.job.spec.patch import SkillLevelPatch
-from simaple.job.static_property import StaticProperty
 from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.patch import EvalPatch, Patch
 from simaple.spec.repository import DirectorySpecRepository
@@ -25,7 +26,7 @@ def get_patches(
 
 def get_passive_skills(
     group: str, combat_orders_level: int, passive_skill_level: int, character_level: int
-):
+) -> list[PassiveSkill]:
     repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
     loader = SpecBasedLoader(repository)
     patches = get_patches(combat_orders_level, passive_skill_level, character_level)
@@ -36,7 +37,7 @@ def get_passive_skills(
 
 def get_default_active_skills(
     group: str, combat_orders_level: int, passive_skill_level: int, character_level: int
-):
+) -> list[DefaultActiveSkill]:
     repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
     loader = SpecBasedLoader(repository)
     patches = get_patches(combat_orders_level, passive_skill_level, character_level)
@@ -46,14 +47,21 @@ def get_default_active_skills(
     )
 
 
-def get_static_propery(
+def get_job_dependent_stat(
     group: str, combat_orders_level: int, passive_skill_level: int, character_level: int
-):
-    return StaticProperty(
-        passive_skillset=get_passive_skills(
-            group, combat_orders_level, passive_skill_level, character_level
-        ),
-        default_active_skillset=get_default_active_skills(
-            group, combat_orders_level, passive_skill_level, character_level
-        ),
+) -> Stat:
+    passive_skills = get_passive_skills(
+        group, combat_orders_level, passive_skill_level, character_level
+    )
+
+    default_active_skills = get_default_active_skills(
+        group, combat_orders_level, passive_skill_level, character_level
+    )
+
+    return sum(
+        [
+            passive_skill.stat
+            for passive_skill in (passive_skills + default_active_skills)
+        ],
+        Stat(),
     )

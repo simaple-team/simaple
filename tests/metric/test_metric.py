@@ -2,12 +2,12 @@ import json
 
 from simaple.core import Stat
 from simaple.core.damage import INTBasedDamageLogic
-from simaple.job.builtin.interpreter import get_static_propery
+from simaple.job.builtin.interpreter import get_job_dependent_stat
 from simaple.metric.metric import RegressionMetric
 
 
 def test_metric():
-    static_property = get_static_propery(
+    item_independent_stat = get_job_dependent_stat(
         "archmagefb",
         combat_orders_level=1,
         passive_skill_level=0,
@@ -15,7 +15,7 @@ def test_metric():
     )
 
     metric = RegressionMetric(
-        static_property,
+        item_independent_stat,
         INTBasedDamageLogic(attack_range_constant=1.2, mastery=0.95),
     )
     reference_list = [
