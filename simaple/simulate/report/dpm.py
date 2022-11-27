@@ -7,8 +7,8 @@ from simaple.simulate.report.base import DamageLog, Report
 
 class LevelAdvantage:
     def __init__(self):
-        # fmt: off
-        self._advantage_table = [
+        self._advantage_table: list[float] = [
+            # fmt: off
             1.2, 1.18, 1.16, 1.14, 1.12, 1.1,
             1.0584, 1.0070, 0.9672, 0.9180, 0.88,
             .85, .83, .80, .78, .75,
@@ -29,7 +29,7 @@ class LevelAdvantage:
         if advantage_index > len(self._advantage_table):
             return 0.0
 
-        return self._advantage_table[advantage_index]
+        return float(self._advantage_table[advantage_index])
 
 
 class DPMCalculator(pydantic.BaseModel):

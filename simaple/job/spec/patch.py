@@ -34,7 +34,7 @@ class SkillLevelPatch(DFSTraversePatch):
 
     def get_skill_level(self, origin: dict):
         if origin.get("name") and self.default_skill_levels.get(origin["name"]):
-            skill_level = self.default_skill_levels.get(origin["name"])
+            skill_level: int = self.default_skill_levels[origin["name"]]
         else:
             skill_level = origin.get("default_skill_level", 0)
         if origin.get("passive_skill_enabled", False):
