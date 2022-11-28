@@ -29,7 +29,7 @@ def test_tick_damage_component_emit_initial_damage(
     tick_damage_component, compiled_tick_damage_component
 ):
     events = compiled_tick_damage_component.use(None)
-    assert events[0].payload == {"damage": 100, "hit": 1.0}
+    assert events[0].payload == {"damage": 100, "hit": 1.0, "modifier": None}
     assert events[1].payload == {"time": 30.0}
 
 

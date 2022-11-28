@@ -23,17 +23,18 @@ class DamageLogic(BaseModel, metaclass=ABCMeta):
 
     def get_maximum_attack_range(self, stat: Stat) -> float:
         return (
-            (1 + (stat.boss_damage_multiplier) * 0.01)
+            (1 + (stat.damage_multiplier) * 0.01)
             * (1 + 0.01 * stat.final_damage_multiplier)
             * self.get_base_stat_factor(stat)
             * self.get_attack_type_factor(stat)
             * self.attack_range_constant
+            * 0.01
         )
 
     def get_minimum_attack_range(self, stat: Stat) -> float:
         return self.get_maximum_attack_range(stat) * self.mastery
 
-    def get_general_damage_factor(self, stat: Stat) -> float:
+    def _get_general_damage_factor(self, stat: Stat) -> float:
         return (1 + (stat.boss_damage_multiplier + stat.damage_multiplier) * 0.01) * (
             1 + 0.01 * stat.final_damage_multiplier
         )
@@ -46,7 +47,7 @@ class DamageLogic(BaseModel, metaclass=ABCMeta):
 
     def get_damage_factor(self, stat: Stat, armor: int = 300) -> float:
         return (
-            self.get_general_damage_factor(stat)
+            self._get_general_damage_factor(stat)
             * self.get_armor_factor(stat, armor)
             * self.get_critical_factor(stat)
             * self.get_base_stat_factor(stat)

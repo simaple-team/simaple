@@ -1,19 +1,42 @@
+import pydantic
+
+from simaple.core.base import Stat
 from simaple.simulate.base import Environment, Event, EventHandler
 from simaple.simulate.reserved_names import Tag
 
 
+class DamageLog(pydantic.BaseModel):
+    clock: float
+    name: str
+    damage: float
+    hit: float
+    buff: Stat
+
+    def __str__(self):
+        return (
+            f"{self.clock}ms\t\t{self.name}\t{self.damage:.3f}\t{self.hit}\t{self.buff}"
+        )
+
+
 class Report:
     def __init__(self):
-        self._logs = []
+        self._logs: list[DamageLog] = []
+
+    def __iter__(self):
+        return iter(self._logs)
 
     def add(self, clock, event, buff):
+        buff_stat = buff
+        if event.payload["modifier"] is not None:
+            buff_stat = buff_stat + event.payload["modifier"]
+
         self._logs.append(
-            (
-                clock,
-                event.name,
-                event.payload["damage"],
-                event.payload["hit"],
-                buff.short_dict(),
+            DamageLog(
+                clock=clock,
+                name=event.name,
+                damage=event.payload["damage"],
+                hit=event.payload["hit"],
+                buff=buff_stat.short_dict(),
             )
         )
 
@@ -23,8 +46,11 @@ class Report:
                 f.write(f"{clock}\t{name}\t{damage:.3f}\t{hit}\t{buff}\n")
 
     def show(self):
-        for clock, name, damage, hit, buff in self._logs:
-            print(f"{clock}ms\t\t{name}\t{damage:.3f}\t{hit}\t{buff}")
+        for log in self._logs:
+            print(log)
+
+    def total_time(self):
+        return self._logs[-1].clock
 
 
 class ReportEventHandler(EventHandler):
