@@ -21,7 +21,12 @@ def component_repository():
 
 @pytest.fixture
 def global_property():
-    return GlobalProperty(ActionStat())
+    return GlobalProperty(ActionStat(
+        buff_duration=185,
+        cooltime_reduce=2_000,
+        summon_duration=40,
+        cooltime_reduce_rate=5.0
+    ))
 
 
 @pytest.fixture

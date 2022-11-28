@@ -16,6 +16,7 @@ def test_actor(archmagefb_client, character_stat):
             "오버로드 마나",
             "이프리트",
             "파이어 오라",
+            "인피니티",
             "소울 컨트랙트",
             "메이플 여신의 축복",
             "메디테이션",
@@ -52,7 +53,7 @@ def test_actor(archmagefb_client, character_stat):
 
     events = []
     with recorder.start() as rec:
-        while environment.show("clock") < 50_000:
+        while environment.show("clock") < 180_000:
             action = actor.decide(archmagefb_client.environment, events)
             events = archmagefb_client.play(action)
             rec.write(action, environment.show("clock"))

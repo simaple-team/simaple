@@ -10,6 +10,7 @@ from simaple.simulate.global_property import Dynamics
 
 class DurationState(State):
     time_left: float
+    assigned_duration: float = 0.0
 
     def enabled(self):
         return self.time_left > 0
@@ -19,6 +20,10 @@ class DurationState(State):
 
     def set_time_left(self, time: float):
         self.time_left = time
+        self.assigned_duration = time
+
+    def get_elapsed_time(self) -> float:
+        return self.assigned_duration - self.time_left
 
 
 class CooldownState(State):

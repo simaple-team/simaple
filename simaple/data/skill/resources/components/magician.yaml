@@ -1,0 +1,19 @@
+kind: Component
+version: simaple.io/Infinity
+metadata:
+  label:
+    group: adventurer.magician
+    name: 인피니티
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 인피니티
+  cooldown: 180_000
+  delay: 6_000
+  duration: 40_000
+
+  final_damage_increment: 3
+  increase_interval: 6_800
+  default_final_damage: '{{ 40 + skill_level }}'
+  maximum_final_damage: 115
