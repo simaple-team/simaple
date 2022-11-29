@@ -16,6 +16,7 @@ def test_actor(archmagefb_client, character_stat):
             "오버로드 마나",
             "이프리트",
             "파이어 오라",
+            "인피니티",
             "소울 컨트랙트",
             "메이플 여신의 축복",
             "메디테이션",
