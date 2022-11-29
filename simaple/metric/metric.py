@@ -8,7 +8,6 @@ from sklearn.preprocessing import PolynomialFeatures
 
 from simaple.core.base import Stat
 from simaple.core.damage import DamageLogic
-from simaple.job.static_property import StaticProperty
 
 
 class Metric(metaclass=ABCMeta):
@@ -19,11 +18,11 @@ class Metric(metaclass=ABCMeta):
 class RegressionMetric(Metric):
     def __init__(
         self,
-        static_property: StaticProperty,
+        item_independent_stat: Stat,
         damage_logic: DamageLogic,
         degree: int = 3,
     ):
-        self.static_property = static_property
+        self._item_independent_stat = item_independent_stat
         self.damage_logic = damage_logic
         self._references: List[Stat] = []
         self.degree = degree
@@ -40,15 +39,11 @@ class RegressionMetric(Metric):
         return model
 
     def _get_score(self, stat: Stat) -> float:
-        return self.damage_logic.get_major_stat(
-            stat + self.static_property.get_default_stat()
-        )
+        return self.damage_logic.get_major_stat(stat + self._item_independent_stat)
 
     def _get_scale(self, stat: Stat) -> float:
         return (
-            self.damage_logic.get_damage_factor(
-                stat + self.static_property.get_default_stat()
-            )
+            self.damage_logic.get_damage_factor(stat + self._item_independent_stat)
             / 1e9
         )
 

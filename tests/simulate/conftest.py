@@ -4,8 +4,8 @@ import pytest
 import simaple.simulate.component.skill  # pylint: disable=W0611
 import simaple.simulate.component.specific  # pylint: disable=W0611
 from simaple.core.base import ActionStat
-from simaple.job.description import GeneralJobArgument
-from simaple.job.spec.patch import SkillLevelPatch, VSkillImprovementPatch
+from simaple.data.passive.patch import SkillLevelPatch
+from simaple.data.skill.patch import VSkillImprovementPatch
 from simaple.simulate.base import AddressedStore, Client, ConcreteStore, Environment
 from simaple.simulate.global_property import GlobalProperty
 from simaple.simulate.timer import clock_view, install_timer
@@ -16,7 +16,7 @@ from simaple.spec.repository import DirectorySpecRepository
 
 @pytest.fixture(scope="package")
 def component_repository():
-    return DirectorySpecRepository("simaple/simulate/spec/components")
+    return DirectorySpecRepository("simaple/data/skill/resources/components")
 
 
 @pytest.fixture
@@ -40,11 +40,8 @@ def archmagefb_client(component_repository, bare_store):
             query={"group": group},
             patches=[
                 SkillLevelPatch(
-                    job_argument=GeneralJobArgument(
-                        combat_orders_level=1,
-                        passive_skill_level=0,
-                        character_level=260,
-                    ),
+                    combat_orders_level=1,
+                    passive_skill_level=0,
                     default_skill_levels={
                         "도트 퍼니셔": 30,
                         "포이즌 노바": 30,
