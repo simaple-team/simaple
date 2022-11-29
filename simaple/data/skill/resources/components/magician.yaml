@@ -11,7 +11,7 @@ data:
   name: 인피니티
   cooldown: 180_000
   delay: 600
-  duration: '{{ (11 + skill_level) * 1_000 }} '
+  duration: '{{ (10 + skill_level) * 1_000 }} '
 
   final_damage_increment: 3
   increase_interval: 6_800
