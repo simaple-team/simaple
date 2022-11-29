@@ -7,8 +7,8 @@ from simaple.spec.patch import DFSTraversePatch
 
 
 class SkillLevelPatch(DFSTraversePatch):
-    passive_skill_level: int
     combat_orders_level: int
+    passive_skill_level: int
     skill_level_representation: str = "skill_level"
     default_skill_levels: dict[str, int] = pydantic.Field(default_factory=dict)
 
