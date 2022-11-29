@@ -1,0 +1,147 @@
+---
+#- 칠링 스텝
+#- 프리징 브레스
+kind: Component
+version: simaple.io/FrostEffect
+metadata:
+  label:
+    group: archmagetc
+    name: 프로스트 이펙트
+data:
+  listening_actions:
+    프로즌 오브.elapse.emitted.global.damage: increase_step
+    블리자드.use.emitted.global.damage: increase_step
+    엘퀴네스.elapse.emitted.global.damage: increase_step
+    아이스 오라.elapse.emitted.global.damage: increase_step
+  name: 프로스트 이펙트
+  critical_damage_per_stack: 3
+  maximum_stack: 5
+---
+kind: Component
+version: simaple.io/ThunderAttackSkillComponent
+metadata:
+  label:
+    group: archmagetc
+    name: 체인 라이트닝
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 체인 라이트닝
+  delay: 600
+  damage: '{{ 110 + 3 * skill_level }}'
+  hit: 10
+  combat_orders_enabled: true
+  default_skill_level: 30
+  v_improvement: 2
+  modifier:
+    critical_rate: 25
+
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagetc
+    name: 블리자드
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 블리자드
+  cooldown: 45000
+  delay: 690
+  rem: false
+  damage: '{{ 211 + 3 * skill_level }}'
+  hit: 12
+  default_skill_level: 30
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagetc
+    name: 블리자드(패시브)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 블리자드(패시브)
+  delay: 0
+  rem: false
+  damage: '{{ 100 + 4 * skill_level }}'
+  hit: '{{ 0.02 * skill_level }}'
+  default_skill_level: 30
+  disable_validity: True
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: archmagetc
+    name: 프로즌 오브
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 프로즌 오브
+  damage: 0
+  delay: 690
+  hit: 0
+  cooldown: 5_000
+
+  tick_interval: 210
+  tick_damage: '{{ 100 + skill_level * 4 }}'
+  tick_hit: 1
+  duration: 4_000
+
+  v_improvement: 2
+  default_skill_level: 30
+---
+kind: Component
+version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: archmagetc
+    name: 엘퀴네스
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 엘퀴네스
+  damage: 0
+  default_skill_level: 30
+  delay: 600
+  hit: 0
+
+  tick_interval: 3_030
+  tick_damage: '{{ 67 + skill_level * 2 }}'
+  tick_hit: 3
+  duration: '{{ (110 + skill_level * 5) * 1000 }}'
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: archmagetc
+    name: 아이스 오라
+data:
+  name: 아이스 오라
+  damage: 0
+  default_skill_level: 30
+  delay: 0
+  hit: 0
+
+  tick_interval: 1_200
+  tick_damage: 0
+  tick_hit: 0
+  duration: 999_999_999

@@ -248,6 +248,14 @@ class StoreEmbeddedObject:
 
         raise AttributeError
 
+    def __setattr__(self, k, v):
+        if k in ["name", "_store", "_default_states"]:
+            super().__setattr__(k, v)
+        elif k in self._default_states:
+            self._store.local(self.name).set_state(k, v)
+        else:
+            super().__setattr__(k, v)
+
 
 class Component(BaseModel, metaclass=ComponentMetaclass):
     """

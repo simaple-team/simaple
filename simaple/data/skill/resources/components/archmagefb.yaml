@@ -182,6 +182,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - VSkillImprovementPatch
 data:
   name: 메테오(패시브)
   listening_actions: 

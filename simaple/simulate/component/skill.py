@@ -90,6 +90,9 @@ class StackState(State):
     def get_stack(self) -> int:
         return self.stack
 
+    def decrease(self, value: int = 1):
+        self.stack -= value
+
 
 class SkillComponent(Component):
     disable_validity: bool = False
