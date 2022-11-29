@@ -53,7 +53,7 @@ def test_actor(archmagefb_client, character_stat):
 
     events = []
     with recorder.start() as rec:
-        while environment.show("clock") < 180_000:
+        while environment.show("clock") < 50_000:
             action = actor.decide(archmagefb_client.environment, events)
             events = archmagefb_client.play(action)
             rec.write(action, environment.show("clock"))
