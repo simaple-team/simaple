@@ -14,6 +14,6 @@ data:
   duration: '{{ (10 + skill_level) * 1_000 }} '
 
   final_damage_increment: 3
-  increase_interval: 6_800
+  increase_interval: 5_000
   default_final_damage: '{{ 40 + skill_level }}'
   maximum_final_damage: 115
