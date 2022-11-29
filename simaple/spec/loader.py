@@ -58,10 +58,15 @@ class SpecBasedLoader:
         class_name = specification.get_classname()
         component_class = self._get_component_class(class_name, specification.kind)
 
-        args = {}
-        args.update(injects)
-        args.update(specification.interpret(patches))
-        return component_class(**args)
+        try:
+            args = {}
+            args.update(injects)
+            args.update(specification.interpret(patches))
+            return component_class(**args)
+        except Exception as e:
+            raise Exception(
+                f"{class_name} <kind: {specification.kind}> parse failed. Given args: {specification}"
+            ) from e
 
     def _get_component_class(self, clsname: str, kind: str) -> Type[Any]:
         return get_class(clsname, kind=kind)
