@@ -27,7 +27,7 @@ def test_with_no_stack(frost_effect, thunder_attack_skill):
     events = thunder_attack_skill.use(None)
     damage_events = [e for e in events if e.tag == Tag.DAMAGE]
 
-    assert damage_events[0].payload["modifier"] is None
+    assert damage_events[0].payload["modifier"] == Stat()
 
 
 def test_with_some_stack(frost_effect, thunder_attack_skill):

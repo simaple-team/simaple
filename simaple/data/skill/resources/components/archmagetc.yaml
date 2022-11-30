@@ -237,3 +237,24 @@ data:
   tick_damage: '{{ 850 + skill_level * 34 }}'
   tick_hit: 9
   duration: 30_000
+---
+kind: Component
+version: simaple.io/JupyterThunder
+metadata:
+  label:
+    group: archmagetc
+    name: 주피터 썬더
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 주피터 썬더
+  delay: 690
+  cooldown: 120_000
+
+  tick_interval: 120
+  tick_damage: '{{ 300 + skill_level * 12 }}'
+  tick_hit: 8
+  duration: 30_000
+
+  max_count: 30

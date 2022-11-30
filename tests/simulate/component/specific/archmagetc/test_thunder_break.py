@@ -1,6 +1,5 @@
 import pytest
 
-from simaple.core.base import Stat
 from simaple.simulate.component.specific.archmagetc import ThunderBreak
 from simaple.simulate.reserved_names import Tag
 
