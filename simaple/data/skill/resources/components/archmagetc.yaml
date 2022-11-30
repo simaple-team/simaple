@@ -13,6 +13,8 @@ data:
     블리자드.use.emitted.global.damage: increase_step
     엘퀴네스.elapse.emitted.global.damage: increase_step
     아이스 오라.elapse.emitted.global.damage: increase_step
+    아이스 에이지.elapse.emitted.global.damage: increase_step
+    스피릿 오브 스노우.elapse.emitted.global.damage: increase_three
   name: 프로스트 이펙트
   critical_damage_per_stack: 3
   maximum_stack: 5
@@ -214,3 +216,24 @@ data:
 
   decay_rate: 0.8
   max_count: 8
+---
+kind: Component
+version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: archmagetc
+    name: 스피릿 오브 스노우
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 스피릿 오브 스노우
+  damage: 0
+  delay: 720
+  hit: 0
+  cooldown: 120_000
+
+  tick_interval: 3_000
+  tick_damage: '{{ 850 + skill_level * 34 }}'
+  tick_hit: 9
+  duration: 30_000

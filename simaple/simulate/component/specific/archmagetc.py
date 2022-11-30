@@ -37,6 +37,12 @@ class FrostEffect(Component):
         frost_stack.increase(1)
         return frost_stack, []
 
+    @reducer_method
+    def increase_three(self, _: None, frost_stack: StackState):
+        frost_stack = frost_stack.copy()
+        frost_stack.increase(3)
+        return frost_stack, []
+
     @view_method
     def buff(self, frost_stack: StackState):
         return Stat(critical_damage=self.critical_damage_per_stack * frost_stack.stack)

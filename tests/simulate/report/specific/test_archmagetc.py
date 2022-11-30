@@ -21,6 +21,7 @@ def test_actor(archmagetc_client, character_stat):
             "메이플 여신의 축복",
             "메디테이션",
             "에픽 어드벤처",
+            "스피릿 오브 스노우",
             "아이스 에이지",
             "라이트닝 스피어",
             "블리자드",
@@ -56,4 +57,4 @@ def test_actor(archmagetc_client, character_stat):
             rec.write(action, environment.show("clock"))
 
     print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")
-    report.save("report.tsv")
+    # report.save("report.tsv")
