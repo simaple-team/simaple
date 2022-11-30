@@ -47,6 +47,11 @@ class ComponentMethodWrapper:
         ]
 
     def set_states(self, store: Store, states, binds=None):
+        if not len(self._get_bound_names(binds)) == len(states):
+            raise ValueError(
+                "Returned state count does not match with offered state count."
+            )
+
         for name, state in zip(self._get_bound_names(binds), states):
             store.set_state(name, state)
 
