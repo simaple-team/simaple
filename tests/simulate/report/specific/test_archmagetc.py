@@ -24,6 +24,7 @@ def test_actor(archmagetc_client, character_stat):
             "아이스 에이지",
             "라이트닝 스피어",
             "블리자드",
+            "썬더 브레이크",
             "프로즌 오브",
             "체인 라이트닝",
         ]
@@ -55,4 +56,4 @@ def test_actor(archmagetc_client, character_stat):
             rec.write(action, environment.show("clock"))
 
     print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")
-    # report.save('report.tsv')
+    report.save("report.tsv")

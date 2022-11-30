@@ -192,3 +192,25 @@ data:
   tick_damage: '{{ 125 + skill_level * 5 }}'
   tick_hit: 6 # 3 * 2
   duration: 15_000
+---
+kind: Component
+version: simaple.io/ThunderBreak
+metadata:
+  label:
+    group: archmagetc
+    name: 썬더 브레이크
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 썬더 브레이크
+  delay: 690
+  cooldown: 40_000
+
+  tick_interval: 120
+  tick_damage: '{{ 925 + skill_level * 38 }}'
+  tick_hit: 12
+  duration: 10_000
+
+  decay_rate: 0.8
+  max_count: 8
