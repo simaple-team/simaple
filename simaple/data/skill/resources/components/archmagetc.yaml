@@ -171,3 +171,24 @@ data:
   finish_hit: 15
 
   v_improvement: 2
+---
+kind: Component
+version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: archmagetc
+    name: 아이스 에이지
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 아이스 에이지
+  damage: '{{ 500 + skill_level * 20 }}'
+  delay: 660
+  hit: 10
+  cooldown: 60_000
+
+  tick_interval: 810
+  tick_damage: '{{ 125 + skill_level * 5 }}'
+  tick_hit: 6 # 3 * 2
+  duration: 15_000
