@@ -1,26 +1,23 @@
+from typing import Optional
+
 from simaple.core.base import Stat
-from simaple.simulate.base import State
 from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.skill import (
     AttackSkillComponent,
     CooldownState,
-    IntervalState,
     StackState,
-    TickDamageConfiguratedAttackSkillComponent,
 )
 from simaple.simulate.global_property import Dynamics
 
 
-def use_frost_stack(frost_effect: StackState) -> tuple[StackState, Stat]:
+def use_frost_stack(frost_effect: StackState) -> tuple[StackState, Optional[Stat]]:
     if frost_effect.stack == 0:
         return frost_effect, None
-    else:
-        new_frost_effect = frost_effect
-        effect_count = new_frost_effect.stack
-        new_frost_effect.decrease(1)
-        return new_frost_effect, Stat(
-            damage_multiplier=effect_count * 12  # Magic Number
-        )
+
+    new_frost_effect = frost_effect
+    effect_count = new_frost_effect.stack
+    new_frost_effect.decrease(1)
+    return new_frost_effect, Stat(damage_multiplier=effect_count * 12)  # Magic Number
 
 
 class FrostEffect(Component):

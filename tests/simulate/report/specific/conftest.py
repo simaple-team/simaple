@@ -3,15 +3,12 @@ import pytest
 
 import simaple.simulate.component.skill  # pylint: disable=W0611
 import simaple.simulate.component.specific  # pylint: disable=W0611
-from simaple.core.base import ActionStat
 from simaple.data.passive.patch import SkillLevelPatch
 from simaple.data.skill.patch import VSkillImprovementPatch
-from simaple.simulate.base import AddressedStore, Client, ConcreteStore, Environment
-from simaple.simulate.global_property import GlobalProperty
+from simaple.simulate.base import Client, Environment
 from simaple.simulate.timer import clock_view, install_timer
 from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.patch import EvalPatch
-from simaple.spec.repository import DirectorySpecRepository
 
 
 @pytest.fixture
@@ -49,8 +46,5 @@ def archmagetc_client(component_repository, bare_store):
     client = Client(environment)
 
     install_timer(client)
-
-    # from simaple.simulate.util import EventDisplayHandler
-    # client.add_handler(EventDisplayHandler())
 
     return client

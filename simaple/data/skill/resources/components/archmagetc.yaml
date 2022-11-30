@@ -145,3 +145,29 @@ data:
   tick_damage: 0
   tick_hit: 0
   duration: 999_999_999
+---
+kind: Component
+version: simaple.io/KeydownSkillComponent
+metadata:
+  label:
+    group: archmagetc
+    name: 라이트닝 스피어
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 라이트닝 스피어
+  maximum_keydown_time: 3_600
+
+  damage: 150
+  hit: 15
+  delay: 240
+  cooldown: 60_000
+
+  keydown_end_delay: 1080
+
+  finish_damage: 780
+  finish_hit: 15
+
+  v_improvement: 2
