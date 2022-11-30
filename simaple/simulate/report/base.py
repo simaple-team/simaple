@@ -13,9 +13,10 @@ class DamageLog(pydantic.BaseModel):
     buff: Stat
 
     def __str__(self):
-        return (
-            f"{self.clock}ms\t\t{self.name}\t{self.damage:.3f}\t{self.hit}\t{self.buff}"
-        )
+        return f"{self.clock}ms\t\t{self.name}\t{self.damage:.3f}\t{self.hit}\t{self.buff.short_dict()}"
+
+    def serialize(self):
+        return f"{self.clock}\t{self.name}\t{self.damage:.3f}\t{self.hit}\t{self.buff.short_dict()}"
 
 
 class Report:
@@ -30,20 +31,21 @@ class Report:
         if event.payload["modifier"] is not None:
             buff_stat = buff_stat + event.payload["modifier"]
 
-        self._logs.append(
-            DamageLog(
-                clock=clock,
-                name=event.name,
-                damage=event.payload["damage"],
-                hit=event.payload["hit"],
-                buff=buff_stat.short_dict(),
+        if event.payload["damage"] != 0 and event.payload["hit"] != 0:
+            self._logs.append(
+                DamageLog(
+                    clock=clock,
+                    name=event.name,
+                    damage=event.payload["damage"],
+                    hit=event.payload["hit"],
+                    buff=buff_stat.short_dict(),
+                )
             )
-        )
 
     def save(self, file_name):
         with open(file_name, "w", encoding="utf8") as f:
-            for clock, name, damage, hit, buff in self._logs:
-                f.write(f"{clock}\t{name}\t{damage:.3f}\t{hit}\t{buff}\n")
+            for log in self._logs:
+                f.write(log.serialize() + "\n")
 
     def show(self):
         for log in self._logs:
