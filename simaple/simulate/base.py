@@ -150,8 +150,12 @@ class Environment:
     def resolve(self, action: Action) -> list[Event]:
         events = []
         for dispatcher in self.dispatchers:
-            events += dispatcher(action, self.store)
-
+            try:
+                events += dispatcher(action, self.store)
+            except Exception as e:
+                raise Exception(
+                    f"Exception raised during resolving {action.signature}"
+                ) from e
         return events
 
     def show(self, view_name: str):

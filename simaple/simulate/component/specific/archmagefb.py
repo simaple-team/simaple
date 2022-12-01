@@ -67,7 +67,11 @@ class PoisonNovaComponent(Component):
         cooldown_state, nova_state = cooldown_state.copy(), nova_state.copy()
 
         if not cooldown_state.available:
-            return (cooldown_state, nova_state), self.event_provider.rejected()
+            return (
+                cooldown_state,
+                nova_state,
+                dynamics,
+            ), self.event_provider.rejected()
 
         cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
         nova_state.create_nova(self.nova_remaining_time)
