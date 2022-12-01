@@ -11,7 +11,7 @@ from simaple.simulate.global_property import Dynamics
 
 
 def get_frost_modifier(frost_effect: StackState) -> Stat:
-    return Stat(damage_multiplier=frost_effect.stack * 12)
+    return Stat(damage_multiplier=frost_effect.stack * 12)  # Magic Number
 
 
 def use_frost_stack(frost_effect: StackState) -> tuple[StackState, Stat]:
@@ -22,7 +22,7 @@ def use_frost_stack(frost_effect: StackState) -> tuple[StackState, Stat]:
     modifier = get_frost_modifier(new_frost_effect)
     new_frost_effect.decrease(1)
 
-    return new_frost_effect, modifier  # Magic Number
+    return new_frost_effect, modifier
 
 
 class FrostEffect(Component):

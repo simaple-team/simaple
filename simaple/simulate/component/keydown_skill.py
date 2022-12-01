@@ -30,7 +30,7 @@ class KeydownState(State):
         self.time_elapsed_after_latest_action += time
         self.time_elapsed_after_first_action += time
 
-        if self.time_elapsed_after_latest_action > maximum_keydown_time:
+        if self.time_elapsed_after_first_action > maximum_keydown_time:
             self.stop()
         elif self.is_running() and self._can_continue_keydown(allowed_interval):
             return

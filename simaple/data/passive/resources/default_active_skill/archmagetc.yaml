@@ -37,7 +37,7 @@ patch:
   - SkillLevelPatch
   - EvalPatch
 data:
-  name: 익스트림 매직(불,독)
+  name: 익스트림 매직(썬,콜)
   stat:
     final_damage_multiplier: 20
 ---
