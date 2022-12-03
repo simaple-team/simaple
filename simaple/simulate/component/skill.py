@@ -44,10 +44,12 @@ class IntervalState(State):
     interval_counter: float = 0.0
     interval: float
     interval_time_left: float = 0.0
+    count: int = 0
 
     def set_time_left(self, time: float):
         self.interval_time_left = time
         self.interval_counter = self.interval
+        self.count = 0
 
     def enabled(self):
         return self.interval_time_left > 0
@@ -60,7 +62,9 @@ class IntervalState(State):
         if self.interval_counter < 0:
             lapse_count = int(self.interval_counter // self.interval)
             self.interval_counter = self.interval_counter % self.interval
-            return min(maximum_elapsed, lapse_count * -1)
+            count = min(maximum_elapsed, lapse_count * -1)
+            self.count += count
+            return count
 
         return 0
 
@@ -75,6 +79,10 @@ class IntervalState(State):
             self.interval_counter += self.interval
             elapse_count += 1
             yield 1
+            self.count += 1
+
+    def disable(self):
+        self.interval_time_left = 0
 
 
 class StackState(State):
@@ -89,6 +97,9 @@ class StackState(State):
 
     def get_stack(self) -> int:
         return self.stack
+
+    def decrease(self, value: int = 1):
+        self.stack -= value
 
 
 class SkillComponent(Component):

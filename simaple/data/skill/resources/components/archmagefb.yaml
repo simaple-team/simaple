@@ -182,6 +182,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - VSkillImprovementPatch
 data:
   name: 메테오(패시브)
   listening_actions: 
@@ -197,6 +198,7 @@ data:
   hit: '{{ 0.02 * skill_level }}'
   default_skill_level: 30
   disable_validity: True
+  v_improvement: 2
 ---
 kind: Component
 version: simaple.io/TickDamageConfiguratedAttackSkillComponent

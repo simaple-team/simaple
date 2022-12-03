@@ -125,6 +125,11 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
 
         self._binds = binds
 
+    def init_states(self, store: Store):
+        local_store = store.local(self._name)
+        for name in self._default_state:
+            local_store.read_state(name, default=self._default_state[name])
+
     def __call__(self, action: Action, store: Store) -> list[Event]:
         if not self._action_router.is_enabled_action(action):
             return []
@@ -253,6 +258,14 @@ class StoreEmbeddedObject:
 
         raise AttributeError
 
+    def __setattr__(self, k, v):
+        if k in ["name", "_store", "_default_states"]:
+            super().__setattr__(k, v)
+        elif k in self._default_states:
+            self._store.local(self.name).set_state(k, v)
+        else:
+            super().__setattr__(k, v)
+
 
 class Component(BaseModel, metaclass=ComponentMetaclass):
     """
@@ -290,6 +303,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     def add_to_environment(self, environment: Environment):
         dispatcher = self.export_dispatcher()
         environment.add_dispatcher(dispatcher)
+        dispatcher.init_states(environment.store)
 
         for view_name, view in self.get_views().items():
             environment.add_view(f"{self.name}.{view_name}", view)
@@ -314,7 +328,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
             method_mappings=method_mappings, mappings=reducer_mappings
         )
 
-    def export_dispatcher(self) -> Dispatcher:
+    def export_dispatcher(self) -> ReducerMethodWrappingDispatcher:
         return ReducerMethodWrappingDispatcher(
             self.name,
             self.get_action_router(),
