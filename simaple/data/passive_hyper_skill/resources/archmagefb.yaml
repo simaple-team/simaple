@@ -1,0 +1,58 @@
+---
+kind: PassiveHyperskill 
+version: simaple.io/StatIncreasePassiveHyperskill
+metadata:
+  label:
+    group: archmagefb
+data:  
+  name: 플레임 스윕-리인포스
+  target: 플레임 스윕
+  key: modifier
+  increment: 
+    damage_multiplier: 10
+---
+kind: PassiveHyperskill 
+version: simaple.io/ValueIncreasePassiveHyperskill
+metadata:
+  label:
+    group: archmagefb
+data:  
+  name: 플레임 스윕-보너스 어택
+  target: 플레임 스윕
+  key: hit
+  increment: 1
+---
+kind: PassiveHyperskill 
+version: simaple.io/StatIncreasePassiveHyperskill
+metadata:
+  label:
+    group: archmagefb
+data:  
+  name: 미스트 이럽션-리인포스
+  target: 미스트 이럽션
+  key: modifier
+  increment: 
+    damage_multiplier: 10
+---
+kind: PassiveHyperskill
+version: simaple.io/StatIncreasePassiveHyperskill
+metadata:
+  label:
+    group: archmagefb
+data:  
+  name: 미스트 이럽션-이그노어 가드
+  target: 미스트 이럽션
+  key: modifier
+  increment: 
+    ignored_defence: 20
+---
+kind: PassiveHyperskill 
+version: simaple.io/MultiplierPassiveHyperskill
+metadata:
+  label:
+    group: archmagefb
+data:  
+  name: 미스트 이럽션-쿨타임 리듀스
+  target: 미스트 이럽션
+  key: cooldown
+  multiplier: 0.5 

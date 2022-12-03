@@ -5,6 +5,7 @@ import simaple.simulate.component.skill  # pylint: disable=W0611
 import simaple.simulate.component.specific  # pylint: disable=W0611
 from simaple.core.base import ActionStat
 from simaple.data.passive.patch import SkillLevelPatch
+from simaple.data.passive_hyper_skill import get_hyper_skill_patch
 from simaple.data.skill.patch import VSkillImprovementPatch
 from simaple.simulate.base import AddressedStore, Client, ConcreteStore, Environment
 from simaple.simulate.global_property import GlobalProperty
@@ -66,12 +67,16 @@ def archmagefb_client(component_repository, bare_store):
                         "이프리트": 60,
                     }
                 ),
+                get_hyper_skill_patch("archmagefb"),
             ],
         )
         for group in ("archmagefb", "common", "adventurer.magician")
     ]
 
     components = sum(components, [])
+
+    print([c for c in components if c.name == "플레임 스윕"])
+    print([c for c in components if c.name == "미스트 이럽션"])
 
     environment = Environment(store=bare_store)
     environment.add_view("clock", clock_view)
