@@ -2,6 +2,7 @@
 
 - 메이플스토리에 관련된 다양한 연산을 지원하는 패키지.
 - Package for various calculation related with Maplestory.
+- [Discord](https://discord.gg/5hgN5EbyA4)
 
 ## Install
 - `pip install simaple`
