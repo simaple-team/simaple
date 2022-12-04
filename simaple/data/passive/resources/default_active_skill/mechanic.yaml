@@ -1,0 +1,11 @@
+---
+kind: DefaultActiveSkill
+version: simaple.io/DefaultActiveSkill
+metadata:
+  label:
+    group: mechanic
+    name: "메탈아머: 탱크"
+data:
+  name: "메탈아머: 탱크"
+  stat:
+    critical_rate: 30
