@@ -1,6 +1,3 @@
-from typing import Optional
-
-from simaple.core.base import Stat
 from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.skill import (
     CooldownState,
