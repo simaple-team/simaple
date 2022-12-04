@@ -22,6 +22,7 @@ def test_actor(bishop_client, character_stat):
             "에픽 어드벤처",
             "제네시스",
             "파운틴 포 엔젤",
+            "홀리 블러드",
             "엔젤레이",
         ]
     )

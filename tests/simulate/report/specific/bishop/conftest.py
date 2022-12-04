@@ -12,7 +12,7 @@ from simaple.spec.patch import EvalPatch
 
 
 @pytest.fixture
-def bishop_client(component_repository, bare_store):
+def bishop_client(component_repository, bare_store, character_stat):
     loader = SpecBasedLoader(component_repository)
 
     components = [
@@ -27,6 +27,7 @@ def bishop_client(component_repository, bare_store):
                 EvalPatch(
                     injected_values={
                         "character_level": 260,
+                        "character_stat": character_stat,
                     }
                 ),
                 VSkillImprovementPatch(improvements={}),
