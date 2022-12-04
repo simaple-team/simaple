@@ -109,7 +109,6 @@ data:
   delay: 0
   duration: 120_000
 ---
-#홀리 블러드
 kind: Component
 version: simaple.io/BuffSkillComponent
 metadata:
@@ -127,3 +126,39 @@ data:
   rem: false
   stat:
     final_damage_multiplier: '{{ 1 + (character_stat.INT // 5000) }}'
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: bishop
+    name: 헤븐즈 도어
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 헤븐즈 도어
+  delay: 270
+  cooldown: 60_000
+  damage: 670
+  hit: 8
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: bishop
+    name: 프레이
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 프레이
+  cooldown: 120_000
+  delay: 360
+  duration: '{{ (15 + skill_level // 2) * 1000 }}'
+  rem: false
+  stat:
+    final_damage_multiplier: '{{ min((character_stat.INT // 2500), 15 + skill_level) }}'
