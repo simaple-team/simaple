@@ -206,7 +206,7 @@ class WrappedView:
     def __call__(self, store: Store):
         local_store = store.local(self._name)
         input_states = self._wrapped_view_method.get_states(
-            local_store, self._default_state
+            local_store, self._default_state, binds=self._binds
         )
         view = self._wrapped_view_method(*input_states)
 
