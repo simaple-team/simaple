@@ -192,3 +192,25 @@ data:
 
   mark_advantage:
     final_damage_multiplier: 10
+---
+kind: Component
+version: simaple.io/SynergySkillComponent
+metadata:
+  label:
+    group: bishop
+    name: 피스메이커
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 피스메이커
+  delay: 750
+  damage: '{{ 350 + 14 * skill_level }}'
+  hit: 16
+  cooldown: 10
+
+  synergy:
+    damage_multiplier: '{{ 5 + skill_level // 5 }}'
+
+  duration: 8_000
+
