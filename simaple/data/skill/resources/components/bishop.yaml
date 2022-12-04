@@ -213,4 +213,26 @@ data:
     damage_multiplier: '{{ 5 + skill_level // 5 }}'
 
   duration: 8_000
+---
+kind: Component
+version: simaple.io/KeydownSkillComponent
+metadata:
+  label:
+    group: bishop
+    name: 디바인 퍼니시먼트
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 디바인 퍼니시먼트
+  maximum_keydown_time: 8_160
 
+  damage: '{{ 225 + skill_level * 9 }}'
+  hit: 50
+  delay: 1020
+  cooldown: 68_000
+
+  keydown_end_delay: 720
+
+  finish_damage: 0
+  finish_hit: 0

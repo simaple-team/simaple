@@ -27,6 +27,7 @@ def test_actor(bishop_client, character_stat):
             "엔젤 오브 리브라",
             "홀리 블러드",
             "피스메이커",
+            "디바인 퍼니시먼트",
             "엔젤레이",
         ]
     )
