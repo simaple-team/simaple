@@ -104,12 +104,5 @@ class TriggableBuffSkill(SkillComponent):
         )
 
     @view_method
-    def buff(self, duration_state: DurationState) -> Optional[Stat]:
-        if duration_state.enabled():
-            return self.stat
-
-        return None
-
-    @view_method
     def running(self, duration_state: DurationState) -> Running:
         return Running(name=self.name, time_left=duration_state.time_left)

@@ -15,6 +15,7 @@ def test_actor(bishop_client, character_stat):
         order=[
             "오버로드 마나",
             "바하뮤트",
+            "트라이엄프 페더",
             "인피니티",
             "소울 컨트랙트",
             "메이플 여신의 축복",

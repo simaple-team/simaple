@@ -1,6 +1,4 @@
-#트라이엄프 페더
 #홀리 블러드
-#바하뮤트
 
 kind: Component
 version: simaple.io/DivineAttackSkillComponent
@@ -91,3 +89,24 @@ data:
   v_improvement: 2
   mark_advantage:
     final_damage_multiplier: 25
+---
+kind: Component
+version: simaple.io/TriggableBuffSkill
+metadata:
+  label:
+    group: bishop
+    name: 트라이엄프 페더
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions:
+    엔젤레이.use.emitted.global.damage: trigger
+    제네시스.use.emitted.global.damage: trigger
+  name: 트라이엄프 페더
+  trigger_cooldown: 3_000
+  trigger_damage: 230
+  trigger_hit: 4
+  cooldown: 60_000
+  delay: 0
+  duration: 120_000
