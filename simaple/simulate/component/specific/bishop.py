@@ -2,7 +2,7 @@ from typing import Optional
 
 from simaple.core.base import Stat
 from simaple.simulate.base import State
-from simaple.simulate.component.base import reducer_method
+from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.skill import (
     AttackSkillComponent,
     CooldownState,
@@ -61,10 +61,19 @@ class DivineAttackSkillComponent(AttackSkillComponent):
 
 class DivineMinion(TickDamageConfiguratedAttackSkillComponent):
     mark_advantage: Stat
+    stat: Optional[Stat]
 
     def get_default_state(self):
+        if self.name == "바하뮤트":
+            return {
+                "divine_mark": DivineMarkState(),
+                "cooldown_state": CooldownState(time_left=0),
+                "interval_state": IntervalState(
+                    interval=self.tick_interval, time_left=0
+                ),
+            }
+
         return {
-            "divine_mark": DivineMarkState(),
             "cooldown_state": CooldownState(time_left=0),
             "interval_state": IntervalState(interval=self.tick_interval, time_left=0),
         }
@@ -95,3 +104,10 @@ class DivineMinion(TickDamageConfiguratedAttackSkillComponent):
         return (cooldown_state, interval_state, divine_mark), [
             self.event_provider.elapsed(time)
         ] + dealing_events
+
+    @view_method
+    def buff(self, interval_state: IntervalState):
+        if interval_state.enabled():
+            return self.stat
+
+        return None

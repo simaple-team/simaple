@@ -162,3 +162,33 @@ data:
   rem: false
   stat:
     final_damage_multiplier: '{{ min((character_stat.INT // 2500), 15 + skill_level) }}'
+---
+kind: Component
+version: simaple.io/DivineMinion
+metadata:
+  label:
+    group: bishop
+    name: 엔젤 오브 리브라
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  binds:
+    divine_mark: .바하뮤트.divine_mark
+
+  name: 엔젤 오브 리브라
+  damage: 0
+  delay: 540
+  hit: 0
+  cooldown: 180_000
+  duration: '{{ (25 + skill_level // 2) * 1000 }}'
+
+  tick_interval: 4_020
+  tick_damage: '{{ 500 + 20 * skill_level }}'
+  tick_hit: 10
+
+  stat:
+    damage_multiplier: '{{ character_stat.INT // 1250 + 5 }}'
+
+  mark_advantage:
+    final_damage_multiplier: 10
