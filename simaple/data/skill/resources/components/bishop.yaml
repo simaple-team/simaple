@@ -1,0 +1,93 @@
+#트라이엄프 페더
+#홀리 블러드
+#바하뮤트
+
+kind: Component
+version: simaple.io/DivineAttackSkillComponent
+metadata:
+  label:
+    group: bishop
+    name: 엔젤레이
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 엔젤레이
+  delay: 630
+  damage: '{{ 75 + 5 * skill_level }}'
+  hit: 14
+  combat_orders_enabled: true
+  default_skill_level: 30
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/DivineAttackSkillComponent
+metadata:
+  label:
+    group: bishop
+    name: 제네시스
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 제네시스
+  delay: 630
+  cooldown: 45_000
+  damage: '{{ 144 + 6 * skill_level }}'
+  hit: 10
+  combat_orders_enabled: true
+  default_skill_level: 30
+  v_improvement: 2
+  modifier:
+    critical_rate: '{{ 5 + skill_level // 2 }}'
+---
+kind: Component
+version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: bishop
+    name: 파운틴 포 엔젤
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 파운틴 포 엔젤
+  damage: 0
+  delay: 600 #?
+  hit: 0
+  cooldown: 30_000
+
+  tick_interval: 2_000
+  tick_damage: 180
+  tick_hit: 5
+  duration: 60_000
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/DivineMinion
+metadata:
+  label:
+    group: bishop
+    name: 바하뮤트
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 바하뮤트
+  damage: 0
+  delay: 600
+  hit: 0
+
+  tick_interval: 3_030
+  tick_damage: '{{ 110 + 20 * skill_level }}'
+  tick_hit: 3
+  duration: '{{ (60 + skill_level * 10) * 1000 }}'
+  default_skill_level: 20
+  v_improvement: 2
+  mark_advantage:
+    final_damage_multiplier: 25
