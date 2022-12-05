@@ -1,0 +1,15 @@
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: resistance
+    name: 윌 오브 리버티
+data:
+  name: 윌 오브 리버티
+  cooldown: 120000
+  delay: 0
+  red: false
+  rem: false
+  duration: 60000
+  stat:
+    damage_multiplier: 10
