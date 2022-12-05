@@ -1,7 +1,4 @@
 #어드밴스드 호밍
-#로봇팩토리rm1
-
-#로봇 마스터리
 
 #더블 럭다
 kind: Component
@@ -134,3 +131,42 @@ data:
 
 
 # 2차 폭발 구현
+---
+kind: Component
+version: simaple.io/HommingMissile
+metadata:
+  label:
+    group: mechanic
+    name: "호밍 미사일"
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: "호밍 미사일"
+  damage: 0
+  delay: 0
+  hit: 0
+
+  tick_interval: 660
+  tick_damage: 300
+  tick_hit: 9
+  duration: 999_999_999
+
+  default_skill_level: 30
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: mechanic
+    name: 봄버 타임
+data:
+  name: 봄버 타임
+  stat: {}
+  cooldown: 100_000
+  delay: 900
+  duration: 10_000
+  rem: False
+

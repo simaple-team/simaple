@@ -14,11 +14,13 @@ def test_actor(mechanic_client, character_stat):
     actor = DefaultMDCActor(
         order=[
             "로봇 마스터리",
+            "호밍 미사일",
             "오픈 게이트: GX-9",
             "로봇 런처: RM7",
             "서포트 웨이버: H-EX",
             "마그네틱 필드",
             "로봇 팩토리: RM1",
+            "봄버 타임",
             "매시브 파이어: IRON-B",
         ]
     )

@@ -122,3 +122,37 @@ class RobotSummonSkill(TickDamageConfiguratedAttackSkillComponent):
             return None
 
         return robot_mastery.get_robot_buff()
+
+
+class HommingMissile(TickDamageConfiguratedAttackSkillComponent):
+    binds: dict[str, str] = {"bomber_time": ".봄버 타임.duration_state"}
+
+    @reducer_method
+    def elapse(
+        self,
+        time: float,
+        cooldown_state: CooldownState,
+        interval_state: IntervalState,
+        bomber_time: DurationState,
+    ):
+        cooldown_state = cooldown_state.copy()
+        interval_state = interval_state.copy()
+
+        cooldown_state.elapse(time)
+        lapse_count = interval_state.elapse(time)
+
+        return (cooldown_state, interval_state, bomber_time), [
+            self.event_provider.elapsed(time)
+        ] + [
+            self.event_provider.dealt(
+                self.tick_damage, self.get_homming_missile_hit(bomber_time)
+            )
+            for _ in range(lapse_count)
+        ]
+
+    def get_homming_missile_hit(self, bomber_time: DurationState) -> int:
+        hit = self.tick_hit
+        if bomber_time.enabled():
+            hit += 5
+
+        return hit
