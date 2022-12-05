@@ -22,6 +22,7 @@ def test_actor(mechanic_client, character_stat):
             "로봇 팩토리: RM1",
             "봄버 타임",
             "윌 오브 리버티",
+            "레지스탕스 라인 인팬트리",
             "디스토션 필드",
             "매시브 파이어: IRON-B",
         ]
