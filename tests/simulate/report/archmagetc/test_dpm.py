@@ -58,4 +58,3 @@ def test_actor(archmagetc_client, character_stat):
             rec.write(action, environment.show("clock"))
 
     print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")
-    report.save("report.tsv")
