@@ -27,12 +27,13 @@ def mechanic_client(component_repository, bare_store):
                 EvalPatch(
                     injected_values={
                         "character_level": 260,
+                        "weapon_attack_power": 500,
                     }
                 ),
                 VSkillImprovementPatch(improvements={}),
             ],
         )
-        for group in ("mechanic", "common", "resistance")
+        for group in ("mechanic", "common", "resistance", "pirate")
     ]
 
     components = sum(components, [])

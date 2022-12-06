@@ -193,3 +193,91 @@ data:
   duration: 4_000
 
   v_improvement: 2
+---
+kind: Component
+version: simaple.io/MultipleOptionComponent
+metadata:
+  label:
+    group: mechanic
+    name: "멀티플 옵션: M-FL"
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: "멀티플 옵션: M-FL"
+  cooldown: 200_000
+  delay: 780
+
+  tick_interval: 1530
+  duration: '{{ (75 + 2 * skill_level) * 1000 }}'
+
+  missile_count: 3
+  missile_damage:  '{{ 350 + skill_level * 10 }}'
+  missile_hit: 8
+
+  gatling_count: 5
+  gatling_damage: '{{ 200 + skill_level * 8 }}'
+  gatling_hit: 6
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: mechanic
+    name: 마이크로 미사일 컨테이너
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 마이크로 미사일 컨테이너
+  delay: 540
+  damage: '{{ 375 + 17 * skill_level }}'
+  hit: '{{ (30 + skill_level // 3) * 5}}'
+  cooldown: 25_000
+---
+kind: Component
+version: simaple.io/KeydownSkillComponent
+metadata:
+  label:
+    group: mechanic
+    name: 메탈아머 전탄발사
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 메탈아머 전탄발사
+  maximum_keydown_time: 10_000
+
+  damage: '{{ 400 + 16 * skill_level }}'
+  hit: 11
+  delay: 200
+  cooldown: 60_000
+
+  keydown_end_delay: 1800
+
+  finish_damage: 0
+  finish_hit: 0
+---
+kind: Component
+version: simaple.io/MecaCarrier
+metadata:
+  label:
+    group: mechanic
+    name: 메카 캐리어
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 메카 캐리어
+
+  cooldown: 200_000
+  delay: 720
+  duration: 70_000
+
+  tick_interval: 2850
+
+  maximum_intercepter: 16
+  start_intercepter: 9
+  damage_per_intercepter: '{{ 250 + 10 * skill_level }}'
+  hit_per_intercepter: 4
+  intercepter_penalty: 120

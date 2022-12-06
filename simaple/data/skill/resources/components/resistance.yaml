@@ -18,7 +18,7 @@ kind: Component
 version: simaple.io/TickDamageConfiguratedAttackSkillComponent
 metadata:
   label:
-    group: mechanic
+    group: resistance
     name: 레지스탕스 라인 인팬트리
 patch:
   - SkillLevelPatch

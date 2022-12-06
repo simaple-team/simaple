@@ -1,13 +1,13 @@
 from typing import Optional
 
 from simaple.core import Stat
-from simaple.simulate.base import State
+from simaple.simulate.base import Event, State
 from simaple.simulate.component.base import Component, reducer_method, view_method
+from simaple.simulate.component.keydown_skill import KeydownState
 from simaple.simulate.component.skill import (
     CooldownState,
     DurationState,
     IntervalState,
-    StackState,
     TickDamageConfiguratedAttackSkillComponent,
 )
 from simaple.simulate.component.view import Running, Validity
@@ -123,9 +123,37 @@ class RobotSummonSkill(TickDamageConfiguratedAttackSkillComponent):
 
         return robot_mastery.get_robot_buff()
 
+    @reducer_method
+    def elapse(
+        self,
+        time: float,
+        cooldown_state: CooldownState,
+        interval_state: IntervalState,
+        robot_mastery: RobotMasteryState,
+    ):
+        cooldown_state = cooldown_state.copy()
+        interval_state = interval_state.copy()
+
+        cooldown_state.elapse(time)
+        lapse_count = interval_state.elapse(time)
+
+        return (cooldown_state, interval_state, robot_mastery), [
+            self.event_provider.elapsed(time)
+        ] + [
+            self.event_provider.dealt(
+                self.tick_damage,
+                self.tick_hit,
+                modifier=robot_mastery.get_robot_modifier(),
+            )
+            for _ in range(lapse_count)
+        ]
+
 
 class HommingMissile(TickDamageConfiguratedAttackSkillComponent):
-    binds: dict[str, str] = {"bomber_time": ".봄버 타임.duration_state"}
+    binds: dict[str, str] = {
+        "bomber_time": ".봄버 타임.duration_state",
+        "buster_call": ".메탈아머 전탄발사.keydown_state",
+    }
 
     @reducer_method
     def elapse(
@@ -134,6 +162,7 @@ class HommingMissile(TickDamageConfiguratedAttackSkillComponent):
         cooldown_state: CooldownState,
         interval_state: IntervalState,
         bomber_time: DurationState,
+        buster_call: KeydownState,
     ):
         cooldown_state = cooldown_state.copy()
         interval_state = interval_state.copy()
@@ -141,18 +170,275 @@ class HommingMissile(TickDamageConfiguratedAttackSkillComponent):
         cooldown_state.elapse(time)
         lapse_count = interval_state.elapse(time)
 
-        return (cooldown_state, interval_state, bomber_time), [
+        return (cooldown_state, interval_state, bomber_time, buster_call), [
             self.event_provider.elapsed(time)
         ] + [
             self.event_provider.dealt(
-                self.tick_damage, self.get_homming_missile_hit(bomber_time)
+                self.tick_damage, self.get_homming_missile_hit(bomber_time, buster_call)
             )
             for _ in range(lapse_count)
         ]
 
-    def get_homming_missile_hit(self, bomber_time: DurationState) -> int:
-        hit = self.tick_hit
+    def get_homming_missile_hit(
+        self, bomber_time: DurationState, buster_call: KeydownState
+    ) -> int:
+        hit = int(self.tick_hit)
         if bomber_time.enabled():
             hit += 5
 
+        if buster_call.is_running():
+            hit += 7
+
+        if (
+            not buster_call.is_running()
+            and buster_call.time_elapsed_after_latest_action < 2_000
+        ):
+            hit = 0
+
         return hit
+
+
+class PeriodicState(State):
+    tick: int
+    period: int
+
+    def step(self):
+        self.tick += 1
+        self.tick = self.tick % self.period
+
+    def get_tick(self) -> int:
+        return self.tick
+
+    def clear(self):
+        self.tick = 0
+
+
+class MultipleOptionComponent(Component):
+    name: str
+    cooldown: float = 0.0
+    delay: float
+
+    tick_interval: float
+    duration: float
+
+    missile_count: int
+    missile_damage: float
+    missile_hit: int
+
+    gatling_count: int
+    gatling_damage: float
+    gatling_hit: int
+
+    binds: dict[str, str] = {"robot_mastery": ".로봇 마스터리.robot_mastery"}
+
+    def get_default_state(self):
+        return {
+            "cooldown_state": CooldownState(time_left=0),
+            "interval_state": IntervalState(interval=self.tick_interval, time_left=0),
+            "period": PeriodicState(
+                tick=0, period=self.missile_count + self.gatling_count
+            ),
+        }
+
+    def get_damage_event(
+        self, period: PeriodicState, robot_mastery: RobotMasteryState
+    ) -> Event:
+        if period.get_tick() < self.missile_count:
+            return self.event_provider.dealt(
+                self.missile_damage,
+                self.missile_hit,
+                modifier=robot_mastery.get_robot_modifier(),
+            )
+
+        return self.event_provider.dealt(
+            self.gatling_damage,
+            self.gatling_hit,
+            modifier=robot_mastery.get_robot_modifier(),
+        )
+
+    @reducer_method
+    def elapse(
+        self,
+        time: float,
+        cooldown_state: CooldownState,
+        interval_state: IntervalState,
+        robot_mastery: RobotMasteryState,
+        period: PeriodicState,
+    ):
+        cooldown_state = cooldown_state.copy()
+        interval_state = interval_state.copy()
+
+        cooldown_state.elapse(time)
+        dealing_events = []
+
+        for _ in interval_state.resolving(time):
+            dealing_events.append(self.get_damage_event(period, robot_mastery))
+            period.step()
+
+        return (cooldown_state, interval_state, robot_mastery, period), [
+            self.event_provider.elapsed(time)
+        ] + dealing_events
+
+    @reducer_method
+    def use(
+        self,
+        _: None,
+        cooldown_state: CooldownState,
+        interval_state: IntervalState,
+        period: PeriodicState,
+        dynamics: Dynamics,
+    ):
+        cooldown_state, interval_state, period = (
+            cooldown_state.copy(),
+            interval_state.copy(),
+            period.copy(),
+        )
+
+        if not cooldown_state.available:
+            return (cooldown_state, interval_state), self.event_provider.rejected()
+
+        cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
+        interval_state.set_time_left(self.duration)
+        period.clear()
+
+        return (cooldown_state, interval_state, period, dynamics), [
+            self.event_provider.delayed(self.delay),
+        ]
+
+    @view_method
+    def validity(self, cooldown_state: CooldownState):
+        return Validity(
+            name=self.name,
+            time_left=max(0, cooldown_state.time_left),
+            valid=cooldown_state.available,
+        )
+
+    @view_method
+    def running(self, interval_state: IntervalState) -> Running:
+        return Running(name=self.name, time_left=interval_state.interval_time_left)
+
+
+class DynamicIntervalState(State):
+    interval_counter: float = 0.0
+    interval: float
+    interval_time_left: float = 0.0
+    count: int = 0
+    count_interval_penalty: float
+    max_count: int
+
+    def set_time_left(self, time: float, count: int):
+        self.interval_time_left = time
+        self.interval_counter = self.interval
+        self.count = count
+
+    def enabled(self):
+        return self.interval_time_left > 0
+
+    def resolving(self, time: float):
+        maximum_elapsed = max(0, int(self.interval_time_left // self.interval))
+
+        self.interval_time_left -= time
+        self.interval_counter -= time
+        elapse_count = 0
+
+        while self.interval_counter <= 0 and elapse_count < maximum_elapsed:
+            self.interval_counter += (
+                self.interval + self.count * self.count_interval_penalty
+            )
+            elapse_count += 1
+            yield self.count
+            self.count += 1
+            self.count = min(self.max_count, self.count)
+
+    def disable(self):
+        self.interval_time_left = 0
+
+
+class MecaCarrier(Component):
+    name: str
+    cooldown: float = 0.0
+    delay: float
+    duration: float
+
+    tick_interval: float
+
+    maximum_intercepter: int
+    start_intercepter: int
+    damage_per_intercepter: float
+    hit_per_intercepter: int
+    intercepter_penalty: float
+
+    binds: dict[str, str] = {"robot_mastery": ".로봇 마스터리.robot_mastery"}
+
+    def get_default_state(self):
+        return {
+            "cooldown_state": CooldownState(time_left=0),
+            "interval_state": DynamicIntervalState(
+                interval=self.tick_interval,
+                time_left=0,
+                count=self.start_intercepter,
+                count_interval_penalty=self.intercepter_penalty,
+                max_count=self.maximum_intercepter,
+            ),
+        }
+
+    @reducer_method
+    def elapse(
+        self,
+        time: float,
+        cooldown_state: CooldownState,
+        interval_state: DynamicIntervalState,
+        robot_mastery: RobotMasteryState,
+    ):
+        cooldown_state, interval_state = cooldown_state.copy(), interval_state.copy()
+
+        cooldown_state.elapse(time)
+
+        dealing_events = []
+
+        for intercepter_count in interval_state.resolving(time):
+            dealing_events.append(
+                self.event_provider.dealt(
+                    self.damage_per_intercepter,
+                    self.hit_per_intercepter * intercepter_count,
+                    modifier=robot_mastery.get_robot_modifier(),
+                )
+            )
+
+        return (cooldown_state, interval_state, robot_mastery), [
+            self.event_provider.elapsed(time)
+        ] + dealing_events
+
+    @reducer_method
+    def use(
+        self,
+        _: None,
+        cooldown_state: CooldownState,
+        interval_state: DynamicIntervalState,
+        dynamics: Dynamics,
+    ):
+        cooldown_state = cooldown_state.copy()
+        interval_state = interval_state.copy()
+
+        if not cooldown_state.available:
+            return (cooldown_state, interval_state), self.event_provider.rejected()
+
+        cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
+
+        interval_state.set_time_left(self.duration, self.start_intercepter)
+
+        return (cooldown_state, interval_state, dynamics), [
+            self.event_provider.delayed(self.delay),
+        ]
+
+    @view_method
+    def validity(self, cooldown_state):
+        return Validity(
+            name=self.name,
+            time_left=max(0, cooldown_state.time_left),
+            valid=cooldown_state.available,
+        )
+
+    @view_method
+    def running(self, interval_state: DynamicIntervalState) -> Running:
+        return Running(name=self.name, time_left=interval_state.interval_time_left)
