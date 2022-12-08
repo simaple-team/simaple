@@ -18,6 +18,7 @@ unittest = "pytest -vv -x --ignore tests/fetch/request"
 rsctest = "pytest -vv -x test_resource/"
 typetest = "mypy simaple tests"
 fetchtest = "pytest -vv -x tests/fetch/request"
+clean = "rm -rf **/__pycache__ .coverage .mypy_cache .pytest_cache"
 
 test = ["coverage", "typetest", "lint", "formatting-check"]
 
@@ -81,6 +82,7 @@ requests = "^2.26.0"
 Sphinx = "^5.1.1"
 sphinx-rtd-theme = "^1.0.0"
 readthedocs-sphinx-ext = "^2.2.0"
+fastapi = "^0.88.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
