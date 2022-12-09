@@ -2,6 +2,7 @@ import simaple.simulate.component.skill  # pylint: disable=W0611
 import simaple.simulate.component.specific  # pylint: disable=W0611
 from simaple.core.base import ActionStat
 from simaple.data.passive.patch import SkillLevelPatch
+from simaple.data.passive_hyper_skill import get_hyper_skill_patch
 from simaple.data.skill.patch import VSkillImprovementPatch
 from simaple.simulate.base import AddressedStore, Client, ConcreteStore, Environment
 from simaple.simulate.component.base import Component
@@ -49,6 +50,7 @@ def get_client(
                 ),
                 EvalPatch(injected_values=injected_values),
                 VSkillImprovementPatch(improvements=v_improvements),
+                get_hyper_skill_patch("archmagefb"),
             ],
         )
         for group in groups
