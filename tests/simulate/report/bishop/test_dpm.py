@@ -1,4 +1,5 @@
 import simaple.simulate.component.skill  # pylint: disable=W0611
+from simaple.core.base import ActionStat
 from simaple.core.damage import INTBasedDamageLogic
 from simaple.simulate.actor import ActionRecorder, DefaultMDCActor
 from simaple.simulate.component.view import (
@@ -6,11 +7,23 @@ from simaple.simulate.component.view import (
     RunningParentView,
     ValidityParentView,
 )
+from simaple.simulate.kms import get_client
 from simaple.simulate.report.base import Report, ReportEventHandler
 from simaple.simulate.report.dpm import DPMCalculator, LevelAdvantage
 
 
-def test_actor(bishop_client, character_stat):
+def test_actor(character_stat):
+    bishop_client = get_client(
+        ActionStat(),
+        ["bishop", "common", "adventurer.magician"],
+        {
+            "character_level": 260,
+            "character_stat": character_stat,
+        },
+        {},
+        {},
+    )
+
     actor = DefaultMDCActor(
         order=[
             "오버로드 마나",
