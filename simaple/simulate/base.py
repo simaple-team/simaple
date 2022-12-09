@@ -77,6 +77,14 @@ class Store(metaclass=ABCMeta):
     def local(self, address: str):
         ...
 
+    @abstractmethod
+    def save(self) -> Any:
+        ...
+
+    @abstractmethod
+    def load(self, saved_store) -> None:
+        ...
+
 
 class ConcreteStore(Store):
     def __init__(self):
@@ -95,6 +103,12 @@ class ConcreteStore(Store):
 
     def local(self, address):
         return self
+
+    def save(self) -> Any:
+        return {k: v.copy() for k, v in self._states.items()}
+
+    def load(self, saved_store: dict[str, State]) -> None:
+        self._states = {k: v.copy() for k, v in saved_store.items()}
 
 
 class AddressedStore(Store):
@@ -121,6 +135,12 @@ class AddressedStore(Store):
             return f"{self._current_address}.{name}"
 
         return name
+
+    def save(self):
+        return self._concrete_store.save()
+
+    def load(self, saved_store):
+        return self._concrete_store.load(saved_store)
 
 
 DispatcherType = Callable[[Action, Store], list[Event]]
