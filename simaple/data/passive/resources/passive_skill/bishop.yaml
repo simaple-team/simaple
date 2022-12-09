@@ -8,6 +8,19 @@ patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  name: 매작 액셀레이션
+  stat:
+    INT: 20
+---
+kind: PassiveSkill 
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: bishop
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
   name: 하이 위즈덤
   stat:
     INT: 40
