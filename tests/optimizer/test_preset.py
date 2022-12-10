@@ -27,7 +27,6 @@ def test_preset(test_gearset):
             critical_rate=60,
         ),
         level=200,
-        level_stat=Stat(STR=200 * 5 + 18, DEX=4),
         damage_logic=STRBasedDamageLogic(attack_range_constant=1.2, mastery=0.95),
         character_job_type=JobType.adele,
         alternate_character_job_types=[],
