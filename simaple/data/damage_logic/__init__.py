@@ -1,6 +1,7 @@
 import json
 import os
 import pathlib
+from abc import abstractmethod
 from pathlib import Path
 from typing import cast
 
@@ -24,41 +25,7 @@ from simaple.spec.patch import EvalPatch, Patch
 from simaple.spec.repository import DirectorySpecRepository
 
 
-class DamageLogicConfiguration(
-    pydantic.BaseModel,
-    metaclass=TaggedNamespacedABCMeta(kind="DamageLogicConfiguration"),
-):
-    attack_range_constant: float
-    mastery: float
-    damage_logic_type: str
-
-
-def get_damage_logic_from_config(conf: DamageLogicConfiguration) -> DamageLogic:
-    if conf.damage_logic_type == "STR":
-        return STRBasedDamageLogic(
-            attack_range_constant=conf.attack_range_constant,
-            mastery=conf.mastery,
-        )
-    if conf.damage_logic_type == "DEX":
-        return DEXBasedDamageLogic(
-            attack_range_constant=conf.attack_range_constant,
-            mastery=conf.mastery,
-        )
-    if conf.damage_logic_type == "LUK":
-        return LUKBasedDamageLogic(
-            attack_range_constant=conf.attack_range_constant,
-            mastery=conf.mastery,
-        )
-    if conf.damage_logic_type == "INT":
-        return INTBasedDamageLogic(
-            attack_range_constant=conf.attack_range_constant,
-            mastery=conf.mastery,
-        )
-
-    raise ValueError(f"Unknown damage logic: {conf.damage_logic_type}")
-
-
-def get_config(jobtype: JobType, combat_orders_level: int) -> DamageLogicConfiguration:
+def get_damage_logic(jobtype: JobType, combat_orders_level: int) -> DamageLogic:
     repository = DirectorySpecRepository(str(Path(__file__).parent))
     loader = SpecBasedLoader(repository)
     patches = [
@@ -69,14 +36,9 @@ def get_config(jobtype: JobType, combat_orders_level: int) -> DamageLogicConfigu
         EvalPatch(injected_values={}),
     ]
     return cast(
-        DamageLogicConfiguration,
+        DamageLogic,
         loader.load(
-            query={"group": jobtype.value, "kind": "DamageLogicConfiguration"},
+            query={"group": jobtype.value, "kind": "DamageLogic"},
             patches=patches,
         ),
     )
-
-
-def get_damage_logic(jobtype: JobType, combat_orders_level: int) -> DamageLogic:
-    conf = get_config(jobtype, combat_orders_level)
-    return get_damage_logic_from_config(conf)

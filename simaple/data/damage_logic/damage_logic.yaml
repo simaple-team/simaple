@@ -1,5 +1,5 @@
-kind: DamageLogicConfiguration 
-version: simaple.io/DamageLogicConfiguration
+kind: DamageLogic
+version: simaple.io/INTBasedDamageLogic
 metadata:
   label:
     group: archmagefb
@@ -9,12 +9,11 @@ patch:
 data:  
   attack_range_constant: 1.2
   mastery: '{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}'
-  damage_logic_type: INT
   default_skill_level: 0
   combat_orders_enabled: True
 ---
-kind: DamageLogicConfiguration 
-version: simaple.io/DamageLogicConfiguration
+kind: DamageLogic 
+version: simaple.io/INTBasedDamageLogic
 metadata:
   label:
     group: archmagetc
@@ -24,12 +23,11 @@ patch:
 data:  
   attack_range_constant: 1.2
   mastery: '{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}'
-  damage_logic_type: INT
   default_skill_level: 0
   combat_orders_enabled: True
 ---
-kind: DamageLogicConfiguration 
-version: simaple.io/DamageLogicConfiguration
+kind: DamageLogic 
+version: simaple.io/INTBasedDamageLogic
 metadata:
   label:
     group: bishop
@@ -39,6 +37,5 @@ patch:
 data:  
   attack_range_constant: 1.2
   mastery: '{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}'
-  damage_logic_type: INT
   default_skill_level: 0
   combat_orders_enabled: True

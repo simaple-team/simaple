@@ -1,11 +1,14 @@
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod
 
 from pydantic import BaseModel
 
 from simaple.core.base import AttackType, BaseStatType, Stat
+from simaple.spec.loadable import (  # pylint:disable=unused-import
+    TaggedNamespacedABCMeta,
+)
 
 
-class DamageLogic(BaseModel, metaclass=ABCMeta):
+class DamageLogic(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="DamageLogic")):
     attack_range_constant: float
     mastery: float
 
@@ -19,6 +22,10 @@ class DamageLogic(BaseModel, metaclass=ABCMeta):
 
     @abstractmethod
     def get_attack_type_factor(self, stat: Stat) -> float:
+        ...
+
+    @abstractmethod
+    def get_best_level_based_stat(self, level: int) -> Stat:
         ...
 
     def get_maximum_attack_range(self, stat: Stat) -> float:
@@ -70,6 +77,14 @@ class STRBasedDamageLogic(DamageLogic):
     def get_attack_type_factor(self, stat: Stat) -> float:
         return stat.get_attack_coefficient(AttackType.attack_power)
 
+    def get_best_level_based_stat(self, level: int) -> Stat:
+        return Stat(
+            STR=level * 5 + 18,
+            DEX=4,
+            INT=4,
+            LUK=4,
+        )
+
 
 class INTBasedDamageLogic(DamageLogic):
     def get_major_stat(self, stat: Stat) -> float:
@@ -82,6 +97,14 @@ class INTBasedDamageLogic(DamageLogic):
 
     def get_attack_type_factor(self, stat: Stat) -> float:
         return stat.get_attack_coefficient(AttackType.magic_attack)
+
+    def get_best_level_based_stat(self, level: int) -> Stat:
+        return Stat(
+            STR=4,
+            DEX=4,
+            INT=level * 5 + 18,
+            LUK=4,
+        )
 
 
 class DEXBasedDamageLogic(DamageLogic):
@@ -96,6 +119,14 @@ class DEXBasedDamageLogic(DamageLogic):
     def get_attack_type_factor(self, stat: Stat) -> float:
         return stat.get_attack_coefficient(AttackType.attack_power)
 
+    def get_best_level_based_stat(self, level: int) -> Stat:
+        return Stat(
+            STR=4,
+            DEX=level * 5 + 18,
+            INT=4,
+            LUK=4,
+        )
+
 
 class LUKBasedDamageLogic(DamageLogic):
     def get_major_stat(self, stat: Stat) -> float:
@@ -108,3 +139,11 @@ class LUKBasedDamageLogic(DamageLogic):
 
     def get_attack_type_factor(self, stat: Stat) -> float:
         return stat.get_attack_coefficient(AttackType.attack_power)
+
+    def get_best_level_based_stat(self, level: int) -> Stat:
+        return Stat(
+            STR=4,
+            DEX=4,
+            INT=4,
+            LUK=level * 5 + 18,
+        )
