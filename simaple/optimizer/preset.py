@@ -173,6 +173,7 @@ class PresetOptimizer(BaseModel):
         for slot in preset.gearset.get_weaponry_slots():
             slot.get_gear().potential = Potential()
 
+        preset.gearset.set_empty_potential()
         preset.gearset.change_weaponry_potentials(
             self.calculate_optimal_weapon_potential(
                 preset.get_total_stat() + self.default_stat

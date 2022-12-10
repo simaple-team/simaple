@@ -189,7 +189,7 @@ class Gearset(BaseModel):
     def _get_sub_weapon_slot(self) -> GearSlot:
         for slot in self.gear_slots:
             for gear_type in slot.enabled_gear_types:
-                if GearType.is_weapon(gear_type):
+                if GearType.is_sub_weapon(gear_type):
                     return slot
 
         raise ValueError
@@ -197,7 +197,7 @@ class Gearset(BaseModel):
     def _get_emblem_slot(self) -> GearSlot:
         for slot in self.gear_slots:
             for gear_type in slot.enabled_gear_types:
-                if GearType.is_weapon(gear_type):
+                if gear_type == GearType.emblem:
                     return slot
 
         raise ValueError
@@ -208,6 +208,10 @@ class Gearset(BaseModel):
             self._get_sub_weapon_slot(),
             self._get_emblem_slot(),
         )
+
+    def set_empty_potential(self) -> None:
+        for slot in self.get_weaponry_slots():
+            slot.get_gear().potential = Potential(options=[])
 
     def change_weaponry_potentials(
         self, weaponry_potentials: Tuple[Potential, Potential, Potential]
