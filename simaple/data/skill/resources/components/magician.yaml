@@ -9,7 +9,7 @@ patch:
   - EvalPatch
 data:
   name: 인피니티
-  cooldown: 180_000
+  cooldown: 120_000
   delay: 600
   duration: '{{ (10 + skill_level) * 1_000 }} '
 
@@ -17,3 +17,4 @@ data:
   increase_interval: 5_000
   default_final_damage: '{{ 40 + skill_level }}'
   maximum_final_damage: 115
+  default_skill_level: 30
