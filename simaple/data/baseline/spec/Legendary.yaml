@@ -79,6 +79,7 @@ data:
       stat_type: first_stat
   pet_equip:
     first_stat: 0
+    first_att: 70
   pet_set: 
     first_stat: 0
   cash:
@@ -105,7 +106,6 @@ data:
     cap:
       gear_id: 앱솔랩스 모자
       <<: *armor
-      star: 22
       potential:
         options:
           - first_stat_multiplier: 12
@@ -169,7 +169,7 @@ data:
       gear_id: 이터널 플레임 링
       <<: *acc
       exclude: 
-        - bonus
+        - bonuses
         - star
     ring4:
       gear_id: 이터널 플레임 링
