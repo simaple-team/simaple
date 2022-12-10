@@ -1,0 +1,104 @@
+---
+kind: NamedStat 
+version: simaple.io/Doping
+metadata:
+  label:
+    name: 전설의 영웅 비약
+    level: normal
+data:  
+  name: 전설의 영웅 비약
+  stat: 
+    attack_power: 30
+    magic_attack: 30
+---
+kind: NamedStat 
+version: simaple.io/Doping
+metadata:
+  label:
+    name: 길드의 축복
+    level: normal
+data:  
+  name: 길드의 축복
+  stat: 
+    attack_power: 30
+    magic_attack: 30
+---
+kind: NamedStat 
+version: simaple.io/Doping
+metadata:
+  label:
+    name: 우르스 뿌리기
+    level: normal
+data:  
+  name: 우르스 뿌리기
+  stat: 
+    attack_power: 30
+    magic_attack: 30
+---
+kind: NamedStat 
+version: simaple.io/Doping
+metadata:
+  label:
+    name: 익스트림 물약
+    level: normal
+data:  
+  name: 익스트림 물약
+  stat: 
+    attack_power: 30
+    magic_attack: 30
+---
+kind: NamedStat 
+version: simaple.io/Doping
+metadata:
+  label:
+    name: 고급 보스 킬러의 비약
+    level: normal
+data:  
+  name: 고급 보스 킬러의 비약
+  stat: 
+    boss_damage_multiplier: 20
+---
+kind: NamedStat 
+version: simaple.io/Doping
+metadata:
+  label:
+    name: 길드 스킬(크뎀)
+    level: normal
+data:  
+  name: 길드 스킬(크뎀)
+  stat: 
+    critical_damage: 30
+---
+kind: NamedStat 
+version: simaple.io/Doping
+metadata:
+  label:
+    name: 길드 스킬(보공)
+    level: normal
+data:  
+  name: 길드 스킬(보공)
+  stat: 
+    boss_damage_multiplier: 30
+---
+kind: NamedStat 
+version: simaple.io/Doping
+metadata:
+  label:
+    name: 길드 스킬(데미지)
+    level: normal
+data:  
+  name: 길드 스킬(데미지)
+  stat: 
+    damage_multiplier: 30
+---
+kind: NamedStat 
+version: simaple.io/Doping
+metadata:
+  label:
+    name: 영웅의 메아리
+    level: normal
+data:  
+  name: 영웅의 메아리
+  stat: 
+    attack_power_multiplier: 4
+    magic_attack_multiplier: 4
