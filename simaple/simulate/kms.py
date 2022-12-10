@@ -50,7 +50,7 @@ def get_client(
                 ),
                 EvalPatch(injected_values=injected_values),
                 VSkillImprovementPatch(improvements=v_improvements),
-                get_hyper_skill_patch("archmagefb"),
+                get_hyper_skill_patch(group),
             ],
         )
         for group in groups
