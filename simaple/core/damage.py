@@ -52,7 +52,9 @@ class DamageLogic(BaseModel, metaclass=ABCMeta):
             * self.get_critical_factor(stat)
             * self.get_base_stat_factor(stat)
             * self.get_attack_type_factor(stat)
+            * self.attack_range_constant
             * 0.01
+            * ((1 + self.mastery) / 2)
         )
 
 
