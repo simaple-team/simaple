@@ -1,11 +1,7 @@
 import simaple.simulate.component.skill  # pylint: disable=W0611
-from simaple.core.damage import INTBasedDamageLogic
+from simaple.core.jobtype import JobType
+from simaple.data.damage_logic import get_damage_logic
 from simaple.simulate.actor import ActionRecorder, DefaultMDCActor
-from simaple.simulate.component.view import (
-    BuffParentView,
-    RunningParentView,
-    ValidityParentView,
-)
 from simaple.simulate.report.base import Report, ReportEventHandler
 from simaple.simulate.report.dpm import DPMCalculator, LevelAdvantage
 
@@ -32,20 +28,16 @@ def test_actor(archmagefb_client, character_stat):
             "플레임 스윕",
         ]
     )
-    events = []
+
     environment = archmagefb_client.environment
-    ValidityParentView.build_and_install(environment, "validity")
-    BuffParentView.build_and_install(environment, "buff")
-    RunningParentView.build_and_install(environment, "running")
 
     recorder = ActionRecorder("record.tsv")
     report = Report()
-
     archmagefb_client.add_handler(ReportEventHandler(report))
 
     dpm_calculator = DPMCalculator(
         character_spec=character_stat,
-        damage_logic=INTBasedDamageLogic(attack_range_constant=1.2, mastery=0.95),
+        damage_logic=get_damage_logic(JobType.archmagefb, 0),
         armor=300,
         level=LevelAdvantage().get_advantage(250, 260),
         force_advantage=1.5,

@@ -1,0 +1,44 @@
+kind: DamageLogicConfiguration 
+version: simaple.io/DamageLogicConfiguration
+metadata:
+  label:
+    group: archmagefb
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:  
+  attack_range_constant: 1.2
+  mastery: '{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}'
+  damage_logic_type: INT
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogicConfiguration 
+version: simaple.io/DamageLogicConfiguration
+metadata:
+  label:
+    group: archmagetc
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:  
+  attack_range_constant: 1.2
+  mastery: '{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}'
+  damage_logic_type: INT
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogicConfiguration 
+version: simaple.io/DamageLogicConfiguration
+metadata:
+  label:
+    group: bishop
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:  
+  attack_range_constant: 1.2
+  mastery: '{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}'
+  damage_logic_type: INT
+  default_skill_level: 0
+  combat_orders_enabled: True
