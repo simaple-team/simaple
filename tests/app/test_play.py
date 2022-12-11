@@ -51,6 +51,8 @@ def test_read_main():
     workspace_id = response.json()["id"]
 
     requests = 0
+    previous_delay = 0
+
     with open(os.path.join(os.path.dirname(__file__), "record.tsv")) as f:
         for line in f:
             timing, action = line.split("\t")
@@ -58,4 +60,12 @@ def test_read_main():
                 f"/workspaces/play/{workspace_id}",
                 json=json.loads(action),
             )
+
+            given_delay = resp.json()["delay"]
+
+            if previous_delay != 0:
+                assert given_delay == 0
+
+            previous_delay = given_delay
+
             requests += 1

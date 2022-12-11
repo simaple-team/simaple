@@ -13,6 +13,7 @@ class PlayLog(pydantic.BaseModel):
     buff_view: Stat
     clock: float
     damage: float
+    delay: float
 
 
 _workspaces: dict = {}

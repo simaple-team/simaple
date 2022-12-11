@@ -67,6 +67,7 @@ def create(
         buff_view=client.environment.show("buff"),
         clock=0,
         damage=0,
+        delay=0,
     )
 
     logs[workspace_id] = [
@@ -100,6 +101,11 @@ def play(
         if event.tag == Tag.DAMAGE:
             report.add(0, event, buff_view)
 
+    delay = 0
+    for event in events:
+        if event.tag in (Tag.DELAY,) and event.payload["time"] > 0:
+            delay += event.payload["time"]
+
     damage = damage_calculator.calculate_damage(report)
 
     response = PlayLog(
@@ -110,6 +116,7 @@ def play(
         buff_view=client.environment.show("buff"),
         clock=client.environment.show("clock"),
         damage=damage,
+        delay=delay,
     )
 
     current_log.append(
