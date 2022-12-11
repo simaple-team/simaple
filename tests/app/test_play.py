@@ -10,7 +10,7 @@ client = TestClient(app)
 
 def test_read_main():
     response = client.post(
-        "/workspace/",
+        "/workspaces/",
         json={
             "action_stat": {},
             "groups": ["archmagefb", "common", "adventurer.magician"],
@@ -55,7 +55,7 @@ def test_read_main():
         for line in f:
             timing, action = line.split("\t")
             resp = client.post(
-                f"/workspace/play/{workspace_id}",
+                f"/workspaces/play/{workspace_id}",
                 json=json.loads(action),
             )
             requests += 1

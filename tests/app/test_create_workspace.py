@@ -10,7 +10,7 @@ client = TestClient(app)
 
 def test_read_main():
     response = client.post(
-        "/workspace/",
+        "/workspaces/",
         json={
             "action_stat": {},
             "groups": ["archmagefb", "common", "adventurer.magician"],
@@ -51,7 +51,9 @@ def test_read_main():
     workspace_id = response.json()["id"]
 
     resp = client.get(
-        f"/workspace/{workspace_id}/logs/0",
+        f"/workspaces/logs/{workspace_id}/0",
     )
+
+    print(resp.json())
 
     assert resp.json()["index"] == 0

@@ -14,7 +14,7 @@ from simaple.simulate.report.base import Report
 from simaple.simulate.report.dpm import DPMCalculator, LevelAdvantage
 from simaple.simulate.reserved_names import Tag
 
-router = fastapi.APIRouter(prefix="/workspace")
+router = fastapi.APIRouter(prefix="/workspaces")
 
 _workspaces: dict = {}
 _logs: dict = {}
@@ -76,6 +76,7 @@ def create(
         validity_view=client.environment.show("validity"),
         running_view=client.environment.show("running"),
         buff_view=client.environment.show("buff"),
+        clock=0,
         damage=0,
     )
 
@@ -95,6 +96,7 @@ class PlayResponse(pydantic.BaseModel):
     validity_view: list[Validity]
     running_view: list[Running]
     buff_view: Stat
+    clock: float
     damage: float
 
 
@@ -127,6 +129,7 @@ def play(
         validity_view=client.environment.show("validity"),
         running_view=client.environment.show("running"),
         buff_view=client.environment.show("buff"),
+        clock=client.environment.show("clock"),
         damage=damage,
     )
 
@@ -137,7 +140,7 @@ def play(
     return response
 
 
-@router.get("/{workspace_id}/logs/{log_id}", response_model=PlayResponse)
+@router.get("/logs/{workspace_id}/{log_id}", response_model=PlayResponse)
 def get_log(
     workspace_id: str,
     log_id: int,
