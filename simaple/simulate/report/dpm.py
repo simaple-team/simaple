@@ -39,6 +39,9 @@ class DPMCalculator(pydantic.BaseModel):
     level_advantage: float = 1.0
     force_advantage: float = 1.0
 
+    class Config:
+        extra = "forbid"
+
     def get_damage(self, log: DamageLog):
         buffed_stat = self.character_spec + log.buff
         damage_factor = self.damage_logic.get_damage_factor(buffed_stat, self.armor)
