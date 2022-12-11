@@ -133,4 +133,5 @@ class KeydownSkillComponent(SkillComponent):
             name=self.name,
             time_left=max(0, cooldown_state.time_left),
             valid=cooldown_state.available,
+            cooldown=self.cooldown,
         )

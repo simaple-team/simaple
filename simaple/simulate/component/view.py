@@ -10,6 +10,7 @@ class Validity(pydantic.BaseModel):
     name: str
     time_left: float
     valid: bool
+    cooldown: float
 
 
 class Running(pydantic.BaseModel):
