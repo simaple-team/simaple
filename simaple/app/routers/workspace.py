@@ -70,9 +70,22 @@ def create(
         "damage_calculator": damage_calculator,
     }
 
-    logs[workspace_id] = [(client.environment.store.save(),)]
-    print(workspace_id)
+    response = PlayResponse(
+        events=[],
+        index=0,
+        validity_view=client.environment.show("validity"),
+        running_view=client.environment.show("running"),
+        buff_view=client.environment.show("buff"),
+        damage=0,
+    )
 
+    logs[workspace_id] = [
+        (
+            client.environment.store.save(),
+            Action(name="*", method="elapse", payload=0),
+            response,
+        )
+    ]
     return WorkspaceResponse(id=workspace_id)
 
 
@@ -122,3 +135,16 @@ def play(
     )
 
     return response
+
+
+@router.get("/{workspace_id}/logs/{log_id}", response_model=PlayResponse)
+def get_log(
+    workspace_id: str,
+    log_id: int,
+    workspace=Depends(get_workspace),
+    logs=Depends(get_logs),
+) -> PlayResponse:
+    current_log = logs[workspace_id]
+    _, __, resp = current_log[log_id]
+
+    return resp
