@@ -8,8 +8,8 @@ from simaple.simulate.component.view import Running, Validity
 class PlayLog(pydantic.BaseModel):
     events: list[Event]
     index: int
-    validity_view: list[Validity]
-    running_view: list[Running]
+    validity_view: dict[str, Validity]
+    running_view: dict[str, Running]
     buff_view: Stat
     clock: float
     damage: float

@@ -62,8 +62,8 @@ def create(
     response = PlayLog(
         events=[],
         index=0,
-        validity_view=client.environment.show("validity"),
-        running_view=client.environment.show("running"),
+        validity_view={v.name: v for v in client.environment.show("validity")},
+        running_view={v.name: v for v in client.environment.show("running")},
         buff_view=client.environment.show("buff"),
         clock=0,
         damage=0,
@@ -105,8 +105,8 @@ def play(
     response = PlayLog(
         events=events,
         index=event_index,
-        validity_view=client.environment.show("validity"),
-        running_view=client.environment.show("running"),
+        validity_view={v.name: v for v in client.environment.show("validity")},
+        running_view={v.name: v for v in client.environment.show("running")},
         buff_view=client.environment.show("buff"),
         clock=client.environment.show("clock"),
         damage=damage,
