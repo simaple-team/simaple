@@ -1,0 +1,49 @@
+kind: ClientConfiguration 
+version: simaple.io/ClientConfiguration
+metadata:
+  label:
+    group: archmagefb
+data:  
+  v_skill_names: 
+  - 도트 퍼니셔
+  - 포이즌 노바
+  - 오버로드 마나
+  - 포이즌 체인
+  - 퓨리 오브 이프리트
+  - 메이플 여신의 축복
+  v_improvement_names:
+  - 플레임 스윕
+  - 미스트 이럽션
+  - 플레임 헤이즈
+  - 메기도 플레임
+  - 이그나이트
+  - 파이어 오라
+  - 이프리트
+  - 포이즌 리전
+  - 텔레포트 마스터리
+  - 메테오
+  - 메테오(패시브)
+  component_groups: 
+  - archmagefb
+  - common
+  - adventurer.magician
+  mdc_order:
+  - 오버로드 마나
+  - 이프리트
+  - 파이어 오라
+  - 인피니티
+  - 소울 컨트랙트
+  - 메이플 여신의 축복
+  - 메디테이션
+  - 에픽 어드벤처
+  - 메테오
+  - 포이즌 노바
+  - 도트 퍼니셔
+  - 포이즌 체인
+  - 메기도 플레임
+  - 퓨리 오브 이프리트
+  - 미스트 이럽션
+  - 플레임 헤이즈
+  - 플레임 스윕
+
+

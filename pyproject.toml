@@ -3,11 +3,11 @@ _black-check = "black --check simaple tests"
 _isort-check = "isort --check-only simaple tests"
 formatting-check = ["_black-check", "_isort-check"]
 
-_black = "black simaple tests"
-_isort = "isort simaple tests"
+_black = "black simaple tests scripts"
+_isort = "isort simaple tests scripts"
 format = ["_black", "_isort"]
 
-_pylint = "pylint simaple tests"
+_pylint = "pylint simaple tests scripts"
 lint = ["_pylint"]
 
 coverage = "pytest --cov=simaple --ignore tests/fetch/request"
@@ -86,6 +86,7 @@ fastapi = "^0.88.0"
 fire = "^0.4.0"
 uvicorn = "^0.20.0"
 httpx = "^0.23.1"
+dependency-injector = "^4.40.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
