@@ -301,3 +301,10 @@ class LevelStat(BaseModel):
 
 
 AnyStat = Union[Stat, ActionStat, LevelStat]
+
+
+class ElementalResistance(BaseModel):
+    value: float
+
+    def get_disadvantage(self) -> float:
+        return 0.5 * (1 + self.value * 0.01)

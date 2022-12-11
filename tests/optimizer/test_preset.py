@@ -31,11 +31,6 @@ def test_preset(test_gearset):
         character_job_type=JobType.adele,
         alternate_character_job_types=[],
         link_count=12 + 1,
-        weapon_potential_tier=(
-            PotentialTier.legendary,
-            PotentialTier.unique,
-            PotentialTier.unique,
-        ),
     )
 
     preset = optimizer.create_optimal_preset_from_gearset(test_gearset)

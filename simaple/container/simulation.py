@@ -5,7 +5,7 @@ from typing import Callable
 import pydantic
 from dependency_injector import containers, providers
 
-from simaple.core import ActionStat, JobCategory, JobType, Stat
+from simaple.core import ActionStat, ElementalResistance, JobCategory, JobType, Stat
 from simaple.data.baseline import get_baseline_gearset
 from simaple.data.client_configuration import get_client_configuration
 from simaple.data.damage_logic import get_damage_logic
@@ -35,6 +35,7 @@ class SimulationSetting(pydantic.BaseSettings):
 
     v_skill_level: int = 30
     v_improvements_level: int = 60
+    elemental_resistance: ElementalResistance
 
     def get_preset_hash(self) -> str:
         preset_hash = (
@@ -139,6 +140,10 @@ class SimulationContainer(containers.DeclarativeContainer):
         armor=config.armor,
         level_advantage=level_advantage,
         force_advantage=config.force_advantage,
+        elemental_resistance_disadvantage=providers.Factory(
+            ElementalResistance.parse_obj,
+            config.elemental_resistance,
+        ).provided.get_disadvantage.call(),
     )
 
     client_patch_injected_values = providers.Dict(

@@ -60,8 +60,9 @@ def create(
         character_spec=conf.character_stat,
         damage_logic=INTBasedDamageLogic(attack_range_constant=1.2, mastery=0.95),
         armor=300,
-        level=LevelAdvantage().get_advantage(250, 260),
+        level_advantage=LevelAdvantage().get_advantage(250, 260),
         force_advantage=1.5,
+        elemental_resistance_disadvantage=0.5,
     )
 
     workspace[workspace_id] = {

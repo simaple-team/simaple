@@ -51,7 +51,7 @@ def test_actor(character_stat):
         character_spec=character_stat,
         damage_logic=get_damage_logic(JobType.bishop, 0),
         armor=300,
-        level=LevelAdvantage().get_advantage(250, 260),
+        level_advantage=LevelAdvantage().get_advantage(250, 260),
         force_advantage=1.5,
     )
 
