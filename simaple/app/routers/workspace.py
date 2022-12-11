@@ -124,6 +124,39 @@ def dispatch_use(
     return response
 
 
+@router.post("/use_and_elapse/{workspace_id}", response_model=PlayLog)
+def dispatch_use(
+    workspace_id: str,
+    request: RequestDispatchUse,
+    workspaces=Depends(get_workspace),
+    logs=Depends(get_logs),
+) -> PlayLog:
+
+    response = dispatch_action(
+        workspaces[workspace_id],
+        logs[workspace_id],
+        Action(
+            name=request.name,
+            method="use",
+            payload=None,
+        ),
+    )
+    add_play_log(workspaces[workspace_id], logs[workspace_id], response)
+
+    response = dispatch_action(
+        workspaces[workspace_id],
+        logs[workspace_id],
+        Action(
+            name="*",
+            method="elapse",
+            payload=response.delay,
+        ),
+    )
+    add_play_log(workspaces[workspace_id], logs[workspace_id], response)
+
+    return response
+
+
 class RequestDispatchElapse(pydantic.BaseModel):
     time: float
 
