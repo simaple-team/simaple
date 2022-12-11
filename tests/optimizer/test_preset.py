@@ -3,7 +3,6 @@ import pytest
 from simaple.core import JobCategory, JobType, Stat
 from simaple.core.damage import STRBasedDamageLogic
 from simaple.data.baseline import get_baseline_gearset
-from simaple.gear.potential import PotentialTier
 from simaple.optimizer.preset import PresetOptimizer
 
 
