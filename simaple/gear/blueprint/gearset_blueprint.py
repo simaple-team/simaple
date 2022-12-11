@@ -1,5 +1,4 @@
 from abc import abstractmethod
-from typing import List, Tuple
 
 from pydantic import BaseModel, Field
 
@@ -27,15 +26,15 @@ class GearsetBlueprint(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="bluepr
 
 # TODO: weapon potential optimizer (stand-alone)
 class UserGearsetBlueprint(GearsetBlueprint):
-    arcane_symbols: List[ArcaneSymbol] = Field(default_factory=list)
-    authentic_symbols: List[AuthenticSymbol] = Field(default_factory=list)
+    arcane_symbols: list[ArcaneSymbol] = Field(default_factory=list)
+    authentic_symbols: list[AuthenticSymbol] = Field(default_factory=list)
     pet_equip: Stat
     pet_set: Stat
     cash: Stat
-    weapon_potential_tiers: Tuple[
-        List[PotentialTier],
-        List[PotentialTier],
-        List[PotentialTier],
+    weapon_potential_tiers: tuple[
+        list[PotentialTier],
+        list[PotentialTier],
+        list[PotentialTier],
     ]
     title: Stat
 
@@ -50,7 +49,7 @@ class UserGearsetBlueprint(GearsetBlueprint):
             gearset.equip(blueprint.build(gear_repository=gear_repository), slot_name)
 
         gearset.set_title_stat(self.title)
-
+        gearset.annotate_weapon_potential_tiers(self.weapon_potential_tiers)
         gearset.set_arcane_symbols(self.arcane_symbols)
         gearset.set_authentic_symbols(self.authentic_symbols)
 
