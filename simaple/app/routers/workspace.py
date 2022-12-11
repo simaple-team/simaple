@@ -16,9 +16,7 @@ from simaple.core.base import ActionStat, Stat
 from simaple.core.damage import INTBasedDamageLogic
 from simaple.simulate.base import Action
 from simaple.simulate.kms import get_client
-from simaple.simulate.report.base import Report
 from simaple.simulate.report.dpm import DPMCalculator, LevelAdvantage
-from simaple.simulate.reserved_names import Tag
 
 router = fastapi.APIRouter(prefix="/workspaces")
 
@@ -95,6 +93,58 @@ def play(
 ) -> PlayLog:
 
     response = dispatch_action(workspaces[workspace_id], logs[workspace_id], action)
+    add_play_log(workspaces[workspace_id], logs[workspace_id], response)
+
+    return response
+
+
+class RequestDispatchUse(pydantic.BaseModel):
+    name: str
+
+
+@router.post("/use/{workspace_id}", response_model=PlayLog)
+def dispatch_use(
+    workspace_id: str,
+    request: RequestDispatchUse,
+    workspaces=Depends(get_workspace),
+    logs=Depends(get_logs),
+) -> PlayLog:
+
+    response = dispatch_action(
+        workspaces[workspace_id],
+        logs[workspace_id],
+        Action(
+            name=request.name,
+            method="use",
+            payload=None,
+        ),
+    )
+    add_play_log(workspaces[workspace_id], logs[workspace_id], response)
+
+    return response
+
+
+class RequestDispatchElapse(pydantic.BaseModel):
+    time: float
+
+
+@router.post("/elapse/{workspace_id}", response_model=PlayLog)
+def dispatch_elapse(
+    workspace_id: str,
+    request: RequestDispatchElapse,
+    workspaces=Depends(get_workspace),
+    logs=Depends(get_logs),
+) -> PlayLog:
+
+    response = dispatch_action(
+        workspaces[workspace_id],
+        logs[workspace_id],
+        Action(
+            name="*",
+            method="elapse",
+            payload=request.time,
+        ),
+    )
     add_play_log(workspaces[workspace_id], logs[workspace_id], response)
 
     return response
