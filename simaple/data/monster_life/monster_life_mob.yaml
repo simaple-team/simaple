@@ -78,7 +78,7 @@ metadata:
 data:  
   name: 주스텟S
   stat: 
-    STR: 5
-    DEX: 5
-    INT: 5
-    LUK: 5
+    STR: 6
+    DEX: 6
+    INT: 6
+    LUK: 6
