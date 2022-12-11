@@ -68,12 +68,12 @@ def create(
         clock=0,
         damage=0,
         delay=0,
+        action=Action(name="*", method="elapse", payload=0),
     )
 
     logs[workspace_id] = [
         (
             client.environment.store.save(),
-            Action(name="*", method="elapse", payload=0),
             response,
         )
     ]
@@ -117,10 +117,11 @@ def play(
         clock=client.environment.show("clock"),
         damage=damage,
         delay=delay,
+        action=action,
     )
 
     current_log.append(
-        (client.environment.store.save(), action, response),
+        (client.environment.store.save(), response),
     )
 
     return response
@@ -134,6 +135,6 @@ def get_log(
     logs=Depends(get_logs),
 ) -> PlayLog:
     current_log = logs[workspace_id]
-    _, __, resp = current_log[log_id]
+    _, resp = current_log[log_id]
 
     return resp

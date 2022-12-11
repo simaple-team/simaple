@@ -14,10 +14,11 @@ class PlayLog(pydantic.BaseModel):
     clock: float
     damage: float
     delay: float
+    action: Action
 
 
 _workspaces: dict = {}
-_logs: dict[str, list[dict, Action, PlayLog]] = {}
+_logs: dict[str, list[dict, PlayLog]] = {}
 
 
 def get_workspace():
@@ -30,4 +31,4 @@ def get_logs():
 
 def get_play_logs(workspace_id, logs) -> list[PlayLog]:
     verbose_logs = logs[workspace_id]
-    return [pl for _, __, pl in verbose_logs]
+    return [pl for _, pl in verbose_logs]
