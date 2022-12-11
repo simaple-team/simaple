@@ -3,8 +3,8 @@ from __future__ import annotations
 from typing import List
 
 from simaple.core import DamageLogic, JobType, Stat
-from simaple.link import LinkSkillset
 from simaple.optimizer.optimizer import DiscreteTarget
+from simaple.system.link import LinkSkillset
 
 
 class LinkSkillTarget(DiscreteTarget):

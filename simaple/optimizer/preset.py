@@ -11,8 +11,6 @@ from pydantic import BaseModel
 from simaple.core import DamageLogic, JobType, Stat
 from simaple.gear.gearset import Gearset
 from simaple.gear.potential import Potential, PotentialTier
-from simaple.hyperstat import Hyperstat
-from simaple.link import LinkSkillset
 from simaple.optimizer import (
     HyperstatTarget,
     LinkSkillTarget,
@@ -21,7 +19,9 @@ from simaple.optimizer import (
     UnionSquadTarget,
     WeaponPotentialOptimizer,
 )
-from simaple.union import UnionOccupation, UnionSquad
+from simaple.system.hyperstat import Hyperstat
+from simaple.system.link import LinkSkillset
+from simaple.system.union import UnionOccupation, UnionSquad
 from simaple.util import Timer
 
 

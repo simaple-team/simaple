@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from simaple.core import DamageLogic, Stat
-from simaple.hyperstat import Hyperstat
 from simaple.optimizer.optimizer import DiscreteTarget
+from simaple.system.hyperstat import Hyperstat
 
 
 class HyperstatTarget(DiscreteTarget):
