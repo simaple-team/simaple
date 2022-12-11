@@ -3,7 +3,6 @@ import pytest
 from simaple.core import JobCategory, JobType, Stat
 from simaple.core.damage import STRBasedDamageLogic
 from simaple.data.baseline import get_baseline_gearset
-from simaple.gear.potential import PotentialTier
 from simaple.optimizer.preset import PresetOptimizer
 
 
@@ -31,11 +30,6 @@ def test_preset(test_gearset):
         character_job_type=JobType.adele,
         alternate_character_job_types=[],
         link_count=12 + 1,
-        weapon_potential_tier=(
-            PotentialTier.legendary,
-            PotentialTier.unique,
-            PotentialTier.unique,
-        ),
     )
 
     preset = optimizer.create_optimal_preset_from_gearset(test_gearset)

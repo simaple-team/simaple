@@ -3,3 +3,6 @@
 .vscode/
 dist/
 docs/_build/
+record.tsv
+report.tsv
+.stat*

@@ -10,7 +10,7 @@ from pydantic import BaseModel
 
 from simaple.core import DamageLogic, JobType, Stat
 from simaple.gear.gearset import Gearset
-from simaple.gear.potential import Potential, PotentialTier
+from simaple.gear.potential import Potential
 from simaple.optimizer import (
     HyperstatTarget,
     LinkSkillTarget,
@@ -67,7 +67,6 @@ class PresetOptimizer(BaseModel):
     character_job_type: JobType
     alternate_character_job_types: List[JobType]
     link_count: int
-    weapon_potential_tier: Tuple[PotentialTier, PotentialTier, PotentialTier]
 
     def calculate_optimal_hyperstat(self, reference_stat: Stat) -> Hyperstat:
         with Timer("hyperstat"):
@@ -136,12 +135,12 @@ class PresetOptimizer(BaseModel):
         return result
 
     def calculate_optimal_weapon_potential(
-        self, reference_stat: Stat
+        self, reference_stat: Stat, weapon_potential_tiers
     ) -> Tuple[Potential, Potential, Potential]:
         with Timer("weapon potential"):
             potentials = WeaponPotentialOptimizer(
                 default_stat=reference_stat,
-                tiers=self.weapon_potential_tier,
+                tiers=weapon_potential_tiers,
                 damage_logic=self.damage_logic,
             ).get_full_optimal_potential()
 
@@ -176,7 +175,8 @@ class PresetOptimizer(BaseModel):
         preset.gearset.set_empty_potential()
         preset.gearset.change_weaponry_potentials(
             self.calculate_optimal_weapon_potential(
-                preset.get_total_stat() + self.default_stat
+                preset.get_total_stat() + self.default_stat,
+                preset.gearset.weapon_potential_tiers[0],
             )
         )
 

@@ -122,7 +122,7 @@ confidence=
 # Unfortunately, since the options parsing does not support multi-line entries
 # nor line continuation, all of the above items are redundantly specified here
 # in a way that pylint is willing to parse.
-disable=super-on-old-class,arguments-differ,signature-differs,method-hidden,abstract-method,no-member,relative-import,no-init,import-error,attribute-defined-outside-init,abstract-class-not-used,unused-argument,unused-variable,invalid-name,duplicate-code,abstract-class-little-used,too-few-public-methods,too-many-instance-attributes,too-many-ancestors,too-many-return-statements,too-many-lines,too-many-locals,too-many-function-args,too-many-public-methods,too-many-arguments,bad-continuation,no-self-use,missing-docstring,fixme,star-args,locally-disabled,locally-enabled,bad-option-value
+disable=super-on-old-class,arguments-differ,signature-differs,method-hidden,abstract-method,no-member,relative-import,no-init,import-error,attribute-defined-outside-init,abstract-class-not-used,unused-argument,unused-variable,invalid-name,duplicate-code,abstract-class-little-used,too-few-public-methods,too-many-instance-attributes,too-many-ancestors,too-many-return-statements,too-many-lines,too-many-locals,too-many-function-args,too-many-public-methods,too-many-arguments,bad-continuation,no-self-use,missing-docstring,fixme,star-args,locally-disabled,locally-enabled,bad-option-value,c-extension-no-member
 
 [REPORTS]
 

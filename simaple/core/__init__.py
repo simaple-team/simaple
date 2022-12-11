@@ -3,6 +3,7 @@ from simaple.core.base import (
     AnyStat,
     AttackType,
     BaseStatType,
+    ElementalResistance,
     LevelStat,
     Stat,
     StatProps,
