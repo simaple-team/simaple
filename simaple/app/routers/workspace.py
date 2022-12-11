@@ -5,27 +5,16 @@ import fastapi
 import pydantic
 from fastapi import Depends
 
+from simaple.app.services.base import PlayLog, get_logs, get_workspace
 from simaple.core.base import ActionStat, Stat
 from simaple.core.damage import INTBasedDamageLogic
-from simaple.simulate.base import Action, Event
-from simaple.simulate.component.view import Running, Validity
+from simaple.simulate.base import Action
 from simaple.simulate.kms import get_client
 from simaple.simulate.report.base import Report
 from simaple.simulate.report.dpm import DPMCalculator, LevelAdvantage
 from simaple.simulate.reserved_names import Tag
 
 router = fastapi.APIRouter(prefix="/workspaces")
-
-_workspaces: dict = {}
-_logs: dict = {}
-
-
-def get_workspace():
-    return _workspaces
-
-
-def get_logs():
-    return _logs
 
 
 class WorkspaceConfiguration(pydantic.BaseModel):
@@ -70,7 +59,7 @@ def create(
         "damage_calculator": damage_calculator,
     }
 
-    response = PlayResponse(
+    response = PlayLog(
         events=[],
         index=0,
         validity_view=client.environment.show("validity"),
@@ -90,23 +79,13 @@ def create(
     return WorkspaceResponse(id=workspace_id)
 
 
-class PlayResponse(pydantic.BaseModel):
-    events: list[Event]
-    index: int
-    validity_view: list[Validity]
-    running_view: list[Running]
-    buff_view: Stat
-    clock: float
-    damage: float
-
-
-@router.post("/play/{workspace_id}", response_model=PlayResponse)
+@router.post("/play/{workspace_id}", response_model=PlayLog)
 def play(
     workspace_id: str,
     action: Action,
     workspace=Depends(get_workspace),
     logs=Depends(get_logs),
-) -> PlayResponse:
+) -> PlayLog:
 
     client = workspace[workspace_id]["client"]
     damage_calculator = workspace[workspace_id]["damage_calculator"]
@@ -123,7 +102,7 @@ def play(
 
     damage = damage_calculator.calculate_damage(report)
 
-    response = PlayResponse(
+    response = PlayLog(
         events=events,
         index=event_index,
         validity_view=client.environment.show("validity"),
@@ -140,13 +119,13 @@ def play(
     return response
 
 
-@router.get("/logs/{workspace_id}/{log_id}", response_model=PlayResponse)
+@router.get("/logs/{workspace_id}/{log_id}", response_model=PlayLog)
 def get_log(
     workspace_id: str,
     log_id: int,
     workspace=Depends(get_workspace),
     logs=Depends(get_logs),
-) -> PlayResponse:
+) -> PlayLog:
     current_log = logs[workspace_id]
     _, __, resp = current_log[log_id]
 

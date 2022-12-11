@@ -1,3 +1,6 @@
+import json
+import os
+
 from fastapi.testclient import TestClient
 
 from simaple.app.web import app
@@ -48,7 +51,21 @@ def test_read_main():
     workspace_id = response.json()["id"]
 
     resp = client.get(
-        f"/workspaces/logs/{workspace_id}/0",
+        f"/statistics/graph/{workspace_id}",
     )
 
-    assert resp.json()["index"] == 0
+    requests = 0
+    with open(os.path.join(os.path.dirname(__file__), "record.tsv")) as f:
+        for line in f:
+            timing, action = line.split("\t")
+            resp = client.post(
+                f"/workspaces/play/{workspace_id}",
+                json=json.loads(action),
+            )
+            requests += 1
+            if requests > 50:
+                break
+
+    resp = client.get(
+        f"/statistics/graph/{workspace_id}",
+    )
