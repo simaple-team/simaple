@@ -5,8 +5,8 @@ from loguru import logger
 
 from simaple.core import JobType, Stat
 from simaple.core.damage import INTBasedDamageLogic
-from simaple.link import LinkSkillset
 from simaple.optimizer import LinkSkillTarget, StepwizeOptimizer
+from simaple.system.link import LinkSkillset
 
 
 @pytest.mark.parametrize("maximum_cost", [3, 6, 12, 13])

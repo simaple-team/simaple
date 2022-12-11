@@ -6,7 +6,7 @@ from loguru import logger
 from simaple.core import JobType, Stat
 from simaple.core.damage import INTBasedDamageLogic
 from simaple.optimizer import StepwizeOptimizer, UnionSquadTarget
-from simaple.union import UnionSquad
+from simaple.system.union import UnionSquad
 
 
 @pytest.mark.parametrize("maximum_cost", [5, 10, 15, 30])

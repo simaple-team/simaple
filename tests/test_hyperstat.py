@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.hyperstat import Hyperstat
+from simaple.system.hyperstat import Hyperstat
 
 
 @pytest.mark.parametrize(

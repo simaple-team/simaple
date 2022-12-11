@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from simaple.core import DamageLogic, Stat
 from simaple.optimizer.optimizer import DiscreteTarget
-from simaple.union import UnionOccupation
+from simaple.system.union import UnionOccupation
 
 
 class UnionOccupationTarget(DiscreteTarget):

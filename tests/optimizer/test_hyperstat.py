@@ -5,8 +5,8 @@ from loguru import logger
 
 from simaple.core import Stat
 from simaple.core.damage import INTBasedDamageLogic
-from simaple.hyperstat import Hyperstat
 from simaple.optimizer import HyperstatTarget, StepwizeOptimizer
+from simaple.system.hyperstat import Hyperstat
 
 
 @pytest.mark.parametrize("maximum_cost", [50, 300, 1200])

@@ -4,7 +4,7 @@ from typing import List
 
 from simaple.core import DamageLogic, JobType, Stat
 from simaple.optimizer.optimizer import DiscreteTarget
-from simaple.union import UnionSquad
+from simaple.system.union import UnionSquad
 
 
 class UnionSquadTarget(DiscreteTarget):
