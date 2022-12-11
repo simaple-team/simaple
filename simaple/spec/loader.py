@@ -1,4 +1,4 @@
-from typing import Any, Optional, Type
+from typing import Any, Optional, Sequence, Type
 
 from simaple.spec.loadable import get_class
 from simaple.spec.patch import Patch
@@ -18,7 +18,7 @@ class SpecBasedLoader:
         self,
         query: Optional[dict[str, Any]] = None,
         injects: Optional[dict[str, Any]] = None,
-        patches: Optional[list[Patch]] = None,
+        patches: Optional[Sequence[Patch]] = None,
     ) -> Any:
         if query is None:
             query = {}
@@ -35,7 +35,7 @@ class SpecBasedLoader:
         self,
         query: Optional[dict[str, Any]] = None,
         injects: Optional[dict[str, Any]] = None,
-        patches: Optional[list[Patch]] = None,
+        patches: Optional[Sequence[Patch]] = None,
     ) -> list[Any]:
         if query is None:
             query = {}
@@ -53,7 +53,7 @@ class SpecBasedLoader:
         self,
         specification: Spec,
         injects: dict[str, Any],
-        patches: Optional[list[Patch]],
+        patches: Optional[Sequence[Patch]],
     ):
         class_name = specification.get_classname()
         component_class = self._get_component_class(class_name, specification.kind)

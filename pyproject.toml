@@ -18,7 +18,8 @@ unittest = "pytest -vv -x --ignore tests/fetch/request"
 rsctest = "pytest -vv -x test_resource/"
 typetest = "mypy simaple tests"
 fetchtest = "pytest -vv -x tests/fetch/request"
-
+clean = "rm -rf **/__pycache__ .coverage .mypy_cache .pytest_cache"
+web = "python launcher.py web"
 test = ["coverage", "typetest", "lint", "formatting-check"]
 
 [tool.black]
@@ -81,6 +82,10 @@ requests = "^2.26.0"
 Sphinx = "^5.1.1"
 sphinx-rtd-theme = "^1.0.0"
 readthedocs-sphinx-ext = "^2.2.0"
+fastapi = "^0.88.0"
+fire = "^0.4.0"
+uvicorn = "^0.20.0"
+httpx = "^0.23.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
@@ -93,6 +98,9 @@ pytest-cov = "^3.0.0"
 build = "^0.8.0"
 twine = "^4.0.1"
 types-requests = "^2.28.3"
+
+[tool.poetry.group.dev.dependencies]
+jupyter = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

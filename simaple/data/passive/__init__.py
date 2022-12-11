@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from simaple.character.passive_skill import DefaultActiveSkill, PassiveSkill
-from simaple.core import Stat
+from simaple.core import JobType, Stat
 from simaple.data.passive.patch import SkillLevelPatch
 from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.patch import EvalPatch, Patch
@@ -25,37 +25,46 @@ def get_patches(
 
 
 def get_passive_skills(
-    group: str, combat_orders_level: int, passive_skill_level: int, character_level: int
+    jobtype: JobType,
+    combat_orders_level: int,
+    passive_skill_level: int,
+    character_level: int,
 ) -> list[PassiveSkill]:
     repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
     loader = SpecBasedLoader(repository)
     patches = get_patches(combat_orders_level, passive_skill_level, character_level)
     return loader.load_all(
-        query={"group": group, "kind": "PassiveSkill"}, patches=patches
+        query={"group": jobtype.value, "kind": "PassiveSkill"}, patches=patches
     )
 
 
 def get_default_active_skills(
-    group: str, combat_orders_level: int, passive_skill_level: int, character_level: int
+    jobtype: JobType,
+    combat_orders_level: int,
+    passive_skill_level: int,
+    character_level: int,
 ) -> list[DefaultActiveSkill]:
     repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
     loader = SpecBasedLoader(repository)
     patches = get_patches(combat_orders_level, passive_skill_level, character_level)
 
     return loader.load_all(
-        query={"group": group, "kind": "DefaultActiveSkill"}, patches=patches
+        query={"group": jobtype.value, "kind": "DefaultActiveSkill"}, patches=patches
     )
 
 
 def get_passive_and_default_active_stat(
-    group: str, combat_orders_level: int, passive_skill_level: int, character_level: int
+    jobtype: JobType,
+    combat_orders_level: int,
+    passive_skill_level: int,
+    character_level: int,
 ) -> Stat:
     passive_skills = get_passive_skills(
-        group, combat_orders_level, passive_skill_level, character_level
+        jobtype, combat_orders_level, passive_skill_level, character_level
     )
 
     default_active_skills = get_default_active_skills(
-        group, combat_orders_level, passive_skill_level, character_level
+        jobtype, combat_orders_level, passive_skill_level, character_level
     )
 
     return sum(

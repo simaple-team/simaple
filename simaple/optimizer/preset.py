@@ -57,10 +57,12 @@ class PresetOptimizer(BaseModel):
     Optimzation may not optimal; also takes long time (more than 1 minute).
     """
 
+    class Config:
+        extra = "forbid"
+
     union_block_count: int
     default_stat: Stat
     level: int
-    level_stat: Stat
     damage_logic: DamageLogic
     character_job_type: JobType
     alternate_character_job_types: List[JobType]
@@ -158,7 +160,7 @@ class PresetOptimizer(BaseModel):
             union_squad=UnionSquad.empty(),
             union_occupation=UnionOccupation(),
             level=self.level,
-            level_stat=self.level_stat,
+            level_stat=self.damage_logic.get_best_level_based_stat(self.level),
         )
 
         for i in range(2):
@@ -171,6 +173,7 @@ class PresetOptimizer(BaseModel):
         for slot in preset.gearset.get_weaponry_slots():
             slot.get_gear().potential = Potential()
 
+        preset.gearset.set_empty_potential()
         preset.gearset.change_weaponry_potentials(
             self.calculate_optimal_weapon_potential(
                 preset.get_total_stat() + self.default_stat

@@ -10,7 +10,6 @@ patch:
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
-  type: DamageSkill
   name: 플레임 스윕
   delay: 600
   damage: '{{ 130 + 3 * skill_level }}'
@@ -38,7 +37,6 @@ data:
   red: true
   damage: '{{ 112 + 3 * skill_level }}'
   hit: 15
-  type: DamageSkill
   default_skill_level: 30
   v_improvement: 2
 ---
@@ -59,7 +57,6 @@ data:
   delay: 720
   red: true
   modifier:
-    damage_multiplier: 10
     final_damage_multiplier: 125
     ignored_defence: '{{ 10 + skill_level }}'
   damage: '{{ 95 + skill_level }}'

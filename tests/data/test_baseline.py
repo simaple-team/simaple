@@ -33,5 +33,6 @@ def test_gearset_ok():
     )
 
     assert (
-        gearset.get_total_stat().get_base_stat_coefficient(BaseStatType.STR) == 45188.9
+        int(gearset.get_total_stat().get_base_stat_coefficient(BaseStatType.STR))
+        == 44495
     )

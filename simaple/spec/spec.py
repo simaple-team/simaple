@@ -1,6 +1,8 @@
-from typing import Any, Optional
+from typing import Any, Optional, Sequence
 
 import pydantic
+
+from simaple.spec.patch import Patch
 
 
 class SpecMetadata(pydantic.BaseModel):
@@ -26,7 +28,7 @@ class Spec(pydantic.BaseModel):
     def get_classname(self):
         return self.version.split("/")[1]
 
-    def is_patch_fits(self, patches: Optional[list] = None):
+    def is_patch_fits(self, patches: Optional[Sequence[Patch]] = None):
         if self.patch is None:
             return patches is None
 
@@ -41,7 +43,7 @@ class Spec(pydantic.BaseModel):
             for given, expected in zip(patches, self.patch)
         )
 
-    def interpret(self, patches: Optional[list] = None):
+    def interpret(self, patches: Optional[Sequence[Patch]] = None):
         if self.ignore_overflowing_patch:
             if self.patch and patches is not None:
                 patches = patches[: len(self.patch)]

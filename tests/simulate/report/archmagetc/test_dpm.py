@@ -1,16 +1,22 @@
 import simaple.simulate.component.skill  # pylint: disable=W0611
-from simaple.core.damage import INTBasedDamageLogic
+from simaple.core.base import ActionStat
+from simaple.core.jobtype import JobType
+from simaple.data.damage_logic import get_damage_logic
 from simaple.simulate.actor import ActionRecorder, DefaultMDCActor
-from simaple.simulate.component.view import (
-    BuffParentView,
-    RunningParentView,
-    ValidityParentView,
-)
+from simaple.simulate.kms import get_client
 from simaple.simulate.report.base import Report, ReportEventHandler
 from simaple.simulate.report.dpm import DPMCalculator, LevelAdvantage
 
 
-def test_actor(archmagetc_client, character_stat):
+def test_actor(character_stat):
+    archmagetc_client = get_client(
+        ActionStat(),
+        ["archmagetc", "common", "adventurer.magician"],
+        {"character_level": 260},
+        {},
+        {},
+    )
+
     actor = DefaultMDCActor(
         order=[
             "오버로드 마나",
@@ -31,11 +37,8 @@ def test_actor(archmagetc_client, character_stat):
             "체인 라이트닝",
         ]
     )
-    events = []
+
     environment = archmagetc_client.environment
-    ValidityParentView.build_and_install(environment, "validity")
-    BuffParentView.build_and_install(environment, "buff")
-    RunningParentView.build_and_install(environment, "running")
 
     recorder = ActionRecorder("record.tsv")
     report = Report()
@@ -44,7 +47,7 @@ def test_actor(archmagetc_client, character_stat):
 
     dpm_calculator = DPMCalculator(
         character_spec=character_stat,
-        damage_logic=INTBasedDamageLogic(attack_range_constant=1.2, mastery=0.95),
+        damage_logic=get_damage_logic(JobType.archmagetc, 0),
         armor=300,
         level=LevelAdvantage().get_advantage(250, 260),
         force_advantage=1.5,
@@ -58,4 +61,3 @@ def test_actor(archmagetc_client, character_stat):
             rec.write(action, environment.show("clock"))
 
     print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")
-    report.save("report.tsv")
