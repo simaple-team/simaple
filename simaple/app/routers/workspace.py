@@ -5,7 +5,13 @@ import fastapi
 import pydantic
 from fastapi import Depends
 
-from simaple.app.services.base import PlayLog, get_logs, get_workspace
+from simaple.app.services.base import (
+    PlayLog,
+    add_play_log,
+    dispatch_action,
+    get_logs,
+    get_workspace,
+)
 from simaple.core.base import ActionStat, Stat
 from simaple.core.damage import INTBasedDamageLogic
 from simaple.simulate.base import Action
@@ -84,45 +90,12 @@ def create(
 def play(
     workspace_id: str,
     action: Action,
-    workspace=Depends(get_workspace),
+    workspaces=Depends(get_workspace),
     logs=Depends(get_logs),
 ) -> PlayLog:
 
-    client = workspace[workspace_id]["client"]
-    damage_calculator = workspace[workspace_id]["damage_calculator"]
-
-    current_log = logs[workspace_id]
-    events = client.play(action)
-    event_index = len(current_log) + 1
-    buff_view = client.environment.show("buff")
-
-    report = Report()
-    for event in events:
-        if event.tag == Tag.DAMAGE:
-            report.add(0, event, buff_view)
-
-    delay = 0
-    for event in events:
-        if event.tag in (Tag.DELAY,) and event.payload["time"] > 0:
-            delay += event.payload["time"]
-
-    damage = damage_calculator.calculate_damage(report)
-
-    response = PlayLog(
-        events=events,
-        index=event_index,
-        validity_view={v.name: v for v in client.environment.show("validity")},
-        running_view={v.name: v for v in client.environment.show("running")},
-        buff_view=client.environment.show("buff"),
-        clock=client.environment.show("clock"),
-        damage=damage,
-        delay=delay,
-        action=action,
-    )
-
-    current_log.append(
-        (client.environment.store.save(), response),
-    )
+    response = dispatch_action(workspaces[workspace_id], logs[workspace_id], action)
+    add_play_log(workspaces[workspace_id], logs[workspace_id], response)
 
     return response
 
