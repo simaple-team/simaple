@@ -3,7 +3,6 @@ from abc import ABCMeta, abstractmethod
 
 import bs4
 import pydantic
-import re
 
 
 class NumberString:
@@ -126,30 +125,31 @@ class CharacterHyperstatExtractor(CharacterPropertyExtractor):
                 "immunity", "attack_power", "magic_attack", "arcaneforce"]
 
         regexes = {
-            "STR": re.compile('힘 \d+ 증가'),
-            "DEX": re.compile('민첩성 \d+ 증가'),
-            "INT": re.compile('지력 \d+ 증가'),
-            "LUK": re.compile('운 \d+ 증가'),
-            "HP": re.compile('최대 HP \d+% 증가'),
-            "MP": re.compile('최대 MP \d+% 증가'),
-            "DF": re.compile('최대 데몬 포스/타임 포스 \d+ 증가'),
-            "PP": re.compile('최대 싸이킥 포인트 \d+ 증가'),
-            "critical_rate": re.compile('크리티컬 확률 \d+% 증가'),
-            "critical_damage": re.compile('크리티컬 데미지 \d+% 증가'),
-            "ignored_defence": re.compile('방어율 무시 \d+% 증가'),
-            "damage_multiplier": re.compile('데미지 \d+% 증가'),
-            "boss_damage_multiplier": re.compile('보스 몬스터 공격 시 데미지 \d+% 증가'),
-            "immunity": re.compile('상태이상 내성 \d+ 증가'),
-            "attack_power": re.compile('공격력과 마력 \d+ 증가'),
-            "magic_attack": re.compile('공격력과 마력 \d+ 증가'),
-            "arcaneforce": re.compile('아케인포스 \d+ 증가'),
+            "STR": re.compile('힘 \\d+ 증가'),
+            "DEX": re.compile('민첩성 \\d+ 증가'),
+            "INT": re.compile('지력 \\d+ 증가'),
+            "LUK": re.compile('운 \\d+ 증가'),
+            "HP": re.compile('최대 HP \\d+% 증가'),
+            "MP": re.compile('최대 MP \\d+% 증가'),
+            "DF": re.compile('최대 데몬 포스/타임 포스 \\d+ 증가'),
+            "PP": re.compile('최대 싸이킥 포인트 \\d+ 증가'),
+            "critical_rate": re.compile('크리티컬 확률 \\d+% 증가'),
+            "critical_damage": re.compile('크리티컬 데미지 \\d+% 증가'),
+            "ignored_defence": re.compile('방어율 무시 \\d+% 증가'),
+            "damage_multiplier": re.compile('데미지 \\d+% 증가'),
+            "boss_damage_multiplier": re.compile('보스 몬스터 공격 시 데미지 \\d+% 증가'),
+            "immunity": re.compile('상태이상 내성 \\d+ 증가'),
+            "attack_power": re.compile('공격력과 마력 \\d+ 증가'),
+            "magic_attack": re.compile('공격력과 마력 \\d+ 증가'),
+            "arcaneforce": re.compile('아케인포스 \\d+ 증가'),
         }
 
         result = {}
         for key in keys:
             for element in stat_elements:
                 if regexes[key].match(element):
-                    result[key] = float(re.findall("\d+", element)[0])
+                    result[key] = float(re.findall("\\d+", element)[0])
+                    break
             # if the key does not exists, set as 0
             if key not in result:
                 result[key] = 0.0
