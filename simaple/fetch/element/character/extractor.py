@@ -111,6 +111,7 @@ class CharacterHyperstatExtractor(CharacterPropertyExtractor):
         # STR, DEX, INT, LUK, HP%, MP%, DF/TF/PP/영력, 크확, 크뎀, 방무, 데미지, 보뎀, 일뎀, 내성, 공마, 경험치, 아케인포스
         # 스탯에는 스탯퍼 미적용
         '''
+
         stat_elements = [
             el.text
             for el in soup.select_one(
@@ -118,6 +119,12 @@ class CharacterHyperstatExtractor(CharacterPropertyExtractor):
             ).children
             if isinstance(el, bs4.element.NavigableString)
         ]
+
+        keys = ["STR", "DEX", "INT", "LUK", "HP", "MP", "DF", "PP",
+                "critical_rate", "critical_damage", "ignored_defence",
+                "damage_multiplier", "boss_damage_multiplier",
+                "immunity", "attack_power", "magic_attack", "arcaneforce"]
+
         regexes = {
             "STR": re.compile('힘 \d+ 증가'),
             "DEX": re.compile('민첩성 \d+ 증가'),
@@ -137,17 +144,15 @@ class CharacterHyperstatExtractor(CharacterPropertyExtractor):
             "magic_attack": re.compile('공격력과 마력 \d+ 증가'),
             "arcaneforce": re.compile('아케인포스 \d+ 증가'),
         }
-        result =   {"STR": 0, "DEX": 0, "INT": 0, "LUK": 0,
-                    "HP": 0, "MP": 0, "DF": 0, "PP": 0,
-                    "critical_rate": 0, "critical_damage": 0, "ignored_defence": 0,
-                    "damage_multiplier": 0, "boss_damage_multiplier": 0,
-                    "immunity": 0, "attack_power": 0, "magic_attack": 0,
-                    "arcaneforce": 0
-                    }
-        for element in stat_elements:
-            for key in result.keys():
+
+        result = {}
+        for key in keys:
+            for element in stat_elements:
                 if regexes[key].match(element):
                     result[key] = float(re.findall("\d+", element)[0])
+            # if the key does not exists, set as 0
+            if key not in result:
+                result[key] = 0.0
         return result
 
 
