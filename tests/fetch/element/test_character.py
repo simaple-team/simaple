@@ -62,7 +62,7 @@ def test_item_element():
             "immunity": 0,
             "attack_power": 18.0,
             "magic_attack": 18.0,
-            "arcaneforce": 0
+            "arcaneforce": 0,
         },
         "trait": {"카리스마": 100, "통찰력": 100, "의지": 100, "손재주": 100, "감성": 100, "매력": 100},
     }
