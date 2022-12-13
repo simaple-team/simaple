@@ -119,33 +119,13 @@ class CharacterHyperstatExtractor(CharacterPropertyExtractor):
             if isinstance(el, bs4.element.NavigableString)
         ]
 
-        keys = [
-            "STR",
-            "DEX",
-            "INT",
-            "LUK",
-            "HP",
-            "MP",
-            "DF",
-            "PP",
-            "critical_rate",
-            "critical_damage",
-            "ignored_defence",
-            "damage_multiplier",
-            "boss_damage_multiplier",
-            "immunity",
-            "attack_power",
-            "magic_attack",
-            "arcaneforce",
-        ]
-
         regexes = {
-            "STR": re.compile("힘 \\d+ 증가"),
-            "DEX": re.compile("민첩성 \\d+ 증가"),
-            "INT": re.compile("지력 \\d+ 증가"),
-            "LUK": re.compile("운 \\d+ 증가"),
-            "HP": re.compile("최대 HP \\d+% 증가"),
-            "MP": re.compile("최대 MP \\d+% 증가"),
+            "STR_static": re.compile("힘 \\d+ 증가"),
+            "DEX_static": re.compile("민첩성 \\d+ 증가"),
+            "INT_static": re.compile("지력 \\d+ 증가"),
+            "LUK_static": re.compile("운 \\d+ 증가"),
+            "MHP": re.compile("최대 HP \\d+% 증가"),
+            "MMP": re.compile("최대 MP \\d+% 증가"),
             "DF": re.compile("최대 데몬 포스/타임 포스 \\d+ 증가"),
             "PP": re.compile("최대 싸이킥 포인트 \\d+ 증가"),
             "critical_rate": re.compile("크리티컬 확률 \\d+% 증가"),
@@ -160,14 +140,15 @@ class CharacterHyperstatExtractor(CharacterPropertyExtractor):
         }
 
         result = {}
-        for key in keys:
+
+        for (key, patttern) in regexes.items():
+            # default value of key is 0
+            result[key] = 0
             for element in stat_elements:
-                if regexes[key].match(element):
+                if patttern.match(element):
                     result[key] = float(re.findall("\\d+", element)[0])
                     break
-            # if the key does not exists, set as 0
-            if key not in result:
-                result[key] = 0.0
+
         return result
 
 
