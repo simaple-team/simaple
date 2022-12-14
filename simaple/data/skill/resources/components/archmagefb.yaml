@@ -396,6 +396,7 @@ data:
   damage: '{{ 250 + 10 * skill_level }}'
   delay: 600
   hit: 0
+  cooldown: 25_000
 
   tick_interval: 1_800
   tick_damage: '{{ 150 + skill_level * 6 }}'

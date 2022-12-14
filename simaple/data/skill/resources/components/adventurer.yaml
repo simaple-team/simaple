@@ -10,6 +10,7 @@ patch:
 data:
   name: 메이플 여신의 축복
   duration: 60_000
+  cooldown: 120_000
   delay: 450
   red: true
   rem: false
