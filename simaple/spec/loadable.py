@@ -1,16 +1,13 @@
 from __future__ import annotations
 
-import copy
 from typing import Any, Type
 
 from pydantic.main import ModelMetaclass
 
 
 class NamespaceRepository:
-    def __init__(self, db_clone=None):
+    def __init__(self):
         self._db: dict[str, dict[str, Type[Any]]] = {}
-        if db_clone:
-            self._db = db_clone
 
     def add(self, name: str, cls: Type[Any], kind: str) -> None:
         if kind not in self._db:
@@ -24,15 +21,8 @@ class NamespaceRepository:
     def _create_kind(self, kind: str) -> None:
         self._db[kind] = {}
 
-    def copy(self) -> NamespaceRepository:
-        return NamespaceRepository(copy.deepcopy(self._db))
-
 
 _LAYER_NAMESPACE = NamespaceRepository()
-
-
-def get_all() -> NamespaceRepository:
-    return _LAYER_NAMESPACE.copy()
 
 
 def get_class(name: str, kind: str = "default") -> Type[Any]:

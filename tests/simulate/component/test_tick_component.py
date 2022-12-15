@@ -16,6 +16,7 @@ def tick_damage_component():
         tick_damage=50,
         tick_hit=3,
         duration=1_000,
+        cooldown=30_000,
     )
     return component
 
@@ -25,9 +26,14 @@ def compiled_tick_damage_component(tick_damage_component, bare_store):
     return tick_damage_component.compile(bare_store)
 
 
-def test_tick_damage_component_emit_initial_damage(
-    tick_damage_component, compiled_tick_damage_component
-):
+def test_tick_damage_component_reject(compiled_tick_damage_component):
+    events = compiled_tick_damage_component.use(None)
+    events = compiled_tick_damage_component.use(None)
+
+    assert events[0].tag == Tag.REJECT
+
+
+def test_tick_damage_component_emit_initial_damage(compiled_tick_damage_component):
     events = compiled_tick_damage_component.use(None)
     assert events[0].payload == {"damage": 100, "hit": 1.0, "modifier": None}
     assert events[1].payload == {"time": 30.0}

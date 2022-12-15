@@ -12,9 +12,6 @@ class DamageLog(pydantic.BaseModel):
     hit: float
     buff: Stat
 
-    def __str__(self):
-        return f"{self.clock}ms\t\t{self.name}\t{self.damage:.3f}\t{self.hit}\t{self.buff.short_dict()}"
-
     def serialize(self):
         return f"{self.clock}\t{self.name}\t{self.damage:.3f}\t{self.hit}\t{self.buff.short_dict()}"
 
@@ -46,10 +43,6 @@ class Report:
         with open(file_name, "w", encoding="utf8") as f:
             for log in self._logs:
                 f.write(log.serialize() + "\n")
-
-    def show(self):
-        for log in self._logs:
-            print(log)
 
     def total_time(self):
         return self._logs[-1].clock

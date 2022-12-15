@@ -49,10 +49,6 @@ class FrostEffect(Component):
     def buff(self, frost_stack: StackState):
         return Stat(critical_damage=self.critical_damage_per_stack * frost_stack.stack)
 
-    @view_method
-    def stack(self, frost_stack: StackState):
-        return frost_stack.get_stack()
-
 
 def jupyter_thunder_shock_advantage(jupyter_thunder_shock: IntervalState) -> Stat:
     if jupyter_thunder_shock.enabled():
@@ -131,7 +127,11 @@ class JupyterThunder(Component):
         interval_state = interval_state.copy()
 
         if not cooldown_state.available:
-            return (cooldown_state, interval_state), self.event_provider.rejected()
+            return (
+                cooldown_state,
+                interval_state,
+                dynamics,
+            ), self.event_provider.rejected()
 
         cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
         interval_state.set_time_left(self.duration)
@@ -262,7 +262,11 @@ class ThunderBreak(Component):
         interval_state = interval_state.copy()
 
         if not cooldown_state.available:
-            return (cooldown_state, interval_state), self.event_provider.rejected()
+            return (
+                cooldown_state,
+                interval_state,
+                dynamics,
+            ), self.event_provider.rejected()
 
         cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
         interval_state.set_time_left(self.duration)

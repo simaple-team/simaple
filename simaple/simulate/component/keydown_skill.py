@@ -72,7 +72,11 @@ class KeydownSkillComponent(SkillComponent):
         keydown_state = keydown_state.copy()
 
         if not cooldown_state.available:
-            return (cooldown_state, keydown_state), self.event_provider.rejected()
+            return (
+                cooldown_state,
+                keydown_state,
+                dynamics,
+            ), self.event_provider.rejected()
 
         damage_event = [self.event_provider.dealt(self.damage, self.hit)]
         delay_event = [self.event_provider.delayed(self.delay)]

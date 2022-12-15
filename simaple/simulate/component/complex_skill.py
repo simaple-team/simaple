@@ -39,7 +39,11 @@ class SynergySkillComponent(SkillComponent):
         duration_state = duration_state.copy()
 
         if not cooldown_state.available:
-            return cooldown_state, self.event_provider.rejected()
+            return (
+                cooldown_state,
+                duration_state,
+                dynamics,
+            ), self.event_provider.rejected()
 
         cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
         duration_state.set_time_left(

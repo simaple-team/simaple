@@ -9,17 +9,17 @@ from pydantic import BaseModel, PrivateAttr
 
 class Patch(BaseModel, metaclass=ABCMeta):
     def apply(self, raw: dict) -> dict:
-        ...
+        """Modify gien raw-dict"""
 
 
 class DFSTraversePatch(Patch):
     @abstractmethod
     def patch_value(self, value, origin: dict):
-        ...
+        """Modify gien value in dictionary"""
 
     @abstractmethod
     def patch_dict(self, k, v, origin: dict):
-        ...
+        """Modify partial dictionary"""
 
     def apply(self, raw: dict) -> dict:
         return cast(dict, self._apply(raw, raw))
