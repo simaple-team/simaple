@@ -19,7 +19,7 @@ class ViewTestComponent(Component):
 
     @view_method
     def validity(self, some_state):
-        return Validity(name=self.name, time_left=12, valid=False)
+        return Validity(name=self.name, time_left=12, valid=False, cooldown=10)
 
 
 def test_view():
@@ -32,5 +32,5 @@ def test_view():
     ValidityParentView.build_and_install(environment, "validity")
 
     assert environment.show("validity") == [
-        Validity(name="test_component", time_left=12.0, valid=False)
+        Validity(name="test_component", time_left=12.0, valid=False, cooldown=10)
     ]

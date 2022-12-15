@@ -21,16 +21,13 @@ def test_read_main(workspace_configuration, record_file_name):
     with open(record_file_name, encoding="utf-8") as f:
         for line in f:
             timing, action = line.split("\t")
-            resp = client.post(
-                f"/workspaces/play/{workspace_id}",
-                json=json.loads(action),
-            )
+            action = json.loads(action)
+
+            if action["method"] == "use":
+                resp = client.post(
+                    f"/workspaces/use_and_elapse/{workspace_id}",
+                    json={"name": action["name"]},
+                )
 
             given_delay = resp.json()["delay"]
-
-            if previous_delay != 0:
-                assert given_delay == 0
-
-            previous_delay = given_delay
-
-            requests += 1
+            assert given_delay == 0

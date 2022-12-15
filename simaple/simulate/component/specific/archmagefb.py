@@ -1,11 +1,12 @@
 from simaple.simulate.base import State
-from simaple.simulate.component.base import Component, reducer_method
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.skill import (
     CooldownState,
     IntervalState,
     StackState,
     TickDamageConfiguratedAttackSkillComponent,
 )
+from simaple.simulate.component.view import Validity
 from simaple.simulate.global_property import Dynamics
 
 
@@ -97,6 +98,15 @@ class PoisonNovaComponent(Component):
             ]
 
         return nova_state, None
+
+    @view_method
+    def validity(self, cooldown_state):
+        return Validity(
+            name=self.name,
+            time_left=max(0, cooldown_state.time_left),
+            valid=cooldown_state.available,
+            cooldown=self.cooldown,
+        )
 
 
 class PoisonChainComponent(TickDamageConfiguratedAttackSkillComponent):
