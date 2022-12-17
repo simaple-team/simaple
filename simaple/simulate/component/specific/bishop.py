@@ -5,10 +5,9 @@ from simaple.simulate.base import State
 from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.skill import (
     AttackSkillComponent,
-    CooldownState,
-    IntervalState,
     TickDamageConfiguratedAttackSkillComponent,
 )
+from simaple.simulate.component.state import CooldownState, IntervalState
 from simaple.simulate.global_property import Dynamics
 
 

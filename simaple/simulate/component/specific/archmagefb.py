@@ -1,12 +1,10 @@
 from simaple.simulate.base import State
 from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.skill import (
-    CooldownState,
-    IntervalState,
-    StackState,
-    TickDamageConfiguratedAttackSkillComponent,
     SkillComponent,
+    TickDamageConfiguratedAttackSkillComponent,
 )
+from simaple.simulate.component.state import CooldownState, IntervalState, StackState
 from simaple.simulate.component.view import Validity
 from simaple.simulate.global_property import Dynamics
 

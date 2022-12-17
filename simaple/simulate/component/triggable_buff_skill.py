@@ -1,9 +1,6 @@
 from simaple.simulate.component.base import reducer_method, view_method
-from simaple.simulate.component.skill import (
-    CooldownState,
-    DurationState,
-    SkillComponent,
-)
+from simaple.simulate.component.skill import SkillComponent
+from simaple.simulate.component.state import CooldownState, DurationState
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.global_property import Dynamics
 
