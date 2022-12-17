@@ -105,6 +105,8 @@ class StackState(State):
 class SkillComponent(Component):
     disable_validity: bool = False
     modifier: Optional[Stat]
+    cooldown: float
+    delay: float
 
     @property
     def event_provider(self) -> EventProvider:
@@ -123,7 +125,7 @@ class AttackSkillComponent(SkillComponent):
     name: str
     damage: float
     hit: float
-    cooldown: float = 0.0
+    cooldown: float
     delay: float
 
     def get_default_state(self):
@@ -269,7 +271,7 @@ class TickDamageConfiguratedAttackSkillComponent(SkillComponent):
     name: str
     damage: float
     hit: float
-    cooldown: float = 0.0
+    cooldown: float
     delay: float
 
     tick_interval: float

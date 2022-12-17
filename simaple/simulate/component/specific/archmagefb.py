@@ -1,10 +1,11 @@
 from simaple.simulate.base import State
-from simaple.simulate.component.base import Component, reducer_method, view_method
+from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.skill import (
     CooldownState,
     IntervalState,
     StackState,
     TickDamageConfiguratedAttackSkillComponent,
+    SkillComponent,
 )
 from simaple.simulate.component.view import Validity
 from simaple.simulate.global_property import Dynamics
@@ -28,12 +29,10 @@ class PoisonNovaState(State):
         self.time_left -= time
 
 
-class PoisonNovaComponent(Component):
+class PoisonNovaComponent(SkillComponent):
     name: str
     damage: float
     hit: float
-    cooldown: float = 0.0
-    delay: float
 
     nova_remaining_time: float = 4000
     nova_damage: float
