@@ -8,9 +8,15 @@ from simaple.simulate.component.skill import (
     CooldownState,
     DurationState,
     IntervalState,
-    TickDamageConfiguratedAttackSkillComponent,
+    SkillComponent,
 )
-from simaple.simulate.component.view import Running, Validity
+from simaple.simulate.component.trait.impl import (
+    CooldownValidityTrait,
+    DurableTrait,
+    StartIntervalWithoutDamageTrait,
+    TickEmittingTrait,
+)
+from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
 
@@ -41,7 +47,7 @@ class RobotMastery(Component):
         }
 
 
-class RobotSetupBuff(Component):
+class RobotSetupBuff(SkillComponent, DurableTrait, CooldownValidityTrait):
     stat: Stat
     cooldown: float = 0.0
     delay: float
@@ -62,43 +68,17 @@ class RobotSetupBuff(Component):
         duration_state: DurationState,
         dynamics: Dynamics,
     ):
-        cooldown_state, duration_state = cooldown_state.copy(), duration_state.copy()
-
-        if not cooldown_state.available:
-            return (
-                cooldown_state,
-                duration_state,
-                dynamics,
-            ), self.event_provider.rejected()
-
-        cooldown_state.set_time_left(self.cooldown)
-        duration_state.set_time_left(self.duration)
-
-        return (cooldown_state, duration_state, dynamics), self.event_provider.delayed(
-            self.delay
-        )
+        return self.use_durable_trait(cooldown_state, duration_state, dynamics)
 
     @reducer_method
     def elapse(
         self, time: float, cooldown_state: CooldownState, duration_state: DurationState
     ):
-        cooldown_state, duration_state = cooldown_state.copy(), duration_state.copy()
-
-        cooldown_state.elapse(time)
-        duration_state.elapse(time)
-
-        return (cooldown_state, duration_state), [
-            self.event_provider.elapsed(time),
-        ]
+        return self.elapse_durable_trait(time, cooldown_state, duration_state)
 
     @view_method
     def validity(self, cooldown_state: CooldownState):
-        return Validity(
-            name=self.name,
-            time_left=max(0, cooldown_state.time_left),
-            valid=cooldown_state.available,
-            cooldown=self.cooldown,
-        )
+        return self.validity_in_cooldown_trait(cooldown_state)
 
     @view_method
     def buff(
@@ -113,9 +93,28 @@ class RobotSetupBuff(Component):
     def running(self, duration_state: DurationState) -> Running:
         return Running(name=self.name, time_left=duration_state.time_left)
 
+    def _get_duration(self) -> float:
+        return self.duration
 
-class RobotSummonSkill(TickDamageConfiguratedAttackSkillComponent):
+
+class RobotSummonSkill(SkillComponent, TickEmittingTrait, CooldownValidityTrait):
     binds: dict[str, str] = {"robot_mastery": ".로봇 마스터리.robot_mastery"}
+    name: str
+    damage: float
+    hit: float
+    cooldown: float
+    delay: float
+
+    tick_interval: float
+    tick_damage: float
+    tick_hit: float
+    duration: float
+
+    def get_default_state(self):
+        return {
+            "cooldown_state": CooldownState(time_left=0),
+            "interval_state": IntervalState(interval=self.tick_interval, time_left=0),
+        }
 
     @view_method
     def buff(self, interval_state: IntervalState, robot_mastery: RobotMasteryState):
@@ -149,12 +148,67 @@ class RobotSummonSkill(TickDamageConfiguratedAttackSkillComponent):
             for _ in range(lapse_count)
         ]
 
+    @reducer_method
+    def use(
+        self,
+        _: None,
+        cooldown_state: CooldownState,
+        interval_state: IntervalState,
+        dynamics: Dynamics,
+    ):
+        return self.use_tick_emitting_trait(cooldown_state, interval_state, dynamics)
 
-class HommingMissile(TickDamageConfiguratedAttackSkillComponent):
+    @view_method
+    def validity(self, cooldown_state: CooldownState):
+        return self.validity_in_cooldown_trait(cooldown_state)
+
+    @view_method
+    def running(self, interval_state: IntervalState) -> Running:
+        return Running(name=self.name, time_left=interval_state.interval_time_left)
+
+    def _get_duration(self) -> float:
+        return self.duration
+
+    def _get_simple_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit
+
+    def _get_tick_damage_hit(self) -> tuple[float, float]:
+        return self.tick_damage, self.tick_hit
+
+
+class HommingMissile(
+    SkillComponent, StartIntervalWithoutDamageTrait, CooldownValidityTrait
+):
     binds: dict[str, str] = {
         "bomber_time": ".봄버 타임.duration_state",
         "buster_call": ".메탈아머 전탄발사.keydown_state",
     }
+    name: str
+    cooldown: float
+    delay: float
+
+    tick_interval: float
+    tick_damage: float
+    tick_hit: float
+    duration: float
+
+    def get_default_state(self):
+        return {
+            "cooldown_state": CooldownState(time_left=0),
+            "interval_state": IntervalState(interval=self.tick_interval, time_left=0),
+        }
+
+    @reducer_method
+    def use(
+        self,
+        _: None,
+        cooldown_state: CooldownState,
+        interval_state: IntervalState,
+        dynamics: Dynamics,
+    ):
+        return self.use_tick_emitting_without_damage_trait(
+            cooldown_state, interval_state, dynamics
+        )
 
     @reducer_method
     def elapse(
@@ -198,6 +252,20 @@ class HommingMissile(TickDamageConfiguratedAttackSkillComponent):
 
         return hit
 
+    @view_method
+    def validity(self, cooldown_state: CooldownState):
+        return self.validity_in_cooldown_trait(cooldown_state)
+
+    @view_method
+    def running(self, interval_state: IntervalState) -> Running:
+        return Running(name=self.name, time_left=interval_state.interval_time_left)
+
+    def _get_duration(self) -> float:
+        return self.duration
+
+    def _get_tick_damage_hit(self) -> tuple[float, float]:
+        return self.tick_damage, self.tick_hit
+
 
 class PeriodicState(State):
     tick: int
@@ -214,7 +282,7 @@ class PeriodicState(State):
         self.tick = 0
 
 
-class MultipleOptionComponent(Component):
+class MultipleOptionComponent(SkillComponent, CooldownValidityTrait):
     name: str
     cooldown: float = 0.0
     delay: float
@@ -308,12 +376,7 @@ class MultipleOptionComponent(Component):
 
     @view_method
     def validity(self, cooldown_state: CooldownState):
-        return Validity(
-            name=self.name,
-            time_left=max(0, cooldown_state.time_left),
-            valid=cooldown_state.available,
-            cooldown=self.cooldown,
-        )
+        return self.validity_in_cooldown_trait(cooldown_state)
 
     @view_method
     def running(self, interval_state: IntervalState) -> Running:
@@ -356,7 +419,7 @@ class DynamicIntervalState(State):
         self.interval_time_left = 0
 
 
-class MecaCarrier(Component):
+class MecaCarrier(SkillComponent, CooldownValidityTrait):
     name: str
     cooldown: float = 0.0
     delay: float
@@ -435,12 +498,7 @@ class MecaCarrier(Component):
 
     @view_method
     def validity(self, cooldown_state):
-        return Validity(
-            name=self.name,
-            time_left=max(0, cooldown_state.time_left),
-            valid=cooldown_state.available,
-            cooldown=self.cooldown,
-        )
+        return self.validity_in_cooldown_trait(cooldown_state)
 
     @view_method
     def running(self, interval_state: DynamicIntervalState) -> Running:

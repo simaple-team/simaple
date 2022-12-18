@@ -7,11 +7,12 @@ from simaple.simulate.component.skill import (
     DurationState,
     SkillComponent,
 )
-from simaple.simulate.component.view import Running, Validity
+from simaple.simulate.component.trait.impl import CooldownValidityTrait, DurableTrait
+from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
 
-class PenalizedBuffSkill(SkillComponent):
+class PenalizedBuffSkill(SkillComponent, CooldownValidityTrait, DurableTrait):
     advantage: Stat
     disadvantage: Stat
     cooldown: float
@@ -32,48 +33,17 @@ class PenalizedBuffSkill(SkillComponent):
         duration_state: DurationState,
         dynamics: Dynamics,
     ):
-        cooldown_state = cooldown_state.copy()
-        duration_state = duration_state.copy()
-
-        if not cooldown_state.available:
-            return (
-                cooldown_state,
-                duration_state,
-                dynamics,
-            ), self.event_provider.rejected()
-
-        cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
-
-        duration_state.set_time_left(
-            dynamics.stat.calculate_buff_duration(self.duration)
-        )
-
-        return (cooldown_state, duration_state, dynamics), self.event_provider.delayed(
-            self.delay
-        )
+        return self.use_durable_trait(cooldown_state, duration_state, dynamics)
 
     @reducer_method
     def elapse(
         self, time: float, cooldown_state: CooldownState, duration_state: DurationState
     ):
-        cooldown_state = cooldown_state.copy()
-        duration_state = duration_state.copy()
-
-        cooldown_state.elapse(time)
-        duration_state.elapse(time)
-
-        return (cooldown_state, duration_state), [
-            self.event_provider.elapsed(time),
-        ]
+        return self.elapse_durable_trait(time, cooldown_state, duration_state)
 
     @view_method
     def validity(self, cooldown_state: CooldownState):
-        return Validity(
-            name=self.name,
-            time_left=max(0, cooldown_state.time_left),
-            valid=cooldown_state.available,
-            cooldown=self.cooldown,
-        )
+        return self.validity_in_cooldown_trait(cooldown_state)
 
     @view_method
     def buff(
@@ -90,3 +60,6 @@ class PenalizedBuffSkill(SkillComponent):
     @view_method
     def running(self, duration_state: DurationState) -> Running:
         return Running(name=self.name, time_left=duration_state.time_left)
+
+    def _get_duration(self) -> float:
+        return self.duration
