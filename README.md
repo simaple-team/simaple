@@ -3,12 +3,16 @@
 - 메이플스토리에 관련된 다양한 연산을 지원하는 패키지.
 - Package for various calculation related with Maplestory.
 - [Discord](https://discord.gg/5hgN5EbyA4)
+- [Slack](https://join.slack.com/t/maplestorydpmcalc/shared_invite/zt-1lwi3l97o-EH0R9~W97SB8TjsoXnpzpQ)
 
 ## Install
 - `pip install simaple`
 
 ## Documentation
 - https://simaple.readthedocs.io/en/latest/
+
+## Developments
+- See [Development documentation](development/readmd.md)
 
 ## Functions
 
