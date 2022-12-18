@@ -1,8 +1,4 @@
-from simaple.simulate.component.state import (
-    CooldownState,
-    DurationState,
-    IntervalState,
-)
+from simaple.simulate.component.state import CooldownState, DurationState, IntervalState
 from simaple.simulate.component.trait.base import (
     CooldownTrait,
     DelayTrait,
@@ -17,8 +13,8 @@ from simaple.simulate.component.view import Validity
 from simaple.simulate.global_property import Dynamics
 
 
-class CooldownOnlyTrait(CooldownTrait, InvalidatableTrait, NamedTrait):
-    def validity_in_cooldown_only_validity_trait(
+class InvalidatableCooldownTrait(CooldownTrait, InvalidatableTrait, NamedTrait):
+    def validity_in_invalidatable_cooldown_trait(
         self, cooldown_state: CooldownState
     ) -> Validity:
         return self.invalidate_if_disabled(
@@ -121,7 +117,12 @@ class DurableTrait(CooldownTrait, DurationTrait, EventProviderTrait, DelayTrait)
 
 
 class TickEmittingTrait(
-    CooldownTrait, TickDamageTrait, SimpleDamageTrait, DurationTrait, EventProviderTrait, DelayTrait,
+    CooldownTrait,
+    TickDamageTrait,
+    SimpleDamageTrait,
+    DurationTrait,
+    EventProviderTrait,
+    DelayTrait,
 ):
     def elapse_tick_emitting_trait(
         self, time: float, cooldown_state: CooldownState, interval_state: IntervalState

@@ -4,8 +4,8 @@ from simaple.core.base import Stat
 from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.state import CooldownState, DurationState, IntervalState
 from simaple.simulate.component.trait.impl import (
-    CooldownOnlyTrait,
     DurableTrait,
+    InvalidatableCooldownTrait,
     TickEmittingTrait,
     UseSimpleAttackTrait,
 )
@@ -48,7 +48,9 @@ class SkillComponent(Component):
         return self.name
 
 
-class AttackSkillComponent(SkillComponent, CooldownOnlyTrait, UseSimpleAttackTrait):
+class AttackSkillComponent(
+    SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait
+):
     name: str
     damage: float
     hit: float
@@ -73,7 +75,7 @@ class AttackSkillComponent(SkillComponent, CooldownOnlyTrait, UseSimpleAttackTra
 
     @view_method
     def validity(self, cooldown_state):
-        return self.validity_in_cooldown_only_validity_trait(cooldown_state)
+        return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit
@@ -97,7 +99,7 @@ class MultipleAttackSkillComponent(AttackSkillComponent):
         ] + [self.event_provider.delayed(self.delay)]
 
 
-class BuffSkillComponent(SkillComponent, DurableTrait, CooldownOnlyTrait):
+class BuffSkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownTrait):
     stat: Stat
     cooldown: float = 0.0
     delay: float
@@ -128,7 +130,7 @@ class BuffSkillComponent(SkillComponent, DurableTrait, CooldownOnlyTrait):
 
     @view_method
     def validity(self, cooldown_state: CooldownState):
-        return self.validity_in_cooldown_only_validity_trait(cooldown_state)
+        return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
 
     @view_method
     def buff(self, duration_state: DurationState) -> Optional[Stat]:
@@ -146,7 +148,7 @@ class BuffSkillComponent(SkillComponent, DurableTrait, CooldownOnlyTrait):
 
 
 class TickDamageConfiguratedAttackSkillComponent(
-    SkillComponent, TickEmittingTrait, CooldownOnlyTrait
+    SkillComponent, TickEmittingTrait, InvalidatableCooldownTrait
 ):
     name: str
     damage: float
@@ -183,7 +185,7 @@ class TickDamageConfiguratedAttackSkillComponent(
 
     @view_method
     def validity(self, cooldown_state: CooldownState):
-        return self.validity_in_cooldown_only_validity_trait(cooldown_state)
+        return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
 
     @view_method
     def running(self, interval_state: IntervalState) -> Running:
