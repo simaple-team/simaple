@@ -47,7 +47,7 @@ def test_actor(mechanic_client, character_stat):
         character_spec=character_stat,
         damage_logic=INTBasedDamageLogic(attack_range_constant=1.2, mastery=0.95),
         armor=300,
-        level=LevelAdvantage().get_advantage(250, 260),
+        level_advantage=LevelAdvantage().get_advantage(250, 260),
         force_advantage=1.5,
     )
 

@@ -97,6 +97,7 @@ class RobotSetupBuff(Component):
             name=self.name,
             time_left=max(0, cooldown_state.time_left),
             valid=cooldown_state.available,
+            cooldown=self.cooldown,
         )
 
     @view_method
@@ -311,6 +312,7 @@ class MultipleOptionComponent(Component):
             name=self.name,
             time_left=max(0, cooldown_state.time_left),
             valid=cooldown_state.available,
+            cooldown=self.cooldown,
         )
 
     @view_method
@@ -437,6 +439,7 @@ class MecaCarrier(Component):
             name=self.name,
             time_left=max(0, cooldown_state.time_left),
             valid=cooldown_state.available,
+            cooldown=self.cooldown,
         )
 
     @view_method
