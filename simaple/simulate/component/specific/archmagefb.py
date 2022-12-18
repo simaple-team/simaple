@@ -6,6 +6,7 @@ from simaple.simulate.component.trait.impl import (
     CooldownValidityTrait,
     TickEmittingTrait,
 )
+from simaple.simulate.component.util import is_rejected
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.global_property import Dynamics
 
@@ -177,7 +178,9 @@ class PoisonChainComponent(SkillComponent, TickEmittingTrait, CooldownValidityTr
         ), events = self.use_tick_emitting_trait(
             cooldown_state, interval_state, dynamics
         )
-        stack_state.reset(1)
+        if not is_rejected(events):
+            stack_state.reset(1)
+
         return (cooldown_state, interval_state, stack_state, dynamics), events
 
     @view_method

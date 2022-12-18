@@ -163,7 +163,7 @@ class TickEmittingTrait(
                 cooldown_state,
                 interval_state,
                 dynamics,
-            ), self.event_provider.rejected()
+            ), [self.event_provider.rejected()]
 
         damage, hit = self._get_simple_damage_hit()
         delay = self._get_delay()

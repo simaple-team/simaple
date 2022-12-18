@@ -3,11 +3,15 @@ from typing import Optional
 from simaple.core.base import Stat
 from simaple.simulate.base import State
 from simaple.simulate.component.base import reducer_method, view_method
-from simaple.simulate.component.skill import (
-    AttackSkillComponent,
-    TickDamageConfiguratedAttackSkillComponent,
-)
+from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.state import CooldownState, IntervalState
+from simaple.simulate.component.trait.impl import (
+    CooldownValidityTrait,
+    InvalidatableCooldownTrait,
+    TickEmittingTrait,
+    UseSimpleAttackTrait,
+)
+from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
 
@@ -25,10 +29,22 @@ class DivineMarkState(State):
         return advantage
 
 
-class DivineAttackSkillComponent(AttackSkillComponent):
+class DivineAttackSkillComponent(
+    SkillComponent, CooldownValidityTrait, UseSimpleAttackTrait
+):
     binds: dict[str, str] = {
         "divine_mark": ".바하뮤트.divine_mark",
     }
+    name: str
+    damage: float
+    hit: float
+    cooldown: float
+    delay: float
+
+    def get_default_state(self):
+        return {
+            "cooldown_state": CooldownState(time_left=0),
+        }
 
     @reducer_method
     def use(
@@ -57,8 +73,30 @@ class DivineAttackSkillComponent(AttackSkillComponent):
             self.event_provider.delayed(self.delay),
         ]
 
+    @reducer_method
+    def elapse(self, time: float, cooldown_state: CooldownState):
+        return self.elapse_simple_attack(time, cooldown_state)
 
-class DivineMinion(TickDamageConfiguratedAttackSkillComponent):
+    @view_method
+    def validity(self, cooldown_state):
+        return self.validity_in_cooldown_trait(cooldown_state)
+
+    def _get_simple_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit
+
+
+class DivineMinion(SkillComponent, TickEmittingTrait, InvalidatableCooldownTrait):
+    name: str
+    damage: float
+    hit: float
+    cooldown: float
+    delay: float
+
+    tick_interval: float
+    tick_damage: float
+    tick_hit: float
+    duration: float
+
     mark_advantage: Stat
     stat: Optional[Stat]
 
@@ -110,3 +148,30 @@ class DivineMinion(TickDamageConfiguratedAttackSkillComponent):
             return self.stat
 
         return None
+
+    @reducer_method
+    def use(
+        self,
+        _: None,
+        cooldown_state: CooldownState,
+        interval_state: IntervalState,
+        dynamics: Dynamics,
+    ):
+        return self.use_tick_emitting_trait(cooldown_state, interval_state, dynamics)
+
+    @view_method
+    def validity(self, cooldown_state: CooldownState):
+        return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
+
+    @view_method
+    def running(self, interval_state: IntervalState) -> Running:
+        return Running(name=self.name, time_left=interval_state.interval_time_left)
+
+    def _get_duration(self) -> float:
+        return self.duration
+
+    def _get_simple_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit
+
+    def _get_tick_damage_hit(self) -> tuple[float, float]:
+        return self.tick_damage, self.tick_hit
