@@ -59,6 +59,7 @@ data:
   damage: 0
   delay: 630
   hit: 0
+  cooldown: 0
 
   tick_interval: 1_000
   tick_damage: 385 # Need to apply passive skill level only
@@ -78,6 +79,7 @@ data:
   damage: 0
   delay: 630
   hit: 0
+  cooldown: 0
 
   tick_interval: 990
   tick_damage: 200
@@ -101,6 +103,7 @@ data:
   damage: 0
   delay: 630
   hit: 0
+  cooldown: 0
 
   tick_interval: 3_000
   tick_damage: '{{ 350 + skill_level * 5 }}'
@@ -128,6 +131,7 @@ data:
   combat_orders_enabled: true
   default_skill_level: 30
   v_improvement: 2
+  cooldown: 0
 
 
 # 2차 폭발 구현
@@ -147,6 +151,7 @@ data:
   damage: 0
   delay: 0
   hit: 0
+  cooldown: 0
 
   tick_interval: 660
   tick_damage: 300
