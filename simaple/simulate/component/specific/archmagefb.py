@@ -1,11 +1,12 @@
 from simaple.simulate.base import State
 from simaple.simulate.component.base import reducer_method, view_method
-from simaple.simulate.component.skill import (
-    SkillComponent,
-    TickDamageConfiguratedAttackSkillComponent,
-)
+from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.state import CooldownState, IntervalState, StackState
-from simaple.simulate.component.view import Validity
+from simaple.simulate.component.trait.impl import (
+    CooldownValidityTrait,
+    TickEmittingTrait,
+)
+from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.global_property import Dynamics
 
 
@@ -106,17 +107,26 @@ class PoisonNovaComponent(SkillComponent):
         )
 
 
-class PoisonChainComponent(TickDamageConfiguratedAttackSkillComponent):
+class PoisonChainComponent(SkillComponent, TickEmittingTrait, CooldownValidityTrait):
+    name: str
+    damage: float
+    hit: float
+    cooldown: float
+    delay: float
+
+    tick_interval: float
+    tick_damage: float
+    tick_hit: float
+    duration: float
+
     tick_damage_increment: float
 
     def get_default_state(self):
-        tick_states = super().get_default_state()
-        tick_states.update(
-            {
-                "stack_state": StackState(maximum_stack=5),
-            }
-        )
-        return tick_states
+        return {
+            "cooldown_state": CooldownState(time_left=0),
+            "interval_state": IntervalState(interval=self.tick_interval, time_left=0),
+            "stack_state": StackState(maximum_stack=5),
+        }
 
     def get_tick_damage(self, stack_state: StackState):
         return self.tick_damage + self.tick_damage_increment * stack_state.get_stack()
@@ -160,8 +170,29 @@ class PoisonChainComponent(TickDamageConfiguratedAttackSkillComponent):
     ):
         stack_state = stack_state.copy()
 
-        (cooldown_state, interval_state, dynamics), events = super().use(
-            payload, cooldown_state, interval_state, dynamics
+        (
+            cooldown_state,
+            interval_state,
+            dynamics,
+        ), events = self.use_tick_emitting_trait(
+            cooldown_state, interval_state, dynamics
         )
         stack_state.reset(1)
         return (cooldown_state, interval_state, stack_state, dynamics), events
+
+    @view_method
+    def validity(self, cooldown_state: CooldownState):
+        return self.validity_in_cooldown_trait(cooldown_state)
+
+    @view_method
+    def running(self, interval_state: IntervalState) -> Running:
+        return Running(name=self.name, time_left=interval_state.interval_time_left)
+
+    def _get_duration(self) -> float:
+        return self.duration
+
+    def _get_simple_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit
+
+    def _get_tick_damage_hit(self) -> tuple[float, float]:
+        return self.tick_damage, self.tick_hit

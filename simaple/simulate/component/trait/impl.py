@@ -13,6 +13,16 @@ from simaple.simulate.component.view import Validity
 from simaple.simulate.global_property import Dynamics
 
 
+class CooldownValidityTrait(CooldownTrait, NamedTrait):
+    def validity_in_cooldown_trait(self, cooldown_state) -> Validity:
+        return Validity(
+            name=self._get_name(),
+            time_left=max(0, cooldown_state.time_left),
+            valid=cooldown_state.available,
+            cooldown=self._get_cooldown(),
+        )
+
+
 class InvalidatableCooldownTrait(CooldownTrait, InvalidatableTrait, NamedTrait):
     def validity_in_invalidatable_cooldown_trait(
         self, cooldown_state: CooldownState
@@ -165,5 +175,39 @@ class TickEmittingTrait(
 
         return (cooldown_state, interval_state, dynamics), [
             self.event_provider.dealt(damage, hit),
+            self.event_provider.delayed(delay),
+        ]
+
+
+class StartIntervalWithoutDamageTrait(
+    CooldownTrait,
+    DurationTrait,
+    EventProviderTrait,
+    DelayTrait,
+):
+    def use_tick_emitting_without_damage_trait(
+        self,
+        cooldown_state: CooldownState,
+        interval_state: IntervalState,
+        dynamics: Dynamics,
+    ):
+        cooldown_state = cooldown_state.copy()
+        interval_state = interval_state.copy()
+
+        if not cooldown_state.available:
+            return (
+                cooldown_state,
+                interval_state,
+                dynamics,
+            ), self.event_provider.rejected()
+
+        delay = self._get_delay()
+
+        cooldown_state.set_time_left(
+            dynamics.stat.calculate_cooldown(self._get_cooldown())
+        )
+        interval_state.set_time_left(self._get_duration())
+
+        return (cooldown_state, interval_state, dynamics), [
             self.event_provider.delayed(delay),
         ]

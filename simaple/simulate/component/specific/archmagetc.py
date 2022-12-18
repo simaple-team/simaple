@@ -1,8 +1,12 @@
 from simaple.core.base import Stat
 from simaple.simulate.component.base import Component, reducer_method, view_method
-from simaple.simulate.component.skill import AttackSkillComponent
+from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.state import CooldownState, IntervalState, StackState
-from simaple.simulate.component.view import Validity
+from simaple.simulate.component.trait.impl import (
+    CooldownValidityTrait,
+    StartIntervalWithoutDamageTrait,
+    UseSimpleAttackTrait,
+)
 from simaple.simulate.global_property import Dynamics
 
 
@@ -53,7 +57,9 @@ def jupyter_thunder_shock_advantage(jupyter_thunder_shock: IntervalState) -> Sta
     return Stat()
 
 
-class JupyterThunder(Component):
+class JupyterThunder(
+    SkillComponent, StartIntervalWithoutDamageTrait, CooldownValidityTrait
+):
     name: str
     cooldown: float = 0.0
     delay: float
@@ -119,38 +125,37 @@ class JupyterThunder(Component):
         interval_state: IntervalState,
         dynamics: Dynamics,
     ):
-        cooldown_state = cooldown_state.copy()
-        interval_state = interval_state.copy()
-
-        if not cooldown_state.available:
-            return (
-                cooldown_state,
-                interval_state,
-                dynamics,
-            ), self.event_provider.rejected()
-
-        cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
-        interval_state.set_time_left(self.duration)
-
-        return (cooldown_state, interval_state, dynamics), [
-            self.event_provider.delayed(self.delay),
-        ]
-
-    @view_method
-    def validity(self, cooldown_state):
-        return Validity(
-            name=self.name,
-            time_left=max(0, cooldown_state.time_left),
-            valid=cooldown_state.available,
-            cooldown=self.cooldown,
+        return self.use_tick_emitting_without_damage_trait(
+            cooldown_state,
+            interval_state,
+            dynamics,
         )
 
+    @view_method
+    def validity(self, cooldown_state: CooldownState):
+        return self.validity_in_cooldown_trait(cooldown_state)
 
-class ThunderAttackSkillComponent(AttackSkillComponent):
+    def _get_duration(self) -> float:
+        return self.duration
+
+
+class ThunderAttackSkillComponent(
+    SkillComponent, UseSimpleAttackTrait, CooldownValidityTrait
+):
     binds: dict[str, str] = {
         "frost_stack": ".프로스트 이펙트.frost_stack",
         "jupyter_thunder_shock": ".주피터 썬더.interval_state",
     }
+    name: str
+    damage: float
+    hit: float
+    cooldown: float
+    delay: float
+
+    def get_default_state(self):
+        return {
+            "cooldown_state": CooldownState(time_left=0),
+        }
 
     @reducer_method
     def use(
@@ -181,8 +186,21 @@ class ThunderAttackSkillComponent(AttackSkillComponent):
             self.event_provider.delayed(self.delay),
         ]
 
+    @reducer_method
+    def elapse(self, time: float, cooldown_state: CooldownState):
+        return self.elapse_simple_attack(time, cooldown_state)
 
-class ThunderBreak(Component):
+    @view_method
+    def validity(self, cooldown_state):
+        return self.validity_in_cooldown_trait(cooldown_state)
+
+    def _get_simple_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit
+
+
+class ThunderBreak(
+    SkillComponent, StartIntervalWithoutDamageTrait, CooldownValidityTrait
+):
     name: str
     cooldown: float = 0.0
     delay: float
@@ -254,28 +272,15 @@ class ThunderBreak(Component):
         interval_state: IntervalState,
         dynamics: Dynamics,
     ):
-        cooldown_state = cooldown_state.copy()
-        interval_state = interval_state.copy()
-
-        if not cooldown_state.available:
-            return (
-                cooldown_state,
-                interval_state,
-                dynamics,
-            ), self.event_provider.rejected()
-
-        cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
-        interval_state.set_time_left(self.duration)
-
-        return (cooldown_state, interval_state, dynamics), [
-            self.event_provider.delayed(self.delay),
-        ]
+        return self.use_tick_emitting_without_damage_trait(
+            cooldown_state,
+            interval_state,
+            dynamics,
+        )
 
     @view_method
-    def validity(self, cooldown_state):
-        return Validity(
-            name=self.name,
-            time_left=max(0, cooldown_state.time_left),
-            valid=cooldown_state.available,
-            cooldown=self.cooldown,
-        )
+    def validity(self, cooldown_state: CooldownState):
+        return self.validity_in_cooldown_trait(cooldown_state)
+
+    def _get_duration(self) -> float:
+        return self.duration
