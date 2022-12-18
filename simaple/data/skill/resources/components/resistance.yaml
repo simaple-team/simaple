@@ -8,7 +8,6 @@ data:
   name: 윌 오브 리버티
   cooldown: 120000
   delay: 0
-  red: false
   rem: false
   duration: 60000
   stat:
