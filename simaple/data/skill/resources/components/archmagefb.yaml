@@ -14,6 +14,7 @@ data:
   delay: 600
   damage: '{{ 130 + 3 * skill_level }}'
   hit: 7
+  cooldown: 0
   combat_orders_enabled: true
   default_skill_level: 30
   v_improvement: 2
@@ -192,6 +193,7 @@ data:
     이프리트.elapse.emitted.global.damage: use
     # TODO: entangle many
   delay: 0
+  cooldown: 0
   rem: false
   damage: '{{ 100 + 4 * skill_level }}'
   hit: '{{ 0.02 * skill_level }}'
@@ -214,6 +216,7 @@ data:
   damage: 0
   default_skill_level: 30
   delay: 600
+  cooldown: 0
   hit: 0
 
   tick_interval: 3_030
@@ -238,6 +241,7 @@ data:
   damage: 0
   delay: 0
   hit: 0
+  cooldown: 0
 
   tick_interval: 3_000
   tick_damage: 400
@@ -268,6 +272,7 @@ data:
   delay: 0
   damage: 40
   hit: 4.5
+  cooldown: 0
   disable_validity: True
   v_improvement: 4
 ---
@@ -284,6 +289,7 @@ data:
   damage: 0
   delay: 0
   hit: 0
+  cooldown: 0
 
   tick_interval: 1_000
   tick_damage: 270

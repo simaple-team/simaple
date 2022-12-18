@@ -11,6 +11,7 @@ patch:
 data:
   name: 엔젤레이
   delay: 630
+  cooldown: 0
   damage: '{{ 75 + 5 * skill_level }}'
   hit: 14
   combat_orders_enabled: true
@@ -77,6 +78,7 @@ data:
   name: 바하뮤트
   damage: 0
   delay: 600
+  cooldown: 0
   hit: 0
 
   tick_interval: 3_030

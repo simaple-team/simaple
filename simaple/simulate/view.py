@@ -14,7 +14,7 @@ class AggregationView(metaclass=ABCMeta):
 
     @abstractmethod
     def aggregate(self, representations: list[Any]):
-        ...
+        """A method to aggregate matching representations"""
 
     @classmethod
     @abstractmethod

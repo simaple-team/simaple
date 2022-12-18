@@ -10,11 +10,11 @@ from simaple.spec.spec import Spec
 class SpecRepository(metaclass=ABCMeta):
     @abstractmethod
     def get(self, **kwargs) -> Optional[Spec]:
-        ...
+        """Get first Spec with given constraint"""
 
     @abstractmethod
     def get_all(self, **kwargs) -> list[Spec]:
-        ...
+        """Get every Spec with given constraint"""
 
 
 class DirectorySpecRepository(SpecRepository):

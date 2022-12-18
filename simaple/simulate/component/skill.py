@@ -1,110 +1,24 @@
 from typing import Optional
 
 from simaple.core.base import Stat
-from simaple.simulate.base import State
 from simaple.simulate.component.base import Component, reducer_method, view_method
+from simaple.simulate.component.state import CooldownState, DurationState, IntervalState
+from simaple.simulate.component.trait.impl import (
+    DurableTrait,
+    InvalidatableCooldownTrait,
+    TickEmittingTrait,
+    UseSimpleAttackTrait,
+)
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import Dynamics
 
 
-class DurationState(State):
-    time_left: float
-    assigned_duration: float = 0.0
-
-    def enabled(self):
-        return self.time_left > 0
-
-    def elapse(self, time: float):
-        self.time_left -= time
-
-    def set_time_left(self, time: float):
-        self.time_left = time
-        self.assigned_duration = time
-
-    def get_elapsed_time(self) -> float:
-        return self.assigned_duration - self.time_left
-
-
-class CooldownState(State):
-    time_left: float
-
-    @property
-    def available(self):
-        return self.time_left <= 0
-
-    def elapse(self, time: float):
-        self.time_left -= time
-
-    def set_time_left(self, time: float):
-        self.time_left = time
-
-
-class IntervalState(State):
-    interval_counter: float = 0.0
-    interval: float
-    interval_time_left: float = 0.0
-    count: int = 0
-
-    def set_time_left(self, time: float):
-        self.interval_time_left = time
-        self.interval_counter = self.interval
-        self.count = 0
-
-    def enabled(self):
-        return self.interval_time_left > 0
-
-    def elapse(self, time: float) -> int:
-        maximum_elapsed = max(0, int(self.interval_time_left // self.interval))
-        self.interval_time_left -= time
-        self.interval_counter -= time
-
-        if self.interval_counter < 0:
-            lapse_count = int(self.interval_counter // self.interval)
-            self.interval_counter = self.interval_counter % self.interval
-            count = min(maximum_elapsed, lapse_count * -1)
-            self.count += count
-            return count
-
-        return 0
-
-    def resolving(self, time: float):
-        maximum_elapsed = max(0, int(self.interval_time_left // self.interval))
-
-        self.interval_time_left -= time
-        self.interval_counter -= time
-        elapse_count = 0
-
-        while self.interval_counter <= 0 and elapse_count < maximum_elapsed:
-            self.interval_counter += self.interval
-            elapse_count += 1
-            yield 1
-            self.count += 1
-
-    def disable(self):
-        self.interval_time_left = 0
-
-
-class StackState(State):
-    stack: int = 0
-    maximum_stack: int
-
-    def reset(self, value: int = 0):
-        self.stack = value
-
-    def increase(self, value: int = 1):
-        self.stack = min(self.maximum_stack, self.stack + value)
-
-    def get_stack(self) -> int:
-        return self.stack
-
-    def decrease(self, value: int = 1):
-        self.stack -= value
-
-
 class SkillComponent(Component):
     disable_validity: bool = False
     modifier: Optional[Stat]
+    cooldown: float
+    delay: float
 
     @property
     def event_provider(self) -> EventProvider:
@@ -118,12 +32,29 @@ class SkillComponent(Component):
 
         return validity
 
+    @reducer_method
+    def reset_cooldown(self, _: None, cooldown_state: CooldownState):
+        cooldown_state = cooldown_state.copy()
+        cooldown_state.set_time_left(0)
+        return cooldown_state, None
 
-class AttackSkillComponent(SkillComponent):
+    def _get_cooldown(self) -> float:
+        return self.cooldown
+
+    def _get_delay(self) -> float:
+        return self.delay
+
+    def _get_name(self) -> str:
+        return self.name
+
+
+class AttackSkillComponent(
+    SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait
+):
     name: str
     damage: float
     hit: float
-    cooldown: float = 0.0
+    cooldown: float
     delay: float
 
     def get_default_state(self):
@@ -133,40 +64,21 @@ class AttackSkillComponent(SkillComponent):
 
     @reducer_method
     def elapse(self, time: float, cooldown_state: CooldownState):
-        cooldown_state = cooldown_state.copy()
-        cooldown_state.elapse(time)
-        return cooldown_state, self.event_provider.elapsed(time)
+        return self.elapse_simple_attack(time, cooldown_state)
 
     @reducer_method
     def use(self, _: None, cooldown_state: CooldownState, dynamics: Dynamics):
-        cooldown_state = cooldown_state.copy()
-
-        if not cooldown_state.available:
-            return (cooldown_state, dynamics), self.event_provider.rejected()
-
-        cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
-
-        return (cooldown_state, dynamics), [
-            self.event_provider.dealt(self.damage, self.hit),
-            self.event_provider.delayed(self.delay),
-        ]
-
-    @reducer_method
-    def reset_cooldown(self, _: None, cooldown_state: CooldownState):
-        cooldown_state = cooldown_state.copy()
-        cooldown_state.set_time_left(0)
-        return cooldown_state, None
+        return self.use_simple_attack(
+            cooldown_state,
+            dynamics,
+        )
 
     @view_method
     def validity(self, cooldown_state):
-        return self.invalidate_if_disabled(
-            Validity(
-                name=self.name,
-                time_left=max(0, cooldown_state.time_left),
-                valid=cooldown_state.available,
-                cooldown=self.cooldown,
-            )
-        )
+        return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
+
+    def _get_simple_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit
 
 
 class MultipleAttackSkillComponent(AttackSkillComponent):
@@ -187,7 +99,7 @@ class MultipleAttackSkillComponent(AttackSkillComponent):
         ] + [self.event_provider.delayed(self.delay)]
 
 
-class BuffSkillComponent(SkillComponent):
+class BuffSkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownTrait):
     stat: Stat
     cooldown: float = 0.0
     delay: float
@@ -208,50 +120,17 @@ class BuffSkillComponent(SkillComponent):
         duration_state: DurationState,
         dynamics: Dynamics,
     ):
-        cooldown_state = cooldown_state.copy()
-        duration_state = duration_state.copy()
-
-        if not cooldown_state.available:
-            return (
-                cooldown_state,
-                duration_state,
-                dynamics,
-            ), self.event_provider.rejected()
-
-        cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
-
-        duration_state.set_time_left(
-            dynamics.stat.calculate_buff_duration(self.duration)
-        )
-
-        return (cooldown_state, duration_state, dynamics), self.event_provider.delayed(
-            self.delay
-        )
+        return self.use_durable_trait(cooldown_state, duration_state, dynamics)
 
     @reducer_method
     def elapse(
         self, time: float, cooldown_state: CooldownState, duration_state: DurationState
     ):
-        cooldown_state = cooldown_state.copy()
-        duration_state = duration_state.copy()
-
-        cooldown_state.elapse(time)
-        duration_state.elapse(time)
-
-        return (cooldown_state, duration_state), [
-            self.event_provider.elapsed(time),
-        ]
+        return self.elapse_durable_trait(time, cooldown_state, duration_state)
 
     @view_method
     def validity(self, cooldown_state: CooldownState):
-        return self.invalidate_if_disabled(
-            Validity(
-                name=self.name,
-                time_left=max(0, cooldown_state.time_left),
-                valid=cooldown_state.available,
-                cooldown=self.cooldown,
-            )
-        )
+        return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
 
     @view_method
     def buff(self, duration_state: DurationState) -> Optional[Stat]:
@@ -264,12 +143,17 @@ class BuffSkillComponent(SkillComponent):
     def running(self, duration_state: DurationState) -> Running:
         return Running(name=self.name, time_left=duration_state.time_left)
 
+    def _get_duration(self) -> float:
+        return self.duration
 
-class TickDamageConfiguratedAttackSkillComponent(SkillComponent):
+
+class TickDamageConfiguratedAttackSkillComponent(
+    SkillComponent, TickEmittingTrait, InvalidatableCooldownTrait
+):
     name: str
     damage: float
     hit: float
-    cooldown: float = 0.0
+    cooldown: float
     delay: float
 
     tick_interval: float
@@ -287,16 +171,7 @@ class TickDamageConfiguratedAttackSkillComponent(SkillComponent):
     def elapse(
         self, time: float, cooldown_state: CooldownState, interval_state: IntervalState
     ):
-        cooldown_state = cooldown_state.copy()
-        interval_state = interval_state.copy()
-
-        cooldown_state.elapse(time)
-        lapse_count = interval_state.elapse(time)
-
-        return (cooldown_state, interval_state), [self.event_provider.elapsed(time)] + [
-            self.event_provider.dealt(self.tick_damage, self.tick_hit)
-            for _ in range(lapse_count)
-        ]
+        return self.elapse_tick_emitting_trait(time, cooldown_state, interval_state)
 
     @reducer_method
     def use(
@@ -306,38 +181,24 @@ class TickDamageConfiguratedAttackSkillComponent(SkillComponent):
         interval_state: IntervalState,
         dynamics: Dynamics,
     ):
-        cooldown_state = cooldown_state.copy()
-        interval_state = interval_state.copy()
-
-        if not cooldown_state.available:
-            return (
-                cooldown_state,
-                interval_state,
-                dynamics,
-            ), self.event_provider.rejected()
-
-        cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
-        interval_state.set_time_left(self.duration)
-
-        return (cooldown_state, interval_state, dynamics), [
-            self.event_provider.dealt(self.damage, self.hit),
-            self.event_provider.delayed(self.delay),
-        ]
+        return self.use_tick_emitting_trait(cooldown_state, interval_state, dynamics)
 
     @view_method
-    def validity(self, cooldown_state):
-        return self.invalidate_if_disabled(
-            Validity(
-                name=self.name,
-                time_left=max(0, cooldown_state.time_left),
-                valid=cooldown_state.available,
-                cooldown=self.cooldown,
-            )
-        )
+    def validity(self, cooldown_state: CooldownState):
+        return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
 
     @view_method
     def running(self, interval_state: IntervalState) -> Running:
         return Running(name=self.name, time_left=interval_state.interval_time_left)
+
+    def _get_duration(self) -> float:
+        return self.duration
+
+    def _get_simple_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit
+
+    def _get_tick_damage_hit(self) -> tuple[float, float]:
+        return self.tick_damage, self.tick_hit
 
 
 class DOTSkillComponent(Component):

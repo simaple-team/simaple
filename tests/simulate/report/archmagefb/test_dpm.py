@@ -51,3 +51,5 @@ def test_actor(archmagefb_client, character_stat):
             rec.write(action, environment.show("clock"))
 
     print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")
+
+    assert int(dpm_calculator.calculate_dpm(report)) == 2_728_847_146_506

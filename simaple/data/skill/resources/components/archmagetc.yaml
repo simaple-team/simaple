@@ -32,6 +32,7 @@ patch:
 data:
   name: 체인 라이트닝
   delay: 600
+  cooldown: 0
   damage: '{{ 110 + 3 * skill_level }}'
   hit: 10
   combat_orders_enabled: true
@@ -74,6 +75,7 @@ patch:
 data:
   name: 블리자드(패시브)
   delay: 0
+  cooldown: 0
   rem: false
   damage: '{{ 100 + 4 * skill_level }}'
   hit: '{{ 0.02 * skill_level }}'
@@ -119,6 +121,7 @@ patch:
 data:
   name: 엘퀴네스
   damage: 0
+  cooldown: 0
   default_skill_level: 30
   delay: 600
   hit: 0
@@ -139,6 +142,7 @@ metadata:
 data:
   name: 아이스 오라
   damage: 0
+  cooldown: 0
   default_skill_level: 30
   delay: 0
   hit: 0

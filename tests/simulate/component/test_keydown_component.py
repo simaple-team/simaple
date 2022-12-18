@@ -2,6 +2,7 @@
 import pytest
 
 from simaple.simulate.component.keydown_skill import KeydownSkillComponent
+from tests.simulate.component.util import is_rejected
 
 
 @pytest.fixture
@@ -22,6 +23,14 @@ def keydown_component(bare_store, keydown_delay):
         finish_hit=15,
         maximum_keydown_time=keydown_delay * 10,
     ).compile(bare_store)
+
+
+def test_reject(keydown_component):
+    keydown_component.use(None)
+    keydown_component.elapse(10_000)
+    events = keydown_component.use(None)
+
+    assert is_rejected(events)
 
 
 def test_use_keydown_component(keydown_component):

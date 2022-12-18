@@ -1,5 +1,6 @@
 from simaple.simulate.component.base import State, reducer_method, view_method
-from simaple.simulate.component.skill import CooldownState, SkillComponent
+from simaple.simulate.component.skill import SkillComponent
+from simaple.simulate.component.state import CooldownState
 from simaple.simulate.component.view import Validity
 from simaple.simulate.global_property import Dynamics
 
@@ -72,7 +73,11 @@ class KeydownSkillComponent(SkillComponent):
         keydown_state = keydown_state.copy()
 
         if not cooldown_state.available:
-            return (cooldown_state, keydown_state), self.event_provider.rejected()
+            return (
+                cooldown_state,
+                keydown_state,
+                dynamics,
+            ), self.event_provider.rejected()
 
         damage_event = [self.event_provider.dealt(self.damage, self.hit)]
         delay_event = [self.event_provider.delayed(self.delay)]
