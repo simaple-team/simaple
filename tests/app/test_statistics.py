@@ -7,16 +7,16 @@ from simaple.app.interface.web import app
 client = TestClient(app)
 
 
-def test_read_main(workspace_configuration, record_file_name):
+def test_read_main(simulator_configuration, record_file_name):
     response = client.post(
         "/workspaces/",
-        json=workspace_configuration,
+        json=simulator_configuration,
     )
     assert response.status_code == 200
-    workspace_id = response.json()["id"]
+    simulator_id = response.json()["id"]
 
     resp = client.get(
-        f"/statistics/graph/{workspace_id}",
+        f"/statistics/graph/{simulator_id}",
     )
 
     requests = 0
@@ -24,7 +24,7 @@ def test_read_main(workspace_configuration, record_file_name):
         for line in f:
             timing, action = line.split("\t")
             resp = client.post(
-                f"/workspaces/play/{workspace_id}",
+                f"/workspaces/play/{simulator_id}",
                 json=json.loads(action),
             )
             requests += 1
@@ -32,5 +32,5 @@ def test_read_main(workspace_configuration, record_file_name):
                 break
 
     resp = client.get(
-        f"/statistics/graph/{workspace_id}",
+        f"/statistics/graph/{simulator_id}",
     )

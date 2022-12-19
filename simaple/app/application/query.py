@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import pydantic
 
-from simaple.app.application.exception import UnknownWorkspaceException
+from simaple.app.application.exception import UnknownSimulatorException
 from simaple.app.domain.history import PlayLog
 from simaple.app.domain.services.statistics import get_cumulative_logs, get_damage_logs
+from simaple.app.domain.simulator import Simulator
 from simaple.app.domain.uow import UnitOfWork
-from simaple.app.domain.workspace import Workspace
 from simaple.core.base import Stat
 from simaple.simulate.base import Action, Event
 from simaple.simulate.component.view import Running, Validity
@@ -25,7 +25,7 @@ class PlayLogResponse(pydantic.BaseModel):
 
     @classmethod
     def from_playlog(
-        cls, index: int, playlog: PlayLog, workspace: Workspace
+        cls, index: int, playlog: PlayLog, simulator: Simulator
     ) -> PlayLogResponse:
         return PlayLogResponse(
             events=playlog.events,
@@ -34,36 +34,36 @@ class PlayLogResponse(pydantic.BaseModel):
             running_view=playlog.view.running_view,
             buff_view=playlog.view.get_buff(),
             clock=playlog.clock,
-            damage=playlog.get_total_damage(workspace.calculator),
+            damage=playlog.get_total_damage(simulator.calculator),
             delay=playlog.get_delay(),
             action=playlog.action,
         )
 
 
-def query_latest_playlog(workspace_id: str, uow: UnitOfWork) -> PlayLogResponse:
-    workspace = uow.workspace_repository().get(workspace_id)
-    history = uow.history_repository().get(workspace_id)
+def query_latest_playlog(simulator_id: str, uow: UnitOfWork) -> PlayLogResponse:
+    simulator = uow.simulator_repository().get(simulator_id)
+    history = uow.history_repository().get(simulator_id)
 
-    if history is None or workspace is None:
-        raise UnknownWorkspaceException()
+    if history is None or simulator is None:
+        raise UnknownSimulatorException()
 
     latest_index = len(history) - 1
 
     return PlayLogResponse.from_playlog(
-        latest_index, history.get(latest_index), workspace
+        latest_index, history.get(latest_index), simulator
     )
 
 
 def query_playlog(
-    workspace_id: str, log_index: int, uow: UnitOfWork
+    simulator_id: str, log_index: int, uow: UnitOfWork
 ) -> PlayLogResponse:
-    workspace = uow.workspace_repository().get(workspace_id)
-    history = uow.history_repository().get(workspace_id)
+    simulator = uow.simulator_repository().get(simulator_id)
+    history = uow.history_repository().get(simulator_id)
 
-    if history is None or workspace is None:
-        raise UnknownWorkspaceException()
+    if history is None or simulator is None:
+        raise UnknownSimulatorException()
 
-    return PlayLogResponse.from_playlog(log_index, history.get(log_index), workspace)
+    return PlayLogResponse.from_playlog(log_index, history.get(log_index), simulator)
 
 
 class StatisticsResponse(pydantic.BaseModel):
@@ -73,15 +73,15 @@ class StatisticsResponse(pydantic.BaseModel):
     value_y: list[float]
 
 
-def query_statistics(workspace_id: str, uow: UnitOfWork) -> StatisticsResponse:
-    workspace = uow.workspace_repository().get(workspace_id)
-    history = uow.history_repository().get(workspace_id)
+def query_statistics(simulator_id: str, uow: UnitOfWork) -> StatisticsResponse:
+    simulator = uow.simulator_repository().get(simulator_id)
+    history = uow.history_repository().get(simulator_id)
 
-    if history is None or workspace is None:
-        raise UnknownWorkspaceException()
+    if history is None or simulator is None:
+        raise UnknownSimulatorException()
 
-    cumulative_x, cumulative_y = get_cumulative_logs(history, workspace)
-    value_x, value_y = get_damage_logs(history, workspace)
+    cumulative_x, cumulative_y = get_cumulative_logs(history, simulator)
+    value_x, value_y = get_damage_logs(history, simulator)
 
     return StatisticsResponse(
         cumulative_x=cumulative_x,

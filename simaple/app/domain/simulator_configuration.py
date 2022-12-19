@@ -10,7 +10,7 @@ from simaple.simulate.kms import get_client
 from simaple.simulate.report.dpm import DPMCalculator, LevelAdvantage
 
 
-class WorkspaceConfiguration(pydantic.BaseModel, metaclass=ABCMeta):
+class SimulatorConfiguration(pydantic.BaseModel, metaclass=ABCMeta):
     @abstractmethod
     def create_client(self) -> Client:
         ...
@@ -20,7 +20,7 @@ class WorkspaceConfiguration(pydantic.BaseModel, metaclass=ABCMeta):
         ...
 
 
-class MinimalWorkspaceConfiguration(WorkspaceConfiguration):
+class MinimalSimulatorConfiguration(SimulatorConfiguration):
     action_stat: ActionStat
     groups: list[str]
     injected_values: dict[str, Any]

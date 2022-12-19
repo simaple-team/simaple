@@ -1,20 +1,20 @@
 from simaple.app.infrastructure.repository import (
     InmemoryHistoryRepository,
-    InmemoryWorkspaceRepository,
+    InmemorySimulatorRepository,
 )
 from simaple.app.infrastructure.uow import SimpleUnitOfWork
 
-_workspace_repository = InmemoryWorkspaceRepository()
+_simulator_repository = InmemorySimulatorRepository()
 _history_repository = InmemoryHistoryRepository()
 
 _unit_of_work = SimpleUnitOfWork(
     _history_repository,
-    _workspace_repository,
+    _simulator_repository,
 )
 
 
-def get_workspace_repository():
-    return _workspace_repository
+def get_simulator_repository():
+    return _simulator_repository
 
 
 def get_history_repository():

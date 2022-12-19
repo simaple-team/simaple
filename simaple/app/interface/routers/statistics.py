@@ -8,9 +8,9 @@ from simaple.app.interface.base import get_unit_of_work
 statistics_router = fastapi.APIRouter(prefix="/statistics")
 
 
-@statistics_router.get("/graph/{workspace_id}", response_model=StatisticsResponse)
+@statistics_router.get("/graph/{simulator_id}", response_model=StatisticsResponse)
 def get_cumulative_graph_data(
-    workspace_id: str,
+    simulator_id: str,
     uow: UnitOfWork = Depends(get_unit_of_work),
 ) -> StatisticsResponse:
-    return query_statistics(workspace_id, uow)
+    return query_statistics(simulator_id, uow)

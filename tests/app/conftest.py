@@ -4,7 +4,7 @@ import pytest
 
 
 @pytest.fixture
-def workspace_configuration():
+def simulator_configuration():
     return {
         "action_stat": {},
         "groups": ["archmagefb", "common", "adventurer.magician"],

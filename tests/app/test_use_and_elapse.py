@@ -7,13 +7,13 @@ from simaple.app.interface.web import app
 client = TestClient(app)
 
 
-def test_read_main(workspace_configuration, record_file_name):
+def test_read_main(simulator_configuration, record_file_name):
     response = client.post(
         "/workspaces/",
-        json=workspace_configuration,
+        json=simulator_configuration,
     )
     assert response.status_code == 200
-    workspace_id = response.json()["id"]
+    simulator_id = response.json()["id"]
 
     requests = 0
     previous_delay = 0
@@ -25,12 +25,12 @@ def test_read_main(workspace_configuration, record_file_name):
 
             if action["method"] == "use":
                 resp = client.post(
-                    f"/workspaces/use/{workspace_id}",
+                    f"/workspaces/use/{simulator_id}",
                     json={"name": action["name"]},
                 )
             elif action["method"] == "elapse":
                 resp = client.post(
-                    f"/workspaces/elapse/{workspace_id}",
+                    f"/workspaces/elapse/{simulator_id}",
                     json={"time": action["payload"]},
                 )
 

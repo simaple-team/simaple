@@ -1,7 +1,7 @@
 import abc
 
 from simaple.app.domain.history import HistoryRepository
-from simaple.app.domain.workspace import WorkspaceRepository
+from simaple.app.domain.simulator import SimulatorRepository
 
 
 class UnitOfWork(metaclass=abc.ABCMeta):
@@ -10,5 +10,5 @@ class UnitOfWork(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractmethod
-    def workspace_repository(self) -> WorkspaceRepository:
+    def simulator_repository(self) -> SimulatorRepository:
         ...

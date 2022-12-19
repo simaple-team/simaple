@@ -1,59 +1,59 @@
-from simaple.app.application.exception import UnknownWorkspaceException
+from simaple.app.application.exception import UnknownSimulatorException
 from simaple.app.domain.history import History
+from simaple.app.domain.simulator import Simulator
+from simaple.app.domain.simulator_configuration import MinimalSimulatorConfiguration
 from simaple.app.domain.uow import UnitOfWork
-from simaple.app.domain.workspace import Workspace
-from simaple.app.domain.workspace_configuration import MinimalWorkspaceConfiguration
 from simaple.simulate.base import Action
 
 
-def create_workspace(conf: MinimalWorkspaceConfiguration, uow: UnitOfWork) -> str:
-    workspace = Workspace.create_from_config(conf)
+def create_simulator(conf: MinimalSimulatorConfiguration, uow: UnitOfWork) -> str:
+    simulator = Simulator.create_from_config(conf)
 
-    playlog = workspace.empty_action_playlog()
-    history = History(id=workspace.id, logs=[playlog])
+    playlog = simulator.empty_action_playlog()
+    history = History(id=simulator.id, logs=[playlog])
 
-    uow.workspace_repository().add(workspace)
+    uow.simulator_repository().add(simulator)
     uow.history_repository().add(history)
 
-    return workspace.id
+    return simulator.id
 
 
-def play_action(workspace_id: str, action: Action, uow: UnitOfWork) -> None:
-    workspace = uow.workspace_repository().get(workspace_id)
-    history = uow.history_repository().get(workspace_id)
+def play_action(simulator_id: str, action: Action, uow: UnitOfWork) -> None:
+    simulator = uow.simulator_repository().get(simulator_id)
+    history = uow.history_repository().get(simulator_id)
 
-    if history is None or workspace is None:
-        raise UnknownWorkspaceException()
+    if history is None or simulator is None:
+        raise UnknownSimulatorException()
 
-    playlog = workspace.dispatch(action)
+    playlog = simulator.dispatch(action)
     history.append(playlog)
 
     uow.history_repository().update(history)
-    uow.workspace_repository().update(workspace)
+    uow.simulator_repository().update(simulator)
 
 
-def play_use(workspace_id: str, name: str, uow: UnitOfWork) -> None:
-    workspace = uow.workspace_repository().get(workspace_id)
-    history = uow.history_repository().get(workspace_id)
+def play_use(simulator_id: str, name: str, uow: UnitOfWork) -> None:
+    simulator = uow.simulator_repository().get(simulator_id)
+    history = uow.history_repository().get(simulator_id)
 
-    if history is None or workspace is None:
-        raise UnknownWorkspaceException()
+    if history is None or simulator is None:
+        raise UnknownSimulatorException()
 
-    playlog = workspace.dispatch(Action(name=name, method="use", payload=None))
+    playlog = simulator.dispatch(Action(name=name, method="use", payload=None))
     history.append(playlog)
 
     uow.history_repository().update(history)
-    uow.workspace_repository().update(workspace)
+    uow.simulator_repository().update(simulator)
 
 
-def play_elapse(workspace_id: str, time: float, uow: UnitOfWork) -> None:
-    workspace = uow.workspace_repository().get(workspace_id)
-    history = uow.history_repository().get(workspace_id)
+def play_elapse(simulator_id: str, time: float, uow: UnitOfWork) -> None:
+    simulator = uow.simulator_repository().get(simulator_id)
+    history = uow.history_repository().get(simulator_id)
 
-    if history is None or workspace is None:
-        raise UnknownWorkspaceException()
+    if history is None or simulator is None:
+        raise UnknownSimulatorException()
 
-    playlog = workspace.dispatch(
+    playlog = simulator.dispatch(
         Action(
             name="*",
             method="elapse",
@@ -63,23 +63,23 @@ def play_elapse(workspace_id: str, time: float, uow: UnitOfWork) -> None:
     history.append(playlog)
 
     uow.history_repository().update(history)
-    uow.workspace_repository().update(workspace)
+    uow.simulator_repository().update(simulator)
 
 
-def play_use_and_elapse(workspace_id: str, name: str, uow: UnitOfWork) -> None:
-    workspace = uow.workspace_repository().get(workspace_id)
-    history = uow.history_repository().get(workspace_id)
+def play_use_and_elapse(simulator_id: str, name: str, uow: UnitOfWork) -> None:
+    simulator = uow.simulator_repository().get(simulator_id)
+    history = uow.history_repository().get(simulator_id)
 
-    if history is None or workspace is None:
-        raise UnknownWorkspaceException()
+    if history is None or simulator is None:
+        raise UnknownSimulatorException()
 
-    playlog = workspace.dispatch(Action(name=name, method="use", payload=None))
+    playlog = simulator.dispatch(Action(name=name, method="use", payload=None))
     history.append(playlog)
 
-    playlog = workspace.dispatch(
+    playlog = simulator.dispatch(
         Action(name="*", method="elapse", payload=playlog.get_delay())
     )
     history.append(playlog)
 
     uow.history_repository().update(history)
-    uow.workspace_repository().update(workspace)
+    uow.simulator_repository().update(simulator)

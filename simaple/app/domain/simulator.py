@@ -6,24 +6,24 @@ from typing import Optional
 
 import pydantic
 
-from simaple.app.domain.history import PlayLog, SimulationView
-from simaple.app.domain.workspace_configuration import WorkspaceConfiguration
+from simaple.app.domain.history import History, PlayLog, SimulationView
+from simaple.app.domain.simulator_configuration import SimulatorConfiguration
 from simaple.simulate.base import Action, Client
 from simaple.simulate.report.dpm import DPMCalculator
 
 
-class Workspace(pydantic.BaseModel):
+class Simulator(pydantic.BaseModel):
     id: str
     client: Client
     calculator: DPMCalculator
-    conf: WorkspaceConfiguration  # polymorphic
+    conf: SimulatorConfiguration  # polymorphic
 
     class Config:
         arbitrary_types_allowed = True
 
     @classmethod
-    def create_from_config(cls, conf: WorkspaceConfiguration) -> Workspace:
-        return Workspace(
+    def create_from_config(cls, conf: SimulatorConfiguration) -> Simulator:
+        return Simulator(
             id=str(uuid.uuid4()),
             client=conf.create_client(),
             calculator=conf.create_damage_calculator(),
@@ -58,15 +58,15 @@ class Workspace(pydantic.BaseModel):
         )
 
 
-class WorkspaceRepository(metaclass=abc.ABCMeta):
+class SimulatorRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def add(self, workspace: Workspace) -> None:
+    def add(self, simulator: Simulator) -> None:
         ...
 
     @abc.abstractmethod
-    def get(self, workspace_id: str) -> Optional[Workspace]:
+    def get(self, simulator_id: str) -> Optional[Simulator]:
         ...
 
     @abc.abstractmethod
-    def update(self, workspace: Workspace) -> None:
+    def update(self, simulator: Simulator) -> None:
         ...
