@@ -22,6 +22,7 @@ class Workspace(pydantic.BaseModel):
             view=self.get_simulation_view(),
             clock=self.client.environment.show("clock"),
             action=Action(name="*", method="elapse", payload=0),
+            checkpoint=self.client.environment.store.save(),
         )
 
     def get_simulation_view(self) -> SimulationView:
@@ -39,6 +40,7 @@ class Workspace(pydantic.BaseModel):
             view=self.get_simulation_view(),
             action=action,
             events=events,
+            checkpoint=self.client.environment.store.save(),
         )
 
 

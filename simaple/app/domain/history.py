@@ -26,6 +26,7 @@ class PlayLog(pydantic.BaseModel):
     action: Action
     events: list[Event]
     view: SimulationView
+    checkpoint: dict[str, dict]
 
     def get_delay(self) -> float:
         delay = 0
