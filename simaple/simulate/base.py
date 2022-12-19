@@ -1,12 +1,17 @@
 import copy
 import re
 from abc import ABCMeta, abstractmethod
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Optional, Union, cast
 
 from pydantic import BaseModel, Extra
 
+from simaple.spec.loadable import (  # pylint:disable=unused-import
+    TaggedNamespacedABCMeta,
+    get_class,
+)
 
-class State(BaseModel):
+
+class State(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="State")):
     ...
 
 
@@ -105,10 +110,21 @@ class ConcreteStore(Store):
         return self
 
     def save(self) -> Any:
-        return {k: v.copy() for k, v in self._states.items()}
+        return {k: self._save_state(v) for k, v in self._states.items()}
 
-    def load(self, saved_store: dict[str, State]) -> None:
-        self._states = {k: v.copy() for k, v in saved_store.items()}
+    def load(self, saved_store: dict[str, dict]) -> None:
+        self._states = {k: self._load_state(v) for k, v in saved_store.items()}
+
+    def _save_state(self, state: State) -> dict:
+        state_clsname = state.__class__.__name__
+        return {
+            "cls": state_clsname,
+            "payload": state.dict(),
+        }
+
+    def _load_state(self, saved_state_dict: dict) -> State:
+        clsname, payload = saved_state_dict["cls"], saved_state_dict["payload"]
+        return cast(State, get_class(clsname, kind="State").parse_obj(payload))
 
 
 class AddressedStore(Store):
