@@ -1,0 +1,288 @@
+#어드밴스드 호밍
+
+#더블 럭다
+kind: Component
+version: simaple.io/RobotMastery
+metadata:
+  label:
+    group: mechanic
+    name: 로봇 마스터리
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 로봇 마스터리
+  summon_increment: "{{ 10 + skill_level }}"
+  robot_damage_increment: "{{ 15 + 3 * skill_level }}"
+  robot_buff_damage_multiplier: 6
+  combat_orders_enabled: true
+  default_skill_level: 30
+---
+kind: Component
+version: simaple.io/RobotSetupBuff
+metadata:
+  label:
+    group: mechanic
+    name: "오픈 게이트: GX-9"
+data:
+  name: "오픈 게이트: GX-9"
+  delay: 1260
+  duration: 300_000
+  stat: {}
+---
+kind: Component
+version: simaple.io/RobotSetupBuff
+metadata:
+  label:
+    group: mechanic
+    name: "서포트 웨이버: H-EX"
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: "서포트 웨이버: H-EX"
+  delay: 630
+  duration: 80_000
+  default_skill_level: 30
+  stat:
+    ignored_defence: 10
+    final_damage_multiplier: '{{ skill_level // 3 }}'
+---
+kind: Component
+version: simaple.io/RobotSummonSkill
+metadata:
+  label:
+    group: mechanic
+    name: "로봇 런처: RM7"
+data:
+  name: "로봇 런처: RM7"
+  damage: 0
+  delay: 630
+  hit: 0
+  cooldown: 0
+
+  tick_interval: 1_000
+  tick_damage: 385 # Need to apply passive skill level only
+  tick_hit: 1
+  duration: 70_000
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/RobotSummonSkill
+metadata:
+  label:
+    group: mechanic
+    name: "마그네틱 필드"
+data:
+  name: "마그네틱 필드"
+  damage: 0
+  delay: 630
+  hit: 0
+  cooldown: 0
+
+  tick_interval: 990
+  tick_damage: 200
+  tick_hit: 1
+  duration: 70_000
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/RobotSummonSkill
+metadata:
+  label:
+    group: mechanic
+    name: "로봇 팩토리: RM1"
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: "로봇 팩토리: RM1"
+  damage: 0
+  delay: 630
+  hit: 0
+  cooldown: 0
+
+  tick_interval: 3_000
+  tick_damage: '{{ 350 + skill_level * 5 }}'
+  tick_hit: 3
+  duration: 70_000
+
+  default_skill_level: 30
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: mechanic
+    name: "매시브 파이어: IRON-B"
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: "매시브 파이어: IRON-B"
+  delay: 600
+  damage: '{{ 105 + 6 * skill_level }}'
+  hit: 6
+  combat_orders_enabled: true
+  default_skill_level: 30
+  v_improvement: 2
+  cooldown: 0
+
+
+# 2차 폭발 구현
+---
+kind: Component
+version: simaple.io/HommingMissile
+metadata:
+  label:
+    group: mechanic
+    name: "호밍 미사일"
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: "호밍 미사일"
+  damage: 0
+  delay: 0
+  hit: 0
+  cooldown: 0
+
+  tick_interval: 660
+  tick_damage: 300
+  tick_hit: 9
+  duration: 999_999_999
+
+  default_skill_level: 30
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: mechanic
+    name: 봄버 타임
+data:
+  name: 봄버 타임
+  stat: {}
+  cooldown: 100_000
+  delay: 900
+  duration: 10_000
+  rem: False
+---
+kind: Component
+version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: mechanic
+    name: 디스토션 필드
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 디스토션 필드
+  damage: 0
+  delay: 690
+  hit: 0
+  cooldown: 8_000
+
+  tick_interval: 250
+  tick_damage: 350
+  tick_hit: 2
+  duration: 4_000
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/MultipleOptionComponent
+metadata:
+  label:
+    group: mechanic
+    name: "멀티플 옵션: M-FL"
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: "멀티플 옵션: M-FL"
+  cooldown: 200_000
+  delay: 780
+
+  tick_interval: 1530
+  duration: '{{ (75 + 2 * skill_level) * 1000 }}'
+
+  missile_count: 3
+  missile_damage:  '{{ 350 + skill_level * 10 }}'
+  missile_hit: 8
+
+  gatling_count: 5
+  gatling_damage: '{{ 200 + skill_level * 8 }}'
+  gatling_hit: 6
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: mechanic
+    name: 마이크로 미사일 컨테이너
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 마이크로 미사일 컨테이너
+  delay: 540
+  damage: '{{ 375 + 17 * skill_level }}'
+  hit: '{{ (30 + skill_level // 3) * 5}}'
+  cooldown: 25_000
+---
+kind: Component
+version: simaple.io/KeydownSkillComponent
+metadata:
+  label:
+    group: mechanic
+    name: 메탈아머 전탄발사
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 메탈아머 전탄발사
+  maximum_keydown_time: 10_000
+
+  damage: '{{ 400 + 16 * skill_level }}'
+  hit: 11
+  delay: 200
+  cooldown: 60_000
+
+  keydown_end_delay: 1800
+
+  finish_damage: 0
+  finish_hit: 0
+---
+kind: Component
+version: simaple.io/MecaCarrier
+metadata:
+  label:
+    group: mechanic
+    name: 메카 캐리어
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 메카 캐리어
+
+  cooldown: 200_000
+  delay: 720
+  duration: 70_000
+
+  tick_interval: 2850
+
+  maximum_intercepter: 16
+  start_intercepter: 9
+  damage_per_intercepter: '{{ 250 + 10 * skill_level }}'
+  hit_per_intercepter: 4
+  intercepter_penalty: 120
