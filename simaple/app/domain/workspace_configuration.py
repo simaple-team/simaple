@@ -1,9 +1,8 @@
-import uuid
+from abc import ABCMeta, abstractmethod
 from typing import Any
 
 import pydantic
 
-from simaple.app.domain.workspace import Workspace
 from simaple.core.base import ActionStat, Stat
 from simaple.core.damage import INTBasedDamageLogic
 from simaple.simulate.base import Client
@@ -11,20 +10,23 @@ from simaple.simulate.kms import get_client
 from simaple.simulate.report.dpm import DPMCalculator, LevelAdvantage
 
 
-class WorkspaceConfiguration(pydantic.BaseModel):
+class WorkspaceConfiguration(pydantic.BaseModel, metaclass=ABCMeta):
+    @abstractmethod
+    def create_client(self) -> Client:
+        ...
+
+    @abstractmethod
+    def create_damage_calculator(self) -> DPMCalculator:
+        ...
+
+
+class MinimalWorkspaceConfiguration(WorkspaceConfiguration):
     action_stat: ActionStat
     groups: list[str]
     injected_values: dict[str, Any]
     skill_levels: dict[str, int]
     v_improvements: dict[str, int]
     character_stat: Stat
-
-    def create_workspace(self) -> Workspace:
-        return Workspace(
-            id=str(uuid.uuid4()),
-            client=self.create_client(),
-            calculator=self.create_damage_calculator(),
-        )
 
     def create_client(self) -> Client:
         return get_client(

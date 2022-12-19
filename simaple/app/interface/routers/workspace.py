@@ -16,8 +16,8 @@ from simaple.app.application.query import (
     query_latest_playlog,
     query_playlog,
 )
-from simaple.app.domain.services.workspace_builder import WorkspaceConfiguration
 from simaple.app.domain.uow import UnitOfWork
+from simaple.app.domain.workspace_configuration import MinimalWorkspaceConfiguration
 from simaple.app.interface.base import get_unit_of_work
 from simaple.simulate.base import Action
 
@@ -30,7 +30,7 @@ class WorkspaceResponse(pydantic.BaseModel):
 
 @router.post("", response_model=WorkspaceResponse)
 def create(
-    conf: WorkspaceConfiguration,
+    conf: MinimalWorkspaceConfiguration,
     uow: UnitOfWork = Depends(get_unit_of_work),
 ) -> Any:
     workspace_id = create_workspace(conf, uow)

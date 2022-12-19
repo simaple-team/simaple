@@ -1,12 +1,13 @@
 from simaple.app.application.exception import UnknownWorkspaceException
 from simaple.app.domain.history import History
-from simaple.app.domain.services.workspace_builder import WorkspaceConfiguration
 from simaple.app.domain.uow import UnitOfWork
+from simaple.app.domain.workspace import Workspace
+from simaple.app.domain.workspace_configuration import MinimalWorkspaceConfiguration
 from simaple.simulate.base import Action
 
 
-def create_workspace(conf: WorkspaceConfiguration, uow: UnitOfWork) -> str:
-    workspace = conf.create_workspace()
+def create_workspace(conf: MinimalWorkspaceConfiguration, uow: UnitOfWork) -> str:
+    workspace = Workspace.create_from_config(conf)
 
     playlog = workspace.empty_action_playlog()
     history = History(id=workspace.id, logs=[playlog])

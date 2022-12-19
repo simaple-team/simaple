@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 import abc
+import uuid
 from typing import Optional
 
 import pydantic
 
 from simaple.app.domain.history import PlayLog, SimulationView
+from simaple.app.domain.workspace_configuration import WorkspaceConfiguration
 from simaple.simulate.base import Action, Client
 from simaple.simulate.report.dpm import DPMCalculator
 
@@ -12,9 +16,19 @@ class Workspace(pydantic.BaseModel):
     id: str
     client: Client
     calculator: DPMCalculator
+    conf: WorkspaceConfiguration  # polymorphic
 
     class Config:
         arbitrary_types_allowed = True
+
+    @classmethod
+    def create_from_config(cls, conf: WorkspaceConfiguration) -> Workspace:
+        return Workspace(
+            id=str(uuid.uuid4()),
+            client=conf.create_client(),
+            calculator=conf.create_damage_calculator(),
+            conf=conf,
+        )
 
     def empty_action_playlog(self) -> PlayLog:
         return PlayLog(
