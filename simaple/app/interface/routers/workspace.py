@@ -14,6 +14,7 @@ from simaple.app.application.command import (
 )
 from simaple.app.application.query import (
     PlayLogResponse,
+    query_every_playlog,
     query_latest_playlog,
     query_playlog,
 )
@@ -98,6 +99,14 @@ def get_log(
     uow: UnitOfWork = Depends(get_unit_of_work),
 ) -> PlayLogResponse:
     return query_playlog(simulator_id, log_index, uow)
+
+
+@router.get("/logs/{simulator_id}", response_model=list[PlayLogResponse])
+def get_all_log(
+    simulator_id: str,
+    uow: UnitOfWork = Depends(get_unit_of_work),
+) -> PlayLogResponse:
+    return query_every_playlog(simulator_id, uow)
 
 
 @router.post("/rollback/{simulator_id}/{history_index}", response_model=None)

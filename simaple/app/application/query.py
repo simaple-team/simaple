@@ -61,6 +61,18 @@ def query_playlog(
     return PlayLogResponse.from_playlog(simulator, log_index)
 
 
+def query_every_playlog(simulator_id: str, uow: UnitOfWork) -> list[PlayLogResponse]:
+    simulator = uow.simulator_repository().get(simulator_id)
+
+    if simulator is None:
+        raise UnknownSimulatorException()
+
+    return [
+        PlayLogResponse.from_playlog(simulator, log_index)
+        for log_index in range(len(simulator.history))
+    ]
+
+
 class StatisticsResponse(pydantic.BaseModel):
     cumulative_x: list[float]
     cumulative_y: list[float]
