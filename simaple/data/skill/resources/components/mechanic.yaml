@@ -39,6 +39,8 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
 data:
   name: "서포트 웨이버: H-EX"
   delay: 630
@@ -46,7 +48,9 @@ data:
   default_skill_level: 30
   stat:
     ignored_defence: 10
-    final_damage_multiplier: '{{ skill_level // 3 }}'
+    final_damage_multiplier: "{{ skill_level // 3 }}"
+
+  v_improvement: 2
 ---
 kind: Component
 version: simaple.io/RobotSummonSkill
@@ -73,9 +77,14 @@ version: simaple.io/RobotSummonSkill
 metadata:
   label:
     group: mechanic
-    name: "마그네틱 필드"
+    name: 마그네틱 필드
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
 data:
-  name: "마그네틱 필드"
+  name: 마그네틱 필드
   damage: 0
   delay: 630
   hit: 0
@@ -123,10 +132,11 @@ patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
+  - PassiveHyperskillPatch
 data:
   name: "매시브 파이어: IRON-B"
   delay: 600
-  damage: '{{ 105 + 6 * skill_level }}'
+  damage: "{{ 105 + 6 * skill_level }}"
   hit: 6
   combat_orders_enabled: true
   default_skill_level: 30
