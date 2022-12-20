@@ -19,6 +19,7 @@ class PlayLogResponse(pydantic.BaseModel):
     buff_view: Stat
     clock: float
     damage: float
+    damages: list[tuple[str, float]]
     delay: float
     action: Action
 
@@ -32,6 +33,7 @@ class PlayLogResponse(pydantic.BaseModel):
             running_view=playlog.view.running_view,
             buff_view=playlog.view.get_buff(),
             clock=playlog.clock,
+            damages=playlog.get_damages(simulator.calculator),
             damage=playlog.get_total_damage(simulator.calculator),
             delay=playlog.get_delay(),
             action=playlog.action,
