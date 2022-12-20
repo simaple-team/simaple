@@ -15,9 +15,6 @@ def test_read_main(simulator_configuration, record_file_name):
     assert response.status_code == 200
     simulator_id = response.json()["id"]
 
-    requests = 0
-    previous_delay = 0
-
     with open(record_file_name, encoding="utf-8") as f:
         actions = [line.split("\t")[1] for line in f]
 
@@ -36,7 +33,7 @@ def test_read_main(simulator_configuration, record_file_name):
         )
 
     rollback_resp = client.post(
-        f"/workspaces/rollback/{simulator_id}/25",
+        f"/workspaces/rollback/{simulator_id}/24",
     )
 
     assert rollback_resp.status_code == 200

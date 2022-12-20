@@ -69,7 +69,7 @@ class Simulator(pydantic.BaseModel):
         self.history.append(playlog)
 
     def rollback(self, history_index: int) -> None:
-        self.history.logs = self.history.logs[:history_index]
+        self.history.logs = self.history.logs[:history_index + 1]
         last_playlog = self.history.logs[-1]
         self.client.environment.store.load(last_playlog.checkpoint)
         self.client.restore_previous_callbacks(last_playlog.checkpoint_callback)
