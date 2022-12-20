@@ -104,43 +104,43 @@ class CharacterAbilityExtractor(CharacterPropertyExtractor):
         ]
 
         regexes = {
-            "STR_static": re.compile("STR \\d+ 증가"),
-            "DEX_static": re.compile("DEX \\d+ 증가"),
-            "INT_static": re.compile("INT \\d+ 증가"),
-            "LUK_static": re.compile("LUK \\d+ 증가"),
-            # 방어력 \\d+ 증가
-            "MHP": re.compile("최대 HP \\d+ 증가"),
-            "MMP": re.compile("최대 MP \\d+ 증가"),
-            # 점프력 \\d+ 증가
-            # 이동속도 \\d+ 증가
-            "attack_power": re.compile("공격력 \\d+ 증가"),
-            "magic_attack": re.compile("마력 \\d+ 증가"),
-            "critical_rate": re.compile("크리티컬 확률 \\d+% 증가"),
-            "allStat": re.compile("모든 능력치 \\d+ 증가"),  # special case
-            "attackSpeed": re.compile("공격 속도 \\d+ 단계 증가"),
-            "strToDEX": re.compile("AP를 직접 투자한 STR의 \\d+% 만큼 DEX 증가"),
-            "dexToSTR": re.compile("AP를 직접 투자한 DEX의 \\d+% 만큼 STR 증가"),
-            "intToLUK": re.compile("AP를 직접 투자한 INT의 \\d+% 만큼 LUK 증가"),
-            "lukToDEX": re.compile("AP를 직접 투자한 LUK의 \\d+% 만큼 DEX 증가"),
+            "STR_static": re.compile(r"STR \d+ 증가"),
+            "DEX_static": re.compile(r"DEX \d+ 증가"),
+            "INT_static": re.compile(r"INT \d+ 증가"),
+            "LUK_static": re.compile(r"LUK \d+ 증가"),
+            # 방어력 \d+ 증가
+            "MHP": re.compile(r"최대 HP \d+ 증가"),
+            "MMP": re.compile(r"최대 MP \d+ 증가"),
+            # 점프력 \d+ 증가
+            # 이동속도 \d+ 증가
+            "attack_power": re.compile(r"공격력 \d+ 증가"),
+            "magic_attack": re.compile(r"마력 \d+ 증가"),
+            "critical_rate": re.compile(r"크리티컬 확률 \d+% 증가"),
+            "allStat": re.compile(r"모든 능력치 \d+ 증가"),  # special case
+            "attackSpeed": re.compile(r"공격 속도 \d+ 단계 증가"),
+            "strToDEX": re.compile(r"AP를 직접 투자한 STR의 \d+% 만큼 DEX 증가"),
+            "dexToSTR": re.compile(r"AP를 직접 투자한 DEX의 \d+% 만큼 STR 증가"),
+            "intToLUK": re.compile(r"AP를 직접 투자한 INT의 \d+% 만큼 LUK 증가"),
+            "lukToDEX": re.compile(r"AP를 직접 투자한 LUK의 \d+% 만큼 DEX 증가"),
             "relativeAttackPower": re.compile(
-                "\\d+레벨마다 공격력 1 증가"
+                r"\d+레벨마다 공격력 1 증가"
             ),  # TODO: need to verify
             "relativeMagicAttack": re.compile(
-                "\\d+레벨마다 마력 1 증가"
+                r"\d+레벨마다 마력 1 증가"
             ),  # TODO: need to verify
-            # 방어력 \\d+% 증가
-            "MHP_multiplier": re.compile("최대 HP \\d+% 증가"),
-            "MMP_multiplier": re.compile("최대 MP \\d+% 증가"),
-            "boss_damage_multiplier": re.compile("보스 몬스터 공격 시 데미지 \\d+% 증가"),
-            # 일반 몬스터 공격 시 데미지 \\d+% 증가
-            "stunDamage": re.compile("상태 이상에 걸린 대상 공격 시 데미지 \\d+% 증가"),
-            # 방어력의 \\d+%만큼 데미지 고정값 증가
-            "cooldownReset": re.compile("스킬 사용 시 \\d+% 확률로 재사용 대기시간이 미적용"),
-            "passiveSkill": re.compile("패시브 스킬 레벨 \\d+ 증가"),
-            "multiTarget": re.compile("다수 공격 스킬의 공격 대상 \\d+ 증가"),
-            "buff_duration": re.compile("버프 스킬의 지속 시간 \\d+% 증가"),
-            # 아이템 드롭률 \\d+% 증가
-            # 메소 획득량 \\d+% 증가
+            # 방어력 \d+% 증가
+            "MHP_multiplier": re.compile(r"최대 HP \d+% 증가"),
+            "MMP_multiplier": re.compile(r"최대 MP \d+% 증가"),
+            "boss_damage_multiplier": re.compile(r"보스 몬스터 공격 시 데미지 \d+% 증가"),
+            # 일반 몬스터 공격 시 데미지 \d+% 증가
+            "stunDamage": re.compile(r"상태 이상에 걸린 대상 공격 시 데미지 \d+% 증가"),
+            # 방어력의 \d+%만큼 데미지 고정값 증가
+            "cooldownReset": re.compile(r"스킬 사용 시 \d+% 확률로 재사용 대기시간이 미적용"),
+            "passiveSkill": re.compile(r"패시브 스킬 레벨 \d+ 증가"),
+            "multiTarget": re.compile(r"다수 공격 스킬의 공격 대상 \d+ 증가"),
+            "buff_duration": re.compile(r"버프 스킬의 지속 시간 \d+% 증가"),
+            # 아이템 드롭률 \d+% 증가
+            # 메소 획득량 \d+% 증가
         }
 
         result = {}
@@ -179,23 +179,23 @@ class CharacterHyperstatExtractor(CharacterPropertyExtractor):
         ]
 
         regexes = {
-            "STR_static": re.compile("힘 \\d+ 증가"),
-            "DEX_static": re.compile("민첩성 \\d+ 증가"),
-            "INT_static": re.compile("지력 \\d+ 증가"),
-            "LUK_static": re.compile("운 \\d+ 증가"),
-            "MHP_multiplier": re.compile("최대 HP \\d+% 증가"),
-            "MMP_multiplier": re.compile("최대 MP \\d+% 증가"),
-            "DF": re.compile("최대 데몬 포스/타임 포스 \\d+ 증가"),
-            "PP": re.compile("최대 싸이킥 포인트 \\d+ 증가"),
-            "critical_rate": re.compile("크리티컬 확률 \\d+% 증가"),
-            "critical_damage": re.compile("크리티컬 데미지 \\d+% 증가"),
-            "ignored_defence": re.compile("방어율 무시 \\d+% 증가"),
-            "damage_multiplier": re.compile("데미지 \\d+% 증가"),
-            "boss_damage_multiplier": re.compile("보스 몬스터 공격 시 데미지 \\d+% 증가"),
-            "immunity": re.compile("상태 이상 내성 \\d+ 증가"),
-            "attack_power": re.compile("공격력과 마력 \\d+ 증가"),
-            "magic_attack": re.compile("공격력과 마력 \\d+ 증가"),
-            "arcaneforce": re.compile("아케인포스 \\d+ 증가"),
+            "STR_static": re.compile(r"힘 \d+ 증가"),
+            "DEX_static": re.compile(r"민첩성 \d+ 증가"),
+            "INT_static": re.compile(r"지력 \d+ 증가"),
+            "LUK_static": re.compile(r"운 \d+ 증가"),
+            "MHP_multiplier": re.compile(r"최대 HP \d+% 증가"),
+            "MMP_multiplier": re.compile(r"최대 MP \d+% 증가"),
+            "DF": re.compile(r"최대 데몬 포스/타임 포스 \d+ 증가"),
+            "PP": re.compile(r"최대 싸이킥 포인트 \d+ 증가"),
+            "critical_rate": re.compile(r"크리티컬 확률 \d+% 증가"),
+            "critical_damage": re.compile(r"크리티컬 데미지 \d+% 증가"),
+            "ignored_defence": re.compile(r"방어율 무시 \d+% 증가"),
+            "damage_multiplier": re.compile(r"데미지 \d+% 증가"),
+            "boss_damage_multiplier": re.compile(r"보스 몬스터 공격 시 데미지 \d+% 증가"),
+            "immunity": re.compile(r"상태 이상 내성 \d+ 증가"),
+            "attack_power": re.compile(r"공격력과 마력 \d+ 증가"),
+            "magic_attack": re.compile(r"공격력과 마력 \d+ 증가"),
+            "arcaneforce": re.compile(r"아케인포스 \d+ 증가"),
         }
 
         result = {}
