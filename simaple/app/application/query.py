@@ -3,7 +3,6 @@ from __future__ import annotations
 import pydantic
 
 from simaple.app.application.exception import UnknownSimulatorException
-from simaple.app.domain.history import PlayLog
 from simaple.app.domain.services.statistics import get_cumulative_logs, get_damage_logs
 from simaple.app.domain.simulator import Simulator
 from simaple.app.domain.uow import UnitOfWork
@@ -24,9 +23,8 @@ class PlayLogResponse(pydantic.BaseModel):
     action: Action
 
     @classmethod
-    def from_playlog(
-        cls, index: int, playlog: PlayLog, simulator: Simulator
-    ) -> PlayLogResponse:
+    def from_playlog(cls, simulator: Simulator, index: int) -> PlayLogResponse:
+        playlog = simulator.history.get(index)
         return PlayLogResponse(
             events=playlog.events,
             index=index,
@@ -42,28 +40,23 @@ class PlayLogResponse(pydantic.BaseModel):
 
 def query_latest_playlog(simulator_id: str, uow: UnitOfWork) -> PlayLogResponse:
     simulator = uow.simulator_repository().get(simulator_id)
-    history = uow.history_repository().get(simulator_id)
-
-    if history is None or simulator is None:
+    if simulator is None:
         raise UnknownSimulatorException()
 
-    latest_index = len(history) - 1
+    latest_index = len(simulator.history) - 1
 
-    return PlayLogResponse.from_playlog(
-        latest_index, history.get(latest_index), simulator
-    )
+    return PlayLogResponse.from_playlog(simulator, latest_index)
 
 
 def query_playlog(
     simulator_id: str, log_index: int, uow: UnitOfWork
 ) -> PlayLogResponse:
     simulator = uow.simulator_repository().get(simulator_id)
-    history = uow.history_repository().get(simulator_id)
 
-    if history is None or simulator is None:
+    if simulator is None:
         raise UnknownSimulatorException()
 
-    return PlayLogResponse.from_playlog(log_index, history.get(log_index), simulator)
+    return PlayLogResponse.from_playlog(simulator, log_index)
 
 
 class StatisticsResponse(pydantic.BaseModel):
@@ -75,13 +68,12 @@ class StatisticsResponse(pydantic.BaseModel):
 
 def query_statistics(simulator_id: str, uow: UnitOfWork) -> StatisticsResponse:
     simulator = uow.simulator_repository().get(simulator_id)
-    history = uow.history_repository().get(simulator_id)
 
-    if history is None or simulator is None:
+    if simulator is None:
         raise UnknownSimulatorException()
 
-    cumulative_x, cumulative_y = get_cumulative_logs(history, simulator)
-    value_x, value_y = get_damage_logs(history, simulator)
+    cumulative_x, cumulative_y = get_cumulative_logs(simulator.history, simulator)
+    value_x, value_y = get_damage_logs(simulator.history, simulator)
 
     return StatisticsResponse(
         cumulative_x=cumulative_x,

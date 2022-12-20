@@ -17,26 +17,33 @@ class Simulator(pydantic.BaseModel):
     client: Client
     calculator: DPMCalculator
     conf: SimulatorConfiguration  # polymorphic
+    history: History
 
     class Config:
         arbitrary_types_allowed = True
 
     @classmethod
     def create_from_config(cls, conf: SimulatorConfiguration) -> Simulator:
-        return Simulator(
-            id=str(uuid.uuid4()),
+        simulator_id = str(uuid.uuid4())
+        simulation = Simulator(
+            id=simulator_id,
             client=conf.create_client(),
             calculator=conf.create_damage_calculator(),
             conf=conf,
+            history=History(id=simulator_id, logs=[]),
         )
+        simulation.add_empty_action_playlog()
+        return simulation
 
-    def empty_action_playlog(self) -> PlayLog:
-        return PlayLog(
-            events=[],
-            view=self.get_simulation_view(),
-            clock=self.client.environment.show("clock"),
-            action=Action(name="*", method="elapse", payload=0),
-            checkpoint=self.client.environment.store.save(),
+    def add_empty_action_playlog(self) -> PlayLog:
+        self.history.append(
+            PlayLog(
+                events=[],
+                view=self.get_simulation_view(),
+                clock=self.client.environment.show("clock"),
+                action=Action(name="*", method="elapse", payload=0),
+                checkpoint=self.client.environment.store.save(),
+            )
         )
 
     def get_simulation_view(self) -> SimulationView:
@@ -46,16 +53,18 @@ class Simulator(pydantic.BaseModel):
             buff_view=self.client.environment.show("buff"),
         )
 
-    def dispatch(self, action: Action) -> PlayLog:
+    def dispatch(self, action: Action) -> None:
         events = self.client.play(action)
 
-        return PlayLog(
+        playlog = PlayLog(
             clock=self.client.environment.show("clock"),
             view=self.get_simulation_view(),
             action=action,
             events=events,
             checkpoint=self.client.environment.store.save(),
         )
+
+        self.history.append(playlog)
 
 
 class SimulatorRepository(metaclass=abc.ABCMeta):
