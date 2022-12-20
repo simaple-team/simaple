@@ -67,8 +67,15 @@ class RobotSetupBuff(SkillComponent, DurableTrait, CooldownValidityTrait):
         cooldown_state: CooldownState,
         duration_state: DurationState,
         dynamics: Dynamics,
+        robot_mastery: RobotMasteryState,
     ):
-        return self.use_durable_trait(cooldown_state, duration_state, dynamics)
+        states, event = self.use_durable_trait(
+            cooldown_state,
+            duration_state,
+            dynamics,
+            (1 + robot_mastery.summon_increment / 100),
+        )
+        return (*states, robot_mastery), event
 
     @reducer_method
     def elapse(
@@ -155,8 +162,15 @@ class RobotSummonSkill(SkillComponent, TickEmittingTrait, CooldownValidityTrait)
         cooldown_state: CooldownState,
         interval_state: IntervalState,
         dynamics: Dynamics,
+        robot_mastery: RobotMastery,
     ):
-        return self.use_tick_emitting_trait(cooldown_state, interval_state, dynamics)
+        states, event = self.use_tick_emitting_trait(
+            cooldown_state,
+            interval_state,
+            dynamics,
+            (1 + robot_mastery.summon_increment / 100),
+        )
+        return (*states, robot_mastery), event
 
     @view_method
     def validity(self, cooldown_state: CooldownState):
