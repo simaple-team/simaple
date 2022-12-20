@@ -89,6 +89,7 @@ class DurableTrait(CooldownTrait, DurationTrait, EventProviderTrait, DelayTrait)
         cooldown_state: CooldownState,
         duration_state: DurationState,
         dynamics: Dynamics,
+        duration_multiplier=1.0,
     ):
         cooldown_state = cooldown_state.copy()
         duration_state = duration_state.copy()
@@ -105,7 +106,9 @@ class DurableTrait(CooldownTrait, DurationTrait, EventProviderTrait, DelayTrait)
         )
 
         duration_state.set_time_left(
-            dynamics.stat.calculate_buff_duration(self._get_duration())
+            dynamics.stat.calculate_buff_duration(
+                self._get_duration() * duration_multiplier
+            )
         )
 
         return (cooldown_state, duration_state, dynamics), self.event_provider.delayed(
@@ -154,6 +157,7 @@ class TickEmittingTrait(
         cooldown_state: CooldownState,
         interval_state: IntervalState,
         dynamics: Dynamics,
+        duration_multiplier=1.0,
     ):
         cooldown_state = cooldown_state.copy()
         interval_state = interval_state.copy()
@@ -171,7 +175,7 @@ class TickEmittingTrait(
         cooldown_state.set_time_left(
             dynamics.stat.calculate_cooldown(self._get_cooldown())
         )
-        interval_state.set_time_left(self._get_duration())
+        interval_state.set_time_left(self._get_duration() * duration_multiplier)
 
         return (cooldown_state, interval_state, dynamics), [
             self.event_provider.dealt(damage, hit),

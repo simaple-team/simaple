@@ -1,6 +1,26 @@
 #어드밴스드 호밍
 
-#더블 럭다
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: mechanic
+    name: 로디드 다이스
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 로디드 다이스
+  combat_orders_enabled: true
+  default_skill_level: 5
+  duration: 180_000
+  cooldown: 180_000
+  delay: 0
+  red: true
+  rem: true
+  stat:
+    damage_multiplier: "{{ 20 + 10/6 + 10/6 * (5/6 + 1/11) * (10 * skill_level * 0.01) }}"
+---
 kind: Component
 version: simaple.io/RobotMastery
 metadata:
@@ -39,6 +59,8 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
 data:
   name: "서포트 웨이버: H-EX"
   delay: 630
@@ -46,7 +68,9 @@ data:
   default_skill_level: 30
   stat:
     ignored_defence: 10
-    final_damage_multiplier: '{{ skill_level // 3 }}'
+    final_damage_multiplier: "{{ skill_level // 3 }}"
+
+  v_improvement: 2
 ---
 kind: Component
 version: simaple.io/RobotSummonSkill
@@ -73,13 +97,19 @@ version: simaple.io/RobotSummonSkill
 metadata:
   label:
     group: mechanic
-    name: "마그네틱 필드"
+    name: 마그네틱 필드
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
 data:
-  name: "마그네틱 필드"
+  name: 마그네틱 필드
   damage: 0
   delay: 630
   hit: 0
-  cooldown: 0
+  cooldown: 80_000
+  red: true
 
   tick_interval: 990
   tick_damage: 200
@@ -103,10 +133,10 @@ data:
   damage: 0
   delay: 630
   hit: 0
-  cooldown: 0
+  cooldown: 60_000
 
   tick_interval: 3_000
-  tick_damage: '{{ 350 + skill_level * 5 }}'
+  tick_damage: "{{ 350 + skill_level * 5 }}"
   tick_hit: 3
   duration: 70_000
 
@@ -123,18 +153,39 @@ patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
+  - PassiveHyperskillPatch
 data:
   name: "매시브 파이어: IRON-B"
   delay: 600
-  damage: '{{ 105 + 6 * skill_level }}'
+  damage: "{{ 105 + 6 * skill_level }}"
   hit: 6
   combat_orders_enabled: true
   default_skill_level: 30
   v_improvement: 2
   cooldown: 0
-
-
-# 2차 폭발 구현
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: mechanic
+    name: "매시브 파이어: IRON-B (폭발)"
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: "매시브 파이어: IRON-B (폭발)"
+  listening_actions:
+    "매시브 파이어: IRON-B.use.emitted.global.damage": use
+  delay: 0
+  damage: "{{ 50 + 10 * skill_level }}"
+  hit: 1
+  combat_orders_enabled: true
+  default_skill_level: 30
+  disable_validity: True
+  v_improvement: 2
+  cooldown: 0
 ---
 kind: Component
 version: simaple.io/HommingMissile
@@ -214,14 +265,14 @@ data:
   delay: 780
 
   tick_interval: 1530
-  duration: '{{ (75 + 2 * skill_level) * 1000 }}'
+  duration: "{{ (75 + 2 * skill_level) * 1000 }}"
 
   missile_count: 3
-  missile_damage:  '{{ 350 + skill_level * 10 }}'
+  missile_damage: "{{ 350 + skill_level * 10 }}"
   missile_hit: 8
 
   gatling_count: 5
-  gatling_damage: '{{ 200 + skill_level * 8 }}'
+  gatling_damage: "{{ 200 + skill_level * 8 }}"
   gatling_hit: 6
 ---
 kind: Component
@@ -236,8 +287,8 @@ patch:
 data:
   name: 마이크로 미사일 컨테이너
   delay: 540
-  damage: '{{ 375 + 17 * skill_level }}'
-  hit: '{{ (30 + skill_level // 3) * 5}}'
+  damage: "{{ 375 + 17 * skill_level }}"
+  hit: "{{ (30 + skill_level // 3) * 5}}"
   cooldown: 25_000
 ---
 kind: Component
@@ -253,10 +304,10 @@ data:
   name: 메탈아머 전탄발사
   maximum_keydown_time: 10_000
 
-  damage: '{{ 400 + 16 * skill_level }}'
+  damage: "{{ 400 + 16 * skill_level }}"
   hit: 11
   delay: 200
-  cooldown: 60_000
+  cooldown: 200_000
 
   keydown_end_delay: 1800
 
@@ -283,6 +334,6 @@ data:
 
   maximum_intercepter: 16
   start_intercepter: 9
-  damage_per_intercepter: '{{ 250 + 10 * skill_level }}'
+  damage_per_intercepter: "{{ 250 + 10 * skill_level }}"
   hit_per_intercepter: 4
   intercepter_penalty: 120

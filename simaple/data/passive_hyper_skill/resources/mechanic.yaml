@@ -1,0 +1,58 @@
+---
+kind: PassiveHyperskill
+version: simaple.io/StatIncreasePassiveHyperskill
+metadata:
+  label:
+    group: mechanic
+data:
+  name: 매시브 파이어 - 리인포스
+  target: "매시브 파이어: IRON-B"
+  key: modifier
+  increment:
+    damage_multiplier: 10
+---
+kind: PassiveHyperskill
+version: simaple.io/ValueIncreasePassiveHyperskill
+metadata:
+  label:
+    group: mechanic
+data:
+  name: "매시브 파이어 : IRON-B - 보너스 어택"
+  target: "매시브 파이어: IRON-B"
+  key: hit
+  increment: 1
+---
+kind: PassiveHyperskill
+version: simaple.io/StatIncreasePassiveHyperskill
+metadata:
+  label:
+    group: mechanic
+data:
+  name: 마그네틱 필드 - 리인포스
+  target: 마그네틱 필드
+  key: modifier
+  increment:
+    damage_multiplier: 10
+---
+kind: PassiveHyperskill
+version: simaple.io/MultiplierPassiveHyperskill
+metadata:
+  label:
+    group: mechanic
+data:
+  name: 마그네틱 필드 - 쿨타임 리듀스
+  target: 마그네틱 필드
+  key: cooldown
+  multiplier: 0.75
+---
+kind: PassiveHyperskill
+version: simaple.io/StatIncreasePassiveHyperskill
+metadata:
+  label:
+    group: mechanic
+data:
+  name: "서포트 웨이버: H-EX - 파티 리인포스"
+  target: "서포트 웨이버: H-EX"
+  key: stat
+  increment:
+    final_damage_multiplier: 5
