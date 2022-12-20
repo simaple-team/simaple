@@ -64,3 +64,13 @@ def play_use_and_elapse(simulator_id: str, name: str, uow: UnitOfWork) -> None:
     )
 
     uow.simulator_repository().update(simulator)
+
+
+def rollback(simulator_id: str, target_index: int, uow: UnitOfWork) -> None:
+    simulator = uow.simulator_repository().get(simulator_id)
+
+    if simulator is None:
+        raise UnknownSimulatorException()
+
+    simulator.rollback(target_index)
+    uow.simulator_repository().update(simulator)

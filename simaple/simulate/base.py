@@ -255,6 +255,12 @@ class Client:
     def clean(self) -> None:
         self._previous_callbacks = []
 
+    def export_previous_callbacks(self) -> list[EventCallback]:
+        return [(x.copy(), y.copy()) for x, y in self._previous_callbacks]
+
+    def restore_previous_callbacks(self, callbacks: list[EventCallback]) -> None:
+        self._previous_callbacks = callbacks
+
     def _handle(
         self, event: Event, environment: Environment, all_events: list[Event]
     ) -> None:

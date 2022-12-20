@@ -10,6 +10,7 @@ from simaple.app.application.command import (
     play_elapse,
     play_use,
     play_use_and_elapse,
+    rollback,
 )
 from simaple.app.application.query import (
     PlayLogResponse,
@@ -97,3 +98,14 @@ def get_log(
     uow: UnitOfWork = Depends(get_unit_of_work),
 ) -> PlayLogResponse:
     return query_playlog(simulator_id, log_index, uow)
+
+
+@router.post("/rollback/{simulator_id}/{history_index}", response_model=None)
+def rollback_to_checkpoint(
+    simulator_id: str,
+    history_index: int,
+    uow: UnitOfWork = Depends(get_unit_of_work),
+) -> None:
+    rollback(simulator_id, history_index, uow)
+
+    return None
