@@ -389,6 +389,13 @@ class MultipleOptionComponent(SkillComponent, CooldownValidityTrait):
         ]
 
     @view_method
+    def buff(self, interval_state: IntervalState, robot_mastery: RobotMasteryState):
+        if not interval_state.enabled():
+            return None
+
+        return robot_mastery.get_robot_buff()
+
+    @view_method
     def validity(self, cooldown_state: CooldownState):
         return self.validity_in_cooldown_trait(cooldown_state)
 
@@ -509,6 +516,13 @@ class MecaCarrier(SkillComponent, CooldownValidityTrait):
         return (cooldown_state, interval_state, dynamics), [
             self.event_provider.delayed(self.delay),
         ]
+
+    @view_method
+    def buff(self, interval_state: IntervalState, robot_mastery: RobotMasteryState):
+        if not interval_state.enabled():
+            return None
+
+        return robot_mastery.get_robot_buff()
 
     @view_method
     def validity(self, cooldown_state):
