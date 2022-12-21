@@ -19,6 +19,11 @@ class SimulatorConfiguration(pydantic.BaseModel, metaclass=ABCMeta):
     def create_damage_calculator(self) -> DPMCalculator:
         ...
 
+    @classmethod
+    @abstractmethod
+    def get_name(cls) -> str:
+        ...
+
 
 class MinimalSimulatorConfiguration(SimulatorConfiguration):
     action_stat: ActionStat
@@ -27,6 +32,10 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
     skill_levels: dict[str, int]
     v_improvements: dict[str, int]
     character_stat: Stat
+
+    @classmethod
+    def get_name(cls) -> str:
+        return "minimal"
 
     def create_client(self) -> Client:
         return get_client(
