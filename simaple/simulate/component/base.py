@@ -24,9 +24,12 @@ class ComponentMethodWrapper:
         ][
             skip_count:
         ]  # skip self, payload
-        self._payload_type: Type[BaseModel] = list(
-            inspect.signature(func).parameters.values()
-        )[0].annotation
+        if len(inspect.signature(func).parameters.values()) == 0:
+            self._payload_type = None
+        else:
+            self._payload_type: Type[BaseModel] = list(
+                inspect.signature(func).parameters.values()
+            )[0].annotation
 
     def __call__(self, *args, **kwargs) -> tuple[Union[tuple[State], State], Any]:
         return self._func(*args, **kwargs)
