@@ -200,6 +200,24 @@ version: simaple.io/SynergySkillComponent
 metadata:
   label:
     group: bishop
+    name: 엔젤릭 터치
+data:
+  name: 엔젤릭 터치
+  delay: 750
+  damage: 350
+  hit: 5
+  cooldown: 10_000
+
+  synergy:
+    ignored_defence: 44
+
+  duration: 60_000
+---
+kind: Component
+version: simaple.io/SynergySkillComponent
+metadata:
+  label:
+    group: bishop
     name: 피스메이커
 patch:
   - SkillLevelPatch
@@ -209,7 +227,7 @@ data:
   delay: 750
   damage: '{{ 350 + 14 * skill_level }}'
   hit: 16
-  cooldown: 10
+  cooldown: 10_000
 
   synergy:
     damage_multiplier: '{{ 5 + skill_level // 5 }}'
