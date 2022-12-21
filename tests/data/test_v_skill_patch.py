@@ -16,7 +16,11 @@ def test_v_patch():
 
     assert output == {
         "name": "flame swip",
-        "modifier": {"attack_power": 30, "final_damage_multiplier": 52 * 13},
+        "modifier": {
+            "ignored_defence": 20,
+            "attack_power": 30,
+            "final_damage_multiplier": 52 * 13,
+        },
     }
 
 
