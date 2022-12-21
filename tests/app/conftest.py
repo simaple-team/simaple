@@ -1,6 +1,9 @@
 import os
 
 import pytest
+from fastapi.testclient import TestClient
+
+from simaple.app.interface.web import SimapleWeb
 
 
 @pytest.fixture
@@ -45,3 +48,12 @@ def simulator_configuration():
 @pytest.fixture
 def record_file_name():
     return os.path.join(os.path.dirname(__file__), "record.tsv")
+
+
+@pytest.fixture
+def client():
+    app = SimapleWeb()
+    app.reset_database()
+    app_client = TestClient(app)
+
+    return app_client

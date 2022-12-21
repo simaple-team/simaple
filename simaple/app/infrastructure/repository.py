@@ -17,6 +17,9 @@ class InmemorySimulatorRepository(SimulatorRepository):
     def get(self, simulator_id: str) -> Optional[Simulator]:
         return self._workspaces.get(simulator_id)
 
+    def get_all(self) -> list[Simulator]:
+        return list(self._workspaces.values())
+
 
 class InmemoryHistoryRepository(HistoryRepository):
     def __init__(self):

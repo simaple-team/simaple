@@ -1,8 +1,10 @@
-from simaple.app.infrastructure.snapshot_repository import SqlSnapshotRepository
+from typing import Callable
+
+from sqlalchemy.orm import Session
+
 from simaple.app.domain.simulator import SimulatorRepository
 from simaple.app.domain.uow import UnitOfWork
-from sqlalchemy.orm import Session
-from typing import Callable
+from simaple.app.infrastructure.snapshot_repository import SqlSnapshotRepository
 
 
 class SimpleUnitOfWork(UnitOfWork):

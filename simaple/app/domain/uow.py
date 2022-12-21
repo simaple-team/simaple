@@ -1,7 +1,7 @@
 import abc
 
-from simaple.app.domain.snapshot import SnapshotRepository
 from simaple.app.domain.simulator import SimulatorRepository
+from simaple.app.domain.snapshot import SnapshotRepository
 
 
 class UnitOfWork(metaclass=abc.ABCMeta):
@@ -16,4 +16,3 @@ class UnitOfWork(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def commit(self) -> None:
         ...
-

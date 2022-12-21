@@ -35,7 +35,7 @@ class Simulator(pydantic.BaseModel):
         simulation.add_empty_action_playlog()
         return simulation
 
-    def add_empty_action_playlog(self) -> PlayLog:
+    def add_empty_action_playlog(self) -> None:
         self.history.append(
             PlayLog(
                 events=[],
@@ -82,6 +82,10 @@ class SimulatorRepository(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def get(self, simulator_id: str) -> Optional[Simulator]:
+        ...
+
+    @abc.abstractmethod
+    def get_all(self) -> list[Simulator]:
         ...
 
     @abc.abstractmethod

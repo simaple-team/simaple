@@ -1,6 +1,9 @@
-from simaple.app.domain.simulator_configuration import SimulatorConfiguration, MinimalSimulatorConfiguration
-
 from typing import Type
+
+from simaple.app.domain.simulator_configuration import (
+    MinimalSimulatorConfiguration,
+    SimulatorConfiguration,
+)
 
 
 class ConfigurationMapper:
@@ -18,9 +21,7 @@ class ConfigurationMapper:
 
     def _get_configuration_cls(self, config_name: str) -> Type[SimulatorConfiguration]:
         cls_list = [MinimalSimulatorConfiguration]
-        cls_map = {
-            cls.name: cls for cls in cls_list
-        }
+        cls_map = {cls.get_name(): cls for cls in cls_list}  # type: ignore
 
         if config_name not in cls_map:
             raise KeyError("Configuration name not exist.")

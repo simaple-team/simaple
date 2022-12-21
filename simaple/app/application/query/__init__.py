@@ -95,3 +95,13 @@ def query_statistics(simulator_id: str, uow: UnitOfWork) -> StatisticsResponse:
         value_x=value_x,
         value_y=value_y,
     )
+
+
+class SimulatorResponse(pydantic.BaseModel):
+    id: str
+
+
+def query_all_simulator(uow: UnitOfWork) -> list[SimulatorResponse]:
+    simulators = uow.simulator_repository().get_all()
+
+    return [SimulatorResponse(id=simulator.id) for simulator in simulators]

@@ -1,13 +1,7 @@
 import json
 
-from fastapi.testclient import TestClient
 
-from simaple.app.interface.web import app
-
-client = TestClient(app)
-
-
-def test_read_main(simulator_configuration, record_file_name):
+def test_read_main(simulator_configuration, record_file_name, client):
     response = client.post(
         "/workspaces/",
         json=simulator_configuration,

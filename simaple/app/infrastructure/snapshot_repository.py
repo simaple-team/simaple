@@ -1,15 +1,14 @@
-from simaple.app.domain.snapshot import SnapshotRepository, Snapshot
-from simaple.app.infrastructure.orm import BaseOrm
-from sqlalchemy import orm
-
-from sqlalchemy import JSON, Column, DateTime, String
 from datetime import datetime
-from typing import Optional
+from typing import Optional, cast
 
+from sqlalchemy import JSON, Column, DateTime, String, orm
+
+from simaple.app.domain.snapshot import Snapshot, SnapshotRepository
 from simaple.app.infrastructure.configuration_mapper import ConfigurationMapper
+from simaple.app.infrastructure.orm import BaseOrm
 
 
-class SnapshotOrm(BaseOrm):
+class SnapshotOrm(BaseOrm):  # type: ignore
     __tablename__ = "snapshot"
 
     id = Column(String(256), primary_key=True)
@@ -25,38 +24,47 @@ class SqlSnapshotRepository(SnapshotRepository):
         self._configuration_mapper = ConfigurationMapper()
 
     def insert(self, snapshot: Snapshot) -> None:
-        orm = self._to_orm(snapshot)
-        self._session.add(orm)
+        snapshot_orm = self._to_orm(snapshot)
+        self._session.add(snapshot_orm)
         self._session.flush()
 
+    def get_all(self) -> list[Snapshot]:
+        fetched = self._session.query(SnapshotOrm)
+
+        return [self._to_entity(snapshot_orm) for snapshot_orm in fetched]
+
     def get(self, snapshot_id: str) -> Optional[Snapshot]:
-        fetched = self._session.query(SnapshotOrm).filter_by(id=snapshot_id).one_or_none()
+        fetched = (
+            self._session.query(SnapshotOrm).filter_by(id=snapshot_id).one_or_none()
+        )
         if fetched is None:
             return fetched
-        
+
         return self._to_entity(fetched)
 
     def get_by_name(self, name: str) -> Optional[Snapshot]:
         fetched = self._session.query(SnapshotOrm).filter_by(name=name).one_or_none()
         if fetched is None:
             return fetched
-        
+
         return self._to_entity(fetched)
 
-    def _to_entity(self, orm: SnapshotOrm) -> Snapshot:
+    def _to_entity(self, snapshot_orm: SnapshotOrm) -> Snapshot:
         return Snapshot(
-            id=orm.id,
-            history=orm.history,
-            updated_at=orm.updated_at,
-            name=orm.name,
-            configuration = self._configuration_mapper.load(orm.configuration)
+            id=snapshot_orm.id,
+            history=snapshot_orm.history,
+            updated_at=snapshot_orm.updated_at,
+            name=snapshot_orm.name,
+            configuration=self._configuration_mapper.load(
+                cast(dict, snapshot_orm.configuration)
+            ),
         )
 
     def _to_orm(self, entity: Snapshot) -> SnapshotOrm:
         return SnapshotOrm(
             id=entity.id,
-            history=entity.history,
+            history=entity.history.dict(),
             updated_at=entity.updated_at,
             name=entity.name,
-            configuration = self._configuration_mapper.save(entity.configuration)
+            configuration=self._configuration_mapper.dump(entity.configuration),
         )
