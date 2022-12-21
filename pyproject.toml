@@ -55,7 +55,8 @@ module = [
     "sklearn.pipeline",
     "sklearn.preprocessing",
     "bs4",
-    "sqlalchemy"
+    "sqlalchemy",
+    "sqlalchemy.orm",
 ]
 
 [tool.poetry]
