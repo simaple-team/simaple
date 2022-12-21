@@ -40,6 +40,7 @@ class DivineAttackSkillComponent(
     hit: float
     cooldown: float
     delay: float
+    synergy: Optional[Stat]
 
     def get_default_state(self):
         return {
@@ -80,6 +81,10 @@ class DivineAttackSkillComponent(
     @view_method
     def validity(self, cooldown_state):
         return self.validity_in_cooldown_trait(cooldown_state)
+
+    @view_method
+    def buff(self):
+        return self.synergy
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit

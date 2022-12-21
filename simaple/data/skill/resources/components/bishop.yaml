@@ -17,6 +17,8 @@ data:
   combat_orders_enabled: true
   default_skill_level: 30
   v_improvement: 2
+  synergy:
+    final_damage_multiplier: 10
 ---
 kind: Component
 version: simaple.io/DivineAttackSkillComponent
