@@ -1,16 +1,23 @@
 from abc import ABCMeta, abstractmethod
-from typing import Any
 
 import pydantic
 
 from simaple.core.base import ActionStat, Stat
-from simaple.core.damage import INTBasedDamageLogic
+from simaple.core.jobtype import JobType
+from simaple.data.client_configuration import (
+    ClientConfiguration,
+    get_client_configuration,
+)
+from simaple.data.damage_logic import get_damage_logic
 from simaple.simulate.base import Client
 from simaple.simulate.kms import get_client
 from simaple.simulate.report.dpm import DPMCalculator, LevelAdvantage
 
 
 class SimulatorConfiguration(pydantic.BaseModel, metaclass=ABCMeta):
+    class Config:
+        extra = "forbid"
+
     @abstractmethod
     def create_client(self) -> Client:
         ...
@@ -27,32 +34,54 @@ class SimulatorConfiguration(pydantic.BaseModel, metaclass=ABCMeta):
 
 class MinimalSimulatorConfiguration(SimulatorConfiguration):
     action_stat: ActionStat
-    groups: list[str]
-    injected_values: dict[str, Any]
-    skill_levels: dict[str, int]
-    v_improvements: dict[str, int]
+    job: str
+
     character_stat: Stat
+    character_level: int
+
+    combat_orders_level: int = 1
+    force_advantage: float = 1.5
+    elemental_resistance_disadvantage: float = 0.5
+    target_armor: float = 300
+    mob_level: int = 250
+    weapon_attack: int = 0
 
     @classmethod
     def get_name(cls) -> str:
         return "minimal"
 
+    def get_jobtype(self) -> JobType:
+        return JobType(self.job)
+
+    def get_client_configuration(self) -> ClientConfiguration:
+        return get_client_configuration(self.get_jobtype())
+
     def create_client(self) -> Client:
+        client_configuration = self.get_client_configuration()
         return get_client(
             self.action_stat,
-            self.groups,
-            self.injected_values,
-            self.skill_levels,
-            self.v_improvements,
+            client_configuration.get_groups(),
+            self.get_injected_values(),
+            client_configuration.get_filled_v_skill(),
+            client_configuration.get_filled_v_improvements(),
         )
+
+    def get_injected_values(self) -> dict:
+        return {
+            "character_level": self.character_level,
+            "character_stat": self.character_stat,
+            "weapon_attack": self.weapon_attack,
+        }
 
     def create_damage_calculator(self) -> DPMCalculator:
         """TODO: replace by simaple.container.simulation container-logic"""
         return DPMCalculator(
             character_spec=self.character_stat,
-            damage_logic=INTBasedDamageLogic(attack_range_constant=1.2, mastery=0.95),
-            armor=300,
-            level_advantage=LevelAdvantage().get_advantage(250, 260),
-            force_advantage=1.5,
-            elemental_resistance_disadvantage=0.5,
+            damage_logic=get_damage_logic(self.get_jobtype(), self.combat_orders_level),
+            armor=self.target_armor,
+            level_advantage=LevelAdvantage().get_advantage(
+                self.mob_level, self.character_level
+            ),
+            force_advantage=self.force_advantage,
+            elemental_resistance_disadvantage=self.elemental_resistance_disadvantage,
         )

@@ -10,10 +10,8 @@ from simaple.app.interface.web import SimapleWeb
 def simulator_configuration():
     return {
         "action_stat": {},
-        "groups": ["archmagefb", "common", "adventurer.magician"],
-        "injected_values": {"character_level": 260},
-        "skill_levels": {},
-        "v_improvements": {},
+        "job": "archmagefb",
+        "character_level": 260,
         "character_stat": {
             "STR": 907.0,
             "LUK": 2224.0,
