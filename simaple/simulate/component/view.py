@@ -11,11 +11,13 @@ class Validity(pydantic.BaseModel):
     time_left: float
     valid: bool
     cooldown: float
+    stack: Optional[float]
 
 
 class Running(pydantic.BaseModel):
     name: str
     time_left: float
+    stack: Optional[float]
 
 
 class ValidityParentView(AggregationView):
