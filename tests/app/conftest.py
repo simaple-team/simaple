@@ -1,16 +1,17 @@
 import os
 
 import pytest
+from fastapi.testclient import TestClient
+
+from simaple.app.interface.web import SimapleWeb
 
 
 @pytest.fixture
-def workspace_configuration():
+def simulator_configuration():
     return {
         "action_stat": {},
-        "groups": ["archmagefb", "common", "adventurer.magician"],
-        "injected_values": {"character_level": 260},
-        "skill_levels": {},
-        "v_improvements": {},
+        "job": "archmagefb",
+        "character_level": 260,
         "character_stat": {
             "STR": 907.0,
             "LUK": 2224.0,
@@ -45,3 +46,12 @@ def workspace_configuration():
 @pytest.fixture
 def record_file_name():
     return os.path.join(os.path.dirname(__file__), "record.tsv")
+
+
+@pytest.fixture
+def client():
+    app = SimapleWeb()
+    app.reset_database()
+    app_client = TestClient(app)
+
+    return app_client

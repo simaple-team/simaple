@@ -1,21 +1,24 @@
 from typing import Optional
 
 from simaple.app.domain.history import History, HistoryRepository
-from simaple.app.domain.workspace import Workspace, WorkspaceRepository
+from simaple.app.domain.simulator import Simulator, SimulatorRepository
 
 
-class InmemoryWorkspaceRepository(WorkspaceRepository):
+class InmemorySimulatorRepository(SimulatorRepository):
     def __init__(self):
-        self._workspaces: dict[str, Workspace] = {}
+        self._workspaces: dict[str, Simulator] = {}
 
-    def add(self, workspace: Workspace) -> None:
-        self._workspaces[workspace.id] = workspace
+    def add(self, simulator: Simulator) -> None:
+        self._workspaces[simulator.id] = simulator
 
-    def update(self, workspace: Workspace) -> None:
-        self._workspaces[workspace.id] = workspace
+    def update(self, simulator: Simulator) -> None:
+        self._workspaces[simulator.id] = simulator
 
-    def get(self, workspace_id: str) -> Optional[Workspace]:
-        return self._workspaces.get(workspace_id)
+    def get(self, simulator_id: str) -> Optional[Simulator]:
+        return self._workspaces.get(simulator_id)
+
+    def get_all(self) -> list[Simulator]:
+        return list(self._workspaces.values())
 
 
 class InmemoryHistoryRepository(HistoryRepository):

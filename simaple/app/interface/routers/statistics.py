@@ -1,16 +1,19 @@
 import fastapi
-from fastapi import Depends
+from dependency_injector.wiring import Provide, inject
 
 from simaple.app.application.query import StatisticsResponse, query_statistics
 from simaple.app.domain.uow import UnitOfWork
-from simaple.app.interface.base import get_unit_of_work
+from simaple.app.interface.container import WebContainer
+
+UowProvider = fastapi.Depends(Provide[WebContainer.unit_of_work])
 
 statistics_router = fastapi.APIRouter(prefix="/statistics")
 
 
-@statistics_router.get("/graph/{workspace_id}", response_model=StatisticsResponse)
+@statistics_router.get("/graph/{simulator_id}", response_model=StatisticsResponse)
+@inject
 def get_cumulative_graph_data(
-    workspace_id: str,
-    uow: UnitOfWork = Depends(get_unit_of_work),
+    simulator_id: str,
+    uow: UnitOfWork = UowProvider,
 ) -> StatisticsResponse:
-    return query_statistics(workspace_id, uow)
+    return query_statistics(simulator_id, uow)

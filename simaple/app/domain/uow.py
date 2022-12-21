@@ -1,14 +1,18 @@
 import abc
 
-from simaple.app.domain.history import HistoryRepository
-from simaple.app.domain.workspace import WorkspaceRepository
+from simaple.app.domain.simulator import SimulatorRepository
+from simaple.app.domain.snapshot import SnapshotRepository
 
 
 class UnitOfWork(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def history_repository(self) -> HistoryRepository:
+    def snapshot_repository(self) -> SnapshotRepository:
         ...
 
     @abc.abstractmethod
-    def workspace_repository(self) -> WorkspaceRepository:
+    def simulator_repository(self) -> SimulatorRepository:
+        ...
+
+    @abc.abstractmethod
+    def commit(self) -> None:
         ...

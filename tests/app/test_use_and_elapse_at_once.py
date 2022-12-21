@@ -1,22 +1,13 @@
 import json
 
-from fastapi.testclient import TestClient
 
-from simaple.app.interface.web import app
-
-client = TestClient(app)
-
-
-def test_read_main(workspace_configuration, record_file_name):
+def test_read_main(simulator_configuration, record_file_name, client):
     response = client.post(
         "/workspaces/",
-        json=workspace_configuration,
+        json=simulator_configuration,
     )
     assert response.status_code == 200
-    workspace_id = response.json()["id"]
-
-    requests = 0
-    previous_delay = 0
+    simulator_id = response.json()["id"]
 
     with open(record_file_name, encoding="utf-8") as f:
         for line in f:
@@ -25,7 +16,7 @@ def test_read_main(workspace_configuration, record_file_name):
 
             if action["method"] == "use":
                 resp = client.post(
-                    f"/workspaces/use_and_elapse/{workspace_id}",
+                    f"/workspaces/use_and_elapse/{simulator_id}",
                     json={"name": action["name"]},
                 )
 

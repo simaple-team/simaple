@@ -1,2 +1,2 @@
-class UnknownWorkspaceException(Exception):
+class UnknownSimulatorException(Exception):
     ...

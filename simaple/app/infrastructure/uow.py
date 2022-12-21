@@ -1,19 +1,26 @@
-from simaple.app.domain.history import HistoryRepository
+from typing import Callable
+
+from sqlalchemy.orm import Session
+
+from simaple.app.domain.simulator import SimulatorRepository
 from simaple.app.domain.uow import UnitOfWork
-from simaple.app.domain.workspace import WorkspaceRepository
+from simaple.app.infrastructure.snapshot_repository import SqlSnapshotRepository
 
 
 class SimpleUnitOfWork(UnitOfWork):
     def __init__(
         self,
-        history_repository: HistoryRepository,
-        workspace_repository: WorkspaceRepository,
+        session_builder: Callable[[], Session],
+        simulator_repository: SimulatorRepository,
     ):
-        self._history_repository = history_repository
-        self._workspace_repository = workspace_repository
+        self._session = session_builder()
+        self._simulator_repository = simulator_repository
 
-    def history_repository(self) -> HistoryRepository:
-        return self._history_repository
+    def snapshot_repository(self) -> SqlSnapshotRepository:
+        return SqlSnapshotRepository(self._session)
 
-    def workspace_repository(self) -> WorkspaceRepository:
-        return self._workspace_repository
+    def simulator_repository(self) -> SimulatorRepository:
+        return self._simulator_repository
+
+    def commit(self) -> None:
+        self._session.commit()
