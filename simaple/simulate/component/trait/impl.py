@@ -158,6 +158,7 @@ class TickEmittingTrait(
         interval_state: IntervalState,
         dynamics: Dynamics,
         duration_multiplier=1.0,
+        hit_multiplier=1,
     ):
         cooldown_state = cooldown_state.copy()
         interval_state = interval_state.copy()
@@ -178,7 +179,7 @@ class TickEmittingTrait(
         interval_state.set_time_left(self._get_duration() * duration_multiplier)
 
         return (cooldown_state, interval_state, dynamics), [
-            self.event_provider.dealt(damage, hit),
+            self.event_provider.dealt(damage, hit * hit_multiplier),
             self.event_provider.delayed(delay),
         ]
 

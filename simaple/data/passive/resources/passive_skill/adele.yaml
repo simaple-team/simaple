@@ -1,0 +1,115 @@
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: adele
+    name: 매직 서킷
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 매직 서킷
+  stat:
+    attack_power: "{{ weapon_attack_power * 0.15 }}"
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: adele
+    name: 패이스
+data:
+  name: 패이스
+  stat:
+    critical_damage: 10
+    attack_power_multiplier: 10
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: adele
+    name: 루디먼트
+data:
+  name: 루디먼트
+  stat:
+    attack_power: 30
+
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: adele
+    name: 마스터리
+data:
+  name: 마스터리
+  stat:
+    attack_power: 30
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: adele
+    name: 트레인
+data:
+  name: 트레인
+  stat:
+    STR: 60
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: adele
+    name: 어센트
+data:
+  name: 어센트
+  stat:
+    attack_power: 10
+    final_damage_multiplier: 10
+    critical_rate: 20
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: adele
+    name: 엑스퍼트
+data:
+  name: 엑스퍼트
+  stat:
+    attack_power: 30
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: adele
+    name: 데몰리션
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 데몰리션
+  stat:
+    final_damage_multiplier: "{{ 10 + skill_level }}"
+    ignored_defence: "{{ skill_level }}"
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: adele
+    name: 어테인
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 어테인
+  stat:
+    attack_power: "{{ 10 + skill_level }}"
+    boss_damage_multiplier: "{{ math.ceil(skill_level / 2) }}"
+    critical_rate: "{{ skill_level }}"

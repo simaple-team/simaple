@@ -184,6 +184,36 @@ class Stat(BaseModel):
 
         return self
 
+    def stack(self, stack: int) -> Stat:
+        return Stat(
+            STR=self.STR * stack,
+            LUK=self.LUK * stack,
+            INT=self.INT * stack,
+            DEX=self.DEX * stack,
+            STR_multiplier=self.STR_multiplier * stack,
+            LUK_multiplier=self.LUK_multiplier * stack,
+            INT_multiplier=self.INT_multiplier * stack,
+            DEX_multiplier=self.DEX_multiplier * stack,
+            STR_static=self.STR_static * stack,
+            LUK_static=self.LUK_static * stack,
+            INT_static=self.INT_static * stack,
+            DEX_static=self.DEX_static * stack,
+            attack_power=self.attack_power * stack,
+            magic_attack=self.magic_attack * stack,
+            attack_power_multiplier=self.attack_power_multiplier * stack,
+            magic_attack_multiplier=self.magic_attack_multiplier * stack,
+            critical_rate=self.critical_rate * stack,
+            critical_damage=self.critical_damage * stack,
+            boss_damage_multiplier=self.boss_damage_multiplier * stack,
+            damage_multiplier=self.damage_multiplier * stack,
+            MHP=self.MHP * stack,
+            MMP=self.MMP * stack,
+            MHP_multiplier=self.MHP_multiplier * stack,
+            MMP_multiplier=self.MMP_multiplier * stack,
+            final_damage_multiplier=self.final_damage_multiplier * stack,
+            ignored_defence=self.ignored_defence * stack,
+        )
+
     def get(self, prop: StatProps):
         return getattr(self, prop.value)
 

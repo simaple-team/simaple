@@ -1,0 +1,477 @@
+---
+kind: Component
+version: simaple.io/AdeleEtherComponent
+metadata:
+  label:
+    group: adele
+    name: 에테르
+data:
+  name: 에테르
+  tick_interval: 10020
+  maximum_stack: 400
+  stack_per_tick: 5
+  stack_per_trigger: 12
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 샤드
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  name: 샤드
+  delay: 630
+  damage: "{{ 80 + 30 + 115 + 135 + 3 * skill_level }}"
+  hit: 15
+  cooldown: 6000
+  red: true
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/AdeleWonderComponent
+metadata:
+  label:
+    group: adele
+    name: 원더
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  name: 원더
+  delay: 0
+  damage: "{{ 80 + 30 + 115 + 135 + 3 * skill_level }}"
+  hit: 15
+  cooldown: 8000
+  red: false # TODO: red=True인지 확인 필요
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+
+  v_improvement: 2
+
+  disable_validity: True
+---
+kind: Component
+version: simaple.io/AdeleResonanceComponent
+metadata:
+  label:
+    group: adele
+    name: 레조넌스
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  name: 레조넌스
+  delay: 690
+  damage: "{{ 120 + 125 + 175 + 3 * skill_level }}"
+  hit: 6
+
+  modifier:
+    final_damage_multiplier: 75
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+
+  ether_gain: 0
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/StackableBuffSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 레조넌스(버프)
+data:
+  name: 레조넌스(버프)
+  listening_actions:
+    레조넌스.use.emitted.global.damage: use
+
+  delay: 0
+  maximum_stack: 2
+  duration: 30_000
+  rem: False
+
+  buff:
+    final_damage_multiplier: 5
+    ignored_defence: 5
+
+  disable_validity: True
+---
+kind: Component
+version: simaple.io/AdeleCreationComponent
+metadata:
+  label:
+    group: adele
+    name: 크리에이션
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 크리에이션
+  delay: 0
+  damage: "{{ 200 + 240 + 180 + 3 * skill_level }}"
+
+  cooldown: 1500
+  red: true
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+
+  v_improvement: 2
+
+  disable_validity: True
+---
+# TODO: 최종 폭발
+kind: Component
+version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 테리토리
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  name: 테리토리
+  delay: 420
+  damage: 0
+
+  cooldown: 30_000
+  red: true
+
+  duration: 7000
+  rem: false
+
+  tick_interval: 405
+  tick_damage: "{{ 100 + 150 + 5 * skill_level }}"
+  tick_hit: 4
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/AdeleOrderComponent
+metadata:
+  label:
+    group: adele
+    name: 오더
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 오더
+
+  delay: 0
+  cooldown: 500
+
+  tick_interval: 1020
+  tick_damage: "{{ 240 + 30 + 3 * skill_level }}"
+  tick_hit: 2
+
+  ether_consume: 100
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/AdeleGatheringComponent
+metadata:
+  label:
+    group: adele
+    name: 게더링
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 게더링
+
+  delay: 630
+  damage: "{{ 260 + 210 + 3 * skill_level }}"
+  hit: 4
+
+  cooldown: 12_000
+  red: true
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 게더링(디버프)
+data:
+  name: 게더링(디버프)
+  listening_actions:
+    게더링.use.emitted.global.damage: use
+
+  delay: 0
+  duration: 30_000
+  rem: false
+
+  buff:
+    ignored_defence: 10
+
+  disable_validity: True
+---
+kind: Component
+version: simaple.io/AdeleBlossomComponent
+metadata:
+  label:
+    group: adele
+    name: 블로섬
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  name: 블로섬
+
+  delay: 420
+  damage: "{{ 470 + 6 * skill_level }}"
+  hit: 8
+
+  cooldown: 12_000
+  red: true
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 디바이드
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  name: 디바이드
+
+  delay: 600
+  damage: "{{ 285 + 3 * skill_level }}"
+  hit: 6
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 그레이브
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 그레이브
+
+  delay: 630
+  damage: "{{ 400 + 20 * skill_level }}"
+  hit: 10
+
+  cooldown: 90_000
+  red: true
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 그레이브(디버프)
+data:
+  name: 그레이브(디버프)
+  listening_actions:
+    그레이브.use.emitted.global.damage: use
+
+  delay: 0
+  duration: 999_999_999
+  rem: false
+
+  buff:
+    damage_multiplier: 20
+    ignored_defence: 10
+
+  disable_validity: True
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 마커
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 마커
+
+  delay: 690
+  damage: 500
+  hit: "{{ 6 * 2 }}"
+
+  cooldown: 60_000
+  red: True
+
+  modifier:
+    final_damage_multiplier: 300
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/AdeleRuinComponent
+metadata:
+  label:
+    group: adele
+    name: 루인
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 루인
+
+  delay: 600
+
+  cooldown: 60_000
+  red: True
+
+  tick_damage_first: "{{ 250 + 10 * skill_level }}"
+  tick_hit_first: 6
+  tick_interval_first: 160
+  duration_first: 2000
+
+  tick_damage_second: "{{ 450 + 18 * skill_level }}"
+  tick_hit_second: 9
+  tick_interval_second: 250
+  duration_second: 2000
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+---
+kind: Component
+version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 인피니트
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 인피니트
+
+  delay: 540
+  damage: 0
+  hit: 0
+
+  cooldown: 180_000
+  red: true
+
+  tick_interval: 342
+  tick_damage: "{{ 350 + skill_level * 14 }}"
+  tick_hit: "{{ 2 * 6 }}"
+  duration: 30_000
+
+  default_skill_level: 30
+---
+# TODO: 리스토어 버프
+kind: Component
+version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 리스토어
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 리스토어
+
+  delay: 720
+  damage: 0
+  hit: 0
+
+  cooldown: 180_000
+  red: true
+
+  tick_interval: 2970
+  tick_damage: "{{ 900 + skill_level * 36 }}"
+  tick_hit: 3
+  duration: 30_000
+
+  default_skill_level: 30
+---
+kind: Component
+version: simaple.io/AdeleStormComponent
+metadata:
+  label:
+    group: adele
+    name: 스톰
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 스톰
+
+  delay: 780
+  damage: 0
+  hit: 0
+
+  cooldown: 90_000
+  red: true
+
+  tick_interval: 330
+  tick_damage: "{{ 250 + skill_level * 10 }}"
+  tick_hit: 2
+  duration: 14000
+
+  default_skill_level: 30
