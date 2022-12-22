@@ -6,13 +6,16 @@
 - [Slack](https://join.slack.com/t/maplestorydpmcalc/shared_invite/zt-1lwi3l97o-EH0R9~W97SB8TjsoXnpzpQ)
 
 ## Install
+
 - `pip install simaple`
 
 ## Documentation
+
 - https://simaple.readthedocs.io/en/latest/
 
 ## Developments
-- See [Development documentation](development/readmd.md)
+
+- See [Development documentation](development/readme.md)
 
 ## Functions
 
@@ -28,4 +31,3 @@
 ### 홈페이지 연동
 
 - 홈페이지 데이터 불러오기 기능
-
