@@ -54,7 +54,11 @@ class Infinity(SkillComponent, DurableTrait, CooldownValidityTrait):
 
     @view_method
     def running(self, duration_state: DurationState) -> Running:
-        return Running(name=self.name, time_left=duration_state.time_left)
+        return Running(
+            name=self.name,
+            time_left=duration_state.time_left,
+            duration=self._get_duration(),
+        )
 
     def get_infinity_effect(self, duration_state) -> Stat:
         elapsed = duration_state.get_elapsed_time()

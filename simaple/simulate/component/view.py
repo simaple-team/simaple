@@ -18,6 +18,7 @@ class Running(pydantic.BaseModel):
     name: str
     time_left: float
     stack: Optional[float] = None
+    duration: float
 
 
 class ValidityParentView(AggregationView):
