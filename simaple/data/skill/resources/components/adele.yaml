@@ -22,7 +22,6 @@ patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
-  - PassiveHyperskillPatch
 data:
   name: 샤드
   delay: 630
@@ -46,7 +45,6 @@ patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
-  - PassiveHyperskillPatch
 data:
   name: 원더
   delay: 0

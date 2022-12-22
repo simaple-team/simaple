@@ -59,6 +59,11 @@ class AdeleEtherComponent(Component):
 class AdeleResonanceComponent(
     SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait
 ):
+    name: str
+    damage: float
+    hit: float
+    delay: float
+
     ether_gain: int
 
     binds: dict[str, str] = {"ether_state": ".에테르.ether_state"}
@@ -91,10 +96,19 @@ class AdeleResonanceComponent(
     def validity(self, cooldown_state: CooldownState):
         return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
 
+    def _get_simple_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit
+
 
 class AdeleWonderComponent(
     SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait
 ):
+    name: str
+    damage: float
+    hit: float
+    cooldown: float
+    delay: float
+
     listening_actions: dict[str, str] = {"디바이드.use": "trigger"}
 
     def get_default_state(self):
@@ -114,10 +128,19 @@ class AdeleWonderComponent(
     def validity(self, cooldown_state):
         return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
 
+    def _get_simple_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit
+
 
 class AdeleCreationComponent(
     SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait
 ):
+    name: str
+    damage: float
+    hit: float
+    cooldown: float
+    delay: float
+
     listening_actions: dict[str, str] = {"디바이드.use": "trigger"}
     binds: dict[str, str] = {"ether_state": ".에테르.ether_state"}
 
@@ -145,6 +168,9 @@ class AdeleCreationComponent(
     @view_method
     def validity(self, cooldown_state: CooldownState):
         return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
+
+    def _get_simple_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit
 
 
 class AdeleOrderComponent(SkillComponent, TickEmittingTrait, CooldownValidityTrait):

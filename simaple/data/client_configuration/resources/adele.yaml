@@ -26,5 +26,6 @@ data:
     - adele
     - common
     - flora
+    - str_based
     - warrior
   mdc_order: []
