@@ -17,21 +17,6 @@ version: simaple.io/DefaultActiveSkill
 metadata:
   label:
     group: archmagetc
-    name: 메이플 용사
-patch:
-  - SkillLevelPatch
-  - EvalPatch
-data:
-  name: 메이플 용사
-  default_skill_level: 30
-  stat:
-    INT: '{{ math.floor((18 + 5 * character_level) * 0.15) }}'
----
-kind: DefaultActiveSkill
-version: simaple.io/DefaultActiveSkill
-metadata:
-  label:
-    group: archmagetc
     name: 익스트림 매직(썬,콜)
 patch:
   - SkillLevelPatch
@@ -41,7 +26,7 @@ data:
   stat:
     final_damage_multiplier: 20
 ---
-kind: DefaultActiveSkill 
+kind: DefaultActiveSkill
 version: simaple.io/DefaultActiveSkill
 metadata:
   label:

@@ -12,25 +12,10 @@ data:
   passive_skill_enabled: true
   stat:
     boss_damage_multiplier: 10
-    magic_attack: '{{ 20 + skill_level }}'
-    attack_power: '{{ 20 + skill_level }}'
+    magic_attack: "{{ 20 + skill_level }}"
+    attack_power: "{{ 20 + skill_level }}"
 ---
 kind: DefaultActiveSkill
-version: simaple.io/DefaultActiveSkill
-metadata:
-  label:
-    group: bishop
-    name: 메이플 용사
-patch:
-  - SkillLevelPatch
-  - EvalPatch
-data:
-  name: 메이플 용사
-  default_skill_level: 30
-  stat:
-    INT: '{{ math.floor((18 + 5 * character_level) * 0.15) }}'
----
-kind: DefaultActiveSkill 
 version: simaple.io/DefaultActiveSkill
 metadata:
   label:
