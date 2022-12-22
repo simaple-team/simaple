@@ -6,13 +6,13 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
-data:  
+data:
   attack_range_constant: 1.2
-  mastery: '{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}'
+  mastery: "{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}"
   default_skill_level: 0
   combat_orders_enabled: True
 ---
-kind: DamageLogic 
+kind: DamageLogic
 version: simaple.io/INTBasedDamageLogic
 metadata:
   label:
@@ -20,13 +20,13 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
-data:  
+data:
   attack_range_constant: 1.2
-  mastery: '{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}'
+  mastery: "{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}"
   default_skill_level: 0
   combat_orders_enabled: True
 ---
-kind: DamageLogic 
+kind: DamageLogic
 version: simaple.io/INTBasedDamageLogic
 metadata:
   label:
@@ -34,8 +34,22 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
-data:  
+data:
   attack_range_constant: 1.2
-  mastery: '{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}'
+  mastery: "{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/DEXBasedDamageLogic
+metadata:
+  label:
+    group: mechanic
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.5
+  mastery: "{{ 0.85 + 0.01 * ((skill_level+1) // 2) }}"
   default_skill_level: 0
   combat_orders_enabled: True
