@@ -32,8 +32,11 @@ class PlayLog(pydantic.BaseModel):
     def get_delay(self) -> float:
         delay = 0
         for event in self.events:
-            if event.tag in (Tag.DELAY,) and event.payload["time"] > 0:
-                delay += event.payload["time"]
+            if event.tag in (Tag.DELAY,):
+                if event.payload is None:
+                    raise ValueError
+                if event.payload["time"] > 0:
+                    delay += event.payload["time"]
 
         return delay
 

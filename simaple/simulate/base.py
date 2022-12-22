@@ -50,7 +50,7 @@ class Event(BaseModel):
     method: str = ""
     tag: Optional[str]
     handler: Optional[str]
-    payload: Any
+    payload: Optional[dict]
 
     class Config:
         extra = Extra.forbid

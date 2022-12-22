@@ -21,7 +21,6 @@ def test_scenario():
 
     attack_skill_1.add_to_environment(environment)
     attack_skill_2.add_to_environment(environment)
-    print(".")
     event = environment.resolve(
         Action(
             name="test-A",
@@ -29,7 +28,6 @@ def test_scenario():
             payload=None,
         )
     )
-    print(event)
 
     event = environment.resolve(
         Action(
