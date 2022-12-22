@@ -1,5 +1,5 @@
 ---
-kind: PassiveSkill 
+kind: PassiveSkill
 version: simaple.io/PassiveSkill
 metadata:
   label:
@@ -7,12 +7,12 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
-data:  
+data:
   name: 하이 위즈덤
   stat:
     INT: 40
 ---
-kind: PassiveSkill 
+kind: PassiveSkill
 version: simaple.io/PassiveSkill
 metadata:
   label:
@@ -20,12 +20,12 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
-data:  
+data:
   name: 스펠 마스터리
   stat:
     magic_attack: 10
 ---
-kind: PassiveSkill 
+kind: PassiveSkill
 version: simaple.io/PassiveSkill
 metadata:
   label:
@@ -33,13 +33,13 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
-data:  
+data:
   name: 매직 크리티컬
   stat:
     critical_rate: 30
     critical_damage: 13
 ---
-kind: PassiveSkill 
+kind: PassiveSkill
 version: simaple.io/PassiveSkill
 metadata:
   label:
@@ -52,7 +52,7 @@ data:
   stat:
     damage_multiplier: 50
 ---
-kind: PassiveSkill 
+kind: PassiveSkill
 version: simaple.io/PassiveSkill
 metadata:
   label:
@@ -65,7 +65,7 @@ data:
   stat:
     final_damage_multiplier: 40
 ---
-kind: PassiveSkill 
+kind: PassiveSkill
 version: simaple.io/PassiveSkill
 metadata:
   label:
@@ -79,11 +79,11 @@ data:
   combat_orders_enabled: true
   default_skill_level: 10
   stat:
-    magic_attack: '{{ 3 * skill_level }}'
+    magic_attack: "{{ 3 * skill_level }}"
   action_stat:
-    buff_duration: '{{ 5 * skill_level }}'
+    buff_duration: "{{ 5 * skill_level }}"
 ---
-kind: PassiveSkill 
+kind: PassiveSkill
 version: simaple.io/PassiveSkill
 metadata:
   label:
@@ -96,4 +96,4 @@ data:
   passive_skill_enabled: true
   default_skill_level: 30
   stat:
-    ignored_defence: '{{ 5 + math.ceil(skill_level / 2) }}'
+    ignored_defence: "{{ 5 + math.ceil(skill_level / 2) }}"
