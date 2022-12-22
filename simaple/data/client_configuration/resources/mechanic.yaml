@@ -1,0 +1,27 @@
+kind: ClientConfiguration
+version: simaple.io/ClientConfiguration
+metadata:
+  label:
+    group: mechanic
+data:
+  v_skill_names:
+    - 레지스탕스 라인 인팬트리
+    - 메이플 여신의 축복
+    - 프레이
+    - "멀티플 옵션: M-FL"
+    - 마이크로 미사일 컨트롤러
+    - 메탈아머 전탄발사
+  v_improvement_names:
+    - 호밍 미사일
+    - "매시브 파이어: IRON-B"
+    - "매시브 파이어: IRON-B (폭발)"
+    - 디스토션 필드
+    - "로봇 팩토리: RM1"
+    - 마그네틱 필드
+    - "로봇 런처: RM7"
+  component_groups:
+    - mechanic
+    - common
+    - resistance
+    - pirate
+  mdc_order: []
