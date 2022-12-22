@@ -44,7 +44,7 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
     elemental_resistance_disadvantage: float = 0.5
     target_armor: float = 300
     mob_level: int = 250
-    weapon_attack: int = 0
+    weapon_attack_power: int = 0
 
     @classmethod
     def get_name(cls) -> str:
@@ -70,7 +70,7 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
         return {
             "character_level": self.character_level,
             "character_stat": self.character_stat,
-            "weapon_attack": self.weapon_attack,
+            "weapon_attack_power": self.weapon_attack_power,
         }
 
     def create_damage_calculator(self) -> DPMCalculator:
