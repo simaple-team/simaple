@@ -22,6 +22,7 @@ data:
   component_groups:
     - mechanic
     - common
+    - dex_based
     - resistance
     - pirate
   mdc_order: []

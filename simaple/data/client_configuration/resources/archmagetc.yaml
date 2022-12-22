@@ -1,42 +1,43 @@
-kind: ClientConfiguration 
+kind: ClientConfiguration
 version: simaple.io/ClientConfiguration
 metadata:
   label:
     group: archmagetc
-data:  
-  v_skill_names: 
-  - 오버로드 마나
-  - 메이플 여신의 축복
-  - 아이스 에이지
-  - 썬더 브레이크
-  - 스피릿 오브 스노우
-  - 주피터 썬더
+data:
+  v_skill_names:
+    - 오버로드 마나
+    - 메이플 여신의 축복
+    - 아이스 에이지
+    - 썬더 브레이크
+    - 스피릿 오브 스노우
+    - 주피터 썬더
   v_improvement_names:
-  - 칠링 스텝
-  - 체인 라이트닝
-  - 블리자드
-  - 블리자드(패시브)
-  - 프로즌 오브
-  - 엘퀴네스
-  - 라이트닝 스피어
-  component_groups: 
-  - archmagetc
-  - common
-  - adventurer.magician
+    - 칠링 스텝
+    - 체인 라이트닝
+    - 블리자드
+    - 블리자드(패시브)
+    - 프로즌 오브
+    - 엘퀴네스
+    - 라이트닝 스피어
+  component_groups:
+    - archmagetc
+    - common
+    - int_based
+    - adventurer.magician
   mdc_order:
-  - 오버로드 마나
-  - 엘퀴네스
-  - 아이스 오라
-  - 메디테이션
-  - 인피니티
-  - 소울 컨트랙트
-  - 메이플 여신의 축복
-  - 에픽 어드벤처
-  - 스피릿 오브 스노우
-  - 아이스 에이지
-  - 라이트닝 스피어
-  - 블리자드
-  - 주피터 썬더
-  - 썬더 브레이크
-  - 프로즌 오브
-  - 체인 라이트닝
+    - 오버로드 마나
+    - 엘퀴네스
+    - 아이스 오라
+    - 메디테이션
+    - 인피니티
+    - 소울 컨트랙트
+    - 메이플 여신의 축복
+    - 에픽 어드벤처
+    - 스피릿 오브 스노우
+    - 아이스 에이지
+    - 라이트닝 스피어
+    - 블리자드
+    - 주피터 썬더
+    - 썬더 브레이크
+    - 프로즌 오브
+    - 체인 라이트닝
