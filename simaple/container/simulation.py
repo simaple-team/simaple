@@ -16,6 +16,7 @@ from simaple.gear.gearset import Gearset
 from simaple.optimizer.preset import Preset, PresetOptimizer
 from simaple.simulate.kms import get_client
 from simaple.simulate.report.dpm import DPMCalculator, LevelAdvantage
+from simaple.system.trait import CharacterTrait
 
 
 class SimulationSetting(pydantic.BaseSettings):
@@ -32,6 +33,7 @@ class SimulationSetting(pydantic.BaseSettings):
     armor: int = 300
     mob_level: int = 265
     force_advantage: float = 1.0
+    trait_level: int = 100
 
     v_skill_level: int = 30
     v_improvements_level: int = 60
@@ -78,6 +80,16 @@ class SimulationContainer(containers.DeclarativeContainer):
         character_level=config.level,
     )
 
+    trait = providers.Factory(
+        CharacterTrait,
+        ambition=config.trait_level,
+        insight=config.trait_level,
+        empathy=config.trait_level,
+        willpower=config.trait_level,
+        diligence=config.trait_level,
+        charm=config.trait_level,
+    )
+
     doping_stat = providers.Factory(get_normal_doping)
 
     monster_life_stat = providers.Factory(get_normal_monsterlife_stat)
@@ -87,6 +99,7 @@ class SimulationContainer(containers.DeclarativeContainer):
         passive_stat,
         doping_stat,
         monster_life_stat,
+        trait.provided.get_stat.call(),
     )
 
     gearset = providers.Factory(
