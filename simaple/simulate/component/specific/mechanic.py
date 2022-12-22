@@ -552,7 +552,7 @@ class MecaCarrier(SkillComponent, CooldownValidityTrait):
         return Running(
             name=self.name,
             time_left=interval_state.interval_time_left,
-            stack=interval_state.count,
+            stack=interval_state.count if interval_state.interval_time_left > 0 else 0,
             duration=self._get_duration(),
         )
 
