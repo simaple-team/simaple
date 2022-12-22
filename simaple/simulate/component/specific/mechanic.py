@@ -25,6 +25,9 @@ class RobotMasteryState(State):
     robot_damage_increment: float
     robot_buff_damage_multiplier: float
 
+    def get_summon_multiplier(self) -> float:
+        return 1 + self.summon_increment / 100
+
     def get_robot_modifier(self) -> Stat:
         return Stat(final_damage_multiplier=self.robot_damage_increment)
 
@@ -73,7 +76,7 @@ class RobotSetupBuff(SkillComponent, DurableTrait, CooldownValidityTrait):
             cooldown_state,
             duration_state,
             dynamics,
-            (1 + robot_mastery.summon_increment / 100),
+            robot_mastery.get_summon_multiplier(),
         )
         return (*states, robot_mastery), event
 
@@ -97,11 +100,13 @@ class RobotSetupBuff(SkillComponent, DurableTrait, CooldownValidityTrait):
         return None
 
     @view_method
-    def running(self, duration_state: DurationState) -> Running:
+    def running(
+        self, duration_state: DurationState, robot_mastery: RobotMasteryState
+    ) -> Running:
         return Running(
             name=self.name,
             time_left=duration_state.time_left,
-            duration=self._get_duration(),
+            duration=self._get_duration() * robot_mastery.get_summon_multiplier(),
         )
 
     def _get_duration(self) -> float:
@@ -166,13 +171,13 @@ class RobotSummonSkill(SkillComponent, TickEmittingTrait, CooldownValidityTrait)
         cooldown_state: CooldownState,
         interval_state: IntervalState,
         dynamics: Dynamics,
-        robot_mastery: RobotMastery,
+        robot_mastery: RobotMasteryState,
     ):
         states, event = self.use_tick_emitting_trait(
             cooldown_state,
             interval_state,
             dynamics,
-            (1 + robot_mastery.summon_increment / 100),
+            robot_mastery.get_summon_multiplier(),
         )
         return (*states, robot_mastery), event
 
@@ -181,11 +186,13 @@ class RobotSummonSkill(SkillComponent, TickEmittingTrait, CooldownValidityTrait)
         return self.validity_in_cooldown_trait(cooldown_state)
 
     @view_method
-    def running(self, interval_state: IntervalState) -> Running:
+    def running(
+        self, interval_state: IntervalState, robot_mastery: RobotMasteryState
+    ) -> Running:
         return Running(
             name=self.name,
             time_left=interval_state.interval_time_left,
-            duration=self._get_duration(),
+            duration=self._get_duration() * robot_mastery.get_summon_multiplier(),
         )
 
     def _get_duration(self) -> float:
