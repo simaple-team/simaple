@@ -7,6 +7,7 @@ from simaple.simulate.component.trait.impl import (
     StartIntervalWithoutDamageTrait,
     UseSimpleAttackTrait,
 )
+from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
 
@@ -48,6 +49,15 @@ class FrostEffect(Component):
     @view_method
     def buff(self, frost_stack: StackState):
         return Stat(critical_damage=self.critical_damage_per_stack * frost_stack.stack)
+
+    @view_method
+    def running(self, frost_stack: StackState):
+        return Running(
+            name=self.name,
+            duration=999_999_999,
+            time_left=999_999_999,
+            stack=frost_stack.stack,
+        )
 
 
 def jupyter_thunder_shock_advantage(jupyter_thunder_shock: IntervalState) -> Stat:
