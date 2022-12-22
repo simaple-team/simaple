@@ -25,7 +25,7 @@ class Snapshot(pydantic.BaseModel):
 
     def restore_simulator(self) -> Simulator:
         simulator = Simulator.create_from_config(self.configuration)
-        simulator.history = self.history
+        simulator.set_history(self.history)
 
         return simulator
 

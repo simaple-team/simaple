@@ -74,6 +74,10 @@ class Simulator(pydantic.BaseModel):
         self.client.environment.store.load(last_playlog.checkpoint)
         self.client.restore_previous_callbacks(last_playlog.checkpoint_callback)
 
+    def set_history(self, history: History) -> None:
+        self.history = history
+        self.rollback(len(history) - 1)
+
 
 class SimulatorRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod
