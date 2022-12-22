@@ -98,7 +98,11 @@ class RobotSetupBuff(SkillComponent, DurableTrait, CooldownValidityTrait):
 
     @view_method
     def running(self, duration_state: DurationState) -> Running:
-        return Running(name=self.name, time_left=duration_state.time_left)
+        return Running(
+            name=self.name,
+            time_left=duration_state.time_left,
+            duration=self._get_duration(),
+        )
 
     def _get_duration(self) -> float:
         return self.duration
@@ -178,7 +182,11 @@ class RobotSummonSkill(SkillComponent, TickEmittingTrait, CooldownValidityTrait)
 
     @view_method
     def running(self, interval_state: IntervalState) -> Running:
-        return Running(name=self.name, time_left=interval_state.interval_time_left)
+        return Running(
+            name=self.name,
+            time_left=interval_state.interval_time_left,
+            duration=self._get_duration(),
+        )
 
     def _get_duration(self) -> float:
         return self.duration
@@ -272,7 +280,11 @@ class HommingMissile(
 
     @view_method
     def running(self, interval_state: IntervalState) -> Running:
-        return Running(name=self.name, time_left=interval_state.interval_time_left)
+        return Running(
+            name=self.name,
+            time_left=interval_state.interval_time_left,
+            duration=self._get_duration(),
+        )
 
     def _get_duration(self) -> float:
         return self.duration
@@ -401,7 +413,14 @@ class MultipleOptionComponent(SkillComponent, CooldownValidityTrait):
 
     @view_method
     def running(self, interval_state: IntervalState) -> Running:
-        return Running(name=self.name, time_left=interval_state.interval_time_left)
+        return Running(
+            name=self.name,
+            time_left=interval_state.interval_time_left,
+            duration=self._get_duration(),
+        )
+
+    def _get_duration(self) -> float:
+        return self.duration
 
 
 class DynamicIntervalState(State):
@@ -534,4 +553,8 @@ class MecaCarrier(SkillComponent, CooldownValidityTrait):
             name=self.name,
             time_left=interval_state.interval_time_left,
             stack=interval_state.count,
+            duration=self._get_duration(),
         )
+
+    def _get_duration(self) -> float:
+        return self.duration
