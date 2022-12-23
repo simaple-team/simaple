@@ -19,7 +19,7 @@ class CharacterTrait(pydantic.BaseModel):
         )
 
     def get_action_stat(self) -> ActionStat:
-        ActionStat(buff_duration=(self.empathy // 10))
+        return ActionStat(buff_duration=(self.empathy // 10))
 
     def get_elemental_resistance(self) -> ElementalResistance:
         return ElementalResistance(value=(self.insight // 10) * 0.5)
