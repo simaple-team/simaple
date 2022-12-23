@@ -9,8 +9,8 @@ def fixture_multiple_option(
     mechanic_store,
 ):
     component = MecaCarrier(
-        name="test-multiple-option",
-        cooldown=180_000,
+        name="test-meca-carrier",
+        cooldown=200_000,
         delay=690,
         duration=120_000,
         tick_interval=3000,

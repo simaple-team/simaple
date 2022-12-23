@@ -9,6 +9,7 @@ from simaple.simulate.component.specific.adele import (
     AdeleEtherComponent,
     AdeleOrderComponent,
     EtherState,
+    RestoreDurationState,
 )
 from simaple.simulate.global_property import GlobalProperty
 from simaple.spec.repository import DirectorySpecRepository
@@ -40,6 +41,10 @@ def adele_store(global_property):
             creation_step=100,
             order_consume=100,
         ),
+    )
+    store.set_state(
+        ".리스토어(버프).duration_state",
+        RestoreDurationState(time_left=0, ether_multiplier=80),
     )
     return store
 
@@ -75,5 +80,6 @@ def fixture_order(
         tick_damage=360,
         tick_hit=2,
         maximum_stack=6,
+        restore_maximum_stack=8,
     )
     return component.compile(adele_store)
