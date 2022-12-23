@@ -170,7 +170,7 @@ class StackableBuffSkillComponent(
         return {
             "cooldown_state": CooldownState(time_left=0),
             "duration_state": DurationState(time_left=0),
-            "stack_state": StackState(time_left=0),
+            "stack_state": StackState(maximum_stack=self.maximum_stack),
         }
 
     @reducer_method
@@ -179,17 +179,15 @@ class StackableBuffSkillComponent(
         _: None,
         cooldown_state: CooldownState,
         duration_state: DurationState,
-        stack_state: StackState,
         dynamics: Dynamics,
+        stack_state: StackState,
     ):
         stack_state = stack_state.copy()
         if duration_state.time_left <= 0:
             stack_state.reset()
         stack_state.increase()
 
-        (states, event) = self.use_durable_trait(
-            cooldown_state, duration_state, dynamics
-        )
+        states, event = self.use_durable_trait(cooldown_state, duration_state, dynamics)
 
         return (*states, stack_state), event
 
@@ -213,11 +211,14 @@ class StackableBuffSkillComponent(
         return None
 
     @view_method
-    def running(self, duration_state: DurationState) -> Running:
+    def running(
+        self, duration_state: DurationState, stack_state: StackState
+    ) -> Running:
         return Running(
             name=self.name,
             time_left=duration_state.time_left,
             duration=self._get_duration(),
+            stack=stack_state.stack if duration_state.time_left > 0 else 0,
         )
 
     def _get_duration(self) -> float:

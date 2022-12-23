@@ -5,10 +5,11 @@ import simaple.simulate.component.skill  # pylint: disable=W0611
 import simaple.simulate.component.specific  # pylint: disable=W0611
 from simaple.core.base import ActionStat
 from simaple.simulate.base import AddressedStore, ConcreteStore
-from simaple.simulate.component.skill import AttackSkillComponent
-from simaple.simulate.component.specific.adele import AdeleEtherComponent, EtherState
-from simaple.simulate.component.specific.archmagetc import FrostEffect
-from simaple.simulate.component.state import IntervalState
+from simaple.simulate.component.specific.adele import (
+    AdeleEtherComponent,
+    AdeleOrderComponent,
+    EtherState,
+)
 from simaple.simulate.global_property import GlobalProperty
 from simaple.spec.repository import DirectorySpecRepository
 
@@ -34,7 +35,11 @@ def adele_store(global_property):
     global_property.install_global_properties(store)
     store.set_state(
         ".에테르.ether_state",
-        EtherState(maximum_stack=400),
+        EtherState(
+            maximum_stack=400,
+            creation_step=100,
+            order_consume=100,
+        ),
     )
     return store
 
@@ -48,6 +53,8 @@ def ether(adele_store):
         stack_per_tick=5,
         stack_per_trigger=12,
         stack_per_resonance=20,
+        creation_step=100,
+        order_consume=100,
     )
 
     compiled_component = ether.compile(adele_store)
@@ -55,9 +62,18 @@ def ether(adele_store):
     return compiled_component
 
 
-@pytest.fixture
-def divide(adele_store):
-    divide = AttackSkillComponent(name="디바이드", delay=600, damage=375, hit=6)
-
-    compiled_component = divide.compile(adele_store)
-    return compiled_component
+@pytest.fixture(name="order")
+def fixture_order(
+    adele_store,
+):
+    component = AdeleOrderComponent(
+        name="test-order",
+        delay=0,
+        cooldown=500,
+        duration=40000,
+        tick_interval=1020,
+        tick_damage=360,
+        tick_hit=2,
+        maximum_stack=6,
+    )
+    return component.compile(adele_store)

@@ -138,7 +138,11 @@ class TickEmittingTrait(
     DelayTrait,
 ):
     def elapse_tick_emitting_trait(
-        self, time: float, cooldown_state: CooldownState, interval_state: IntervalState
+        self,
+        time: float,
+        cooldown_state: CooldownState,
+        interval_state: IntervalState,
+        hit_multiplier=1,
     ):
         cooldown_state = cooldown_state.copy()
         interval_state = interval_state.copy()
@@ -149,7 +153,8 @@ class TickEmittingTrait(
         tick_damage, tick_hit = self._get_tick_damage_hit()
 
         return (cooldown_state, interval_state), [self.event_provider.elapsed(time)] + [
-            self.event_provider.dealt(tick_damage, tick_hit) for _ in range(lapse_count)
+            self.event_provider.dealt(tick_damage, tick_hit * hit_multiplier)
+            for _ in range(lapse_count)
         ]
 
     def use_tick_emitting_trait(
@@ -158,7 +163,6 @@ class TickEmittingTrait(
         interval_state: IntervalState,
         dynamics: Dynamics,
         duration_multiplier=1.0,
-        hit_multiplier=1,
     ):
         cooldown_state = cooldown_state.copy()
         interval_state = interval_state.copy()
@@ -179,7 +183,7 @@ class TickEmittingTrait(
         interval_state.set_time_left(self._get_duration() * duration_multiplier)
 
         return (cooldown_state, interval_state, dynamics), [
-            self.event_provider.dealt(damage, hit * hit_multiplier),
+            self.event_provider.dealt(damage, hit),
             self.event_provider.delayed(delay),
         ]
 

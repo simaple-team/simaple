@@ -190,7 +190,7 @@ class Environment:
                 events += dispatcher(action, self.store)
             except Exception as e:
                 raise Exception(
-                    f"Exception raised during resolving {action.signature}"
+                    f"Exception raised during resolving {action.signature}\nError: {e}"
                 ) from e
         return events
 

@@ -1,10 +1,16 @@
 ---
+# TODO: 리스토어 버프
 kind: Component
 version: simaple.io/AdeleEtherComponent
 metadata:
   label:
     group: adele
     name: 에테르
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
 data:
   name: 에테르
   tick_interval: 10020
@@ -12,7 +18,10 @@ data:
   stack_per_tick: 5
   stack_per_trigger: 12
   stack_per_resonance: 0
-  sword_per_stack: 100
+  creation_step: 100
+  order_consume: 100
+
+  v_improvement: 2 # FIXME: Do we really this unnecessary v_improvement?
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -50,7 +59,7 @@ patch:
 data:
   name: 원더
   listening_actions:
-    디바이드.use.emitted.global.damage: trigger
+    디바이드.use.emitted.global.damage: use
 
   delay: 0
   damage: "{{ 80 + 30 + 115 + 135 + 3 * skill_level }}"
@@ -78,12 +87,9 @@ patch:
 data:
   name: 레조넌스
   delay: 690
-  damage: "{{ 120 + 125 + 175 + 3 * skill_level }}"
+  damage: "{{ 502 + 125 + 175 + 3 * skill_level }}"
   hit: 6
   cooldown: 0
-
-  modifier:
-    final_damage_multiplier: 75
 
   combat_orders_enabled: true
   default_skill_level: 30
@@ -187,12 +193,14 @@ data:
 
   delay: 0
   cooldown: 500
+  duration: 40000
 
   tick_interval: 1020
   tick_damage: "{{ 240 + 30 + 3 * skill_level }}"
   tick_hit: 2
 
   maximum_stack: 6
+  restore_maximum_stack: 8
 
   combat_orders_enabled: true
   default_skill_level: 30
@@ -214,7 +222,7 @@ data:
 
   delay: 630
   damage: "{{ 260 + 210 + 3 * skill_level }}"
-  hit: 4
+  hit_per_sword: 4
 
   cooldown: 12_000
   red: true
@@ -236,10 +244,11 @@ data:
     게더링.use.emitted.global.damage: use
 
   delay: 0
+  cooldown: 0
   duration: 30_000
   rem: false
 
-  buff:
+  stat:
     ignored_defence: 10
 
   disable_validity: True
@@ -260,10 +269,13 @@ data:
 
   delay: 420
   damage: "{{ 470 + 6 * skill_level }}"
-  hit: 8
+  hit_per_sword: 8
 
-  cooldown: 12_000
+  cooldown: 20_000
   red: true
+
+  exceeded_stat:
+    final_damage_multiplier: -25
 
   combat_orders_enabled: true
   default_skill_level: 30
@@ -285,6 +297,7 @@ data:
   name: 디바이드
 
   delay: 600
+  cooldown: 0
   damage: "{{ 285 + 3 * skill_level }}"
   hit: 6
 
@@ -307,10 +320,10 @@ data:
   name: 그레이브
 
   delay: 630
-  damage: "{{ 400 + 20 * skill_level }}"
+  damage: "{{ 120 + 5 * skill_level }}"
   hit: 10
 
-  cooldown: 90_000
+  cooldown: 10_000
   red: true
 
   combat_orders_enabled: true
@@ -330,10 +343,11 @@ data:
     그레이브.use.emitted.global.damage: use
 
   delay: 0
+  cooldown: 0
   duration: 999_999_999
   rem: false
 
-  buff:
+  stat:
     damage_multiplier: 20
     ignored_defence: 10
 
@@ -353,14 +367,11 @@ data:
   name: 마커
 
   delay: 690
-  damage: 500
+  damage: 2000
   hit: "{{ 6 * 2 }}"
 
   cooldown: 60_000
   red: True
-
-  modifier:
-    final_damage_multiplier: 300
 
   combat_orders_enabled: true
   default_skill_level: 30
@@ -376,7 +387,6 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
-  - VSkillImprovementPatch
 data:
   name: 루인
 
@@ -407,7 +417,6 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
-  - VSkillImprovementPatch
 data:
   name: 인피니트
 
@@ -425,7 +434,6 @@ data:
 
   default_skill_level: 30
 ---
-# TODO: 리스토어 버프
 kind: Component
 version: simaple.io/TickDamageConfiguratedAttackSkillComponent
 metadata:
@@ -435,7 +443,6 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
-  - VSkillImprovementPatch
 data:
   name: 리스토어
 
@@ -454,6 +461,34 @@ data:
   default_skill_level: 30
 ---
 kind: Component
+version: simaple.io/AdeleRestoreBuffComponent
+metadata:
+  label:
+    group: adele
+    name: 리스토어(버프)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions:
+    리스토어.use.emitted.global.delay: use
+
+  name: 리스토어(버프)
+
+  delay: 0
+  cooldown: 0
+
+  duration: 30_000
+
+  ether_multiplier: "{{ 50 + skill_level }}"
+  stat:
+    damage_multiplier: "{{ 15 + skill_level }}"
+
+  default_skill_level: 30
+
+  disable_validity: True
+---
+kind: Component
 version: simaple.io/AdeleStormComponent
 metadata:
   label:
@@ -462,20 +497,18 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
-  - VSkillImprovementPatch
 data:
   name: 스톰
 
   delay: 780
-  damage: 0
-  hit: 0
-
   cooldown: 90_000
   red: true
 
   tick_interval: 330
   tick_damage: "{{ 250 + skill_level * 10 }}"
-  tick_hit: 2
+  tick_hit: 1
   duration: 14000
+
+  maximum_stack: 8
 
   default_skill_level: 30
