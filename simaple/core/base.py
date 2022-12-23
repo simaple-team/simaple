@@ -308,3 +308,6 @@ class ElementalResistance(BaseModel):
 
     def get_disadvantage(self) -> float:
         return 0.5 * (1 + self.value * 0.01)
+
+    def __add__(self, arg: ElementalResistance):
+        return ElementalResistance(value=self.value + arg.value)
