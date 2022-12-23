@@ -11,6 +11,8 @@ data:
   maximum_stack: 400
   stack_per_tick: 5
   stack_per_trigger: 12
+  stack_per_resonance: 0
+  sword_per_stack: 100
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -36,7 +38,7 @@ data:
   v_improvement: 2
 ---
 kind: Component
-version: simaple.io/AdeleWonderComponent
+version: simaple.io/AttackSkillComponent
 metadata:
   label:
     group: adele
@@ -47,6 +49,9 @@ patch:
   - VSkillImprovementPatch
 data:
   name: 원더
+  listening_actions:
+    디바이드.use.emitted.global.damage: trigger
+
   delay: 0
   damage: "{{ 80 + 30 + 115 + 135 + 3 * skill_level }}"
   hit: 15
@@ -61,7 +66,7 @@ data:
   disable_validity: True
 ---
 kind: Component
-version: simaple.io/AdeleResonanceComponent
+version: simaple.io/AttackSkillComponent
 metadata:
   label:
     group: adele
@@ -70,20 +75,18 @@ patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
-  - PassiveHyperskillPatch
 data:
   name: 레조넌스
   delay: 690
   damage: "{{ 120 + 125 + 175 + 3 * skill_level }}"
   hit: 6
+  cooldown: 0
 
   modifier:
     final_damage_multiplier: 75
 
   combat_orders_enabled: true
   default_skill_level: 30
-
-  ether_gain: 0
 
   v_improvement: 2
 ---
@@ -99,11 +102,12 @@ data:
     레조넌스.use.emitted.global.damage: use
 
   delay: 0
+  cooldown: 0
   maximum_stack: 2
   duration: 30_000
   rem: False
 
-  buff:
+  stat:
     final_damage_multiplier: 5
     ignored_defence: 5
 
@@ -123,6 +127,7 @@ data:
   name: 크리에이션
   delay: 0
   damage: "{{ 200 + 240 + 180 + 3 * skill_level }}"
+  hit_per_sword: 1
 
   cooldown: 1500
   red: true
@@ -150,6 +155,7 @@ data:
   name: 테리토리
   delay: 420
   damage: 0
+  hit: 0
 
   cooldown: 30_000
   red: true
@@ -186,7 +192,7 @@ data:
   tick_damage: "{{ 240 + 30 + 3 * skill_level }}"
   tick_hit: 2
 
-  ether_consume: 100
+  maximum_stack: 6
 
   combat_orders_enabled: true
   default_skill_level: 30

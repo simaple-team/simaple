@@ -30,8 +30,8 @@ metadata:
     group: adele
 data:
   name: 레조넌스 - 엑스트라 힐링
-  target: 레조넌스
-  key: ether_gain
+  target: 에테르
+  key: stack_per_resonance
   increment: 20
 ---
 kind: PassiveHyperskill

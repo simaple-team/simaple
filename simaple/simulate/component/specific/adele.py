@@ -12,13 +12,18 @@ from simaple.simulate.component.trait.impl import (
     UseSimpleAttackTrait,
 )
 from simaple.simulate.component.util import is_rejected
-from simaple.simulate.component.view import Running
+from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.global_property import Dynamics
 
 
 class EtherState(StackState):
+    sword_per_stack: int
+
     def get_sword_count(self) -> int:
-        return min(self.stack // 100, 3) * 2
+        return min(self.stack // self.sword_per_stack, 3) * 2
+
+    def is_order_valid(self) -> bool:
+        return self.stack >= self.sword_per_stack
 
 
 class AdeleEtherComponent(Component):
@@ -26,13 +31,19 @@ class AdeleEtherComponent(Component):
     tick_interval: float
     stack_per_tick: int
     stack_per_trigger: int
+    stack_per_resonance: int
+    sword_per_stack: int
 
-    listening_actions: dict[str, str] = {"디바이드.use": "trigger"}
+    listening_actions: dict[str, str] = {"디바이드.use": "trigger", "레조넌스.use": "resonance"}
 
     def get_default_state(self):
         return {
-            "ether_state": EtherState(maximum_stack=self.maximum_stack),
-            "interval_state": IntervalState(interval=self.tick_interval, time_left=0),
+            "ether_state": EtherState(
+                maximum_stack=self.maximum_stack, sword_per_stack=self.sword_per_stack
+            ),
+            "interval_state": IntervalState(
+                interval=self.tick_interval, interval_time_left=999_999_999
+            ),
         }
 
     @reducer_method
@@ -45,7 +56,7 @@ class AdeleEtherComponent(Component):
         lapse_count = interval_state.elapse(time)
         ether_state.increase(lapse_count * self.stack_per_tick)
 
-        return (interval_state), [self.event_provider.elapsed(time)]
+        return (ether_state, interval_state), [self.event_provider.elapsed(time)]
 
     @reducer_method
     def trigger(self, _: None, ether_state: EtherState):
@@ -55,81 +66,22 @@ class AdeleEtherComponent(Component):
 
         return (ether_state), []
 
-
-class AdeleResonanceComponent(
-    SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait
-):
-    name: str
-    damage: float
-    hit: float
-    delay: float
-
-    ether_gain: int
-
-    binds: dict[str, str] = {"ether_state": ".에테르.ether_state"}
-
-    def get_default_state(self):
-        return {
-            "cooldown_state": CooldownState(time_left=0),
-        }
-
     @reducer_method
-    def use(
-        self,
-        _: None,
-        cooldown_state: CooldownState,
-        dynamics: Dynamics,
-        ether_state: EtherState,
-    ):
+    def resonance(self, _: None, ether_state: EtherState):
         ether_state = ether_state.copy()
-        ether_state.increase(self.ether_gain)
 
-        (states, event) = self.use_simple_attack(cooldown_state, dynamics)
+        ether_state.increase(self.stack_per_resonance)
 
-        return (*states, ether_state), event
-
-    @reducer_method
-    def elapse(self, time: float, cooldown_state: CooldownState):
-        return self.elapse_simple_attack(time, cooldown_state)
+        return (ether_state), []
 
     @view_method
-    def validity(self, cooldown_state: CooldownState):
-        return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
-
-    def _get_simple_damage_hit(self) -> tuple[float, float]:
-        return self.damage, self.hit
-
-
-class AdeleWonderComponent(
-    SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait
-):
-    name: str
-    damage: float
-    hit: float
-    cooldown: float
-    delay: float
-
-    listening_actions: dict[str, str] = {"디바이드.use": "trigger"}
-
-    def get_default_state(self):
-        return {
-            "cooldown_state": CooldownState(time_left=0),
-        }
-
-    @reducer_method
-    def elapse(self, time: float, cooldown_state: CooldownState):
-        return self.elapse_simple_attack(time, cooldown_state)
-
-    @reducer_method
-    def trigger(self, _: None, cooldown_state: CooldownState, dynamics: Dynamics):
-        return self.use_simple_attack(cooldown_state, dynamics)
-
-    @view_method
-    def validity(self, cooldown_state):
-        return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
-
-    def _get_simple_damage_hit(self) -> tuple[float, float]:
-        return self.damage, self.hit
+    def running(self, ether_state: EtherState):
+        return Running(
+            name=self.name,
+            time_left=999_999_999,
+            duration=999_999_999,
+            stack=ether_state.get_stack(),
+        )
 
 
 class AdeleCreationComponent(
@@ -137,7 +89,7 @@ class AdeleCreationComponent(
 ):
     name: str
     damage: float
-    hit: float
+    hit_per_sword: float
     cooldown: float
     delay: float
 
@@ -170,7 +122,7 @@ class AdeleCreationComponent(
         return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
-        return self.damage, self.hit
+        return self.damage, self.hit_per_sword
 
 
 class AdeleOrderComponent(SkillComponent, TickEmittingTrait, CooldownValidityTrait):
@@ -178,7 +130,7 @@ class AdeleOrderComponent(SkillComponent, TickEmittingTrait, CooldownValidityTra
     tick_damage: float
     tick_hit: float
     duration: float
-    ether_consume: int
+    maximum_stack: int
 
     binds: dict[str, str] = {"ether_state": ".에테르.ether_state"}
 
@@ -186,7 +138,7 @@ class AdeleOrderComponent(SkillComponent, TickEmittingTrait, CooldownValidityTra
         return {
             "cooldown_state": CooldownState(time_left=0),
             "interval_state": IntervalState(interval=self.tick_interval, time_left=0),
-            "stack_state": StackState(maximum_stack=6),
+            "stack_state": StackState(maximum_stack=self.maximum_stack),
         }
 
     @reducer_method
@@ -213,9 +165,8 @@ class AdeleOrderComponent(SkillComponent, TickEmittingTrait, CooldownValidityTra
         ether_state: EtherState,
     ):
         stack_state = stack_state.copy()
-        ether_state = ether_state.copy()
 
-        if ether_state.stack < self.ether_consume:
+        if not ether_state.is_order_valid():
             return (
                 cooldown_state,
                 interval_state,
@@ -228,14 +179,18 @@ class AdeleOrderComponent(SkillComponent, TickEmittingTrait, CooldownValidityTra
             cooldown_state, interval_state, dynamics
         )
         if not is_rejected(events):
-            ether_state.decrease(self.ether_consume)
             stack_state.increase(2)
 
-        return (*states, stack_state), events
+        return (*states, stack_state, ether_state), events
 
     @view_method
-    def validity(self, cooldown_state: CooldownState):
-        return self.validity_in_cooldown_trait(cooldown_state)
+    def validity(self, cooldown_state: CooldownState, ether_state: EtherState):
+        return Validity(
+            name=self._get_name(),
+            time_left=max(0, cooldown_state.time_left),
+            valid=cooldown_state.available and ether_state.is_order_valid(),
+            cooldown=self._get_cooldown(),
+        )
 
     @view_method
     def running(
