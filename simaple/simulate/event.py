@@ -59,6 +59,6 @@ class NamedEventProvider(EventProvider):
             payload={
                 "damage": damage,
                 "hit": hit,
-                "modifier": total_modifier,
+                "modifier": total_modifier.dict() if total_modifier else None,
             },
         )
