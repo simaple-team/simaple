@@ -1,6 +1,3 @@
-import pytest
-
-
 def test_ether_elapse(ether):
     ether.elapse(10020)
     assert ether.running().stack == 5

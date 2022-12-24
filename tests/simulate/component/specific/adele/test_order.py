@@ -1,5 +1,3 @@
-import pytest
-
 from simaple.simulate.component.specific.adele import EtherState
 
 

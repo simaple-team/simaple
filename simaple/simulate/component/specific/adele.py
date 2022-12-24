@@ -35,8 +35,7 @@ class RestoreDurationState(DurationState):
     def get_gain_rate(self) -> float:
         if self.enabled():
             return 1 + self.ether_multiplier / 100
-        else:
-            return 1
+        return 1
 
 
 class AdeleEtherComponent(Component):
@@ -318,8 +317,8 @@ class AdeleOrderComponent(SkillComponent, CooldownValidityTrait):
     def _max_sword_count(self, restore_state: RestoreDurationState):
         if restore_state.enabled():
             return self.restore_maximum_stack
-        else:
-            return self.maximum_stack
+
+        return self.maximum_stack
 
 
 class AdeleGatheringComponent(SkillComponent, UseSimpleAttackTrait):
@@ -573,8 +572,8 @@ class AdeleRestoreBuffComponent(SkillComponent):
     def buff(self, duration_state: RestoreDurationState):
         if duration_state.enabled():
             return self.stat
-        else:
-            return None
+
+        return None
 
     @view_method
     def running(self, duration_state: RestoreDurationState) -> Running:
