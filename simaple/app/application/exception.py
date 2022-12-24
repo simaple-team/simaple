@@ -1,2 +1,6 @@
 class UnknownSimulatorException(Exception):
     ...
+
+
+class ApplicationError(Exception):
+    ...
