@@ -11,7 +11,7 @@ patch:
 data:
   name: 매직 서킷
   stat:
-    attack_power: "{{ weapon_attack_power * 0.15 }}"
+    attack_power: "{{ weapon_attack_power * 0.15 }}" # 최대치 가정
 ---
 kind: PassiveSkill
 version: simaple.io/PassiveSkill
@@ -97,6 +97,7 @@ data:
   stat:
     final_damage_multiplier: "{{ 10 + skill_level }}"
     ignored_defence: "{{ skill_level }}"
+  default_skill_level: 20
 ---
 kind: PassiveSkill
 version: simaple.io/PassiveSkill
@@ -113,3 +114,4 @@ data:
     attack_power: "{{ 10 + skill_level }}"
     boss_damage_multiplier: "{{ math.ceil(skill_level / 2) }}"
     critical_rate: "{{ skill_level }}"
+  default_skill_level: 20

@@ -185,6 +185,9 @@ class Stat(BaseModel):
         return self
 
     def stack(self, stack: int) -> Stat:
+        """
+        StackableBuffSkill을 위한 메소드로, armor_ignore 및 final_damage_multiplier를 단순 곱셈한 값을 반환합니다.
+        """
         return Stat(
             STR=self.STR * stack,
             LUK=self.LUK * stack,

@@ -2,7 +2,7 @@ import pytest
 
 from simaple.core import Stat
 from simaple.simulate.component.specific.adele import AdeleBlossomComponent, OrderState
-from simaple.simulate.reserved_names import Tag
+from tests.simulate.component.util import count_damage_skill
 
 
 @pytest.fixture(name="blossom")
@@ -27,9 +27,8 @@ def test_blossom_order_1pair(adele_store, blossom):
     )
 
     events = blossom.use(None)
-    dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
 
-    assert len(dealing_event) == 2
+    assert count_damage_skill(events) == 2
 
 
 def test_blossom_order_3pair(adele_store, blossom):
@@ -39,6 +38,5 @@ def test_blossom_order_3pair(adele_store, blossom):
     )
 
     events = blossom.use(None)
-    dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
 
-    assert len(dealing_event) == 6
+    assert count_damage_skill(events) == 6

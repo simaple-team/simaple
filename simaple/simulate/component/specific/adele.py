@@ -210,6 +210,7 @@ class OrderState(State):
         return len(self.running_swords) * 2
 
 
+# TODO: 게더링-블로섬 도중 타격 미발생 및 지속시간 정지
 class AdeleOrderComponent(SkillComponent, CooldownValidityTrait):
     tick_interval: float
     tick_damage: float

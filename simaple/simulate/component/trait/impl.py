@@ -14,7 +14,7 @@ from simaple.simulate.global_property import Dynamics
 
 
 class CooldownValidityTrait(CooldownTrait, NamedTrait):
-    def validity_in_cooldown_trait(self, cooldown_state) -> Validity:
+    def validity_in_cooldown_trait(self, cooldown_state: CooldownState) -> Validity:
         return Validity(
             name=self._get_name(),
             time_left=max(0, cooldown_state.time_left),
