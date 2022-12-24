@@ -164,7 +164,7 @@ class OrderState(State):
     interval: float
 
     def get_time_left(self) -> float:
-        if len(self.running_swords) <= 0:
+        if len(self.running_swords) == 0:
             return 0
 
         _, time_left = self.running_swords[-1]
@@ -211,7 +211,7 @@ class OrderState(State):
 
 
 # TODO: 게더링-블로섬 도중 타격 미발생 및 지속시간 정지
-class AdeleOrderComponent(SkillComponent, CooldownValidityTrait):
+class AdeleOrderComponent(SkillComponent):
     tick_interval: float
     tick_damage: float
     tick_hit: float
@@ -267,15 +267,7 @@ class AdeleOrderComponent(SkillComponent, CooldownValidityTrait):
         order_state = order_state.copy()
         cooldown_state = cooldown_state.copy()
 
-        if not ether_state.is_order_valid():
-            return (
-                cooldown_state,
-                dynamics,
-                order_state,
-                ether_state,
-            ), [self.event_provider.rejected()]
-
-        if not cooldown_state.available:
+        if not (ether_state.is_order_valid() and cooldown_state.available):
             return (
                 cooldown_state,
                 dynamics,
@@ -387,14 +379,7 @@ class AdeleBlossomComponent(SkillComponent, UseSimpleAttackTrait):
         cooldown_state = cooldown_state.copy()
         sword_count = order_state.get_sword_count()
 
-        if not cooldown_state.available:
-            return (
-                cooldown_state,
-                order_state,
-                dynamics,
-            ), self.event_provider.rejected()
-
-        if sword_count <= 0:
+        if not cooldown_state.available or sword_count <= 0:
             return (
                 cooldown_state,
                 order_state,
