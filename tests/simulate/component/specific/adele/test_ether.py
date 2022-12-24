@@ -1,3 +1,6 @@
+from simaple.simulate.component.specific.adele import EtherState
+
+
 def test_ether_elapse(ether):
     ether.elapse(10020)
     assert ether.running().stack == 5
@@ -13,11 +16,17 @@ def test_ether_resonance(ether):
     assert ether.running().stack == 20
 
 
-def test_ether_order_consume(ether):
-    ether.resonance(None)  # 20
-    ether.resonance(None)  # 40
-    ether.resonance(None)  # 60
-    ether.resonance(None)  # 80
-    ether.resonance(None)  # 100
-    ether.order(None)  # 0
+def test_ether_order_consume(adele_store, ether):
+    adele_store.set_state(
+        ".에테르.ether_state",
+        EtherState(
+            stack=100,
+            maximum_stack=400,
+            creation_step=100,
+            order_consume=100,
+        ),
+    )
+
+    ether.order(None)
+
     assert ether.running().stack == 0

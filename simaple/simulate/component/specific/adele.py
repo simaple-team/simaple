@@ -377,9 +377,8 @@ class AdeleBlossomComponent(SkillComponent, UseSimpleAttackTrait):
         dynamics: Dynamics,
     ):
         cooldown_state = cooldown_state.copy()
-        sword_count = order_state.get_sword_count()
 
-        if not cooldown_state.available or sword_count <= 0:
+        if not self._is_valid(cooldown_state, order_state):
             return (
                 cooldown_state,
                 order_state,
@@ -416,11 +415,14 @@ class AdeleBlossomComponent(SkillComponent, UseSimpleAttackTrait):
             name=self.name,
             time_left=max(0, cooldown_state.time_left),
             valid=cooldown_state.available and order_state.get_sword_count() > 0,
-            cooldown=self._get_cooldown(),
+            cooldown=self._is_valid(cooldown_state, order_state),
         )
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit_per_sword
+
+    def _is_valid(self, cooldown_state: CooldownState, order_state: OrderState):
+        return cooldown_state.available and order_state.get_sword_count() > 0
 
 
 class AdeleRuinComponent(
@@ -496,9 +498,10 @@ class AdeleRuinComponent(
         cooldown_state.set_time_left(
             dynamics.stat.calculate_cooldown(self._get_cooldown())
         )
-        interval_state_first.set_time_left(self.duration_first)
+        interval_state_first.set_time_left(time=self.duration_first)
         interval_state_second.set_time_left(
-            self.duration_first + self.duration_second, self.duration_first
+            time=self.duration_first + self.duration_second,
+            initial_counter=self.duration_first,
         )
 
         return (
