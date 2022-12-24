@@ -2,7 +2,7 @@ kind: Component
 version: simaple.io/BuffSkillComponent
 metadata:
   label:
-    group: resistance
+    group: flora
     name: 레이스 오브 갓
 data:
   name: 레이스 오브 갓
