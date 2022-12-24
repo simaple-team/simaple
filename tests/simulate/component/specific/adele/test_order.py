@@ -37,6 +37,12 @@ def test_order_elapse(adele_store, order):
     order.use(None)
     order.elapse(10000)
     order.use(None)
-    order.elapse(20000)
 
+    order.elapse(20000)
     assert order.running().stack == 4
+
+    order.elapse(10000)
+    assert order.running().stack == 2
+
+    order.elapse(10000)
+    assert order.running().stack == 0
