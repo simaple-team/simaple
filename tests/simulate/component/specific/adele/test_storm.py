@@ -1,9 +1,6 @@
 import pytest
 
-from simaple.simulate.component.specific.adele import (
-    AdeleStormComponent,
-    OrderState,
-)
+from simaple.simulate.component.specific.adele import AdeleStormComponent, OrderState
 from simaple.simulate.reserved_names import Tag
 
 
