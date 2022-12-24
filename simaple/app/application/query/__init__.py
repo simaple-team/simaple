@@ -22,6 +22,7 @@ class PlayLogResponse(pydantic.BaseModel):
     damages: list[tuple[str, float]]
     delay: float
     action: Action
+    checkpoint: dict
 
     @classmethod
     def from_playlog(cls, simulator: Simulator, index: int) -> PlayLogResponse:
@@ -37,6 +38,7 @@ class PlayLogResponse(pydantic.BaseModel):
             damage=playlog.get_total_damage(simulator.calculator),
             delay=playlog.get_delay(),
             action=playlog.action,
+            checkpoint=playlog.checkpoint,
         )
 
 
