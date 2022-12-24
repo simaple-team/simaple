@@ -1,4 +1,7 @@
-from simaple.app.application.exception import UnknownSimulatorException
+from simaple.app.application.exception import (
+    ApplicationError,
+    UnknownSimulatorException,
+)
 from simaple.app.domain.simulator import Simulator
 from simaple.app.domain.simulator_configuration import MinimalSimulatorConfiguration
 from simaple.app.domain.uow import UnitOfWork
@@ -73,4 +76,17 @@ def rollback(simulator_id: str, target_index: int, uow: UnitOfWork) -> None:
         raise UnknownSimulatorException()
 
     simulator.rollback(target_index)
+    uow.simulator_repository().update(simulator)
+
+
+def override_checkpint(simulator_id, checkpoint: dict, uow: UnitOfWork) -> None:
+    simulator = uow.simulator_repository().get(simulator_id)
+
+    if simulator is None:
+        raise UnknownSimulatorException()
+
+    if len(simulator.history) != 1:
+        raise ApplicationError("override_checkpoint only valid for no-history")
+
+    simulator.change_current_checkpoint(checkpoint)
     uow.simulator_repository().update(simulator)

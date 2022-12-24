@@ -78,6 +78,14 @@ class Simulator(pydantic.BaseModel):
         self.history = history
         self.rollback(len(history) - 1)
 
+    def change_current_checkpoint(self, ckpt: dict) -> None:
+        last_playlog = self.history.logs[-1].copy()
+        last_playlog.checkpoint = ckpt
+        self.history.logs[-1] = last_playlog
+
+        self.client.environment.store.load(last_playlog.checkpoint)
+        self.client.restore_previous_callbacks(last_playlog.checkpoint_callback)
+
 
 class SimulatorRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod

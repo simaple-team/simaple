@@ -4,6 +4,7 @@ from typing import Optional
 import pytest
 
 from simaple.app.domain.simulator import SimulatorRepository
+from simaple.app.domain.simulator_configuration import MinimalSimulatorConfiguration
 from simaple.app.domain.snapshot import Snapshot, SnapshotRepository
 from simaple.app.domain.uow import UnitOfWork
 from simaple.app.infrastructure.repository import InmemorySimulatorRepository
@@ -52,3 +53,8 @@ class InmemoryUnitOfWork(UnitOfWork):
 @pytest.fixture
 def uow():
     return InmemoryUnitOfWork()
+
+
+@pytest.fixture
+def minimal_conf(simulator_configuration):
+    return MinimalSimulatorConfiguration.parse_obj(simulator_configuration)

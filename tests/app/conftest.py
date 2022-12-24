@@ -3,6 +3,7 @@ import os
 import pytest
 from fastapi.testclient import TestClient
 
+from simaple.app.interface.handler import add_exception_handlers
 from simaple.app.interface.web import SimapleWeb
 
 
@@ -51,6 +52,7 @@ def record_file_name():
 @pytest.fixture
 def client():
     app = SimapleWeb()
+    add_exception_handlers(app)
     app.reset_database()
     app_client = TestClient(app)
 

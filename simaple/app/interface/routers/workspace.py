@@ -6,6 +6,7 @@ from dependency_injector.wiring import Provide, inject
 
 from simaple.app.application.command import (
     create_simulator,
+    override_checkpint,
     play_action,
     play_elapse,
     play_use,
@@ -131,3 +132,13 @@ def rollback_to_checkpoint(
     uow: UnitOfWork = UowProvider,
 ) -> None:
     rollback(simulator_id, history_index, uow)
+
+
+@router.post("/override/{simulator_id}", response_model=None)
+@inject
+def override(
+    simulator_id: str,
+    ckpt_json: dict,
+    uow: UnitOfWork = UowProvider,
+) -> None:
+    override_checkpint(simulator_id, ckpt_json, uow)
