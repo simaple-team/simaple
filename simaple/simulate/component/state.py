@@ -1,3 +1,5 @@
+from typing import Optional
+
 from simaple.simulate.base import State
 
 
@@ -39,9 +41,11 @@ class IntervalState(State):
     interval_time_left: float = 0.0
     count: int = 0
 
-    def set_time_left(self, time: float):
+    def set_time_left(self, time: float, initial_counter: Optional[float] = None):
         self.interval_time_left = time
-        self.interval_counter = self.interval
+        self.interval_counter = (
+            initial_counter if initial_counter is not None else self.interval
+        )
         self.count = 0
 
     def enabled(self):

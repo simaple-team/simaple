@@ -2,7 +2,12 @@ from typing import Optional
 
 from simaple.core.base import Stat
 from simaple.simulate.component.base import Component, reducer_method, view_method
-from simaple.simulate.component.state import CooldownState, DurationState, IntervalState
+from simaple.simulate.component.state import (
+    CooldownState,
+    DurationState,
+    IntervalState,
+    StackState,
+)
 from simaple.simulate.component.trait.impl import (
     DurableTrait,
     InvalidatableCooldownTrait,
@@ -145,6 +150,75 @@ class BuffSkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownTrai
             name=self.name,
             time_left=duration_state.time_left,
             duration=self._get_duration(),
+        )
+
+    def _get_duration(self) -> float:
+        return self.duration
+
+
+class StackableBuffSkillComponent(
+    SkillComponent, DurableTrait, InvalidatableCooldownTrait
+):
+    stat: Stat
+    cooldown: float
+    delay: float
+    duration: float
+    maximum_stack: int
+    # TODO: use rem, red argument to apply cooltime reduction and buff remnance
+
+    def get_default_state(self):
+        return {
+            "cooldown_state": CooldownState(time_left=0),
+            "duration_state": DurationState(time_left=0),
+            "stack_state": StackState(maximum_stack=self.maximum_stack),
+        }
+
+    @reducer_method
+    def use(
+        self,
+        _: None,
+        cooldown_state: CooldownState,
+        duration_state: DurationState,
+        dynamics: Dynamics,
+        stack_state: StackState,
+    ):
+        stack_state = stack_state.copy()
+        if duration_state.time_left <= 0:
+            stack_state.reset()
+        stack_state.increase()
+
+        states, event = self.use_durable_trait(cooldown_state, duration_state, dynamics)
+
+        return (*states, stack_state), event
+
+    @reducer_method
+    def elapse(
+        self, time: float, cooldown_state: CooldownState, duration_state: DurationState
+    ):
+        return self.elapse_durable_trait(time, cooldown_state, duration_state)
+
+    @view_method
+    def validity(self, cooldown_state: CooldownState):
+        return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
+
+    @view_method
+    def buff(
+        self, duration_state: DurationState, stack_state: StackState
+    ) -> Optional[Stat]:
+        if duration_state.enabled():
+            return self.stat.stack(stack_state.stack)
+
+        return None
+
+    @view_method
+    def running(
+        self, duration_state: DurationState, stack_state: StackState
+    ) -> Running:
+        return Running(
+            name=self.name,
+            time_left=duration_state.time_left,
+            duration=self._get_duration(),
+            stack=stack_state.stack if duration_state.time_left > 0 else 0,
         )
 
     def _get_duration(self) -> float:

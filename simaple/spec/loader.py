@@ -65,7 +65,7 @@ class SpecBasedLoader:
             return component_class(**args)
         except Exception as e:
             raise Exception(
-                f"{class_name} <kind: {specification.kind}> parse failed. Given args: {specification}"
+                f"{class_name} <kind: {specification.kind}> parse failed.\nGiven args: {specification}\nError: {e}"
             ) from e
 
     def _get_component_class(self, clsname: str, kind: str) -> Type[Any]:

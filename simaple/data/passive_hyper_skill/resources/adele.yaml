@@ -1,0 +1,57 @@
+---
+kind: PassiveHyperskill
+version: simaple.io/StatIncreasePassiveHyperskill
+metadata:
+  label:
+    group: adele
+data:
+  name: 트리거 - 리인포스
+  target: 디바이드
+  key: modifier
+  increment:
+    damage_multiplier: 20
+---
+kind: PassiveHyperskill
+version: simaple.io/StatIncreasePassiveHyperskill
+metadata:
+  label:
+    group: adele
+data:
+  name: 트리거 - 보스 킬러
+  target: 디바이드
+  key: modifier
+  increment:
+    boss_damage_multiplier: 20
+---
+kind: PassiveHyperskill
+version: simaple.io/ValueIncreasePassiveHyperskill
+metadata:
+  label:
+    group: adele
+data:
+  name: 레조넌스 - 엑스트라 힐링
+  target: 에테르
+  key: stack_per_resonance
+  increment: 20
+---
+kind: PassiveHyperskill
+version: simaple.io/ValueIncreasePassiveHyperskill
+metadata:
+  label:
+    group: adele
+data:
+  name: 테리토리 - 퍼시스트
+  target: 테리토리
+  key: duration
+  increment: 4000
+---
+kind: PassiveHyperskill
+version: simaple.io/MultiplierPassiveHyperskill
+metadata:
+  label:
+    group: adele
+data:
+  name: 블로섬 - 쿨타임 리듀스
+  target: 블로섬
+  key: cooldown
+  multiplier: 0.75

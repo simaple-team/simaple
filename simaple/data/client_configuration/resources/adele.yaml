@@ -1,0 +1,31 @@
+kind: ClientConfiguration
+version: simaple.io/ClientConfiguration
+metadata:
+  label:
+    group: adele
+data:
+  v_skill_names:
+    - 루인
+    - 인피니트
+    - 리스토어
+    - 스톰
+  v_improvement_names:
+    - 디바이드
+    - 오더
+    - 그레이브
+    - 테리토리
+    - 블로섬
+    - 스콜
+    - 레조넌스
+    - 마커
+    - 크리에이션
+    - 게더링
+    - 샤드
+    - 원더
+  component_groups:
+    - adele
+    - common
+    - flora
+    - str_based
+    - warrior
+  mdc_order: []
