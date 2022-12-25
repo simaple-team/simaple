@@ -74,6 +74,7 @@ metadata:
 data:
   name: 메디테이션
   duration: 240000
+  cooldown: 0
   delay: 0
   red: true
   rem: true

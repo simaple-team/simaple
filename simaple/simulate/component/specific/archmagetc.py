@@ -71,7 +71,7 @@ class JupyterThunder(
     SkillComponent, StartIntervalWithoutDamageTrait, CooldownValidityTrait
 ):
     name: str
-    cooldown: float = 0.0
+    cooldown: float
     delay: float
 
     tick_interval: float
@@ -212,7 +212,7 @@ class ThunderBreak(
     SkillComponent, StartIntervalWithoutDamageTrait, CooldownValidityTrait
 ):
     name: str
-    cooldown: float = 0.0
+    cooldown: float
     delay: float
 
     tick_interval: float

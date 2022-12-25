@@ -106,7 +106,7 @@ class MultipleAttackSkillComponent(AttackSkillComponent):
 
 class BuffSkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownTrait):
     stat: Stat
-    cooldown: float = 0.0
+    cooldown: float
     delay: float
     duration: float
     # TODO: use rem, red argument to apply cooltime reduction and buff remnance

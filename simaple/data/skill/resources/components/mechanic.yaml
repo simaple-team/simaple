@@ -46,6 +46,7 @@ metadata:
     name: "오픈 게이트: GX-9"
 data:
   name: "오픈 게이트: GX-9"
+  cooldown: 0
   delay: 1260
   duration: 300_000
   stat: {}
@@ -63,6 +64,7 @@ patch:
   - PassiveHyperskillPatch
 data:
   name: "서포트 웨이버: H-EX"
+  cooldown: 0
   delay: 630
   duration: 80_000
   default_skill_level: 30

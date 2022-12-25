@@ -48,7 +48,7 @@ class KeydownSkillComponent(SkillComponent):
     damage: float
     hit: float
     delay: float
-    cooldown: float = 0.0
+    cooldown: float
 
     keydown_end_delay: float = 0.0
 
