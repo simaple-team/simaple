@@ -58,6 +58,13 @@
 - To change architecture about library, please make document in development/adr with template and create PR. Maintainers will invited and discuss about given proposal to aceept or not.
 
 
+## Release
+- 본 프로젝트는 develop branch를 사용하지 않습니다. 모든 변경사항은 main에 바로 merge됩니다.
+- 프로젝트는 큰 단위의 마일스톤 레벨에서 릴리즈 됩니다. 릴리즈는 버전 태깅(x.y.z)을 통해 달성됩니다.
+  - 릴리즈는 readthedocs 웹훅을 트리거합니다.
+- 릴리즈 버저닝은 symantic versioning 규칙을 따릅니다.
+
+
 ## 그래서, 무엇부터 시작해야 하나요? (So, what i have to do?)
 - 인게임 정보와 라이브러리 정보의 불일치를 수정하고자 한다면, `simaple/data` 를 둘러보세요.
   - to add or fix value missmatch between library and  in-game , check `simaple/data`
