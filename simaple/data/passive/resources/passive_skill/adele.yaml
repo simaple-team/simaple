@@ -11,7 +11,7 @@ patch:
 data:
   name: 매직 서킷
   stat:
-    attack_power: "{{ weapon_attack_power * 0.15 }}" # 최대치 가정
+    attack_power: "{{ weapon_pure_attack_power * 0.15 }}" # 최대치 가정
 ---
 kind: PassiveSkill
 version: simaple.io/PassiveSkill

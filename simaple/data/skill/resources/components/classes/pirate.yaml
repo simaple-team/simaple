@@ -15,6 +15,6 @@ data:
   duration: 30_000
   rem: False
   advantage:
-    attack_power: '{{ weapon_attack_power * (0.2 + 0.02 * skill_level ) }}'
+    attack_power: '{{ weapon_pure_attack_power * (0.2 + 0.02 * skill_level ) }}'
   disadvantage:
-    attack_power: '{{ weapon_attack_power * -0.15 }}'
+    attack_power: '{{ weapon_pure_attack_power * -0.15 }}'
