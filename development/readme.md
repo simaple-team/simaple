@@ -25,6 +25,14 @@
 - 모든 PR은 merge되기 위해서 위 세 테스트를 통과해야 합니다.
 - PR must pass those checks before merged.
 
+## Git 
+- 모든 커밋은 [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) 을 준수하여 작성합니다.
+- every commit may follow [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/)
+
+## Pull Request
+- 모든 Review는 [conventional comment](https://conventionalcomments.org/) 를 준수하여 작성합니다.
+- every PR review may follow [conventional comment](https://conventionalcomments.org/)
+
 ## Unittest
 - unittest는 pytest를 이용하여 구성됩니다.
   - tests/ 하위에 작성된 코드를 검증하기 위해 충분한 테스트를 작성합니다.
@@ -48,6 +56,13 @@
 
 - We use Architecture decision record for making big change in library.
 - To change architecture about library, please make document in development/adr with template and create PR. Maintainers will invited and discuss about given proposal to aceept or not.
+
+
+## Release
+- 본 프로젝트는 develop branch를 사용하지 않습니다. 모든 변경사항은 main에 바로 merge됩니다.
+- 프로젝트는 큰 단위의 마일스톤 레벨에서 릴리즈 됩니다. 릴리즈는 버전 태깅(x.y.z)을 통해 달성됩니다.
+  - 릴리즈는 readthedocs 웹훅을 트리거합니다.
+- 릴리즈 버저닝은 symantic versioning 규칙을 따릅니다.
 
 
 ## 그래서, 무엇부터 시작해야 하나요? (So, what i have to do?)
