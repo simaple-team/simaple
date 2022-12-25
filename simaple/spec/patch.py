@@ -126,7 +126,7 @@ class EvalPatch(DFSTraversePatch):
         return match.group(1)
 
     def _evaluate_with_math(self, value):
-        global_variables = globals()
+        global_variables = {}
         global_variables.update(self.injected_values)
         global_variables["math"] = math
 
