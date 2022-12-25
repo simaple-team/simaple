@@ -16,7 +16,7 @@ class SynergySkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownT
     name: str
     damage: float
     hit: float
-    cooldown: float = 0.0
+    cooldown: float
     delay: float
 
     synergy: Stat

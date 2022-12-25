@@ -52,7 +52,7 @@ class RobotMastery(Component):
 
 class RobotSetupBuff(SkillComponent, DurableTrait, CooldownValidityTrait):
     stat: Stat
-    cooldown: float = 0.0
+    cooldown: float
     delay: float
     duration: float
     binds: dict[str, str] = {"robot_mastery": ".로봇 마스터리.robot_mastery"}
@@ -317,7 +317,7 @@ class PeriodicState(State):
 
 class MultipleOptionComponent(SkillComponent, CooldownValidityTrait):
     name: str
-    cooldown: float = 0.0
+    cooldown: float
     delay: float
 
     tick_interval: float
@@ -468,7 +468,7 @@ class DynamicIntervalState(State):
 
 class MecaCarrier(SkillComponent, CooldownValidityTrait):
     name: str
-    cooldown: float = 0.0
+    cooldown: float
     delay: float
     duration: float
 

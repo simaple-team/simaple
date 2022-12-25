@@ -14,7 +14,7 @@ class TriggableBuffSkill(SkillComponent, DurableTrait, InvalidatableCooldownTrai
     trigger_damage: float
     trigger_hit: float
 
-    cooldown: float = 0.0
+    cooldown: float
     delay: float
     duration: float
 
