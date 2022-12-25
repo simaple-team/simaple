@@ -14,7 +14,8 @@ def adele_client():
         ["adele", "common", "flora", "str_based", "warrior"],
         {
             "character_level": 260,
-            "weapon_pure_attack_power": 500,
+            "weapon_attack_power": 700,
+            "weapon_pure_attack_power": 295,
         },
         {},
         {},
