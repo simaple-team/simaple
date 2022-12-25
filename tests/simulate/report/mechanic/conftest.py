@@ -14,7 +14,7 @@ def mechanic_client():
         ["mechanic", "common", "resistance", "pirate"],
         {
             "character_level": 260,
-            "weapon_attack_power": 500,
+            "weapon_pure_attack_power": 500,
         },
         {},
         {},
