@@ -25,6 +25,14 @@
 - 모든 PR은 merge되기 위해서 위 세 테스트를 통과해야 합니다.
 - PR must pass those checks before merged.
 
+## Git 
+- 모든 커밋은 [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) 을 준수하여 작성합니다.
+- every commit may follow [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/)
+
+## Pull Request
+- 모든 Review는 [conventional comment](https://conventionalcomments.org/) 를 준수하여 작성합니다.
+- every PR review may follow [conventional comment](https://conventionalcomments.org/)
+
 ## Unittest
 - unittest는 pytest를 이용하여 구성됩니다.
   - tests/ 하위에 작성된 코드를 검증하기 위해 충분한 테스트를 작성합니다.
