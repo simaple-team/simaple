@@ -17,7 +17,9 @@ def test_query_all_snapshot(
 ):
     simulator_id = create_simulator(minimal_conf, uow)
 
-    with open(Path(os.path.dirname(__file__)) / "checkpoint.json") as f:
+    with open(
+        Path(os.path.dirname(__file__)) / "checkpoint.json", encoding="utf-8"
+    ) as f:
         ckpt = json.load(f)
 
     override_checkpint(simulator_id, ckpt, uow)
