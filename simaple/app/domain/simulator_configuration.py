@@ -44,6 +44,7 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
     elemental_resistance_disadvantage: float = 0.5
     target_armor: int = 300
     mob_level: int = 250
+    weapon_attack_power: int = 0
     weapon_pure_attack_power: int = 0
 
     @classmethod
@@ -70,6 +71,7 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
         return {
             "character_level": self.character_level,
             "character_stat": self.character_stat,
+            "weapon_attack_power": self.weapon_pure_attack_power,
             "weapon_pure_attack_power": self.weapon_pure_attack_power,
         }
 
