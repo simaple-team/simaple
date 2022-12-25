@@ -1,6 +1,6 @@
 # [short title of solved problem and solution]
 
-* Status: proposed
+* Status: resolved
 * Deciders: meson3241, icepeng
 * Date: 2022.12.24
 
@@ -31,7 +31,7 @@ DOT 피해는 다른 피해와 다르게, 아래와 같은 특징을 가진다.
 
 ## Decision Outcome
 
-- Propose Option 3
+- Choose Option 2
 
 ## Pros and Cons of the Options <!-- optional -->
 
