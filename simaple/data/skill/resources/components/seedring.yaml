@@ -1,0 +1,122 @@
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: common
+    name: 리스트레인트 링
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 리스트레인트 링
+  default_skill_level: 4
+  cooldown: 180_000
+  duration: "{{ (7 + 2 * skill_level) * 1000 }}"
+  delay: 60
+  red: true
+  rem: false
+  stat:
+    attack_power_multiplier: "{{ 25 * skill_level }}"
+    magic_attack_multiplier: "{{ 25 * skill_level }}"
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: common
+    name: 리스크테이커 링
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 리스크테이커 링
+  default_skill_level: 4
+  cooldown: 180_000
+  duration: "{{ (6 + 6 * skill_level) * 1000 }}"
+  delay: 60
+  red: true
+  rem: false
+  stat:
+    attack_power_multiplier: "{{ 10 + 10 * skill_level }}"
+    magic_attack_multiplier: "{{ 10 + 10 * skill_level }}"
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: str_based
+    name: 웨폰퍼프-S 링
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 웨폰퍼프-S 링
+  default_skill_level: 4
+  cooldown: 180_000
+  duration: "{{ (7 + 2 * skill_level) * 1000 }}"
+  delay: 60
+  red: true
+  rem: false
+  stat:
+    STR: "{{ 17.5 * weapon_attack_power * skill_level }}"
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: dex_based
+    name: 웨폰퍼프-D 링
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 웨폰퍼프-D 링
+  default_skill_level: 4
+  cooldown: 180_000
+  duration: "{{ (7 + 2 * skill_level) * 1000 }}"
+  delay: 60
+  red: true
+  rem: false
+  stat:
+    DEX: "{{ 17.5 * weapon_attack_power * skill_level }}"
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: int_based
+    name: 웨폰퍼프-I 링
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 웨폰퍼프-I 링
+  default_skill_level: 4
+  cooldown: 180_000
+  duration: "{{ (7 + 2 * skill_level) * 1000 }}"
+  delay: 60
+  red: true
+  rem: false
+  stat:
+    INT: "{{ 17.5 * weapon_attack_power * skill_level }}"
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: luk_based
+    name: 웨폰퍼프-L 링
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 웨폰퍼프-L 링
+  default_skill_level: 4
+  cooldown: 180_000
+  duration: "{{ (7 + 2 * skill_level) * 1000 }}"
+  delay: 60
+  red: true
+  rem: false
+  stat:
+    LUK: "{{ 17.5 * weapon_attack_power * skill_level }}"
