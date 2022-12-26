@@ -22,7 +22,7 @@ class LastingProtocol(CopyProtocol, Protocol):
     lasting: Lasting
 
 
-ProtocolGeneric = TypeVar("ProtocolGeneric", bound=LastingProtocol)
+LastingGeneric = TypeVar("LastingGeneric", bound=LastingProtocol)
 
 
 class PeriodicProtocol(CopyProtocol, Protocol):
