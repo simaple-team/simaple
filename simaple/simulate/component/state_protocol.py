@@ -1,6 +1,6 @@
 from typing import Protocol, TypeVar
 
-from simaple.simulate.component.state_fragment import (
+from simaple.simulate.component.entity import (
     CooldownState,
     DurationState,
     IntervalState,

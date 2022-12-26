@@ -108,19 +108,19 @@ class StoreAdapter:
         self._binds = binds
 
     def get_state(self, store: Store, state_type):
-        fragments = {
+        entities = {
             name: store.read_state(address, default=self._default_state.get(name))
             for name, address in self._get_bound_names().items()
         }
 
-        return state_type(**fragments)
+        return state_type(**entities)
 
     def set_state(self, store: Store, state):
         bounded_names = self._get_bound_names()
 
-        for name, fragment in dict(state).items():
+        for name, entity in dict(state).items():
             if name in bounded_names:
-                store.set_state(bounded_names[name], fragment)
+                store.set_state(bounded_names[name], entity)
 
     def _get_bound_names(self) -> dict[str, str]:
         names = {name: name for name in self._default_state}

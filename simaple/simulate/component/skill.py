@@ -7,7 +7,7 @@ from simaple.simulate.component.base import (
     reducer_method,
     view_method,
 )
-from simaple.simulate.component.state_fragment import (
+from simaple.simulate.component.entity import (
     CooldownState,
     DurationState,
     IntervalState,

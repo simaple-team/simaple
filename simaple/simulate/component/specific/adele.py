@@ -6,12 +6,12 @@ from simaple.simulate.component.base import (
     reducer_method,
     view_method,
 )
+from simaple.simulate.component.entity import DurationState, StackState
 from simaple.simulate.component.skill import (
     CooldownState,
     IntervalState,
     SkillComponent,
 )
-from simaple.simulate.component.state_fragment import DurationState, StackState
 from simaple.simulate.component.trait.impl import (
     CooldownValidityTrait,
     InvalidatableCooldownTrait,

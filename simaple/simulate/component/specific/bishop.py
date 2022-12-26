@@ -3,8 +3,8 @@ from typing import Optional
 from simaple.core.base import Stat
 from simaple.simulate.base import Entity
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from simaple.simulate.component.entity import CooldownState, IntervalState
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.state_fragment import CooldownState, IntervalState
 from simaple.simulate.component.trait.impl import (
     CooldownValidityTrait,
     InvalidatableCooldownTrait,
