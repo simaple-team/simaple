@@ -9,11 +9,11 @@ def fixture_thunder_break(frost_effect, archmagetc_store):
     component = ThunderBreak(
         name="test-thunder-break",
         delay=690,
-        cooldown=40_000,
+        cooldown_duration=40_000,
         tick_interval=120,
         tick_damage=925,
         tick_hit=12,
-        duration=10_000,
+        lasting_duration=10_000,
         decay_rate=0.8,
         max_count=8,
     )

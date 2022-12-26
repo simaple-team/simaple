@@ -11,7 +11,7 @@ def fixture_ruin(
     component = AdeleRuinComponent(
         name="test-ruin",
         delay=600,
-        cooldown=60_000,
+        cooldown_duration=60_000,
         red=True,
         tick_damage_first=550,
         tick_hit_first=6,

@@ -13,8 +13,8 @@ data:
   name: 로디드 다이스
   combat_orders_enabled: true
   default_skill_level: 5
-  duration: 180_000
-  cooldown: 180_000
+  lasting_duration: 180_000
+  cooldown_duration: 180_000
   delay: 0
   red: true
   rem: true
@@ -46,9 +46,9 @@ metadata:
     name: "오픈 게이트: GX-9"
 data:
   name: "오픈 게이트: GX-9"
-  cooldown: 0
+  cooldown_duration: 0
   delay: 1260
-  duration: 300_000
+  lasting_duration: 300_000
   stat: {}
 ---
 kind: Component
@@ -64,9 +64,9 @@ patch:
   - PassiveHyperskillPatch
 data:
   name: "서포트 웨이버: H-EX"
-  cooldown: 0
+  cooldown_duration: 0
   delay: 630
-  duration: 80_000
+  lasting_duration: 80_000
   default_skill_level: 30
   stat:
     ignored_defence: 10
@@ -85,12 +85,12 @@ data:
   damage: 0
   delay: 630
   hit: 0
-  cooldown: 0
+  cooldown_duration: 0
 
   tick_interval: 1_000
   tick_damage: 385 # Need to apply passive skill level only
   tick_hit: 1
-  duration: 70_000
+  lasting_duration: 70_000
 
   v_improvement: 2
 ---
@@ -110,13 +110,13 @@ data:
   damage: 0
   delay: 630
   hit: 0
-  cooldown: 80_000
+  cooldown_duration: 80_000
   red: true
 
   tick_interval: 990
   tick_damage: 200
   tick_hit: 1
-  duration: 70_000
+  lasting_duration: 70_000
 
   v_improvement: 2
 ---
@@ -135,12 +135,12 @@ data:
   damage: 0
   delay: 630
   hit: 0
-  cooldown: 60_000
+  cooldown_duration: 60_000
 
   tick_interval: 3_000
   tick_damage: "{{ 350 + skill_level * 5 }}"
   tick_hit: 3
-  duration: 70_000
+  lasting_duration: 70_000
 
   default_skill_level: 30
   v_improvement: 2
@@ -164,7 +164,7 @@ data:
   combat_orders_enabled: true
   default_skill_level: 30
   v_improvement: 2
-  cooldown: 0
+  cooldown_duration: 0
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -187,7 +187,7 @@ data:
   default_skill_level: 30
   disable_validity: True
   v_improvement: 2
-  cooldown: 0
+  cooldown_duration: 0
 ---
 kind: Component
 version: simaple.io/HommingMissile
@@ -204,12 +204,12 @@ data:
   damage: 0
   delay: 0
   hit: 0
-  cooldown: 0
+  cooldown_duration: 0
 
   tick_interval: 660
   tick_damage: 300
   tick_hit: 9
-  duration: 999_999_999
+  lasting_duration: 999_999_999
 
   default_skill_level: 30
   v_improvement: 2
@@ -223,9 +223,9 @@ metadata:
 data:
   name: 봄버 타임
   stat: {}
-  cooldown: 100_000
+  cooldown_duration: 100_000
   delay: 900
-  duration: 10_000
+  lasting_duration: 10_000
   rem: False
 ---
 kind: Component
@@ -243,12 +243,12 @@ data:
   damage: 0
   delay: 690
   hit: 0
-  cooldown: 8_000
+  cooldown_duration: 8_000
 
   tick_interval: 250
   tick_damage: 350
   tick_hit: 2
-  duration: 4_000
+  lasting_duration: 4_000
 
   v_improvement: 2
 ---
@@ -263,11 +263,11 @@ patch:
   - EvalPatch
 data:
   name: "멀티플 옵션: M-FL"
-  cooldown: 200_000
+  cooldown_duration: 200_000
   delay: 780
 
   tick_interval: 1530
-  duration: "{{ (75 + 2 * skill_level) * 1000 }}"
+  lasting_duration: "{{ (75 + 2 * skill_level) * 1000 }}"
 
   missile_count: 3
   missile_damage: "{{ 350 + skill_level * 10 }}"
@@ -291,7 +291,7 @@ data:
   delay: 540
   damage: "{{ 375 + 17 * skill_level }}"
   hit: "{{ (30 + skill_level // 3) * 5}}"
-  cooldown: 25_000
+  cooldown_duration: 25_000
 ---
 kind: Component
 version: simaple.io/KeydownSkillComponent
@@ -309,7 +309,7 @@ data:
   damage: "{{ 400 + 16 * skill_level }}"
   hit: 11
   delay: 200
-  cooldown: 200_000
+  cooldown_duration: 200_000
 
   keydown_end_delay: 1800
 
@@ -328,9 +328,9 @@ patch:
 data:
   name: 메카 캐리어
 
-  cooldown: 200_000
+  cooldown_duration: 200_000
   delay: 720
-  duration: 70_000
+  lasting_duration: 70_000
 
   tick_interval: 2850
 

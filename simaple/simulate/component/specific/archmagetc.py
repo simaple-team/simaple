@@ -65,7 +65,7 @@ class FrostEffect(Component):
     def running(self, state: FrostEffectState):
         return Running(
             name=self.name,
-            duration=999_999_999,
+            lasting_duration=999_999_999,
             time_left=999_999_999,
             stack=state.frost_stack.stack,
         )
@@ -89,13 +89,13 @@ class JupyterThunder(
     SkillComponent, StartIntervalWithoutDamageTrait, CooldownValidityTrait
 ):
     name: str
-    cooldown: float
+    cooldown_duration: float
     delay: float
 
     tick_interval: float
     tick_damage: float
     tick_hit: float
-    duration: float = 10_000  # very long enough
+    lasting_duration: float = 10_000  # very long enough
 
     max_count: int
 
@@ -148,8 +148,8 @@ class JupyterThunder(
     def validity(self, state: JupyterThunderState):
         return self.validity_in_cooldown_trait(state)
 
-    def _get_duration(self, state: JupyterThunderState) -> float:
-        return self.duration
+    def _get_lasting_duration(self, state: JupyterThunderState) -> float:
+        return self.lasting_duration
 
 
 class ThunderAttackSkillState(ReducerState):
@@ -169,7 +169,7 @@ class ThunderAttackSkillComponent(
     name: str
     damage: float
     hit: float
-    cooldown: float
+    cooldown_duration: float
     delay: float
 
     def get_default_state(self):
@@ -189,7 +189,7 @@ class ThunderAttackSkillComponent(
             return state, self.event_provider.rejected()
 
         state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown)
+            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
         )
 
         frost_stack, modifier = use_frost_stack(state.frost_stack)
@@ -225,13 +225,13 @@ class ThunderBreak(
     SkillComponent, StartIntervalWithoutDamageTrait, CooldownValidityTrait
 ):
     name: str
-    cooldown: float
+    cooldown_duration: float
     delay: float
 
     tick_interval: float
     tick_damage: float
     tick_hit: float
-    duration: float = 10_000  # very long enough
+    lasting_duration: float = 10_000  # very long enough
 
     decay_rate: float
     max_count: int
@@ -291,5 +291,5 @@ class ThunderBreak(
     def validity(self, state: ThunderBreakState):
         return self.validity_in_cooldown_trait(state)
 
-    def _get_duration(self, state: ThunderBreakState) -> float:
-        return self.duration
+    def _get_lasting_duration(self, state: ThunderBreakState) -> float:
+        return self.lasting_duration

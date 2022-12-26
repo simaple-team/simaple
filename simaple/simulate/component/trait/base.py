@@ -17,7 +17,7 @@ class EventProviderTrait(ComponentTrait):
 
 class CooldownTrait(ComponentTrait):
     @abstractmethod
-    def _get_cooldown(self) -> float:
+    def _get_cooldown_duration(self) -> float:
         ...
 
 
@@ -29,7 +29,7 @@ class DelayTrait(ComponentTrait):
 
 class DurationTrait(ComponentTrait):
     @abstractmethod
-    def _get_duration(self, state) -> float:
+    def _get_lasting_duration(self, state) -> float:
         ...
 
 

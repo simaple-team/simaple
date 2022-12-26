@@ -1,6 +1,6 @@
 from typing import Protocol, TypeVar
 
-from simaple.simulate.component.entity import Cooldown, Duration, Periodic
+from simaple.simulate.component.entity import Cooldown, Lasting, Periodic
 from simaple.simulate.global_property import Dynamics
 
 T = TypeVar("T")
@@ -19,7 +19,7 @@ CooldownGeneric = TypeVar("CooldownGeneric", bound=CooldownProtocol)
 
 
 class DurationProtocol(CopyProtocol, Protocol):
-    duration: Duration
+    lasting: Lasting
 
 
 DurationGeneric = TypeVar("DurationGeneric", bound=DurationProtocol)

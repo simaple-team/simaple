@@ -8,9 +8,9 @@ from simaple.simulate.component.specific.magician import Infinity
 def fixture_infinity_component(bare_store):
     infinity = Infinity(
         name="인피니티",
-        cooldown=180_000,
+        cooldown_duration=180_000,
         delay=600,
-        duration=110_000,
+        lasting_duration=110_000,
         final_damage_increment=3,
         increase_interval=3_000,
         default_final_damage=70,

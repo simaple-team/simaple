@@ -11,7 +11,7 @@ def dot_damage_component():
         name="DOT-damage-component",
         tick_interval=120,
         tick_damage=50,
-        duration=1_000,
+        lasting_duration=1_000,
     )
     return component
 

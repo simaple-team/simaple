@@ -10,11 +10,11 @@ patch:
   - EvalPatch
 data:
   name: 오버 드라이브
-  cooldown: '{{ 70_000 - 1_000 * (skill_level // 5) }}'
+  cooldown_duration: "{{ 70_000 - 1_000 * (skill_level // 5) }}"
   delay: 420
-  duration: 30_000
+  lasting_duration: 30_000
   rem: False
   advantage:
-    attack_power: '{{ weapon_pure_attack_power * (0.2 + 0.02 * skill_level ) }}'
+    attack_power: "{{ weapon_pure_attack_power * (0.2 + 0.02 * skill_level ) }}"
   disadvantage:
-    attack_power: '{{ weapon_pure_attack_power * -0.15 }}'
+    attack_power: "{{ weapon_pure_attack_power * -0.15 }}"

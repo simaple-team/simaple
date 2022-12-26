@@ -59,7 +59,7 @@ class KeydownSkillComponent(SkillComponent):
     damage: float
     hit: float
     delay: float
-    cooldown: float
+    cooldown_duration: float
 
     keydown_end_delay: float = 0.0
 
@@ -95,7 +95,7 @@ class KeydownSkillComponent(SkillComponent):
             # apply cooldown and finisher
             state.keydown.stop()
             state.cooldown.set_time_left(
-                state.dynamics.stat.calculate_cooldown(self.cooldown)
+                state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
             )
             damage_event.append(
                 self.event_provider.dealt(self.finish_damage, self.finish_hit)
@@ -118,7 +118,7 @@ class KeydownSkillComponent(SkillComponent):
 
         if was_running and not state.keydown.is_running():
             state.cooldown.set_time_left(
-                state.dynamics.stat.calculate_cooldown(self.cooldown)
+                state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
             )
 
             # if keydown stopped and finish delay is not zero, compensate un-resolved delay.
@@ -136,5 +136,5 @@ class KeydownSkillComponent(SkillComponent):
             name=self.name,
             time_left=max(0, state.cooldown.time_left),
             valid=state.cooldown.available,
-            cooldown=self.cooldown,
+            cooldown_duration=self.cooldown_duration,
         )

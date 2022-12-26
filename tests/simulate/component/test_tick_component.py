@@ -15,8 +15,8 @@ def tick_damage_component():
         tick_interval=120,
         tick_damage=50,
         tick_hit=3,
-        duration=1_000,
-        cooldown=30_000,
+        lasting_duration=1_000,
+        cooldown_duration=30_000,
     )
     return component
 

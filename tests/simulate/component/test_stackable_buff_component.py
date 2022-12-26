@@ -10,9 +10,9 @@ def buff_component(bare_store):
     component = StackableBuffSkillComponent(
         name="buff-component",
         stat=Stat(attack_power=30),
-        cooldown=30_000,
+        cooldown_duration=30_000,
         delay=600,
-        duration=15_000,
+        lasting_duration=15_000,
         maximum_stack=2,
     )
     return component.compile(bare_store)

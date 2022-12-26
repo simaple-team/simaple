@@ -16,7 +16,7 @@ def fixture_gathering(
         delay=420,
         damage=650,
         hit_per_sword=4,
-        cooldown=12_000,
+        cooldown_duration=12_000,
     )
     return component.compile(adele_store)
 

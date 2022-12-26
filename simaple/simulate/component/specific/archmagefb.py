@@ -70,7 +70,7 @@ class PoisonNovaComponent(SkillComponent):
             return state, self.event_provider.rejected()
 
         state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown)
+            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
         )
         state.poison_nova.create_nova(self.nova_remaining_time)
 
@@ -103,7 +103,7 @@ class PoisonNovaComponent(SkillComponent):
             name=self.name,
             time_left=max(0, state.cooldown.time_left),
             valid=state.cooldown.available,
-            cooldown=self.cooldown,
+            cooldown_duration=self.cooldown_duration,
         )
 
 
@@ -118,13 +118,13 @@ class PoisonChainComponent(SkillComponent, TickEmittingTrait, CooldownValidityTr
     name: str
     damage: float
     hit: float
-    cooldown: float
+    cooldown_duration: float
     delay: float
 
     tick_interval: float
     tick_damage: float
     tick_hit: float
-    duration: float
+    lasting_duration: float
 
     tick_damage_increment: float
 
@@ -173,11 +173,11 @@ class PoisonChainComponent(SkillComponent, TickEmittingTrait, CooldownValidityTr
         return Running(
             name=self.name,
             time_left=state.periodic.time_left,
-            duration=self._get_duration(state),
+            lasting_duration=self._get_lasting_duration(state),
         )
 
-    def _get_duration(self, state: PoisonChainState) -> float:
-        return self.duration
+    def _get_lasting_duration(self, state: PoisonChainState) -> float:
+        return self.lasting_duration
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit

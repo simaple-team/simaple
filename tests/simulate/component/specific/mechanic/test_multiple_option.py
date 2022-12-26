@@ -10,10 +10,10 @@ class TestMultipleOption:
     def fixture_multiple_option(self, mechanic_store, missile_damage, gatling_damage):
         component = MultipleOptionComponent(
             name="test-multiple-option",
-            cooldown=40_000,
+            cooldown_duration=40_000,
             delay=690,
             tick_interval=1000,
-            duration=120_000,
+            lasting_duration=120_000,
             missile_count=3,
             missile_damage=missile_damage,
             missile_hit=3,

@@ -1,5 +1,5 @@
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
-from simaple.simulate.component.entity import Cooldown, Duration
+from simaple.simulate.component.entity import Cooldown, Lasting
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
     DurableTrait,
@@ -11,24 +11,24 @@ from simaple.simulate.global_property import Dynamics
 
 class TriggableBuffState(ReducerState):
     cooldown: Cooldown
-    duration: Duration
+    lasting: Lasting
     trigger_cooldown: Cooldown
     dynamics: Dynamics
 
 
 class TriggableBuffSkill(SkillComponent, DurableTrait, InvalidatableCooldownTrait):
-    trigger_cooldown: float
+    trigger_cooldown_duration: float
     trigger_damage: float
     trigger_hit: float
 
-    cooldown: float
+    cooldown_duration: float
     delay: float
-    duration: float
+    lasting_duration: float
 
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "duration": Duration(time_left=0),
+            "lasting": Lasting(time_left=0),
             "trigger_cooldown": Cooldown(time_left=0),
         }
 
@@ -45,7 +45,7 @@ class TriggableBuffSkill(SkillComponent, DurableTrait, InvalidatableCooldownTrai
         state = state.copy()
 
         state.cooldown.elapse(time)
-        state.duration.elapse(time)
+        state.lasting.elapse(time)
         state.trigger_cooldown.elapse(time)
 
         return state, [
@@ -58,11 +58,11 @@ class TriggableBuffSkill(SkillComponent, DurableTrait, InvalidatableCooldownTrai
         _: None,
         state: TriggableBuffState,
     ):
-        if not (state.duration.enabled() and state.trigger_cooldown.available):
+        if not (state.lasting.enabled() and state.trigger_cooldown.available):
             return state, []
 
         state = state.copy()
-        state.trigger_cooldown.set_time_left(self.trigger_cooldown)
+        state.trigger_cooldown.set_time_left(self.trigger_cooldown_duration)
 
         return (
             state,
@@ -77,5 +77,5 @@ class TriggableBuffSkill(SkillComponent, DurableTrait, InvalidatableCooldownTrai
     def running(self, state: TriggableBuffState) -> Running:
         return self.running_in_durable_trait(state)
 
-    def _get_duration(self, state: TriggableBuffState) -> float:
-        return self.duration
+    def _get_lasting_duration(self, state: TriggableBuffState) -> float:
+        return self.lasting_duration

@@ -44,7 +44,7 @@ class DivineAttackSkillComponent(
     name: str
     damage: float
     hit: float
-    cooldown: float
+    cooldown_duration: float
     delay: float
     synergy: Optional[Stat]
 
@@ -61,7 +61,7 @@ class DivineAttackSkillComponent(
             return state, self.event_provider.rejected()
 
         state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown)
+            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
         )
 
         modifier = state.divine_mark.consume_mark()
@@ -98,13 +98,13 @@ class DivineMinion(SkillComponent, TickEmittingTrait, InvalidatableCooldownTrait
     name: str
     damage: float
     hit: float
-    cooldown: float
+    cooldown_duration: float
     delay: float
 
     tick_interval: float
     tick_damage: float
     tick_hit: float
-    duration: float
+    lasting_duration: float
 
     mark_advantage: Stat
     stat: Optional[Stat]
@@ -160,11 +160,11 @@ class DivineMinion(SkillComponent, TickEmittingTrait, InvalidatableCooldownTrait
         return Running(
             name=self.name,
             time_left=state.periodic.time_left,
-            duration=self._get_duration(state),
+            lasting_duration=self._get_lasting_duration(state),
         )
 
-    def _get_duration(self, state: DivineMinionState) -> float:
-        return self.duration
+    def _get_lasting_duration(self, state: DivineMinionState) -> float:
+        return self.lasting_duration
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit

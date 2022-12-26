@@ -16,7 +16,7 @@ def keydown_component(bare_store, keydown_delay):
         name="test-keydown",
         damage=100,
         hit=3,
-        cooldown=60_000,
+        cooldown_duration=60_000,
         delay=keydown_delay,
         keydown_end_delay=500,
         finish_damage=500,

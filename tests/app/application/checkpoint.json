@@ -40,8 +40,8 @@
       "time_left": 0.0
     }
   },
-  ".메디테이션.duration": {
-    "cls": "Duration",
+  ".메디테이션.lasting": {
+    "cls": "Lasting",
     "payload": {
       "time_left": 0.0,
       "assigned_duration": 0.0
@@ -53,8 +53,8 @@
       "time_left": 0.0
     }
   },
-  ".에픽 어드벤처.duration": {
-    "cls": "Duration",
+  ".에픽 어드벤처.lasting": {
+    "cls": "Lasting",
     "payload": {
       "time_left": 0.0,
       "assigned_duration": 0.0
@@ -251,8 +251,8 @@
       "time_left": 0.0
     }
   },
-  ".오버로드 마나.duration": {
-    "cls": "Duration",
+  ".오버로드 마나.lasting": {
+    "cls": "Lasting",
     "payload": {
       "time_left": 0.0,
       "assigned_duration": 0.0
@@ -264,8 +264,8 @@
       "time_left": 0.0
     }
   },
-  ".소울 컨트랙트.duration": {
-    "cls": "Duration",
+  ".소울 컨트랙트.lasting": {
+    "cls": "Lasting",
     "payload": {
       "time_left": 0.0,
       "assigned_duration": 0.0
@@ -277,8 +277,8 @@
       "time_left": 0.0
     }
   },
-  ".메이플 여신의 축복.duration": {
-    "cls": "Duration",
+  ".메이플 여신의 축복.lasting": {
+    "cls": "Lasting",
     "payload": {
       "time_left": 0.0,
       "assigned_duration": 0.0
@@ -290,8 +290,8 @@
       "time_left": 0.0
     }
   },
-  ".인피니티.duration": {
-    "cls": "Duration",
+  ".인피니티.lasting": {
+    "cls": "Lasting",
     "payload": {
       "time_left": 0.0,
       "assigned_duration": 0.0

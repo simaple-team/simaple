@@ -10,14 +10,14 @@ class Validity(pydantic.BaseModel):
     name: str
     time_left: float
     valid: bool
-    cooldown: float
+    cooldown_duration: float
     stack: Optional[float] = None
 
 
 class Running(pydantic.BaseModel):
     name: str
     time_left: float
-    duration: float
+    lasting_duration: float
     stack: Optional[float] = None
 
 

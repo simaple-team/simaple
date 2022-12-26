@@ -2,8 +2,8 @@ from simaple.simulate.base import Event
 from simaple.simulate.component.state_protocol import (
     CooldownDurationDynamicsGeneric,
     CooldownDynamicsGeneric,
-    CooldownGeneric,
     CooldownDynamicsPeriodicGeneric,
+    CooldownGeneric,
     CooldownPeriodicGeneric,
     CooldownProtocol,
     DurationProtocol,
@@ -27,7 +27,7 @@ class CooldownValidityTrait(CooldownTrait, NamedTrait):
             name=self._get_name(),
             time_left=max(0, state.cooldown.time_left),
             valid=state.cooldown.available,
-            cooldown=self._get_cooldown(),
+            cooldown_duration=self._get_cooldown_duration(),
         )
 
 
@@ -40,7 +40,7 @@ class InvalidatableCooldownTrait(CooldownTrait, InvalidatableTrait, NamedTrait):
                 name=self._get_name(),
                 time_left=max(0, state.cooldown.time_left),
                 valid=state.cooldown.available,
-                cooldown=self._get_cooldown(),
+                cooldown_duration=self._get_cooldown_duration(),
             )
         )
 
@@ -57,7 +57,7 @@ class UseSimpleAttackTrait(
             return state, [self.event_provider.rejected()]
 
         state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown())
+            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
 
         damage, hit = self._get_simple_damage_hit()
@@ -84,7 +84,7 @@ class UseSimpleAttackTrait(
             return state, [self.event_provider.rejected()]
 
         state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown())
+            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
 
         damage, hit = self._get_simple_damage_hit()
@@ -108,11 +108,13 @@ class DurableTrait(
             return state, [self.event_provider.rejected()]
 
         state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown())
+            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
 
-        state.duration.set_time_left(
-            state.dynamics.stat.calculate_buff_duration(self._get_duration(state))
+        state.lasting.set_time_left(
+            state.dynamics.stat.calculate_buff_duration(
+                self._get_lasting_duration(state)
+            )
         )
 
         return state, [self.event_provider.delayed(self._get_delay())]
@@ -125,7 +127,7 @@ class DurableTrait(
         state = state.copy()
 
         state.cooldown.elapse(time)
-        state.duration.elapse(time)
+        state.lasting.elapse(time)
 
         return state, [
             self.event_provider.elapsed(time),
@@ -134,8 +136,8 @@ class DurableTrait(
     def running_in_durable_trait(self, state: DurationProtocol) -> Running:
         return Running(
             name=self._get_name(),
-            time_left=state.duration.time_left,
-            duration=self._get_duration(state),
+            time_left=state.lasting.time_left,
+            lasting_duration=self._get_lasting_duration(state),
         )
 
 
@@ -176,9 +178,9 @@ class TickEmittingTrait(
         delay = self._get_delay()
 
         state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown())
+            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        state.periodic.set_time_left(self._get_duration(state))
+        state.periodic.set_time_left(self._get_lasting_duration(state))
 
         return state, [
             self.event_provider.dealt(damage, hit),
@@ -204,9 +206,9 @@ class StartIntervalWithoutDamageTrait(
         delay = self._get_delay()
 
         state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown())
+            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        state.periodic.set_time_left(self._get_duration(state))
+        state.periodic.set_time_left(self._get_lasting_duration(state))
 
         return state, [
             self.event_provider.delayed(delay),

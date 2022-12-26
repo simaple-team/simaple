@@ -1,5 +1,5 @@
 from simaple.simulate.base import ConcreteStore
-from simaple.simulate.component.entity import Cooldown, Duration, Periodic
+from simaple.simulate.component.entity import Cooldown, Lasting, Periodic
 
 
 def test_store_save_load():
@@ -7,7 +7,7 @@ def test_store_save_load():
 
     store.set_state(
         "dur",
-        Duration(
+        Lasting(
             time_left=3.0,
             assigned_duration=0.0,
         ),

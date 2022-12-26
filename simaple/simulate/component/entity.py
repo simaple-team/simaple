@@ -3,7 +3,7 @@ from typing import Optional
 from simaple.simulate.base import Entity
 
 
-class Duration(Entity):
+class Lasting(Entity):
     time_left: float
     assigned_duration: float = 0.0
 

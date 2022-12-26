@@ -10,9 +10,9 @@ def fixture_multiple_option(
 ):
     component = MecaCarrier(
         name="test-meca-carrier",
-        cooldown=200_000,
+        cooldown_duration=200_000,
         delay=690,
-        duration=120_000,
+        lasting_duration=120_000,
         tick_interval=3000,
         maximum_intercepter=16,
         start_intercepter=8,
