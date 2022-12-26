@@ -4,7 +4,7 @@ from simaple.core.base import Stat
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Lasting
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import CooldownValidityTrait, DurableTrait
+from simaple.simulate.component.trait.impl import BuffTrait, CooldownValidityTrait
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
@@ -15,7 +15,7 @@ class InfinityState(ReducerState):
     dynamics: Dynamics
 
 
-class Infinity(SkillComponent, DurableTrait, CooldownValidityTrait):
+class Infinity(SkillComponent, BuffTrait, CooldownValidityTrait):
     cooldown_duration: float
     delay: float
     lasting_duration: float
@@ -33,11 +33,11 @@ class Infinity(SkillComponent, DurableTrait, CooldownValidityTrait):
 
     @reducer_method
     def use(self, _: None, state: InfinityState):
-        return self.use_durable_trait(state)
+        return self.use_buff_trait(state)
 
     @reducer_method
     def elapse(self, time: float, state: InfinityState):
-        return self.elapse_durable_trait(time, state)
+        return self.elapse_buff_trait(time, state)
 
     @view_method
     def validity(self, state: InfinityState):

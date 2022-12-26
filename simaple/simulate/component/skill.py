@@ -9,7 +9,7 @@ from simaple.simulate.component.base import (
 )
 from simaple.simulate.component.entity import Cooldown, Lasting, Periodic, Stack
 from simaple.simulate.component.trait.impl import (
-    DurableTrait,
+    BuffTrait,
     InvalidatableCooldownTrait,
     PeriodicWithSimpleDamageTrait,
     UseSimpleAttackTrait,
@@ -114,7 +114,7 @@ class BuffSkillState(ReducerState):
     dynamics: Dynamics
 
 
-class BuffSkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownTrait):
+class BuffSkillComponent(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
     stat: Stat
     cooldown_duration: float
     delay: float
@@ -129,11 +129,11 @@ class BuffSkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownTrai
 
     @reducer_method
     def use(self, _: None, state: BuffSkillState):
-        return self.use_durable_trait(state)
+        return self.use_buff_trait(state)
 
     @reducer_method
     def elapse(self, time: float, state: BuffSkillState):
-        return self.elapse_durable_trait(time, state)
+        return self.elapse_buff_trait(time, state)
 
     @view_method
     def validity(self, state: BuffSkillState):
@@ -148,7 +148,7 @@ class BuffSkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownTrai
 
     @view_method
     def running(self, state: BuffSkillState) -> Running:
-        return self.running_in_durable_trait(state)
+        return self.running_in_buff_trait(state)
 
     def _get_lasting_duration(self, state: BuffSkillState) -> float:
         return self.lasting_duration
@@ -162,7 +162,7 @@ class StackableBuffSkillState(ReducerState):
 
 
 class StackableBuffSkillComponent(
-    SkillComponent, DurableTrait, InvalidatableCooldownTrait
+    SkillComponent, BuffTrait, InvalidatableCooldownTrait
 ):
     stat: Stat
     cooldown_duration: float
@@ -189,7 +189,7 @@ class StackableBuffSkillComponent(
             state.stack.reset()
         state.stack.increase()
 
-        return self.use_durable_trait(state)
+        return self.use_buff_trait(state)
 
     @reducer_method
     def elapse(
@@ -197,7 +197,7 @@ class StackableBuffSkillComponent(
         time: float,
         state: StackableBuffSkillState,
     ):
-        return self.elapse_durable_trait(time, state)
+        return self.elapse_buff_trait(time, state)
 
     @view_method
     def validity(self, state: StackableBuffSkillState):
