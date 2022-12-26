@@ -3,8 +3,9 @@ from abc import ABCMeta, abstractmethod
 from typing import Any, Callable, Optional, Type, Union
 
 from pydantic import BaseModel, Field
+from pydantic.error_wrappers import ValidationError
 
-from simaple.simulate.base import Action, Dispatcher, Environment, Event, State, Store
+from simaple.simulate.base import Action, Dispatcher, Entity, Environment, Event, Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import GlobalProperty
 from simaple.spec.loadable import TaggedNamespacedABCMeta
@@ -12,18 +13,17 @@ from simaple.spec.loadable import TaggedNamespacedABCMeta
 WILD_CARD = "*"
 
 
-ReducerType = Callable[..., tuple[Union[tuple[State], State], Any]]
+ReducerType = Callable[..., tuple[Union[tuple[Entity], Entity], Any]]
+
+
+class ReducerState(BaseModel):
+    ...
 
 
 class ComponentMethodWrapper:
     def __init__(self, func: ReducerType, skip_count=1):
         self._func = func
         self._has_payload = skip_count == 1
-        self._input_state_names = [
-            param.name for param in inspect.signature(func).parameters.values()
-        ][
-            skip_count:
-        ]  # skip self, payload
 
         self._payload_type: Optional[Type[BaseModel]] = None
         if len(inspect.signature(func).parameters.values()) > 0:
@@ -31,7 +31,11 @@ class ComponentMethodWrapper:
                 0
             ].annotation
 
-    def __call__(self, *args, **kwargs) -> tuple[Union[tuple[State], State], Any]:
+        self._state_type = list(inspect.signature(func).parameters.values())[
+            skip_count
+        ].annotation
+
+    def __call__(self, *args, **kwargs) -> tuple[Union[tuple[Entity], Entity], Any]:
         return self._func(*args, **kwargs)
 
     def translate_payload(self, payload: Optional[Union[int, str, dict]]):
@@ -43,28 +47,8 @@ class ComponentMethodWrapper:
 
         return self._payload_type.parse_obj(payload)
 
-    def get_states(self, store: Store, default_states, binds=None):
-        return [
-            store.read_state(name, default=default_states.get(name, None))
-            for name in self._get_bound_names(binds)
-        ]
-
-    def set_states(self, store: Store, states, binds=None):
-        if not len(self._get_bound_names(binds)) == len(states):
-            raise ValueError(
-                "Returned state count does not match with offered state count."
-            )
-
-        for name, state in zip(self._get_bound_names(binds), states):
-            store.set_state(name, state)
-
-    def _get_bound_names(self, binds: Optional[dict[str, str]] = None) -> list[str]:
-        if binds is None:
-            binds = {}
-
-        return [
-            (binds[name] if name in binds else name) for name in self._input_state_names
-        ]
+    def get_state_type(self):
+        return self._state_type
 
 
 def reducer_method(func):
@@ -110,23 +94,53 @@ class ConcreteActionRouter(ActionRouter):
         return self.method_mappings[action.signature]
 
 
+class StoreAdapter:
+    def __init__(
+        self,
+        default_state: dict[str, Entity],
+        binds=None,
+    ):
+        self._default_state = default_state
+        if binds is None:
+            binds = {}
+        binds.update(GlobalProperty.get_default_binds())
+
+        self._binds = binds
+
+    def get_state(self, store: Store, state_type):
+        fragments = {
+            name: store.read_state(address, default=self._default_state.get(name))
+            for name, address in self._get_bound_names().items()
+        }
+
+        return state_type(**fragments)
+
+    def set_state(self, store: Store, state):
+        bounded_names = self._get_bound_names()
+
+        for name, fragment in dict(state).items():
+            if name in bounded_names:
+                store.set_state(bounded_names[name], fragment)
+
+    def _get_bound_names(self) -> dict[str, str]:
+        names = {name: name for name in self._default_state}
+        names.update(self._binds)
+
+        return names
+
+
 class ReducerMethodWrappingDispatcher(Dispatcher):
     def __init__(
         self,
         name: str,
         action_router: ActionRouter,
-        default_state: dict[str, State],
+        default_state: dict[str, Entity],
         binds=None,
     ):
         self._name = name
         self._default_state = default_state
         self._action_router = action_router
-        if binds is None:
-            binds = {}
-
-        binds.update(GlobalProperty.get_default_binds())
-
-        self._binds = binds
+        self._store_adapter = StoreAdapter(self._default_state, binds)
 
     def init_states(self, store: Store):
         local_store = store.local(self._name)
@@ -142,17 +156,16 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
         reducer = self._action_router.get_matching_reducer(action)
         method_name = self._action_router.get_matching_method_name(action)
 
-        input_states = reducer.get_states(
-            local_store, self._default_state, binds=self._binds
+        input_state = self._store_adapter.get_state(
+            local_store, reducer.get_state_type()
         )
-        output_states, maybe_events = reducer(
-            reducer.translate_payload(action.payload), *input_states
+        output_state, maybe_events = reducer(
+            reducer.translate_payload(action.payload), input_state
         )
 
-        reducer.set_states(
+        self._store_adapter.set_state(
             local_store,
-            self.regularize_returned_state(output_states),
-            binds=self._binds,
+            output_state,
         )
 
         events = self.regularize_returned_event(maybe_events)
@@ -169,14 +182,6 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
             return [maybe_events]
 
         return maybe_events
-
-    def regularize_returned_state(
-        self, maybe_state_tuple: Union[tuple[State], State]
-    ) -> tuple[State]:
-        if not isinstance(maybe_state_tuple, tuple):
-            return (maybe_state_tuple,)
-
-        return maybe_state_tuple
 
     def tag_events_by_method_name(
         self, method_name: str, events: list[Event]
@@ -198,22 +203,25 @@ class WrappedView:
         self,
         name: str,
         wrapped_view_method: ComponentMethodWrapper,
-        default_state: dict[str, State],
+        default_state: dict[str, Entity],
         binds=None,
     ):
         self._name = name
         self._default_state = default_state
         self._wrapped_view_method = wrapped_view_method
-        self._binds = binds
+        self._store_adapter = StoreAdapter(self._default_state, binds)
 
     def __call__(self, store: Store):
         local_store = store.local(self._name)
-        input_states = self._wrapped_view_method.get_states(
-            local_store, self._default_state, binds=self._binds
-        )
-        view = self._wrapped_view_method(*input_states)
+        try:
+            input_state = self._store_adapter.get_state(
+                local_store, self._wrapped_view_method.get_state_type()
+            )
+            view = self._wrapped_view_method(input_state)
 
-        return view
+            return view
+        except ValidationError as e:
+            raise ValueError(f"Error raised from {self._name}\n{e}") from e
 
 
 class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
@@ -259,7 +267,7 @@ class StoreEmbeddedObject:
                 k, default=self._default_states.get(k, None)
             )
 
-        raise AttributeError
+        raise AttributeError(f"No attribute: {k}")
 
     def __setattr__(self, k, v):
         if k in ["name", "_store", "_default_states"]:
@@ -296,7 +304,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         underscore_attrs_are_private = True
 
     @abstractmethod
-    def get_default_state(self) -> dict[str, State]:
+    def get_default_state(self) -> dict[str, Entity]:
         ...
 
     @property

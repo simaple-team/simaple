@@ -22,7 +22,7 @@ data:
     damage_multiplier: "{{ 20 + 10/6 + 10/6 * (5/6 + 1/11) * (10 * skill_level * 0.01) }}"
 ---
 kind: Component
-version: simaple.io/RobotMastery
+version: simaple.io/RobotMasteryComponent
 metadata:
   label:
     group: mechanic

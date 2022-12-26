@@ -1,7 +1,7 @@
 import pytest
 
 from simaple.core import Stat
-from simaple.simulate.component.specific.adele import AdeleBlossomComponent, OrderState
+from simaple.simulate.component.specific.adele import AdeleBlossomComponent, OrderSword
 from tests.simulate.component.util import count_damage_skill
 
 
@@ -22,8 +22,8 @@ def fixture_blossom(
 
 def test_blossom_order_1pair(adele_store, blossom):
     adele_store.set_state(
-        ".오더.order_state",
-        OrderState(interval=1020, running_swords=[(0, 40000)]),
+        ".오더.order_sword",
+        OrderSword(interval=1020, running_swords=[(0, 40000)]),
     )
 
     events = blossom.use(None)
@@ -33,8 +33,8 @@ def test_blossom_order_1pair(adele_store, blossom):
 
 def test_blossom_order_3pair(adele_store, blossom):
     adele_store.set_state(
-        ".오더.order_state",
-        OrderState(interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]),
+        ".오더.order_sword",
+        OrderSword(interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]),
     )
 
     events = blossom.use(None)

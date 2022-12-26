@@ -1,7 +1,7 @@
 from typing import Optional
 
 from simaple.core.base import Stat
-from simaple.simulate.component.base import reducer_method, view_method
+from simaple.simulate.component.base import ReducerState, reducer_method, view_method
 from simaple.simulate.component.skill import (
     CooldownState,
     DurationState,
@@ -10,6 +10,12 @@ from simaple.simulate.component.skill import (
 from simaple.simulate.component.trait.impl import CooldownValidityTrait, DurableTrait
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
+
+
+class PenalizedBuffSkillState(ReducerState):
+    cooldown_state: CooldownState
+    duration_state: DurationState
+    dynamics: Dynamics
 
 
 class PenalizedBuffSkill(SkillComponent, CooldownValidityTrait, DurableTrait):
@@ -26,42 +32,32 @@ class PenalizedBuffSkill(SkillComponent, CooldownValidityTrait, DurableTrait):
         }
 
     @reducer_method
-    def use(
-        self,
-        _: None,
-        cooldown_state: CooldownState,
-        duration_state: DurationState,
-        dynamics: Dynamics,
-    ):
-        return self.use_durable_trait(cooldown_state, duration_state, dynamics)
+    def use(self, _: None, state: PenalizedBuffSkillState):
+        return self.use_durable_trait(state)
 
     @reducer_method
-    def elapse(
-        self, time: float, cooldown_state: CooldownState, duration_state: DurationState
-    ):
-        return self.elapse_durable_trait(time, cooldown_state, duration_state)
+    def elapse(self, time: float, state: PenalizedBuffSkillState):
+        return self.elapse_durable_trait(time, state)
 
     @view_method
-    def validity(self, cooldown_state: CooldownState):
-        return self.validity_in_cooldown_trait(cooldown_state)
+    def validity(self, state: PenalizedBuffSkillState):
+        return self.validity_in_cooldown_trait(state)
 
     @view_method
-    def buff(
-        self, cooldown_state: CooldownState, duration_state: DurationState
-    ) -> Optional[Stat]:
-        if duration_state.enabled():
+    def buff(self, state: PenalizedBuffSkillState) -> Optional[Stat]:
+        if state.duration_state.enabled():
             return self.advantage
 
-        if not (duration_state.enabled() or cooldown_state.available):
+        if not (state.duration_state.enabled() or state.cooldown_state.available):
             return self.disadvantage
 
         return None
 
     @view_method
-    def running(self, duration_state: DurationState) -> Running:
+    def running(self, state: PenalizedBuffSkillState) -> Running:
         return Running(
             name=self.name,
-            time_left=duration_state.time_left,
+            time_left=state.duration_state.time_left,
             duration=self._get_duration(),
         )
 

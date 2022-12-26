@@ -1,4 +1,4 @@
-from simaple.simulate.component.specific.adele import EtherState
+from simaple.simulate.component.specific.adele import EtherGauge
 
 
 def test_ether_elapse(ether):
@@ -18,8 +18,8 @@ def test_ether_resonance(ether):
 
 def test_ether_order_consume(adele_store, ether):
     adele_store.set_state(
-        ".에테르.ether_state",
-        EtherState(
+        ".에테르.ether_gauge",
+        EtherGauge(
             stack=100,
             maximum_stack=400,
             creation_step=100,

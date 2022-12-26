@@ -1,5 +1,9 @@
 from simaple.simulate.base import ConcreteStore
-from simaple.simulate.component.state import CooldownState, DurationState, IntervalState
+from simaple.simulate.component.state_fragment import (
+    CooldownState,
+    DurationState,
+    IntervalState,
+)
 
 
 def test_store_save_load():

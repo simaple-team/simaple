@@ -1,24 +1,33 @@
-from simaple.simulate.base import AddressedStore, ConcreteStore, Environment, State
-from simaple.simulate.component.base import Component, view_method
+from simaple.core.base import ActionStat
+from simaple.simulate.base import AddressedStore, ConcreteStore, Entity, Environment
+from simaple.simulate.component.base import Component, ReducerState, view_method
+from simaple.simulate.global_property import GlobalProperty
 
 
-class SomeState(State):
+class SomeEntity(Entity):
     obj: int = 3
+
+
+class SomeTestState(ReducerState):
+    some_state: SomeEntity
 
 
 class ViewTestComponent(Component):
     value: int = 5
 
     def get_default_state(self):
-        return {"some_state": SomeState()}
+        return {"some_state": SomeEntity()}
 
     @view_method
-    def naming(self, some_state):
-        return str(some_state.obj + self.value)
+    def naming(self, state: SomeTestState):
+        return str(state.some_state.obj + self.value)
 
 
 def test_view():
     store = AddressedStore(ConcreteStore())
+    global_property = GlobalProperty(ActionStat())
+    global_property.install_global_properties(store)
+
     environment = Environment(store=store)
 
     component = ViewTestComponent(name="test_component")
@@ -29,6 +38,9 @@ def test_view():
 
 def test_view_query():
     store = AddressedStore(ConcreteStore())
+    global_property = GlobalProperty(ActionStat())
+    global_property.install_global_properties(store)
+
     environment = Environment(store=store)
 
     component = ViewTestComponent(name="test_component")

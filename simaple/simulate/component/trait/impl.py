@@ -1,4 +1,12 @@
-from simaple.simulate.component.state import CooldownState, DurationState, IntervalState
+from typing import Union
+
+from simaple.simulate.component.state_protocol import (
+    CooldownDurationDynamicsProtocol,
+    CooldownDynamicsIntervalProtocol,
+    CooldownDynamicsProtocol,
+    CooldownIntervalProtocol,
+    CooldownProtocol,
+)
 from simaple.simulate.component.trait.base import (
     CooldownTrait,
     DelayTrait,
@@ -10,28 +18,27 @@ from simaple.simulate.component.trait.base import (
     TickDamageTrait,
 )
 from simaple.simulate.component.view import Validity
-from simaple.simulate.global_property import Dynamics
 
 
 class CooldownValidityTrait(CooldownTrait, NamedTrait):
-    def validity_in_cooldown_trait(self, cooldown_state: CooldownState) -> Validity:
+    def validity_in_cooldown_trait(self, state: CooldownProtocol) -> Validity:
         return Validity(
             name=self._get_name(),
-            time_left=max(0, cooldown_state.time_left),
-            valid=cooldown_state.available,
+            time_left=max(0, state.cooldown_state.time_left),
+            valid=state.cooldown_state.available,
             cooldown=self._get_cooldown(),
         )
 
 
 class InvalidatableCooldownTrait(CooldownTrait, InvalidatableTrait, NamedTrait):
     def validity_in_invalidatable_cooldown_trait(
-        self, cooldown_state: CooldownState
+        self, state: CooldownProtocol
     ) -> Validity:
         return self.invalidate_if_disabled(
             Validity(
                 name=self._get_name(),
-                time_left=max(0, cooldown_state.time_left),
-                valid=cooldown_state.available,
+                time_left=max(0, state.cooldown_state.time_left),
+                valid=state.cooldown_state.available,
                 cooldown=self._get_cooldown(),
             )
         )
@@ -40,45 +47,43 @@ class InvalidatableCooldownTrait(CooldownTrait, InvalidatableTrait, NamedTrait):
 class UseSimpleAttackTrait(
     CooldownTrait, SimpleDamageTrait, EventProviderTrait, DelayTrait
 ):
-    def use_simple_attack(self, cooldown_state: CooldownState, dynamics: Dynamics):
-        cooldown_state = cooldown_state.copy()
+    def use_simple_attack(self, state: CooldownDynamicsProtocol):
+        state = state.copy()
 
-        if not cooldown_state.available:
-            return (cooldown_state, dynamics), self.event_provider.rejected()
+        if not state.cooldown_state.available:
+            return state, self.event_provider.rejected()
 
-        cooldown_state.set_time_left(
-            dynamics.stat.calculate_cooldown(self._get_cooldown())
+        state.cooldown_state.set_time_left(
+            state.dynamics.stat.calculate_cooldown(self._get_cooldown())
         )
 
         damage, hit = self._get_simple_damage_hit()
         delay = self._get_delay()
 
-        return (cooldown_state, dynamics), [
+        return state, [
             self.event_provider.dealt(damage, hit),
             self.event_provider.delayed(delay),
         ]
 
-    def elapse_simple_attack(self, time: float, cooldown_state: CooldownState):
-        cooldown_state = cooldown_state.copy()
-        cooldown_state.elapse(time)
-        return cooldown_state, self.event_provider.elapsed(time)
+    def elapse_simple_attack(self, time: float, state: CooldownProtocol):
+        state = state.copy()
+        state.cooldown_state.elapse(time)
+        return state, self.event_provider.elapsed(time)
 
-    def use_multiple_damage(
-        self, cooldown_state: CooldownState, dynamics: Dynamics, multiple: int
-    ):
-        cooldown_state = cooldown_state.copy()
+    def use_multiple_damage(self, state: CooldownDynamicsProtocol, multiple: int):
+        state = state.copy()
 
-        if not cooldown_state.available:
-            return (cooldown_state, dynamics), self.event_provider.rejected()
+        if not state.cooldown_state.available:
+            return state, self.event_provider.rejected()
 
-        cooldown_state.set_time_left(
-            dynamics.stat.calculate_cooldown(self._get_cooldown())
+        state.cooldown_state.set_time_left(
+            state.dynamics.stat.calculate_cooldown(self._get_cooldown())
         )
 
         damage, hit = self._get_simple_damage_hit()
         delay = self._get_delay()
 
-        return (cooldown_state, dynamics), [
+        return state, [
             self.event_provider.dealt(damage, hit) for _ in range(multiple)
         ] + [self.event_provider.delayed(delay)]
 
@@ -86,45 +91,37 @@ class UseSimpleAttackTrait(
 class DurableTrait(CooldownTrait, DurationTrait, EventProviderTrait, DelayTrait):
     def use_durable_trait(
         self,
-        cooldown_state: CooldownState,
-        duration_state: DurationState,
-        dynamics: Dynamics,
+        state: CooldownDurationDynamicsProtocol,
         duration_multiplier=1.0,
     ):
-        cooldown_state = cooldown_state.copy()
-        duration_state = duration_state.copy()
+        state = state.copy()
 
-        if not cooldown_state.available:
-            return (
-                cooldown_state,
-                duration_state,
-                dynamics,
-            ), self.event_provider.rejected()
+        if not state.cooldown_state.available:
+            return state, self.event_provider.rejected()
 
-        cooldown_state.set_time_left(
-            dynamics.stat.calculate_cooldown(self._get_cooldown())
+        state.cooldown_state.set_time_left(
+            state.dynamics.stat.calculate_cooldown(self._get_cooldown())
         )
 
-        duration_state.set_time_left(
-            dynamics.stat.calculate_buff_duration(
+        state.duration_state.set_time_left(
+            state.dynamics.stat.calculate_buff_duration(
                 self._get_duration() * duration_multiplier
             )
         )
 
-        return (cooldown_state, duration_state, dynamics), self.event_provider.delayed(
-            self._get_delay()
-        )
+        return state, self.event_provider.delayed(self._get_delay())
 
     def elapse_durable_trait(
-        self, time: float, cooldown_state: CooldownState, duration_state: DurationState
+        self,
+        time: float,
+        state: CooldownDurationDynamicsProtocol,
     ):
-        cooldown_state = cooldown_state.copy()
-        duration_state = duration_state.copy()
+        state = state.copy()
 
-        cooldown_state.elapse(time)
-        duration_state.elapse(time)
+        state.cooldown_state.elapse(time)
+        state.duration_state.elapse(time)
 
-        return (cooldown_state, duration_state), [
+        return state, [
             self.event_provider.elapsed(time),
         ]
 
@@ -140,49 +137,40 @@ class TickEmittingTrait(
     def elapse_tick_emitting_trait(
         self,
         time: float,
-        cooldown_state: CooldownState,
-        interval_state: IntervalState,
+        state: CooldownIntervalProtocol,
         hit_multiplier=1,
     ):
-        cooldown_state = cooldown_state.copy()
-        interval_state = interval_state.copy()
+        state = state.copy()
 
-        cooldown_state.elapse(time)
-        lapse_count = interval_state.elapse(time)
+        state.cooldown_state.elapse(time)
+        lapse_count = state.interval_state.elapse(time)
 
         tick_damage, tick_hit = self._get_tick_damage_hit()
 
-        return (cooldown_state, interval_state), [self.event_provider.elapsed(time)] + [
+        return state, [self.event_provider.elapsed(time)] + [
             self.event_provider.dealt(tick_damage, tick_hit * hit_multiplier)
             for _ in range(lapse_count)
         ]
 
     def use_tick_emitting_trait(
         self,
-        cooldown_state: CooldownState,
-        interval_state: IntervalState,
-        dynamics: Dynamics,
+        state: CooldownDynamicsIntervalProtocol,
         duration_multiplier=1.0,
     ):
-        cooldown_state = cooldown_state.copy()
-        interval_state = interval_state.copy()
+        state = state.copy()
 
-        if not cooldown_state.available:
-            return (
-                cooldown_state,
-                interval_state,
-                dynamics,
-            ), [self.event_provider.rejected()]
+        if not state.cooldown_state.available:
+            return state, [self.event_provider.rejected()]
 
         damage, hit = self._get_simple_damage_hit()
         delay = self._get_delay()
 
-        cooldown_state.set_time_left(
-            dynamics.stat.calculate_cooldown(self._get_cooldown())
+        state.cooldown_state.set_time_left(
+            state.dynamics.stat.calculate_cooldown(self._get_cooldown())
         )
-        interval_state.set_time_left(self._get_duration() * duration_multiplier)
+        state.interval_state.set_time_left(self._get_duration() * duration_multiplier)
 
-        return (cooldown_state, interval_state, dynamics), [
+        return state, [
             self.event_provider.dealt(damage, hit),
             self.event_provider.delayed(delay),
         ]
@@ -196,27 +184,20 @@ class StartIntervalWithoutDamageTrait(
 ):
     def use_tick_emitting_without_damage_trait(
         self,
-        cooldown_state: CooldownState,
-        interval_state: IntervalState,
-        dynamics: Dynamics,
+        state: CooldownDynamicsIntervalProtocol,
     ):
-        cooldown_state = cooldown_state.copy()
-        interval_state = interval_state.copy()
+        state = state.copy()
 
-        if not cooldown_state.available:
-            return (
-                cooldown_state,
-                interval_state,
-                dynamics,
-            ), self.event_provider.rejected()
+        if not state.cooldown_state.available:
+            return state, self.event_provider.rejected()
 
         delay = self._get_delay()
 
-        cooldown_state.set_time_left(
-            dynamics.stat.calculate_cooldown(self._get_cooldown())
+        state.cooldown_state.set_time_left(
+            state.dynamics.stat.calculate_cooldown(self._get_cooldown())
         )
-        interval_state.set_time_left(self._get_duration())
+        state.interval_state.set_time_left(self._get_duration())
 
-        return (cooldown_state, interval_state, dynamics), [
+        return state, [
             self.event_provider.delayed(delay),
         ]

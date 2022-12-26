@@ -2,7 +2,7 @@ import pytest
 
 from simaple.simulate.component.specific.adele import (
     AdeleGatheringComponent,
-    OrderState,
+    OrderSword,
 )
 from tests.simulate.component.util import count_damage_skill
 
@@ -23,8 +23,8 @@ def fixture_gathering(
 
 def test_gathering_order_1pair(adele_store, gathering):
     adele_store.set_state(
-        ".오더.order_state",
-        OrderState(interval=1020, running_swords=[(0, 40000)]),
+        ".오더.order_sword",
+        OrderSword(interval=1020, running_swords=[(0, 40000)]),
     )
 
     events = gathering.use(None)
@@ -34,8 +34,8 @@ def test_gathering_order_1pair(adele_store, gathering):
 
 def test_gathering_order_3pair(adele_store, gathering):
     adele_store.set_state(
-        ".오더.order_state",
-        OrderState(interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]),
+        ".오더.order_sword",
+        OrderSword(interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]),
     )
 
     events = gathering.use(None)
