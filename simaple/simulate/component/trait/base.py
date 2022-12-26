@@ -29,7 +29,7 @@ class DelayTrait(ComponentTrait):
 
 class DurationTrait(ComponentTrait):
     @abstractmethod
-    def _get_duration(self) -> float:
+    def _get_duration(self, state) -> float:
         ...
 
 

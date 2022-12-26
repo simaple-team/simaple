@@ -81,9 +81,7 @@ class RobotSetupBuff(SkillComponent, DurableTrait, CooldownValidityTrait):
         _: None,
         state: RobotSetupBuffState,
     ):
-        return self.use_durable_trait(
-            state, state.robot_mastery.get_summon_multiplier()
-        )
+        return self.use_durable_trait(state)
 
     @reducer_method
     def elapse(self, time: float, state: RobotSetupBuffState):
@@ -105,11 +103,11 @@ class RobotSetupBuff(SkillComponent, DurableTrait, CooldownValidityTrait):
         return Running(
             name=self.name,
             time_left=state.duration_state.time_left,
-            duration=self._get_duration() * state.robot_mastery.get_summon_multiplier(),
+            duration=self._get_duration(state),
         )
 
-    def _get_duration(self) -> float:
-        return self.duration
+    def _get_duration(self, state: RobotSetupBuffState) -> float:
+        return self.duration * state.robot_mastery.get_summon_multiplier()
 
 
 class RobotSummonState(ReducerState):
@@ -177,10 +175,11 @@ class RobotSummonSkill(SkillComponent, TickEmittingTrait, CooldownValidityTrait)
         return Running(
             name=self.name,
             time_left=state.interval_state.interval_time_left,
-            duration=self._get_duration() * state.robot_mastery.get_summon_multiplier(),
+            duration=self._get_duration(state)
+            * state.robot_mastery.get_summon_multiplier(),
         )
 
-    def _get_duration(self) -> float:
+    def _get_duration(self, state: RobotSummonState) -> float:
         return self.duration
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
@@ -267,10 +266,10 @@ class HommingMissile(
         return Running(
             name=self.name,
             time_left=state.interval_state.interval_time_left,
-            duration=self._get_duration(),
+            duration=self._get_duration(state),
         )
 
-    def _get_duration(self) -> float:
+    def _get_duration(self, state: HommingMissileState) -> float:
         return self.duration
 
     def _get_tick_damage_hit(self) -> tuple[float, float]:
@@ -390,10 +389,10 @@ class MultipleOptionComponent(SkillComponent, CooldownValidityTrait):
         return Running(
             name=self.name,
             time_left=state.interval_state.interval_time_left,
-            duration=self._get_duration(),
+            duration=self._get_duration(state),
         )
 
-    def _get_duration(self) -> float:
+    def _get_duration(self, state: MultipleOptionState) -> float:
         return self.duration
 
 
@@ -526,8 +525,8 @@ class MecaCarrier(SkillComponent, CooldownValidityTrait):
             stack=state.interval_state.count
             if state.interval_state.interval_time_left > 0
             else 0,
-            duration=self._get_duration(),
+            duration=self._get_duration(state),
         )
 
-    def _get_duration(self) -> float:
+    def _get_duration(self, state: MecaCarrierState) -> float:
         return self.duration

@@ -153,13 +153,9 @@ class BuffSkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownTrai
 
     @view_method
     def running(self, state: BuffSkillState) -> Running:
-        return Running(
-            name=self.name,
-            time_left=state.duration_state.time_left,
-            duration=self._get_duration(),
-        )
+        return self.running_in_durable_trait(state)
 
-    def _get_duration(self) -> float:
+    def _get_duration(self, state: BuffSkillState) -> float:
         return self.duration
 
 
@@ -224,11 +220,11 @@ class StackableBuffSkillComponent(
         return Running(
             name=self.name,
             time_left=state.duration_state.time_left,
-            duration=self._get_duration(),
+            duration=self._get_duration(state),
             stack=state.stack_state.stack if state.duration_state.time_left > 0 else 0,
         )
 
-    def _get_duration(self) -> float:
+    def _get_duration(self, state: StackableBuffSkillState) -> float:
         return self.duration
 
 
@@ -275,10 +271,10 @@ class TickDamageConfiguratedAttackSkillComponent(
         return Running(
             name=self.name,
             time_left=state.interval_state.interval_time_left,
-            duration=self._get_duration(),
+            duration=self._get_duration(state),
         )
 
-    def _get_duration(self) -> float:
+    def _get_duration(self, state: TickDamageState) -> float:
         return self.duration
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:

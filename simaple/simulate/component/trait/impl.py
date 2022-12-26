@@ -1,11 +1,10 @@
-from typing import Union
-
 from simaple.simulate.component.state_protocol import (
     CooldownDurationDynamicsProtocol,
     CooldownDynamicsIntervalProtocol,
     CooldownDynamicsProtocol,
     CooldownIntervalProtocol,
     CooldownProtocol,
+    DurationProtocol,
 )
 from simaple.simulate.component.trait.base import (
     CooldownTrait,
@@ -17,7 +16,7 @@ from simaple.simulate.component.trait.base import (
     SimpleDamageTrait,
     TickDamageTrait,
 )
-from simaple.simulate.component.view import Validity
+from simaple.simulate.component.view import Running, Validity
 
 
 class CooldownValidityTrait(CooldownTrait, NamedTrait):
@@ -88,11 +87,12 @@ class UseSimpleAttackTrait(
         ] + [self.event_provider.delayed(delay)]
 
 
-class DurableTrait(CooldownTrait, DurationTrait, EventProviderTrait, DelayTrait):
+class DurableTrait(
+    CooldownTrait, DurationTrait, EventProviderTrait, DelayTrait, NamedTrait
+):
     def use_durable_trait(
         self,
         state: CooldownDurationDynamicsProtocol,
-        duration_multiplier=1.0,
     ):
         state = state.copy()
 
@@ -104,9 +104,7 @@ class DurableTrait(CooldownTrait, DurationTrait, EventProviderTrait, DelayTrait)
         )
 
         state.duration_state.set_time_left(
-            state.dynamics.stat.calculate_buff_duration(
-                self._get_duration() * duration_multiplier
-            )
+            state.dynamics.stat.calculate_buff_duration(self._get_duration(state))
         )
 
         return state, self.event_provider.delayed(self._get_delay())
@@ -124,6 +122,13 @@ class DurableTrait(CooldownTrait, DurationTrait, EventProviderTrait, DelayTrait)
         return state, [
             self.event_provider.elapsed(time),
         ]
+
+    def running_in_durable_trait(self, state: DurationProtocol):
+        return Running(
+            name=self._get_name(),
+            time_left=state.duration_state.time_left,
+            duration=self._get_duration(state),
+        )
 
 
 class TickEmittingTrait(
@@ -168,7 +173,9 @@ class TickEmittingTrait(
         state.cooldown_state.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown())
         )
-        state.interval_state.set_time_left(self._get_duration() * duration_multiplier)
+        state.interval_state.set_time_left(
+            self._get_duration(state) * duration_multiplier
+        )
 
         return state, [
             self.event_provider.dealt(damage, hit),
@@ -196,7 +203,7 @@ class StartIntervalWithoutDamageTrait(
         state.cooldown_state.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown())
         )
-        state.interval_state.set_time_left(self._get_duration())
+        state.interval_state.set_time_left(self._get_duration(state))
 
         return state, [
             self.event_provider.delayed(delay),

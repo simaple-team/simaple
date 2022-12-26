@@ -180,10 +180,10 @@ class PoisonChainComponent(SkillComponent, TickEmittingTrait, CooldownValidityTr
         return Running(
             name=self.name,
             time_left=state.interval_state.interval_time_left,
-            duration=self._get_duration(),
+            duration=self._get_duration(state),
         )
 
-    def _get_duration(self) -> float:
+    def _get_duration(self, state: PoisonChainState) -> float:
         return self.duration
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:

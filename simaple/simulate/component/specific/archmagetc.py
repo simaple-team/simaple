@@ -152,7 +152,7 @@ class JupyterThunder(
     def validity(self, state: JupyterThunderState):
         return self.validity_in_cooldown_trait(state)
 
-    def _get_duration(self) -> float:
+    def _get_duration(self, state: JupyterThunderState) -> float:
         return self.duration
 
 
@@ -295,5 +295,5 @@ class ThunderBreak(
     def validity(self, state: ThunderBreakState):
         return self.validity_in_cooldown_trait(state)
 
-    def _get_duration(self) -> float:
+    def _get_duration(self, state: ThunderBreakState) -> float:
         return self.duration

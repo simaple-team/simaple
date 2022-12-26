@@ -644,11 +644,11 @@ class AdeleStormComponent(SkillComponent, TickEmittingTrait, CooldownValidityTra
         return Running(
             name=self.name,
             time_left=state.interval_state.interval_time_left,
-            duration=self._get_duration(),
+            duration=self._get_duration(state),
             stack=state.stack_state.stack,
         )
 
-    def _get_duration(self) -> float:
+    def _get_duration(self, state: AdeleStormState) -> float:
         return self.duration
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:

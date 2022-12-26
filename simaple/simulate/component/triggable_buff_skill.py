@@ -77,11 +77,7 @@ class TriggableBuffSkill(SkillComponent, DurableTrait, InvalidatableCooldownTrai
 
     @view_method
     def running(self, state: TriggableBuffState) -> Running:
-        return Running(
-            name=self.name,
-            time_left=state.duration_state.time_left,
-            duration=self._get_duration(),
-        )
+        return self.running_in_durable_trait(state)
 
-    def _get_duration(self) -> float:
+    def _get_duration(self, state: TriggableBuffState) -> float:
         return self.duration
