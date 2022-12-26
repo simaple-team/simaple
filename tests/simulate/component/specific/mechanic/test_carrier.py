@@ -13,7 +13,7 @@ def fixture_multiple_option(
         cooldown_duration=200_000,
         delay=690,
         lasting_duration=120_000,
-        tick_interval=3000,
+        periodic_interval=3000,
         maximum_intercepter=16,
         start_intercepter=8,
         damage_per_intercepter=100,

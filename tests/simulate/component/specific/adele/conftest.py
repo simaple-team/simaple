@@ -54,8 +54,8 @@ def ether(adele_store):
     ether = AdeleEtherComponent(
         name="에테르",
         maximum_stack=400,
-        tick_interval=10020,
-        stack_per_tick=5,
+        periodic_interval=10020,
+        stack_per_period=5,
         stack_per_trigger=12,
         stack_per_resonance=20,
         creation_step=100,
@@ -76,9 +76,9 @@ def fixture_order(
         delay=0,
         cooldown_duration=500,
         lasting_duration=40000,
-        tick_interval=1020,
-        tick_damage=360,
-        tick_hit=2,
+        periodic_interval=1020,
+        periodic_damage=360,
+        periodic_hit=2,
         maximum_stack=6,
         restore_maximum_stack=8,
     )

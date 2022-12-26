@@ -84,7 +84,7 @@ data:
   v_improvement: 2
 ---
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: archmagetc
@@ -100,16 +100,16 @@ data:
   hit: 0
   cooldown_duration: 5_000
 
-  tick_interval: 210
-  tick_damage: "{{ 100 + skill_level * 4 }}"
-  tick_hit: 1
+  periodic_interval: 210
+  periodic_damage: "{{ 100 + skill_level * 4 }}"
+  periodic_hit: 1
   lasting_duration: 4_000
 
   v_improvement: 2
   default_skill_level: 30
 ---
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: archmagetc
@@ -126,15 +126,15 @@ data:
   delay: 600
   hit: 0
 
-  tick_interval: 3_030
-  tick_damage: "{{ 67 + skill_level * 2 }}"
-  tick_hit: 3
+  periodic_interval: 3_030
+  periodic_damage: "{{ 67 + skill_level * 2 }}"
+  periodic_hit: 3
   lasting_duration: "{{ (110 + skill_level * 5) * 1000 }}"
 
   v_improvement: 2
 ---
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: archmagetc
@@ -147,9 +147,9 @@ data:
   delay: 0
   hit: 0
 
-  tick_interval: 1_200
-  tick_damage: 0
-  tick_hit: 0
+  periodic_interval: 1_200
+  periodic_damage: 0
+  periodic_hit: 0
   lasting_duration: 999_999_999
 ---
 kind: Component
@@ -179,7 +179,7 @@ data:
   v_improvement: 2
 ---
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: archmagetc
@@ -194,9 +194,9 @@ data:
   hit: 10
   cooldown_duration: 60_000
 
-  tick_interval: 810
-  tick_damage: "{{ 125 + skill_level * 5 }}"
-  tick_hit: 6 # 3 * 2
+  periodic_interval: 810
+  periodic_damage: "{{ 125 + skill_level * 5 }}"
+  periodic_hit: 6 # 3 * 2
   lasting_duration: 15_000
 ---
 kind: Component
@@ -213,16 +213,16 @@ data:
   delay: 690
   cooldown_duration: 40_000
 
-  tick_interval: 120
-  tick_damage: "{{ 925 + skill_level * 38 }}"
-  tick_hit: 12
+  periodic_interval: 120
+  periodic_damage: "{{ 925 + skill_level * 38 }}"
+  periodic_hit: 12
   lasting_duration: 10_000
 
   decay_rate: 0.8
   max_count: 8
 ---
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: archmagetc
@@ -237,9 +237,9 @@ data:
   hit: 0
   cooldown_duration: 120_000
 
-  tick_interval: 3_000
-  tick_damage: "{{ 850 + skill_level * 34 }}"
-  tick_hit: 9
+  periodic_interval: 3_000
+  periodic_damage: "{{ 850 + skill_level * 34 }}"
+  periodic_hit: 9
   lasting_duration: 30_000
 ---
 kind: Component
@@ -256,9 +256,9 @@ data:
   delay: 690
   cooldown_duration: 120_000
 
-  tick_interval: 120
-  tick_damage: "{{ 300 + skill_level * 12 }}"
-  tick_hit: 8
+  periodic_interval: 120
+  periodic_damage: "{{ 300 + skill_level * 12 }}"
+  periodic_hit: 8
   lasting_duration: 30_000
 
   max_count: 30

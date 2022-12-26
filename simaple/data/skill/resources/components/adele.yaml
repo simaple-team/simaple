@@ -12,9 +12,9 @@ patch:
   - PassiveHyperskillPatch
 data:
   name: 에테르
-  tick_interval: 10020
+  periodic_interval: 10020
   maximum_stack: 400
-  stack_per_tick: 5
+  stack_per_period: 5
   stack_per_trigger: 12
   stack_per_resonance: 0
   creation_step: 100
@@ -146,7 +146,7 @@ data:
 ---
 # TODO: 최종 폭발
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: adele
@@ -168,9 +168,9 @@ data:
   lasting_duration: 7000
   rem: false
 
-  tick_interval: 405
-  tick_damage: "{{ 100 + 150 + 5 * skill_level }}"
-  tick_hit: 4
+  periodic_interval: 405
+  periodic_damage: "{{ 100 + 150 + 5 * skill_level }}"
+  periodic_hit: 4
 
   combat_orders_enabled: true
   default_skill_level: 30
@@ -194,9 +194,9 @@ data:
   cooldown_duration: 500
   lasting_duration: 40000
 
-  tick_interval: 1020
-  tick_damage: "{{ 240 + 30 + 3 * skill_level }}"
-  tick_hit: 2
+  periodic_interval: 1020
+  periodic_damage: "{{ 240 + 30 + 3 * skill_level }}"
+  periodic_hit: 2
 
   maximum_stack: 6
   restore_maximum_stack: 8
@@ -394,21 +394,21 @@ data:
   cooldown_duration: 60_000
   red: True
 
-  tick_damage_first: "{{ 250 + 10 * skill_level }}"
-  tick_hit_first: 6
-  tick_interval_first: 160
-  duration_first: 2000
+  periodic_damage_first: "{{ 250 + 10 * skill_level }}"
+  periodic_hit_first: 6
+  periodic_interval_first: 160
+  lasting_duration_first: 2000
 
-  tick_damage_second: "{{ 450 + 18 * skill_level }}"
-  tick_hit_second: 9
-  tick_interval_second: 250
-  duration_second: 2000
+  periodic_damage_second: "{{ 450 + 18 * skill_level }}"
+  periodic_hit_second: 9
+  periodic_interval_second: 250
+  lasting_duration_second: 2000
 
   combat_orders_enabled: true
   default_skill_level: 30
 ---
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: adele
@@ -426,15 +426,15 @@ data:
   cooldown_duration: 180_000
   red: true
 
-  tick_interval: 342
-  tick_damage: "{{ 350 + skill_level * 14 }}"
-  tick_hit: "{{ 2 * 6 }}"
+  periodic_interval: 342
+  periodic_damage: "{{ 350 + skill_level * 14 }}"
+  periodic_hit: "{{ 2 * 6 }}"
   lasting_duration: 30_000
 
   default_skill_level: 30
 ---
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: adele
@@ -452,9 +452,9 @@ data:
   cooldown_duration: 180_000
   red: true
 
-  tick_interval: 2970
-  tick_damage: "{{ 900 + skill_level * 36 }}"
-  tick_hit: 3
+  periodic_interval: 2970
+  periodic_damage: "{{ 900 + skill_level * 36 }}"
+  periodic_hit: 3
   lasting_duration: 30_000
 
   default_skill_level: 30
@@ -503,9 +503,9 @@ data:
   cooldown_duration: 90_000
   red: true
 
-  tick_interval: 330
-  tick_damage: "{{ 250 + skill_level * 10 }}"
-  tick_hit: 1
+  periodic_interval: 330
+  periodic_damage: "{{ 250 + skill_level * 10 }}"
+  periodic_hit: 1
   lasting_duration: 14000
 
   maximum_stack: 8

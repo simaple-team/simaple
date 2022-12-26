@@ -87,9 +87,9 @@ data:
   hit: 0
   cooldown_duration: 0
 
-  tick_interval: 1_000
-  tick_damage: 385 # Need to apply passive skill level only
-  tick_hit: 1
+  periodic_interval: 1_000
+  periodic_damage: 385 # Need to apply passive skill level only
+  periodic_hit: 1
   lasting_duration: 70_000
 
   v_improvement: 2
@@ -113,9 +113,9 @@ data:
   cooldown_duration: 80_000
   red: true
 
-  tick_interval: 990
-  tick_damage: 200
-  tick_hit: 1
+  periodic_interval: 990
+  periodic_damage: 200
+  periodic_hit: 1
   lasting_duration: 70_000
 
   v_improvement: 2
@@ -137,9 +137,9 @@ data:
   hit: 0
   cooldown_duration: 60_000
 
-  tick_interval: 3_000
-  tick_damage: "{{ 350 + skill_level * 5 }}"
-  tick_hit: 3
+  periodic_interval: 3_000
+  periodic_damage: "{{ 350 + skill_level * 5 }}"
+  periodic_hit: 3
   lasting_duration: 70_000
 
   default_skill_level: 30
@@ -206,9 +206,9 @@ data:
   hit: 0
   cooldown_duration: 0
 
-  tick_interval: 660
-  tick_damage: 300
-  tick_hit: 9
+  periodic_interval: 660
+  periodic_damage: 300
+  periodic_hit: 9
   lasting_duration: 999_999_999
 
   default_skill_level: 30
@@ -229,7 +229,7 @@ data:
   rem: False
 ---
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: mechanic
@@ -245,9 +245,9 @@ data:
   hit: 0
   cooldown_duration: 8_000
 
-  tick_interval: 250
-  tick_damage: 350
-  tick_hit: 2
+  periodic_interval: 250
+  periodic_damage: 350
+  periodic_hit: 2
   lasting_duration: 4_000
 
   v_improvement: 2
@@ -266,7 +266,7 @@ data:
   cooldown_duration: 200_000
   delay: 780
 
-  tick_interval: 1530
+  periodic_interval: 1530
   lasting_duration: "{{ (75 + 2 * skill_level) * 1000 }}"
 
   missile_count: 3
@@ -332,7 +332,7 @@ data:
   delay: 720
   lasting_duration: 70_000
 
-  tick_interval: 2850
+  periodic_interval: 2850
 
   maximum_intercepter: 16
   start_intercepter: 9

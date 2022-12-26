@@ -1,7 +1,7 @@
 from simaple.simulate.base import Event
 from simaple.simulate.component.state_protocol import (
-    CooldownDurationDynamicsGeneric,
     CooldownDynamicsGeneric,
+    CooldownDynamicsLastingGeneric,
     CooldownDynamicsPeriodicGeneric,
     CooldownGeneric,
     CooldownPeriodicGeneric,
@@ -11,12 +11,12 @@ from simaple.simulate.component.state_protocol import (
 from simaple.simulate.component.trait.base import (
     CooldownTrait,
     DelayTrait,
-    DurationTrait,
     EventProviderTrait,
     InvalidatableTrait,
+    LastingTrait,
     NamedTrait,
+    PeriodicDamageTrait,
     SimpleDamageTrait,
-    TickDamageTrait,
 )
 from simaple.simulate.component.view import Running, Validity
 
@@ -96,12 +96,12 @@ class UseSimpleAttackTrait(
 
 
 class DurableTrait(
-    CooldownTrait, DurationTrait, EventProviderTrait, DelayTrait, NamedTrait
+    CooldownTrait, LastingTrait, EventProviderTrait, DelayTrait, NamedTrait
 ):
     def use_durable_trait(
         self,
-        state: CooldownDurationDynamicsGeneric,
-    ) -> tuple[CooldownDurationDynamicsGeneric, list[Event]]:
+        state: CooldownDynamicsLastingGeneric,
+    ) -> tuple[CooldownDynamicsLastingGeneric, list[Event]]:
         state = state.copy()
 
         if not state.cooldown.available:
@@ -122,8 +122,8 @@ class DurableTrait(
     def elapse_durable_trait(
         self,
         time: float,
-        state: CooldownDurationDynamicsGeneric,
-    ) -> tuple[CooldownDurationDynamicsGeneric, list[Event]]:
+        state: CooldownDynamicsLastingGeneric,
+    ) -> tuple[CooldownDynamicsLastingGeneric, list[Event]]:
         state = state.copy()
 
         state.cooldown.elapse(time)
@@ -141,15 +141,15 @@ class DurableTrait(
         )
 
 
-class TickEmittingTrait(
+class PeriodicWithSimpleDamageTrait(
     CooldownTrait,
-    TickDamageTrait,
+    PeriodicDamageTrait,
     SimpleDamageTrait,
-    DurationTrait,
+    LastingTrait,
     EventProviderTrait,
     DelayTrait,
 ):
-    def elapse_tick_emitting_trait(
+    def elapse_periodic_damage_trait(
         self,
         time: float,
         state: CooldownPeriodicGeneric,
@@ -159,13 +159,14 @@ class TickEmittingTrait(
         state.cooldown.elapse(time)
         lapse_count = state.periodic.elapse(time)
 
-        tick_damage, tick_hit = self._get_tick_damage_hit(state)
+        periodic_damage, periodic_hit = self._get_periodic_damage_hit(state)
 
         return state, [self.event_provider.elapsed(time)] + [
-            self.event_provider.dealt(tick_damage, tick_hit) for _ in range(lapse_count)
+            self.event_provider.dealt(periodic_damage, periodic_hit)
+            for _ in range(lapse_count)
         ]
 
-    def use_tick_emitting_trait(
+    def use_periodic_damage_trait(
         self,
         state: CooldownDynamicsPeriodicGeneric,
     ) -> tuple[CooldownDynamicsPeriodicGeneric, list[Event]]:
@@ -188,13 +189,13 @@ class TickEmittingTrait(
         ]
 
 
-class StartIntervalWithoutDamageTrait(
+class UsePeriodicDamageTrait(
     CooldownTrait,
-    DurationTrait,
+    LastingTrait,
     EventProviderTrait,
     DelayTrait,
 ):
-    def use_tick_emitting_without_damage_trait(
+    def use_periodic_damage_trait(
         self,
         state: CooldownDynamicsPeriodicGeneric,
     ) -> tuple[CooldownDynamicsPeriodicGeneric, list[Event]]:

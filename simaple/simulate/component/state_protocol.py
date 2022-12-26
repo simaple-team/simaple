@@ -39,14 +39,14 @@ class DynamicsProtocol(CopyProtocol, Protocol):
 DynamicsGeneric = TypeVar("DynamicsGeneric", bound=DynamicsProtocol)
 
 
-class CooldownDurationDynamicsProtocol(
-    CooldownProtocol, LastingProtocol, DynamicsProtocol, Protocol
+class CooldownDynamicsLastingProtocol(
+    CooldownProtocol, DynamicsProtocol, LastingProtocol, Protocol
 ):
     pass
 
 
-CooldownDurationDynamicsGeneric = TypeVar(
-    "CooldownDurationDynamicsGeneric", bound=CooldownDurationDynamicsProtocol
+CooldownDynamicsLastingGeneric = TypeVar(
+    "CooldownDynamicsLastingGeneric", bound=CooldownDynamicsLastingProtocol
 )
 
 

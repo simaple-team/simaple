@@ -9,8 +9,8 @@ from simaple.simulate.reserved_names import Tag
 def dot_damage_component():
     component = DOTSkillComponent(
         name="DOT-damage-component",
-        tick_interval=120,
-        tick_damage=50,
+        periodic_interval=120,
+        periodic_damage=50,
         lasting_duration=1_000,
     )
     return component

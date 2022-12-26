@@ -11,7 +11,7 @@ from simaple.simulate.component.skill import Cooldown, Periodic, SkillComponent
 from simaple.simulate.component.trait.impl import (
     CooldownValidityTrait,
     InvalidatableCooldownTrait,
-    TickEmittingTrait,
+    PeriodicWithSimpleDamageTrait,
     UseSimpleAttackTrait,
 )
 from simaple.simulate.component.util import is_rejected
@@ -47,8 +47,8 @@ class EtherState(ReducerState):
 
 class AdeleEtherComponent(Component):
     maximum_stack: int
-    tick_interval: float
-    stack_per_tick: int
+    periodic_interval: float
+    stack_per_period: int
     stack_per_trigger: int
     stack_per_resonance: int
     creation_step: int
@@ -68,7 +68,9 @@ class AdeleEtherComponent(Component):
                 creation_step=self.creation_step,
                 order_consume=self.order_consume,
             ),
-            "periodic": Periodic(interval=self.tick_interval, time_left=999_999_999),
+            "periodic": Periodic(
+                interval=self.periodic_interval, time_left=999_999_999
+            ),
         }
 
     @reducer_method
@@ -80,7 +82,7 @@ class AdeleEtherComponent(Component):
         state = state.copy()
 
         lapse_count = state.periodic.elapse(time)
-        state.ether_gauge.increase(lapse_count * self.stack_per_tick)
+        state.ether_gauge.increase(lapse_count * self.stack_per_period)
 
         return state, [self.event_provider.elapsed(time)]
 
@@ -235,9 +237,9 @@ class AdeleOrderState(ReducerState):
 
 # TODO: 게더링-블로섬 도중 타격 미발생 및 지속시간 정지
 class AdeleOrderComponent(SkillComponent):
-    tick_interval: float
-    tick_damage: float
-    tick_hit: float
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
     lasting_duration: float
     maximum_stack: int
     restore_maximum_stack: int
@@ -250,7 +252,7 @@ class AdeleOrderComponent(SkillComponent):
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "order_sword": OrderSword(interval=self.tick_interval),
+            "order_sword": OrderSword(interval=self.periodic_interval),
         }
 
     @reducer_method
@@ -267,7 +269,7 @@ class AdeleOrderComponent(SkillComponent):
 
         for _ in state.order_sword.resolving(time, self._max_sword_count(state)):
             dealing_events.append(
-                self.event_provider.dealt(self.tick_damage, self.tick_hit)
+                self.event_provider.dealt(self.periodic_damage, self.periodic_hit)
             )
 
         return state, [self.event_provider.elapsed(time)] + dealing_events
@@ -283,7 +285,7 @@ class AdeleOrderComponent(SkillComponent):
         if not (state.ether_gauge.is_order_valid() and state.cooldown.available):
             return state, [self.event_provider.rejected()]
 
-        damage, hit = self.tick_damage, self.tick_hit
+        damage, hit = self.periodic_damage, self.periodic_hit
         delay = self._get_delay()
 
         state.cooldown.set_time_left(
@@ -443,21 +445,21 @@ class AdeleRuinComponent(
     SkillComponent,
     CooldownValidityTrait,
 ):
-    tick_interval_first: float
-    tick_damage_first: float
-    tick_hit_first: float
-    duration_first: float
+    periodic_interval_first: float
+    periodic_damage_first: float
+    periodic_hit_first: float
+    lasting_duration_first: float
 
-    tick_interval_second: float
-    tick_damage_second: float
-    tick_hit_second: float
-    duration_second: float
+    periodic_interval_second: float
+    periodic_damage_second: float
+    periodic_hit_second: float
+    lasting_duration_second: float
 
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "interval_state_first": Periodic(interval=self.tick_interval_first),
-            "interval_state_second": Periodic(interval=self.tick_interval_second),
+            "interval_state_first": Periodic(interval=self.periodic_interval_first),
+            "interval_state_second": Periodic(interval=self.periodic_interval_second),
         }
 
     @reducer_method
@@ -473,10 +475,14 @@ class AdeleRuinComponent(
         lapse_count_second = state.interval_state_second.elapse(time)
 
         return state, [self.event_provider.elapsed(time)] + [
-            self.event_provider.dealt(self.tick_damage_first, self.tick_hit_first)
+            self.event_provider.dealt(
+                self.periodic_damage_first, self.periodic_hit_first
+            )
             for _ in range(lapse_count_first)
         ] + [
-            self.event_provider.dealt(self.tick_damage_second, self.tick_hit_second)
+            self.event_provider.dealt(
+                self.periodic_damage_second, self.periodic_hit_second
+            )
             for _ in range(lapse_count_second)
         ]
 
@@ -496,10 +502,10 @@ class AdeleRuinComponent(
         state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        state.interval_state_first.set_time_left(time=self.duration_first)
+        state.interval_state_first.set_time_left(time=self.lasting_duration_first)
         state.interval_state_second.set_time_left(
-            time=self.duration_first + self.duration_second,
-            initial_counter=self.duration_first,
+            time=self.lasting_duration_first + self.lasting_duration_second,
+            initial_counter=self.lasting_duration_first,
         )
 
         return state, [
@@ -521,7 +527,7 @@ class AdeleRuinComponent(
         return Running(
             name=self.name,
             time_left=state.interval_state_second.time_left,
-            lasting_duration=self.duration_first + self.duration_second,
+            lasting_duration=self.lasting_duration_first + self.lasting_duration_second,
         )
 
 
@@ -580,10 +586,12 @@ class AdeleStormState(ReducerState):
     order_sword: OrderSword
 
 
-class AdeleStormComponent(SkillComponent, TickEmittingTrait, CooldownValidityTrait):
-    tick_interval: float
-    tick_damage: float
-    tick_hit: float
+class AdeleStormComponent(
+    SkillComponent, PeriodicWithSimpleDamageTrait, CooldownValidityTrait
+):
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
     lasting_duration: float
     maximum_stack: int
 
@@ -592,7 +600,7 @@ class AdeleStormComponent(SkillComponent, TickEmittingTrait, CooldownValidityTra
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.tick_interval, time_left=0),
+            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
             "stack": Stack(maximum_stack=self.maximum_stack),
         }
 
@@ -602,7 +610,7 @@ class AdeleStormComponent(SkillComponent, TickEmittingTrait, CooldownValidityTra
         time: float,
         state: AdeleStormState,
     ):
-        return self.elapse_tick_emitting_trait(time, state)
+        return self.elapse_periodic_damage_trait(time, state)
 
     @reducer_method
     def use(self, _: None, state: AdeleStormState):
@@ -611,7 +619,7 @@ class AdeleStormComponent(SkillComponent, TickEmittingTrait, CooldownValidityTra
         if sword_count <= 0:
             return state, [self.event_provider.rejected()]
 
-        state, events = self.use_tick_emitting_trait(state)
+        state, events = self.use_periodic_damage_trait(state)
         if not is_rejected(events):
             state.stack.reset(sword_count)
 
@@ -642,5 +650,5 @@ class AdeleStormComponent(SkillComponent, TickEmittingTrait, CooldownValidityTra
         # TODO: TickEmittingTrait should not extend SimpleDamageTrait. Remove this method
         return 0, 0
 
-    def _get_tick_damage_hit(self, state: AdeleStormState) -> tuple[float, float]:
-        return self.tick_damage, self.tick_hit * state.stack.stack
+    def _get_periodic_damage_hit(self, state: AdeleStormState) -> tuple[float, float]:
+        return self.periodic_damage, self.periodic_hit * state.stack.stack

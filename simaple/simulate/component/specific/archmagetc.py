@@ -9,7 +9,7 @@ from simaple.simulate.component.entity import Cooldown, Periodic, Stack
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
     CooldownValidityTrait,
-    StartIntervalWithoutDamageTrait,
+    UsePeriodicDamageTrait,
     UseSimpleAttackTrait,
 )
 from simaple.simulate.component.view import Running
@@ -85,16 +85,14 @@ class JupyterThunderState(ReducerState):
     dynamics: Dynamics
 
 
-class JupyterThunder(
-    SkillComponent, StartIntervalWithoutDamageTrait, CooldownValidityTrait
-):
+class JupyterThunder(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait):
     name: str
     cooldown_duration: float
     delay: float
 
-    tick_interval: float
-    tick_damage: float
-    tick_hit: float
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
     lasting_duration: float = 10_000  # very long enough
 
     max_count: int
@@ -104,7 +102,7 @@ class JupyterThunder(
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.tick_interval, time_left=0),
+            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
         }
 
     @reducer_method
@@ -129,8 +127,8 @@ class JupyterThunder(
 
             dealing_events.append(
                 self.event_provider.dealt(
-                    self.tick_damage,
-                    self.tick_hit,
+                    self.periodic_damage,
+                    self.periodic_hit,
                     modifier=modifier,
                 )
             )
@@ -142,7 +140,7 @@ class JupyterThunder(
 
     @reducer_method
     def use(self, _: None, state: JupyterThunderState):
-        return self.use_tick_emitting_without_damage_trait(state)
+        return self.use_periodic_damage_trait(state)
 
     @view_method
     def validity(self, state: JupyterThunderState):
@@ -221,16 +219,14 @@ class ThunderBreakState(ReducerState):
     periodic: Periodic
 
 
-class ThunderBreak(
-    SkillComponent, StartIntervalWithoutDamageTrait, CooldownValidityTrait
-):
+class ThunderBreak(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait):
     name: str
     cooldown_duration: float
     delay: float
 
-    tick_interval: float
-    tick_damage: float
-    tick_hit: float
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
     lasting_duration: float = 10_000  # very long enough
 
     decay_rate: float
@@ -244,7 +240,7 @@ class ThunderBreak(
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.tick_interval, time_left=0),
+            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
         }
 
     @reducer_method
@@ -269,8 +265,8 @@ class ThunderBreak(
 
             dealing_events.append(
                 self.event_provider.dealt(
-                    self.tick_damage * self._get_decay_factor(state),
-                    self.tick_hit,
+                    self.periodic_damage * self._get_decay_factor(state),
+                    self.periodic_hit,
                     modifier=modifier,
                 )
             )
@@ -285,7 +281,7 @@ class ThunderBreak(
 
     @reducer_method
     def use(self, _: None, state: ThunderBreakState):
-        return self.use_tick_emitting_without_damage_trait(state)
+        return self.use_periodic_damage_trait(state)
 
     @view_method
     def validity(self, state: ThunderBreakState):

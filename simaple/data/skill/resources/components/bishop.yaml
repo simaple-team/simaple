@@ -43,7 +43,7 @@ data:
     critical_rate: "{{ 5 + skill_level // 2 }}"
 ---
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: bishop
@@ -59,9 +59,9 @@ data:
   hit: 0
   cooldown_duration: 30_000
 
-  tick_interval: 2_000
-  tick_damage: 180
-  tick_hit: 5
+  periodic_interval: 2_000
+  periodic_damage: 180
+  periodic_hit: 5
   lasting_duration: 60_000
 
   v_improvement: 2
@@ -83,9 +83,9 @@ data:
   cooldown_duration: 0
   hit: 0
 
-  tick_interval: 3_030
-  tick_damage: "{{ 110 + 20 * skill_level }}"
-  tick_hit: 3
+  periodic_interval: 3_030
+  periodic_damage: "{{ 110 + 20 * skill_level }}"
+  periodic_hit: 3
   lasting_duration: "{{ (60 + skill_level * 10) * 1000 }}"
   default_skill_level: 20
   v_improvement: 2
@@ -187,9 +187,9 @@ data:
   cooldown_duration: 180_000
   lasting_duration: "{{ (25 + skill_level // 2) * 1000 }}"
 
-  tick_interval: 4_020
-  tick_damage: "{{ 500 + 20 * skill_level }}"
-  tick_hit: 10
+  periodic_interval: 4_020
+  periodic_damage: "{{ 500 + 20 * skill_level }}"
+  periodic_hit: 10
 
   stat:
     damage_multiplier: "{{ character_stat.INT // 1250 + 5 }}"

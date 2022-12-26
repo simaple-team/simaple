@@ -4,7 +4,7 @@ from simaple.simulate.component.entity import Cooldown, Periodic, Stack
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
     CooldownValidityTrait,
-    TickEmittingTrait,
+    PeriodicWithSimpleDamageTrait,
 )
 from simaple.simulate.component.util import is_rejected
 from simaple.simulate.component.view import Running, Validity
@@ -114,29 +114,34 @@ class PoisonChainState(ReducerState):
     dynamics: Dynamics
 
 
-class PoisonChainComponent(SkillComponent, TickEmittingTrait, CooldownValidityTrait):
+class PoisonChainComponent(
+    SkillComponent, PeriodicWithSimpleDamageTrait, CooldownValidityTrait
+):
     name: str
     damage: float
     hit: float
     cooldown_duration: float
     delay: float
 
-    tick_interval: float
-    tick_damage: float
-    tick_hit: float
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
     lasting_duration: float
 
-    tick_damage_increment: float
+    periodic_damage_increment: float
 
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.tick_interval, time_left=0),
+            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
             "stack": Stack(maximum_stack=5),
         }
 
-    def get_tick_damage(self, state: PoisonChainState):
-        return self.tick_damage + self.tick_damage_increment * state.stack.get_stack()
+    def get_periodic_damage(self, state: PoisonChainState):
+        return (
+            self.periodic_damage
+            + self.periodic_damage_increment * state.stack.get_stack()
+        )
 
     @reducer_method
     def elapse(self, time: float, state: PoisonChainState):
@@ -148,7 +153,9 @@ class PoisonChainComponent(SkillComponent, TickEmittingTrait, CooldownValidityTr
 
         for _ in state.periodic.resolving(time):
             dealing_events.append(
-                self.event_provider.dealt(self.get_tick_damage(state), self.tick_hit)
+                self.event_provider.dealt(
+                    self.get_periodic_damage(state), self.periodic_hit
+                )
             )
             state.stack.increase(1)
 
@@ -158,7 +165,7 @@ class PoisonChainComponent(SkillComponent, TickEmittingTrait, CooldownValidityTr
     def use(self, _: None, state: PoisonChainState):
         state = state.copy()
 
-        state, events = self.use_tick_emitting_trait(state)
+        state, events = self.use_periodic_damage_trait(state)
         if not is_rejected(events):
             state.stack.reset(1)
 
@@ -182,5 +189,5 @@ class PoisonChainComponent(SkillComponent, TickEmittingTrait, CooldownValidityTr
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit
 
-    def _get_tick_damage_hit(self, state: PoisonChainState) -> tuple[float, float]:
-        return self.tick_damage, self.tick_hit
+    def _get_periodic_damage_hit(self, state: PoisonChainState) -> tuple[float, float]:
+        return self.periodic_damage, self.periodic_hit

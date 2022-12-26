@@ -12,9 +12,9 @@ def fixture_storm(
         name="test-storm",
         delay=780,
         cooldown_duration=90_000,
-        tick_interval=330,
-        tick_damage=550,
-        tick_hit=1,
+        periodic_interval=330,
+        periodic_damage=550,
+        periodic_hit=1,
         lasting_duration=14000,
         maximum_stack=8,
     )

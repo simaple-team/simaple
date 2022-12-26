@@ -203,7 +203,7 @@ data:
   v_improvement: 2
 ---
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: archmagefb
@@ -220,15 +220,15 @@ data:
   cooldown_duration: 0
   hit: 0
 
-  tick_interval: 3_030
-  tick_damage: "{{ 90 + skill_level * 2 }}"
-  tick_hit: 3
+  periodic_interval: 3_030
+  periodic_damage: "{{ 90 + skill_level * 2 }}"
+  periodic_hit: 3
   lasting_duration: "{{ (110 + skill_level * 5) * 1000 }}"
 
   v_improvement: 2
 ---
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: archmagefb
@@ -244,9 +244,9 @@ data:
   hit: 0
   cooldown_duration: 0
 
-  tick_interval: 3_000
-  tick_damage: 400
-  tick_hit: 2
+  periodic_interval: 3_000
+  periodic_damage: 400
+  periodic_hit: 2
   lasting_duration: 999_999_999
 
   v_improvement: 2
@@ -278,7 +278,7 @@ data:
   v_improvement: 4
 ---
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: archmagefb
@@ -292,9 +292,9 @@ data:
   hit: 0
   cooldown_duration: 0
 
-  tick_interval: 1_000
-  tick_damage: 270
-  tick_hit: 1
+  periodic_interval: 1_000
+  periodic_damage: 270
+  periodic_hit: 1
   lasting_duration: 22_000
 
 ---
@@ -311,7 +311,7 @@ data:
   listening_actions:
     플레임 스윕.use.emitted.global.damage: apply
   name: 플레임 스윕(도트)
-  tick_damage: "{{ 120 + 4 * skill_level }}"
+  periodic_damage: "{{ 120 + 4 * skill_level }}"
   lasting_duration: 10_000
   default_skill_level: 30
 ---
@@ -328,7 +328,7 @@ data:
   listening_actions:
     이프리트.elapse.emitted.global.damage: apply
   name: 이프리트(도트)
-  tick_damage: "{{ 120 + 4 * skill_level }}"
+  periodic_damage: "{{ 120 + 4 * skill_level }}"
   lasting_duration: 4_000
   default_skill_level: 30
 
@@ -346,7 +346,7 @@ data:
   listening_actions:
     플레임 헤이즈.use.emitted.global.damage: apply
   name: 플레임 헤이즈(도트)
-  tick_damage: "{{ 110 + 3 * skill_level }}"
+  periodic_damage: "{{ 110 + 3 * skill_level }}"
   lasting_duration: 20_000
   default_skill_level: 30
 
@@ -364,7 +364,7 @@ data:
   listening_actions:
     포이즌 노바.use.emitted.global.damage: apply
   name: 포이즌 노바(도트)
-  tick_damage: "{{ 300 + 12 * skill_level }}"
+  periodic_damage: "{{ 300 + 12 * skill_level }}"
   lasting_duration: 20_000
 
 ---
@@ -381,7 +381,7 @@ data:
   listening_actions:
     도트 퍼니셔.use.emitted.global.damage: apply
   name: 도트 퍼니셔(도트)
-  tick_damage: "{{ 200 + 3 * skill_level }}"
+  periodic_damage: "{{ 200 + 3 * skill_level }}"
   lasting_duration: 16_000
 
 ---
@@ -401,11 +401,11 @@ data:
   hit: 0
   cooldown_duration: 25_000
 
-  tick_interval: 1_800
-  tick_damage: "{{ 150 + skill_level * 6 }}"
-  tick_hit: 5
+  periodic_interval: 1_800
+  periodic_damage: "{{ 150 + skill_level * 6 }}"
+  periodic_hit: 5
   lasting_duration: 17_000
-  tick_damage_increment: "{{ 30 + skill_level }}"
+  periodic_damage_increment: "{{ 30 + skill_level }}"
 
 ---
 kind: Component
@@ -442,12 +442,12 @@ data:
     메기도 플레임.use.emitted.global.damage: apply
   type: DamageSkill
   name: 메기도 플레임(도트)
-  tick_damage: 700
+  periodic_damage: 700
   lasting_duration: 30_000
 
 ---
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: archmagefb
@@ -462,9 +462,9 @@ data:
   hit: 0
   cooldown_duration: 75_000
 
-  tick_interval: 240
-  tick_damage: "{{ 200 + 8 * skill_level }}"
-  tick_hit: 6
+  periodic_interval: 240
+  periodic_damage: "{{ 200 + 8 * skill_level }}"
+  periodic_hit: 6
   lasting_duration: 6_000
 
 ---

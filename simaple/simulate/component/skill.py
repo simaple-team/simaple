@@ -11,7 +11,7 @@ from simaple.simulate.component.entity import Cooldown, Lasting, Periodic, Stack
 from simaple.simulate.component.trait.impl import (
     DurableTrait,
     InvalidatableCooldownTrait,
-    TickEmittingTrait,
+    PeriodicWithSimpleDamageTrait,
     UseSimpleAttackTrait,
 )
 from simaple.simulate.component.view import Running, Validity
@@ -223,60 +223,64 @@ class StackableBuffSkillComponent(
         return self.lasting_duration
 
 
-class TickDamageState(ReducerState):
+class PeriodicDamageState(ReducerState):
     cooldown: Cooldown
     periodic: Periodic
     dynamics: Dynamics
 
 
-class TickDamageConfiguratedAttackSkillComponent(
-    SkillComponent, TickEmittingTrait, InvalidatableCooldownTrait
+class PeriodicDamageConfiguratedAttackSkillComponent(
+    SkillComponent, PeriodicWithSimpleDamageTrait, InvalidatableCooldownTrait
 ):
     name: str
     damage: float
     hit: float
-    cooldown_duration: float
     delay: float
 
-    tick_interval: float
-    tick_damage: float
-    tick_hit: float
+    cooldown_duration: float
+
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+
     lasting_duration: float
 
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.tick_interval, time_left=0),
+            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
         }
 
     @reducer_method
-    def elapse(self, time: float, state: TickDamageState):
-        return self.elapse_tick_emitting_trait(time, state)
+    def elapse(self, time: float, state: PeriodicDamageState):
+        return self.elapse_periodic_damage_trait(time, state)
 
     @reducer_method
-    def use(self, _: None, state: TickDamageState):
-        return self.use_tick_emitting_trait(state)
+    def use(self, _: None, state: PeriodicDamageState):
+        return self.use_periodic_damage_trait(state)
 
     @view_method
-    def validity(self, state: TickDamageState):
+    def validity(self, state: PeriodicDamageState):
         return self.validity_in_invalidatable_cooldown_trait(state)
 
     @view_method
-    def running(self, state: TickDamageState) -> Running:
+    def running(self, state: PeriodicDamageState) -> Running:
         return Running(
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),
         )
 
-    def _get_lasting_duration(self, state: TickDamageState) -> float:
+    def _get_lasting_duration(self, state: PeriodicDamageState) -> float:
         return self.lasting_duration
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit
 
-    def _get_tick_damage_hit(self, state: TickDamageState) -> tuple[float, float]:
-        return self.tick_damage, self.tick_hit
+    def _get_periodic_damage_hit(
+        self, state: PeriodicDamageState
+    ) -> tuple[float, float]:
+        return self.periodic_damage, self.periodic_hit
 
 
 class DOTState(ReducerState):
@@ -287,14 +291,14 @@ class DOTState(ReducerState):
 class DOTSkillComponent(Component):
     name: str
 
-    tick_interval: float = 1_000
-    tick_damage: float
-    tick_hit: int = 1
+    periodic_interval: float = 1_000
+    periodic_damage: float
+    periodic_hit: int = 1
     lasting_duration: float
 
     def get_default_state(self):
         return {
-            "periodic": Periodic(interval=self.tick_interval, time_left=0),
+            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
         }
 
     @reducer_method
@@ -304,7 +308,7 @@ class DOTSkillComponent(Component):
         lapse_count = state.periodic.elapse(time)
 
         return state, [
-            self.event_provider.dealt(self.tick_damage, self.tick_hit)
+            self.event_provider.dealt(self.periodic_damage, self.periodic_hit)
             for _ in range(lapse_count)
         ]
 
