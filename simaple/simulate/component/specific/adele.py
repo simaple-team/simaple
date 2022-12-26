@@ -610,11 +610,7 @@ class AdeleStormComponent(SkillComponent, TickEmittingTrait, CooldownValidityTra
         time: float,
         state: AdeleStormState,
     ):
-        return self.elapse_tick_emitting_trait(
-            time,
-            state,
-            hit_multiplier=state.stack_state.stack,
-        )
+        return self.elapse_tick_emitting_trait(time, state)
 
     @reducer_method
     def use(self, _: None, state: AdeleStormState):
@@ -655,5 +651,5 @@ class AdeleStormComponent(SkillComponent, TickEmittingTrait, CooldownValidityTra
         # TODO: TickEmittingTrait should not extend SimpleDamageTrait. Remove this method
         return 0, 0
 
-    def _get_tick_damage_hit(self) -> tuple[float, float]:
-        return self.tick_damage, self.tick_hit
+    def _get_tick_damage_hit(self, state: AdeleStormState) -> tuple[float, float]:
+        return self.tick_damage, self.tick_hit * state.stack_state.stack

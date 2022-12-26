@@ -123,7 +123,7 @@ class DurableTrait(
             self.event_provider.elapsed(time),
         ]
 
-    def running_in_durable_trait(self, state: DurationProtocol):
+    def running_in_durable_trait(self, state: DurationProtocol) -> Running:
         return Running(
             name=self._get_name(),
             time_left=state.duration_state.time_left,
@@ -143,24 +143,21 @@ class TickEmittingTrait(
         self,
         time: float,
         state: CooldownIntervalProtocol,
-        hit_multiplier=1,
     ):
         state = state.copy()
 
         state.cooldown_state.elapse(time)
         lapse_count = state.interval_state.elapse(time)
 
-        tick_damage, tick_hit = self._get_tick_damage_hit()
+        tick_damage, tick_hit = self._get_tick_damage_hit(state)
 
         return state, [self.event_provider.elapsed(time)] + [
-            self.event_provider.dealt(tick_damage, tick_hit * hit_multiplier)
-            for _ in range(lapse_count)
+            self.event_provider.dealt(tick_damage, tick_hit) for _ in range(lapse_count)
         ]
 
     def use_tick_emitting_trait(
         self,
         state: CooldownDynamicsIntervalProtocol,
-        duration_multiplier=1.0,
     ):
         state = state.copy()
 
@@ -173,9 +170,7 @@ class TickEmittingTrait(
         state.cooldown_state.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown())
         )
-        state.interval_state.set_time_left(
-            self._get_duration(state) * duration_multiplier
-        )
+        state.interval_state.set_time_left(self._get_duration(state))
 
         return state, [
             self.event_provider.dealt(damage, hit),

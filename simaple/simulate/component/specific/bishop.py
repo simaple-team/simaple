@@ -171,5 +171,5 @@ class DivineMinion(SkillComponent, TickEmittingTrait, InvalidatableCooldownTrait
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit
 
-    def _get_tick_damage_hit(self) -> tuple[float, float]:
+    def _get_tick_damage_hit(self, state: DivineMinionState) -> tuple[float, float]:
         return self.tick_damage, self.tick_hit

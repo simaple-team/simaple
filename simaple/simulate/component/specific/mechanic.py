@@ -161,10 +161,7 @@ class RobotSummonSkill(SkillComponent, TickEmittingTrait, CooldownValidityTrait)
 
     @reducer_method
     def use(self, _: None, state: RobotSummonState):
-        return self.use_tick_emitting_trait(
-            state,
-            state.robot_mastery.get_summon_multiplier(),
-        )
+        return self.use_tick_emitting_trait(state)
 
     @view_method
     def validity(self, state: RobotSummonState):
@@ -175,17 +172,16 @@ class RobotSummonSkill(SkillComponent, TickEmittingTrait, CooldownValidityTrait)
         return Running(
             name=self.name,
             time_left=state.interval_state.interval_time_left,
-            duration=self._get_duration(state)
-            * state.robot_mastery.get_summon_multiplier(),
+            duration=self._get_duration(state),
         )
 
     def _get_duration(self, state: RobotSummonState) -> float:
-        return self.duration
+        return self.duration * state.robot_mastery.get_summon_multiplier()
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit
 
-    def _get_tick_damage_hit(self) -> tuple[float, float]:
+    def _get_tick_damage_hit(self, state: RobotSummonState) -> tuple[float, float]:
         return self.tick_damage, self.tick_hit
 
 
@@ -272,7 +268,7 @@ class HommingMissile(
     def _get_duration(self, state: HommingMissileState) -> float:
         return self.duration
 
-    def _get_tick_damage_hit(self) -> tuple[float, float]:
+    def _get_tick_damage_hit(self, state: HommingMissileState) -> tuple[float, float]:
         return self.tick_damage, self.tick_hit
 
 
