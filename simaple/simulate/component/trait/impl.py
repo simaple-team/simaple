@@ -6,7 +6,7 @@ from simaple.simulate.component.state_protocol import (
     CooldownGeneric,
     CooldownPeriodicGeneric,
     CooldownProtocol,
-    DurationProtocol,
+    LastingProtocol,
 )
 from simaple.simulate.component.trait.base import (
     CooldownTrait,
@@ -133,7 +133,7 @@ class DurableTrait(
             self.event_provider.elapsed(time),
         ]
 
-    def running_in_durable_trait(self, state: DurationProtocol) -> Running:
+    def running_in_durable_trait(self, state: LastingProtocol) -> Running:
         return Running(
             name=self._get_name(),
             time_left=state.lasting.time_left,

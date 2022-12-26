@@ -18,11 +18,11 @@ class CooldownProtocol(CopyProtocol, Protocol):
 CooldownGeneric = TypeVar("CooldownGeneric", bound=CooldownProtocol)
 
 
-class DurationProtocol(CopyProtocol, Protocol):
+class LastingProtocol(CopyProtocol, Protocol):
     lasting: Lasting
 
 
-DurationGeneric = TypeVar("DurationGeneric", bound=DurationProtocol)
+ProtocolGeneric = TypeVar("ProtocolGeneric", bound=LastingProtocol)
 
 
 class PeriodicProtocol(CopyProtocol, Protocol):
@@ -40,7 +40,7 @@ DynamicsGeneric = TypeVar("DynamicsGeneric", bound=DynamicsProtocol)
 
 
 class CooldownDurationDynamicsProtocol(
-    CooldownProtocol, DurationProtocol, DynamicsProtocol, Protocol
+    CooldownProtocol, LastingProtocol, DynamicsProtocol, Protocol
 ):
     pass
 
