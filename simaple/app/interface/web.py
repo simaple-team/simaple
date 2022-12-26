@@ -6,6 +6,7 @@ from simaple.app.interface.handler import add_exception_handlers
 from simaple.app.interface.routers import snapshot, statistics, workspace
 from simaple.app.interface.routers.snapshot import snapshot_router
 from simaple.app.interface.routers.statistics import statistics_router
+from simaple.app.interface.routers.component_spec import component_spec_router
 from simaple.app.interface.routers.workspace import router
 
 
@@ -22,6 +23,7 @@ class SimapleWeb(fastapi.FastAPI):
         self.include_router(router)
         self.include_router(statistics_router)
         self.include_router(snapshot_router)
+        self.include_router(component_spec_router)
 
     def reset_database(self):
         self.container.sql_database().delete()
