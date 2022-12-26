@@ -12,7 +12,7 @@ from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
 
-class SynergeState(ReducerState):
+class SynergyState(ReducerState):
     cooldown_state: CooldownState
     duration_state: DurationState
     dynamics: Dynamics
@@ -35,7 +35,7 @@ class SynergySkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownT
         }
 
     @reducer_method
-    def use(self, _: None, state: SynergeState):
+    def use(self, _: None, state: SynergyState):
         state = state.copy()
         if not state.cooldown_state.available:
             return state, self.event_provider.rejected()
@@ -53,23 +53,23 @@ class SynergySkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownT
         ]
 
     @reducer_method
-    def elapse(self, time: float, state: SynergeState):
+    def elapse(self, time: float, state: SynergyState):
         return self.elapse_durable_trait(time, state)
 
     @view_method
-    def validity(self, state: SynergeState):
+    def validity(self, state: SynergyState):
         return self.validity_in_invalidatable_cooldown_trait(state)
 
     @view_method
-    def buff(self, state: SynergeState) -> Optional[Stat]:
+    def buff(self, state: SynergyState) -> Optional[Stat]:
         if state.duration_state.enabled():
             return self.synergy
 
         return Stat()
 
     @view_method
-    def running(self, state: SynergeState) -> Running:
+    def running(self, state: SynergyState) -> Running:
         return self.running_in_durable_trait(state)
 
-    def _get_duration(self, state: SynergeState) -> float:
+    def _get_duration(self, state: SynergyState) -> float:
         return self.duration
