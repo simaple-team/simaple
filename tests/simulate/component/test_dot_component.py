@@ -23,7 +23,7 @@ def compiled_dot_component(dot_damage_component, bare_store):
 
 def test_dot_damage_component_emit_initial_damage(compiled_dot_component):
     compiled_dot_component.apply(None)
-    assert compiled_dot_component.interval_state.interval_time_left == 1_000
+    assert compiled_dot_component.periodic.time_left == 1_000
 
 
 def test_dot_damage_component_emit_after(compiled_dot_component):

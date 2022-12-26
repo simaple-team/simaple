@@ -35,19 +35,19 @@ def test_reject(keydown_component):
 
 def test_use_keydown_component(keydown_component):
     keydown_component.use(None)
-    assert keydown_component.keydown_state.is_running()
+    assert keydown_component.keydown.is_running()
 
 
 def test_use_keydown_component_and_elapse_time(keydown_component, keydown_delay):
     keydown_component.use(None)
     keydown_component.elapse(keydown_delay)
-    assert keydown_component.keydown_state.is_running()
+    assert keydown_component.keydown.is_running()
 
 
 def test_use_keydown_component_and_elapse_more_time(keydown_component, keydown_delay):
     keydown_component.use(None)
     events = keydown_component.elapse(keydown_delay + 10)
-    assert not keydown_component.keydown_state.is_running()
+    assert not keydown_component.keydown.is_running()
     assert events[-1].payload["time"] == 500 - 10 - keydown_delay
 
 
@@ -55,7 +55,7 @@ def test_use_keydown_component_many_time(keydown_component, keydown_delay):
     for _ in range(6):
         keydown_component.use(None)
         keydown_component.elapse(keydown_delay)
-    assert keydown_component.keydown_state.is_running()
+    assert keydown_component.keydown.is_running()
 
 
 def test_use_keydown_component_too_long(keydown_component, keydown_delay):
@@ -63,4 +63,4 @@ def test_use_keydown_component_too_long(keydown_component, keydown_delay):
         keydown_component.use(None)
         keydown_component.elapse(keydown_delay)
 
-    assert not keydown_component.keydown_state.is_running()
+    assert not keydown_component.keydown.is_running()

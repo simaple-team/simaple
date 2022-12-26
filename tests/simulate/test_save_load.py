@@ -1,9 +1,5 @@
 from simaple.simulate.base import ConcreteStore
-from simaple.simulate.component.entity import (
-    CooldownState,
-    DurationState,
-    IntervalState,
-)
+from simaple.simulate.component.entity import Cooldown, Duration, Periodic
 
 
 def test_store_save_load():
@@ -11,7 +7,7 @@ def test_store_save_load():
 
     store.set_state(
         "dur",
-        DurationState(
+        Duration(
             time_left=3.0,
             assigned_duration=0.0,
         ),
@@ -19,17 +15,17 @@ def test_store_save_load():
 
     store.set_state(
         "x.cooldown",
-        CooldownState(
+        Cooldown(
             time_left=3.0,
         ),
     )
 
     store.set_state(
         "y.interval",
-        IntervalState(
+        Periodic(
             interval_counter=3.0,
             interval=8.5,
-            interval_time_left=2.0,
+            time_left=2.0,
             count=13,
         ),
     )

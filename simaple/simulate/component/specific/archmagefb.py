@@ -1,6 +1,6 @@
 from simaple.simulate.base import Entity
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
-from simaple.simulate.component.entity import CooldownState, IntervalState, StackState
+from simaple.simulate.component.entity import Cooldown, Periodic, Stack
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
     CooldownValidityTrait,
@@ -30,7 +30,7 @@ class PoisonNovaEntity(Entity):
 
 
 class PoisonNovaState(ReducerState):
-    cooldown_state: CooldownState
+    cooldown: Cooldown
     poison_nova: PoisonNovaEntity
     dynamics: Dynamics
 
@@ -49,7 +49,7 @@ class PoisonNovaComponent(SkillComponent):
 
     def get_default_state(self):
         return {
-            "cooldown_state": CooldownState(time_left=0),
+            "cooldown": Cooldown(time_left=0),
             "poison_nova": PoisonNovaEntity(
                 time_left=0, maximum_time_left=100 * 1000.0
             ),
@@ -58,7 +58,7 @@ class PoisonNovaComponent(SkillComponent):
     @reducer_method
     def elapse(self, time: float, state: PoisonNovaState):
         state = state.copy()
-        state.cooldown_state.elapse(time)
+        state.cooldown.elapse(time)
         state.poison_nova.elapse(time)
         return state, self.event_provider.elapsed(time)
 
@@ -66,10 +66,10 @@ class PoisonNovaComponent(SkillComponent):
     def use(self, _: None, state: PoisonNovaState):
         state = state.copy()
 
-        if not state.cooldown_state.available:
+        if not state.cooldown.available:
             return state, self.event_provider.rejected()
 
-        state.cooldown_state.set_time_left(
+        state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self.cooldown)
         )
         state.poison_nova.create_nova(self.nova_remaining_time)
@@ -101,16 +101,16 @@ class PoisonNovaComponent(SkillComponent):
     def validity(self, state: PoisonNovaState):
         return Validity(
             name=self.name,
-            time_left=max(0, state.cooldown_state.time_left),
-            valid=state.cooldown_state.available,
+            time_left=max(0, state.cooldown.time_left),
+            valid=state.cooldown.available,
             cooldown=self.cooldown,
         )
 
 
 class PoisonChainState(ReducerState):
-    cooldown_state: CooldownState
-    interval_state: IntervalState
-    stack_state: StackState
+    cooldown: Cooldown
+    periodic: Periodic
+    stack: Stack
     dynamics: Dynamics
 
 
@@ -130,30 +130,27 @@ class PoisonChainComponent(SkillComponent, TickEmittingTrait, CooldownValidityTr
 
     def get_default_state(self):
         return {
-            "cooldown_state": CooldownState(time_left=0),
-            "interval_state": IntervalState(interval=self.tick_interval, time_left=0),
-            "stack_state": StackState(maximum_stack=5),
+            "cooldown": Cooldown(time_left=0),
+            "periodic": Periodic(interval=self.tick_interval, time_left=0),
+            "stack": Stack(maximum_stack=5),
         }
 
     def get_tick_damage(self, state: PoisonChainState):
-        return (
-            self.tick_damage
-            + self.tick_damage_increment * state.stack_state.get_stack()
-        )
+        return self.tick_damage + self.tick_damage_increment * state.stack.get_stack()
 
     @reducer_method
     def elapse(self, time: float, state: PoisonChainState):
         state = state.copy()
 
-        state.cooldown_state.elapse(time)
+        state.cooldown.elapse(time)
 
         dealing_events = []
 
-        for _ in state.interval_state.resolving(time):
+        for _ in state.periodic.resolving(time):
             dealing_events.append(
                 self.event_provider.dealt(self.get_tick_damage(state), self.tick_hit)
             )
-            state.stack_state.increase(1)
+            state.stack.increase(1)
 
         return state, [self.event_provider.elapsed(time)] + dealing_events
 
@@ -163,7 +160,7 @@ class PoisonChainComponent(SkillComponent, TickEmittingTrait, CooldownValidityTr
 
         state, events = self.use_tick_emitting_trait(state)
         if not is_rejected(events):
-            state.stack_state.reset(1)
+            state.stack.reset(1)
 
         return state, events
 
@@ -175,7 +172,7 @@ class PoisonChainComponent(SkillComponent, TickEmittingTrait, CooldownValidityTr
     def running(self, state: PoisonChainState) -> Running:
         return Running(
             name=self.name,
-            time_left=state.interval_state.interval_time_left,
+            time_left=state.periodic.time_left,
             duration=self._get_duration(state),
         )
 

@@ -5,7 +5,7 @@ from simaple.simulate.component.base import (
     reducer_method,
     view_method,
 )
-from simaple.simulate.component.entity import CooldownState, IntervalState, StackState
+from simaple.simulate.component.entity import Cooldown, Periodic, Stack
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
     CooldownValidityTrait,
@@ -16,11 +16,11 @@ from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
 
-def get_frost_modifier(frost_effect: StackState) -> Stat:
+def get_frost_modifier(frost_effect: Stack) -> Stat:
     return Stat(damage_multiplier=frost_effect.stack * 12)  # Magic Number
 
 
-def use_frost_stack(frost_effect: StackState) -> tuple[StackState, Stat]:
+def use_frost_stack(frost_effect: Stack) -> tuple[Stack, Stat]:
     if frost_effect.stack == 0:
         return frost_effect, Stat()
 
@@ -32,7 +32,7 @@ def use_frost_stack(frost_effect: StackState) -> tuple[StackState, Stat]:
 
 
 class FrostEffectState(ReducerState):
-    frost_stack: StackState
+    frost_stack: Stack
 
 
 class FrostEffect(Component):
@@ -41,7 +41,7 @@ class FrostEffect(Component):
     maximum_stack: int
 
     def get_default_state(self):
-        return {"frost_stack": StackState(maximum_stack=self.maximum_stack)}
+        return {"frost_stack": Stack(maximum_stack=self.maximum_stack)}
 
     @reducer_method
     def increase_step(self, _: None, state: FrostEffectState):
@@ -71,7 +71,7 @@ class FrostEffect(Component):
         )
 
 
-def jupyter_thunder_shock_advantage(jupyter_thunder_shock: IntervalState) -> Stat:
+def jupyter_thunder_shock_advantage(jupyter_thunder_shock: Periodic) -> Stat:
     if jupyter_thunder_shock.enabled():
         return Stat(final_damage_multiplier=12)
 
@@ -79,9 +79,9 @@ def jupyter_thunder_shock_advantage(jupyter_thunder_shock: IntervalState) -> Sta
 
 
 class JupyterThunderState(ReducerState):
-    frost_stack: StackState
-    cooldown_state: CooldownState
-    interval_state: IntervalState
+    frost_stack: Stack
+    cooldown: Cooldown
+    periodic: Periodic
     dynamics: Dynamics
 
 
@@ -103,8 +103,8 @@ class JupyterThunder(
 
     def get_default_state(self):
         return {
-            "cooldown_state": CooldownState(time_left=0),
-            "interval_state": IntervalState(interval=self.tick_interval, time_left=0),
+            "cooldown": Cooldown(time_left=0),
+            "periodic": Periodic(interval=self.tick_interval, time_left=0),
         }
 
     @reducer_method
@@ -115,14 +115,14 @@ class JupyterThunder(
     ):
         state = state.copy()
 
-        state.cooldown_state.elapse(time)
+        state.cooldown.elapse(time)
         dealing_events = []
 
-        for _ in state.interval_state.resolving(time):
-            if state.interval_state.count >= self.max_count:
+        for _ in state.periodic.resolving(time):
+            if state.periodic.count >= self.max_count:
                 break
 
-            if (state.interval_state.count + 1) % 5 == 0:
+            if (state.periodic.count + 1) % 5 == 0:
                 _, modifier = use_frost_stack(state.frost_stack)
             else:
                 modifier = get_frost_modifier(state.frost_stack)
@@ -135,8 +135,8 @@ class JupyterThunder(
                 )
             )
 
-        if state.interval_state.count >= self.max_count:
-            state.interval_state.disable()
+        if state.periodic.count >= self.max_count:
+            state.periodic.disable()
 
         return state, [self.event_provider.elapsed(time)] + dealing_events
 
@@ -153,9 +153,9 @@ class JupyterThunder(
 
 
 class ThunderAttackSkillState(ReducerState):
-    frost_stack: StackState
-    jupyter_thunder_shock: IntervalState
-    cooldown_state: CooldownState
+    frost_stack: Stack
+    jupyter_thunder_shock: Periodic
+    cooldown: Cooldown
     dynamics: Dynamics
 
 
@@ -164,7 +164,7 @@ class ThunderAttackSkillComponent(
 ):
     binds: dict[str, str] = {
         "frost_stack": ".프로스트 이펙트.frost_stack",
-        "jupyter_thunder_shock": ".주피터 썬더.interval_state",
+        "jupyter_thunder_shock": ".주피터 썬더.periodic",
     }
     name: str
     damage: float
@@ -174,7 +174,7 @@ class ThunderAttackSkillComponent(
 
     def get_default_state(self):
         return {
-            "cooldown_state": CooldownState(time_left=0),
+            "cooldown": Cooldown(time_left=0),
         }
 
     @reducer_method
@@ -185,10 +185,10 @@ class ThunderAttackSkillComponent(
     ):
         state = state.copy()
 
-        if not state.cooldown_state.available:
+        if not state.cooldown.available:
             return state, self.event_provider.rejected()
 
-        state.cooldown_state.set_time_left(
+        state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self.cooldown)
         )
 
@@ -214,11 +214,11 @@ class ThunderAttackSkillComponent(
 
 
 class ThunderBreakState(ReducerState):
-    frost_stack: StackState
-    jupyter_thunder_shock: IntervalState
-    cooldown_state: CooldownState
+    frost_stack: Stack
+    jupyter_thunder_shock: Periodic
+    cooldown: Cooldown
     dynamics: Dynamics
-    interval_state: IntervalState
+    periodic: Periodic
 
 
 class ThunderBreak(
@@ -238,13 +238,13 @@ class ThunderBreak(
 
     binds: dict[str, str] = {
         "frost_stack": ".프로스트 이펙트.frost_stack",
-        "jupyter_thunder_shock": ".주피터 썬더.interval_state",
+        "jupyter_thunder_shock": ".주피터 썬더.periodic",
     }
 
     def get_default_state(self):
         return {
-            "cooldown_state": CooldownState(time_left=0),
-            "interval_state": IntervalState(interval=self.tick_interval, time_left=0),
+            "cooldown": Cooldown(time_left=0),
+            "periodic": Periodic(interval=self.tick_interval, time_left=0),
         }
 
     @reducer_method
@@ -255,11 +255,11 @@ class ThunderBreak(
     ):
         state = state.copy()
 
-        state.cooldown_state.elapse(time)
+        state.cooldown.elapse(time)
         dealing_events = []
 
-        for _ in state.interval_state.resolving(time):
-            if state.interval_state.count >= self.max_count:
+        for _ in state.periodic.resolving(time):
+            if state.periodic.count >= self.max_count:
                 break
 
             frost_stack, modifier = use_frost_stack(state.frost_stack)
@@ -275,13 +275,13 @@ class ThunderBreak(
                 )
             )
 
-        if state.interval_state.count >= self.max_count:
-            state.interval_state.disable()
+        if state.periodic.count >= self.max_count:
+            state.periodic.disable()
 
         return state, [self.event_provider.elapsed(time)] + dealing_events
 
     def _get_decay_factor(self, state: ThunderBreakState):
-        return self.decay_rate**state.interval_state.count
+        return self.decay_rate**state.periodic.count
 
     @reducer_method
     def use(self, _: None, state: ThunderBreakState):
