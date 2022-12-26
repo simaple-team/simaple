@@ -1,10 +1,10 @@
 from typing import Optional
 
 from simaple.core.base import Stat
-from simaple.simulate.base import State
-from simaple.simulate.component.base import reducer_method, view_method
+from simaple.simulate.base import Entity
+from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from simaple.simulate.component.entity import CooldownState, IntervalState
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.state import CooldownState, IntervalState
 from simaple.simulate.component.trait.impl import (
     CooldownValidityTrait,
     InvalidatableCooldownTrait,
@@ -15,7 +15,7 @@ from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
 
-class DivineMarkState(State):
+class DivineMark(Entity):
     advantage: Optional[Stat]
 
     def mark(self, advantage: Stat):
@@ -27,6 +27,12 @@ class DivineMarkState(State):
             advantage = Stat()
 
         return advantage
+
+
+class DivineAttackSkillState(ReducerState):
+    divine_mark: DivineMark
+    cooldown_state: CooldownState
+    dynamics: Dynamics
 
 
 class DivineAttackSkillComponent(
@@ -48,46 +54,44 @@ class DivineAttackSkillComponent(
         }
 
     @reducer_method
-    def use(
-        self,
-        _: None,
-        cooldown_state: CooldownState,
-        divine_mark: DivineMarkState,
-        dynamics: Dynamics,
-    ):
-        cooldown_state = cooldown_state.copy()
-        divine_mark = divine_mark.copy()
+    def use(self, _: None, state: DivineAttackSkillState):
+        state = state.copy()
 
-        if not cooldown_state.available:
-            return (
-                cooldown_state,
-                divine_mark,
-                dynamics,
-            ), self.event_provider.rejected()
+        if not state.cooldown_state.available:
+            return state, self.event_provider.rejected()
 
-        cooldown_state.set_time_left(dynamics.stat.calculate_cooldown(self.cooldown))
+        state.cooldown_state.set_time_left(
+            state.dynamics.stat.calculate_cooldown(self.cooldown)
+        )
 
-        modifier = divine_mark.consume_mark()
+        modifier = state.divine_mark.consume_mark()
 
-        return (cooldown_state, divine_mark, dynamics), [
+        return state, [
             self.event_provider.dealt(self.damage, self.hit, modifier=modifier),
             self.event_provider.delayed(self.delay),
         ]
 
     @reducer_method
-    def elapse(self, time: float, cooldown_state: CooldownState):
-        return self.elapse_simple_attack(time, cooldown_state)
+    def elapse(self, time: float, state: DivineAttackSkillState):
+        return self.elapse_simple_attack(time, state)
 
     @view_method
-    def validity(self, cooldown_state):
-        return self.validity_in_cooldown_trait(cooldown_state)
+    def validity(self, state: DivineAttackSkillState):
+        return self.validity_in_cooldown_trait(state)
 
     @view_method
-    def buff(self):
+    def buff(self, _: DivineAttackSkillState):
         return self.synergy
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit
+
+
+class DivineMinionState(ReducerState):
+    divine_mark: DivineMark
+    cooldown_state: CooldownState
+    interval_state: IntervalState
+    dynamics: Dynamics
 
 
 class DivineMinion(SkillComponent, TickEmittingTrait, InvalidatableCooldownTrait):
@@ -108,7 +112,7 @@ class DivineMinion(SkillComponent, TickEmittingTrait, InvalidatableCooldownTrait
     def get_default_state(self):
         if self.name == "바하뮤트":
             return {
-                "divine_mark": DivineMarkState(),
+                "divine_mark": DivineMark(),
                 "cooldown_state": CooldownState(time_left=0),
                 "interval_state": IntervalState(
                     interval=self.tick_interval, time_left=0
@@ -121,21 +125,14 @@ class DivineMinion(SkillComponent, TickEmittingTrait, InvalidatableCooldownTrait
         }
 
     @reducer_method
-    def elapse(
-        self,
-        time: float,
-        cooldown_state: CooldownState,
-        interval_state: IntervalState,
-        divine_mark: DivineMarkState,
-    ):
-        cooldown_state = cooldown_state.copy()
-        interval_state = interval_state.copy()
+    def elapse(self, time: float, state: DivineMinionState):
+        state = state.copy()
 
-        cooldown_state.elapse(time)
+        state.cooldown_state.elapse(time)
         dealing_events = []
 
-        for _ in interval_state.resolving(time):
-            divine_mark.mark(self.mark_advantage)
+        for _ in state.interval_state.resolving(time):
+            state.divine_mark.mark(self.mark_advantage)
             dealing_events.append(
                 self.event_provider.dealt(
                     self.tick_damage,
@@ -143,44 +140,36 @@ class DivineMinion(SkillComponent, TickEmittingTrait, InvalidatableCooldownTrait
                 )
             )
 
-        return (cooldown_state, interval_state, divine_mark), [
-            self.event_provider.elapsed(time)
-        ] + dealing_events
+        return state, [self.event_provider.elapsed(time)] + dealing_events
 
     @view_method
-    def buff(self, interval_state: IntervalState):
-        if interval_state.enabled():
+    def buff(self, state: DivineMinionState):
+        if state.interval_state.enabled():
             return self.stat
 
         return None
 
     @reducer_method
-    def use(
-        self,
-        _: None,
-        cooldown_state: CooldownState,
-        interval_state: IntervalState,
-        dynamics: Dynamics,
-    ):
-        return self.use_tick_emitting_trait(cooldown_state, interval_state, dynamics)
+    def use(self, _: None, state: DivineMinionState):
+        return self.use_tick_emitting_trait(state)
 
     @view_method
-    def validity(self, cooldown_state: CooldownState):
-        return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
+    def validity(self, state: DivineMinionState):
+        return self.validity_in_invalidatable_cooldown_trait(state)
 
     @view_method
-    def running(self, interval_state: IntervalState) -> Running:
+    def running(self, state: DivineMinionState) -> Running:
         return Running(
             name=self.name,
-            time_left=interval_state.interval_time_left,
-            duration=self._get_duration(),
+            time_left=state.interval_state.interval_time_left,
+            duration=self._get_duration(state),
         )
 
-    def _get_duration(self) -> float:
+    def _get_duration(self, state: DivineMinionState) -> float:
         return self.duration
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit
 
-    def _get_tick_damage_hit(self) -> tuple[float, float]:
+    def _get_tick_damage_hit(self, state: DivineMinionState) -> tuple[float, float]:
         return self.tick_damage, self.tick_hit

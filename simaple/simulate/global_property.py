@@ -1,12 +1,12 @@
 from simaple.core.base import ActionStat
-from simaple.simulate.base import State, Store
+from simaple.simulate.base import Entity, Store
 
 
-class Dynamics(State):
+class Dynamics(Entity):
     stat: ActionStat
 
 
-class Clock(State):
+class Clock(Entity):
     current_time: float = 0.0
 
     def spent(self, time: float):

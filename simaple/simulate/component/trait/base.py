@@ -29,7 +29,7 @@ class DelayTrait(ComponentTrait):
 
 class DurationTrait(ComponentTrait):
     @abstractmethod
-    def _get_duration(self) -> float:
+    def _get_duration(self, state) -> float:
         ...
 
 
@@ -53,5 +53,5 @@ class InvalidatableTrait(ComponentTrait):
 
 class TickDamageTrait(ComponentTrait):
     @abstractmethod
-    def _get_tick_damage_hit(self) -> tuple[float, float]:
+    def _get_tick_damage_hit(self, state) -> tuple[float, float]:
         ...

@@ -1,12 +1,19 @@
-from simaple.simulate.component.base import reducer_method, view_method
+from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from simaple.simulate.component.entity import CooldownState, DurationState
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.state import CooldownState, DurationState
 from simaple.simulate.component.trait.impl import (
     DurableTrait,
     InvalidatableCooldownTrait,
 )
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
+
+
+class TriggableBuffState(ReducerState):
+    cooldown_state: CooldownState
+    duration_state: DurationState
+    trigger_cooldown_state: CooldownState
+    dynamics: Dynamics
 
 
 class TriggableBuffSkill(SkillComponent, DurableTrait, InvalidatableCooldownTrait):
@@ -26,32 +33,22 @@ class TriggableBuffSkill(SkillComponent, DurableTrait, InvalidatableCooldownTrai
         }
 
     @reducer_method
-    def use(
-        self,
-        _: None,
-        cooldown_state: CooldownState,
-        duration_state: DurationState,
-        dynamics: Dynamics,
-    ):
-        return self.use_durable_trait(cooldown_state, duration_state, dynamics)
+    def use(self, _: None, state: TriggableBuffState):
+        return self.use_durable_trait(state)
 
     @reducer_method
     def elapse(
         self,
         time: float,
-        cooldown_state: CooldownState,
-        duration_state: DurationState,
-        trigger_cooldown_state: CooldownState,
+        state: TriggableBuffState,
     ):
-        cooldown_state = cooldown_state.copy()
-        duration_state = duration_state.copy()
-        trigger_cooldown_state = trigger_cooldown_state.copy()
+        state = state.copy()
 
-        cooldown_state.elapse(time)
-        duration_state.elapse(time)
-        trigger_cooldown_state.elapse(time)
+        state.cooldown_state.elapse(time)
+        state.duration_state.elapse(time)
+        state.trigger_cooldown_state.elapse(time)
 
-        return (cooldown_state, duration_state, trigger_cooldown_state), [
+        return state, [
             self.event_provider.elapsed(time),
         ]
 
@@ -59,31 +56,28 @@ class TriggableBuffSkill(SkillComponent, DurableTrait, InvalidatableCooldownTrai
     def trigger(
         self,
         _: None,
-        trigger_cooldown_state: CooldownState,
-        duration_state: DurationState,
+        state: TriggableBuffState,
     ):
-        if not (duration_state.enabled() and trigger_cooldown_state.available):
-            return (trigger_cooldown_state, duration_state), []
+        if not (
+            state.duration_state.enabled() and state.trigger_cooldown_state.available
+        ):
+            return state, []
 
-        trigger_cooldown_state = trigger_cooldown_state.copy()
-        trigger_cooldown_state.set_time_left(self.trigger_cooldown)
+        state = state.copy()
+        state.trigger_cooldown_state.set_time_left(self.trigger_cooldown)
 
         return (
-            (trigger_cooldown_state, duration_state),
+            state,
             self.event_provider.dealt(self.trigger_damage, self.trigger_hit),
         )
 
     @view_method
-    def validity(self, cooldown_state: CooldownState):
-        return self.validity_in_invalidatable_cooldown_trait(cooldown_state)
+    def validity(self, state: TriggableBuffState):
+        return self.validity_in_invalidatable_cooldown_trait(state)
 
     @view_method
-    def running(self, duration_state: DurationState) -> Running:
-        return Running(
-            name=self.name,
-            time_left=duration_state.time_left,
-            duration=self._get_duration(),
-        )
+    def running(self, state: TriggableBuffState) -> Running:
+        return self.running_in_durable_trait(state)
 
-    def _get_duration(self) -> float:
+    def _get_duration(self, state: TriggableBuffState) -> float:
         return self.duration

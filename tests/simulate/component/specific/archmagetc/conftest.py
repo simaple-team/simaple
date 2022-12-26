@@ -5,8 +5,8 @@ import simaple.simulate.component.skill  # pylint: disable=W0611
 import simaple.simulate.component.specific  # pylint: disable=W0611
 from simaple.core.base import ActionStat
 from simaple.simulate.base import AddressedStore, ConcreteStore
+from simaple.simulate.component.entity import IntervalState
 from simaple.simulate.component.specific.archmagetc import FrostEffect
-from simaple.simulate.component.state import IntervalState
 from simaple.simulate.global_property import GlobalProperty
 from simaple.spec.repository import DirectorySpecRepository
 

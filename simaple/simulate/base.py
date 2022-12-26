@@ -11,7 +11,7 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 )
 
 
-class State(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="State")):
+class Entity(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="State")):
     ...
 
 
@@ -64,18 +64,18 @@ class Event(BaseModel):
 
 
 class Store(metaclass=ABCMeta):
-    def use_state(self, name: str, default: State):
+    def use_state(self, name: str, default: Entity):
         def state_setter(state):
             self.set_state(name, state)
 
         return self.read_state(name, default=default), state_setter
 
     @abstractmethod
-    def read_state(self, name: str, default: State):
+    def read_state(self, name: str, default: Optional[Entity]):
         ...
 
     @abstractmethod
-    def set_state(self, name: str, state: State):
+    def set_state(self, name: str, state: Entity):
         ...
 
     @abstractmethod
@@ -93,16 +93,19 @@ class Store(metaclass=ABCMeta):
 
 class ConcreteStore(Store):
     def __init__(self):
-        self._states: dict[str, State] = {}
+        self._states: dict[str, Entity] = {}
 
-    def set_state(self, name: str, state: State):
+    def set_state(self, name: str, state: Entity):
         self._states[name] = state
 
-    def read_state(self, name: str, default: State):
-        value = self._states.setdefault(name, default)
+    def read_state(self, name: str, default: Optional[Entity]):
+        if default is None:
+            value = self._states.get(name)
+        else:
+            value = self._states.setdefault(name, default)
         if value is None:
             raise ValueError(
-                "None-default only enabled for external-property binding. Maybe missing global proeperty installation?"
+                f"No state exists: {name}. None-default only enabled for external-property binding. Maybe missing global proeperty installation?"
             )
         return value.copy()
 
@@ -115,16 +118,16 @@ class ConcreteStore(Store):
     def load(self, saved_store: dict[str, dict]) -> None:
         self._states = {k: self._load_state(v) for k, v in saved_store.items()}
 
-    def _save_state(self, state: State) -> dict:
+    def _save_state(self, state: Entity) -> dict:
         state_clsname = state.__class__.__name__
         return {
             "cls": state_clsname,
             "payload": state.dict(),
         }
 
-    def _load_state(self, saved_state_dict: dict) -> State:
+    def _load_state(self, saved_state_dict: dict) -> Entity:
         clsname, payload = saved_state_dict["cls"], saved_state_dict["payload"]
-        return cast(State, get_class(clsname, kind="State").parse_obj(payload))
+        return cast(Entity, get_class(clsname, kind="State").parse_obj(payload))
 
 
 class AddressedStore(Store):
@@ -132,11 +135,11 @@ class AddressedStore(Store):
         self._current_address = current_address
         self._concrete_store = concrete_store
 
-    def set_state(self, name: str, state: State):
+    def set_state(self, name: str, state: Entity):
         address = self._resolve_address(name)
         return self._concrete_store.set_state(address, state)
 
-    def read_state(self, name: str, default: State):
+    def read_state(self, name: str, default: Optional[Entity]):
         address = self._resolve_address(name)
         return self._concrete_store.read_state(address, default)
 

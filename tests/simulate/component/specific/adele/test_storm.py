@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.simulate.component.specific.adele import AdeleStormComponent, OrderState
+from simaple.simulate.component.specific.adele import AdeleStormComponent, OrderSword
 from simaple.simulate.reserved_names import Tag
 
 
@@ -23,8 +23,8 @@ def fixture_storm(
 
 def test_storm_order_1pair(adele_store, storm):
     adele_store.set_state(
-        ".오더.order_state",
-        OrderState(interval=1020, running_swords=[(0, 40000)]),
+        ".오더.order_sword",
+        OrderSword(interval=1020, running_swords=[(0, 40000)]),
     )
 
     storm.use(None)
@@ -36,8 +36,8 @@ def test_storm_order_1pair(adele_store, storm):
 
 def test_storm_order_3pair(adele_store, storm):
     adele_store.set_state(
-        ".오더.order_state",
-        OrderState(interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]),
+        ".오더.order_sword",
+        OrderSword(interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]),
     )
 
     storm.use(None)

@@ -73,7 +73,7 @@
     }
   },
   ".포이즌 노바.nova_state": {
-    "cls": "PoisonNovaState",
+    "cls": "PoisonNovaEntity",
     "payload": {
       "time_left": 0.0,
       "maximum_time_left": 100000.0

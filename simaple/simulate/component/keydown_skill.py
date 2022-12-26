@@ -1,11 +1,16 @@
-from simaple.simulate.component.base import State, reducer_method, view_method
+from simaple.simulate.component.base import (
+    Entity,
+    ReducerState,
+    reducer_method,
+    view_method,
+)
+from simaple.simulate.component.entity import CooldownState
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.state import CooldownState
 from simaple.simulate.component.view import Validity
 from simaple.simulate.global_property import Dynamics
 
 
-class KeydownState(State):
+class KeydownState(Entity):
     time_elapsed_after_latest_action: float = 999_999_999
     time_elapsed_after_first_action: float = 999_999_999
     running: bool
@@ -42,6 +47,12 @@ class KeydownState(State):
         return self.time_elapsed_after_latest_action <= allowed_interval
 
 
+class KeydownSkillState(ReducerState):
+    cooldown_state: CooldownState
+    keydown_state: KeydownState
+    dynamics: Dynamics
+
+
 class KeydownSkillComponent(SkillComponent):
     maximum_keydown_time: float = 999_999_999
 
@@ -65,62 +76,51 @@ class KeydownSkillComponent(SkillComponent):
     def use(
         self,
         _: None,
-        cooldown_state: CooldownState,
-        keydown_state: KeydownState,
-        dynamics: Dynamics,
+        state: KeydownSkillState,
     ):
-        cooldown_state = cooldown_state.copy()
-        keydown_state = keydown_state.copy()
+        state = state.copy()
 
-        if not cooldown_state.available:
-            return (
-                cooldown_state,
-                keydown_state,
-                dynamics,
-            ), self.event_provider.rejected()
+        if not state.cooldown_state.available:
+            return state, self.event_provider.rejected()
 
         damage_event = [self.event_provider.dealt(self.damage, self.hit)]
         delay_event = [self.event_provider.delayed(self.delay)]
 
         # check user's trigger
-        if not keydown_state.is_running():
-            keydown_state.start()
+        if not state.keydown_state.is_running():
+            state.keydown_state.start()
 
         # if keydown will end by trigger this action
-        if not keydown_state.will_keydown_lasts(self.delay, self.maximum_keydown_time):
+        if not state.keydown_state.will_keydown_lasts(
+            self.delay, self.maximum_keydown_time
+        ):
             # apply cooldown and finisher
-            keydown_state.stop()
-            cooldown_state.set_time_left(
-                dynamics.stat.calculate_cooldown(self.cooldown)
+            state.keydown_state.stop()
+            state.cooldown_state.set_time_left(
+                state.dynamics.stat.calculate_cooldown(self.cooldown)
             )
             damage_event.append(
                 self.event_provider.dealt(self.finish_damage, self.finish_hit)
             )
             delay_event.append(self.event_provider.delayed(self.keydown_end_delay))
         else:
-            keydown_state.continue_running()
+            state.keydown_state.continue_running()
 
-        return (cooldown_state, keydown_state, dynamics), damage_event + delay_event
+        return state, damage_event + delay_event
 
     @reducer_method
-    def elapse(
-        self,
-        time: float,
-        cooldown_state: CooldownState,
-        keydown_state: KeydownState,
-        dynamics: Dynamics,
-    ):
-        cooldown_state, keydown_state = cooldown_state.copy(), keydown_state.copy()
+    def elapse(self, time: float, state: KeydownSkillState):
+        state = state.copy()
 
-        cooldown_state.elapse(time)
-        was_running = keydown_state.is_running()
-        keydown_state.elapse(time, self.delay, self.maximum_keydown_time)
+        state.cooldown_state.elapse(time)
+        was_running = state.keydown_state.is_running()
+        state.keydown_state.elapse(time, self.delay, self.maximum_keydown_time)
 
         events = [self.event_provider.elapsed(time)]
 
-        if was_running and not keydown_state.is_running():
-            cooldown_state.set_time_left(
-                dynamics.stat.calculate_cooldown(self.cooldown)
+        if was_running and not state.keydown_state.is_running():
+            state.cooldown_state.set_time_left(
+                state.dynamics.stat.calculate_cooldown(self.cooldown)
             )
 
             # if keydown stopped and finish delay is not zero, compensate un-resolved delay.
@@ -128,15 +128,15 @@ class KeydownSkillComponent(SkillComponent):
                 events.append(
                     self.event_provider.delayed(self.keydown_end_delay - time)
                 )
-                cooldown_state.elapse(self.keydown_end_delay - time)
+                state.cooldown_state.elapse(self.keydown_end_delay - time)
 
-        return (cooldown_state, keydown_state, dynamics), events
+        return state, events
 
     @view_method
-    def validity(self, cooldown_state):
+    def validity(self, state: KeydownSkillState):
         return Validity(
             name=self.name,
-            time_left=max(0, cooldown_state.time_left),
-            valid=cooldown_state.available,
+            time_left=max(0, state.cooldown_state.time_left),
+            valid=state.cooldown_state.available,
             cooldown=self.cooldown,
         )

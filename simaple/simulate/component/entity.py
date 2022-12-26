@@ -1,9 +1,9 @@
 from typing import Optional
 
-from simaple.simulate.base import State
+from simaple.simulate.base import Entity
 
 
-class DurationState(State):
+class DurationState(Entity):
     time_left: float
     assigned_duration: float = 0.0
 
@@ -21,7 +21,7 @@ class DurationState(State):
         return self.assigned_duration - self.time_left
 
 
-class CooldownState(State):
+class CooldownState(Entity):
     time_left: float
 
     @property
@@ -35,7 +35,7 @@ class CooldownState(State):
         self.time_left = time
 
 
-class IntervalState(State):
+class IntervalState(Entity):
     interval_counter: float = 0.0
     interval: float
     interval_time_left: float = 0.0
@@ -82,7 +82,7 @@ class IntervalState(State):
         self.interval_time_left = 0
 
 
-class StackState(State):
+class StackState(Entity):
     stack: int = 0
     maximum_stack: int
 

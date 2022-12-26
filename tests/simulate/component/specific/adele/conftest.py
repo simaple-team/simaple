@@ -8,7 +8,7 @@ from simaple.simulate.base import AddressedStore, ConcreteStore
 from simaple.simulate.component.specific.adele import (
     AdeleEtherComponent,
     AdeleOrderComponent,
-    EtherState,
+    EtherGauge,
     RestoreDurationState,
 )
 from simaple.simulate.global_property import GlobalProperty
@@ -35,8 +35,8 @@ def adele_store(global_property):
     store = AddressedStore(ConcreteStore())
     global_property.install_global_properties(store)
     store.set_state(
-        ".에테르.ether_state",
-        EtherState(
+        ".에테르.ether_gauge",
+        EtherGauge(
             maximum_stack=400,
             creation_step=100,
             order_consume=100,
@@ -63,7 +63,7 @@ def ether(adele_store):
     )
 
     compiled_component = ether.compile(adele_store)
-    _ = compiled_component.ether_state
+    _ = compiled_component.ether_gauge
     return compiled_component
 
 
