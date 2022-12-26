@@ -4,10 +4,7 @@ from simaple.core.base import Stat
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Lasting
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    DurableTrait,
-    InvalidatableCooldownTrait,
-)
+from simaple.simulate.component.trait.impl import BuffTrait, InvalidatableCooldownTrait
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
@@ -18,7 +15,7 @@ class SynergyState(ReducerState):
     dynamics: Dynamics
 
 
-class SynergySkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownTrait):
+class SynergySkillComponent(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
     name: str
     damage: float
     hit: float
@@ -54,7 +51,7 @@ class SynergySkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownT
 
     @reducer_method
     def elapse(self, time: float, state: SynergyState):
-        return self.elapse_durable_trait(time, state)
+        return self.elapse_buff_trait(time, state)
 
     @view_method
     def validity(self, state: SynergyState):
@@ -69,7 +66,7 @@ class SynergySkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownT
 
     @view_method
     def running(self, state: SynergyState) -> Running:
-        return self.running_in_durable_trait(state)
+        return self.running_in_buff_trait(state)
 
     def _get_lasting_duration(self, state: SynergyState) -> float:
         return self.lasting_duration

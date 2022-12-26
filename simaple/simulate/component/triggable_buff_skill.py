@@ -1,10 +1,7 @@
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Lasting
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    DurableTrait,
-    InvalidatableCooldownTrait,
-)
+from simaple.simulate.component.trait.impl import BuffTrait, InvalidatableCooldownTrait
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
@@ -16,7 +13,7 @@ class TriggableBuffState(ReducerState):
     dynamics: Dynamics
 
 
-class TriggableBuffSkill(SkillComponent, DurableTrait, InvalidatableCooldownTrait):
+class TriggableBuffSkill(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
     trigger_cooldown_duration: float
     trigger_damage: float
     trigger_hit: float
@@ -34,7 +31,7 @@ class TriggableBuffSkill(SkillComponent, DurableTrait, InvalidatableCooldownTrai
 
     @reducer_method
     def use(self, _: None, state: TriggableBuffState):
-        return self.use_durable_trait(state)
+        return self.use_buff_trait(state)
 
     @reducer_method
     def elapse(
@@ -75,7 +72,7 @@ class TriggableBuffSkill(SkillComponent, DurableTrait, InvalidatableCooldownTrai
 
     @view_method
     def running(self, state: TriggableBuffState) -> Running:
-        return self.running_in_durable_trait(state)
+        return self.running_in_buff_trait(state)
 
     def _get_lasting_duration(self, state: TriggableBuffState) -> float:
         return self.lasting_duration

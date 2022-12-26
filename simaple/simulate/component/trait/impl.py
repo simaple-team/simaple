@@ -95,10 +95,10 @@ class UseSimpleAttackTrait(
         ] + [self.event_provider.delayed(delay)]
 
 
-class DurableTrait(
+class BuffTrait(
     CooldownTrait, LastingTrait, EventProviderTrait, DelayTrait, NamedTrait
 ):
-    def use_durable_trait(
+    def use_buff_trait(
         self,
         state: CooldownDynamicsLastingGeneric,
     ) -> tuple[CooldownDynamicsLastingGeneric, list[Event]]:
@@ -119,7 +119,7 @@ class DurableTrait(
 
         return state, [self.event_provider.delayed(self._get_delay())]
 
-    def elapse_durable_trait(
+    def elapse_buff_trait(
         self,
         time: float,
         state: CooldownDynamicsLastingGeneric,
@@ -133,7 +133,7 @@ class DurableTrait(
             self.event_provider.elapsed(time),
         ]
 
-    def running_in_durable_trait(self, state: LastingProtocol) -> Running:
+    def running_in_buff_trait(self, state: LastingProtocol) -> Running:
         return Running(
             name=self._get_name(),
             time_left=state.lasting.time_left,

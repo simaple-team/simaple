@@ -12,8 +12,8 @@ from simaple.simulate.component.entity import Cycle
 from simaple.simulate.component.keydown_skill import Keydown
 from simaple.simulate.component.skill import Cooldown, Lasting, Periodic, SkillComponent
 from simaple.simulate.component.trait.impl import (
+    BuffTrait,
     CooldownValidityTrait,
-    DurableTrait,
     PeriodicWithSimpleDamageTrait,
     UsePeriodicDamageTrait,
 )
@@ -58,7 +58,7 @@ class RobotSetupBuffState(ReducerState):
     dynamics: Dynamics
 
 
-class RobotSetupBuff(SkillComponent, DurableTrait, CooldownValidityTrait):
+class RobotSetupBuff(SkillComponent, BuffTrait, CooldownValidityTrait):
     stat: Stat
     cooldown_duration: float
     delay: float
@@ -77,11 +77,11 @@ class RobotSetupBuff(SkillComponent, DurableTrait, CooldownValidityTrait):
         _: None,
         state: RobotSetupBuffState,
     ):
-        return self.use_durable_trait(state)
+        return self.use_buff_trait(state)
 
     @reducer_method
     def elapse(self, time: float, state: RobotSetupBuffState):
-        return self.elapse_durable_trait(time, state)
+        return self.elapse_buff_trait(time, state)
 
     @view_method
     def validity(self, state: RobotSetupBuffState):
