@@ -1,10 +1,6 @@
 from typing import Protocol, TypeVar
 
-from simaple.simulate.component.entity import (
-    CooldownState,
-    DurationState,
-    IntervalState,
-)
+from simaple.simulate.component.entity import Cooldown, Lasting, Periodic
 from simaple.simulate.global_property import Dynamics
 
 T = TypeVar("T")
@@ -16,36 +12,68 @@ class CopyProtocol(Protocol[T]):
 
 
 class CooldownProtocol(CopyProtocol, Protocol):
-    cooldown_state: CooldownState
+    cooldown: Cooldown
 
 
-class DurationProtocol(CopyProtocol, Protocol):
-    duration_state: DurationState
+CooldownGeneric = TypeVar("CooldownGeneric", bound=CooldownProtocol)
 
 
-class IntervalProtocol(CopyProtocol, Protocol):
-    interval_state: IntervalState
+class LastingProtocol(CopyProtocol, Protocol):
+    lasting: Lasting
+
+
+LastingGeneric = TypeVar("LastingGeneric", bound=LastingProtocol)
+
+
+class PeriodicProtocol(CopyProtocol, Protocol):
+    periodic: Periodic
+
+
+PeriodicGeneric = TypeVar("PeriodicGeneric", bound=PeriodicProtocol)
 
 
 class DynamicsProtocol(CopyProtocol, Protocol):
     dynamics: Dynamics
 
 
-class CooldownDurationDynamicsProtocol(
-    CooldownProtocol, DurationProtocol, DynamicsProtocol, Protocol
+DynamicsGeneric = TypeVar("DynamicsGeneric", bound=DynamicsProtocol)
+
+
+class CooldownDynamicsLastingProtocol(
+    CooldownProtocol, DynamicsProtocol, LastingProtocol, Protocol
 ):
     pass
+
+
+CooldownDynamicsLastingGeneric = TypeVar(
+    "CooldownDynamicsLastingGeneric", bound=CooldownDynamicsLastingProtocol
+)
 
 
 class CooldownDynamicsProtocol(DynamicsProtocol, CooldownProtocol, Protocol):
     pass
 
 
-class CooldownIntervalProtocol(CooldownProtocol, IntervalProtocol, Protocol):
+CooldownDynamicsGeneric = TypeVar(
+    "CooldownDynamicsGeneric", bound=CooldownDynamicsProtocol
+)
+
+
+class CooldownPeriodicProtocol(CooldownProtocol, PeriodicProtocol, Protocol):
     pass
 
 
-class CooldownDynamicsIntervalProtocol(
-    CooldownProtocol, IntervalProtocol, DynamicsProtocol, Protocol
+CooldownPeriodicGeneric = TypeVar(
+    "CooldownPeriodicGeneric", bound=CooldownPeriodicProtocol
+)
+
+
+class CooldownDynamicsPeriodicProtocol(
+    CooldownProtocol, PeriodicProtocol, DynamicsProtocol, Protocol
 ):
     pass
+
+
+CooldownDynamicsPeriodicGeneric = TypeVar(
+    "CooldownDynamicsPeriodicGeneric", bound=CooldownDynamicsPeriodicProtocol
+)

@@ -3,7 +3,7 @@ from typing import Optional
 from simaple.simulate.base import Entity
 
 
-class DurationState(Entity):
+class Lasting(Entity):
     time_left: float
     assigned_duration: float = 0.0
 
@@ -21,7 +21,7 @@ class DurationState(Entity):
         return self.assigned_duration - self.time_left
 
 
-class CooldownState(Entity):
+class Cooldown(Entity):
     time_left: float
 
     @property
@@ -35,25 +35,40 @@ class CooldownState(Entity):
         self.time_left = time
 
 
-class IntervalState(Entity):
+class Cycle(Entity):
+    tick: int
+    period: int
+
+    def step(self):
+        self.tick += 1
+        self.tick = self.tick % self.period
+
+    def get_tick(self) -> int:
+        return self.tick
+
+    def clear(self):
+        self.tick = 0
+
+
+class Periodic(Entity):
     interval_counter: float = 0.0
     interval: float
-    interval_time_left: float = 0.0
+    time_left: float = 0.0
     count: int = 0
 
     def set_time_left(self, time: float, initial_counter: Optional[float] = None):
-        self.interval_time_left = time
+        self.time_left = time
         self.interval_counter = (
             initial_counter if initial_counter is not None else self.interval
         )
         self.count = 0
 
     def enabled(self):
-        return self.interval_time_left > 0
+        return self.time_left > 0
 
     def elapse(self, time: float) -> int:
-        maximum_elapsed = max(0, int(self.interval_time_left // self.interval))
-        self.interval_time_left -= time
+        maximum_elapsed = max(0, int(self.time_left // self.interval))
+        self.time_left -= time
         self.interval_counter -= time
 
         if self.interval_counter < 0:
@@ -66,9 +81,9 @@ class IntervalState(Entity):
         return 0
 
     def resolving(self, time: float):
-        maximum_elapsed = max(0, int(self.interval_time_left // self.interval))
+        maximum_elapsed = max(0, int(self.time_left // self.interval))
 
-        self.interval_time_left -= time
+        self.time_left -= time
         self.interval_counter -= time
         elapse_count = 0
 
@@ -79,10 +94,10 @@ class IntervalState(Entity):
             self.count += 1
 
     def disable(self):
-        self.interval_time_left = 0
+        self.time_left = 0
 
 
-class StackState(Entity):
+class Stack(Entity):
     stack: int = 0
     maximum_stack: int
 

@@ -17,10 +17,10 @@ def synergy_component(synergy):
         name="test-synergy",
         damage=100,
         hit=3,
-        cooldown=60_000,
+        cooldown_duration=60_000,
         delay=300,
         synergy=synergy,
-        duration=20_000,
+        lasting_duration=20_000,
     )
 
 

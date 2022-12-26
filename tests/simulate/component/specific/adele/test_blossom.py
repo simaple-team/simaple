@@ -14,7 +14,7 @@ def fixture_blossom(
         delay=420,
         damage=650,
         hit_per_sword=8,
-        cooldown=20_000,
+        cooldown_duration=20_000,
         exceeded_stat=Stat(final_damage_multiplier=-25),
     )
     return component.compile(adele_store)

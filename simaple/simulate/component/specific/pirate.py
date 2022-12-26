@@ -2,33 +2,29 @@ from typing import Optional
 
 from simaple.core.base import Stat
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
-from simaple.simulate.component.skill import (
-    CooldownState,
-    DurationState,
-    SkillComponent,
-)
+from simaple.simulate.component.skill import Cooldown, Lasting, SkillComponent
 from simaple.simulate.component.trait.impl import CooldownValidityTrait, DurableTrait
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
 
 class PenalizedBuffSkillState(ReducerState):
-    cooldown_state: CooldownState
-    duration_state: DurationState
+    cooldown: Cooldown
+    lasting: Lasting
     dynamics: Dynamics
 
 
 class PenalizedBuffSkill(SkillComponent, CooldownValidityTrait, DurableTrait):
     advantage: Stat
     disadvantage: Stat
-    cooldown: float
+    cooldown_duration: float
     delay: float
-    duration: float
+    lasting_duration: float
 
     def get_default_state(self):
         return {
-            "cooldown_state": CooldownState(time_left=0),
-            "duration_state": DurationState(time_left=0),
+            "cooldown": Cooldown(time_left=0),
+            "lasting": Lasting(time_left=0),
         }
 
     @reducer_method
@@ -45,10 +41,10 @@ class PenalizedBuffSkill(SkillComponent, CooldownValidityTrait, DurableTrait):
 
     @view_method
     def buff(self, state: PenalizedBuffSkillState) -> Optional[Stat]:
-        if state.duration_state.enabled():
+        if state.lasting.enabled():
             return self.advantage
 
-        if not (state.duration_state.enabled() or state.cooldown_state.available):
+        if not (state.lasting.enabled() or state.cooldown.available):
             return self.disadvantage
 
         return None
@@ -57,9 +53,9 @@ class PenalizedBuffSkill(SkillComponent, CooldownValidityTrait, DurableTrait):
     def running(self, state: PenalizedBuffSkillState) -> Running:
         return Running(
             name=self.name,
-            time_left=state.duration_state.time_left,
-            duration=self._get_duration(state),
+            time_left=state.lasting.time_left,
+            lasting_duration=self._get_lasting_duration(state),
         )
 
-    def _get_duration(self, state: PenalizedBuffSkillState) -> float:
-        return self.duration
+    def _get_lasting_duration(self, state: PenalizedBuffSkillState) -> float:
+        return self.lasting_duration

@@ -10,10 +10,10 @@ patch:
   - EvalPatch
 data:
   name: 소울 컨트랙트
-  cooldown: 90_000
+  cooldown_duration: 90_000
   delay: 900
   red: true
   rem: true
-  duration: 10_000
+  lasting_duration: 10_000
   stat:
     damage_multiplier: 45

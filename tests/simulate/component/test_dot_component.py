@@ -9,9 +9,9 @@ from simaple.simulate.reserved_names import Tag
 def dot_damage_component():
     component = DOTSkillComponent(
         name="DOT-damage-component",
-        tick_interval=120,
-        tick_damage=50,
-        duration=1_000,
+        periodic_interval=120,
+        periodic_damage=50,
+        lasting_duration=1_000,
     )
     return component
 
@@ -23,7 +23,7 @@ def compiled_dot_component(dot_damage_component, bare_store):
 
 def test_dot_damage_component_emit_initial_damage(compiled_dot_component):
     compiled_dot_component.apply(None)
-    assert compiled_dot_component.interval_state.interval_time_left == 1_000
+    assert compiled_dot_component.periodic.time_left == 1_000
 
 
 def test_dot_damage_component_emit_after(compiled_dot_component):

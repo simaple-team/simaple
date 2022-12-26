@@ -9,10 +9,10 @@ from tests.simulate.component.util import count_damage_skill
 def fixture_triggable_buff_skill(bare_store):
     return TriggableBuffSkill(
         name="test-triggable",
-        cooldown=30_000,
+        cooldown_duration=30_000,
         delay=300,
-        duration=10_000,
-        trigger_cooldown=4_000,
+        lasting_duration=10_000,
+        trigger_cooldown_duration=4_000,
         trigger_damage=100,
         trigger_hit=3,
     ).compile(bare_store)

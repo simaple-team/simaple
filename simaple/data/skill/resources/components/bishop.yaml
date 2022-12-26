@@ -11,8 +11,8 @@ patch:
 data:
   name: 엔젤레이
   delay: 630
-  cooldown: 0
-  damage: '{{ 75 + 5 * skill_level }}'
+  cooldown_duration: 0
+  damage: "{{ 75 + 5 * skill_level }}"
   hit: 14
   combat_orders_enabled: true
   default_skill_level: 30
@@ -33,17 +33,17 @@ patch:
 data:
   name: 제네시스
   delay: 630
-  cooldown: 45_000
-  damage: '{{ 144 + 6 * skill_level }}'
+  cooldown_duration: 45_000
+  damage: "{{ 144 + 6 * skill_level }}"
   hit: 10
   combat_orders_enabled: true
   default_skill_level: 30
   v_improvement: 2
   modifier:
-    critical_rate: '{{ 5 + skill_level // 2 }}'
+    critical_rate: "{{ 5 + skill_level // 2 }}"
 ---
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: bishop
@@ -57,12 +57,12 @@ data:
   damage: 0
   delay: 600 #?
   hit: 0
-  cooldown: 30_000
+  cooldown_duration: 30_000
 
-  tick_interval: 2_000
-  tick_damage: 180
-  tick_hit: 5
-  duration: 60_000
+  periodic_interval: 2_000
+  periodic_damage: 180
+  periodic_hit: 5
+  lasting_duration: 60_000
 
   v_improvement: 2
 ---
@@ -80,13 +80,13 @@ data:
   name: 바하뮤트
   damage: 0
   delay: 600
-  cooldown: 0
+  cooldown_duration: 0
   hit: 0
 
-  tick_interval: 3_030
-  tick_damage: '{{ 110 + 20 * skill_level }}'
-  tick_hit: 3
-  duration: '{{ (60 + skill_level * 10) * 1000 }}'
+  periodic_interval: 3_030
+  periodic_damage: "{{ 110 + 20 * skill_level }}"
+  periodic_hit: 3
+  lasting_duration: "{{ (60 + skill_level * 10) * 1000 }}"
   default_skill_level: 20
   v_improvement: 2
   mark_advantage:
@@ -106,12 +106,12 @@ data:
     엔젤레이.use.emitted.global.damage: trigger
     제네시스.use.emitted.global.damage: trigger
   name: 트라이엄프 페더
-  trigger_cooldown: 3_000
+  trigger_cooldown_duration: 3_000
   trigger_damage: 230
   trigger_hit: 4
-  cooldown: 60_000
+  cooldown_duration: 60_000
   delay: 0
-  duration: 120_000
+  lasting_duration: 120_000
 ---
 kind: Component
 version: simaple.io/BuffSkillComponent
@@ -124,12 +124,12 @@ patch:
   - EvalPatch
 data:
   name: 홀리 블러드
-  cooldown: '{{ (260 - 12 * (character_stat.INT // 5000)) * 1000 }}'
+  cooldown_duration: "{{ (260 - 12 * (character_stat.INT // 5000)) * 1000 }}"
   delay: 600 #?
-  duration: 10_000
+  lasting_duration: 10_000
   rem: false
   stat:
-    final_damage_multiplier: '{{ 1 + (character_stat.INT // 5000) }}'
+    final_damage_multiplier: "{{ 1 + (character_stat.INT // 5000) }}"
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -144,7 +144,7 @@ patch:
 data:
   name: 헤븐즈 도어
   delay: 270
-  cooldown: 60_000
+  cooldown_duration: 60_000
   damage: 670
   hit: 8
   v_improvement: 2
@@ -160,12 +160,12 @@ patch:
   - EvalPatch
 data:
   name: 프레이
-  cooldown: 120_000
+  cooldown_duration: 120_000
   delay: 360
-  duration: '{{ (15 + skill_level // 2) * 1000 }}'
+  lasting_duration: "{{ (15 + skill_level // 2) * 1000 }}"
   rem: false
   stat:
-    final_damage_multiplier: '{{ min((character_stat.INT // 2500), 15 + skill_level) }}'
+    final_damage_multiplier: "{{ min((character_stat.INT // 2500), 15 + skill_level) }}"
 ---
 kind: Component
 version: simaple.io/DivineMinion
@@ -184,15 +184,15 @@ data:
   damage: 0
   delay: 540
   hit: 0
-  cooldown: 180_000
-  duration: '{{ (25 + skill_level // 2) * 1000 }}'
+  cooldown_duration: 180_000
+  lasting_duration: "{{ (25 + skill_level // 2) * 1000 }}"
 
-  tick_interval: 4_020
-  tick_damage: '{{ 500 + 20 * skill_level }}'
-  tick_hit: 10
+  periodic_interval: 4_020
+  periodic_damage: "{{ 500 + 20 * skill_level }}"
+  periodic_hit: 10
 
   stat:
-    damage_multiplier: '{{ character_stat.INT // 1250 + 5 }}'
+    damage_multiplier: "{{ character_stat.INT // 1250 + 5 }}"
 
   mark_advantage:
     final_damage_multiplier: 10
@@ -208,12 +208,12 @@ data:
   delay: 750
   damage: 350
   hit: 5
-  cooldown: 10_000
+  cooldown_duration: 10_000
 
   synergy:
     ignored_defence: 44
 
-  duration: 60_000
+  lasting_duration: 60_000
 ---
 kind: Component
 version: simaple.io/SynergySkillComponent
@@ -227,14 +227,14 @@ patch:
 data:
   name: 피스메이커
   delay: 750
-  damage: '{{ 350 + 14 * skill_level }}'
+  damage: "{{ 350 + 14 * skill_level }}"
   hit: 16
-  cooldown: 10_000
+  cooldown_duration: 10_000
 
   synergy:
-    damage_multiplier: '{{ 5 + skill_level // 5 }}'
+    damage_multiplier: "{{ 5 + skill_level // 5 }}"
 
-  duration: 8_000
+  lasting_duration: 8_000
 ---
 kind: Component
 version: simaple.io/KeydownSkillComponent
@@ -249,10 +249,10 @@ data:
   name: 디바인 퍼니시먼트
   maximum_keydown_time: 8_160
 
-  damage: '{{ 225 + skill_level * 9 }}'
+  damage: "{{ 225 + skill_level * 9 }}"
   hit: 50
   delay: 1020
-  cooldown: 68_000
+  cooldown_duration: 68_000
 
   keydown_end_delay: 720
 

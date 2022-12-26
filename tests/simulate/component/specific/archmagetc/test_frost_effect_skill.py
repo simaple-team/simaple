@@ -12,7 +12,7 @@ def fixture_thunder_attack_skill(frost_effect, archmagetc_store):
         damage=130,
         delay=500,
         hit=3,
-        cooldown=0,
+        cooldown_duration=0,
     )
     return component.compile(archmagetc_store)
 

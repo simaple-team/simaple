@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.simulate.component.skill import IntervalState
+from simaple.simulate.component.skill import Periodic
 
 
 @pytest.mark.parametrize(
@@ -12,7 +12,7 @@ from simaple.simulate.component.skill import IntervalState
     ],
 )
 def test_interval_state_iterator(time, expected):
-    interval_state = IntervalState(interval=100)
+    interval_state = Periodic(interval=100)
 
     interval_state.set_time_left(1200)
 

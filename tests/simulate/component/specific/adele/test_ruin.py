@@ -11,16 +11,16 @@ def fixture_ruin(
     component = AdeleRuinComponent(
         name="test-ruin",
         delay=600,
-        cooldown=60_000,
+        cooldown_duration=60_000,
         red=True,
-        tick_damage_first=550,
-        tick_hit_first=6,
-        tick_interval_first=160,
-        duration_first=2000,
-        tick_damage_second=990,
-        tick_hit_second=9,
-        tick_interval_second=250,
-        duration_second=2000,
+        periodic_damage_first=550,
+        periodic_hit_first=6,
+        periodic_interval_first=160,
+        lasting_duration_first=2000,
+        periodic_damage_second=990,
+        periodic_hit_second=9,
+        periodic_interval_second=250,
+        lasting_duration_second=2000,
     )
     return component.compile(adele_store)
 

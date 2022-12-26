@@ -17,7 +17,7 @@ class EventProviderTrait(ComponentTrait):
 
 class CooldownTrait(ComponentTrait):
     @abstractmethod
-    def _get_cooldown(self) -> float:
+    def _get_cooldown_duration(self) -> float:
         ...
 
 
@@ -27,9 +27,9 @@ class DelayTrait(ComponentTrait):
         ...
 
 
-class DurationTrait(ComponentTrait):
+class LastingTrait(ComponentTrait):
     @abstractmethod
-    def _get_duration(self, state) -> float:
+    def _get_lasting_duration(self, state) -> float:
         ...
 
 
@@ -51,7 +51,7 @@ class InvalidatableTrait(ComponentTrait):
         ...
 
 
-class TickDamageTrait(ComponentTrait):
+class PeriodicDamageTrait(ComponentTrait):
     @abstractmethod
-    def _get_tick_damage_hit(self, state) -> tuple[float, float]:
+    def _get_periodic_damage_hit(self, state) -> tuple[float, float]:
         ...

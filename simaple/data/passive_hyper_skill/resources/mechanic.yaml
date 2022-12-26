@@ -42,7 +42,7 @@ metadata:
 data:
   name: 마그네틱 필드 - 쿨타임 리듀스
   target: 마그네틱 필드
-  key: cooldown
+  key: cooldown_duration
   multiplier: 0.75
 ---
 kind: PassiveHyperskill

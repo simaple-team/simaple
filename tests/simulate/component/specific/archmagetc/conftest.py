@@ -5,7 +5,7 @@ import simaple.simulate.component.skill  # pylint: disable=W0611
 import simaple.simulate.component.specific  # pylint: disable=W0611
 from simaple.core.base import ActionStat
 from simaple.simulate.base import AddressedStore, ConcreteStore
-from simaple.simulate.component.entity import IntervalState
+from simaple.simulate.component.entity import Periodic
 from simaple.simulate.component.specific.archmagetc import FrostEffect
 from simaple.simulate.global_property import GlobalProperty
 from simaple.spec.repository import DirectorySpecRepository
@@ -32,7 +32,7 @@ def global_property():
 def archmagetc_store(global_property):
     store = AddressedStore(ConcreteStore())
     global_property.install_global_properties(store)
-    store.set_state(".주피터 썬더.interval_state", IntervalState(interval=120))
+    store.set_state(".주피터 썬더.periodic", Periodic(interval=120))
     return store
 
 

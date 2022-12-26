@@ -10,11 +10,11 @@ def test_scenario():
     global_property.install_global_properties(store)
 
     attack_skill_1 = AttackSkillComponent(
-        name="test-A", damage=300, hit=4, cooldown=14.0, delay=0.0
+        name="test-A", damage=300, hit=4, cooldown_duration=14.0, delay=0.0
     )
 
     attack_skill_2 = AttackSkillComponent(
-        name="test-B", damage=400, hit=6, cooldown=14.0, delay=0.0
+        name="test-B", damage=400, hit=6, cooldown_duration=14.0, delay=0.0
     )
 
     environment = Environment(store)

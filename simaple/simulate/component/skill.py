@@ -7,16 +7,11 @@ from simaple.simulate.component.base import (
     reducer_method,
     view_method,
 )
-from simaple.simulate.component.entity import (
-    CooldownState,
-    DurationState,
-    IntervalState,
-    StackState,
-)
+from simaple.simulate.component.entity import Cooldown, Lasting, Periodic, Stack
 from simaple.simulate.component.trait.impl import (
     DurableTrait,
     InvalidatableCooldownTrait,
-    TickEmittingTrait,
+    PeriodicWithSimpleDamageTrait,
     UseSimpleAttackTrait,
 )
 from simaple.simulate.component.view import Running, Validity
@@ -27,7 +22,7 @@ from simaple.simulate.global_property import Dynamics
 class SkillComponent(Component):
     disable_validity: bool = False
     modifier: Optional[Stat]
-    cooldown: float
+    cooldown_duration: float
     delay: float
 
     @property
@@ -42,8 +37,8 @@ class SkillComponent(Component):
 
         return validity
 
-    def _get_cooldown(self) -> float:
-        return self.cooldown
+    def _get_cooldown_duration(self) -> float:
+        return self.cooldown_duration
 
     def _get_delay(self) -> float:
         return self.delay
@@ -53,7 +48,7 @@ class SkillComponent(Component):
 
 
 class AttackSkillState(ReducerState):
-    cooldown_state: CooldownState
+    cooldown: Cooldown
     dynamics: Dynamics
 
 
@@ -63,12 +58,12 @@ class AttackSkillComponent(
     name: str
     damage: float
     hit: float
-    cooldown: float
+    cooldown_duration: float
     delay: float
 
     def get_default_state(self):
         return {
-            "cooldown_state": CooldownState(time_left=0),
+            "cooldown": Cooldown(time_left=0),
         }
 
     @reducer_method
@@ -82,7 +77,7 @@ class AttackSkillComponent(
     @reducer_method
     def reset_cooldown(self, _: None, state: AttackSkillState):
         state = state.copy()
-        state.cooldown_state.set_time_left(0)
+        state.cooldown.set_time_left(0)
         return state, None
 
     @view_method
@@ -100,11 +95,11 @@ class MultipleAttackSkillComponent(AttackSkillComponent):
     def use(self, _: None, state: AttackSkillState):
         state = state.copy()
 
-        if not state.cooldown_state.available:
+        if not state.cooldown.available:
             return state, self.event_provider.rejected()
 
-        state.cooldown_state.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown)
+        state.cooldown.set_time_left(
+            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
         )
 
         return state, [
@@ -114,22 +109,22 @@ class MultipleAttackSkillComponent(AttackSkillComponent):
 
 
 class BuffSkillState(ReducerState):
-    cooldown_state: CooldownState
-    duration_state: DurationState
+    cooldown: Cooldown
+    lasting: Lasting
     dynamics: Dynamics
 
 
 class BuffSkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownTrait):
     stat: Stat
-    cooldown: float
+    cooldown_duration: float
     delay: float
-    duration: float
+    lasting_duration: float
     # TODO: use rem, red argument to apply cooltime reduction and buff remnance
 
     def get_default_state(self):
         return {
-            "cooldown_state": CooldownState(time_left=0),
-            "duration_state": DurationState(time_left=0),
+            "cooldown": Cooldown(time_left=0),
+            "lasting": Lasting(time_left=0),
         }
 
     @reducer_method
@@ -146,7 +141,7 @@ class BuffSkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownTrai
 
     @view_method
     def buff(self, state: BuffSkillState) -> Optional[Stat]:
-        if state.duration_state.enabled():
+        if state.lasting.enabled():
             return self.stat
 
         return None
@@ -155,14 +150,14 @@ class BuffSkillComponent(SkillComponent, DurableTrait, InvalidatableCooldownTrai
     def running(self, state: BuffSkillState) -> Running:
         return self.running_in_durable_trait(state)
 
-    def _get_duration(self, state: BuffSkillState) -> float:
-        return self.duration
+    def _get_lasting_duration(self, state: BuffSkillState) -> float:
+        return self.lasting_duration
 
 
 class StackableBuffSkillState(ReducerState):
-    cooldown_state: CooldownState
-    duration_state: DurationState
-    stack_state: StackState
+    cooldown: Cooldown
+    lasting: Lasting
+    stack: Stack
     dynamics: Dynamics
 
 
@@ -170,17 +165,17 @@ class StackableBuffSkillComponent(
     SkillComponent, DurableTrait, InvalidatableCooldownTrait
 ):
     stat: Stat
-    cooldown: float
+    cooldown_duration: float
     delay: float
-    duration: float
+    lasting_duration: float
     maximum_stack: int
     # TODO: use rem, red argument to apply cooltime reduction and buff remnance
 
     def get_default_state(self):
         return {
-            "cooldown_state": CooldownState(time_left=0),
-            "duration_state": DurationState(time_left=0),
-            "stack_state": StackState(maximum_stack=self.maximum_stack),
+            "cooldown": Cooldown(time_left=0),
+            "lasting": Lasting(time_left=0),
+            "stack": Stack(maximum_stack=self.maximum_stack),
         }
 
     @reducer_method
@@ -190,9 +185,9 @@ class StackableBuffSkillComponent(
         state: StackableBuffSkillState,
     ):
         state = state.copy()
-        if state.duration_state.time_left <= 0:
-            state.stack_state.reset()
-        state.stack_state.increase()
+        if state.lasting.time_left <= 0:
+            state.stack.reset()
+        state.stack.increase()
 
         return self.use_durable_trait(state)
 
@@ -210,8 +205,8 @@ class StackableBuffSkillComponent(
 
     @view_method
     def buff(self, state: StackableBuffSkillState) -> Optional[Stat]:
-        if state.duration_state.enabled():
-            return self.stat.stack(state.stack_state.stack)
+        if state.lasting.enabled():
+            return self.stat.stack(state.stack.stack)
 
         return None
 
@@ -219,97 +214,101 @@ class StackableBuffSkillComponent(
     def running(self, state: StackableBuffSkillState) -> Running:
         return Running(
             name=self.name,
-            time_left=state.duration_state.time_left,
-            duration=self._get_duration(state),
-            stack=state.stack_state.stack if state.duration_state.time_left > 0 else 0,
+            time_left=state.lasting.time_left,
+            lasting_duration=self._get_lasting_duration(state),
+            stack=state.stack.stack if state.lasting.time_left > 0 else 0,
         )
 
-    def _get_duration(self, state: StackableBuffSkillState) -> float:
-        return self.duration
+    def _get_lasting_duration(self, state: StackableBuffSkillState) -> float:
+        return self.lasting_duration
 
 
-class TickDamageState(ReducerState):
-    cooldown_state: CooldownState
-    interval_state: IntervalState
+class PeriodicDamageState(ReducerState):
+    cooldown: Cooldown
+    periodic: Periodic
     dynamics: Dynamics
 
 
-class TickDamageConfiguratedAttackSkillComponent(
-    SkillComponent, TickEmittingTrait, InvalidatableCooldownTrait
+class PeriodicDamageConfiguratedAttackSkillComponent(
+    SkillComponent, PeriodicWithSimpleDamageTrait, InvalidatableCooldownTrait
 ):
     name: str
     damage: float
     hit: float
-    cooldown: float
     delay: float
 
-    tick_interval: float
-    tick_damage: float
-    tick_hit: float
-    duration: float
+    cooldown_duration: float
+
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+
+    lasting_duration: float
 
     def get_default_state(self):
         return {
-            "cooldown_state": CooldownState(time_left=0),
-            "interval_state": IntervalState(interval=self.tick_interval, time_left=0),
+            "cooldown": Cooldown(time_left=0),
+            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
         }
 
     @reducer_method
-    def elapse(self, time: float, state: TickDamageState):
-        return self.elapse_tick_emitting_trait(time, state)
+    def elapse(self, time: float, state: PeriodicDamageState):
+        return self.elapse_periodic_damage_trait(time, state)
 
     @reducer_method
-    def use(self, _: None, state: TickDamageState):
-        return self.use_tick_emitting_trait(state)
+    def use(self, _: None, state: PeriodicDamageState):
+        return self.use_periodic_damage_trait(state)
 
     @view_method
-    def validity(self, state: TickDamageState):
+    def validity(self, state: PeriodicDamageState):
         return self.validity_in_invalidatable_cooldown_trait(state)
 
     @view_method
-    def running(self, state: TickDamageState) -> Running:
+    def running(self, state: PeriodicDamageState) -> Running:
         return Running(
             name=self.name,
-            time_left=state.interval_state.interval_time_left,
-            duration=self._get_duration(state),
+            time_left=state.periodic.time_left,
+            lasting_duration=self._get_lasting_duration(state),
         )
 
-    def _get_duration(self, state: TickDamageState) -> float:
-        return self.duration
+    def _get_lasting_duration(self, state: PeriodicDamageState) -> float:
+        return self.lasting_duration
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit
 
-    def _get_tick_damage_hit(self, state: TickDamageState) -> tuple[float, float]:
-        return self.tick_damage, self.tick_hit
+    def _get_periodic_damage_hit(
+        self, state: PeriodicDamageState
+    ) -> tuple[float, float]:
+        return self.periodic_damage, self.periodic_hit
 
 
 class DOTState(ReducerState):
-    interval_state: IntervalState
+    periodic: Periodic
     dynamics: Dynamics
 
 
 class DOTSkillComponent(Component):
     name: str
 
-    tick_interval: float = 1_000
-    tick_damage: float
-    tick_hit: int = 1
-    duration: float
+    periodic_interval: float = 1_000
+    periodic_damage: float
+    periodic_hit: int = 1
+    lasting_duration: float
 
     def get_default_state(self):
         return {
-            "interval_state": IntervalState(interval=self.tick_interval, time_left=0),
+            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
         }
 
     @reducer_method
     def elapse(self, time: float, state: DOTState):
         state = state.copy()
 
-        lapse_count = state.interval_state.elapse(time)
+        lapse_count = state.periodic.elapse(time)
 
         return state, [
-            self.event_provider.dealt(self.tick_damage, self.tick_hit)
+            self.event_provider.dealt(self.periodic_damage, self.periodic_hit)
             for _ in range(lapse_count)
         ]
 
@@ -317,6 +316,6 @@ class DOTSkillComponent(Component):
     def apply(self, _: None, state: DOTState):
         state = state.copy()
 
-        state.interval_state.set_time_left(self.duration)
+        state.periodic.set_time_left(self.lasting_duration)
 
         return state, None

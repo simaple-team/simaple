@@ -16,282 +16,282 @@
       "current_time": 0.0
     }
   },
-  ".플레임 스윕.cooldown_state": {
-    "cls": "CooldownState",
+  ".플레임 스윕.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".플레임 헤이즈.cooldown_state": {
-    "cls": "CooldownState",
+  ".플레임 헤이즈.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".미스트 이럽션.cooldown_state": {
-    "cls": "CooldownState",
+  ".미스트 이럽션.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".메디테이션.cooldown_state": {
-    "cls": "CooldownState",
+  ".메디테이션.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".메디테이션.duration_state": {
-    "cls": "DurationState",
+  ".메디테이션.lasting": {
+    "cls": "Lasting",
     "payload": {
       "time_left": 0.0,
       "assigned_duration": 0.0
     }
   },
-  ".에픽 어드벤처.cooldown_state": {
-    "cls": "CooldownState",
+  ".에픽 어드벤처.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".에픽 어드벤처.duration_state": {
-    "cls": "DurationState",
+  ".에픽 어드벤처.lasting": {
+    "cls": "Lasting",
     "payload": {
       "time_left": 0.0,
       "assigned_duration": 0.0
     }
   },
-  ".텔레포트 마스터리.cooldown_state": {
-    "cls": "CooldownState",
+  ".텔레포트 마스터리.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".포이즌 노바.cooldown_state": {
-    "cls": "CooldownState",
+  ".포이즌 노바.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".포이즌 노바.nova_state": {
+  ".포이즌 노바.nova": {
     "cls": "PoisonNovaEntity",
     "payload": {
       "time_left": 0.0,
       "maximum_time_left": 100000.0
     }
   },
-  ".도트 퍼니셔.cooldown_state": {
-    "cls": "CooldownState",
+  ".도트 퍼니셔.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".메테오.cooldown_state": {
-    "cls": "CooldownState",
+  ".메테오.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".메테오(패시브).cooldown_state": {
-    "cls": "CooldownState",
+  ".메테오(패시브).cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".이프리트.cooldown_state": {
-    "cls": "CooldownState",
+  ".이프리트.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".이프리트.interval_state": {
-    "cls": "IntervalState",
+  ".이프리트.interval": {
+    "cls": "Periodic",
     "payload": {
       "interval_counter": 0.0,
       "interval": 3030.0,
-      "interval_time_left": 0.0,
+      "time_left": 0.0,
       "count": 150
     }
   },
-  ".파이어 오라.cooldown_state": {
-    "cls": "CooldownState",
+  ".파이어 오라.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".파이어 오라.interval_state": {
-    "cls": "IntervalState",
+  ".파이어 오라.interval": {
+    "cls": "Periodic",
     "payload": {
       "interval_counter": 0.0,
       "interval": 3000.0,
-      "interval_time_left": 0.0,
+      "time_left": 0.0,
       "count": 0
     }
   },
-  ".이그나이트.cooldown_state": {
-    "cls": "CooldownState",
+  ".이그나이트.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".포이즌 미스트.cooldown_state": {
-    "cls": "CooldownState",
+  ".포이즌 미스트.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".포이즌 미스트.interval_state": {
-    "cls": "IntervalState",
+  ".포이즌 미스트.interval": {
+    "cls": "Periodic",
     "payload": {
       "interval_counter": 0.0,
       "interval": 1000.0,
-      "interval_time_left": 0.0,
+      "time_left": 0.0,
       "count": 0
     }
   },
-  ".플레임 스윕(도트).interval_state": {
-    "cls": "IntervalState",
+  ".플레임 스윕(도트).interval": {
+    "cls": "Periodic",
     "payload": {
       "interval_counter": 0.0,
       "interval": 1000.0,
-      "interval_time_left": 0.0,
+      "time_left": 0.0,
       "count": 0
     }
   },
-  ".이프리트(도트).interval_state": {
-    "cls": "IntervalState",
+  ".이프리트(도트).interval": {
+    "cls": "Periodic",
     "payload": {
       "interval_counter": 0.0,
       "interval": 1000.0,
-      "interval_time_left": 0.0,
+      "time_left": 0.0,
       "count": 0
     }
   },
-  ".플레임 헤이즈(도트).interval_state": {
-    "cls": "IntervalState",
+  ".플레임 헤이즈(도트).interval": {
+    "cls": "Periodic",
     "payload": {
       "interval_counter": 0.0,
       "interval": 1000.0,
-      "interval_time_left": 0.0,
+      "time_left": 0.0,
       "count": 0
     }
   },
-  ".포이즌 노바(도트).interval_state": {
-    "cls": "IntervalState",
+  ".포이즌 노바(도트).interval": {
+    "cls": "Periodic",
     "payload": {
       "interval_counter": 0.0,
       "interval": 1000.0,
-      "interval_time_left": 0.0,
+      "time_left": 0.0,
       "count": 0
     }
   },
-  ".도트 퍼니셔(도트).interval_state": {
-    "cls": "IntervalState",
+  ".도트 퍼니셔(도트).interval": {
+    "cls": "Periodic",
     "payload": {
       "interval_counter": 0.0,
       "interval": 1000.0,
-      "interval_time_left": 0.0,
+      "time_left": 0.0,
       "count": 0
     }
   },
-  ".포이즌 체인.cooldown_state": {
-    "cls": "CooldownState",
+  ".포이즌 체인.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".포이즌 체인.interval_state": {
-    "cls": "IntervalState",
+  ".포이즌 체인.interval": {
+    "cls": "Periodic",
     "payload": {
       "interval_counter": 0.0,
       "interval": 1800.0,
-      "interval_time_left": 0.0,
+      "time_left": 0.0,
       "count": 0
     }
   },
-  ".포이즌 체인.stack_state": {
-    "cls": "StackState",
+  ".포이즌 체인.stack": {
+    "cls": "Stack",
     "payload": {
       "stack": 0,
       "maximum_stack": 5
     }
   },
-  ".메기도 플레임.cooldown_state": {
-    "cls": "CooldownState",
+  ".메기도 플레임.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".메기도 플레임(도트).interval_state": {
-    "cls": "IntervalState",
+  ".메기도 플레임(도트).interval": {
+    "cls": "Periodic",
     "payload": {
       "interval_counter": 0.0,
       "interval": 1000.0,
-      "interval_time_left": 0.0,
+      "time_left": 0.0,
       "count": 0
     }
   },
-  ".퓨리 오브 이프리트.cooldown_state": {
-    "cls": "CooldownState",
+  ".퓨리 오브 이프리트.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".퓨리 오브 이프리트.interval_state": {
-    "cls": "IntervalState",
+  ".퓨리 오브 이프리트.interval": {
+    "cls": "Periodic",
     "payload": {
       "interval_counter": 0.0,
       "interval": 240.0,
-      "interval_time_left": 0.0,
+      "time_left": 0.0,
       "count": 0
     }
   },
-  ".오버로드 마나.cooldown_state": {
-    "cls": "CooldownState",
+  ".오버로드 마나.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".오버로드 마나.duration_state": {
-    "cls": "DurationState",
+  ".오버로드 마나.lasting": {
+    "cls": "Lasting",
     "payload": {
       "time_left": 0.0,
       "assigned_duration": 0.0
     }
   },
-  ".소울 컨트랙트.cooldown_state": {
-    "cls": "CooldownState",
+  ".소울 컨트랙트.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".소울 컨트랙트.duration_state": {
-    "cls": "DurationState",
+  ".소울 컨트랙트.lasting": {
+    "cls": "Lasting",
     "payload": {
       "time_left": 0.0,
       "assigned_duration": 0.0
     }
   },
-  ".메이플 여신의 축복.cooldown_state": {
-    "cls": "CooldownState",
+  ".메이플 여신의 축복.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".메이플 여신의 축복.duration_state": {
-    "cls": "DurationState",
+  ".메이플 여신의 축복.lasting": {
+    "cls": "Lasting",
     "payload": {
       "time_left": 0.0,
       "assigned_duration": 0.0
     }
   },
-  ".인피니티.cooldown_state": {
-    "cls": "CooldownState",
+  ".인피니티.cooldown": {
+    "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".인피니티.duration_state": {
-    "cls": "DurationState",
+  ".인피니티.lasting": {
+    "cls": "Lasting",
     "payload": {
       "time_left": 0.0,
       "assigned_duration": 0.0

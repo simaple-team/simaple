@@ -42,7 +42,7 @@ metadata:
 data:
   name: 테리토리 - 퍼시스트
   target: 테리토리
-  key: duration
+  key: lasting_duration
   increment: 4000
 ---
 kind: PassiveHyperskill
@@ -53,5 +53,5 @@ metadata:
 data:
   name: 블로섬 - 쿨타임 리듀스
   target: 블로섬
-  key: cooldown
+  key: cooldown_duration
   multiplier: 0.75

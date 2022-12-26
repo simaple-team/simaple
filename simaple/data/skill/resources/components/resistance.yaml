@@ -6,15 +6,15 @@ metadata:
     name: 윌 오브 리버티
 data:
   name: 윌 오브 리버티
-  cooldown: 120000
+  cooldown_duration: 120000
   delay: 0
   rem: false
-  duration: 60000
+  lasting_duration: 60000
   stat:
     damage_multiplier: 10
 ---
 kind: Component
-version: simaple.io/TickDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: resistance
@@ -27,9 +27,9 @@ data:
   damage: 0
   delay: 360
   hit: 0
-  cooldown: 25_000
+  cooldown_duration: 25_000
 
-  tick_interval: 1_000
-  tick_damage: "{{ 215 + skill_level * 8 }}"
-  tick_hit: 9
-  duration: 10_000
+  periodic_interval: 1_000
+  periodic_damage: "{{ 215 + skill_level * 8 }}"
+  periodic_hit: 9
+  lasting_duration: 10_000

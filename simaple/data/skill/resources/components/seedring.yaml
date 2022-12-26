@@ -11,8 +11,8 @@ patch:
 data:
   name: 리스트레인트 링
   default_skill_level: 4
-  cooldown: 180_000
-  duration: "{{ (7 + 2 * skill_level) * 1000 }}"
+  cooldown_duration: 180_000
+  lasting_duration: "{{ (7 + 2 * skill_level) * 1000 }}"
   delay: 60
   red: true
   rem: false
@@ -32,8 +32,8 @@ patch:
 data:
   name: 리스크테이커 링
   default_skill_level: 4
-  cooldown: 180_000
-  duration: "{{ (6 + 6 * skill_level) * 1000 }}"
+  cooldown_duration: 180_000
+  lasting_duration: "{{ (6 + 6 * skill_level) * 1000 }}"
   delay: 60
   red: true
   rem: false
@@ -53,8 +53,8 @@ patch:
 data:
   name: 웨폰퍼프-S 링
   default_skill_level: 4
-  cooldown: 180_000
-  duration: "{{ (7 + 2 * skill_level) * 1000 }}"
+  cooldown_duration: 180_000
+  lasting_duration: "{{ (7 + 2 * skill_level) * 1000 }}"
   delay: 60
   red: true
   rem: false
@@ -73,8 +73,8 @@ patch:
 data:
   name: 웨폰퍼프-D 링
   default_skill_level: 4
-  cooldown: 180_000
-  duration: "{{ (7 + 2 * skill_level) * 1000 }}"
+  cooldown_duration: 180_000
+  lasting_duration: "{{ (7 + 2 * skill_level) * 1000 }}"
   delay: 60
   red: true
   rem: false
@@ -93,8 +93,8 @@ patch:
 data:
   name: 웨폰퍼프-I 링
   default_skill_level: 4
-  cooldown: 180_000
-  duration: "{{ (7 + 2 * skill_level) * 1000 }}"
+  cooldown_duration: 180_000
+  lasting_duration: "{{ (7 + 2 * skill_level) * 1000 }}"
   delay: 60
   red: true
   rem: false
@@ -113,8 +113,8 @@ patch:
 data:
   name: 웨폰퍼프-L 링
   default_skill_level: 4
-  cooldown: 180_000
-  duration: "{{ (7 + 2 * skill_level) * 1000 }}"
+  cooldown_duration: 180_000
+  lasting_duration: "{{ (7 + 2 * skill_level) * 1000 }}"
   delay: 60
   red: true
   rem: false

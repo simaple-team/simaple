@@ -1,10 +1,10 @@
 from simaple.simulate.base import Entity
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
-from simaple.simulate.component.entity import CooldownState, IntervalState, StackState
+from simaple.simulate.component.entity import Cooldown, Periodic, Stack
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
     CooldownValidityTrait,
-    TickEmittingTrait,
+    PeriodicWithSimpleDamageTrait,
 )
 from simaple.simulate.component.util import is_rejected
 from simaple.simulate.component.view import Running, Validity
@@ -30,7 +30,7 @@ class PoisonNovaEntity(Entity):
 
 
 class PoisonNovaState(ReducerState):
-    cooldown_state: CooldownState
+    cooldown: Cooldown
     poison_nova: PoisonNovaEntity
     dynamics: Dynamics
 
@@ -49,7 +49,7 @@ class PoisonNovaComponent(SkillComponent):
 
     def get_default_state(self):
         return {
-            "cooldown_state": CooldownState(time_left=0),
+            "cooldown": Cooldown(time_left=0),
             "poison_nova": PoisonNovaEntity(
                 time_left=0, maximum_time_left=100 * 1000.0
             ),
@@ -58,7 +58,7 @@ class PoisonNovaComponent(SkillComponent):
     @reducer_method
     def elapse(self, time: float, state: PoisonNovaState):
         state = state.copy()
-        state.cooldown_state.elapse(time)
+        state.cooldown.elapse(time)
         state.poison_nova.elapse(time)
         return state, self.event_provider.elapsed(time)
 
@@ -66,11 +66,11 @@ class PoisonNovaComponent(SkillComponent):
     def use(self, _: None, state: PoisonNovaState):
         state = state.copy()
 
-        if not state.cooldown_state.available:
+        if not state.cooldown.available:
             return state, self.event_provider.rejected()
 
-        state.cooldown_state.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown)
+        state.cooldown.set_time_left(
+            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
         )
         state.poison_nova.create_nova(self.nova_remaining_time)
 
@@ -101,59 +101,63 @@ class PoisonNovaComponent(SkillComponent):
     def validity(self, state: PoisonNovaState):
         return Validity(
             name=self.name,
-            time_left=max(0, state.cooldown_state.time_left),
-            valid=state.cooldown_state.available,
-            cooldown=self.cooldown,
+            time_left=max(0, state.cooldown.time_left),
+            valid=state.cooldown.available,
+            cooldown_duration=self.cooldown_duration,
         )
 
 
 class PoisonChainState(ReducerState):
-    cooldown_state: CooldownState
-    interval_state: IntervalState
-    stack_state: StackState
+    cooldown: Cooldown
+    periodic: Periodic
+    stack: Stack
     dynamics: Dynamics
 
 
-class PoisonChainComponent(SkillComponent, TickEmittingTrait, CooldownValidityTrait):
+class PoisonChainComponent(
+    SkillComponent, PeriodicWithSimpleDamageTrait, CooldownValidityTrait
+):
     name: str
     damage: float
     hit: float
-    cooldown: float
+    cooldown_duration: float
     delay: float
 
-    tick_interval: float
-    tick_damage: float
-    tick_hit: float
-    duration: float
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+    lasting_duration: float
 
-    tick_damage_increment: float
+    periodic_damage_increment: float
 
     def get_default_state(self):
         return {
-            "cooldown_state": CooldownState(time_left=0),
-            "interval_state": IntervalState(interval=self.tick_interval, time_left=0),
-            "stack_state": StackState(maximum_stack=5),
+            "cooldown": Cooldown(time_left=0),
+            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+            "stack": Stack(maximum_stack=5),
         }
 
-    def get_tick_damage(self, state: PoisonChainState):
+    def get_periodic_damage(self, state: PoisonChainState):
         return (
-            self.tick_damage
-            + self.tick_damage_increment * state.stack_state.get_stack()
+            self.periodic_damage
+            + self.periodic_damage_increment * state.stack.get_stack()
         )
 
     @reducer_method
     def elapse(self, time: float, state: PoisonChainState):
         state = state.copy()
 
-        state.cooldown_state.elapse(time)
+        state.cooldown.elapse(time)
 
         dealing_events = []
 
-        for _ in state.interval_state.resolving(time):
+        for _ in state.periodic.resolving(time):
             dealing_events.append(
-                self.event_provider.dealt(self.get_tick_damage(state), self.tick_hit)
+                self.event_provider.dealt(
+                    self.get_periodic_damage(state), self.periodic_hit
+                )
             )
-            state.stack_state.increase(1)
+            state.stack.increase(1)
 
         return state, [self.event_provider.elapsed(time)] + dealing_events
 
@@ -161,9 +165,9 @@ class PoisonChainComponent(SkillComponent, TickEmittingTrait, CooldownValidityTr
     def use(self, _: None, state: PoisonChainState):
         state = state.copy()
 
-        state, events = self.use_tick_emitting_trait(state)
+        state, events = self.use_periodic_damage_trait(state)
         if not is_rejected(events):
-            state.stack_state.reset(1)
+            state.stack.reset(1)
 
         return state, events
 
@@ -175,15 +179,15 @@ class PoisonChainComponent(SkillComponent, TickEmittingTrait, CooldownValidityTr
     def running(self, state: PoisonChainState) -> Running:
         return Running(
             name=self.name,
-            time_left=state.interval_state.interval_time_left,
-            duration=self._get_duration(state),
+            time_left=state.periodic.time_left,
+            lasting_duration=self._get_lasting_duration(state),
         )
 
-    def _get_duration(self, state: PoisonChainState) -> float:
-        return self.duration
+    def _get_lasting_duration(self, state: PoisonChainState) -> float:
+        return self.lasting_duration
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit
 
-    def _get_tick_damage_hit(self, state: PoisonChainState) -> tuple[float, float]:
-        return self.tick_damage, self.tick_hit
+    def _get_periodic_damage_hit(self, state: PoisonChainState) -> tuple[float, float]:
+        return self.periodic_damage, self.periodic_hit
