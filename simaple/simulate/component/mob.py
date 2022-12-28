@@ -1,11 +1,7 @@
 import pydantic
 
 from simaple.simulate.base import Entity, Event
-from simaple.simulate.component.base import (
-    Component,
-    ReducerState,
-    reducer_method,
-)
+from simaple.simulate.component.base import Component, ReducerState, reducer_method
 from simaple.simulate.reserved_names import Tag
 
 
@@ -19,7 +15,7 @@ class DOT(Entity):
     def new(self, name: str, damage: float, lasting_time: float) -> None:
         self.current[name] = (damage, lasting_time)
 
-    def elapse(self, time: float) -> list[Event]:
+    def elapse(self, time: float) -> dict[tuple[str, float], int]:
         emits: dict[tuple[str, float], int] = {}  # (name, damage): count
 
         elapse_time_left = time
@@ -33,7 +29,7 @@ class DOT(Entity):
     def step(self, time: float) -> tuple[float, list[tuple[str, float]]]:
         if self.period_time_left > time:
             self.period_time_left -= time
-            return 0, {}
+            return 0, []
 
         left_time = time - self.period_time_left
         lapse_time = self.period_time_left

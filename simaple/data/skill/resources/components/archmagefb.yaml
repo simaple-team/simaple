@@ -142,9 +142,12 @@ data:
   nova_damage: "{{ 225 + 9 * skill_level }}"
   nova_single_hit: 12
   nova_hit_count: 4
+
+  dot_damage: "{{ 300 + 12 * skill_level }}"
+  dot_lasting_duration: 20_000
 ---
 kind: Component
-version: simaple.io/MultipleAttackSkillComponent
+version: simaple.io/DotPunisherComponent
 metadata:
   label:
     group: archmagefb
@@ -161,6 +164,10 @@ data:
   red: true
   cooltime: 25000
   damage: "{{ (400 + 15 * skill_level) * (1 + 0.35 * 24) / 25 }}"
+
+  dot_damage: "{{ 200 + 3 * skill_level }}"
+  dot_lasting_duration: 16_000
+
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -211,7 +218,7 @@ data:
   v_improvement: 2
 ---
 kind: Component
-version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
+version: simaple.io/IfrittComponent
 metadata:
   label:
     group: archmagefb
@@ -234,6 +241,9 @@ data:
   lasting_duration: "{{ (110 + skill_level * 5) * 1000 }}"
 
   v_improvement: 2
+
+  dot_damage: "{{ 120 + 4 * skill_level }}"
+  dot_lasting_duration: 4_000
 ---
 kind: Component
 version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
@@ -329,7 +339,7 @@ data:
 
 ---
 kind: Component
-version: simaple.io/AttackSkillComponent
+version: simaple.io/DOTEmittingAttackSkillComponent
 metadata:
   label:
     group: archmagefb
@@ -346,6 +356,10 @@ data:
   damage: "{{ 380 * (1 + 0.55 * 10) / 11 }}"
   hit: "{{ 4 * 11 }}"
   v_improvement: 2
+
+  dot_damage: 700
+  dot_lasting_duration: 30_000
+
 ---
 kind: Component
 version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent

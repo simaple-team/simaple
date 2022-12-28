@@ -24,7 +24,7 @@ class Report:
     def __iter__(self):
         return iter(self._logs)
 
-    def add(self, clock: float, event: Event, buff: Stat):
+    def add(self, clock: float, event, buff: Stat):
         buff_stat = buff
         if event.payload["damage"] != 0 and event.payload["hit"] != 0:
             if event.payload.get("modifier") is not None:
@@ -57,7 +57,7 @@ class ReportEventHandler(EventHandler):
     def __call__(
         self, event: Event, environment: Environment, all_events: list[Event]
     ) -> None:
-        if event.tag in (Tag.DAMAGE, Tag.DOT): 
+        if event.tag in (Tag.DAMAGE, Tag.DOT):
             current_buff_state = environment.show("buff")
             current_clock = environment.show("clock")
             self.report.add(current_clock, event, current_buff_state)

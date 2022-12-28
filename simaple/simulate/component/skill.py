@@ -133,26 +133,6 @@ class DOTEmittingAttackSkillComponent(
         return self.dot_damage, self.dot_lasting_duration
 
 
-class MultipleAttackSkillComponent(AttackSkillComponent):
-    multiple: int
-
-    @reducer_method
-    def use(self, _: None, state: AttackSkillState):
-        state = state.deepcopy()
-
-        if not state.cooldown.available:
-            return state, self.event_provider.rejected()
-
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
-        )
-
-        return state, [
-            self.event_provider.dealt(self.damage, self.hit)
-            for _ in range(self.multiple)
-        ] + [self.event_provider.delayed(self.delay)]
-
-
 class BuffSkillState(ReducerState):
     cooldown: Cooldown
     lasting: Lasting

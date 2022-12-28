@@ -64,6 +64,15 @@ def test_add_dot(mob_component, time, expected_event_count):
     assert count_dot_skill(events) == expected_event_count
 
 
+def test_dot_count(mob_component):
+    mob_component.add_dot({"name": "A", "damage": 100, "lasting_time": 10_000})
+    events = []
+    for _ in range(45):
+        events += mob_component.elapse(100)
+
+    assert count_dot_skill(events) == 4
+
+
 def test_complex_dot_scenario(mob_component):
     mob_component.add_dot({"name": "A", "damage": 100, "lasting_time": 10_000})
     mob_component.add_dot({"name": "B", "damage": 100, "lasting_time": 7_000})
