@@ -64,6 +64,15 @@ class DamageLogic(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="DamageLogic
             * ((1 + self.mastery) / 2)
         )
 
+    def get_dot_factor(self, stat: Stat, armor: int = 300) -> float:
+        return (
+            self._get_general_damage_factor(stat)
+            * self.get_base_stat_factor(stat)
+            * self.get_attack_type_factor(stat)
+            * self.attack_range_constant
+            * 0.01
+        )
+
 
 class STRBasedDamageLogic(DamageLogic):
     def get_major_stat(self, stat: Stat) -> float:

@@ -7,3 +7,5 @@ class Tag:
     REJECT = "global.reject"
     DELAY = "global.delay"
     DAMAGE = "global.damage"
+    DOT = "global.dot"
+    MOB = "global.mob"

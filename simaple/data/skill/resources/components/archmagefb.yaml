@@ -1,5 +1,5 @@
 kind: Component
-version: simaple.io/AttackSkillComponent
+version: simaple.io/DOTEmittingAttackSkillComponent
 metadata:
   label:
     group: archmagefb
@@ -18,9 +18,13 @@ data:
   combat_orders_enabled: true
   default_skill_level: 30
   v_improvement: 2
+
+  dot_damage: "{{ 120 + 4 * skill_level }}"
+  dot_lasting_duration: 10_000
+
 ---
 kind: Component
-version: simaple.io/AttackSkillComponent
+version: simaple.io/DOTEmittingAttackSkillComponent
 metadata:
   label:
     group: archmagefb
@@ -40,6 +44,10 @@ data:
   hit: 15
   default_skill_level: 30
   v_improvement: 2
+
+  dot_damage: "{{ 110 + 3 * skill_level }}"
+  dot_lasting_duration: 20_000
+
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -296,94 +304,6 @@ data:
   periodic_damage: 270
   periodic_hit: 1
   lasting_duration: 22_000
-
----
-kind: Component
-version: simaple.io/DOTSkillComponent
-metadata:
-  label:
-    group: archmagefb
-    name: 플레임 스윕(도트)
-patch:
-  - SkillLevelPatch
-  - EvalPatch
-data:
-  listening_actions:
-    플레임 스윕.use.emitted.global.damage: apply
-  name: 플레임 스윕(도트)
-  periodic_damage: "{{ 120 + 4 * skill_level }}"
-  lasting_duration: 10_000
-  default_skill_level: 30
----
-kind: Component
-version: simaple.io/DOTSkillComponent
-metadata:
-  label:
-    group: archmagefb
-    name: 이프리트(도트)
-patch:
-  - SkillLevelPatch
-  - EvalPatch
-data:
-  listening_actions:
-    이프리트.elapse.emitted.global.damage: apply
-  name: 이프리트(도트)
-  periodic_damage: "{{ 120 + 4 * skill_level }}"
-  lasting_duration: 4_000
-  default_skill_level: 30
-
----
-kind: Component
-version: simaple.io/DOTSkillComponent
-metadata:
-  label:
-    group: archmagefb
-    name: 플레임 헤이즈(도트)
-patch:
-  - SkillLevelPatch
-  - EvalPatch
-data:
-  listening_actions:
-    플레임 헤이즈.use.emitted.global.damage: apply
-  name: 플레임 헤이즈(도트)
-  periodic_damage: "{{ 110 + 3 * skill_level }}"
-  lasting_duration: 20_000
-  default_skill_level: 30
-
----
-kind: Component
-version: simaple.io/DOTSkillComponent
-metadata:
-  label:
-    group: archmagefb
-    name: 포이즌 노바(도트)
-patch:
-  - SkillLevelPatch
-  - EvalPatch
-data:
-  listening_actions:
-    포이즌 노바.use.emitted.global.damage: apply
-  name: 포이즌 노바(도트)
-  periodic_damage: "{{ 300 + 12 * skill_level }}"
-  lasting_duration: 20_000
-
----
-kind: Component
-version: simaple.io/DOTSkillComponent
-metadata:
-  label:
-    group: archmagefb
-    name: 도트 퍼니셔(도트)
-patch:
-  - SkillLevelPatch
-  - EvalPatch
-data:
-  listening_actions:
-    도트 퍼니셔.use.emitted.global.damage: apply
-  name: 도트 퍼니셔(도트)
-  periodic_damage: "{{ 200 + 3 * skill_level }}"
-  lasting_duration: 16_000
-
 ---
 kind: Component
 version: simaple.io/PoisonChainComponent
@@ -426,25 +346,6 @@ data:
   damage: "{{ 380 * (1 + 0.55 * 10) / 11 }}"
   hit: "{{ 4 * 11 }}"
   v_improvement: 2
-
----
-kind: Component
-version: simaple.io/DOTSkillComponent
-metadata:
-  label:
-    group: archmagefb
-    name: 메기도 플레임(도트)
-patch:
-  - SkillLevelPatch
-  - EvalPatch
-data:
-  listening_actions:
-    메기도 플레임.use.emitted.global.damage: apply
-  type: DamageSkill
-  name: 메기도 플레임(도트)
-  periodic_damage: 700
-  lasting_duration: 30_000
-
 ---
 kind: Component
 version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent

@@ -91,14 +91,27 @@ class ConcreteActionRouter(ActionRouter):
     mappings: dict[str, ComponentMethodWrapper]
     method_mappings: dict[str, str]
 
-    def is_enabled_action(self, action: Action):
-        return action.signature in self.mappings
+    def is_enabled_action(self, action: Action) -> bool:
+        mapping = self._find_mapping_name(action.signature, self.mappings)
+        return mapping is not None
 
     def get_matching_reducer(self, action: Action) -> ComponentMethodWrapper:
-        return self.mappings[action.signature]
+        mapping_name = self._find_mapping_name(action.signature, self.mappings)
+        return self.mappings[mapping_name]
 
     def get_matching_method_name(self, action: Action) -> str:
-        return self.method_mappings[action.signature]
+        mapping_name = self._find_mapping_name(action.signature, self.method_mappings)
+        return self.method_mappings[mapping_name]
+
+    def _find_mapping_name(self, target: str, mappings) -> Optional[str]:
+        if target in mappings:
+            return target
+
+        for mapping_name in mappings:
+            if mapping_name[0] == "$" and mapping_name.replace("$", "") in target:
+                return mapping_name
+
+        return None
 
 
 class StoreAdapter:
