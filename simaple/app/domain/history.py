@@ -33,8 +33,6 @@ class PlayLog(pydantic.BaseModel):
         delay = 0
         for event in self.events:
             if event.tag in (Tag.DELAY,):
-                if event.payload is None:
-                    raise ValueError
                 if event.payload["time"] > 0:
                     delay += event.payload["time"]
 

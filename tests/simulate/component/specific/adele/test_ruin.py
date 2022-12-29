@@ -44,7 +44,6 @@ def test_ruin_first(ruin: AdeleRuinComponent, ruin_state: AdeleRuinState):
 
     assert len(dealing_event) == 12
     for event in dealing_event:
-        assert event.payload is not None
         assert event.payload["damage"] == 550
         assert event.payload["hit"] == 6
 
@@ -57,6 +56,5 @@ def test_ruin_second(ruin: AdeleRuinComponent, ruin_state: AdeleRuinState):
 
     assert len(dealing_event) == 8
     for event in dealing_event:
-        assert event.payload is not None
         assert event.payload["damage"] == 990
         assert event.payload["hit"] == 9

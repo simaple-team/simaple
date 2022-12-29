@@ -61,7 +61,6 @@ def test_storm_order_1pair(
     _, events = storm.elapse(500, state)
     dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
 
-    assert dealing_event[0].payload is not None
     assert dealing_event[0].payload["hit"] == 2
 
 
@@ -72,5 +71,4 @@ def test_storm_order_3pair(
     _, events = storm.elapse(500, state)
     dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
 
-    assert dealing_event[0].payload is not None
     assert dealing_event[0].payload["hit"] == 6

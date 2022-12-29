@@ -20,9 +20,13 @@ def pipe(
     initial_state: S, *args: Callable[[S], tuple[S, Union[Event, list[Event]]]]
 ) -> tuple[S, list[Event]]:
     state = initial_state
-    total_events = []
+    total_events: list[Event] = []
     for fn in args:
         state, events = fn(state)
-        total_events += events
+
+        if isinstance(events, list):
+            total_events += events
+        else:
+            total_events += [events]
 
     return state, total_events

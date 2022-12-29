@@ -60,7 +60,6 @@ def test_with_no_stack(
     damage_events = [e for e in events if e.tag == Tag.DAMAGE]
 
     # then
-    assert damage_events[0].payload is not None
     assert damage_events[0].payload["modifier"] == Stat()
 
 
@@ -79,5 +78,4 @@ def test_with_some_stack(
 
     # then
     damage_events = [e for e in events if e.tag == Tag.DAMAGE]
-    assert damage_events[0].payload is not None
     assert damage_events[0].payload["modifier"] == Stat(damage_multiplier=12 * 3)
