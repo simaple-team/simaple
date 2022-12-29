@@ -7,15 +7,15 @@ def timer_delay_dispatcher(action: Action, store: Store) -> list[Event]:
     if action.method != "elapse" and action.name != "*":
         return []
 
-    time_state, set_time_state = store.use_state("global.time", Clock())
+    clock, set_clock = store.use_entity("global.time", Clock())
 
-    time_state.spent(action.payload)
-    set_time_state(time_state)
+    clock.spent(action.payload)
+    set_clock(clock)
     return []
 
 
 def clock_view(store: Store) -> float:
-    time: float = store.read_state("global.time", Clock()).current_time
+    time: float = store.read_entity("global.time", Clock()).current_time
     return time
 
 

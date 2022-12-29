@@ -22,7 +22,7 @@ def fixture_gathering(
 
 
 def test_gathering_order_1pair(adele_store, gathering):
-    adele_store.set_state(
+    adele_store.set_entity(
         ".오더.order_sword",
         OrderSword(interval=1020, running_swords=[(0, 40000)]),
     )
@@ -33,7 +33,7 @@ def test_gathering_order_1pair(adele_store, gathering):
 
 
 def test_gathering_order_3pair(adele_store, gathering):
-    adele_store.set_state(
+    adele_store.set_entity(
         ".오더.order_sword",
         OrderSword(interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]),
     )

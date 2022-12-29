@@ -32,7 +32,7 @@ def global_property():
 def archmagetc_store(global_property):
     store = AddressedStore(ConcreteStore())
     global_property.install_global_properties(store)
-    store.set_state(".주피터 썬더.periodic", Periodic(interval=120))
+    store.set_entity(".주피터 썬더.periodic", Periodic(interval=120))
     return store
 
 

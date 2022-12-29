@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import copy
 import re
 from abc import ABCMeta, abstractmethod
@@ -11,7 +13,7 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 )
 
 
-class Entity(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="State")):
+class Entity(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="Entity")):
     ...
 
 
@@ -64,22 +66,22 @@ class Event(BaseModel):
 
 
 class Store(metaclass=ABCMeta):
-    def use_state(self, name: str, default: Entity):
-        def state_setter(state):
-            self.set_state(name, state)
+    def use_entity(self, name: str, default: Entity):
+        def entity_setter(state):
+            self.set_entity(name, state)
 
-        return self.read_state(name, default=default), state_setter
+        return self.read_entity(name, default=default), entity_setter
 
     @abstractmethod
-    def read_state(self, name: str, default: Optional[Entity]):
+    def read_entity(self, name: str, default: Optional[Entity]):
         ...
 
     @abstractmethod
-    def set_state(self, name: str, state: Entity):
+    def set_entity(self, name: str, entity: Entity):
         ...
 
     @abstractmethod
-    def local(self, address: str):
+    def local(self, address: str) -> Store:
         ...
 
     @abstractmethod
@@ -93,19 +95,19 @@ class Store(metaclass=ABCMeta):
 
 class ConcreteStore(Store):
     def __init__(self):
-        self._states: dict[str, Entity] = {}
+        self._entities: dict[str, Entity] = {}
 
-    def set_state(self, name: str, state: Entity):
-        self._states[name] = state
+    def set_entity(self, name: str, entity: Entity):
+        self._entities[name] = entity
 
-    def read_state(self, name: str, default: Optional[Entity]):
+    def read_entity(self, name: str, default: Optional[Entity]):
         if default is None:
-            value = self._states.get(name)
+            value = self._entities.get(name)
         else:
-            value = self._states.setdefault(name, default)
+            value = self._entities.setdefault(name, default)
         if value is None:
             raise ValueError(
-                f"No state exists: {name}. None-default only enabled for external-property binding. Maybe missing global proeperty installation?"
+                f"No entity exists: {name}. None-default only enabled for external-property binding. Maybe missing global proeperty installation?"
             )
         return value.copy()
 
@@ -113,21 +115,21 @@ class ConcreteStore(Store):
         return self
 
     def save(self) -> Any:
-        return {k: self._save_state(v) for k, v in self._states.items()}
+        return {k: self._save_entity(v) for k, v in self._entities.items()}
 
     def load(self, saved_store: dict[str, dict]) -> None:
-        self._states = {k: self._load_state(v) for k, v in saved_store.items()}
+        self._entities = {k: self._load_entity(v) for k, v in saved_store.items()}
 
-    def _save_state(self, state: Entity) -> dict:
-        state_clsname = state.__class__.__name__
+    def _save_entity(self, entity: Entity) -> dict:
+        entity_clsname = entity.__class__.__name__
         return {
-            "cls": state_clsname,
-            "payload": state.dict(),
+            "cls": entity_clsname,
+            "payload": entity.dict(),
         }
 
-    def _load_state(self, saved_state_dict: dict) -> Entity:
-        clsname, payload = saved_state_dict["cls"], saved_state_dict["payload"]
-        return cast(Entity, get_class(clsname, kind="State").parse_obj(payload))
+    def _load_entity(self, saved_entity_dict: dict) -> Entity:
+        clsname, payload = saved_entity_dict["cls"], saved_entity_dict["payload"]
+        return cast(Entity, get_class(clsname, kind="Entity").parse_obj(payload))
 
 
 class AddressedStore(Store):
@@ -135,13 +137,13 @@ class AddressedStore(Store):
         self._current_address = current_address
         self._concrete_store = concrete_store
 
-    def set_state(self, name: str, state: Entity):
+    def set_entity(self, name: str, entity: Entity):
         address = self._resolve_address(name)
-        return self._concrete_store.set_state(address, state)
+        return self._concrete_store.set_entity(address, entity)
 
-    def read_state(self, name: str, default: Optional[Entity]):
+    def read_entity(self, name: str, default: Optional[Entity]):
         address = self._resolve_address(name)
-        return self._concrete_store.read_state(address, default)
+        return self._concrete_store.read_entity(address, default)
 
     def local(self, address: str):
         return AddressedStore(
