@@ -16,8 +16,12 @@ WILD_CARD = "*"
 ReducerType = Callable[..., tuple[Union[tuple[Entity], Entity], Any]]
 
 
+T = TypeVar("T", bound=BaseModel)
+
+
 class ReducerState(BaseModel):
-    ...
+    def copy(self: T) -> T:
+        return super().copy(deep=True)
 
 
 class ComponentMethodWrapper:
