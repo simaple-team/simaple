@@ -1,6 +1,6 @@
 from typing import Protocol, TypeVar
 
-from simaple.simulate.component.entity import Cooldown, Lasting, Periodic
+from simaple.simulate.component.entity import Cooldown, Keydown, Lasting, Periodic
 from simaple.simulate.global_property import Dynamics
 
 T = TypeVar("T")
@@ -30,6 +30,13 @@ class PeriodicProtocol(DeepcopyProtocol, Protocol):
 
 
 PeriodicGeneric = TypeVar("PeriodicGeneric", bound=PeriodicProtocol)
+
+
+class KeydownProtocol(DeepcopyProtocol, Protocol):
+    keydown: Keydown
+
+
+KeydownGeneric = TypeVar("KeydownGeneric", bound=KeydownProtocol)
 
 
 class DynamicsProtocol(DeepcopyProtocol, Protocol):
@@ -76,4 +83,15 @@ class CooldownDynamicsPeriodicProtocol(
 
 CooldownDynamicsPeriodicGeneric = TypeVar(
     "CooldownDynamicsPeriodicGeneric", bound=CooldownDynamicsPeriodicProtocol
+)
+
+
+class CooldownDynamicsKeydownProtocol(
+    CooldownProtocol, KeydownProtocol, DynamicsProtocol, Protocol
+):
+    pass
+
+
+CooldownDynamicsKeydownGeneric = TypeVar(
+    "CooldownDynamicsKeydownGeneric", bound=CooldownDynamicsKeydownProtocol
 )

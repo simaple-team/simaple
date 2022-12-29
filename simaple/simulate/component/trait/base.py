@@ -33,6 +33,20 @@ class LastingTrait(ComponentTrait):
         ...
 
 
+class KeydownTrait(ComponentTrait):
+    @abstractmethod
+    def _get_maximum_keydown_time_prepare_delay(self) -> tuple[float, float]:
+        ...
+
+    @abstractmethod
+    def _get_keydown_damage_hit(self) -> tuple[float, float]:
+        ...
+
+    @abstractmethod
+    def _get_keydown_end_damage_hit_delay(self) -> tuple[float, float, float]:
+        ...
+
+
 class SimpleDamageTrait(ComponentTrait):
     @abstractmethod
     def _get_simple_damage_hit(self) -> tuple[float, float]:

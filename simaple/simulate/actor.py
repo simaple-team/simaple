@@ -49,9 +49,14 @@ class DefaultMDCActor(pydantic.BaseModel, AlwaysDelayedActor):
     def _decide(self, environment: Environment, events: list[Event]) -> Action:
         validities = environment.show("validity")
         runnings = environment.show("running")
+        keydowns = environment.show("keydown")
 
         validity_map = {v.name: v for v in validities if v.valid}
-        running_map = {d.name: d.time_left for d in runnings}
+        running_map = {r.name: r.time_left for r in runnings}
+        keydown_running_list = [k for k in keydowns if k.running]
+
+        if len(keydown_running_list) > 1:
+            raise ValueError("Running keydown cannot be more than 1")
 
         for name in self.order:
             if validity_map.get(name):

@@ -14,6 +14,7 @@ from simaple.simulate.component.skill import Cooldown, Lasting, Periodic, SkillC
 from simaple.simulate.component.trait.impl import (
     BuffTrait,
     CooldownValidityTrait,
+    KeydownSkillTrait,
     PeriodicWithSimpleDamageTrait,
     UsePeriodicDamageTrait,
 )
@@ -185,7 +186,8 @@ class RobotSummonSkill(
 
 class HommingMissileState(ReducerState):
     bomber_time: Lasting
-    buster_call: Keydown
+    full_barrage_keydown: Keydown
+    full_barrage_penalty_lasting: Lasting
     cooldown: Cooldown
     periodic: Periodic
     dynamics: Dynamics
@@ -194,7 +196,8 @@ class HommingMissileState(ReducerState):
 class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait):
     binds: dict[str, str] = {
         "bomber_time": ".봄버 타임.lasting",
-        "buster_call": ".메탈아머 전탄발사.keydown",
+        "full_barrage_keydown": ".메탈아머 전탄발사.keydown",
+        "full_barrage_penalty_lasting": ".메탈아머 전탄발사.penalty_lasting",
     }
     name: str
     cooldown_duration: float
@@ -238,13 +241,10 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
         if state.bomber_time.enabled():
             hit += 5
 
-        if state.buster_call.is_running():
+        if state.full_barrage_keydown.running:
             hit += 7
 
-        if (
-            not state.buster_call.is_running()
-            and state.buster_call.time_elapsed_after_latest_action < 2_000
-        ):
+        if state.full_barrage_penalty_lasting.enabled():
             hit = 0
 
         return hit
@@ -268,6 +268,80 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
         self, state: HommingMissileState
     ) -> tuple[float, float]:
         return self.periodic_damage, self.periodic_hit
+
+
+class FullMetalBarrageState(ReducerState):
+    cooldown: Cooldown
+    keydown: Keydown
+    penalty_lasting: Lasting
+    dynamics: Dynamics
+
+
+class FullMetalBarrageComponent(
+    SkillComponent, KeydownSkillTrait, CooldownValidityTrait
+):
+    maximum_keydown_time: float
+
+    damage: float
+    hit: float
+    delay: float
+    cooldown_duration: float
+
+    keydown_prepare_delay: float
+    keydown_end_delay: float
+
+    homing_penalty_duration: float
+
+    def get_default_state(self):
+        return {
+            "cooldown": Cooldown(time_left=0),
+            "keydown": Keydown(interval=self.delay, running=False),
+            "penalty_lasting": Lasting(time_left=0),
+        }
+
+    @reducer_method
+    def use(
+        self,
+        _: None,
+        state: FullMetalBarrageState,
+    ):
+        return self.use_keydown_trait(state)
+
+    @reducer_method
+    def elapse(self, time: float, state: FullMetalBarrageState):
+        state.penalty_lasting.elapse(time)
+        state, event, keydown_end = self.elapse_keydown_trait(time, state)
+
+        if keydown_end:
+            state.penalty_lasting.set_time_left(self.homing_penalty_duration)
+
+        return state, event
+
+    @reducer_method
+    def stop(self, _, state: FullMetalBarrageState):
+        state, event, keydown_end = self.stop_keydown_trait(state)
+
+        if keydown_end:
+            state.penalty_lasting.set_time_left(self.homing_penalty_duration)
+
+        return state, event
+
+    @view_method
+    def validity(self, state: FullMetalBarrageState):
+        return self.validity_in_cooldown_trait(state)
+
+    @view_method
+    def keydown(self, state: FullMetalBarrageState):
+        return self.keydown_view_in_keydown_trait(state)
+
+    def _get_maximum_keydown_time_prepare_delay(self) -> tuple[float, float]:
+        return self.maximum_keydown_time, self.keydown_prepare_delay
+
+    def _get_keydown_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit
+
+    def _get_keydown_end_damage_hit_delay(self) -> tuple[float, float, float]:
+        return 0, 0, self.keydown_end_delay
 
 
 class MultipleOptionState(ReducerState):

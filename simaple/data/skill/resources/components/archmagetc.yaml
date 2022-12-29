@@ -171,6 +171,7 @@ data:
   delay: 240
   cooldown_duration: 60_000
 
+  keydown_prepare_delay: 780
   keydown_end_delay: 1080
 
   finish_damage: 780
