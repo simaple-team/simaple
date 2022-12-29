@@ -1,14 +1,18 @@
+# pylint: disable=W0621
 import pytest
 
-from simaple.simulate.component.specific.adele import AdeleStormComponent, OrderSword
+from simaple.simulate.component.specific.adele import (
+    AdeleStormComponent,
+    AdeleStormState,
+    OrderSword,
+)
+from simaple.simulate.global_property import Dynamics
 from simaple.simulate.reserved_names import Tag
 
 
 @pytest.fixture(name="storm")
-def fixture_storm(
-    adele_store,
-):
-    component = AdeleStormComponent(
+def fixture_storm():
+    return AdeleStormComponent(
         name="test-storm",
         delay=780,
         cooldown_duration=90_000,
@@ -18,30 +22,55 @@ def fixture_storm(
         lasting_duration=14000,
         maximum_stack=8,
     )
-    return component.compile(adele_store)
 
 
-def test_storm_order_1pair(adele_store, storm):
-    adele_store.set_entity(
-        ".오더.order_sword",
-        OrderSword(interval=1020, running_swords=[(0, 40000)]),
+@pytest.fixture(name="storm_state_1pair")
+def storm_state_1pair(
+    storm: AdeleStormComponent,
+    dynamics: Dynamics,
+):
+    return AdeleStormState.parse_obj(
+        {
+            **storm.get_default_state(),
+            "order_sword": OrderSword(interval=1020, running_swords=[(0, 40000)]),
+            "dynamics": dynamics,
+        }
     )
 
-    storm.use(None)
-    events = storm.elapse(500)
+
+@pytest.fixture(name="storm_state_3pair")
+def storm_state_3pair(
+    storm: AdeleStormComponent,
+    dynamics: Dynamics,
+):
+    return AdeleStormState.parse_obj(
+        {
+            **storm.get_default_state(),
+            "order_sword": OrderSword(
+                interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]
+            ),
+            "dynamics": dynamics,
+        }
+    )
+
+
+def test_storm_order_1pair(
+    storm: AdeleStormComponent, storm_state_1pair: AdeleStormState
+):
+    state, _ = storm.use(None, storm_state_1pair)
+    _, events = storm.elapse(500, state)
     dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
 
+    assert dealing_event[0].payload is not None
     assert dealing_event[0].payload["hit"] == 2
 
 
-def test_storm_order_3pair(adele_store, storm):
-    adele_store.set_entity(
-        ".오더.order_sword",
-        OrderSword(interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]),
-    )
-
-    storm.use(None)
-    events = storm.elapse(500)
+def test_storm_order_3pair(
+    storm: AdeleStormComponent, storm_state_3pair: AdeleStormState
+):
+    state, _ = storm.use(None, storm_state_3pair)
+    _, events = storm.elapse(500, state)
     dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
 
+    assert dealing_event[0].payload is not None
     assert dealing_event[0].payload["hit"] == 6

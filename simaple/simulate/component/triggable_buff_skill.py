@@ -63,7 +63,7 @@ class TriggableBuffSkill(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
 
         return (
             state,
-            self.event_provider.dealt(self.trigger_damage, self.trigger_hit),
+            [self.event_provider.dealt(self.trigger_damage, self.trigger_hit)],
         )
 
     @view_method

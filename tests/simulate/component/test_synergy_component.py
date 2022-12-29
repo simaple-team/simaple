@@ -2,7 +2,8 @@
 import pytest
 
 from simaple.core.base import Stat
-from simaple.simulate.component.complex_skill import SynergySkillComponent
+from simaple.simulate.component.complex_skill import SynergySkillComponent, SynergyState
+from simaple.simulate.global_property import Dynamics
 from simaple.simulate.reserved_names import Tag
 
 
@@ -12,7 +13,7 @@ def synergy():
 
 
 @pytest.fixture
-def synergy_component(synergy):
+def synergy_component(synergy: Stat):
     return SynergySkillComponent(
         name="test-synergy",
         damage=100,
@@ -25,25 +26,36 @@ def synergy_component(synergy):
 
 
 @pytest.fixture
-def compiled_synergy_component(synergy_component, bare_store):
-    return synergy_component.compile(bare_store)
+def synergy_state(synergy_component: SynergySkillComponent, dynamics: Dynamics):
+    return SynergyState.parse_obj(
+        {**synergy_component.get_default_state(), "dynamics": dynamics}
+    )
 
 
 def test_using_frozen_synerge_component_provide_buff_and_damage(
-    compiled_synergy_component, synergy
+    synergy_component: SynergySkillComponent,
+    synergy_state: SynergyState,
+    synergy: Stat,
 ):
-    events = compiled_synergy_component.use(None)
+    # when
+    state, events = synergy_component.use(None, synergy_state)
 
+    # then
     dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
 
     assert dealing_count == 1
-    assert compiled_synergy_component.buff() == synergy
+    assert synergy_component.buff(state) == synergy
 
 
-def test_using_synerge_component_buff_do_not(compiled_synergy_component):
-    compiled_synergy_component.use(None)
-    events = compiled_synergy_component.elapse(30_000)
+def test_using_synerge_component_buff_do_not(
+    synergy_component: SynergySkillComponent,
+    synergy_state: SynergyState,
+):
+    # when
+    state, _ = synergy_component.use(None, synergy_state)
+    state, events = synergy_component.elapse(30_000, state)
 
+    # then
     dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
     assert dealing_count == 0
-    assert compiled_synergy_component.buff() == Stat()
+    assert synergy_component.buff(state) == Stat()

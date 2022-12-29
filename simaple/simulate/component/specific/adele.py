@@ -29,6 +29,9 @@ class EtherGauge(Stack):
     def is_order_valid(self) -> bool:
         return self.stack >= self.order_consume
 
+    def decrease_order(self):
+        self.decrease(self.order_consume)
+
 
 class RestoreLasting(Lasting):
     ether_multiplier: float
@@ -120,7 +123,7 @@ class AdeleEtherComponent(Component):
     ):
         state = state.copy()
 
-        state.ether_gauge.decrease(self.order_consume)
+        state.ether_gauge.decrease_order()
 
         return (state), []
 
@@ -389,7 +392,7 @@ class AdeleBlossomComponent(SkillComponent, UseSimpleAttackTrait):
         state = state.copy()
 
         if not self._is_valid(state):
-            return state, self.event_provider.rejected()
+            return state, [self.event_provider.rejected()]
 
         state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
