@@ -34,14 +34,12 @@ class DOT(Entity):
         left_time = time - self.period_time_left
         lapse_time = self.period_time_left
 
-        new_current = {}
-        events = []
-
-        for name, (damage, lasting_time) in self.current.items():
-            lasting_time -= lapse_time
-            if lasting_time >= 0:
-                new_current[name] = (damage, lasting_time)
-                events.append((name, damage))
+        new_current = {
+            name: (damage, lasting_time - lapse_time)
+            for name, (damage, lasting_time) in self.current.items()
+            if lasting_time - lapse_time >= 0
+        }
+        events = [(name, damage) for name, (damage, _) in new_current.items()]
 
         self.current = new_current
         self.period_time_left = self.period
