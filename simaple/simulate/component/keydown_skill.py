@@ -78,7 +78,7 @@ class KeydownSkillComponent(SkillComponent):
         _: None,
         state: KeydownSkillState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
@@ -108,7 +108,7 @@ class KeydownSkillComponent(SkillComponent):
 
     @reducer_method
     def elapse(self, time: float, state: KeydownSkillState):
-        state = state.copy()
+        state = state.deepcopy()
 
         state.cooldown.elapse(time)
         was_running = state.keydown.is_running()

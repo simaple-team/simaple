@@ -64,7 +64,7 @@ def test_ether_resonance(ether: AdeleEtherComponent, ether_state: EtherState):
 
 def test_ether_order_consume(ether: AdeleEtherComponent, ether_state: EtherState):
     # given
-    state = ether_state.copy()
+    state = ether_state.deepcopy()
     state.ether_gauge = EtherGauge(
         stack=100,
         maximum_stack=400,
@@ -81,7 +81,7 @@ def test_ether_order_consume(ether: AdeleEtherComponent, ether_state: EtherState
 
 def test_ether_restore_buff(ether: AdeleEtherComponent, ether_state: EtherState):
     # given
-    state = ether_state.copy()
+    state = ether_state.deepcopy()
     state.restore_lasting.set_time_left(1000)
 
     # when

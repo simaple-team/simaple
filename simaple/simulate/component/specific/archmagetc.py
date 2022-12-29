@@ -45,13 +45,13 @@ class FrostEffect(Component):
 
     @reducer_method
     def increase_step(self, _: None, state: FrostEffectState):
-        state = state.copy()
+        state = state.deepcopy()
         state.frost_stack.increase(1)
         return state, []
 
     @reducer_method
     def increase_three(self, _: None, state: FrostEffectState):
-        state = state.copy()
+        state = state.deepcopy()
         state.frost_stack.increase(3)
         return state, []
 
@@ -111,7 +111,7 @@ class JupyterThunder(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
         time: float,
         state: JupyterThunderState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
 
         state.cooldown.elapse(time)
         dealing_events = []
@@ -181,7 +181,7 @@ class ThunderAttackSkillComponent(
         _: None,
         state: ThunderAttackSkillState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
@@ -249,7 +249,7 @@ class ThunderBreak(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait
         time: float,
         state: ThunderBreakState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
 
         state.cooldown.elapse(time)
         dealing_events = []

@@ -1,6 +1,6 @@
 import inspect
 from abc import ABCMeta, abstractmethod
-from typing import Any, Callable, Optional, Type, TypeVar, Union
+from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union
 
 from pydantic import BaseModel, Field
 from pydantic.error_wrappers import ValidationError
@@ -20,8 +20,13 @@ T = TypeVar("T", bound=BaseModel)
 
 
 class ReducerState(BaseModel):
-    def copy(self: T) -> T:
-        return super().copy(deep=True)
+    def copy(self) -> NoReturn:  # type: ignore
+        raise NotImplementedError("copy() is disabled in ReducerState")
+
+    def deepcopy(self: T) -> T:
+        values = dict(self._iter())
+        fields_set = set(self.__fields_set__)
+        return self._copy_and_set_values(values, fields_set, deep=True)
 
 
 class ComponentMethodWrapper:

@@ -55,7 +55,7 @@ class DivineAttackSkillComponent(
 
     @reducer_method
     def use(self, _: None, state: DivineAttackSkillState):
-        state = state.copy()
+        state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, self.event_provider.rejected()
@@ -126,7 +126,7 @@ class DivineMinion(
 
     @reducer_method
     def elapse(self, time: float, state: DivineMinionState):
-        state = state.copy()
+        state = state.deepcopy()
 
         state.cooldown.elapse(time)
         dealing_events = []

@@ -33,7 +33,7 @@ class SynergySkillComponent(SkillComponent, BuffTrait, InvalidatableCooldownTrai
 
     @reducer_method
     def use(self, _: None, state: SynergyState):
-        state = state.copy()
+        state = state.deepcopy()
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 

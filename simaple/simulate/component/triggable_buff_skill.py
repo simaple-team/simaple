@@ -39,7 +39,7 @@ class TriggableBuffSkill(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
         time: float,
         state: TriggableBuffState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
 
         state.cooldown.elapse(time)
         state.lasting.elapse(time)
@@ -58,7 +58,7 @@ class TriggableBuffSkill(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
         if not (state.lasting.enabled() and state.trigger_cooldown.available):
             return state, []
 
-        state = state.copy()
+        state = state.deepcopy()
         state.trigger_cooldown.set_time_left(self.trigger_cooldown_duration)
 
         return (
