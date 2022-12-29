@@ -24,9 +24,7 @@ class ReducerState(BaseModel):
         raise NotImplementedError("copy() is disabled in ReducerState")
 
     def deepcopy(self: T) -> T:
-        values = dict(self._iter())
-        fields_set = set(self.__fields_set__)
-        return self._copy_and_set_values(values, fields_set, deep=True)
+        return super().copy(deep=True)  # type: ignore
 
 
 class ComponentMethodWrapper:
