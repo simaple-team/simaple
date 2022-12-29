@@ -109,7 +109,7 @@ class StoreAdapter:
 
     def get_state(self, store: Store, state_type):
         entities = {
-            name: store.read_state(address, default=self._default_state.get(name))
+            name: store.read_entity(address, default=self._default_state.get(name))
             for name, address in self._get_bound_names().items()
         }
 
@@ -120,7 +120,7 @@ class StoreAdapter:
 
         for name, entity in dict(state).items():
             if name in bounded_names:
-                store.set_state(bounded_names[name], entity)
+                store.set_entity(bounded_names[name], entity)
 
     def _get_bound_names(self) -> dict[str, str]:
         names = {name: name for name in self._default_state}
@@ -142,10 +142,10 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
         self._action_router = action_router
         self._store_adapter = StoreAdapter(self._default_state, binds)
 
-    def init_states(self, store: Store):
+    def init_store(self, store: Store):
         local_store = store.local(self._name)
         for name in self._default_state:
-            local_store.read_state(name, default=self._default_state[name])
+            local_store.read_entity(name, default=self._default_state[name])
 
     def __call__(self, action: Action, store: Store) -> list[Event]:
         if not self._action_router.is_enabled_action(action):
@@ -263,7 +263,7 @@ class StoreEmbeddedObject:
 
     def __getattr__(self, k):
         if k in self._default_states:
-            return self._store.local(self.name).read_state(
+            return self._store.local(self.name).read_entity(
                 k, default=self._default_states.get(k, None)
             )
 
@@ -273,7 +273,7 @@ class StoreEmbeddedObject:
         if k in ["name", "_store", "_default_states"]:
             super().__setattr__(k, v)
         elif k in self._default_states:
-            self._store.local(self.name).set_state(k, v)
+            self._store.local(self.name).set_entity(k, v)
         else:
             super().__setattr__(k, v)
 
@@ -314,7 +314,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     def add_to_environment(self, environment: Environment):
         dispatcher = self.export_dispatcher()
         environment.add_dispatcher(dispatcher)
-        dispatcher.init_states(environment.store)
+        dispatcher.init_store(environment.store)
 
         for view_name, view in self.get_views().items():
             environment.add_view(f"{self.name}.{view_name}", view)

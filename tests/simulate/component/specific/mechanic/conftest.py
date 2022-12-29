@@ -31,7 +31,7 @@ def global_property():
 def mechanic_store(global_property):
     store = AddressedStore(ConcreteStore())
     global_property.install_global_properties(store)
-    store.set_state(
+    store.set_entity(
         ".로봇 마스터리.robot_mastery",
         RobotMastery(
             summon_increment=40,

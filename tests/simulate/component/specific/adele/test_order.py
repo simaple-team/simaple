@@ -2,7 +2,7 @@ from simaple.simulate.component.specific.adele import EtherGauge
 
 
 def test_order_count(adele_store, order):
-    adele_store.set_state(
+    adele_store.set_entity(
         ".에테르.ether_gauge",
         EtherGauge(
             stack=400,
@@ -22,7 +22,7 @@ def test_order_count(adele_store, order):
 
 
 def test_order_elapse(adele_store, order):
-    adele_store.set_state(
+    adele_store.set_entity(
         ".에테르.ether_gauge",
         EtherGauge(
             stack=400,

@@ -17,7 +17,7 @@ def test_ether_resonance(ether):
 
 
 def test_ether_order_consume(adele_store, ether):
-    adele_store.set_state(
+    adele_store.set_entity(
         ".에테르.ether_gauge",
         EtherGauge(
             stack=100,

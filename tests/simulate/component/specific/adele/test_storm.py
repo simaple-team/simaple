@@ -22,7 +22,7 @@ def fixture_storm(
 
 
 def test_storm_order_1pair(adele_store, storm):
-    adele_store.set_state(
+    adele_store.set_entity(
         ".오더.order_sword",
         OrderSword(interval=1020, running_swords=[(0, 40000)]),
     )
@@ -35,7 +35,7 @@ def test_storm_order_1pair(adele_store, storm):
 
 
 def test_storm_order_3pair(adele_store, storm):
-    adele_store.set_state(
+    adele_store.set_entity(
         ".오더.order_sword",
         OrderSword(interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]),
     )

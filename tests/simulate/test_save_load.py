@@ -5,7 +5,7 @@ from simaple.simulate.component.entity import Cooldown, Lasting, Periodic
 def test_store_save_load():
     store = ConcreteStore()
 
-    store.set_state(
+    store.set_entity(
         "dur",
         Lasting(
             time_left=3.0,
@@ -13,14 +13,14 @@ def test_store_save_load():
         ),
     )
 
-    store.set_state(
+    store.set_entity(
         "x.cooldown",
         Cooldown(
             time_left=3.0,
         ),
     )
 
-    store.set_state(
+    store.set_entity(
         "y.interval",
         Periodic(
             interval_counter=3.0,
@@ -35,10 +35,10 @@ def test_store_save_load():
     new_store = ConcreteStore()
     new_store.load(saved_store)
 
-    assert store.read_state("dur", None) == new_store.read_state("dur", None)
-    assert store.read_state("x.cooldown", None) == new_store.read_state(
+    assert store.read_entity("dur", None) == new_store.read_entity("dur", None)
+    assert store.read_entity("x.cooldown", None) == new_store.read_entity(
         "x.cooldown", None
     )
-    assert store.read_state("y.interval", None) == new_store.read_state(
+    assert store.read_entity("y.interval", None) == new_store.read_entity(
         "y.interval", None
     )

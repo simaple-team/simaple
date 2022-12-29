@@ -18,8 +18,8 @@ class GlobalProperty:
         self._action_stat = action_stat
 
     def install_global_properties(self, store: Store):
-        store.set_state("global.dynamics", Dynamics(stat=self._action_stat))
-        store.set_state("global.time", Clock())
+        store.set_entity("global.dynamics", Dynamics(stat=self._action_stat))
+        store.set_entity("global.time", Clock())
 
     @classmethod
     def get_default_binds(cls):

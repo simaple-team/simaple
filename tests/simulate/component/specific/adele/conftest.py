@@ -34,7 +34,7 @@ def global_property():
 def adele_store(global_property):
     store = AddressedStore(ConcreteStore())
     global_property.install_global_properties(store)
-    store.set_state(
+    store.set_entity(
         ".에테르.ether_gauge",
         EtherGauge(
             maximum_stack=400,
@@ -42,7 +42,7 @@ def adele_store(global_property):
             order_consume=100,
         ),
     )
-    store.set_state(
+    store.set_entity(
         ".리스토어(버프).lasting",
         RestoreLasting(time_left=0, ether_multiplier=80),
     )
