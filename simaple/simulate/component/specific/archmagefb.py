@@ -1,11 +1,7 @@
 from simaple.simulate.base import Entity
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic, Stack
-from simaple.simulate.component.skill import (
-    AttackSkillState,
-    PeriodicDamageState,
-    SkillComponent,
-)
+from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
     AddDOTDamageTrait,
     CooldownValidityTrait,
@@ -205,6 +201,11 @@ class PoisonChainComponent(
         return self.periodic_damage, self.periodic_hit
 
 
+class DotPunisherState(ReducerState):
+    cooldown: Cooldown
+    dynamics: Dynamics
+
+
 class DotPunisherComponent(SkillComponent, CooldownValidityTrait, AddDOTDamageTrait):
     name: str
     damage: float
@@ -223,7 +224,7 @@ class DotPunisherComponent(SkillComponent, CooldownValidityTrait, AddDOTDamageTr
         }
 
     @reducer_method
-    def use(self, _: None, state: AttackSkillState):
+    def use(self, _: None, state: DotPunisherState):
         state = state.deepcopy()
 
         if not state.cooldown.available:
@@ -239,23 +240,29 @@ class DotPunisherComponent(SkillComponent, CooldownValidityTrait, AddDOTDamageTr
         ] + [self.event_provider.delayed(self.delay), self.get_dot_add_event()]
 
     @reducer_method
-    def elapse(self, time: float, state: AttackSkillState):
+    def elapse(self, time: float, state: DotPunisherState):
         state = state.deepcopy()
         state.cooldown.elapse(time)
         return state, [self.event_provider.elapsed(time)]
 
     @reducer_method
-    def reset_cooldown(self, _: None, state: AttackSkillState):
+    def reset_cooldown(self, _: None, state: DotPunisherState):
         state = state.deepcopy()
         state.cooldown.set_time_left(0)
         return state, None
 
     @view_method
-    def validity(self, state: AttackSkillState):
+    def validity(self, state: DotPunisherState):
         return self.validity_in_cooldown_trait(state)
 
     def _get_dot_damage_and_lasting(self) -> tuple[float, float]:
         return self.dot_damage, self.dot_lasting_duration
+
+
+class IfrittState(ReducerState):
+    cooldown: Cooldown
+    periodic: Periodic
+    dynamics: Dynamics
 
 
 class IfrittComponent(
@@ -287,35 +294,33 @@ class IfrittComponent(
         }
 
     @reducer_method
-    def elapse(self, time: float, state: PeriodicDamageState):
+    def elapse(self, time: float, state: IfrittState):
         return self.elapse_periodic_damage_trait(time, state)
 
     @reducer_method
-    def use(self, _: None, state: PeriodicDamageState):
+    def use(self, _: None, state: IfrittState):
         state, event = self.use_periodic_damage_trait(state)
         return state, event + [self.get_dot_add_event()]
 
     @view_method
-    def validity(self, state: PeriodicDamageState):
+    def validity(self, state: IfrittState):
         return self.validity_in_cooldown_trait(state)
 
     @view_method
-    def running(self, state: PeriodicDamageState) -> Running:
+    def running(self, state: IfrittState) -> Running:
         return Running(
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),
         )
 
-    def _get_lasting_duration(self, state: PeriodicDamageState) -> float:
+    def _get_lasting_duration(self, state: IfrittState) -> float:
         return self.lasting_duration
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit
 
-    def _get_periodic_damage_hit(
-        self, state: PeriodicDamageState
-    ) -> tuple[float, float]:
+    def _get_periodic_damage_hit(self, state: IfrittState) -> tuple[float, float]:
         return self.periodic_damage, self.periodic_hit
 
     def _get_dot_damage_and_lasting(self) -> tuple[float, float]:

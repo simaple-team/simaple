@@ -89,6 +89,11 @@ class AttackSkillComponent(
         return self.damage, self.hit
 
 
+class DOTEmittingState(ReducerState):
+    cooldown: Cooldown
+    dynamics: Dynamics
+
+
 class DOTEmittingAttackSkillComponent(
     SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait, AddDOTDamageTrait
 ):
@@ -107,23 +112,23 @@ class DOTEmittingAttackSkillComponent(
         }
 
     @reducer_method
-    def elapse(self, time: float, state: AttackSkillState):
+    def elapse(self, time: float, state: DOTEmittingState):
         return self.elapse_simple_attack(time, state)
 
     @reducer_method
-    def use(self, _: None, state: AttackSkillState):
+    def use(self, _: None, state: DOTEmittingState):
         state, event = self.use_simple_attack(state)
         event += [self.get_dot_add_event()]
         return state, event
 
     @reducer_method
-    def reset_cooldown(self, _: None, state: AttackSkillState):
+    def reset_cooldown(self, _: None, state: DOTEmittingState):
         state = state.deepcopy()
         state.cooldown.set_time_left(0)
         return state, None
 
     @view_method
-    def validity(self, state: AttackSkillState):
+    def validity(self, state: DOTEmittingState):
         return self.validity_in_invalidatable_cooldown_trait(state)
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
