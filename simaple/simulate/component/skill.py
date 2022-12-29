@@ -76,7 +76,7 @@ class AttackSkillComponent(
 
     @reducer_method
     def reset_cooldown(self, _: None, state: AttackSkillState):
-        state = state.copy()
+        state = state.deepcopy()
         state.cooldown.set_time_left(0)
         return state, None
 
@@ -93,7 +93,7 @@ class MultipleAttackSkillComponent(AttackSkillComponent):
 
     @reducer_method
     def use(self, _: None, state: AttackSkillState):
-        state = state.copy()
+        state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, self.event_provider.rejected()
@@ -184,7 +184,7 @@ class StackableBuffSkillComponent(
         _: None,
         state: StackableBuffSkillState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
         if state.lasting.time_left <= 0:
             state.stack.reset()
         state.stack.increase()
@@ -303,7 +303,7 @@ class DOTSkillComponent(Component):
 
     @reducer_method
     def elapse(self, time: float, state: DOTState):
-        state = state.copy()
+        state = state.deepcopy()
 
         lapse_count = state.periodic.elapse(time)
 
@@ -314,7 +314,7 @@ class DOTSkillComponent(Component):
 
     @reducer_method
     def apply(self, _: None, state: DOTState):
-        state = state.copy()
+        state = state.deepcopy()
 
         state.periodic.set_time_left(self.lasting_duration)
 

@@ -1,14 +1,14 @@
+# pylint: disable=W0621
 import pytest
 
-from simaple.simulate.component.specific.adele import AdeleRuinComponent
+from simaple.simulate.component.specific.adele import AdeleRuinComponent, AdeleRuinState
+from simaple.simulate.global_property import Dynamics
 from simaple.simulate.reserved_names import Tag
 
 
 @pytest.fixture(name="ruin")
-def fixture_ruin(
-    adele_store,
-):
-    component = AdeleRuinComponent(
+def fixture_ruin():
+    return AdeleRuinComponent(
         name="test-ruin",
         delay=600,
         cooldown_duration=60_000,
@@ -22,12 +22,24 @@ def fixture_ruin(
         periodic_interval_second=250,
         lasting_duration_second=2000,
     )
-    return component.compile(adele_store)
 
 
-def test_ruin_first(ruin):
-    ruin.use(None)
-    events = ruin.elapse(2000)
+@pytest.fixture(name="ruin_state")
+def ruin_state(
+    ruin: AdeleRuinComponent,
+    dynamics: Dynamics,
+):
+    return AdeleRuinState.parse_obj(
+        {
+            **ruin.get_default_state(),
+            "dynamics": dynamics,
+        }
+    )
+
+
+def test_ruin_first(ruin: AdeleRuinComponent, ruin_state: AdeleRuinState):
+    state, _ = ruin.use(None, ruin_state)
+    _, events = ruin.elapse(2000, state)
     dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
 
     assert len(dealing_event) == 12
@@ -36,10 +48,10 @@ def test_ruin_first(ruin):
         assert event.payload["hit"] == 6
 
 
-def test_ruin_second(ruin):
-    ruin.use(None)
-    ruin.elapse(2000)
-    events = ruin.elapse(2000)
+def test_ruin_second(ruin: AdeleRuinComponent, ruin_state: AdeleRuinState):
+    state, _ = ruin.use(None, ruin_state)
+    state, _ = ruin.elapse(2000, state)
+    _, events = ruin.elapse(2000, state)
     dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
 
     assert len(dealing_event) == 8

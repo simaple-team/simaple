@@ -1,6 +1,6 @@
 import inspect
 from abc import ABCMeta, abstractmethod
-from typing import Any, Callable, Optional, Type, Union
+from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union
 
 from pydantic import BaseModel, Field
 from pydantic.error_wrappers import ValidationError
@@ -16,8 +16,15 @@ WILD_CARD = "*"
 ReducerType = Callable[..., tuple[Union[tuple[Entity], Entity], Any]]
 
 
+T = TypeVar("T", bound=BaseModel)
+
+
 class ReducerState(BaseModel):
-    ...
+    def copy(self) -> NoReturn:  # type: ignore
+        raise NotImplementedError("copy() is disabled in ReducerState")
+
+    def deepcopy(self: T) -> T:
+        return super().copy(deep=True)  # type: ignore
 
 
 class ComponentMethodWrapper:
@@ -255,29 +262,6 @@ class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
         return cls
 
 
-class StoreEmbeddedObject:
-    def __init__(self, name, store: Store, default_states: dict):
-        self.name = name
-        self._store = store
-        self._default_states = default_states
-
-    def __getattr__(self, k):
-        if k in self._default_states:
-            return self._store.local(self.name).read_entity(
-                k, default=self._default_states.get(k, None)
-            )
-
-        raise AttributeError(f"No attribute: {k}")
-
-    def __setattr__(self, k, v):
-        if k in ["name", "_store", "_default_states"]:
-            super().__setattr__(k, v)
-        elif k in self._default_states:
-            self._store.local(self.name).set_entity(k, v)
-        else:
-            super().__setattr__(k, v)
-
-
 class Component(BaseModel, metaclass=ComponentMetaclass):
     """
     Component is compact bundle of state-action.
@@ -363,44 +347,3 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
             )
             for method_name in getattr(self, "__views__")
         }
-
-    def compile(self, initialized_store: Store) -> StoreEmbeddedObject:
-        """
-        Return store-embedded object which supports contracted interface of current component.
-        """
-
-        def get_compiled_reducer(method_name, dispatcher, store):
-            def compiled_reducer(payload):
-                action = Action(name=self.name, method=method_name, payload=payload)
-                return dispatcher(action, store)
-
-            return compiled_reducer
-
-        def get_compiled_view(view, store):
-            def compiled_view():
-                return view(store)
-
-            return compiled_view
-
-        compiled_component = StoreEmbeddedObject(
-            self.name, initialized_store, self.get_default_state()
-        )
-        exported_dispatcher = self.export_dispatcher()
-
-        for reducer_name in self.get_reducer_methods():
-            setattr(
-                compiled_component,
-                reducer_name,
-                get_compiled_reducer(
-                    reducer_name, exported_dispatcher, initialized_store
-                ),
-            )
-
-        for view_name, view in self.get_views().items():
-            setattr(
-                compiled_component,
-                view_name,
-                get_compiled_view(view, initialized_store),
-            )
-
-        return compiled_component

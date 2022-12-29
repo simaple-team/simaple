@@ -57,14 +57,14 @@ class PoisonNovaComponent(SkillComponent):
 
     @reducer_method
     def elapse(self, time: float, state: PoisonNovaState):
-        state = state.copy()
+        state = state.deepcopy()
         state.cooldown.elapse(time)
         state.poison_nova.elapse(time)
         return state, self.event_provider.elapsed(time)
 
     @reducer_method
     def use(self, _: None, state: PoisonNovaState):
-        state = state.copy()
+        state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, self.event_provider.rejected()
@@ -81,7 +81,7 @@ class PoisonNovaComponent(SkillComponent):
 
     @reducer_method
     def trigger(self, _: None, state: PoisonNovaState):
-        state = state.copy()
+        state = state.deepcopy()
 
         triggered = state.poison_nova.try_trigger_nova()
         if triggered:
@@ -145,7 +145,7 @@ class PoisonChainComponent(
 
     @reducer_method
     def elapse(self, time: float, state: PoisonChainState):
-        state = state.copy()
+        state = state.deepcopy()
 
         state.cooldown.elapse(time)
 
@@ -163,7 +163,7 @@ class PoisonChainComponent(
 
     @reducer_method
     def use(self, _: None, state: PoisonChainState):
-        state = state.copy()
+        state = state.deepcopy()
 
         state, events = self.use_periodic_damage_trait(state)
         if not is_rejected(events):

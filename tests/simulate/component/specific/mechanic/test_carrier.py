@@ -1,14 +1,18 @@
+# pylint: disable=W0621
 import pytest
 
-from simaple.simulate.component.specific.mechanic import MecaCarrier
+from simaple.simulate.component.specific.mechanic import (
+    MecaCarrier,
+    MecaCarrierState,
+    RobotMastery,
+)
+from simaple.simulate.global_property import Dynamics
 from simaple.simulate.reserved_names import Tag
 
 
 @pytest.fixture(name="meca_carrier")
-def fixture_multiple_option(
-    mechanic_store,
-):
-    component = MecaCarrier(
+def fixture_meca_carrier():
+    return MecaCarrier(
         name="test-meca-carrier",
         cooldown_duration=200_000,
         delay=690,
@@ -20,13 +24,29 @@ def fixture_multiple_option(
         intercepter_penalty=120,
         hit_per_intercepter=4,
     )
-    return component.compile(mechanic_store)
 
 
-def test_meca_carrier_usage_increase_count(meca_carrier):
-    meca_carrier.use(None)
-    events = meca_carrier.elapse(30_000)
+@pytest.fixture(name="meca_carrier_state")
+def meca_carrier_state(
+    meca_carrier: MecaCarrier, dynamics: Dynamics, robot_mastery: RobotMastery
+):
+    return MecaCarrierState.parse_obj(
+        {
+            **meca_carrier.get_default_state(),
+            "dynamics": dynamics,
+            "robot_mastery": robot_mastery,
+        }
+    )
 
+
+def test_meca_carrier_usage_increase_count(
+    meca_carrier: MecaCarrier, meca_carrier_state: MecaCarrierState
+):
+    # when
+    state, _ = meca_carrier.use(None, meca_carrier_state)
+    state, events = meca_carrier.elapse(30_000, state)
+
+    # then
     dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
 
     for idx in range(len(dealing_event) - 1):
@@ -36,19 +56,27 @@ def test_meca_carrier_usage_increase_count(meca_carrier):
         )
 
 
-def test_meca_carrier_usage_delays_more(meca_carrier):
-    meca_carrier.use(None)
-    events = meca_carrier.elapse(3000 * 3 + 120 * (8 + 9))
+def test_meca_carrier_usage_delays_more(
+    meca_carrier: MecaCarrier, meca_carrier_state: MecaCarrierState
+):
+    # when
+    state, _ = meca_carrier.use(None, meca_carrier_state)
+    state, events = meca_carrier.elapse(3000 * 3 + 120 * (8 + 9), state)
 
+    # then
     dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
 
     assert len(dealing_event) == 3
 
 
-def test_meca_carrier_usage_bounds_count(meca_carrier):
-    meca_carrier.use(None)
-    events = meca_carrier.elapse(120_000)
+def test_meca_carrier_usage_bounds_count(
+    meca_carrier: MecaCarrier, meca_carrier_state: MecaCarrierState
+):
+    # when
+    state, _ = meca_carrier.use(None, meca_carrier_state)
+    state, events = meca_carrier.elapse(120_000, state)
 
+    # then
     dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
 
     for idx in range(len(dealing_event) - 1):

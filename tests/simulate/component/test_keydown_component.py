@@ -1,7 +1,11 @@
 # pylint: disable=W0621
 import pytest
 
-from simaple.simulate.component.keydown_skill import KeydownSkillComponent
+from simaple.simulate.component.keydown_skill import (
+    KeydownSkillComponent,
+    KeydownSkillState,
+)
+from simaple.simulate.global_property import Dynamics
 from tests.simulate.component.util import is_rejected
 
 
@@ -11,7 +15,7 @@ def keydown_delay():
 
 
 @pytest.fixture
-def keydown_component(bare_store, keydown_delay):
+def keydown_component(keydown_delay: float):
     return KeydownSkillComponent(
         name="test-keydown",
         damage=100,
@@ -22,45 +26,93 @@ def keydown_component(bare_store, keydown_delay):
         finish_damage=500,
         finish_hit=15,
         maximum_keydown_time=keydown_delay * 10,
-    ).compile(bare_store)
+    )
 
 
-def test_reject(keydown_component):
-    keydown_component.use(None)
-    keydown_component.elapse(10_000)
-    events = keydown_component.use(None)
+@pytest.fixture
+def keydown_state(keydown_component: KeydownSkillComponent, dynamics: Dynamics):
+    return KeydownSkillState.parse_obj(
+        {
+            **keydown_component.get_default_state(),
+            "dynamics": dynamics,
+        }
+    )
 
+
+def test_reject(
+    keydown_component: KeydownSkillComponent, keydown_state: KeydownSkillState
+):
+    # when
+    state, _ = keydown_component.use(None, keydown_state)
+    state, _ = keydown_component.elapse(10_000, state)
+    state, events = keydown_component.use(None, state)
+
+    # then
     assert is_rejected(events)
 
 
-def test_use_keydown_component(keydown_component):
-    keydown_component.use(None)
-    assert keydown_component.keydown.is_running()
+def test_use_keydown_component(
+    keydown_component: KeydownSkillComponent, keydown_state: KeydownSkillState
+):
+    # when
+    state, _ = keydown_component.use(None, keydown_state)
+
+    # then
+    assert state.keydown.is_running()
 
 
-def test_use_keydown_component_and_elapse_time(keydown_component, keydown_delay):
-    keydown_component.use(None)
-    keydown_component.elapse(keydown_delay)
-    assert keydown_component.keydown.is_running()
+def test_use_keydown_component_and_elapse_time(
+    keydown_component: KeydownSkillComponent,
+    keydown_state: KeydownSkillState,
+    keydown_delay: float,
+):
+    # when
+    state, _ = keydown_component.use(None, keydown_state)
+    state, _ = keydown_component.elapse(keydown_delay, state)
+
+    # then
+    assert state.keydown.is_running()
 
 
-def test_use_keydown_component_and_elapse_more_time(keydown_component, keydown_delay):
-    keydown_component.use(None)
-    events = keydown_component.elapse(keydown_delay + 10)
-    assert not keydown_component.keydown.is_running()
+def test_use_keydown_component_and_elapse_more_time(
+    keydown_component: KeydownSkillComponent,
+    keydown_state: KeydownSkillState,
+    keydown_delay: float,
+):
+    # when
+    state, _ = keydown_component.use(None, keydown_state)
+    state, events = keydown_component.elapse(keydown_delay + 10, state)
+
+    # then
+    assert not state.keydown.is_running()
     assert events[-1].payload["time"] == 500 - 10 - keydown_delay
 
 
-def test_use_keydown_component_many_time(keydown_component, keydown_delay):
+def test_use_keydown_component_many_time(
+    keydown_component: KeydownSkillComponent,
+    keydown_state: KeydownSkillState,
+    keydown_delay: float,
+):
+    # when
+    state = keydown_state
     for _ in range(6):
-        keydown_component.use(None)
-        keydown_component.elapse(keydown_delay)
-    assert keydown_component.keydown.is_running()
+        state, _ = keydown_component.use(None, state)
+        state, _ = keydown_component.elapse(keydown_delay, state)
+
+    # then
+    assert state.keydown.is_running()
 
 
-def test_use_keydown_component_too_long(keydown_component, keydown_delay):
+def test_use_keydown_component_too_long(
+    keydown_component: KeydownSkillComponent,
+    keydown_state: KeydownSkillState,
+    keydown_delay: float,
+):
+    # when
+    state = keydown_state
     for _ in range(11):
-        keydown_component.use(None)
-        keydown_component.elapse(keydown_delay)
+        state, _ = keydown_component.use(None, state)
+        state, _ = keydown_component.elapse(keydown_delay, state)
 
-    assert not keydown_component.keydown.is_running()
+    # then
+    assert not state.keydown.is_running()

@@ -11,13 +11,15 @@ from simaple.simulate.component.skill import Periodic
         (750, 7),
     ],
 )
-def test_interval_state_iterator(time, expected):
-    interval_state = Periodic(interval=100)
+def test_periodic_iterator(time, expected):
+    # given
+    periodic = Periodic(interval=100)
+    periodic.set_time_left(1200)
 
-    interval_state.set_time_left(1200)
-
+    # when
     count = 0
-    for _ in interval_state.resolving(time):
+    for _ in periodic.resolving(time):
         count += 1
 
+    # then
     assert count == expected

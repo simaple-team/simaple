@@ -4,9 +4,8 @@ import pytest
 import simaple.simulate.component.skill  # pylint: disable=W0611
 import simaple.simulate.component.specific  # pylint: disable=W0611
 from simaple.core.base import ActionStat
-from simaple.simulate.base import AddressedStore, ConcreteStore
 from simaple.simulate.component.specific.mechanic import RobotMastery
-from simaple.simulate.global_property import GlobalProperty
+from simaple.simulate.global_property import Dynamics
 from simaple.spec.repository import DirectorySpecRepository
 
 
@@ -16,11 +15,11 @@ def component_repository():
 
 
 @pytest.fixture
-def global_property():
-    return GlobalProperty(
-        ActionStat(
-            buff_duration=185,
-            cooltime_reduce=2_000,
+def dynamics():
+    return Dynamics(
+        stat=ActionStat(
+            buff_duration=20,
+            cooltime_reduce=0,
             summon_duration=40,
             cooltime_reduce_rate=5.0,
         )
@@ -28,15 +27,9 @@ def global_property():
 
 
 @pytest.fixture
-def mechanic_store(global_property):
-    store = AddressedStore(ConcreteStore())
-    global_property.install_global_properties(store)
-    store.set_entity(
-        ".로봇 마스터리.robot_mastery",
-        RobotMastery(
-            summon_increment=40,
-            robot_damage_increment=5,
-            robot_buff_damage_multiplier=100,
-        ),
+def robot_mastery():
+    return RobotMastery(
+        summon_increment=40,
+        robot_damage_increment=5,
+        robot_buff_damage_multiplier=100,
     )
-    return store

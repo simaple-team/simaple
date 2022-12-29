@@ -143,7 +143,7 @@ class RobotSummonSkill(
 
     @reducer_method
     def elapse(self, time: float, state: RobotSummonState):
-        state = state.copy()
+        state = state.deepcopy()
 
         state.cooldown.elapse(time)
         lapse_count = state.periodic.elapse(time)
@@ -221,7 +221,7 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
         time: float,
         state: HommingMissileState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
 
         state.cooldown.elapse(time)
         lapse_count = state.periodic.elapse(time)
@@ -322,7 +322,7 @@ class MultipleOptionComponent(SkillComponent, CooldownValidityTrait):
 
     @reducer_method
     def elapse(self, time: float, state: MultipleOptionState):
-        state = state.copy()
+        state = state.deepcopy()
 
         state.cooldown.elapse(time)
         dealing_events = []
@@ -335,7 +335,7 @@ class MultipleOptionComponent(SkillComponent, CooldownValidityTrait):
 
     @reducer_method
     def use(self, _: None, state: MultipleOptionState):
-        state = state.copy()
+        state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, self.event_provider.rejected()
@@ -450,7 +450,7 @@ class MecaCarrier(SkillComponent, CooldownValidityTrait):
         time: float,
         state: MecaCarrierState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
         state.cooldown.elapse(time)
 
         dealing_events = []
@@ -468,7 +468,7 @@ class MecaCarrier(SkillComponent, CooldownValidityTrait):
 
     @reducer_method
     def use(self, _: None, state: MecaCarrierState):
-        state = state.copy()
+        state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, self.event_provider.rejected()

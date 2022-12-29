@@ -34,8 +34,6 @@ class Actor(metaclass=ABCMeta):
 class AlwaysDelayedActor(Actor):
     def decide(self, environment: Environment, events: list[Event]) -> Action:
         for event in events:
-            if event.payload is None:
-                raise ValueError
             if event.tag in (Tag.DELAY,) and event.payload["time"] > 0:
                 return time_elapsing_action(event.payload["time"])
 

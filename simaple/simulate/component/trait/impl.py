@@ -51,7 +51,7 @@ class UseSimpleAttackTrait(
     def use_simple_attack(
         self, state: CooldownDynamicsGeneric
     ) -> tuple[CooldownDynamicsGeneric, list[Event]]:
-        state = state.copy()
+        state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
@@ -71,14 +71,14 @@ class UseSimpleAttackTrait(
     def elapse_simple_attack(
         self, time: float, state: CooldownGeneric
     ) -> tuple[CooldownGeneric, list[Event]]:
-        state = state.copy()
+        state = state.deepcopy()
         state.cooldown.elapse(time)
         return state, [self.event_provider.elapsed(time)]
 
     def use_multiple_damage(
         self, state: CooldownDynamicsGeneric, multiple: int
     ) -> tuple[CooldownDynamicsGeneric, list[Event]]:
-        state = state.copy()
+        state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
@@ -102,7 +102,7 @@ class BuffTrait(
         self,
         state: CooldownDynamicsLastingGeneric,
     ) -> tuple[CooldownDynamicsLastingGeneric, list[Event]]:
-        state = state.copy()
+        state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
@@ -124,7 +124,7 @@ class BuffTrait(
         time: float,
         state: CooldownDynamicsLastingGeneric,
     ) -> tuple[CooldownDynamicsLastingGeneric, list[Event]]:
-        state = state.copy()
+        state = state.deepcopy()
 
         state.cooldown.elapse(time)
         state.lasting.elapse(time)
@@ -154,7 +154,7 @@ class PeriodicWithSimpleDamageTrait(
         time: float,
         state: CooldownPeriodicGeneric,
     ) -> tuple[CooldownPeriodicGeneric, list[Event]]:
-        state = state.copy()
+        state = state.deepcopy()
 
         state.cooldown.elapse(time)
         lapse_count = state.periodic.elapse(time)
@@ -170,7 +170,7 @@ class PeriodicWithSimpleDamageTrait(
         self,
         state: CooldownDynamicsPeriodicGeneric,
     ) -> tuple[CooldownDynamicsPeriodicGeneric, list[Event]]:
-        state = state.copy()
+        state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
@@ -199,7 +199,7 @@ class UsePeriodicDamageTrait(
         self,
         state: CooldownDynamicsPeriodicGeneric,
     ) -> tuple[CooldownDynamicsPeriodicGeneric, list[Event]]:
-        state = state.copy()
+        state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]

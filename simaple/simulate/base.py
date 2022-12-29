@@ -5,7 +5,7 @@ import re
 from abc import ABCMeta, abstractmethod
 from typing import Any, Callable, Optional, Union, cast
 
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel, Extra, Field
 
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
@@ -52,7 +52,7 @@ class Event(BaseModel):
     method: str = ""
     tag: Optional[str]
     handler: Optional[str]
-    payload: Optional[dict]
+    payload: dict = Field(default_factory=dict)
 
     class Config:
         extra = Extra.forbid

@@ -6,33 +6,33 @@ from simaple.simulate.global_property import Dynamics
 T = TypeVar("T")
 
 
-class CopyProtocol(Protocol[T]):
-    def copy(self: T) -> T:
+class DeepcopyProtocol(Protocol[T]):
+    def deepcopy(self: T) -> T:
         pass
 
 
-class CooldownProtocol(CopyProtocol, Protocol):
+class CooldownProtocol(DeepcopyProtocol, Protocol):
     cooldown: Cooldown
 
 
 CooldownGeneric = TypeVar("CooldownGeneric", bound=CooldownProtocol)
 
 
-class LastingProtocol(CopyProtocol, Protocol):
+class LastingProtocol(DeepcopyProtocol, Protocol):
     lasting: Lasting
 
 
 LastingGeneric = TypeVar("LastingGeneric", bound=LastingProtocol)
 
 
-class PeriodicProtocol(CopyProtocol, Protocol):
+class PeriodicProtocol(DeepcopyProtocol, Protocol):
     periodic: Periodic
 
 
 PeriodicGeneric = TypeVar("PeriodicGeneric", bound=PeriodicProtocol)
 
 
-class DynamicsProtocol(CopyProtocol, Protocol):
+class DynamicsProtocol(DeepcopyProtocol, Protocol):
     dynamics: Dynamics
 
 

@@ -29,6 +29,9 @@ class EtherGauge(Stack):
     def is_order_valid(self) -> bool:
         return self.stack >= self.order_consume
 
+    def decrease_order(self):
+        self.decrease(self.order_consume)
+
 
 class RestoreLasting(Lasting):
     ether_multiplier: float
@@ -79,7 +82,7 @@ class AdeleEtherComponent(Component):
         time: float,
         state: EtherState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
 
         lapse_count = state.periodic.elapse(time)
         state.ether_gauge.increase(lapse_count * self.stack_per_period)
@@ -92,7 +95,7 @@ class AdeleEtherComponent(Component):
         _: None,
         state: EtherState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
 
         state.ether_gauge.increase(
             int(self.stack_per_trigger * state.restore_lasting.get_gain_rate())
@@ -106,7 +109,7 @@ class AdeleEtherComponent(Component):
         _: None,
         state: EtherState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
 
         state.ether_gauge.increase(self.stack_per_resonance)
 
@@ -118,9 +121,9 @@ class AdeleEtherComponent(Component):
         _: None,
         state: EtherState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
 
-        state.ether_gauge.decrease(self.order_consume)
+        state.ether_gauge.decrease_order()
 
         return (state), []
 
@@ -261,7 +264,7 @@ class AdeleOrderComponent(SkillComponent):
         time: float,
         state: AdeleOrderState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
 
         state.cooldown.elapse(time)
 
@@ -280,7 +283,7 @@ class AdeleOrderComponent(SkillComponent):
         _: None,
         state: AdeleOrderState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
 
         if not (state.ether_gauge.is_order_valid() and state.cooldown.available):
             return state, [self.event_provider.rejected()]
@@ -386,10 +389,10 @@ class AdeleBlossomComponent(SkillComponent, UseSimpleAttackTrait):
         _: None,
         state: AdeleOrderUsingState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
 
         if not self._is_valid(state):
-            return state, self.event_provider.rejected()
+            return state, [self.event_provider.rejected()]
 
         state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
@@ -468,7 +471,7 @@ class AdeleRuinComponent(
         time: float,
         state: AdeleRuinState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
 
         state.cooldown.elapse(time)
         lapse_count_first = state.interval_state_first.elapse(time)
@@ -492,7 +495,7 @@ class AdeleRuinComponent(
         _: None,
         state: AdeleRuinState,
     ):
-        state = state.copy()
+        state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
@@ -550,7 +553,7 @@ class AdeleRestoreBuffComponent(SkillComponent):
 
     @reducer_method
     def use(self, _: None, state: AdeleRestoreState):
-        state = state.copy()
+        state = state.deepcopy()
         state.lasting.set_time_left(
             state.dynamics.stat.calculate_buff_duration(self.lasting_duration)
         )
@@ -558,7 +561,7 @@ class AdeleRestoreBuffComponent(SkillComponent):
 
     @reducer_method
     def elapse(self, time: float, state: AdeleRestoreState):
-        state = state.copy()
+        state = state.deepcopy()
         state.lasting.elapse(time)
         return state, [self.event_provider.elapsed(time)]
 
