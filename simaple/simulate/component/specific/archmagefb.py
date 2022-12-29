@@ -224,7 +224,7 @@ class DotPunisherComponent(SkillComponent, CooldownValidityTrait, AddDOTDamageTr
 
     @reducer_method
     def use(self, _: None, state: AttackSkillState):
-        state = state.copy()
+        state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, self.event_provider.rejected()
@@ -240,13 +240,13 @@ class DotPunisherComponent(SkillComponent, CooldownValidityTrait, AddDOTDamageTr
 
     @reducer_method
     def elapse(self, time: float, state: AttackSkillState):
-        state = state.copy()
+        state = state.deepcopy()
         state.cooldown.elapse(time)
         return state, [self.event_provider.elapsed(time)]
 
     @reducer_method
     def reset_cooldown(self, _: None, state: AttackSkillState):
-        state = state.copy()
+        state = state.deepcopy()
         state.cooldown.set_time_left(0)
         return state, None
 

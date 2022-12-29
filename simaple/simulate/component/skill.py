@@ -118,7 +118,7 @@ class DOTEmittingAttackSkillComponent(
 
     @reducer_method
     def reset_cooldown(self, _: None, state: AttackSkillState):
-        state = state.copy()
+        state = state.deepcopy()
         state.cooldown.set_time_left(0)
         return state, None
 

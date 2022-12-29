@@ -65,14 +65,14 @@ class MobComponent(Component):
 
     @reducer_method
     def add_dot(self, payload: DOTRequestPayload, state: MobState):
-        state = state.copy()
+        state = state.deepcopy()
         state.dot.new(payload.name, payload.damage, payload.lasting_time)
 
         return state, []
 
     @reducer_method
     def elapse(self, time: float, state: MobState):
-        state = state.copy()
+        state = state.deepcopy()
         emits = state.dot.elapse(time)
 
         events = [
