@@ -150,7 +150,6 @@ def test_elapse_until_finish(
     state, elapse_events = component.elapse(delay * 10, state)
 
     # then
-    print(use_events)
     damage_events = [e for e in elapse_events if e.tag == Tag.DAMAGE]
     assert damage_events[-1].payload["damage"] == component.finish_damage
     assert damage_events[-1].payload["hit"] == component.finish_hit
@@ -186,7 +185,6 @@ def test_elapse_very_long(
     state, elapse_events = component.elapse(delay * 20, state)
 
     # then
-    print(use_events)
     damage_events = [e for e in elapse_events if e.tag == Tag.DAMAGE]
     assert damage_events[-1].payload["damage"] == component.finish_damage
     assert damage_events[-1].payload["hit"] == component.finish_hit

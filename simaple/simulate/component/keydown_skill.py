@@ -69,8 +69,3 @@ class KeydownSkillComponent(SkillComponent, KeydownSkillTrait, CooldownValidityT
 
     def _get_keydown_end_damage_hit_delay(self) -> tuple[float, float, float]:
         return self.finish_damage, self.finish_hit, self.keydown_end_delay
-
-    def _on_keydown_end(
-        self, state: KeydownSkillState
-    ) -> tuple[KeydownSkillState, list[Event]]:
-        return state, []
