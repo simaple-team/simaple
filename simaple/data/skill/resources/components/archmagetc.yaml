@@ -168,7 +168,7 @@ data:
 
   damage: 150
   hit: 15
-  delay: 240
+  delay: 210
   cooldown_duration: 60_000
 
   keydown_prepare_delay: 780
