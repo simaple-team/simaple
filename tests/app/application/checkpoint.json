@@ -34,19 +34,6 @@
       "time_left": 0.0
     }
   },
-  ".메디테이션.cooldown": {
-    "cls": "Cooldown",
-    "payload": {
-      "time_left": 0.0
-    }
-  },
-  ".메디테이션.lasting": {
-    "cls": "Lasting",
-    "payload": {
-      "time_left": 0.0,
-      "assigned_duration": 0.0
-    }
-  },
   ".에픽 어드벤처.cooldown": {
     "cls": "Cooldown",
     "payload": {

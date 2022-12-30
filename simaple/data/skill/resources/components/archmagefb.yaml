@@ -78,22 +78,6 @@ version: simaple.io/BuffSkillComponent
 metadata:
   label:
     group: archmagefb
-    name: 메디테이션
-data:
-  name: 메디테이션
-  lasting_duration: 240000
-  cooldown_duration: 0
-  delay: 0
-  red: true
-  rem: true
-  stat:
-    magic_attack: 30
----
-kind: Component
-version: simaple.io/BuffSkillComponent
-metadata:
-  label:
-    group: archmagefb
     name: 에픽 어드벤처
 data:
   name: 에픽 어드벤처
