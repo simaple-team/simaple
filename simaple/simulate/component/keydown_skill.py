@@ -1,4 +1,3 @@
-from simaple.simulate.base import Event
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Keydown
 from simaple.simulate.component.skill import SkillComponent

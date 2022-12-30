@@ -260,22 +260,26 @@ class KeydownSkillTrait(
 
         state.cooldown.elapse(time)
 
-        events = []
+        damage_hits: list[tuple[float, float]] = []
+
         was_running = state.keydown.running
-        for delay in state.keydown.resolving(time):
-            events += [
-                self.event_provider.dealt(damage, hit),
-                self.event_provider.delayed(delay),
-            ]
+        for _ in state.keydown.resolving(time):
+            damage_hits += [(damage, hit)]
 
         keydown_end = was_running and not state.keydown.running
         if keydown_end:
-            events += [
-                self.event_provider.dealt(finish_damage, finish_hit),
-                self.event_provider.delayed(finish_delay),
-            ]
+            damage_hits += [(finish_damage, finish_hit)]
+            # time_left is negative value here, represents time exceeded after actual keydown end.
+            delay = max(finish_delay + state.keydown.time_left, 0)
+        else:
+            delay = state.keydown.get_next_delay()
 
-        return state, events + [self.event_provider.elapsed(time)], keydown_end
+        return (
+            state,
+            [self.event_provider.dealt(damage, hit) for damage, hit in damage_hits]
+            + [self.event_provider.delayed(delay), self.event_provider.elapsed(time)],
+            keydown_end,
+        )
 
     def stop_keydown_trait(
         self, state: CooldownDynamicsKeydownGeneric

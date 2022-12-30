@@ -123,6 +123,9 @@ class Keydown(Entity):
     def running(self) -> bool:
         return self.time_left > 0
 
+    def get_next_delay(self) -> float:
+        return min(self.interval_counter, self.time_left)
+
     def start(self, maximum_keydown_time: float, prepare_delay: float):
         self.interval_counter = prepare_delay
         self.time_left = maximum_keydown_time
@@ -137,11 +140,6 @@ class Keydown(Entity):
 
         # pylint:disable=chained-comparison
         while resolving_time_left >= 0 and self.interval_counter <= 0:
-            is_last = resolving_time_left < self.interval
-            if is_last:
-                yield resolving_time_left
-            else:
-                yield self.interval
-
+            yield 1
             self.interval_counter += self.interval
             resolving_time_left -= self.interval
