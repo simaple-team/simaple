@@ -36,6 +36,42 @@ class Actor(metaclass=ABCMeta):
 class DefaultMDCActor(pydantic.BaseModel, Actor):
     order: list[str]
 
+    def decide(
+        self,
+        environment: Environment,
+        events: list[Event],
+    ) -> Action:
+        validities: list[Validity] = environment.show("validity")
+        runnings: list[Running] = environment.show("running")
+
+        validity_map = {v.name: v for v in validities if v.valid}
+        running_map = {r.name: r.time_left for r in runnings}
+        keydown_running_name = self._get_keydown_running_name(environment)
+        elapse_time = self._get_next_elapse_time(events)
+
+        chosen_action: Optional[Action] = None
+
+        if keydown_running_name is not None:
+            chosen_action = self._decide_during_keydown(
+                validity_map,
+                running_map,
+                keydown_running_name,
+                elapse_time,
+            )
+        else:
+            chosen_action = self._decide_default(
+                validity_map,
+                running_map,
+                elapse_time,
+            )
+
+        if chosen_action:
+            return chosen_action
+
+        raise ValueError(
+            "No valid element exist! Maybe unintended component was built?"
+        )
+
     def _decide_during_keydown(
         self,
         validity_map: dict[str, Validity],
@@ -77,48 +113,10 @@ class DefaultMDCActor(pydantic.BaseModel, Actor):
 
         return None
 
-    def decide(
-        self,
-        environment: Environment,
-        events: list[Event],
-    ) -> Action:
-        validities: list[Validity] = environment.show("validity")
-        runnings: list[Running] = environment.show("running")
-
-        validity_map = {v.name: v for v in validities if v.valid}
-        running_map = {r.name: r.time_left for r in runnings}
-        keydown_running_name = self._get_keydown_running_name(environment)
-        elapse_time = self._get_next_elapse_time(events)
-
-        chosen_action: Optional[Action] = None
-
-        if keydown_running_name is not None:
-            chosen_action = self._decide_during_keydown(
-                validity_map,
-                running_map,
-                keydown_running_name,
-                elapse_time,
-            )
-        else:
-            chosen_action = self._decide_default(
-                validity_map,
-                running_map,
-                elapse_time,
-            )
-
-        if chosen_action:
-            return chosen_action
-
-        raise ValueError(
-            "No valid element exist! Maybe unintended component was built?"
-        )
-
     def _get_keydown_running_name(self, environment: Environment) -> Optional[str]:
         keydowns: list[KeydownView] = environment.show("keydown")
         keydown_running_list = [k.name for k in keydowns if k.running]
 
-        if len(keydown_running_list) > 1:
-            raise ValueError("Running keydown cannot be more than 1")
         return next(iter(keydown_running_list), None)
 
     def _get_next_elapse_time(self, events: list[Event]) -> float:

@@ -140,6 +140,6 @@ class Keydown(Entity):
 
         # pylint:disable=chained-comparison
         while resolving_time_left >= 0 and self.interval_counter <= 0:
-            yield 1
+            yield
             self.interval_counter += self.interval
             resolving_time_left -= self.interval

@@ -252,11 +252,6 @@ class KeydownSkillTrait(
     ) -> tuple[CooldownDynamicsKeydownGeneric, list[Event], bool]:
         state = state.deepcopy()
         damage, hit = self._get_keydown_damage_hit()
-        (
-            finish_damage,
-            finish_hit,
-            finish_delay,
-        ) = self._get_keydown_end_damage_hit_delay()
 
         state.cooldown.elapse(time)
 
@@ -268,6 +263,11 @@ class KeydownSkillTrait(
 
         keydown_end = was_running and not state.keydown.running
         if keydown_end:
+            (
+                finish_damage,
+                finish_hit,
+                finish_delay,
+            ) = self._get_keydown_end_damage_hit_delay()
             damage_hits += [(finish_damage, finish_hit)]
             # time_left is negative value here, represents time exceeded after actual keydown end.
             delay = max(finish_delay + state.keydown.time_left, 0)
