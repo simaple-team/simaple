@@ -7,7 +7,7 @@ from simaple.simulate.component.view import (
     ValidityParentView,
 )
 from simaple.simulate.report.base import Report, ReportEventHandler
-from simaple.simulate.report.dpm import DPMCalculator, LevelAdvantage
+from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 
 
 def test_actor(mechanic_client, character_stat):
@@ -43,7 +43,7 @@ def test_actor(mechanic_client, character_stat):
 
     mechanic_client.add_handler(ReportEventHandler(report))
 
-    dpm_calculator = DPMCalculator(
+    dpm_calculator = DamageCalculator(
         character_spec=character_stat,
         damage_logic=INTBasedDamageLogic(attack_range_constant=1.2, mastery=0.95),
         armor=300,

@@ -35,6 +35,8 @@ def get_client(
     injected_values: dict,
     skill_levels: dict[str, int],
     v_improvements: dict[str, int],
+    combat_orders_level: int = 1,
+    passive_skill_level: int = 0,
 ) -> Client:
     loader = SpecBasedLoader(get_kms_component_repository())
 
@@ -45,8 +47,8 @@ def get_client(
             query={"group": group},
             patches=[
                 SkillLevelPatch(
-                    combat_orders_level=1,
-                    passive_skill_level=0,
+                    combat_orders_level=combat_orders_level,
+                    passive_skill_level=passive_skill_level,
                     default_skill_levels=skill_levels,
                 ),
                 EvalPatch(injected_values=injected_values),

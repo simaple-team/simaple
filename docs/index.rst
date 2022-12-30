@@ -14,7 +14,14 @@ discover, simulate and optimize related with maplestory.
    :caption: Getting Started
    :hidden:
 
+   modules/tutorial/tutorial.rst
    modules/examples
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Explanations
+   :hidden:
+
    modules/simulate
 
 

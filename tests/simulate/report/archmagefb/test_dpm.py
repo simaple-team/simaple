@@ -3,7 +3,7 @@ from simaple.core.jobtype import JobType
 from simaple.data.damage_logic import get_damage_logic
 from simaple.simulate.actor import ActionRecorder, DefaultMDCActor
 from simaple.simulate.report.base import Report, ReportEventHandler
-from simaple.simulate.report.dpm import DPMCalculator, LevelAdvantage
+from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 
 
 def test_actor(archmagefb_client, character_stat):
@@ -34,7 +34,7 @@ def test_actor(archmagefb_client, character_stat):
     report = Report()
     archmagefb_client.add_handler(ReportEventHandler(report))
 
-    dpm_calculator = DPMCalculator(
+    dpm_calculator = DamageCalculator(
         character_spec=character_stat,
         damage_logic=get_damage_logic(JobType.archmagefb, 0),
         armor=300,

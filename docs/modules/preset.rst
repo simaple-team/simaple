@@ -19,6 +19,6 @@ Includes:
 simaple.preset.base
 ===================
 
-.. automodule:: simaple.preset.base
+.. automodule:: simaple.optimizer.preset
     :members:
     :undoc-members:
