@@ -3,7 +3,6 @@ import os
 from pathlib import Path
 
 from simaple.app.application.command import create_simulator, override_checkpint
-from simaple.app.application.query import query_latest_playlog
 from simaple.app.domain.simulator_configuration import MinimalSimulatorConfiguration
 from simaple.app.domain.uow import UnitOfWork
 

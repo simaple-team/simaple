@@ -1,4 +1,3 @@
-import os
 from typing import Optional
 
 import pytest
@@ -7,6 +6,9 @@ from simaple.app.domain.simulator import SimulatorRepository
 from simaple.app.domain.simulator_configuration import MinimalSimulatorConfiguration
 from simaple.app.domain.snapshot import Snapshot, SnapshotRepository
 from simaple.app.domain.uow import UnitOfWork
+from simaple.app.infrastructure.component_schema_repository import (
+    LoadableComponentSchemaRepository,
+)
 from simaple.app.infrastructure.repository import InmemorySimulatorRepository
 
 
@@ -39,12 +41,18 @@ class InmemoryUnitOfWork(UnitOfWork):
         self._simulator_repository: InmemorySimulatorRepository = (
             InmemorySimulatorRepository()
         )
+        self._component_schema_repository: LoadableComponentSchemaRepository = (
+            LoadableComponentSchemaRepository()
+        )
 
     def snapshot_repository(self) -> SnapshotRepository:
         return self._snapshot_repository
 
     def simulator_repository(self) -> SimulatorRepository:
         return self._simulator_repository
+
+    def component_schema_repository(self) -> LoadableComponentSchemaRepository:
+        return self._component_schema_repository
 
     def commit(self) -> None:
         return
