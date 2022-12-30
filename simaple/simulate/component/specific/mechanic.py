@@ -18,6 +18,7 @@ from simaple.simulate.component.trait.impl import (
     PeriodicWithSimpleDamageTrait,
     UsePeriodicDamageTrait,
 )
+from simaple.simulate.component.util import is_keydown_ended
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
@@ -310,18 +311,18 @@ class FullMetalBarrageComponent(
     @reducer_method
     def elapse(self, time: float, state: FullMetalBarrageState):
         state.penalty_lasting.elapse(time)
-        state, event, keydown_end = self.elapse_keydown_trait(time, state)
+        state, event = self.elapse_keydown_trait(time, state)
 
-        if keydown_end:
+        if is_keydown_ended(event):
             state.penalty_lasting.set_time_left(self.homing_penalty_duration)
 
         return state, event
 
     @reducer_method
     def stop(self, _, state: FullMetalBarrageState):
-        state, event, keydown_end = self.stop_keydown_trait(state)
+        state, event = self.stop_keydown_trait(state)
 
-        if keydown_end:
+        if is_keydown_ended(event):
             state.penalty_lasting.set_time_left(self.homing_penalty_duration)
 
         return state, event

@@ -249,12 +249,11 @@ class KeydownSkillTrait(
 
     def elapse_keydown_trait(
         self, time: float, state: CooldownDynamicsKeydownGeneric
-    ) -> tuple[CooldownDynamicsKeydownGeneric, list[Event], bool]:
+    ) -> tuple[CooldownDynamicsKeydownGeneric, list[Event]]:
         state = state.deepcopy()
-        damage, hit = self._get_keydown_damage_hit()
-
         state.cooldown.elapse(time)
 
+        damage, hit = self._get_keydown_damage_hit()
         damage_hits: list[tuple[float, float]] = []
 
         was_running = state.keydown.running
@@ -277,13 +276,13 @@ class KeydownSkillTrait(
         return (
             state,
             [self.event_provider.dealt(damage, hit) for damage, hit in damage_hits]
-            + [self.event_provider.delayed(delay), self.event_provider.elapsed(time)],
-            keydown_end,
+            + [self.event_provider.delayed(delay), self.event_provider.elapsed(time)]
+            + ([self.event_provider.keydown_end()] if keydown_end else []),
         )
 
     def stop_keydown_trait(
         self, state: CooldownDynamicsKeydownGeneric
-    ) -> tuple[CooldownDynamicsKeydownGeneric, list[Event], bool]:
+    ) -> tuple[CooldownDynamicsKeydownGeneric, list[Event]]:
         state = state.deepcopy()
         (
             finish_damage,
@@ -292,7 +291,7 @@ class KeydownSkillTrait(
         ) = self._get_keydown_end_damage_hit_delay()
 
         if not state.keydown.running:
-            return state, [self.event_provider.rejected()], False
+            return state, [self.event_provider.rejected()]
 
         state.keydown.stop()
 
@@ -301,8 +300,8 @@ class KeydownSkillTrait(
             [
                 self.event_provider.dealt(finish_damage, finish_hit),
                 self.event_provider.delayed(finish_delay),
+                self.event_provider.keydown_end(),
             ],
-            True,
         )
 
     def keydown_view_in_keydown_trait(self, state: CooldownDynamicsKeydownProtocol):

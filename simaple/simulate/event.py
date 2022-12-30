@@ -25,6 +25,10 @@ class EventProvider(metaclass=ABCMeta):
     ) -> Event:
         ...
 
+    @abstractmethod
+    def keydown_end(self) -> Event:
+        ...
+
 
 class NamedEventProvider(EventProvider):
     def __init__(self, name: str, default_modifier: Optional[Stat] = None):
@@ -62,3 +66,6 @@ class NamedEventProvider(EventProvider):
                 "modifier": total_modifier.dict() if total_modifier else None,
             },
         )
+
+    def keydown_end(self) -> Event:
+        return Event(name=self._name, tag=Tag.KEYDOWN_END)

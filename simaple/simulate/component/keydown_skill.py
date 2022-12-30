@@ -44,12 +44,12 @@ class KeydownSkillComponent(SkillComponent, KeydownSkillTrait, CooldownValidityT
 
     @reducer_method
     def elapse(self, time: float, state: KeydownSkillState):
-        state, events, _ = self.elapse_keydown_trait(time, state)
+        state, events = self.elapse_keydown_trait(time, state)
         return state, events
 
     @reducer_method
     def stop(self, _, state: KeydownSkillState):
-        state, events, _ = self.stop_keydown_trait(state)
+        state, events = self.stop_keydown_trait(state)
         return state, events
 
     @view_method
