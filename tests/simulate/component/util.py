@@ -9,6 +9,10 @@ def count_damage_skill(events: list[Event]) -> int:
     return sum([e.tag == Tag.DAMAGE for e in events])
 
 
+def count_dot_skill(events: list[Event]) -> int:
+    return sum([e.tag == Tag.DOT for e in events])
+
+
 def is_rejected(events: list[Event]) -> bool:
     return events[0].tag == Tag.REJECT
 

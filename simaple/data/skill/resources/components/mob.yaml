@@ -1,0 +1,10 @@
+kind: Component
+version: simaple.io/MobComponent
+metadata:
+  label:
+    group: mob
+    name: 평범한 몬스터
+data:
+  listening_actions:
+    "$.emitted.global.mob": add_dot
+  name: 평범한 몬스터

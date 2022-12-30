@@ -1,6 +1,6 @@
 import inspect
 from abc import ABCMeta, abstractmethod
-from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union
+from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union, cast
 
 from pydantic import BaseModel, Field
 from pydantic.error_wrappers import ValidationError
@@ -79,11 +79,11 @@ class ActionRouter(BaseModel, metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    def get_matching_reducer(self, action: Action) -> ComponentMethodWrapper:
+    def get_matching_reducer(self, action: Action) -> Optional[ComponentMethodWrapper]:
         ...
 
     @abstractmethod
-    def get_matching_method_name(self, action: Action) -> str:
+    def get_matching_method_name(self, action: Action) -> Optional[str]:
         ...
 
 
@@ -91,14 +91,32 @@ class ConcreteActionRouter(ActionRouter):
     mappings: dict[str, ComponentMethodWrapper]
     method_mappings: dict[str, str]
 
-    def is_enabled_action(self, action: Action):
-        return action.signature in self.mappings
+    def is_enabled_action(self, action: Action) -> bool:
+        mapping = self._find_mapping_name(action.signature, self.mappings)
+        return mapping is not None
 
-    def get_matching_reducer(self, action: Action) -> ComponentMethodWrapper:
-        return self.mappings[action.signature]
+    def get_matching_reducer(self, action: Action) -> Optional[ComponentMethodWrapper]:
+        mapping_name = self._find_mapping_name(action.signature, self.mappings)
+        if mapping_name is None:
+            return None
+        return self.mappings[mapping_name]
 
-    def get_matching_method_name(self, action: Action) -> str:
-        return self.method_mappings[action.signature]
+    def get_matching_method_name(self, action: Action) -> Optional[str]:
+        mapping_name = self._find_mapping_name(action.signature, self.method_mappings)
+        if mapping_name is None:
+            return None
+
+        return self.method_mappings[mapping_name]
+
+    def _find_mapping_name(self, target: str, mappings) -> Optional[str]:
+        if target in mappings:
+            return target
+
+        for mapping_name in mappings:
+            if mapping_name[0] == "$" and mapping_name.replace("$", "") in target:
+                return cast(str, mapping_name)
+
+        return None
 
 
 class StoreAdapter:
@@ -162,6 +180,9 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
 
         reducer = self._action_router.get_matching_reducer(action)
         method_name = self._action_router.get_matching_method_name(action)
+
+        if reducer is None or method_name is None:
+            return []
 
         input_state = self._store_adapter.get_state(
             local_store, reducer.get_state_type()

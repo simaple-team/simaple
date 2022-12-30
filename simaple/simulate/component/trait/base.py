@@ -55,3 +55,9 @@ class PeriodicDamageTrait(ComponentTrait):
     @abstractmethod
     def _get_periodic_damage_hit(self, state) -> tuple[float, float]:
         ...
+
+
+class DOTTrait(ComponentTrait):
+    @abstractmethod
+    def _get_dot_damage_and_lasting(self) -> tuple[float, float]:
+        ...

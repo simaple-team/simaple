@@ -11,9 +11,10 @@ class DamageLog(pydantic.BaseModel):
     damage: float
     hit: float
     buff: Stat
+    tag: str
 
     def serialize(self):
-        return f"{self.clock}\t{self.name}\t{self.damage:.3f}\t{self.hit}\t{self.buff.short_dict()}"
+        return f"{self.clock}\t{self.name}\t{self.tag}\t{self.damage:.3f}\t{self.hit}\t{self.buff.short_dict()}"
 
 
 class Report:
@@ -23,10 +24,10 @@ class Report:
     def __iter__(self):
         return iter(self._logs)
 
-    def add(self, clock, event, buff):
+    def add(self, clock: float, event, buff: Stat):
         buff_stat = buff
         if event.payload["damage"] != 0 and event.payload["hit"] != 0:
-            if event.payload["modifier"] is not None:
+            if event.payload.get("modifier") is not None:
                 buff_stat = buff_stat + Stat.parse_obj(event.payload["modifier"])
 
             self._logs.append(
@@ -36,6 +37,7 @@ class Report:
                     damage=event.payload["damage"],
                     hit=event.payload["hit"],
                     buff=buff_stat.short_dict(),
+                    tag=event.tag,
                 )
             )
 
@@ -55,7 +57,7 @@ class ReportEventHandler(EventHandler):
     def __call__(
         self, event: Event, environment: Environment, all_events: list[Event]
     ) -> None:
-        if event.tag == Tag.DAMAGE:
+        if event.tag in (Tag.DAMAGE, Tag.DOT):
             current_buff_state = environment.show("buff")
             current_clock = environment.show("clock")
             self.report.add(current_clock, event, current_buff_state)

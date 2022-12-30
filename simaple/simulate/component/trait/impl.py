@@ -11,6 +11,7 @@ from simaple.simulate.component.state_protocol import (
 from simaple.simulate.component.trait.base import (
     CooldownTrait,
     DelayTrait,
+    DOTTrait,
     EventProviderTrait,
     InvalidatableTrait,
     LastingTrait,
@@ -19,6 +20,7 @@ from simaple.simulate.component.trait.base import (
     SimpleDamageTrait,
 )
 from simaple.simulate.component.view import Running, Validity
+from simaple.simulate.reserved_names import Tag
 
 
 class CooldownValidityTrait(CooldownTrait, NamedTrait):
@@ -214,3 +216,18 @@ class UsePeriodicDamageTrait(
         return state, [
             self.event_provider.delayed(delay),
         ]
+
+
+class AddDOTDamageTrait(DOTTrait, NamedTrait):
+    def get_dot_add_event(self) -> Event:
+        damage, lasting_time = self._get_dot_damage_and_lasting()
+        return Event(
+            name=self._get_name(),
+            payload={
+                "damage": damage,
+                "lasting_time": lasting_time,
+                "name": self._get_name(),
+            },
+            tag=Tag.MOB,
+            method="add_dot",
+        )
