@@ -1,7 +1,8 @@
 import fastapi
 from dependency_injector.wiring import Provide, inject
 
-from simaple.app.application.query.component_spec import query_all_component_spec
+from simaple.app.application.query.component_spec import query_all_component_schemas
+from simaple.app.domain.component_schema import ComponentSchema
 from simaple.app.domain.uow import UnitOfWork
 from simaple.app.interface.container import WebContainer
 
@@ -14,5 +15,5 @@ component_spec_router = fastapi.APIRouter(prefix="/component_spec")
 @inject
 def get_all_component_spec(
     uow: UnitOfWork = UowProvider,
-) -> dict:
-    return query_all_component_spec(uow)
+) -> dict[str, ComponentSchema]:
+    return query_all_component_schemas(uow)

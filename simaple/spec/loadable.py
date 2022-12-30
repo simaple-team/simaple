@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Type
 
-from pydantic.main import ModelMetaclass, BaseModel
+from pydantic.main import BaseModel, ModelMetaclass
 
 
 class NamespaceRepository:
@@ -30,6 +30,10 @@ _LAYER_NAMESPACE = NamespaceRepository()
 
 def get_class(name: str, kind: str = "default") -> Type[Any]:
     return _LAYER_NAMESPACE.get(name, kind)
+
+
+def get_all(kind: str) -> dict[str, Type[BaseModel]]:
+    return _LAYER_NAMESPACE.get_all(kind)
 
 
 class BaseNamespacedABCMeta(ModelMetaclass, type):

@@ -1,11 +1,7 @@
-from __future__ import annotations
-
-import pydantic
-
+from simaple.app.domain.component_schema import ComponentSchema
 from simaple.app.domain.uow import UnitOfWork
-from simaple.spec.loadable import _LAYER_NAMESPACE
 
 
-def query_all_component_spec(uow: UnitOfWork) -> dict:
-    components = _LAYER_NAMESPACE.get_all(kind="Component")
-    return {name: model.schema() for name, model in components.items()}
+def query_all_component_schemas(uow: UnitOfWork) -> dict[str, ComponentSchema]:
+    schemas = uow.component_schema_repository().get_all()
+    return {schema.name: schema.value for schema in schemas}

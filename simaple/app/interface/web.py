@@ -4,9 +4,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from simaple.app.interface.container import WebContainer, WebSetting
 from simaple.app.interface.handler import add_exception_handlers
 from simaple.app.interface.routers import snapshot, statistics, workspace
+from simaple.app.interface.routers.component_spec import component_spec_router
 from simaple.app.interface.routers.snapshot import snapshot_router
 from simaple.app.interface.routers.statistics import statistics_router
-from simaple.app.interface.routers.component_spec import component_spec_router
 from simaple.app.interface.routers.workspace import router
 
 
