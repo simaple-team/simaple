@@ -15,7 +15,6 @@ def test_actor(archmagefb_client, character_stat):
             "인피니티",
             "소울 컨트랙트",
             "메이플 여신의 축복",
-            "메디테이션",
             "에픽 어드벤처",
             "메테오",
             "포이즌 노바",
@@ -52,4 +51,4 @@ def test_actor(archmagefb_client, character_stat):
 
     print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")
 
-    assert int(dpm_calculator.calculate_dpm(report)) == 2_603_092_357_530
+    assert int(dpm_calculator.calculate_dpm(report)) == 2_565_994_316_213
