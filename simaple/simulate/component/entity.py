@@ -35,6 +35,29 @@ class Cooldown(Entity):
         self.time_left = time
 
 
+class Consumable(Entity):
+    maximum_stack: int
+    stack: int
+    cooldown_duration: float
+    time_left: float
+
+    @property
+    def available(self):
+        return self.stack > 0
+
+    def elapse(self, time: float):
+        self.time_left -= time
+        while self.time_left <= 0:
+            self.time_left += self.cooldown_duration
+            self.stack = min(self.stack + 1, self.maximum_stack)
+
+        if self.stack == self.maximum_stack:
+            self.time_left = self.cooldown_duration
+
+    def consume(self):
+        self.stack -= 1
+
+
 class Cycle(Entity):
     tick: int
     period: int

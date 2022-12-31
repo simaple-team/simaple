@@ -1,5 +1,7 @@
 from simaple.simulate.base import Event
 from simaple.simulate.component.state_protocol import (
+    ConsumableDynamicsLastingGeneric,
+    ConsumableProtocol,
     CooldownDynamicsGeneric,
     CooldownDynamicsKeydownGeneric,
     CooldownDynamicsKeydownProtocol,
@@ -47,6 +49,17 @@ class InvalidatableCooldownTrait(CooldownTrait, InvalidatableTrait, NamedTrait):
                 valid=state.cooldown.available,
                 cooldown_duration=self._get_cooldown_duration(),
             )
+        )
+
+
+class ConsumableValidityTrait(CooldownTrait, NamedTrait):
+    def validity_in_consumable_trait(self, state: ConsumableProtocol) -> Validity:
+        return Validity(
+            name=self._get_name(),
+            time_left=max(0, state.consumable.time_left),
+            valid=state.consumable.available,
+            cooldown_duration=self._get_cooldown_duration(),
+            stack=state.consumable.stack,
         )
 
 
@@ -144,6 +157,36 @@ class BuffTrait(
             time_left=state.lasting.time_left,
             lasting_duration=self._get_lasting_duration(state),
         )
+
+
+class ConsumableBuffTrait(LastingTrait, EventProviderTrait, DelayTrait):
+    def use_consumable_buff_trait(
+        self, state: ConsumableDynamicsLastingGeneric
+    ) -> tuple[ConsumableDynamicsLastingGeneric, list[Event]]:
+        state = state.deepcopy()
+
+        if not state.consumable.available:
+            return state, [self.event_provider.rejected()]
+
+        state.consumable.consume()
+
+        state.lasting.set_time_left(
+            state.dynamics.stat.calculate_buff_duration(
+                self._get_lasting_duration(state)
+            )
+        )
+
+        return state, [self.event_provider.delayed(self._get_delay())]
+
+    def elapse_consumable_buff_trait(
+        self, time: float, state: ConsumableDynamicsLastingGeneric
+    ) -> tuple[ConsumableDynamicsLastingGeneric, list[Event]]:
+        state = state.deepcopy()
+
+        state.consumable.elapse(time)
+        state.lasting.elapse(time)
+
+        return state, [self.event_provider.elapsed(time)]
 
 
 class PeriodicWithSimpleDamageTrait(
