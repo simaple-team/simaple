@@ -1,0 +1,175 @@
+# TODO: 페이탈 베놈
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 팬텀 블로우
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  name: 팬텀 블로우
+  cooldown_duration: 0
+  delay: 540
+  damage: "{{ 240 + 3 * skill_level }}"
+  hit: 6
+  modifier:
+    ignored_defence: 30
+  v_improvement: 2
+---
+# TODO: 써든레이드(도트)
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 써든레이드
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 써든레이드
+  cooldown_duration: "{{ 60000 - 2000 * skill_level }}"
+  red: True
+  delay: 690
+  damage: "{{ 294 + 3 * skill_level }}"
+  hit: 7
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/FinalCutComponent
+metadata:
+  label:
+    group: dualblade
+    name: 파이널 컷
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 파이널 컷
+  cooldown_duration: 90000
+  red: True
+  delay: 450 # 임의 딜레이
+  damage: "{{ 1400 + 20 * skill_level }}"
+  hit: 1
+
+  sudden_raid_cooltime_reduce: 20
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 파이널 컷(버프)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions:
+    "파이널 컷.use.emitted.global.delay": use
+  name: 파이널 컷(버프)
+  cooldown_duration: 0
+  delay: 0
+  lasting_duration: 60000
+  stat:
+    final_damage_multiplier: "{{ 10 + skill_level }}"
+  disable_validity: True
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 플래시 뱅
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 플래시 뱅
+  cooldown_duration: 30000
+  red: True
+  delay: 390
+  damage: 250
+  hit: 1
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 플래시 뱅(버프)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions:
+    "플래시 뱅.use.emitted.global.delay": use
+  name: 플래시 뱅(버프)
+  cooldown_duration: 0
+  delay: 0
+  lasting_duration: 60000
+  stat:
+    final_damage_multiplier: "{{ 10 + skill_level }}"
+  disable_validity: True
+---
+kind: Component
+version: simaple.io/TriggableBuffSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 히든 블레이드
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 히든 블레이드
+  delay: 0
+  cooldown_duration: 90000
+  lasting_duration: 90000
+
+  trigger_cooldown_duration: 0
+  trigger_damage: 240
+  trigger_hit: 1
+
+  stat:
+    damage_multiplier: 10
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/KeydownSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 아수라
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 아수라
+
+  damage: 693
+  hit: 5
+  delay: 300
+  cooldown_duration: 60_000
+
+  maximum_keydown_time: 5000
+  keydown_end_delay: 360
+
+  finish_damage: 0
+  finish_hit: 0
+
+  modifier:
+    ignored_defence: 100
