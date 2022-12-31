@@ -93,7 +93,7 @@ Reducer
 ----------
 
 Dispatcher는 비-일급 함수라는 nature때문에, 개발자에게 노출되는 인터페이스로는 적절하지 않습니다. 따라서, simaple은 Reducer라는 일급 함수 인터페이스를 제공하여 개발자로 하여 직관적이고 sustainable한 코드를 작성하도록 지원합니다.
-Reducer는 아래와 같은 sugnature를 가지는 함수입니다.
+Reducer는 아래와 같은 signature를 가지는 함수입니다.
 ``(Any, State) -> (State, list[Event])``
 Reducer는 일급 함수입니다; 이는 제공된 상태가 Reducer로 인해 변하지 않아야 함을 의미합니다. Reducer는 내부적으로 ``ReducerMethodWrappingDispatcher`` 를 통해 Dispatcher로 감싸져, 동작으로 인해 실제로 상태가 변화되게 됩니다.
 
