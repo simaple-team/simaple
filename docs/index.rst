@@ -9,7 +9,7 @@ Welcome to simaple's documentation!
 Simaple is a toolkit written by python that allows developers to 
 discover, simulate and optimize related with maplestory.
 
-simaple은 python을 작성된, 메이플스토리 내 최적화와 시뮬레이션을 지원하는 파이썬 라이브러리 입니다.
+simaple은 python으로 작성된, 메이플스토리 내 최적화와 시뮬레이션을 지원하는 파이썬 라이브러리 입니다.
 
 Installation
 ==============
