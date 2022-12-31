@@ -1,3 +1,6 @@
+from typing import Optional
+
+from simaple.core.base import Stat
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Lasting
 from simaple.simulate.component.skill import SkillComponent
@@ -21,6 +24,8 @@ class TriggableBuffSkill(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
     cooldown_duration: float
     delay: float
     lasting_duration: float
+
+    stat: Stat = Stat()
 
     def get_default_state(self):
         return {
@@ -73,6 +78,12 @@ class TriggableBuffSkill(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
     @view_method
     def running(self, state: TriggableBuffState) -> Running:
         return self.running_in_buff_trait(state)
+
+    @view_method
+    def buff(self, state: TriggableBuffState) -> Optional[Stat]:
+        if state.lasting.enabled():
+            return self.stat
+        return None
 
     def _get_lasting_duration(self, state: TriggableBuffState) -> float:
         return self.lasting_duration

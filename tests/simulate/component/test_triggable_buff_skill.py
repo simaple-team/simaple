@@ -1,6 +1,7 @@
 # pylint: disable=W0621
 import pytest
 
+from simaple.core.base import Stat
 from simaple.simulate.component.triggable_buff_skill import (
     TriggableBuffSkill,
     TriggableBuffState,
@@ -19,6 +20,7 @@ def fixture_triggable_buff_skill():
         trigger_cooldown_duration=4_000,
         trigger_damage=100,
         trigger_hit=3,
+        stat=Stat(attack_power=30),
     )
 
 
@@ -88,3 +90,31 @@ def test_trigger_disabled_after_time_done(
 
     # then
     assert count_damage_skill(events) == 0
+
+
+def test_trigger_buff_remains(
+    triggable_buff_skill: TriggableBuffSkill,
+    triggable_buff_state: TriggableBuffState,
+):
+    # given
+    state, _ = triggable_buff_skill.use(None, triggable_buff_state)
+
+    # when
+    state, _ = triggable_buff_skill.elapse(4_000, state)
+
+    # then
+    assert triggable_buff_skill.buff(state) == Stat(attack_power=30)
+
+
+def test_trigger_buff_turns_off(
+    triggable_buff_skill: TriggableBuffSkill,
+    triggable_buff_state: TriggableBuffState,
+):
+    # given
+    state, _ = triggable_buff_skill.use(None, triggable_buff_state)
+
+    # when
+    state, _ = triggable_buff_skill.elapse(11_000, state)
+
+    # then
+    assert triggable_buff_skill.buff(state) is None
