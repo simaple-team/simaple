@@ -93,7 +93,7 @@ data:
     final_damage_multiplier: 25
 ---
 kind: Component
-version: simaple.io/TriggableBuffSkill
+version: simaple.io/TriggableBuffSkillComponent
 metadata:
   label:
     group: bishop

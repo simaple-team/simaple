@@ -1,0 +1,15 @@
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: thief
+    name: 레디 투 다이
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 레디 투 다이
+  stat:
+    attack_power: "{{ skill_level }}"
+  default_skill_level: 30

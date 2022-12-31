@@ -7,12 +7,6 @@ from simaple.core.base import ActionStat
 from simaple.simulate.component.entity import Periodic
 from simaple.simulate.component.specific.archmagetc import FrostEffect, FrostEffectState
 from simaple.simulate.global_property import Dynamics, GlobalProperty
-from simaple.spec.repository import DirectorySpecRepository
-
-
-@pytest.fixture(scope="package")
-def component_repository():
-    return DirectorySpecRepository("simaple/data/skill/resources/components")
 
 
 @pytest.fixture

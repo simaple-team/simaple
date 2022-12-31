@@ -1,0 +1,17 @@
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: thief
+    name: 레디 투 다이
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 레디 투 다이
+  cooldown_duration: "{{ (90 - skill_level // 2) * 1000 }}"
+  delay: 600
+  lasting_duration: 15_000
+  stat:
+    final_damage_multiplier: "{{ 30 + skill_level // 5 }}"

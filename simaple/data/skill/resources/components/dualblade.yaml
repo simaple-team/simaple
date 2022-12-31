@@ -1,0 +1,329 @@
+# TODO: 페이탈 베놈
+# TODO: 미러 이미징
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 팬텀 블로우
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  name: 팬텀 블로우
+  cooldown_duration: 0
+  delay: 540
+  damage: "{{ 240 + 3 * skill_level }}"
+  hit: 6
+
+  modifier:
+    ignored_defence: 30
+
+  default_skill_level: 30
+  v_improvement: 2
+---
+# TODO: 써든레이드(도트)
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 써든레이드
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 써든레이드
+  cooldown_duration: "{{ 60000 - 2000 * (skill_level // 2) }}"
+  red: True
+  delay: 690
+  damage: "{{ 344 + 5 * skill_level }}"
+  hit: 7
+
+  default_skill_level: 30
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/FinalCutComponent
+metadata:
+  label:
+    group: dualblade
+    name: 파이널 컷
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 파이널 컷
+  cooldown_duration: 90000
+  red: True
+  delay: 450 # 임의 딜레이
+  damage: "{{ 1400 + 20 * skill_level }}"
+  hit: 1
+
+  sudden_raid_cooltime_reduce: 20
+
+  v_improvement: 2
+  default_skill_level: 30
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 파이널 컷(버프)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions:
+    "파이널 컷.use.emitted.global.delay": use
+
+  name: 파이널 컷(버프)
+  cooldown_duration: 0
+  delay: 0
+  lasting_duration: 60000
+
+  stat:
+    final_damage_multiplier: "{{ 10 + skill_level }}"
+
+  default_skill_level: 30
+  disable_validity: True
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 플래시 뱅
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 플래시 뱅
+  cooldown_duration: 30000
+  red: True
+  delay: 390
+  damage: 250
+  hit: 1
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 플래시 뱅(버프)
+data:
+  listening_actions:
+    "플래시 뱅.use.emitted.global.delay": use
+  name: 플래시 뱅(버프)
+  cooldown_duration: 0
+  delay: 0
+  lasting_duration: 60000
+  stat:
+    damage_multiplier: 10
+  disable_validity: True
+---
+kind: Component
+version: simaple.io/TriggableBuffSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 히든 블레이드
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 히든 블레이드
+  listening_actions:
+    "아수라.elapse.emitted.global.damage": trigger
+    "팬텀 블로우.use.emitted.global.damage": trigger
+    "써든레이드.use.emitted.global.damage": trigger
+    "플래시 뱅.use.emitted.global.damage": trigger
+    "파이널 컷.use.emitted.global.damage": trigger
+    "카르마 퓨리.use.emitted.global.damage": trigger
+    "블레이드 토네이도.use.emitted.global.damage": trigger
+    "블레이드 토네이도.elapse.emitted.global.damage": trigger
+  delay: 0
+  cooldown_duration: 90000
+  lasting_duration: 90000
+
+  trigger_cooldown_duration: 0
+  trigger_damage: 240
+  trigger_hit: 1
+
+  stat:
+    damage_multiplier: 10
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/KeydownSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 아수라
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 아수라
+
+  damage: 693
+  hit: 5
+  cooldown_duration: 60_000
+
+  maximum_keydown_time: 5000
+  keydown_prepare_delay: 810
+  delay: 300
+  keydown_end_delay: 360
+
+  finish_damage: 0
+  finish_hit: 0
+
+  modifier:
+    ignored_defence: 100
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/BladeStormComponent
+metadata:
+  label:
+    group: dualblade
+    name: 블레이드 스톰
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 블레이드 스톰
+
+  damage: "{{ 570 + skill_level * 13 }}"
+  delay: 120
+  hit: 5
+
+  maximum_keydown_time: 5000
+
+  keydown_prepare_delay: 120
+  prepare_damage: "{{ 580 + skill_level * 23 }}"
+  prepare_hit: 7
+
+  keydown_end_delay: 120
+
+  cooldown_duration: 90_000
+  red: true
+
+  modifier:
+    ignored_defence: 100
+
+  default_skill_level: 30
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 카르마 퓨리
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 카르마 퓨리
+
+  damage: "{{ 400 + skill_level * 16 }}"
+  delay: 750
+  hit: "{{ 7 * 5 }}"
+
+  cooldown_duration: 10_000
+  red: true
+
+  modifier:
+    ignored_defence: 30
+
+  default_skill_level: 30
+---
+# TODO: 1명의 적에게는 최대 6번까지만 회오리 발생
+kind: Component
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 블레이드 토네이도
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 블레이드 토네이도
+
+  delay: 540
+  damage: "{{ 600 + skill_level * 24 }}"
+  hit: 7
+
+  cooldown_duration: 12_000
+  red: true
+
+  periodic_interval: 120
+  periodic_damage: "{{ 400 + skill_level * 16 }}"
+  periodic_hit: 6
+  lasting_duration: "{{ 120 * 4 + 1 }}" # 4타 가정
+
+  modifier:
+    ignored_defence: 100
+
+  default_skill_level: 30
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 헌티드 엣지 - 나찰
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 헌티드 엣지 - 나찰
+  listening_actions:
+    "팬텀 블로우.use.emitted.global.delay": use
+
+  damage: "{{ 435 + skill_level * 17 }}"
+  delay: 0
+  hit: "{{ 4 * 5 }}"
+
+  cooldown_duration: 12_000
+  red: true
+
+  modifier:
+    ignored_defence: 30
+
+  default_skill_level: 30
+  disable_validity: True
+---
+kind: Component
+version: simaple.io/UltimateDarkSightComponent
+metadata:
+  label:
+    group: dualblade
+    name: 얼티밋 다크 사이트
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 얼티밋 다크 사이트
+  cooldown_duration: "{{ (220 - skill_level) * 1000 }}"
+  red: True
+
+  delay: 700
+  lasting_duration: 30_000
+  rem: False
+
+  final_damage_multiplier: "{{ 10 + skill_level // 5 }}"
+  advanced_dark_sight_final_damage_multiplier: 20

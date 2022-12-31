@@ -1,0 +1,39 @@
+kind: ClientConfiguration
+version: simaple.io/ClientConfiguration
+metadata:
+  label:
+    group: dualblade
+data:
+  v_skill_names:
+    - 메이플 여신의 축복
+    - 얼티밋 다크 사이트
+    - 레디 투 다이
+    - 블레이드 스톰
+    - 카르마 퓨리
+    - 블레이드 토네이도
+    - 헌티드 엣지 - 나찰
+  v_improvement_names:
+    - 팬텀 블로우
+    - 써든레이드
+    - 히든 블레이드
+    - 아수라
+  component_groups:
+    - dualblade
+    - common
+    - luk_based
+    - adventurer.thief
+    - thief
+  mdc_order:
+    - 히든 블레이드
+    - 플래시 뱅
+    - 파이널 컷
+    - 써든레이드
+    - 메이플 여신의 축복
+    - 얼티밋 다크 사이트
+    - 에픽 어드벤쳐
+    - 레디 투 다이
+    - 블레이드 토네이도
+    - 카르마 퓨리
+    - 아수라
+    - 블레이드 스톰
+    - 팬텀 블로우
