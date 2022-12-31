@@ -1,5 +1,7 @@
 from typing import Optional
 
+from pydantic import Field
+
 from simaple.core.base import Stat
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Lasting
@@ -27,7 +29,7 @@ class TriggableBuffSkillComponent(
     delay: float
     lasting_duration: float
 
-    stat: Stat = Stat()
+    stat: Stat = Field(default_factory=Stat)
 
     def get_default_state(self):
         return {
