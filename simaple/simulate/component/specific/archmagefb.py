@@ -41,7 +41,7 @@ class PoisonNovaComponent(SkillComponent, AddDOTDamageTrait):
     damage: float
     hit: float
 
-    nova_remaining_time: float = 4000
+    nova_remaining_time: float
     nova_damage: float
     nova_single_hit: int
     nova_hit_count: int

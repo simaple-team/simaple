@@ -93,7 +93,7 @@ class JupyterThunder(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
-    lasting_duration: float = 10_000  # very long enough
+    lasting_duration: float
 
     max_count: int
 
@@ -227,7 +227,7 @@ class ThunderBreak(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
-    lasting_duration: float = 10_000  # very long enough
+    lasting_duration: float
 
     decay_rate: float
     max_count: int
