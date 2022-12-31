@@ -8,6 +8,7 @@ from simaple.simulate.base import AddressedStore, Client, ConcreteStore, Environ
 from simaple.simulate.component.base import Component
 from simaple.simulate.component.view import (
     BuffParentView,
+    KeydownParentView,
     RunningParentView,
     ValidityParentView,
 )
@@ -71,5 +72,6 @@ def get_client(
     ValidityParentView.build_and_install(environment, "validity")
     BuffParentView.build_and_install(environment, "buff")
     RunningParentView.build_and_install(environment, "running")
+    KeydownParentView.build_and_install(environment, "keydown")
 
     return client

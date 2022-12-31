@@ -112,3 +112,34 @@ class Stack(Entity):
 
     def decrease(self, value: int = 1):
         self.stack -= value
+
+
+class Keydown(Entity):
+    interval: float
+    interval_counter: float = 0.0
+    time_left: float = 0
+
+    @property
+    def running(self) -> bool:
+        return self.time_left > 0
+
+    def get_next_delay(self) -> float:
+        return min(self.interval_counter, self.time_left)
+
+    def start(self, maximum_keydown_time: float, prepare_delay: float):
+        self.interval_counter = prepare_delay
+        self.time_left = maximum_keydown_time
+
+    def stop(self):
+        self.time_left = 0
+
+    def resolving(self, time: float):
+        resolving_time_left = self.time_left - max(0, self.interval_counter)
+        self.time_left -= time
+        self.interval_counter -= time
+
+        # pylint:disable=chained-comparison
+        while resolving_time_left >= 0 and self.interval_counter <= 0:
+            yield
+            self.interval_counter += self.interval
+            resolving_time_left -= self.interval

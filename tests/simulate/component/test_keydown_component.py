@@ -6,113 +6,202 @@ from simaple.simulate.component.keydown_skill import (
     KeydownSkillState,
 )
 from simaple.simulate.global_property import Dynamics
-from tests.simulate.component.util import is_rejected
+from simaple.simulate.reserved_names import Tag
+from tests.simulate.component.util import count_damage_skill, is_rejected, total_delay
 
 
-@pytest.fixture
-def keydown_delay():
-    return 300
-
-
-@pytest.fixture
-def keydown_component(keydown_delay: float):
-    return KeydownSkillComponent(
+@pytest.fixture(name="keydown_fixture", params=[300, 500, 800])
+def keydown_fixture(request, dynamics: Dynamics):
+    delay: float = request.param
+    component = KeydownSkillComponent(
         name="test-keydown",
         damage=100,
         hit=3,
         cooldown_duration=60_000,
-        delay=keydown_delay,
+        delay=delay,
+        maximum_keydown_time=delay * 10,
+        keydown_prepare_delay=delay * 2,
         keydown_end_delay=500,
         finish_damage=500,
         finish_hit=15,
-        maximum_keydown_time=keydown_delay * 10,
     )
-
-
-@pytest.fixture
-def keydown_state(keydown_component: KeydownSkillComponent, dynamics: Dynamics):
-    return KeydownSkillState.parse_obj(
+    state = KeydownSkillState.parse_obj(
         {
-            **keydown_component.get_default_state(),
+            **component.get_default_state(),
             "dynamics": dynamics,
         }
     )
+    return (component, state, delay)
 
 
-def test_reject(
-    keydown_component: KeydownSkillComponent, keydown_state: KeydownSkillState
+def test_use_reject(
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
 ):
+    # given
+    component, state, _ = keydown_fixture
+
     # when
-    state, _ = keydown_component.use(None, keydown_state)
-    state, _ = keydown_component.elapse(10_000, state)
-    state, events = keydown_component.use(None, state)
+    state, _ = component.use(None, state)
+    state, _ = component.elapse(10_000, state)
+    state, events = component.use(None, state)
 
     # then
     assert is_rejected(events)
 
 
-def test_use_keydown_component(
-    keydown_component: KeydownSkillComponent, keydown_state: KeydownSkillState
+def test_stop_reject(
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
 ):
+    # given
+    component, state, _ = keydown_fixture
+
     # when
-    state, _ = keydown_component.use(None, keydown_state)
+    state, events = component.stop(None, state)
 
     # then
-    assert state.keydown.is_running()
+    assert is_rejected(events)
 
 
-def test_use_keydown_component_and_elapse_time(
-    keydown_component: KeydownSkillComponent,
-    keydown_state: KeydownSkillState,
-    keydown_delay: float,
-):
+def test_use(keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]):
+    # given
+    component, state, _ = keydown_fixture
+
     # when
-    state, _ = keydown_component.use(None, keydown_state)
-    state, _ = keydown_component.elapse(keydown_delay, state)
+    state, _ = component.use(None, state)
 
     # then
-    assert state.keydown.is_running()
+    assert state.keydown.running is True
 
 
-def test_use_keydown_component_and_elapse_more_time(
-    keydown_component: KeydownSkillComponent,
-    keydown_state: KeydownSkillState,
-    keydown_delay: float,
+def test_use_and_stop(
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
 ):
+    # given
+    component, state, _ = keydown_fixture
+
     # when
-    state, _ = keydown_component.use(None, keydown_state)
-    state, events = keydown_component.elapse(keydown_delay + 10, state)
+    state, _ = component.use(None, state)
+    state, events = component.stop(None, state)
 
     # then
-    assert not state.keydown.is_running()
-    assert events[-1].payload["time"] == 500 - 10 - keydown_delay
+    damage_events = [e for e in events if e.tag == Tag.DAMAGE]
+    assert damage_events[-1].payload["damage"] == component.finish_damage
+    assert damage_events[-1].payload["hit"] == component.finish_hit
+    assert total_delay(events) == component.keydown_end_delay
+    assert state.keydown.running is False
 
 
-def test_use_keydown_component_many_time(
-    keydown_component: KeydownSkillComponent,
-    keydown_state: KeydownSkillState,
-    keydown_delay: float,
+def test_use_and_elapse_lesser_than_prepare_delay(
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
 ):
+    # given
+    component, state, delay = keydown_fixture
+    to_elapse = delay * 2 - 10
+
     # when
-    state = keydown_state
-    for _ in range(6):
-        state, _ = keydown_component.use(None, state)
-        state, _ = keydown_component.elapse(keydown_delay, state)
+    state, _ = component.use(None, state)
+    state, events = component.elapse(to_elapse, state)
 
     # then
-    assert state.keydown.is_running()
+    assert count_damage_skill(events) == 0
+    assert total_delay(events) == 10
 
 
-def test_use_keydown_component_too_long(
-    keydown_component: KeydownSkillComponent,
-    keydown_state: KeydownSkillState,
-    keydown_delay: float,
+def test_use_and_elapse_equals_prepare_delay(
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
 ):
+    # given
+    component, state, delay = keydown_fixture
+    to_elapse = delay * 2
+
     # when
-    state = keydown_state
-    for _ in range(11):
-        state, _ = keydown_component.use(None, state)
-        state, _ = keydown_component.elapse(keydown_delay, state)
+    state, _ = component.use(None, state)
+    state, events = component.elapse(to_elapse, state)
 
     # then
-    assert not state.keydown.is_running()
+    assert count_damage_skill(events) == 1
+    assert total_delay(events) == delay
+
+
+def test_use_and_elapse_greater_than_prepare_delay(
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
+):
+    # given
+    component, state, delay = keydown_fixture
+    to_elapse = delay * 2 + 10
+
+    # when
+    state, _ = component.use(None, state)
+    state, events = component.elapse(to_elapse, state)
+
+    # then
+    assert count_damage_skill(events) == 1
+    assert total_delay(events) == delay - 10
+
+
+def test_elapse_until_finish(
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
+):
+    # given
+    component, state, delay = keydown_fixture
+
+    # when
+    state, _ = component.use(None, state)
+    state, elapse_events = component.elapse(delay * 10, state)
+
+    # then
+    damage_events = [e for e in elapse_events if e.tag == Tag.DAMAGE]
+    assert damage_events[-1].payload["damage"] == component.finish_damage
+    assert damage_events[-1].payload["hit"] == component.finish_hit
+    assert total_delay(elapse_events) == component.keydown_end_delay
+    assert state.keydown.running is False
+
+
+def test_elapse_during_finish_delay(
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
+):
+    # given
+    component, state, delay = keydown_fixture
+
+    # when
+    state, _ = component.use(None, state)
+    state, elapse_events = component.elapse(delay * 10 + 10, state)
+
+    # then
+    damage_events = [e for e in elapse_events if e.tag == Tag.DAMAGE]
+    assert damage_events[-1].payload["damage"] == component.finish_damage
+    assert damage_events[-1].payload["hit"] == component.finish_hit
+    assert total_delay(elapse_events) == component.keydown_end_delay - 10
+    assert state.keydown.running is False
+
+
+def test_elapse_just_before_finish(
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
+):
+    # given
+    component, state, delay = keydown_fixture
+
+    # when
+    state, _ = component.use(None, state)
+    state, _ = component.elapse(delay * 10 - 10, state)
+
+    # then
+    assert state.keydown.running is True
+
+
+def test_elapse_very_long(
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
+):
+    # given
+    component, state, delay = keydown_fixture
+
+    # when
+    state, _ = component.use(None, state)
+    state, elapse_events = component.elapse(delay * 20, state)
+
+    # then
+    damage_events = [e for e in elapse_events if e.tag == Tag.DAMAGE]
+    assert damage_events[-1].payload["damage"] == component.finish_damage
+    assert damage_events[-1].payload["hit"] == component.finish_hit
+    assert total_delay(elapse_events) == 0
+    assert state.keydown.running is False

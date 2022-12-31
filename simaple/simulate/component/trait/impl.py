@@ -1,6 +1,8 @@
 from simaple.simulate.base import Event
 from simaple.simulate.component.state_protocol import (
     CooldownDynamicsGeneric,
+    CooldownDynamicsKeydownGeneric,
+    CooldownDynamicsKeydownProtocol,
     CooldownDynamicsLastingGeneric,
     CooldownDynamicsPeriodicGeneric,
     CooldownGeneric,
@@ -14,12 +16,13 @@ from simaple.simulate.component.trait.base import (
     DOTTrait,
     EventProviderTrait,
     InvalidatableTrait,
+    KeydownTrait,
     LastingTrait,
     NamedTrait,
     PeriodicDamageTrait,
     SimpleDamageTrait,
 )
-from simaple.simulate.component.view import Running, Validity
+from simaple.simulate.component.view import KeydownView, Running, Validity
 from simaple.simulate.reserved_names import Tag
 
 
@@ -216,6 +219,97 @@ class UsePeriodicDamageTrait(
         return state, [
             self.event_provider.delayed(delay),
         ]
+
+
+class KeydownSkillTrait(
+    CooldownTrait,
+    NamedTrait,
+    EventProviderTrait,
+    KeydownTrait,
+):
+    def use_keydown_trait(
+        self,
+        state: CooldownDynamicsKeydownGeneric,
+    ) -> tuple[CooldownDynamicsKeydownGeneric, list[Event]]:
+        state = state.deepcopy()
+        (
+            maximum_keydown_time,
+            keydown_prepare_delay,
+        ) = self._get_maximum_keydown_time_prepare_delay()
+
+        if not state.cooldown.available or state.keydown.running:
+            return state, [self.event_provider.rejected()]
+
+        state.cooldown.set_time_left(
+            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
+        )
+        state.keydown.start(maximum_keydown_time, keydown_prepare_delay)
+
+        return state, [self.event_provider.delayed(keydown_prepare_delay)]
+
+    def elapse_keydown_trait(
+        self, time: float, state: CooldownDynamicsKeydownGeneric
+    ) -> tuple[CooldownDynamicsKeydownGeneric, list[Event]]:
+        state = state.deepcopy()
+        state.cooldown.elapse(time)
+
+        damage, hit = self._get_keydown_damage_hit()
+        damage_hits: list[tuple[float, float]] = []
+
+        was_running = state.keydown.running
+        for _ in state.keydown.resolving(time):
+            damage_hits += [(damage, hit)]
+
+        keydown_end = was_running and not state.keydown.running
+        if keydown_end:
+            (
+                finish_damage,
+                finish_hit,
+                finish_delay,
+            ) = self._get_keydown_end_damage_hit_delay()
+            damage_hits += [(finish_damage, finish_hit)]
+            # time_left is negative value here, represents time exceeded after actual keydown end.
+            delay = max(finish_delay + state.keydown.time_left, 0)
+        else:
+            delay = state.keydown.get_next_delay()
+
+        return (
+            state,
+            [self.event_provider.dealt(damage, hit) for damage, hit in damage_hits]
+            + [self.event_provider.delayed(delay), self.event_provider.elapsed(time)]
+            + ([self.event_provider.keydown_end()] if keydown_end else []),
+        )
+
+    def stop_keydown_trait(
+        self, state: CooldownDynamicsKeydownGeneric
+    ) -> tuple[CooldownDynamicsKeydownGeneric, list[Event]]:
+        state = state.deepcopy()
+        (
+            finish_damage,
+            finish_hit,
+            finish_delay,
+        ) = self._get_keydown_end_damage_hit_delay()
+
+        if not state.keydown.running:
+            return state, [self.event_provider.rejected()]
+
+        state.keydown.stop()
+
+        return (
+            state,
+            [
+                self.event_provider.dealt(finish_damage, finish_hit),
+                self.event_provider.delayed(finish_delay),
+                self.event_provider.keydown_end(),
+            ],
+        )
+
+    def keydown_view_in_keydown_trait(self, state: CooldownDynamicsKeydownProtocol):
+        return KeydownView(
+            name=self._get_name(),
+            time_left=state.keydown.time_left,
+            running=state.keydown.running,
+        )
 
 
 class AddDOTDamageTrait(DOTTrait, NamedTrait):

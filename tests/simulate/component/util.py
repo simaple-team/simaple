@@ -9,6 +9,16 @@ def count_damage_skill(events: list[Event]) -> int:
     return sum([e.tag == Tag.DAMAGE for e in events])
 
 
+def total_delay(events: list[Event]) -> int:
+    return sum(
+        [
+            e.payload["time"]
+            for e in events
+            if e.tag == Tag.DELAY and e.payload is not None
+        ]
+    )
+
+
 def count_dot_skill(events: list[Event]) -> int:
     return sum([e.tag == Tag.DOT for e in events])
 
