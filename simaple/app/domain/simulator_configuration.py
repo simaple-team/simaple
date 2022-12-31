@@ -11,7 +11,7 @@ from simaple.data.client_configuration import (
 from simaple.data.damage_logic import get_damage_logic
 from simaple.simulate.base import Client
 from simaple.simulate.kms import get_client
-from simaple.simulate.report.dpm import DPMCalculator, LevelAdvantage
+from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 
 
 class SimulatorConfiguration(pydantic.BaseModel, metaclass=ABCMeta):
@@ -23,7 +23,7 @@ class SimulatorConfiguration(pydantic.BaseModel, metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    def create_damage_calculator(self) -> DPMCalculator:
+    def create_damage_calculator(self) -> DamageCalculator:
         ...
 
     @classmethod
@@ -75,9 +75,9 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
             "weapon_pure_attack_power": self.weapon_pure_attack_power,
         }
 
-    def create_damage_calculator(self) -> DPMCalculator:
+    def create_damage_calculator(self) -> DamageCalculator:
         """TODO: replace by simaple.container.simulation container-logic"""
-        return DPMCalculator(
+        return DamageCalculator(
             character_spec=self.character_stat,
             damage_logic=get_damage_logic(self.get_jobtype(), self.combat_orders_level),
             armor=self.target_armor,

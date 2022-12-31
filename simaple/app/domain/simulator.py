@@ -9,13 +9,13 @@ import pydantic
 from simaple.app.domain.history import History, PlayLog, SimulationView
 from simaple.app.domain.simulator_configuration import SimulatorConfiguration
 from simaple.simulate.base import Action, Client
-from simaple.simulate.report.dpm import DPMCalculator
+from simaple.simulate.report.dpm import DamageCalculator
 
 
 class Simulator(pydantic.BaseModel):
     id: str
     client: Client
-    calculator: DPMCalculator
+    calculator: DamageCalculator
     conf: SimulatorConfiguration  # polymorphic
     history: History
 

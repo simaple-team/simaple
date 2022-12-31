@@ -33,7 +33,7 @@ class LevelAdvantage:
         return float(self._advantage_table[advantage_index])
 
 
-class DPMCalculator(pydantic.BaseModel):
+class DamageCalculator(pydantic.BaseModel):
     character_spec: Stat
     damage_logic: DamageLogic
     armor: int = 300

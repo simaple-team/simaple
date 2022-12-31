@@ -15,7 +15,7 @@ from simaple.data.passive import get_passive_and_default_active_stat
 from simaple.gear.gearset import Gearset
 from simaple.optimizer.preset import Preset, PresetOptimizer
 from simaple.simulate.kms import get_client
-from simaple.simulate.report.dpm import DPMCalculator, LevelAdvantage
+from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 from simaple.system.trait import CharacterTrait
 
 
@@ -150,7 +150,7 @@ class SimulationContainer(containers.DeclarativeContainer):
     )
 
     dpm_calculator = providers.Factory(
-        DPMCalculator,
+        DamageCalculator,
         character_spec=character_stat,
         damage_logic=damage_logic,
         armor=config.armor,
@@ -178,4 +178,6 @@ class SimulationContainer(containers.DeclarativeContainer):
         client_configuration.provided.get_filled_v_improvements.call(
             config.v_improvements_level
         ),
+        passive_skill_level=config.passive_skill_level,
+        combat_orders_level=config.combat_orders_level,
     )

@@ -7,7 +7,7 @@ from simaple.core.base import Stat
 from simaple.simulate.base import Action, Event, EventCallback
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.report.base import Report
-from simaple.simulate.report.dpm import DPMCalculator
+from simaple.simulate.report.dpm import DamageCalculator
 from simaple.simulate.reserved_names import Tag
 
 
@@ -38,10 +38,10 @@ class PlayLog(pydantic.BaseModel):
 
         return delay
 
-    def get_total_damage(self, calc: DPMCalculator) -> float:
+    def get_total_damage(self, calc: DamageCalculator) -> float:
         return sum([v[1] for v in self.get_damages(calc)])
 
-    def get_damages(self, calc: DPMCalculator) -> list[tuple[str, float]]:
+    def get_damages(self, calc: DamageCalculator) -> list[tuple[str, float]]:
         report = self.create_report()
 
         return [(damage_log.name, calc.get_damage(damage_log)) for damage_log in report]
