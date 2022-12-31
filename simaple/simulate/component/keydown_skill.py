@@ -25,8 +25,8 @@ class KeydownSkillComponent(SkillComponent, KeydownSkillTrait, CooldownValidityT
     keydown_prepare_delay: float
     keydown_end_delay: float
 
-    finish_damage: float = 0.0
-    finish_hit: float = 0.0
+    finish_damage: float
+    finish_hit: float
 
     def get_default_state(self):
         return {

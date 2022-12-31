@@ -126,6 +126,7 @@ data:
   nova_damage: "{{ 225 + 9 * skill_level }}"
   nova_single_hit: 12
   nova_hit_count: 4
+  nova_remaining_time: 4000
 
   dot_damage: "{{ 300 + 12 * skill_level }}"
   dot_lasting_duration: 20_000
