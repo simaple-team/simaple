@@ -11,7 +11,7 @@ from simaple.simulate.kms import get_client
 def archmagefb_client():
     return get_client(
         ActionStat(),
-        ["archmagefb", "common", "adventurer.magician", "mob"],
+        ["archmagefb", "common", "adventurer.magician", "mob", "common_v"],
         {"character_level": 260},
         {
             "도트 퍼니셔": 30,
