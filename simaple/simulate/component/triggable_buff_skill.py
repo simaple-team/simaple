@@ -16,7 +16,9 @@ class TriggableBuffState(ReducerState):
     dynamics: Dynamics
 
 
-class TriggableBuffSkill(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
+class TriggableBuffSkillComponent(
+    SkillComponent, BuffTrait, InvalidatableCooldownTrait
+):
     trigger_cooldown_duration: float
     trigger_damage: float
     trigger_hit: float

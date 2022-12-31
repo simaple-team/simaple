@@ -1,0 +1,81 @@
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: dualblade
+    name: 카르마
+data:
+  name: 카르마
+  stat:
+    attack_power: 30
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: dualblade
+    name: 피지컬 트레이닝
+data:
+  name: 피지컬 트레이닝
+  stat:
+    LUK: 30
+    DEX: 30
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: dualblade
+    name: 이도 엑셀레이션
+data:
+  name: 이도 엑셀레이션
+  stat:
+    LUK: 20
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: dualblade
+    name: 쏜즈 이펙트
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 쏜즈 이펙트
+  stat:
+    attack_power: "{{ 10 + skill_level }}"
+  default_skill_level: 20
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: dualblade
+    name: 이도류 엑스퍼트
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 이도류 엑스퍼트
+  stat:
+    attack_power: "{{ skill_level }}"
+    final_damage_multiplier: "{{ 5 + skill_level // 2 }}"
+  default_skill_level: 30
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: dualblade
+    name: 샤프니스
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 샤프니스
+  stat:
+    critical_rate: "{{ 5 + skill_level * 3 }}"
+    critical_damage: "{{ 3 + skill_level }}"
+  default_skill_level: 10

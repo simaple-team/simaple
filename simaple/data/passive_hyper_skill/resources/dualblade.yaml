@@ -1,0 +1,35 @@
+---
+kind: PassiveHyperskill
+version: simaple.io/StatIncreasePassiveHyperskill
+metadata:
+  label:
+    group: dualblade
+data:
+  name: 팬텀 블로우 - 리인포스
+  target: 팬텀 블로우
+  key: modifier
+  increment:
+    damage_multiplier: 20
+---
+kind: PassiveHyperskill
+version: simaple.io/StatIncreasePassiveHyperskill
+metadata:
+  label:
+    group: dualblade
+data:
+  name: 팬텀 블로우 - 이그노어 가드
+  target: 팬텀 블로우
+  key: modifier
+  increment:
+    ignored_defence: 20
+---
+kind: PassiveHyperskill
+version: simaple.io/ValueIncreasePassiveHyperskill
+metadata:
+  label:
+    group: dualblade
+data:
+  name: 팬텀 블로우 - 보너스 어택
+  target: 팬텀 블로우
+  key: hit
+  increment: 1

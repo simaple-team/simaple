@@ -155,3 +155,26 @@ class LUKBasedDamageLogic(DamageLogic):
             INT=4,
             LUK=level * 5 + 18,
         )
+
+
+class LUKBasedDualSubDamageLogic(DamageLogic):
+    def get_major_stat(self, stat: Stat) -> float:
+        return stat.get_base_stat_coefficient(BaseStatType.LUK)
+
+    def get_base_stat_factor(self, stat: Stat) -> float:
+        return (
+            stat.get_base_stat_coefficient(BaseStatType.LUK) * 4
+            + stat.get_base_stat_coefficient(BaseStatType.DEX)
+            + stat.get_base_stat_coefficient(BaseStatType.STR)
+        )
+
+    def get_attack_type_factor(self, stat: Stat) -> float:
+        return stat.get_attack_coefficient(AttackType.attack_power)
+
+    def get_best_level_based_stat(self, level: int) -> Stat:
+        return Stat(
+            STR=4,
+            DEX=4,
+            INT=4,
+            LUK=level * 5 + 18,
+        )

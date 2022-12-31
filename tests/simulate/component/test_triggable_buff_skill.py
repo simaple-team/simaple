@@ -3,7 +3,7 @@ import pytest
 
 from simaple.core.base import Stat
 from simaple.simulate.component.triggable_buff_skill import (
-    TriggableBuffSkill,
+    TriggableBuffSkillComponent,
     TriggableBuffState,
 )
 from simaple.simulate.global_property import Dynamics
@@ -12,7 +12,7 @@ from tests.simulate.component.util import count_damage_skill
 
 @pytest.fixture(name="triggable_buff_skill")
 def fixture_triggable_buff_skill():
-    return TriggableBuffSkill(
+    return TriggableBuffSkillComponent(
         name="test-triggable",
         cooldown_duration=30_000,
         delay=300,
@@ -25,14 +25,16 @@ def fixture_triggable_buff_skill():
 
 
 @pytest.fixture
-def triggable_buff_state(triggable_buff_skill: TriggableBuffSkill, dynamics: Dynamics):
+def triggable_buff_state(
+    triggable_buff_skill: TriggableBuffSkillComponent, dynamics: Dynamics
+):
     return TriggableBuffState.parse_obj(
         {**triggable_buff_skill.get_default_state(), "dynamics": dynamics}
     )
 
 
 def test_trigger_emit_damage(
-    triggable_buff_skill: TriggableBuffSkill,
+    triggable_buff_skill: TriggableBuffSkillComponent,
     triggable_buff_state: TriggableBuffState,
 ):
     # given
@@ -46,7 +48,7 @@ def test_trigger_emit_damage(
 
 
 def test_trigger_disabled_after_first_trigger(
-    triggable_buff_skill: TriggableBuffSkill,
+    triggable_buff_skill: TriggableBuffSkillComponent,
     triggable_buff_state: TriggableBuffState,
 ):
     # given
@@ -62,7 +64,7 @@ def test_trigger_disabled_after_first_trigger(
 
 
 def test_trigger_enabled_after_first_trigger(
-    triggable_buff_skill: TriggableBuffSkill,
+    triggable_buff_skill: TriggableBuffSkillComponent,
     triggable_buff_state: TriggableBuffState,
 ):
     # given
@@ -78,7 +80,7 @@ def test_trigger_enabled_after_first_trigger(
 
 
 def test_trigger_disabled_after_time_done(
-    triggable_buff_skill: TriggableBuffSkill,
+    triggable_buff_skill: TriggableBuffSkillComponent,
     triggable_buff_state: TriggableBuffState,
 ):
     # given
@@ -93,7 +95,7 @@ def test_trigger_disabled_after_time_done(
 
 
 def test_trigger_buff_remains(
-    triggable_buff_skill: TriggableBuffSkill,
+    triggable_buff_skill: TriggableBuffSkillComponent,
     triggable_buff_state: TriggableBuffState,
 ):
     # given
@@ -107,7 +109,7 @@ def test_trigger_buff_remains(
 
 
 def test_trigger_buff_turns_off(
-    triggable_buff_skill: TriggableBuffSkill,
+    triggable_buff_skill: TriggableBuffSkillComponent,
     triggable_buff_state: TriggableBuffState,
 ):
     # given

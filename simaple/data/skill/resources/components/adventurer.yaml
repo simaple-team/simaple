@@ -1,3 +1,4 @@
+---
 kind: Component
 version: simaple.io/BuffSkillComponent
 metadata:
@@ -16,4 +17,24 @@ data:
   rem: false
   stat:
     INT: "{{ math.floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
+    damage_multiplier: "{{ math.floor(5 + 0.5 * skill_level) }}"
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: adventurer.thief
+    name: 메이플 여신의 축복
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 메이플 여신의 축복
+  lasting_duration: 60_000
+  cooldown_duration: 180_000
+  delay: 450
+  red: true
+  rem: false
+  stat:
+    LUK: "{{ math.floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
     damage_multiplier: "{{ math.floor(5 + 0.5 * skill_level) }}"
