@@ -39,6 +39,9 @@ class SimulationSetting(pydantic.BaseSettings):
     v_improvements_level: int = 60
     elemental_resistance: ElementalResistance
 
+    weapon_attack_power = 0
+    weapon_pure_attack_power = 0
+
     def get_preset_hash(self) -> str:
         preset_hash = (
             f"{self.tier}-{self.jobtype.value}"
@@ -162,6 +165,8 @@ class SimulationContainer(containers.DeclarativeContainer):
     client_patch_injected_values = providers.Dict(
         character_stat=character_stat,
         character_level=config.level,
+        weapon_attack_power=config.weapon_attack_power,
+        weapon_pure_attack_power=config.weapon_pure_attack_power,
     )
 
     client = providers.Singleton(
