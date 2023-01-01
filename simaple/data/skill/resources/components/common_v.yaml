@@ -2,7 +2,7 @@ kind: Component
 version: simaple.io/BuffSkillComponent
 metadata:
   label:
-    group: common_v
+    group: common
     name: 쓸만한 샤프 아이즈
 patch:
   - SkillLevelPatch
@@ -20,7 +20,7 @@ kind: Component
 version: simaple.io/BuffSkillComponent
 metadata:
   label:
-    group: common_v
+    group: common
     name: 쓸만한 하이퍼 바디
 patch:
   - SkillLevelPatch
@@ -38,7 +38,7 @@ kind: Component
 version: simaple.io/BuffSkillComponent
 metadata:
   label:
-    group: common_v
+    group: common
     name: 쓸만한 어드밴스드 블레스
 patch:
   - SkillLevelPatch
@@ -58,7 +58,7 @@ kind: Component
 version: simaple.io/ProgrammedPeriodicComponent
 metadata:
   label:
-    group: common_v
+    group: common
     name: 스파이더 인 미러
 patch:
   - SkillLevelPatch
@@ -81,7 +81,7 @@ kind: Component
 version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
-    group: common_v
+    group: common
     name: 크레센트 오브 더 솔라
 patch:
   - SkillLevelPatch
