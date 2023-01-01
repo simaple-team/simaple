@@ -3,12 +3,12 @@ from simaple.app.application.exception import (
     UnknownSimulatorException,
 )
 from simaple.app.domain.simulator import Simulator
-from simaple.app.domain.simulator_configuration import MinimalSimulatorConfiguration
+from simaple.app.domain.simulator_configuration import SimulatorConfiguration
 from simaple.app.domain.uow import UnitOfWork
 from simaple.simulate.base import Action
 
 
-def create_simulator(conf: MinimalSimulatorConfiguration, uow: UnitOfWork) -> str:
+def create_simulator(conf: SimulatorConfiguration, uow: UnitOfWork) -> str:
     simulator = Simulator.create_from_config(conf)
     uow.simulator_repository().add(simulator)
 

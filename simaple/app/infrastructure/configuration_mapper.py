@@ -1,6 +1,7 @@
 from typing import Type
 
 from simaple.app.domain.simulator_configuration import (
+    BaselineConfiguration,
     MinimalSimulatorConfiguration,
     SimulatorConfiguration,
 )
@@ -20,7 +21,7 @@ class ConfigurationMapper:
         return config_cls.parse_obj(dumped_config["dump"])
 
     def _get_configuration_cls(self, config_name: str) -> Type[SimulatorConfiguration]:
-        cls_list = [MinimalSimulatorConfiguration]
+        cls_list = [MinimalSimulatorConfiguration, BaselineConfiguration]
         cls_map = {cls.get_name(): cls for cls in cls_list}  # type: ignore
 
         if config_name not in cls_map:

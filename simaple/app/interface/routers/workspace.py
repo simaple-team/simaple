@@ -21,7 +21,10 @@ from simaple.app.application.query import (
     query_latest_playlog,
     query_playlog,
 )
-from simaple.app.domain.simulator_configuration import MinimalSimulatorConfiguration
+from simaple.app.domain.simulator_configuration import (
+    BaselineConfiguration,
+    MinimalSimulatorConfiguration,
+)
 from simaple.app.domain.uow import UnitOfWork
 from simaple.app.interface.container import WebContainer
 from simaple.simulate.base import Action
@@ -34,6 +37,17 @@ router = fastapi.APIRouter(prefix="/workspaces")
 @inject
 def create(
     conf: MinimalSimulatorConfiguration,
+    uow: UnitOfWork = UowProvider,
+) -> Any:
+    simulator_id = create_simulator(conf, uow)
+
+    return SimulatorResponse(id=simulator_id)
+
+
+@router.post("/baseline", response_model=SimulatorResponse)
+@inject
+def create_from_baseline(
+    conf: BaselineConfiguration,
     uow: UnitOfWork = UowProvider,
 ) -> Any:
     simulator_id = create_simulator(conf, uow)

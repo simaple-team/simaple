@@ -45,6 +45,26 @@ def simulator_configuration():
 
 
 @pytest.fixture
+def baseline_configuration():
+    return {
+        "simulation_setting": {
+            "tier": "Legendary",
+            "jobtype": "archmagefb",
+            "job_category": 1,  # 0~4
+            "level": 270,
+            "action_stat": {
+                "buff_duration": 185,
+            },
+            "passive_skill_level": 0,
+            "combat_orders_level": 1,
+            "v_skill_level": 30,
+            "v_improvements_level": 60,
+            "elemental_resistance": {"value": 10},
+        }
+    }
+
+
+@pytest.fixture
 def record_file_name():
     return os.path.join(os.path.dirname(__file__), "record.tsv")
 

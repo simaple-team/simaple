@@ -2,6 +2,7 @@ from abc import ABCMeta, abstractmethod
 
 import pydantic
 
+from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.base import ActionStat, Stat
 from simaple.core.jobtype import JobType
 from simaple.data.client_configuration import (
@@ -87,3 +88,22 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
             force_advantage=self.force_advantage,
             elemental_resistance_disadvantage=self.elemental_resistance_disadvantage,
         )
+
+
+class BaselineConfiguration(SimulatorConfiguration):
+    simulation_setting: SimulationSetting
+
+    def get_container(self) -> SimulationContainer:
+        container = SimulationContainer()
+        container.config.from_pydantic(self.simulation_setting)
+        return container
+
+    def create_client(self) -> Client:
+        return self.get_container().client()
+
+    def create_damage_calculator(self) -> DamageCalculator:
+        return self.get_container().dpm_calculator()
+
+    @classmethod
+    def get_name(cls) -> str:
+        return "baseline"
