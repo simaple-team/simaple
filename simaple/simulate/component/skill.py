@@ -227,6 +227,27 @@ class BuffSkillComponent(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
         return self.lasting_duration
 
 
+class NoState(ReducerState):
+    ...
+
+
+class AlwaysEnabledComponent(Component):
+    stat: Stat
+
+    def get_default_state(self):
+        return {}
+
+    @view_method
+    def buff(self, _: NoState) -> Optional[Stat]:
+        return self.stat
+
+    @view_method
+    def running(self, _: NoState) -> Running:
+        return Running(
+            name=self.name, time_left=999_999_999, lasting_duration=999_999_999
+        )
+
+
 class StackableBuffSkillState(ReducerState):
     cooldown: Cooldown
     lasting: Lasting
