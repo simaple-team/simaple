@@ -401,14 +401,19 @@ class AdeleBlossomComponent(SkillComponent, UseSimpleAttackTrait):
         damage, hit = self._get_simple_damage_hit()
         delay = self._get_delay()
 
-        return state, [self.event_provider.dealt(damage, hit)] + [
-            self.event_provider.dealt(
-                damage,
-                hit,
-                modifier=self.exceeded_stat,
-            )
-            for _ in range(state.order_sword.get_sword_count() - 1)
-        ] + [self.event_provider.delayed(delay)]
+        return (
+            state,
+            [self.event_provider.dealt(damage, hit)]
+            + [
+                self.event_provider.dealt(
+                    damage,
+                    hit,
+                    modifier=self.exceeded_stat,
+                )
+                for _ in range(state.order_sword.get_sword_count() - 1)
+            ]
+            + [self.event_provider.delayed(delay)],
+        )
 
     @reducer_method
     def elapse(

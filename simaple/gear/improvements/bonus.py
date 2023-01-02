@@ -166,7 +166,7 @@ def bonus_key_func(bonus: Bonus):
         return stat_index[bonus.stat_type] * 100 + bonus.grade
     if isinstance(bonus, DualStatBonus):
         return (
-            (10**3)
+            (10 ** 3)
             + (
                 stat_index[bonus.stat_type_pair[0]]
                 + stat_index[bonus.stat_type_pair[1]]
@@ -175,13 +175,13 @@ def bonus_key_func(bonus: Bonus):
             + bonus.grade
         )
     if isinstance(bonus, ResourcePointBonus):
-        return (10**4) + resource_point_index[bonus.stat_type] * 100 + bonus.grade
+        return (10 ** 4) + resource_point_index[bonus.stat_type] * 100 + bonus.grade
     if isinstance(bonus, AttackTypeBonus):
-        return (10**5) + attack_type_index[bonus.attack_type] * 100 + bonus.grade
+        return (10 ** 5) + attack_type_index[bonus.attack_type] * 100 + bonus.grade
     if isinstance(bonus, BossDamageMultiplierBonus):
-        return (10**6) + bonus.grade
+        return (10 ** 6) + bonus.grade
     if isinstance(bonus, DamageMultiplierBonus):
-        return (10**7) + bonus.grade
+        return (10 ** 7) + bonus.grade
     if isinstance(bonus, AllstatBonus):
-        return (10**8) + bonus.grade
-    return 10**9
+        return (10 ** 8) + bonus.grade
+    return 10 ** 9

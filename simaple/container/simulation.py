@@ -6,6 +6,7 @@ import pydantic
 from dependency_injector import containers, providers
 
 from simaple.core import ActionStat, ElementalResistance, JobCategory, JobType, Stat
+from simaple.data.ability import get_best_ability
 from simaple.data.baseline import get_baseline_gearset
 from simaple.data.client_configuration import get_client_configuration
 from simaple.data.damage_logic import get_damage_logic
@@ -16,6 +17,7 @@ from simaple.gear.gearset import Gearset
 from simaple.optimizer.preset import Preset, PresetOptimizer
 from simaple.simulate.kms import get_client
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
+from simaple.system.ability import get_ability_stat
 from simaple.system.trait import CharacterTrait
 
 
@@ -83,6 +85,16 @@ class SimulationContainer(containers.DeclarativeContainer):
         character_level=config.level,
     )
 
+    ability_lines = providers.Singleton(
+        get_best_ability,
+        config.jobtype,
+    )
+
+    ability_stat = providers.Factory(
+        get_ability_stat,
+        ability_lines,
+    )
+
     trait = providers.Factory(
         CharacterTrait,
         ambition=config.trait_level,
@@ -102,6 +114,7 @@ class SimulationContainer(containers.DeclarativeContainer):
         passive_stat,
         doping_stat,
         monster_life_stat,
+        ability_stat.provided.stat,
         trait.provided.get_stat.call(),
     )
 
