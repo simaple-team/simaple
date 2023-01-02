@@ -1,4 +1,3 @@
-from simaple.core import Stat
 from simaple.core.jobtype import JobType
 from simaple.data.ability import get_best_ability
 

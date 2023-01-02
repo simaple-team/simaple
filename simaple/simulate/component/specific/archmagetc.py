@@ -277,7 +277,7 @@ class ThunderBreak(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait
         return state, [self.event_provider.elapsed(time)] + dealing_events
 
     def _get_decay_factor(self, state: ThunderBreakState):
-        return self.decay_rate ** state.periodic.count
+        return self.decay_rate**state.periodic.count
 
     @reducer_method
     def use(self, _: None, state: ThunderBreakState):
