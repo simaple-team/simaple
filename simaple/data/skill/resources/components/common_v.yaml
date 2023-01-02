@@ -1,0 +1,101 @@
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: common
+    name: 쓸만한 샤프 아이즈
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 쓸만한 샤프 아이즈
+  cooldown_duration: 180_000
+  delay: 0 # pet buff
+  lasting_duration: '{{ (180 + 3 * skill_level) * 1_000 }} '
+  stat:
+    critical_damage: 8
+    critical_rate: 10
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: common
+    name: 쓸만한 하이퍼 바디
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 쓸만한 하이퍼 바디
+  cooldown_duration: 180_000
+  delay: 0 # pet buff
+  lasting_duration: '{{ (180 + 3 * skill_level) * 1_000 }} '
+  stat:
+    MHP_multiplier: 40
+    MMP_multiplier: 40
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: common
+    name: 쓸만한 어드밴스드 블레스
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 쓸만한 어드밴스드 블레스
+  cooldown_duration: 180_000
+  delay: 0 # pet buff
+  lasting_duration: '{{ (180 + 3 * skill_level) * 1_000 }} '
+  stat:
+    attack_power: 20
+    magic_attack: 20
+    MHP: 475
+    MMP: 475
+---
+kind: Component
+version: simaple.io/ProgrammedPeriodicComponent
+metadata:
+  label:
+    group: common
+    name: 스파이더 인 미러
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 스파이더 인 미러
+  damage: '{{ 450 + 18 * skill_level }}'
+  hit: 15
+  delay: 720
+
+  cooldown_duration: 250_000
+
+  periodic_intervals: [900, 850, 750, 650, 5730]
+  periodic_damage: '{{ 175 + 7 * skill_level }}'
+  periodic_hit: 8
+
+  lasting_duration: 50_000
+---
+kind: Component
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: common
+    name: 크레센트 오브 더 솔라
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 크레센트 오브 더 솔라
+  damage: '{{ 750 + 30 * skill_level }}'
+  hit: 12
+  delay: 720
+
+  cooldown_duration: 250_000
+
+  periodic_interval: 2100
+  periodic_damage: '{{ 275 + 11 * skill_level }}'
+  periodic_hit: 6
+
+  lasting_duration: 51_000
