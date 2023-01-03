@@ -68,7 +68,7 @@ description = "Maplestory calculation / Simulation library"
 authors = ["meson324 <meson324@gmail.com>"]
 readme = "README.md"
 license = "MIT"
-repository = "https://github.com/oleneyl/simaple"
+repository = "https://github.com/simaple-team/simaple"
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.11"
