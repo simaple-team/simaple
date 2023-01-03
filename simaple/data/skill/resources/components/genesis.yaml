@@ -1,0 +1,10 @@
+kind: Component
+version: simaple.io/AlwaysEnabledComponent
+metadata:
+  label:
+    group: genesis
+    name: 파괴의 얄다바오트
+data:
+  name: 파괴의 얄다바오트
+  stat:
+    final_damage_multiplier: 10
