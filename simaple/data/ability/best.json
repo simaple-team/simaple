@@ -1,0 +1,27 @@
+{
+    "archmagefb": [
+        {"type": "buff_duration", "value": 50},
+        {"type": "critical_rate", "value": 20},
+        {"type": "boss_damage_multiplier", "value": 10}
+    ],
+    "archmagetc": [
+        {"type": "buff_duration", "value": 50},
+        {"type": "critical_rate", "value": 20},
+        {"type": "boss_damage_multiplier", "value": 10}
+    ],
+    "bishop": [
+        {"type": "buff_duration", "value": 50},
+        {"type": "abnormal_status_damage_multiplier", "value": 8},
+        {"type": "boss_damage_multiplier", "value": 10}
+    ],
+    "adele": [
+        {"type": "cooldown_reset_chance", "value": 20},
+        {"type": "buff_duration", "value": 38},
+        {"type": "boss_damage_multiplier", "value": 10}
+    ],
+    "dualblade": [
+        {"type": "boss_damage_multiplier", "value": 20},
+        {"type": "buff_duration", "value": 38},
+        {"type": "critical_rate", "value": 20}
+    ]
+}

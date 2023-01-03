@@ -3,7 +3,7 @@ from __future__ import annotations
 import enum
 from typing import Union
 
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel, Extra, Field
 
 
 class BaseStatType(enum.Enum):
@@ -332,8 +332,31 @@ class LevelStat(BaseModel):
             magic_attack=self.magic_attack * multiplier,
         )
 
+    def __add__(self, arg: LevelStat):
+        return LevelStat(
+            STR=self.STR + arg.STR,
+            LUK=self.LUK + arg.LUK,
+            INT=self.INT + arg.INT,
+            DEX=self.DEX + arg.DEX,
+            attack_power=self.attack_power + arg.attack_power,
+            magic_attack=self.magic_attack + arg.magic_attack,
+        )
+
 
 AnyStat = Union[Stat, ActionStat, LevelStat]
+
+
+class ExtendedStat(BaseModel):
+    stat: Stat = Field(default_factory=Stat)
+    action_stat: ActionStat = Field(default_factory=ActionStat)
+    level_stat: LevelStat = Field(default_factory=LevelStat)
+
+    def __add__(self, arg: ExtendedStat) -> ExtendedStat:
+        return ExtendedStat(
+            stat=self.stat + arg.stat,
+            action_stat=self.action_stat + arg.action_stat,
+            level_stat=self.level_stat + arg.level_stat,
+        )
 
 
 class ElementalResistance(BaseModel):
