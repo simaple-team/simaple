@@ -254,3 +254,30 @@ data:
   finish_hit: "{{ 15 * 5 }}" # 스킬 막타 사용 시 타수, 15타 5번 발동, 막타 시전 중 공격 가능
 
   lasting_duration: 30_000
+
+---
+kind: Component
+version: simaple.io/FlareSlash
+metadata:
+  label:
+    group: soulmaster
+    name: 플레어 슬래시
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 플레어 슬래시
+  listening_actions:
+    "솔라 슬래시.use.emitted.global.delay": change_stance_trigger
+    "루나 디바이드.use.emitted.global.delay": change_stance_trigger
+    "크로스 더 스틱스.use.emitted.global.delay": styx_trigger
+
+  damage: "{{ 550 + skill_level * 22 }}"
+  delay: 0
+  hit: 7
+
+  cooldown_duration: 12_000
+  red: true
+
+  cooldown_reduece_when_stance_changed: 800 # 자세 변환 시 0.8초 쿨감
+  cooldown_reduce_when_cross_the_styx_hit: 1200 # 크로스 더 스틱스 맞출 시 1.2초 쿨감

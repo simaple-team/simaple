@@ -382,3 +382,54 @@ class Cosmos(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
 
     def _get_periodic_damage_hit(self, state: CosmosState) -> tuple[float, float]:
         return self.periodic_damage, self.periodic_hit
+
+
+class FlareSlashState(ReducerState):
+    cooldown: Cooldown
+    dynamics: Dynamics
+
+
+class FlareSlash(
+    SkillComponent, UseSimpleAttackTrait
+):
+    name: str
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
+
+    cooldown_reduece_when_stance_changed: float
+    cooldown_reduce_when_cross_the_styx_hit: float
+
+    def get_default_state(self):
+        return {
+            "cooldown": Cooldown(time_left=0),
+        }
+
+    @reducer_method
+    def elapse(self, time: float, state: FlareSlashState):
+        return self.elapse_simple_attack(time, state)
+
+    @reducer_method
+    def change_stance_trigger(self, _: None, state: FlareSlashState):
+        state = state.deepcopy()
+        state.cooldown.time_left -= self.cooldown_reduece_when_stance_changed
+        return self.use_simple_attack(state)
+
+    @reducer_method
+    def styx_trigger(self, _: None, state: FlareSlashState):
+        state = state.deepcopy()
+        state.cooldown.time_left -= self.cooldown_reduce_when_cross_the_styx_hit
+        return self.use_simple_attack(state)
+
+    @view_method
+    def validity(self, state: FlareSlashState):
+        return Validity(
+            name=self._get_name(),
+            time_left=max(0, state.cooldown.time_left),
+            valid=False,
+            cooldown_duration=self._get_cooldown_duration(),
+        )
+
+    def _get_simple_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit
