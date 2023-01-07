@@ -1,0 +1,72 @@
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: soulmaster
+    name: 솔라 슬래시/루나 디바이드
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  name: 솔라 슬래시/루나 디바이드
+
+  delay: 300
+  cooldown_duration: 0
+  damage: "{{ 335 + 5 * skill_level }}"
+  hit: 6
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/CrossTheStyx
+metadata:
+  label:
+    group: soulmaster
+    name: 크로스 더 스틱스
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  name: 크로스 더 스틱스
+  binds:
+    elysion_lasting: ".엘리시온.lasting"
+  delay: 750
+  damage: "{{ 380 + 15 * skill_level }}"
+  hit: "{{ 5 * 5 }}"
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+  v_improvement: 2
+
+  modifier:
+    ignored_defence: 30
+---
+# TODO: 친구들아 미안해
+kind: Component
+version: simaple.io/Elysion
+metadata:
+  label:
+    group: soulmaster
+    name: 엘리시온
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 엘리시온
+  cooldown_duration: 180_000
+  delay: 750
+  lasting_duration: 40_000
+
+  crack_damage: "{{ 520 + skill_level * 21 }}" # 폭발 데미지, 조건은 하단 참조
+  crack_hit: "{{ 6 * 5 }}"
+  crack_cooldown: 5_000
+  crack_duration: 10_000
+  maximum_crack_count: 7

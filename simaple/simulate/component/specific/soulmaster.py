@@ -12,7 +12,7 @@ from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
     AddDOTDamageTrait,
     BuffTrait,
-    InvalidatableCooldownTrait,
+    CooldownValidityTrait,
     PeriodicWithSimpleDamageTrait,
     UseSimpleAttackTrait,
 )
@@ -28,7 +28,7 @@ class ElysionState(ReducerState):
     crack_cooldown: Cooldown
 
 
-class Elysion(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
+class Elysion(SkillComponent, BuffTrait, CooldownValidityTrait):
     cooldown_duration: float
     delay: float
     lasting_duration: float
@@ -81,8 +81,46 @@ class Elysion(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
         return self.use_buff_trait(state)
 
     @view_method
+    def validity(self, state: ElysionState) -> Validity:
+        return self.validity_in_cooldown_trait(state)
+
+    @view_method
     def running(self, state: ElysionState) -> Running:
         return self.running_in_buff_trait(state)
 
     def _get_lasting_duration(self, state: ElysionState) -> float:
         return self.lasting_duration
+
+
+class CrossTheStyxState(ReducerState):
+    elysion_lasting: Lasting
+
+
+class CrossTheStyx(SkillComponent):
+    name: str
+    damage: float
+    hit: float
+    delay: float
+    cooldown_duration: float = 0.0
+
+    def get_default_state(self):
+        return {}
+
+    @reducer_method
+    def use(self, _: None, state: CrossTheStyxState):
+        if not state.elysion_lasting.enabled():
+            return state, [self.event_provider.rejected()]
+
+        return state, [
+            self.event_provider.dealt(self.damage, self.hit),
+            self.event_provider.delayed(self.delay),
+        ]
+
+    @view_method
+    def validity(self, state: CrossTheStyxState):
+        return Validity(
+            name=self.name,
+            time_left=0.0,
+            valid=state.elysion_lasting.enabled(),
+            cooldown_duration=0.0,
+        )
