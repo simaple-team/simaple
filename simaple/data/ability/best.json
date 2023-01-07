@@ -28,5 +28,10 @@
         {"type": "boss_damage_multiplier", "value": 20},
         {"type": "buff_duration", "value": 38},
         {"type": "critical_rate", "value": 20}
+    ],
+    "soulmaster": [
+        {"type": "boss_damage_multiplier", "value": 20},
+        {"type": "buff_duration", "value": 38},
+        {"type": "critical_rate", "value": 20}
     ]
 }

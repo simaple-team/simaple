@@ -10,7 +10,7 @@ from simaple.simulate.report.base import Report, ReportEventHandler
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 
 
-def test_actor(soulmaster_client, character_stat):
+def test_actor(soulmaster_client, soulmaster_stat):
     actor = DefaultMDCActor(
         order=[
             "솔루나 타임",
@@ -35,8 +35,8 @@ def test_actor(soulmaster_client, character_stat):
     soulmaster_client.add_handler(ReportEventHandler(report))
 
     dpm_calculator = DamageCalculator(
-        character_spec=character_stat,
-        damage_logic=STRBasedDamageLogic(attack_range_constant=1.2, mastery=0.95),
+        character_spec=soulmaster_stat,
+        damage_logic=STRBasedDamageLogic(attack_range_constant=1.34, mastery=0.90),
         armor=300,
         level_advantage=LevelAdvantage().get_advantage(250, 260),
         force_advantage=1.5,
