@@ -138,3 +138,36 @@ data:
   stat:
     final_damage_multiplier: 5
     ignored_defence: 10
+---
+kind: Component
+version: simaple.io/CosmicShower
+metadata:
+  label:
+    group: soulmaster
+    name: 코스믹 샤워
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  name: 코스믹 샤워
+  binds:
+    orb: ".엘리멘트: 소울.orb"
+
+  delay: 600
+
+  cooldown_duration: 30_000
+  red: true
+
+  periodic_interval: 1020
+  periodic_damage: "{{ 210 + 30 + 1 * skill_level }}"
+  periodic_hit: 3
+
+  lasting_duration: 45_000
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+  duration_increase_per_orb: 3000 # 소비한 오브 1개당 지속 시간 3초 증가
+
+  v_improvement: 2

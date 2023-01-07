@@ -191,11 +191,6 @@ class ConsumableBuffTrait(LastingTrait, EventProviderTrait, DelayTrait):
 
 class PeriodicWithSimpleDamageTrait(
     CooldownTrait,
-    PeriodicDamageTrait,
-    SimpleDamageTrait,
-    LastingTrait,
-    EventProviderTrait,
-    DelayTrait,
 ):
     def elapse_periodic_damage_trait(
         self,
@@ -214,6 +209,16 @@ class PeriodicWithSimpleDamageTrait(
             for _ in range(lapse_count)
         ]
 
+
+class PeriodicWithSimpleDamageTrait(
+    PeriodicElapseTrait,
+    CooldownTrait,
+    PeriodicDamageTrait,
+    SimpleDamageTrait,
+    LastingTrait,
+    EventProviderTrait,
+    DelayTrait,
+):
     def use_periodic_damage_trait(
         self,
         state: CooldownDynamicsPeriodicGeneric,

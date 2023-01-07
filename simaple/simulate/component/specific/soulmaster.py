@@ -11,6 +11,7 @@ from simaple.simulate.component.entity import (
     Cycle,
     Lasting,
     LastingStack,
+    Periodic,
     Stack,
 )
 from simaple.simulate.component.skill import SkillComponent
@@ -18,6 +19,7 @@ from simaple.simulate.component.trait.impl import (
     AddDOTDamageTrait,
     BuffTrait,
     CooldownValidityTrait,
+    PeriodicElapseTrait,
     PeriodicWithSimpleDamageTrait,
     UseSimpleAttackTrait,
 )
@@ -216,3 +218,79 @@ class CosmicBurst(SkillComponent):
         )
 
         return state, damages
+
+
+class CosmicShowerState(ReducerState):
+    cooldown: Cooldown
+    periodic: Periodic
+    dynamics: Dynamics
+    orb: LastingStack
+
+
+class CosmicShower(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
+    name: str
+    delay: float
+
+    cooldown_duration: float
+
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+
+    lasting_duration: float
+    duration_increase_per_orb: float
+
+    def get_default_state(self):
+        return {
+            "cooldown": Cooldown(time_left=0),
+            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+        }
+
+    @reducer_method
+    def elapse(self, time: float, state: CosmicShowerState):
+        return self.elapse_periodic_damage_trait(time, state)
+
+    @reducer_method
+    def use(self, _: None, state: CosmicShowerState):
+        state = state.deepcopy()
+        if not state.cooldown.available or state.orb.stack == 0:
+            return state, [self.event_provider.rejected()]
+
+        orbs = state.orb.stack
+        delay = self._get_delay()
+
+        state.cooldown.set_time_left(
+            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
+        )
+        state.periodic.set_time_left(
+            self._get_lasting_duration(state) + orbs * self.duration_increase_per_orb
+        )
+        state.orb.reset()
+
+        return state, [self.event_provider.delayed(delay)]
+
+    @view_method
+    def validity(self, state: CosmicShowerState):
+        return Validity(
+            name=self._get_name(),
+            time_left=max(0, state.cooldown.time_left),
+            valid=state.cooldown.available and state.orb.stack > 0,
+            cooldown_duration=self._get_cooldown_duration(),
+        )
+
+    @view_method
+    def running(self, state: CosmicShowerState) -> Running:
+        return Running(
+            name=self.name,
+            time_left=state.periodic.time_left,
+            lasting_duration=self._get_lasting_duration(state),
+        )
+
+    def _get_lasting_duration(self, state: CosmicShowerState) -> float:
+        return self.lasting_duration
+
+    def _get_simple_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit
+
+    def _get_periodic_damage_hit(self, state: CosmicShowerState) -> tuple[float, float]:
+        return self.periodic_damage, self.periodic_hit
