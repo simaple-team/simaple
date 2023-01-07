@@ -1,6 +1,11 @@
 from simaple.core.base import Stat
 from simaple.simulate.base import Entity, Event
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from simaple.simulate.component.base import (
+    Component,
+    ReducerState,
+    reducer_method,
+    view_method,
+)
 from simaple.simulate.component.entity import (
     Cooldown,
     Cycle,
@@ -18,6 +23,44 @@ from simaple.simulate.component.trait.impl import (
 )
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.global_property import Dynamics
+
+
+class CosmicOrbState(ReducerState):
+    orb: LastingStack
+
+
+class CosmicOrb(Component):
+    default_max_stack: int
+    orb_lasting_duration: float
+    stat: Stat
+
+    def get_default_state(self):
+        return {
+            "orb": LastingStack(
+                maximum_stack=self.default_max_stack, duration=self.orb_lasting_duration
+            )
+        }
+
+    @reducer_method
+    def increase(self, _: None, state: CosmicOrbState):
+        state = state.deepcopy()
+        state.orb.increase(1)
+
+        return state, []
+
+    @reducer_method
+    def maximize(self, _: None, state: CosmicOrbState):
+        state = state.deepcopy()
+        state.orb.increase(10)
+
+        return state, []
+
+    @view_method
+    def buff(self, state: CosmicOrbState):
+        if state.orb.stack > 0:
+            return self.stat
+
+        return None
 
 
 class ElysionState(ReducerState):

@@ -13,6 +13,7 @@ from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 def test_actor(soulmaster_client, character_stat):
     actor = DefaultMDCActor(
         order=[
+            "엘리멘트: 소울",
             "엘리시온",
             "크로스 더 스틱스",
             "솔라 슬래시/루나 디바이드",
@@ -43,5 +44,7 @@ def test_actor(soulmaster_client, character_stat):
             action = actor.decide(soulmaster_client.environment, events)
             events = soulmaster_client.play(action)
             rec.write(action, environment.show("clock"))
+
+    report.save("report.tsv")
 
     print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")

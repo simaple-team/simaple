@@ -1,5 +1,23 @@
 ---
 kind: Component
+version: simaple.io/CosmicOrb
+metadata:
+  label:
+    group: soulmaster
+    name: "엘리멘트: 소울"
+data:
+  name: "엘리멘트: 소울"
+  listening_actions:
+    "솔라 슬래시.use.emitted.global.delay": increase
+    "루나 디바이드.use.emitted.global.delay": increase
+    "크로스 더 스틱스.use.emitted.global.delay": maximize
+
+  default_max_stack: 5
+  orb_lasting_duration: 30_000
+  stat:
+    attack_power: 80
+---
+kind: Component
 version: simaple.io/AttackSkillComponent
 metadata:
   label:
@@ -61,6 +79,8 @@ patch:
   - EvalPatch
 data:
   name: 엘리시온
+  listening_actions:
+    "크로스 더 스틱스.use.emitted.global.delay": "crack"
   cooldown_duration: 180_000
   delay: 750
   lasting_duration: 40_000
