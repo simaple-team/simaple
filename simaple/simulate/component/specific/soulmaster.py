@@ -1,27 +1,17 @@
 from simaple.core.base import Stat
-from simaple.simulate.base import Entity, Event
+from simaple.simulate.base import Entity
 from simaple.simulate.component.base import (
     Component,
     ReducerState,
     reducer_method,
     view_method,
 )
-from simaple.simulate.component.entity import (
-    Cooldown,
-    Cycle,
-    Lasting,
-    LastingStack,
-    Periodic,
-    Stack,
-)
+from simaple.simulate.component.entity import Cooldown, Lasting, LastingStack, Periodic
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
-    AddDOTDamageTrait,
     BuffTrait,
     CooldownValidityTrait,
     PeriodicElapseTrait,
-    PeriodicWithSimpleDamageTrait,
-    UsePeriodicDamageTrait,
     UseSimpleAttackTrait,
 )
 from simaple.simulate.component.view import Running, Validity
@@ -389,9 +379,7 @@ class FlareSlashState(ReducerState):
     dynamics: Dynamics
 
 
-class FlareSlash(
-    SkillComponent, UseSimpleAttackTrait
-):
+class FlareSlash(SkillComponent, UseSimpleAttackTrait):
     name: str
     damage: float
     hit: float

@@ -2,7 +2,6 @@ import pytest
 
 from simaple.simulate.component.specific.soulmaster import Elysion, ElysionState
 from simaple.simulate.global_property import Dynamics
-from simaple.simulate.reserved_names import Tag
 from tests.simulate.component.util import count_damage_skill
 
 

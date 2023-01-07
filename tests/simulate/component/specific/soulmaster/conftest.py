@@ -4,7 +4,6 @@ import pytest
 import simaple.simulate.component.skill  # pylint: disable=W0611
 import simaple.simulate.component.specific  # pylint: disable=W0611
 from simaple.core.base import ActionStat
-from simaple.simulate.component.specific.mechanic import RobotMastery
 from simaple.simulate.global_property import Dynamics
 
 

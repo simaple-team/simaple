@@ -3,7 +3,6 @@ import pytest
 from simaple.simulate.component.entity import LastingStack
 from simaple.simulate.component.specific.soulmaster import CosmicBurst, CosmicBurstState
 from simaple.simulate.global_property import Dynamics
-from simaple.simulate.reserved_names import Tag
 from tests.simulate.component.util import count_damage_skill
 
 
