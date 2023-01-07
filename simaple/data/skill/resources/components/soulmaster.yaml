@@ -171,3 +171,15 @@ data:
   duration_increase_per_orb: 3000 # 소비한 오브 1개당 지속 시간 3초 증가
 
   v_improvement: 2
+---
+kind: Component
+version: simaple.io/AlwaysEnabledComponent
+metadata:
+  label:
+    group: soulmaster
+    name: 솔루나 타임
+data:
+  name: 솔루나 타임
+  stat:
+    # 1.25 * 1.8 = 2.25
+    final_damage_multiplier: 125

@@ -13,6 +13,7 @@ from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 def test_actor(soulmaster_client, character_stat):
     actor = DefaultMDCActor(
         order=[
+            "솔루나 타임",
             "엘리멘트: 소울",
             "트루 사이트",
             "코스믹 버스트",
