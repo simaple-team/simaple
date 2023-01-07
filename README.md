@@ -1,4 +1,4 @@
-# Simultion library for Maplestory
+# simaple: Simulation library for Maplestory
 
 - 메이플스토리에 관련된 다양한 연산을 지원하는 패키지.
 - Package for various calculation related with Maplestory.
