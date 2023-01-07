@@ -16,6 +16,7 @@ def test_actor(soulmaster_client, soulmaster_stat):
             "솔루나 타임",
             "엘리멘트: 소울",
             "트루 사이트",
+            "코스믹 포지",
             "코스믹 버스트",
             "코스믹 샤워",
             "엘리시온",

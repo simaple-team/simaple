@@ -29,17 +29,21 @@ from simaple.simulate.global_property import Dynamics
 
 class CosmicOrbState(ReducerState):
     orb: LastingStack
+    cosmic_forge_lasting: Lasting
 
 
 class CosmicOrb(Component):
     default_max_stack: int
+    cosmic_forge_stack: int
     orb_lasting_duration: float
+
     stat: Stat
 
     def get_default_state(self):
         return {
             "orb": LastingStack(
-                maximum_stack=self.default_max_stack, duration=self.orb_lasting_duration
+                maximum_stack=self.cosmic_forge_stack,
+                duration=self.orb_lasting_duration,
             )
         }
 
@@ -47,14 +51,17 @@ class CosmicOrb(Component):
     def increase(self, _: None, state: CosmicOrbState):
         state = state.deepcopy()
         state.orb.increase(1)
+        if not state.cosmic_forge_lasting.enabled():
+            state.orb.increase(1)
 
+        state = self._regulate_if_no_cosmic_forge(state)
         return state, []
 
     @reducer_method
     def maximize(self, _: None, state: CosmicOrbState):
         state = state.deepcopy()
         state.orb.increase(10)
-
+        state = self._regulate_if_no_cosmic_forge(state)
         return state, []
 
     @view_method
@@ -63,6 +70,15 @@ class CosmicOrb(Component):
             return self.stat
 
         return None
+
+    def _regulate_if_no_cosmic_forge(self, state: CosmicOrbState) -> CosmicOrbState:
+        if state.cosmic_forge_lasting.enabled():
+            return state
+
+        state = state.deepcopy()
+        state.orb.regulate(self.default_max_stack)
+
+        return state
 
 
 class ElysionState(ReducerState):

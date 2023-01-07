@@ -190,6 +190,9 @@ class LastingStack(Entity):
     def is_maximum(self) -> bool:
         return self.stack == self.maximum_stack
 
+    def regulate(self, value: int) -> None:
+        self.stack = min(value, self.stack)
+
 
 class Keydown(Entity):
     interval: float

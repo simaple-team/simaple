@@ -7,12 +7,16 @@ metadata:
     name: "엘리멘트: 소울"
 data:
   name: "엘리멘트: 소울"
+  binds:
+    cosmic_forge_lasting: ".코스믹 포지.lasting"
   listening_actions:
     "솔라 슬래시.use.emitted.global.delay": increase
     "루나 디바이드.use.emitted.global.delay": increase
     "크로스 더 스틱스.use.emitted.global.delay": maximize
+    "코스믹 포지.use.emitted.global.delay": maximize
 
   default_max_stack: 5
+  cosmic_forge_stack: 10
   orb_lasting_duration: 30_000
   stat:
     attack_power: 80
@@ -183,3 +187,19 @@ data:
   stat:
     # 1.25 * 1.8 = 2.25
     final_damage_multiplier: 125
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: soulmaster
+    name: 코스믹 포지
+data:
+  name: 코스믹 포지
+  delay: 600
+  cooldown_duration: 180_000
+  lasting_duration: 60_000
+  rem: false
+
+  stat:
+    damage_multiplier: 10
