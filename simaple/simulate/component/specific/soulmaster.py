@@ -167,3 +167,52 @@ class CrossTheStyx(SkillComponent):
             valid=state.elysion_lasting.enabled(),
             cooldown_duration=0.0,
         )
+
+
+class CosmicBurstState(ReducerState):
+    cooldown: Cooldown
+    dynamics: Dynamics
+    orb: LastingStack
+
+
+class CosmicBurst(SkillComponent):
+    damage: float
+    hit: int
+    delay: float
+    cooldown_duration: float
+
+    damage_decrement_after_2nd_hit: float  # 같은 대상 2번째 히트부터 70% 최종뎀 적용
+    cooltime_reduce_per_orb: float  # 소비한 오브 1개당 재사용 1초 감소
+
+    def get_default_state(self) -> dict[str, Entity]:
+        return {"cooldown": Cooldown(time_left=0.0)}
+
+    @reducer_method
+    def elapse(self, time: float, state: CosmicBurstState):
+        state = state.deepcopy()
+        state.cooldown.elapse(time)
+
+        return state, [self.event_provider.elapsed(time)]
+
+    @reducer_method
+    def trigger(self, _: None, state: CosmicBurstState):
+        if not state.cooldown.available or state.orb.stack == 0:
+            return state, [self.event_provider.rejected()]
+
+        state = state.deepcopy()
+        orbs = state.orb.stack
+
+        state.cooldown.set_time_left(
+            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
+            - orbs * self.cooltime_reduce_per_orb
+        )
+        state.orb.reset()
+
+        damages = [self.event_provider.dealt(self.damage, self.hit)]
+        damages.append(
+            self.event_provider.dealt(
+                self.damage * self.damage_decrement_after_2nd_hit, self.hit * (orbs - 1)
+            )
+        )
+
+        return state, damages

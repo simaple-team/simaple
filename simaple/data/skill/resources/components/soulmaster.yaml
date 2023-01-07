@@ -90,3 +90,51 @@ data:
   crack_cooldown: 5_000
   crack_duration: 10_000
   maximum_crack_count: 7
+---
+kind: Component
+version: simaple.io/CosmicBurst
+metadata:
+  label:
+    group: soulmaster
+    name: 코스믹 버스트
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  name: 코스믹 버스트
+  binds:
+    orb: ".엘리멘트: 소울.orb"
+  listening_actions:
+    "솔라 슬래시.use.emitted.global.delay": trigger
+    "루나 디바이드.use.emitted.global.delay": trigger
+    "크로스 더 스틱스.use.emitted.global.delay": trigger
+  delay: 720
+  damage: "{{ 280 + 4 * skill_level }}"
+  hit: 4
+  cooldown_duration: 15_000
+  red: true
+  damage_decrement_after_2nd_hit: 0.7 # 같은 대상 2번째 히트부터 70% 최종뎀 적용
+  cooltime_reduce_per_orb: 1_000 # 소비한 오브 1개당 재사용 1초 감소
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: soulmaster
+    name: 트루 사이트
+data:
+  name: 트루 사이트
+  delay: 600
+  cooldown_duration: 0
+  lasting_duration: 30_000
+  rem: false
+  stat:
+    final_damage_multiplier: 5
+    ignored_defence: 10

@@ -14,6 +14,8 @@ def test_actor(soulmaster_client, character_stat):
     actor = DefaultMDCActor(
         order=[
             "엘리멘트: 소울",
+            "트루 사이트",
+            "코스믹 버스트",
             "엘리시온",
             "크로스 더 스틱스",
             "솔라 슬래시/루나 디바이드",
