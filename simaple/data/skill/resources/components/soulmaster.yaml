@@ -203,3 +203,29 @@ data:
 
   stat:
     damage_multiplier: 10
+---
+kind: Component
+version: simaple.io/Cosmos
+metadata:
+  label:
+    group: soulmaster
+    name: 코스모스
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 코스모스
+  binds:
+    orb: ".엘리멘트: 소울.orb"
+
+  delay: 720
+
+  cooldown_duration: 90_000
+  red: true
+
+  periodic_interval: 600
+  periodic_damage: "{{ 450 + skill_level * 18 }}"
+  periodic_hit: 5
+  periodic_interval_decrement_per_orb: 30
+
+  lasting_duration: 15_000
