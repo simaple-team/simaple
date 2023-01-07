@@ -229,3 +229,28 @@ data:
   periodic_interval_decrement_per_orb: 30
 
   lasting_duration: 15_000
+---
+kind: Component
+version: simaple.io/PeriodicWithFinishSkillComponent
+metadata:
+  label:
+    group: soulmaster
+    name: 소울 이클립스
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 소울 이클립스
+  delay: 270
+
+  cooldown_duration: 180_000
+  red: true
+
+  periodic_interval: 1000
+  periodic_damage: "{{ 450 + skill_level * 18 }}"
+  periodic_hit: 7
+
+  finish_damage: "{{ 1250 + skill_level * 50 }}" # 스킬 막타 사용 시 데미지
+  finish_hit: "{{ 15 * 5 }}" # 스킬 막타 사용 시 타수, 15타 5번 발동, 막타 시전 중 공격 가능
+
+  lasting_duration: 30_000

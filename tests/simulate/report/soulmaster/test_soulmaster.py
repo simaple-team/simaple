@@ -20,6 +20,7 @@ def test_actor(soulmaster_client, soulmaster_stat):
             "코스믹 버스트",
             "코스모스",
             "코스믹 샤워",
+            "소울 이클립스",
             "엘리시온",
             "크로스 더 스틱스",
             "솔라 슬래시/루나 디바이드",
