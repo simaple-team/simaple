@@ -1,0 +1,233 @@
+kind: Component
+version: simaple.io/SynergySkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 핀포인트 피어스
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 핀포인트 피어스
+  damage: 340
+  hit: 2
+  cooldown_duration: 0
+  delay: 690
+
+  lasting_duration: 60_000
+  synergy:
+    damage_multiplier: 15
+    ignored_defence: 15
+  v_improvement: 3
+---
+kind: Component
+version: simaple.io/KeydownSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 천공의 노래
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  name: 천공의 노래
+  maximum_keydown_time: 999_999_999
+
+  damage: '{{ 300 + 3 * skill_level }}'
+  hit: 1
+  delay: 120
+  cooldown_duration: 0
+
+  keydown_prepare_delay: 300
+  keydown_end_delay: 0
+
+  finish_damage: 0
+  finish_hit: 0
+
+  combat_orders_enabled: true
+  default_skill_level: 15
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/TriggableBuffSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 스톰 브링어
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  listening_actions:
+    핀포인트 피어스.use.emitted.global.damage: trigger
+    천공의 노래.elapse.emitted.global.damage: trigger
+    천공의 노래.stop.emitted.global.damage: trigger
+    하울링 게일.elapse.emitted.global.damage: trigger
+    시그너스 팔랑크스.elapse.emitted.global.damage: trigger
+    볼텍스 스피어.elapse.emitted.global.damage: trigger
+  name: 스톰 브링어
+  trigger_cooldown_duration: 0
+  trigger_damage: '{{ 305 + 5 * skill_level }}'
+  trigger_hit: 0.3
+
+  cooldown_duration: 0
+  delay: 0
+  lasting_duration: 200_000
+
+  combat_orders_enabled: true
+  default_skill_level: 15
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/TriggableBuffSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 트라이플링 윔
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  listening_actions:
+    핀포인트 피어스.use.emitted.global.damage: trigger
+    천공의 노래.elapse.emitted.global.damage: trigger
+    천공의 노래.stop.emitted.global.damage: trigger
+    하울링 게일.elapse.emitted.global.damage: trigger
+    시그너스 팔랑크스.elapse.emitted.global.damage: trigger
+    볼텍스 스피어.elapse.emitted.global.damage: trigger
+  name: 트라이플링 윔
+  trigger_cooldown_duration: 0
+  trigger_damage: '{{ (200 + skill_level * 3) * (1 - 0.01 * (10 + skill_level // 3)) + (300 + skill_level * 3) * 0.01 * (10 + skill_level // 3) }}'
+  trigger_hit: '{{ (35 + skill_level // 2) * 0.01 }}'
+
+  cooldown_duration: 0
+  delay: 0
+  lasting_duration: 999_999_999 # toggle skill
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/TriggableBuffSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 스톰 윔
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  listening_actions:
+    핀포인트 피어스.use.emitted.global.damage: trigger
+    천공의 노래.elapse.emitted.global.damage: trigger
+    천공의 노래.stop.emitted.global.damage: trigger
+    하울링 게일.elapse.emitted.global.damage: trigger
+    시그너스 팔랑크스.elapse.emitted.global.damage: trigger
+    볼텍스 스피어.elapse.emitted.global.damage: trigger
+  trigger_cooldown_duration: 0
+  trigger_damage: 560
+  trigger_hit: 0.3
+
+  cooldown_duration: 120_000
+  delay: 600
+  lasting_duration: 30_000
+
+  rem: false
+  combat_orders_enabled: true
+  default_skill_level: 30
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/ChargeableStackDependentTickDamageSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 하울링 게일
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 하울링 게일
+  delay: 630
+  max_stack: 3
+  charge_interval: 20_000
+
+  duration: 10_000
+  tick_interval: 480
+  tick_damage:
+    - '{{ 325 + skill_level * 13 }}'
+    - '{{ 785 + skill_level * 31 }}'
+    - '{{ 785 + 375 + skill_level * (31 + 19) }}'
+  tick_hit: [3, 3, 3]
+---
+kind: Component
+version: simaple.io/DOTEmittingAttackSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 아이들 윔
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 아이들 윔
+  damage: '{{ (550 + 22 * skill_level) * (1 + 0.85 * 9) / 10 }}'
+  hit: 30
+  cooldown_duration: 10_000
+  delay: 450
+
+  dot_damage: '{{ 500 + 20 * skill_level }}'
+  dot_lasting_duration: 9
+---
+kind: Component
+version: simaple.io/TriggableBuffSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 윈드 월
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  listening_actions:
+    핀포인트 피어스.use.emitted.global.damage: trigger
+    천공의 노래.elapse.emitted.global.damage: trigger
+    천공의 노래.stop.emitted.global.damage: trigger
+    하울링 게일.elapse.emitted.global.damage: trigger
+    시그너스 팔랑크스.elapse.emitted.global.damage: trigger
+    볼텍스 스피어.elapse.emitted.global.damage: trigger
+  name: 윈드 월
+  trigger_cooldown_duration: 2_000
+  trigger_damage: '{{ (550 + 22 * skill_level) * (1 + 0.5 * 2) / 3 }}'
+  trigger_hit: 15
+
+  cooldown_duration: 90_000
+  delay: 540
+  lasting_duration: 45_000
+---
+kind: Component
+version: simaple.io/HitLimitedPeriodicDamageComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 볼텍스 스피어
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name:
+  cooldown_duration: 30_000
+  delay: 420 # approximate
+
+  periodic_interval: 180
+  periodic_damage: '{{ 400 + 16 * skill_level }}'
+  periodic_hit: 6
+  lasting_duration: 11_250
+
+  max_count: 20
