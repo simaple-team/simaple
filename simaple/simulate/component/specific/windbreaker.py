@@ -114,4 +114,4 @@ class HowlingGaleComponent(
         )
 
     def _get_lasting_duration(self, state: HowlingGaleState) -> float:
-        return self.lasting_duration
+        return self.lasting_duration + self.delay

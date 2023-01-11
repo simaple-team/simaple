@@ -159,12 +159,11 @@ data:
 
   cooldown_duration: 20_000
 
-  periodic_interval: 480
+  periodic_interval: 150
   periodic_damage:
     - '{{ 325 + skill_level * 13 }}'
     - '{{ 785 + skill_level * 31 }}'
-    - '{{ 785 + 375 + skill_level * (31 + 19) }}'
-  periodic_hit: [3, 3, 3]
+  periodic_hit: [3, 3]
   lasting_duration: 10_000
 ---
 kind: Component
