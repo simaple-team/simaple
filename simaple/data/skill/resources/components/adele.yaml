@@ -12,6 +12,10 @@ patch:
   - PassiveHyperskillPatch
 data:
   name: 에테르
+  listening_actions:
+    "디바이드.use.emitted.global.delay": "trigger"
+    "레조넌스.use.emitted.global.delay": "resonance"
+    "오더.use.emitted.global.delay": "order"
   periodic_interval: 10020
   maximum_stack: 400
   stack_per_period: 5
@@ -130,6 +134,8 @@ patch:
   - VSkillImprovementPatch
 data:
   name: 크리에이션
+  listening_actions:
+    "디바이드.use": "trigger"
   delay: 0
   damage: "{{ 200 + 240 + 180 + 3 * skill_level }}"
   hit_per_sword: 1

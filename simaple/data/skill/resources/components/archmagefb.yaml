@@ -118,6 +118,8 @@ patch:
   - EvalPatch
 data:
   name: 포이즌 노바
+  listening_actions:
+    "미스트 이럽션.use": trigger
   cooldown_duration: 25000
   delay: 570
   red: true

@@ -24,10 +24,6 @@ class FinalCutComponent(SkillComponent, UseSimpleAttackTrait, CooldownValidityTr
 
     sudden_raid_cooltime_reduce: float
 
-    listening_actions: dict[str, str] = {
-        "써든레이드.use.emitted.global.delay": "sudden_raid"
-    }
-
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
