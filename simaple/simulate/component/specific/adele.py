@@ -57,11 +57,6 @@ class AdeleEtherComponent(Component):
     creation_step: int
     order_consume: int
 
-    listening_actions: dict[str, str] = {
-        "디바이드.use.emitted.global.delay": "trigger",
-        "레조넌스.use.emitted.global.delay": "resonance",
-        "오더.use.emitted.global.delay": "order",
-    }
     binds: dict[str, str] = {"restore_lasting": ".리스토어(버프).lasting"}
 
     def get_default_state(self):
@@ -155,7 +150,6 @@ class AdeleCreationComponent(
     cooldown_duration: float
     delay: float
 
-    listening_actions: dict[str, str] = {"디바이드.use": "trigger"}
     binds: dict[str, str] = {"ether_gauge": ".에테르.ether_gauge"}
 
     def get_default_state(self):

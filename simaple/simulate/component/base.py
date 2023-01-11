@@ -1,3 +1,4 @@
+import copy
 import inspect
 from abc import ABCMeta, abstractmethod
 from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union, cast
@@ -28,9 +29,12 @@ class ReducerState(BaseModel):
 
 
 class ComponentMethodWrapper:
-    def __init__(self, func: ReducerType, skip_count=1):
+    def __init__(
+        self, func: ReducerType, skip_count=1, static_payload: Optional[dict] = None
+    ):
         self._func = func
         self._has_payload = skip_count == 1
+        self._static_payload = static_payload
 
         self._payload_type: Optional[Type[BaseModel]] = None
         if len(inspect.signature(func).parameters.values()) > 0:
@@ -42,12 +46,15 @@ class ComponentMethodWrapper:
             skip_count
         ].annotation
 
-    def __call__(self, *args, **kwargs) -> tuple[Union[tuple[Entity], Entity], Any]:
-        return self._func(*args, **kwargs)
+    def __call__(self, *args) -> tuple[Union[tuple[Entity], Entity], Any]:
+        return self._func(*args)
 
     def translate_payload(self, payload: Optional[Union[int, str, dict]]):
         if not self._has_payload:
             raise ValueError("no skip_count do not support payload translation")
+
+        if self._static_payload:
+            return copy.deepcopy(self._static_payload)
 
         if not isinstance(payload, dict) or self._payload_type is None:
             return payload
@@ -283,6 +290,11 @@ class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
         return cls
 
 
+class StaticPayloadReducerInfo(BaseModel):
+    name: str
+    payload: dict
+
+
 class Component(BaseModel, metaclass=ComponentMetaclass):
     """
     Component is compact bundle of state-action.
@@ -300,7 +312,9 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     """
 
     name: str
-    listening_actions: dict[str, str] = Field(default_factory=dict)
+    listening_actions: dict[str, Union[str, StaticPayloadReducerInfo]] = Field(
+        default_factory=dict
+    )
     binds: dict[str, str] = Field(default_factory=dict)
 
     class Config:
@@ -325,7 +339,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
             environment.add_view(f"{self.name}.{view_name}", view)
 
     def get_action_router(self) -> ActionRouter:
-        reducer_methods = self.get_reducer_methods()
+        reducer_methods = self.get_every_reducer_methods()
 
         wild_card_mappings = {
             f"{WILD_CARD}.{method}": method for method in reducer_methods.keys()
@@ -333,12 +347,27 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         default_mappings = {
             f"{self.name}.{method}": method for method in reducer_methods.keys()
         }
-        method_mappings = {}
+        reducer_mappings, method_mappings = {}, {}
         method_mappings.update(default_mappings)
         method_mappings.update(wild_card_mappings)
-        method_mappings.update(self.listening_actions)
 
-        reducer_mappings = {k: reducer_methods[v] for k, v in method_mappings.items()}
+        # str-type reducers
+        for listening_signature, reducer_info in self.listening_actions.items():
+            if isinstance(reducer_info, str):
+                method_mappings[listening_signature] = reducer_info
+
+        reducer_mappings.update(
+            {k: reducer_methods[v] for k, v in method_mappings.items()}
+        )
+
+        # StaticPayloadReducerInfo-type reducers
+        for listening_signature, reducer_info in self.listening_actions.items():
+            if isinstance(reducer_info, StaticPayloadReducerInfo):
+                method_mappings[listening_signature] = reducer_info.name
+                reducer_mappings[listening_signature] = self._get_reducer_method(
+                    reducer_info.name,
+                    reducer_info.payload,
+                )
 
         return ConcreteActionRouter(
             method_mappings=method_mappings, mappings=reducer_mappings
@@ -352,11 +381,16 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
             binds=self.binds,
         )
 
-    def get_reducer_methods(self):
+    def get_every_reducer_methods(self):
         return {
-            method_name: ComponentMethodWrapper(getattr(self, method_name))
+            method_name: self._get_reducer_method(method_name)
             for method_name in getattr(self, "__reducers__")
         }
+
+    def _get_reducer_method(self, reducer_name, static_payload: Optional[dict] = None):
+        return ComponentMethodWrapper(
+            getattr(self, reducer_name), static_payload=static_payload
+        )
 
     def get_views(self):
         return {

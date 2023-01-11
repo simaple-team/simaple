@@ -49,8 +49,6 @@ class PoisonNovaComponent(SkillComponent, AddDOTDamageTrait):
     dot_damage: float
     dot_lasting_duration: float
 
-    listening_actions: dict[str, str] = {"미스트 이럽션.use": "trigger"}
-
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),

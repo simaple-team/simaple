@@ -59,6 +59,8 @@ patch:
   - VSkillImprovementPatch
 data:
   name: 파이널 컷
+  listening_actions:
+    써든레이드.use.emitted.global.delay": sudden_raid
   cooldown_duration: 90000
   red: True
   delay: 450 # 임의 딜레이
