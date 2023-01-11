@@ -9,6 +9,8 @@ from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 def test_actor(adele_client, character_stat):
     actor = DefaultMDCActor(
         order=[
+            "매직 서킷 풀 드라이브",
+            "그란디스 여신의 축복(레프)",
             "리스토어",
             "인피니트",
             "스톰",
@@ -50,4 +52,4 @@ def test_actor(adele_client, character_stat):
 
     print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")
 
-    assert int(dpm_calculator.calculate_dpm(report)) == 2_978_074_459_544
+    assert int(dpm_calculator.calculate_dpm(report)) == 3_582_571_067_088
