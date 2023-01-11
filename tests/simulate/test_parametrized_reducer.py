@@ -1,5 +1,3 @@
-from typing import Any
-
 from simaple.core.base import ActionStat
 from simaple.simulate.base import (
     Action,
