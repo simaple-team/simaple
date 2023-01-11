@@ -133,9 +133,11 @@ class CharacterAbilityExtractor(CharacterPropertyExtractor):
             "MMP_multiplier": re.compile(r"최대 MP \d+% 증가"),
             "boss_damage_multiplier": re.compile(r"보스 몬스터 공격 시 데미지 \d+% 증가"),
             # 일반 몬스터 공격 시 데미지 \d+% 증가
-            "stunDamage": re.compile(r"상태 이상에 걸린 대상 공격 시 데미지 \d+% 증가"),
+            "abnormal_status_damage_multiplier": re.compile(
+                r"상태 이상에 걸린 대상 공격 시 데미지 \d+% 증가"
+            ),
             # 방어력의 \d+%만큼 데미지 고정값 증가
-            "cooldownReset": re.compile(r"스킬 사용 시 \d+% 확률로 재사용 대기시간이 미적용"),
+            "cooldown_reset_chance": re.compile(r"스킬 사용 시 \d+% 확률로 재사용 대기시간이 미적용"),
             "passiveSkill": re.compile(r"패시브 스킬 레벨 \d+ 증가"),
             "multiTarget": re.compile(r"다수 공격 스킬의 공격 대상 \d+ 증가"),
             "buff_duration": re.compile(r"버프 스킬의 지속 시간 \d+% 증가"),
