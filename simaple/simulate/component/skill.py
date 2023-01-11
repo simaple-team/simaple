@@ -451,7 +451,9 @@ class HitLimitedPeriodicDamageState(ReducerState):
     dynamics: Dynamics
 
 
-class HitLimitedPeriodicDamageComponent(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait):
+class HitLimitedPeriodicDamageComponent(
+    SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait
+):
     name: str
     cooldown_duration: float
     delay: float

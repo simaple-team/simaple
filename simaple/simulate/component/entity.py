@@ -54,6 +54,9 @@ class Consumable(Entity):
         if self.stack == self.maximum_stack:
             self.time_left = self.cooldown_duration
 
+    def get_stack(self) -> int:
+        return self.stack
+
     def consume(self):
         self.stack -= 1
 

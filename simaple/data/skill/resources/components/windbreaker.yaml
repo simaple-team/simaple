@@ -144,7 +144,7 @@ data:
   v_improvement: 2
 ---
 kind: Component
-version: simaple.io/ChargeableStackDependentTickDamageSkillComponent
+version: simaple.io/HowlingGaleComponent
 metadata:
   label:
     group: windbreaker
@@ -155,16 +155,17 @@ patch:
 data:
   name: 하울링 게일
   delay: 630
-  max_stack: 3
-  charge_interval: 20_000
+  maximum_stack: 3
 
-  duration: 10_000
-  tick_interval: 480
-  tick_damage:
+  cooldown_duration: 20_000
+
+  periodic_interval: 480
+  periodic_damage:
     - '{{ 325 + skill_level * 13 }}'
     - '{{ 785 + skill_level * 31 }}'
     - '{{ 785 + 375 + skill_level * (31 + 19) }}'
-  tick_hit: [3, 3, 3]
+  periodic_hit: [3, 3, 3]
+  lasting_duration: 10_000
 ---
 kind: Component
 version: simaple.io/DOTEmittingAttackSkillComponent
