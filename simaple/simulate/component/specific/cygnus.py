@@ -2,21 +2,25 @@ from typing import Optional
 
 from simaple.core.base import Stat
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
-from simaple.simulate.component.entity import Cooldown, Lasting
+from simaple.simulate.component.entity import Consumable, Lasting
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import BuffTrait, CooldownValidityTrait
+from simaple.simulate.component.trait.impl import (
+    ConsumableBuffTrait,
+    ConsumableValidityTrait,
+)
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
 
-
 class TranscendentCygnusBlessingState(ReducerState):
-    cooldown: Cooldown
     lasting: Lasting
     dynamics: Dynamics
+    consumable: Consumable
 
 
-class TranscendentCygnusBlessing(SkillComponent, BuffTrait, CooldownValidityTrait):
+class TranscendentCygnusBlessing(
+    SkillComponent, ConsumableBuffTrait, ConsumableValidityTrait
+):
     cooldown_duration: float
     delay: float
     lasting_duration: float
@@ -25,24 +29,30 @@ class TranscendentCygnusBlessing(SkillComponent, BuffTrait, CooldownValidityTrai
     increase_interval: float
     default_damage: float
     maximum_damage: float
+    maximum_stack: int
 
     def get_default_state(self):
         return {
-            "cooldown": Cooldown(time_left=0),
+            "consumable": Consumable(
+                time_left=self.cooldown_duration,
+                cooldown_duration=self.cooldown_duration,
+                maximum_stack=self.maximum_stack,
+                stack=self.maximum_stack,
+            ),
             "lasting": Lasting(time_left=0),
         }
 
     @reducer_method
     def use(self, _: None, state: TranscendentCygnusBlessingState):
-        return self.use_buff_trait(state)
+        return self.use_consumable_buff_trait(state)
 
     @reducer_method
     def elapse(self, time: float, state: TranscendentCygnusBlessingState):
-        return self.elapse_buff_trait(time, state)
+        return self.elapse_consumable_buff_trait(time, state)
 
     @view_method
     def validity(self, state: TranscendentCygnusBlessingState):
-        return self.validity_in_cooldown_trait(state)
+        return self.validity_in_consumable_trait(state)
 
     @view_method
     def buff(self, state: TranscendentCygnusBlessingState) -> Optional[Stat]:

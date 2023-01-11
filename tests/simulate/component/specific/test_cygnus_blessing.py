@@ -2,7 +2,10 @@
 import pytest
 
 from simaple.core.base import Stat
-from simaple.simulate.component.specific.cygnus import TranscendentCygnusBlessing, TranscendentCygnusBlessingState
+from simaple.simulate.component.specific.cygnus import (
+    TranscendentCygnusBlessing,
+    TranscendentCygnusBlessingState,
+)
 from simaple.simulate.global_property import Dynamics
 
 
@@ -17,18 +20,22 @@ def fixture_cygnus_blessing_component():
         increase_interval=3_000,
         default_damage=70,
         maximum_damage=115,
+        maximum_stack=2,
     )
 
 
 @pytest.fixture(name="cygnus_blessing_state")
-def fixture_cygnus_blessing_state(cygnus_blessing_component: TranscendentCygnusBlessing, dynamics: Dynamics):
+def fixture_cygnus_blessing_state(
+    cygnus_blessing_component: TranscendentCygnusBlessing, dynamics: Dynamics
+):
     return TranscendentCygnusBlessingState.parse_obj(
         {**cygnus_blessing_component.get_default_state(), "dynamics": dynamics}
     )
 
 
 def test_cygnus_blessing_increment(
-    cygnus_blessing_component: TranscendentCygnusBlessing, cygnus_blessing_state: TranscendentCygnusBlessingState
+    cygnus_blessing_component: TranscendentCygnusBlessing,
+    cygnus_blessing_state: TranscendentCygnusBlessingState,
 ):
     # when
     state, _ = cygnus_blessing_component.use(None, cygnus_blessing_state)
@@ -38,7 +45,8 @@ def test_cygnus_blessing_increment(
 
 
 def test_cygnus_blessing_increment_during_increase(
-    cygnus_blessing_component: TranscendentCygnusBlessing, cygnus_blessing_state: TranscendentCygnusBlessingState
+    cygnus_blessing_component: TranscendentCygnusBlessing,
+    cygnus_blessing_state: TranscendentCygnusBlessingState,
 ):
     # when
     state, _ = cygnus_blessing_component.use(None, cygnus_blessing_state)
@@ -49,7 +57,8 @@ def test_cygnus_blessing_increment_during_increase(
 
 
 def test_maximum_cygnus_blessing_increment(
-    cygnus_blessing_component: TranscendentCygnusBlessing, cygnus_blessing_state: TranscendentCygnusBlessingState
+    cygnus_blessing_component: TranscendentCygnusBlessing,
+    cygnus_blessing_state: TranscendentCygnusBlessingState,
 ):
     state, _ = cygnus_blessing_component.use(None, cygnus_blessing_state)
     state, _ = cygnus_blessing_component.elapse(100_000, state)
@@ -57,7 +66,10 @@ def test_maximum_cygnus_blessing_increment(
     assert cygnus_blessing_component.buff(state) == Stat(damage_multiplier=115)
 
 
-def test_cygnus_blessing_stop(cygnus_blessing_component: TranscendentCygnusBlessing, cygnus_blessing_state: TranscendentCygnusBlessingState):
+def test_cygnus_blessing_stop(
+    cygnus_blessing_component: TranscendentCygnusBlessing,
+    cygnus_blessing_state: TranscendentCygnusBlessingState,
+):
     state, _ = cygnus_blessing_component.use(None, cygnus_blessing_state)
     state, _ = cygnus_blessing_component.elapse(140_000, state)
 
