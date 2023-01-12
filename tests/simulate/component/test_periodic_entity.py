@@ -28,6 +28,8 @@ def test_periodic_iterator(time, expected):
 @pytest.mark.parametrize(
     "time_left, initial_counter, time, expected",
     [
+        (0, 0, 70, 0),
+        (0, 20, 70, 0),
         (150, 50, 70, 1),
         (200, 300, 500, 0),
         (300, 300, 500, 1),
