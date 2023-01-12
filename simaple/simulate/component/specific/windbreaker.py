@@ -1,6 +1,6 @@
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
-from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.entity import Consumable, Periodic, Stack
+from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.base import (
     DelayTrait,
     EventProviderTrait,
@@ -43,7 +43,7 @@ class HowlingGaleComponent(
                 maximum_stack=self.maximum_stack,
                 stack=self.maximum_stack,
                 cooldown_duration=self.cooldown_duration,
-                time_left=0,
+                time_left=self.cooldown_duration,
             ),
             "stack": Stack(stack=0, maximum_stack=3),
             "periodic": Periodic(interval=self.periodic_interval, time_left=0),
@@ -54,13 +54,12 @@ class HowlingGaleComponent(
         state = state.deepcopy()
 
         state.consumable.elapse(time)
-        lapse_count = state.periodic.elapse(time)
 
         dealing_events = []
         gale_stack = state.stack.get_stack()
-        for _ in range(lapse_count):
+        for _ in state.periodic.resolving(time):
             for periodic_damage, periodic_hit in zip(
-                self.periodic_damage[gale_stack], self.periodic_hit[gale_stack]
+                self.periodic_damage[gale_stack - 1], self.periodic_hit[gale_stack - 1]
             ):
                 dealing_events.append(
                     self.event_provider.dealt(periodic_damage, periodic_hit)
