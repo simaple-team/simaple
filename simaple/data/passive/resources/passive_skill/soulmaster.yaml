@@ -96,7 +96,7 @@ metadata:
     group: soulmaster
     name: 이너 샤우트
 data:
-  name: 피컬 트레이닝이너 샤우트
+  name: 이너 샤우트
   stat:
     STR: 40
     attack_power: 30
