@@ -10,7 +10,7 @@ patch:
 data:
   name: 초월자 시그너스의 축복
   cooldown_duration: 240_000
-  delay: 600
+  delay: 480
   lasting_duration: 45_000
   rem: False
 
