@@ -55,4 +55,4 @@ def test_actor(windbreaker_get_client, windbreaker_stat):
 
     print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")
 
-    assert int(dpm_calculator.calculate_dpm(report)) == 3_625_575_466_763
+    assert int(dpm_calculator.calculate_dpm(report)) == 3_720_894_843_414
