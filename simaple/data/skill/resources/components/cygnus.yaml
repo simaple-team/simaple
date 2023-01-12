@@ -17,3 +17,25 @@ data:
   periodic_hit: 1
   lasting_duration: 20_000
   max_count: '{{ 40 + skill_level }}'
+---
+kind: Component
+version: simaple.io/TranscendentCygnusBlessing
+metadata:
+  label:
+    group: cygnus
+    name: 초월자 시그너스의 축복
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 초월자 시그너스의 축복
+  cooldown_duration: 240_000
+  delay: 480
+  lasting_duration: 45_000
+  rem: False
+
+  damage_increment: "{{ 6 + skill_level // 15 }}"
+  increase_interval: 5_000
+  default_damage: "{{ skill_level }}"
+  maximum_damage: 120
+  maximum_stack: 2
