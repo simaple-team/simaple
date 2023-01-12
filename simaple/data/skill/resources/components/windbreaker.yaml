@@ -144,6 +144,22 @@ data:
   v_improvement: 2
 ---
 kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 글로리 오브 가디언즈
+data:
+  name: 글로리 오브 가디언즈
+  cooldown_duration: 120_000
+  delay: 0
+  red: false
+  rem: true
+  lasting_duration: 60_000
+  stat:
+    damage_multiplier: 10
+---
+kind: Component
 version: simaple.io/HowlingGaleComponent
 metadata:
   label:
