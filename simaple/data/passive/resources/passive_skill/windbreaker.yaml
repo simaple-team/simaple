@@ -3,20 +3,6 @@ version: simaple.io/PassiveSkill
 metadata:
   label:
     group: windbreaker
-    name: '엘리멘트 : 스톰'
-patch:
-  - SkillLevelPatch
-  - EvalPatch
-data:
-  name: '엘리멘트 : 스톰'
-  stat:
-    damage_multiplier: 10
----
-kind: PassiveSkill
-version: simaple.io/PassiveSkill
-metadata:
-  label:
-    group: windbreaker
   name: 위스퍼 오브 더 윈드
 patch:
   - SkillLevelPatch
@@ -99,39 +85,6 @@ data:
     attack_power: 20
     MHP: 1500
     critical_rate: 10
----
-kind: PassiveSkill
-version: simaple.io/PassiveSkill
-metadata:
-  label:
-    group: windbreaker
-    name: 시그너스 나이츠
-patch:
-  - SkillLevelPatch
-  - EvalPatch
-data:
-  name: 시그너스 나이츠
-  combat_orders_enabled: true
-  default_skill_level: 30
-  stat:
-    DEX: '{{ math.floor((18 + 5 * character_level) * math.ceil(skill_level / 2) * 0.01) }}'
----
-kind: PassiveSkill
-version: simaple.io/PassiveSkill
-metadata:
-  label:
-    group: windbreaker
-    name: 샤프 아이즈
-patch:
-  - SkillLevelPatch
-  - EvalPatch
-data:
-  name: 샤프 아이즈
-  combat_orders_enabled: true
-  default_skill_level: 30
-  stat:
-    critical_rate: '{{ 5 + (skill_level // 2) }}'
-    critical_damage: '{{ skill_level // 2 }}'
 ---
 kind: PassiveSkill
 version: simaple.io/PassiveSkill

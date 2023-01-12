@@ -1,3 +1,20 @@
+kind: BuffSkillComponent
+version: simaple.io/BuffSkillComponent  # toggle skill
+metadata:
+  label:
+    group: windbreaker
+    name: '엘리멘트 : 스톰'
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: '엘리멘트 : 스톰'
+  delay: 0
+  cooldown_duration: 0
+  lasting_duration: 999_999_999
+  stat:
+    damage_multiplier: 10
+---
 kind: Component
 version: simaple.io/SynergySkillComponent
 metadata:
@@ -20,6 +37,47 @@ data:
     damage_multiplier: 15
     ignored_defence: 15
   v_improvement: 3
+---
+kind: BuffSkillComponent
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 시그너스 나이츠
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 시그너스 나이츠
+  delay: 0
+  cooldown_duration: 0
+  lasting_duration: 900_000
+  red: true
+  stat:
+    DEX: '{{ math.floor((18 + 5 * character_level) * math.ceil(skill_level / 2) * 0.01) }}'
+  combat_orders_enabled: true
+  default_skill_level: 30
+---
+kind: BuffSkillComponent
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 샤프 아이즈
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 샤프 아이즈
+  delay: 690
+  cooldown_duration: 0
+  lasting_duration: 300_000
+  red: true
+  stat:
+    critical_rate: '{{ 5 + (skill_level // 2) }}'
+    critical_damage: '{{ skill_level // 2 }}'
+  combat_orders_enabled: true
+  default_skill_level: 30
 ---
 kind: Component
 version: simaple.io/KeydownSkillComponent
