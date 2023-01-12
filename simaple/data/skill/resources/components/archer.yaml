@@ -1,0 +1,17 @@
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: archer
+    name: 크리티컬 리인포스
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 크리티컬 리인포스
+  cooldown_duration: 120_000
+  delay: 600
+  lasting_duration: 30
+  red: false
+  stat:
+    critical_damage: '{{ 0.01 * (20 + skill_level) * character_stat.critical_rate }}'
