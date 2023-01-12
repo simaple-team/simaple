@@ -15,6 +15,7 @@ def test_actor(windbreaker_get_client, windbreaker_stat):
             "시그너스 나이츠",
             "샤프 아이즈",
             "스톰 브링어",
+            "초월자 시그너스의 축복",
             "윈드 월",
             "글로리 오브 가디언즈",
             "스톰 윔",
