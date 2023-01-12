@@ -4,6 +4,7 @@ import simaple.simulate.component.specific.archmagetc
 import simaple.simulate.component.specific.bishop
 import simaple.simulate.component.specific.common_v
 import simaple.simulate.component.specific.dualblade
+import simaple.simulate.component.specific.flora
 import simaple.simulate.component.specific.magician
 import simaple.simulate.component.specific.mechanic
 import simaple.simulate.component.specific.pirate
