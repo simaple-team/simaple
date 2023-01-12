@@ -93,7 +93,9 @@ class Periodic(Entity):
         return self.time_left > 0
 
     def elapse(self, time: float) -> int:
-        maximum_elapsed = max(0, int(self.time_left // self.interval))
+        maximum_elapsed = max(
+            0, int((self.time_left - self.interval_counter) // self.interval) + 1
+        )
         self.time_left -= time
         self.interval_counter -= time
 
@@ -107,7 +109,9 @@ class Periodic(Entity):
         return 0
 
     def resolving(self, time: float):
-        maximum_elapsed = max(0, int(self.time_left // self.interval))
+        maximum_elapsed = max(
+            0, int((self.time_left - self.interval_counter) // self.interval) + 1
+        )
 
         self.time_left -= time
         self.interval_counter -= time
