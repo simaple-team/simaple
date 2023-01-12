@@ -1,4 +1,4 @@
-kind: BuffSkillComponent
+kind: Component
 version: simaple.io/BuffSkillComponent
 metadata:
   label:
@@ -38,7 +38,7 @@ data:
     ignored_defence: 15
   v_improvement: 3
 ---
-kind: BuffSkillComponent
+kind: Component
 version: simaple.io/BuffSkillComponent
 metadata:
   label:
@@ -58,7 +58,7 @@ data:
   combat_orders_enabled: true
   default_skill_level: 30
 ---
-kind: BuffSkillComponent
+kind: Component
 version: simaple.io/BuffSkillComponent
 metadata:
   label:
@@ -188,6 +188,7 @@ data:
     하울링 게일.elapse.emitted.global.damage: trigger
     시그너스 팔랑크스.elapse.emitted.global.damage: trigger
     볼텍스 스피어.elapse.emitted.global.damage: trigger
+  name: 스톰 윔
   trigger_cooldown_duration: 0
   trigger_damage: 560
   trigger_hit: 0.3
