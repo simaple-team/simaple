@@ -32,8 +32,8 @@ class HowlingGaleComponent(
     cooldown_duration: float
 
     periodic_interval: float
-    periodic_damage: float
-    periodic_hit: list[float]
+    periodic_damage: list[list[float]]
+    periodic_hit: list[list[float]]
 
     lasting_duration: float
 
@@ -41,7 +41,7 @@ class HowlingGaleComponent(
         return {
             "consumable": Consumable(
                 maximum_stack=self.maximum_stack,
-                stack=0,
+                stack=self.maximum_stack,
                 cooldown_duration=self.cooldown_duration,
                 time_left=0,
             ),
@@ -57,27 +57,14 @@ class HowlingGaleComponent(
         lapse_count = state.periodic.elapse(time)
 
         dealing_events = []
-        if lapse_count > 0:
-            gale_stack = state.stack.get_stack()
-            if gale_stack in (1, 2):
-                for _ in range(lapse_count):
-                    dealing_events.append(
-                        self.event_provider.dealt(
-                            self.periodic_damage[gale_stack], self.periodic_hit[gale_stack]
-                        )
-                    )
-            elif gale_stack == 3:
-                for _ in range(lapse_count):
-                    dealing_events.append(
-                        self.event_provider.dealt(
-                            self.periodic_damage[0], self.periodic_hit[0]
-                        )
-                    )
-                    dealing_events.append(
-                        self.event_provider.dealt(
-                            self.periodic_damage[1], self.periodic_hit[1]
-                        )
-                    )
+        gale_stack = state.stack.get_stack()
+        for _ in range(lapse_count):
+            for periodic_damage, periodic_hit in zip(
+                self.periodic_damage[gale_stack], self.periodic_hit[gale_stack]
+            ):
+                dealing_events.append(
+                    self.event_provider.dealt(periodic_damage, periodic_hit)
+                )
 
         return state, [self.event_provider.elapsed(time)] + dealing_events
 

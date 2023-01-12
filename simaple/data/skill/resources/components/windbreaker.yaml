@@ -161,9 +161,13 @@ data:
 
   periodic_interval: 150
   periodic_damage:
-    - '{{ 325 + skill_level * 13 }}'
-    - '{{ 785 + skill_level * 31 }}'
-  periodic_hit: [3, 3]
+    - ['{{ 325 + 13 * skill_level }}']
+    - ['{{ 785 + 31 * skill_level }}']
+    - ['{{ 785 + 31 * skill_level }}', '{{ 375 + 19 * skill_level }}']
+  periodic_hit:
+    - [3]
+    - [3]
+    - [3, 3]
   lasting_duration: 10_000
 ---
 kind: Component
