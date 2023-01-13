@@ -1,0 +1,146 @@
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: windbreaker
+  name: 위스퍼 오브 더 윈드
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 위스퍼 오브 더 윈드
+  stat:
+    attack_power: 20
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: windbreaker
+    name: 실프스 에이드
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 실프스 에이드
+  stat:
+    attack_power: 20
+    critical_rate: 10
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: windbreaker
+    name: 보우 액셀레이션
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 보우 액셀레이션
+  stat:
+    DEX: 20
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: windbreaker
+    name: 보우 마스터리
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 보우 마스터리
+  stat:
+    final_damage_multiplier: 10
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: windbreaker
+    name: 피지컬 트레이닝
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 피지컬 트레이닝
+  stat:
+    STR: 30
+    DEX: 30
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: windbreaker
+    name: 알바트로스
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 알바트로스
+  stat:
+    attack_power: 20
+    MHP: 1500
+    critical_rate: 10
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: windbreaker
+    name: 윈드 블레싱
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 윈드 블레싱
+  combat_orders_enabled: true
+  passive_skill_enabled: true
+  default_skill_level: 20
+  stat:
+    attack_power_multiplier: '{{ 5 + (skill_level // 4) }}'
+    DEX_multiplier: '{{ 5 + (skill_level // 3) }}'
+    MHP_multiplier: '{{ 10 + (skill_level // 2) }}'
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: windbreaker
+    name: 보우 엑스퍼트
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 보우 엑스퍼트
+  combat_orders_enabled: true
+  passive_skill_enabled: true
+  default_skill_level: 30
+  stat:
+    attack_power: '{{ skill_level }}'
+    final_damage_multiplier: '{{ 20 + math.ceil(skill_level / 2) }}'
+    critical_damage: '{{ 5 + (skill_level // 2) }}'
+    boss_damage_multiplier: '{{ skill_level + 10 }}'
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: windbreaker
+    name: 알바트로스 맥시멈
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 알바트로스 맥시멈
+  combat_orders_enabled: true
+  passive_skill_enabled: true
+  default_skill_level: 30
+  stat:
+    attack_power: '{{ skill_level }}'
+    damage_multiplier: '{{ 5 + 2 * (skill_level // 3) }}'
+    ignored_defence: '{{ 5 + (skill_level // 3) }}'
+    critical_rate: '{{ 5 + (skill_level // 3) }}'

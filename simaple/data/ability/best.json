@@ -14,6 +14,11 @@
         {"type": "abnormal_status_damage_multiplier", "value": 8},
         {"type": "boss_damage_multiplier", "value": 10}
     ],
+    "windbreaker": [
+        {"type": "boss_damage_multiplier", "value": 20},
+        {"type": "critical_rate", "value": 20},
+        {"type": "abnormal_status_damage_multiplier", "value": 8}
+    ],
     "adele": [
         {"type": "cooldown_reset_chance", "value": 20},
         {"type": "buff_duration", "value": 38},

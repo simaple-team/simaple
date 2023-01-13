@@ -1,0 +1,69 @@
+kind: PassiveHyperskill
+version: simaple.io/StatIncreasePassiveHyperskill
+metadata:
+  label:
+    group: windbreaker
+data:
+  name: 트라이플링 윔-리인포스
+  target: 트라이플링 윔
+  key: modifier
+  increment:
+    damage_multiplier: 20
+---
+kind: PassiveHyperskill
+version: simaple.io/ValueIncreasePassiveHyperskill
+metadata:
+  label:
+    group: windbreaker
+data:
+  name: 트라이플링 윔-인핸스
+  target: 트라이플링 윔
+  key: hit
+  increment: 0.1
+---
+kind: PassiveHyperskill
+version: simaple.io/MultiplierPassiveHyperskill
+metadata:
+  label:
+    group: windbreaker
+data:
+  name: 트라이플링 윔-더블 찬스
+  target: 트라이플링 윔
+  key: hit
+  multiplier: 2
+---
+kind: PassiveHyperskill
+version: simaple.io/StatIncreasePassiveHyperskill
+metadata:
+  label:
+    group: windbreaker
+data:
+  name: 천공의 노래-리인포스
+  target: 천공의 노래
+  key: modifier
+  increment:
+    damage_multiplier: 20
+---
+kind: PassiveHyperskill
+version: simaple.io/StatIncreasePassiveHyperskill
+metadata:
+  label:
+    group: windbreaker_unused  # unused
+data:
+  name: 천공의 노래-이그노어 가드
+  target: 천공의 노래
+  key: modifier
+  increment:
+    ignored_defence: 20
+---
+kind: PassiveHyperskill
+version: simaple.io/StatIncreasePassiveHyperskill
+metadata:
+  label:
+    group: windbreaker
+data:
+  name: 천공의 노래-보스 킬러
+  target: 천공의 노래
+  key: modifier
+  increment:
+    boss_damage_multiplier: 30

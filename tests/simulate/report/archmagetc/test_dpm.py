@@ -61,4 +61,4 @@ def test_actor(character_stat):
 
     print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")
 
-    assert int(dpm_calculator.calculate_dpm(report)) == 1_242_953_386_834
+    assert int(dpm_calculator.calculate_dpm(report)) == 1_270_456_273_704

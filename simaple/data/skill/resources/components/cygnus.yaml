@@ -1,4 +1,24 @@
 kind: Component
+version: simaple.io/HitLimitedPeriodicDamageComponent
+metadata:
+  label:
+    group: cygnus
+    name: 시그너스 팔랑크스
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 시그너스 팔랑크스
+  cooldown_duration: 30_000
+  delay: 600
+
+  periodic_interval: 120
+  periodic_damage: '{{ 450 + 18 * skill_level }}'
+  periodic_hit: 1
+  lasting_duration: 20_000
+  max_count: '{{ 40 + skill_level }}'
+---
+kind: Component
 version: simaple.io/TranscendentCygnusBlessing
 metadata:
   label:

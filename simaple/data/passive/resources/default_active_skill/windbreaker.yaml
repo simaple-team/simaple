@@ -1,0 +1,13 @@
+kind: DefaultActiveSkill
+version: simaple.io/DefaultActiveSkill
+metadata:
+  label:
+    group: windbreaker
+    name: 세컨드 윈드
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 세컨드 윈드
+  stat:
+    attack_power: 15

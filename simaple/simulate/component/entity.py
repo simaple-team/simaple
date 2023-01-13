@@ -54,6 +54,9 @@ class Consumable(Entity):
         if self.stack == self.maximum_stack:
             self.time_left = self.cooldown_duration
 
+    def get_stack(self) -> int:
+        return self.stack
+
     def consume(self):
         self.stack -= 1
 
@@ -90,7 +93,12 @@ class Periodic(Entity):
         return self.time_left > 0
 
     def elapse(self, time: float) -> int:
-        maximum_elapsed = max(0, int(self.time_left // self.interval))
+        if self.time_left <= 0:
+            return 0
+
+        maximum_elapsed = max(
+            0, int((self.time_left - self.interval_counter) // self.interval) + 1
+        )
         self.time_left -= time
         self.interval_counter -= time
 
@@ -104,7 +112,12 @@ class Periodic(Entity):
         return 0
 
     def resolving(self, time: float):
-        maximum_elapsed = max(0, int(self.time_left // self.interval))
+        if self.time_left <= 0:
+            return 0
+
+        maximum_elapsed = max(
+            0, int((self.time_left - self.interval_counter) // self.interval) + 1
+        )
 
         self.time_left -= time
         self.interval_counter -= time
@@ -135,6 +148,16 @@ class Stack(Entity):
 
     def decrease(self, value: int = 1):
         self.stack -= value
+
+
+class Integer(Entity):
+    value: int = 0
+
+    def get_value(self) -> int:
+        return self.value
+
+    def set_value(self, value: int):
+        self.value = value
 
 
 class Keydown(Entity):
