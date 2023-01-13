@@ -1,5 +1,5 @@
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
-from simaple.simulate.component.entity import Consumable, Periodic, Stack
+from simaple.simulate.component.entity import Consumable, Integer, Periodic
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.base import (
     DelayTrait,
@@ -13,7 +13,7 @@ from simaple.simulate.global_property import Dynamics
 
 class HowlingGaleState(ReducerState):
     consumable: Consumable
-    stack: Stack
+    integer: Integer
     periodic: Periodic
     dynamics: Dynamics
 
@@ -45,7 +45,7 @@ class HowlingGaleComponent(
                 cooldown_duration=self.cooldown_duration,
                 time_left=self.cooldown_duration,
             ),
-            "stack": Stack(stack=0, maximum_stack=3),
+            "integer": Integer(stack=0),
             "periodic": Periodic(interval=self.periodic_interval, time_left=0),
         }
 
@@ -56,10 +56,10 @@ class HowlingGaleComponent(
         state.consumable.elapse(time)
 
         dealing_events = []
-        gale_stack = state.stack.get_stack()
+        gale_value = state.integer.get_value()
         for _ in state.periodic.resolving(time):
             for periodic_damage, periodic_hit in zip(
-                self.periodic_damage[gale_stack - 1], self.periodic_hit[gale_stack - 1]
+                self.periodic_damage[gale_value - 1], self.periodic_hit[gale_value - 1]
             ):
                 dealing_events.append(
                     self.event_provider.dealt(periodic_damage, periodic_hit)
@@ -76,10 +76,9 @@ class HowlingGaleComponent(
 
         delay = self._get_delay()
 
-        gale_stack = min(state.consumable.get_stack(), state.stack.maximum_stack)
-        state.stack.reset()
-        state.stack.increase(gale_stack)
-        state.consumable.stack -= gale_stack
+        gale_value = min(state.consumable.get_stack(), len(self.periodic_damage))
+        state.integer.set_value(gale_value)
+        state.consumable.stack -= gale_value
 
         state.periodic.set_time_left(self._get_lasting_duration(state), self.delay)
 
