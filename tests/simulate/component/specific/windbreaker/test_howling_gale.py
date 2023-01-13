@@ -71,7 +71,10 @@ def test_initial_hit_delay(
     ],
 )
 def test_total_hits(
-    howling_gale: HowlingGaleComponent, howling_gale_state: HowlingGaleState, stack: int, total_hits: int
+    howling_gale: HowlingGaleComponent,
+    howling_gale_state: HowlingGaleState,
+    stack: int,
+    total_hits: int,
 ):
     howling_gale_state.consumable.stack = stack
     state, _ = howling_gale.use(None, howling_gale_state)
