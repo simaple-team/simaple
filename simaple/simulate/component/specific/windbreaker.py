@@ -13,7 +13,7 @@ from simaple.simulate.global_property import Dynamics
 
 class HowlingGaleState(ReducerState):
     consumable: Consumable
-    integer: Integer
+    consumed: Integer
     periodic: Periodic
     dynamics: Dynamics
 
@@ -56,10 +56,10 @@ class HowlingGaleComponent(
         state.consumable.elapse(time)
 
         dealing_events = []
-        gale_value = state.integer.get_value()
+        consumed = state.consumed.get_value()
         for _ in state.periodic.resolving(time):
             for periodic_damage, periodic_hit in zip(
-                self.periodic_damage[gale_value - 1], self.periodic_hit[gale_value - 1]
+                self.periodic_damage[consumed - 1], self.periodic_hit[consumed - 1]
             ):
                 dealing_events.append(
                     self.event_provider.dealt(periodic_damage, periodic_hit)
@@ -76,9 +76,9 @@ class HowlingGaleComponent(
 
         delay = self._get_delay()
 
-        gale_value = min(state.consumable.get_stack(), len(self.periodic_damage))
-        state.integer.set_value(gale_value)
-        state.consumable.stack -= gale_value
+        consumed = min(state.consumable.get_stack(), len(self.periodic_damage))
+        state.consumed.set_value(consumed)
+        state.consumable.stack -= consumed
 
         state.periodic.set_time_left(self._get_lasting_duration(state), self.delay)
 
