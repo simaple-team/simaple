@@ -25,6 +25,22 @@ def test_periodic_iterator(time, expected):
     assert count == expected
 
 
+def test_periodic_iterator_partial():
+    periodic = Periodic(interval=100)
+    periodic.set_time_left(1000)
+
+    count = 0
+    times = []
+    for time in range(50, 1050, 50):  # 50, ..., 1000
+        for _ in periodic.resolving(50):
+            count += 1
+            times.append(time)
+
+    assert count == 10
+    assert times[0] == 100
+    assert times[-1] == 1000
+
+
 @pytest.mark.parametrize(
     "time_left, initial_counter, time, expected",
     [
