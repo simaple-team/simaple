@@ -62,11 +62,19 @@ def test_initial_hit_delay(
     assert count_damage_skill(events) == 1
 
 
+@pytest.mark.parametrize(
+    "stack, total_hits",
+    [
+        (1, 66),
+        (2, 66),
+        (3, 66 * 2),
+    ],
+)
 def test_total_hits(
-    howling_gale: HowlingGaleComponent, howling_gale_state: HowlingGaleState
+    howling_gale: HowlingGaleComponent, howling_gale_state: HowlingGaleState, stack: int, total_hits: int
 ):
-    howling_gale_state.consumable.stack = 1
+    howling_gale_state.consumable.stack = stack
     state, _ = howling_gale.use(None, howling_gale_state)
     state, events = howling_gale.elapse(15_000, state)
 
-    assert count_damage_skill(events) == 66
+    assert count_damage_skill(events) == total_hits
