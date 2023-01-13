@@ -45,7 +45,7 @@ class HowlingGaleComponent(
                 cooldown_duration=self.cooldown_duration,
                 time_left=self.cooldown_duration,
             ),
-            "integer": Integer(stack=0),
+            "consumed": Integer(stack=0),
             "periodic": Periodic(interval=self.periodic_interval, time_left=0),
         }
 
