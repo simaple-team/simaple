@@ -150,6 +150,16 @@ class Stack(Entity):
         self.stack -= value
 
 
+class Integer(Entity):
+    value: int = 0
+
+    def get_value(self) -> int:
+        return self.value
+
+    def set_value(self, value: int):
+        self.value = value
+
+
 class Keydown(Entity):
     interval: float
     interval_counter: float = 0.0
