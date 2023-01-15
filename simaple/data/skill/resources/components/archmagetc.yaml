@@ -39,7 +39,7 @@ metadata:
 data:
   name: 아케인 에임(액티브)
   stat:
-    damage_multiplier: 8
+    damage_multiplier: 40
 ---
 kind: Component
 version: simaple.io/BuffSkillComponent
