@@ -1,0 +1,28 @@
+kind: DefaultActiveSkill
+version: simaple.io/DefaultActiveSkill
+metadata:
+  label:
+    group: archmagetc
+    name: 익스트림 매직(썬,콜)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 익스트림 매직(썬,콜)
+  stat:
+    final_damage_multiplier: 20
+---
+kind: DefaultActiveSkill
+version: simaple.io/DefaultActiveSkill
+metadata:
+  label:
+    group: archmagetc
+    name: 아케인 에임(액티브)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 아케인 에임(액티브)
+  passive_skill_enabled: true
+  stat:
+    damage_multiplier: 8
