@@ -189,8 +189,10 @@ class ConsumableBuffTrait(LastingTrait, EventProviderTrait, DelayTrait):
         return state, [self.event_provider.elapsed(time)]
 
 
-class PeriodicWithSimpleDamageTrait(
+class PeriodicElapseTrait(
     CooldownTrait,
+    PeriodicDamageTrait,
+    EventProviderTrait,
 ):
     def elapse_periodic_damage_trait(
         self,
