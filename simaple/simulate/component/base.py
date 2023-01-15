@@ -9,9 +9,8 @@ from pydantic.error_wrappers import ValidationError
 from simaple.simulate.base import Action, Dispatcher, Entity, Environment, Event, Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import GlobalProperty
-from simaple.spec.loadable import TaggedNamespacedABCMeta
 from simaple.simulate.reserved_names import Tag
-
+from simaple.spec.loadable import TaggedNamespacedABCMeta
 
 WILD_CARD = "*"
 
@@ -233,7 +232,9 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
             tagged_events.append(tagged_event)
 
         if all(event.tag != Tag.REJECT for event in events):
-            return tagged_events + [Event(name=self._name, method=method_name, tag=Tag.ACCEPT, payload={})]
+            return tagged_events + [
+                Event(name=self._name, method=method_name, tag=Tag.ACCEPT, payload={})
+            ]
 
         return tagged_events
 
