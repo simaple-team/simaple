@@ -13,11 +13,15 @@
 
 - https://simaple.readthedocs.io/en/latest/
 
-## Developments
+## Developments & Contribution
 
-- See [Development documentation](development/readme.md)
+- See [CONTRIBUTING](CONTRIBUTING.md)
 
 ## Functions
+
+## 인게임 시뮬레이션
+- 기대 데미지 계산, 한줄데미지 계산, 평균 버프 수치 계산
+- DPM 계산
 
 ### 아이템 관련
 
