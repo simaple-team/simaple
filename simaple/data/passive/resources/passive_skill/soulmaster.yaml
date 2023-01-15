@@ -1,0 +1,103 @@
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: soulmaster
+    name: 소드 엑스퍼트
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 소드 엑스퍼트
+  stat:
+    damage_multiplier: 10
+    attack_power: "{{ 20 + 1 * skill_level }}" # 공격력 50 증가
+    critical_damage: 15 # 크리티컬 데미지 15% 증가
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: soulmaster
+    name: 소울 플레지
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 소울 플레지
+  stat:
+    STR: "{{ 10 + 1 * skill_level }}" # 모든 능력치 30
+    DEX: "{{ 10 + 1 * skill_level }}" # 모든 능력치 30
+    INT: "{{ 10 + 1 * skill_level }}" # 모든 능력치 30
+    LUK: "{{ 10 + 1 * skill_level }}" # 모든 능력치 30
+
+  combat_orders_enabled: true
+  default_skill_level: 20
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: soulmaster
+    name: 언포시어블
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 언포시어블
+  stat:
+    ignored_defence: "{{ 2 * skill_level }}" # 방무 30%
+    boss_damage_multiplier: "{{ 1 * skill_level }}" # 보공 15%
+
+  combat_orders_enabled: true
+  default_skill_level: 15
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: soulmaster
+    name: 님블 핑거
+data:
+  name: 님블 핑거
+  stat:
+    STR: 20
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: soulmaster
+    name: 이너 트러스트
+data:
+  name: 이너 트러스트
+  stat:
+    attack_power: 20
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: soulmaster
+    name: 피지컬 트레이닝
+data:
+  name: 피지컬 트레이닝
+  stat:
+    STR: 40
+    DEX: 20
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: soulmaster
+    name: 이너 샤우트
+data:
+  name: 이너 샤우트
+  stat:
+    STR: 40
+    attack_power: 30
+

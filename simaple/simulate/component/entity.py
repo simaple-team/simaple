@@ -160,6 +160,40 @@ class Integer(Entity):
         self.value = value
 
 
+class LastingStack(Entity):
+    """A stack, which includes finite duration."""
+
+    stack: int = 0
+    maximum_stack: int
+    duration: float
+    time_left: float = 0
+
+    def reset(self):
+        self.stack = 0
+        self.time_left = 0
+
+    def increase(self, value: int = 1):
+        self.stack = min(self.maximum_stack, self.stack + value)
+        self.time_left = self.duration
+
+    def get_stack(self) -> int:
+        return self.stack
+
+    def decrease(self, value: int = 1):
+        self.stack -= value
+
+    def elapse(self, time: float):
+        self.time_left -= time
+        if self.time_left < 0:
+            self.reset()
+
+    def is_maximum(self) -> bool:
+        return self.stack == self.maximum_stack
+
+    def regulate(self, value: int) -> None:
+        self.stack = min(value, self.stack)
+
+
 class Keydown(Entity):
     interval: float
     interval_counter: float = 0.0

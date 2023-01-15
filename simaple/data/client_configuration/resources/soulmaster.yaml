@@ -1,0 +1,37 @@
+kind: ClientConfiguration
+version: simaple.io/ClientConfiguration
+metadata:
+  label:
+    group: soulmaster
+data:
+  v_skill_names:
+    - 시그너스 팔랑크스
+    - 초월자 시그너스의 축복
+    - 코스모스
+    - 엘리시온
+    - 소울 이클립스
+    - 플레어 슬래시
+    - 크로스 더 스틱스
+  v_improvement_names:
+    - 솔라 슬래시/루나 디바이드
+    - 코스믹 샤워
+    - 코스믹 버스트
+  component_groups:
+    - soulmaster
+    - common
+    - str_based
+    - cygnus
+    - warrior
+  mdc_order:
+    - "솔루나 타임"
+    - "엘리멘트: 소울"
+    - "트루 사이트"
+    - "코스믹 포지"
+    - "코스믹 버스트"
+    - "코스모스"
+    - "코스믹 샤워"
+    - "소울 이클립스"
+    - "엘리시온"
+    - "크로스 더 스틱스"
+    - "솔라 슬래시/루나 디바이드"
+
