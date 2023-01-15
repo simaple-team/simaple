@@ -90,6 +90,21 @@ data:
     damage_multiplier: 10
 ---
 kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 메디테이션
+data:
+  name: 메디테이션
+  cooldown_duration: 0
+  delay: 0
+  rem: true
+  lasting_duration: 240_000
+  stat:
+    magic_attack: 30
+---
+kind: Component
 version: simaple.io/AttackSkillComponent
 metadata:
   label:

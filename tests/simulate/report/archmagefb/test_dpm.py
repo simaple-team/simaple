@@ -10,6 +10,7 @@ def test_actor(archmagefb_client, character_stat):
     actor = DefaultMDCActor(
         order=[
             "오버로드 마나",
+            "메디테이션",
             "이프리트",
             "파이어 오라",
             "인피니티",

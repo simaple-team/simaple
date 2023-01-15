@@ -3,20 +3,6 @@ version: simaple.io/DefaultActiveSkill
 metadata:
   label:
     group: archmagefb
-    name: 메디테이션
-patch:
-  - SkillLevelPatch
-  - EvalPatch
-data:
-  name: 메디테이션
-  stat:
-    magic_attack: 30
----
-kind: DefaultActiveSkill
-version: simaple.io/DefaultActiveSkill
-metadata:
-  label:
-    group: archmagefb
     name: 퍼번트 드레인
 patch:
   - SkillLevelPatch

@@ -20,6 +20,7 @@ def test_actor(character_stat):
     actor = DefaultMDCActor(
         order=[
             "오버로드 마나",
+            "메디테이션",
             "엘퀴네스",
             "아이스 오라",
             "인피니티",
