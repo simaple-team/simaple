@@ -50,4 +50,4 @@ def test_actor(dualblade_client, character_stat):
 
     print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")
 
-    assert int(dpm_calculator.calculate_dpm(report)) == 2_709_138_952_046
+    assert int(dpm_calculator.calculate_dpm(report)) == 2_669_970_678_041

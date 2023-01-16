@@ -30,11 +30,11 @@ data:
   stat:
     final_damage_multiplier: 20
 ---
-kind: DefaultActiveSkill
+kind: Component
 version: simaple.io/AlwaysEnabledComponent
 metadata:
   label:
-    group: archmagefb
+    group: archmagetc
     name: 아케인 에임(액티브)
 data:
   name: 아케인 에임(액티브)

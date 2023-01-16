@@ -24,6 +24,7 @@ data:
     - adventurer.thief
     - thief
   mdc_order:
+    - 메이플 용사
     - 히든 블레이드
     - 플래시 뱅
     - 파이널 컷

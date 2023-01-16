@@ -126,7 +126,7 @@ data:
   stat:
     final_damage_multiplier: 25
 ---
-kind: DefaultActiveSkill
+kind: Component
 version: simaple.io/AlwaysEnabledComponent
 metadata:
   label:

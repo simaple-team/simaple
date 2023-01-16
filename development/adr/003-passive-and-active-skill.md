@@ -75,4 +75,4 @@
 
 ## Decision Outcome
 
-- TBD
+- Option

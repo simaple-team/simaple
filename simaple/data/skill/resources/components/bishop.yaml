@@ -124,7 +124,7 @@ patch:
   - EvalPatch
 data:
   name: 어드밴스드 블레스
-  cooldown: 0
+  cooldown_duration: 0
   delay: 0
   lasting_duration: 240_000
   rem: true
@@ -135,11 +135,11 @@ data:
   default_skill_level: 30
   passive_skill_enabled: true
 ---
-kind: DefaultActiveSkill
+kind: Component
 version: simaple.io/AlwaysEnabledComponent
 metadata:
   label:
-    group: archmagefb
+    group: bishop
     name: 아케인 에임(액티브)
 data:
   name: 아케인 에임(액티브)
