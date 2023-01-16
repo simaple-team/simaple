@@ -118,6 +118,39 @@ version: simaple.io/BuffSkillComponent
 metadata:
   label:
     group: bishop
+    name: 어드밴스드 블레스
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 어드밴스드 블레스
+  cooldown_duration: 0
+  delay: 0
+  lasting_duration: 240_000
+  rem: true
+  stat:
+    boss_damage_multiplier: 10
+    magic_attack: "{{ 20 + skill_level }}"
+    attack_power: "{{ 20 + skill_level }}"
+  default_skill_level: 30
+  passive_skill_enabled: true
+---
+kind: Component
+version: simaple.io/AlwaysEnabledComponent
+metadata:
+  label:
+    group: bishop
+    name: 아케인 에임(액티브)
+data:
+  name: 아케인 에임(액티브)
+  stat:
+    damage_multiplier: 40
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: bishop
     name: 홀리 블러드
 patch:
   - SkillLevelPatch

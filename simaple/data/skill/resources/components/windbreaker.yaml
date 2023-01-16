@@ -16,6 +16,20 @@ data:
     damage_multiplier: 10
 ---
 kind: Component
+version: simaple.io/AlwaysEnabledComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 세컨드 윈드
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 세컨드 윈드
+  stat:
+    attack_power: 15
+---
+kind: Component
 version: simaple.io/SynergySkillComponent
 metadata:
   label:

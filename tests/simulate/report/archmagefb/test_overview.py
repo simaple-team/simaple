@@ -12,11 +12,12 @@ def test_buff_view(archmagefb_client):
     )
 
     current_buff_stat = archmagefb_client.environment.show("buff")
-    assert current_buff_stat == Stat()
 
     archmagefb_client.play(Action(name="에픽 어드벤처", method="use"))
 
-    assert archmagefb_client.environment.show("buff") == Stat(damage_multiplier=10)
+    assert archmagefb_client.environment.show("buff") == current_buff_stat + Stat(
+        damage_multiplier=10
+    )
 
 
 def test_poison_nova(archmagefb_client):

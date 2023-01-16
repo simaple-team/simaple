@@ -90,6 +90,54 @@ data:
     damage_multiplier: 10
 ---
 kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 메디테이션
+data:
+  name: 메디테이션
+  cooldown_duration: 0
+  delay: 0
+  rem: true
+  lasting_duration: 240_000
+  stat:
+    magic_attack: 30
+---
+kind: Component
+version: simaple.io/AlwaysEnabledComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 익스트림 매직(불,독)
+data:
+  name: 익스트림 매직(불,독)
+  stat:
+    final_damage_multiplier: 20
+---
+kind: Component
+version: simaple.io/AlwaysEnabledComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 퍼번트 드레인
+data:
+  name: 퍼번트 드레인
+  stat:
+    final_damage_multiplier: 25
+---
+kind: Component
+version: simaple.io/AlwaysEnabledComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 아케인 에임(액티브)
+data:
+  name: 아케인 에임(액티브)
+  stat:
+    damage_multiplier: 40
+---
+kind: Component
 version: simaple.io/AttackSkillComponent
 metadata:
   label:

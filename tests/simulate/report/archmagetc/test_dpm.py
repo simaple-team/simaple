@@ -20,6 +20,7 @@ def test_actor(character_stat):
     actor = DefaultMDCActor(
         order=[
             "오버로드 마나",
+            "메디테이션",
             "엘퀴네스",
             "아이스 오라",
             "인피니티",
@@ -61,4 +62,4 @@ def test_actor(character_stat):
 
     print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")
 
-    assert int(dpm_calculator.calculate_dpm(report)) == 1_270_456_273_704
+    assert int(dpm_calculator.calculate_dpm(report)) == 1_658_068_313_678

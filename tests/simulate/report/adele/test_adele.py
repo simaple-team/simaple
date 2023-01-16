@@ -52,4 +52,4 @@ def test_actor(adele_client, character_stat):
 
     print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")
 
-    assert int(dpm_calculator.calculate_dpm(report)) == 3_629_194_123_015
+    assert int(dpm_calculator.calculate_dpm(report)) == 3_586_098_973_066

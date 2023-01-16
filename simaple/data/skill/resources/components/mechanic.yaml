@@ -22,6 +22,17 @@ data:
     damage_multiplier: "{{ 20 + 10/6 + 10/6 * (5/6 + 1/11) * (10 * skill_level * 0.01) }}"
 ---
 kind: Component
+version: simaple.io/AlwaysEnabledComponent
+metadata:
+  label:
+    group: mechanic
+    name: "메탈아머: 탱크"
+data:
+  name: "메탈아머: 탱크"
+  stat:
+    critical_rate: 30
+---
+kind: Component
 version: simaple.io/RobotMasteryComponent
 metadata:
   label:

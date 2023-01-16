@@ -10,6 +10,7 @@ def test_actor(archmagefb_client, character_stat):
     actor = DefaultMDCActor(
         order=[
             "오버로드 마나",
+            "메디테이션",
             "이프리트",
             "파이어 오라",
             "인피니티",
@@ -51,4 +52,4 @@ def test_actor(archmagefb_client, character_stat):
 
     print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")
 
-    assert int(dpm_calculator.calculate_dpm(report)) == 2_592_300_005_517
+    assert int(dpm_calculator.calculate_dpm(report)) == 4_231_855_618_510

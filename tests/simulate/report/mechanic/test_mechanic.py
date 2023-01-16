@@ -59,4 +59,4 @@ def test_actor(mechanic_client, character_stat):
             rec.write(action, environment.show("clock"))
 
     print(f"{environment.show('clock')} | {dpm_calculator.calculate_dpm(report):,} ")
-    assert int(dpm_calculator.calculate_dpm(report)) == 2_443_912_197_311
+    assert int(dpm_calculator.calculate_dpm(report)) == 2_408_578_526_988

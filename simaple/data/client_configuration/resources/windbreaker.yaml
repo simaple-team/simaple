@@ -25,6 +25,7 @@ data:
     - cygnus
     - archer
   mdc_order:
+    - 메이플 용사
     - "엘리멘트 : 스톰"
     - 트라이플링 윔
     - 가이디드 애로우
