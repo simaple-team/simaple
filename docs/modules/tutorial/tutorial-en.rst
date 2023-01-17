@@ -186,7 +186,7 @@ simaple does not store any actual outputted damage numbers in the log by default
 
 
 Quite a bit of information really is required to actually calculate the damage output. First of all, the character stat information (``character_stat``) is required.
-``damage_logic``` specifies the damage calculation method. Call the ``get_damage_logic`` function to retrieve the respective damage calculation logic for the job. Specifying ``JobType.archmagefb`` and ``combat_orders_level=1`` specifies that the main stat is INT, Magic Attack is used, the secondary stat is LUK, and that the weapon constant used is 1.2. 
+``damage_logic`` specifies the damage calculation method. Call the ``get_damage_logic`` function to retrieve the respective damage calculation logic for the job. Specifying ``JobType.archmagefb`` and ``combat_orders_level=1`` specifies that the main stat is INT, Magic Attack is used, the secondary stat is LUK, and that the weapon constant used is 1.2. 
 ``armor=300`` specifies the DEF of the target.
 ``level_advantage`` and ``force_advantage`` specifies the final damage multipliers resulting from level differences and Arcane/Authentic Force differences, respectively. The Level Advantage is inconvenient to calculate, so calling ``LevelAdvantage`` is recommended.
 
