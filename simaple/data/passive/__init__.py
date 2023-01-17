@@ -1,6 +1,7 @@
 from pathlib import Path
+from typing import Optional
 
-from simaple.character.passive_skill import DefaultActiveSkill, PassiveSkill
+from simaple.character.passive_skill import PassiveSkill
 from simaple.core import JobType, Stat
 from simaple.data.passive.patch import SkillLevelPatch
 from simaple.spec.loader import SpecBasedLoader
@@ -9,7 +10,10 @@ from simaple.spec.repository import DirectorySpecRepository
 
 
 def get_patches(
-    combat_orders_level: int, passive_skill_level: int, character_level: int
+    combat_orders_level: int,
+    passive_skill_level: int,
+    character_level: int,
+    weapon_pure_attack_power: Optional[int] = None,
 ) -> list[Patch]:
     return [
         SkillLevelPatch(
@@ -19,58 +23,32 @@ def get_patches(
         EvalPatch(
             injected_values={
                 "character_level": character_level,
+                "weapon_pure_attack_power": weapon_pure_attack_power,
             }
         ),
     ]
 
 
-def get_passive_skills(
+def get_passive_stat(
     jobtype: JobType,
     combat_orders_level: int,
     passive_skill_level: int,
     character_level: int,
-) -> list[PassiveSkill]:
+    weapon_pure_attack_power: Optional[int] = None,
+) -> Stat:
     repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
     loader = SpecBasedLoader(repository)
-    patches = get_patches(combat_orders_level, passive_skill_level, character_level)
-    return loader.load_all(
+    patches = get_patches(
+        combat_orders_level,
+        passive_skill_level,
+        character_level,
+        weapon_pure_attack_power=weapon_pure_attack_power,
+    )
+    passive_skills = loader.load_all(
         query={"group": jobtype.value, "kind": "PassiveSkill"}, patches=patches
     )
 
-
-def get_default_active_skills(
-    jobtype: JobType,
-    combat_orders_level: int,
-    passive_skill_level: int,
-    character_level: int,
-) -> list[DefaultActiveSkill]:
-    repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
-    loader = SpecBasedLoader(repository)
-    patches = get_patches(combat_orders_level, passive_skill_level, character_level)
-
-    return loader.load_all(
-        query={"group": jobtype.value, "kind": "DefaultActiveSkill"}, patches=patches
-    )
-
-
-def get_passive_and_default_active_stat(
-    jobtype: JobType,
-    combat_orders_level: int,
-    passive_skill_level: int,
-    character_level: int,
-) -> Stat:
-    passive_skills = get_passive_skills(
-        jobtype, combat_orders_level, passive_skill_level, character_level
-    )
-
-    default_active_skills = get_default_active_skills(
-        jobtype, combat_orders_level, passive_skill_level, character_level
-    )
-
     return sum(
-        [
-            passive_skill.stat
-            for passive_skill in (passive_skills + default_active_skills)
-        ],
+        [passive_skill.stat for passive_skill in passive_skills],
         Stat(),
     )

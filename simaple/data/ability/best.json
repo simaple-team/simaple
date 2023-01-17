@@ -24,6 +24,11 @@
         {"type": "buff_duration", "value": 38},
         {"type": "boss_damage_multiplier", "value": 10}
     ],
+    "mechanic": [
+        {"type": "passive_skill_level", "value": 1},
+        {"type": "critical_rate", "value": 20},
+        {"type": "boss_damage_multiplier", "value": 10}
+    ],
     "dualblade": [
         {"type": "boss_damage_multiplier", "value": 20},
         {"type": "buff_duration", "value": 38},

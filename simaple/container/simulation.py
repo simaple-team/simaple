@@ -12,7 +12,7 @@ from simaple.data.client_configuration import get_client_configuration
 from simaple.data.damage_logic import get_damage_logic
 from simaple.data.doping import get_normal_doping
 from simaple.data.monster_life import get_normal_monsterlife_stat
-from simaple.data.passive import get_passive_and_default_active_stat
+from simaple.data.passive import get_passive_stat
 from simaple.gear.gearset import Gearset
 from simaple.optimizer.preset import Preset, PresetOptimizer
 from simaple.simulate.kms import get_client
@@ -41,8 +41,10 @@ class SimulationSetting(pydantic.BaseSettings):
     v_improvements_level: int = 60
     elemental_resistance: ElementalResistance
 
-    weapon_attack_power = 0
-    weapon_pure_attack_power = 0
+    weapon_attack_power: int = 0
+    weapon_pure_attack_power: int = 0
+
+    cache_root_dir: str = ""
 
     def get_preset_hash(self) -> str:
         preset_hash = (
@@ -63,6 +65,9 @@ def preset_optimize_cache_layer(
 ):
     cache_location = f".stat.{setting.get_preset_hash()}.json"
 
+    if setting.cache_root_dir:
+        cache_location = os.path.join(setting.cache_root_dir, cache_location)
+
     if os.path.exists(cache_location):
         return Stat.parse_file(cache_location)
 
@@ -78,11 +83,12 @@ class SimulationContainer(containers.DeclarativeContainer):
     settings = providers.Factory(SimulationSetting.parse_obj, config)
 
     passive_stat = providers.Factory(
-        get_passive_and_default_active_stat,
+        get_passive_stat,
         config.jobtype,
         combat_orders_level=config.combat_orders_level,
         passive_skill_level=config.passive_skill_level,
         character_level=config.level,
+        weapon_pure_attack_power=config.weapon_pure_attack_power,
     )
 
     ability_lines = providers.Singleton(
