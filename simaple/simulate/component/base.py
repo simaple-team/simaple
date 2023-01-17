@@ -231,7 +231,7 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
 
             tagged_events.append(tagged_event)
 
-        if all(event.tag != Tag.REJECT for event in events):
+        if all(event.tag not in (Tag.REJECT, Tag.ACCEPT) for event in events):
             return tagged_events + [
                 Event(name=self._name, method=method_name, tag=Tag.ACCEPT, payload={})
             ]
