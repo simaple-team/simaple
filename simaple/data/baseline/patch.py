@@ -4,7 +4,8 @@ import os
 import pydantic
 
 from simaple.core import JobCategory, JobType
-from simaple.spec.patch import KeywordExtendPatch, Patch, StringPatch
+from simaple.gear.bonus_factory import BonusType
+from simaple.spec.patch import DFSTraversePatch, KeywordExtendPatch, Patch, StringPatch
 
 
 def kms_item_alias():
@@ -61,6 +62,14 @@ class GearIdPatch(Patch):
                     interpreted[k] = v
 
         return interpreted
+
+
+class DoubleBonusRefinePatch(DFSTraversePatch):
+    def patch_value(self, value, origin: dict):
+        return BonusType.refine_double_key(value)
+
+    def patch_dict(self, k, v, origin: dict):
+        return {k: BonusType.refine_double_key(v)}
 
 
 def all_stat_patch():

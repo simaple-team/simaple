@@ -11,6 +11,7 @@ patch:
   - StringPatch
   - StringPatch
   - GearIdPatch
+  - DoubleBonusRefinePatch
 spec_hint:
   union_block_count: 30
   character_level: 255

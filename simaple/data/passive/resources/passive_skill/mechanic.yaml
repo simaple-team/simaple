@@ -43,6 +43,6 @@ metadata:
 data:
   name: 오버 튜닝
   stat:
-    final_damage_muliplier: 34
+    final_damage_multiplier: 34
     critical_rate: 20
     ignored_defence: 30
