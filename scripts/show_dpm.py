@@ -1,6 +1,5 @@
 import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.container.simulation import SimulationContainer, SimulationSetting
-from simaple.core import ActionStat
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 from simaple.simulate.actor import ActionRecorder
