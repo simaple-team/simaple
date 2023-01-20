@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pydantic import BaseModel, Extra, Field
 
 from simaple.core import ExtendedStat, Stat
@@ -12,8 +14,8 @@ class Gear(BaseModel):
     type: GearType
     req_level: int
     scroll_chance: int
-    boss_reward: bool
-    superior_eqp: bool
+    boss_reward: bool = False
+    superior_eqp: bool = False
     req_job: int = 0
     set_item_id: int = 0
     joker_to_set_item: bool = False
@@ -24,9 +26,28 @@ class Gear(BaseModel):
 
     class Config:
         extra = Extra.forbid
+        validate_assignment = True
+        allow_mutation = False
 
-    def add_stat(self, stat: Stat) -> None:
-        self.stat += stat
+    def add_stat(self, stat: Stat) -> Gear:
+        serailized_gear = self.dict()
+        serailized_gear["stat"] = Stat.parse_obj(serailized_gear["stat"]) + stat
+
+        return Gear.parse_obj(serailized_gear)
+
+    def set_potential(self, potential: Potential) -> Gear:
+        serailized_gear = self.dict()
+        serailized_gear["potential"] = potential.dict()
+
+        return Gear.parse_obj(serailized_gear)
+
+    def set_additional_potential(
+        self, additional_potential: AdditionalPotential
+    ) -> Gear:
+        serailized_gear = self.dict()
+        serailized_gear["additional_potential"] = additional_potential.dict()
+
+        return Gear.parse_obj(serailized_gear)
 
     def sum_stat(self) -> Stat:
         return self.sum_extended_stat().stat

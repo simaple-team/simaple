@@ -185,9 +185,6 @@ class PresetOptimizer(BaseModel):
 
     def _optimize_step(self, preset: Preset):
         # Cleanse gearset weapon potentials for further optimization.
-        for slot in preset.gearset.get_weaponry_slots():
-            slot.get_gear().potential = Potential()
-
         preset.gearset.set_empty_potential()
 
         if preset.gearset.weapon_potential_tiers is None:

@@ -36,8 +36,8 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
     def build(self, gear_repository: GearRepository) -> Gear:
         gear = gear_repository.get_by_id(self.gear_id)
 
-        gear.potential = self.potential.copy()
-        gear.additional_potential = self.additional_potential.copy()
+        gear = gear.set_potential(self.potential.copy())
+        gear = gear.set_additional_potential(self.additional_potential.copy())
 
         bonus_factory = BonusFactory()
         bonuses = [
@@ -61,13 +61,13 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
             Stat(),
         )
 
-        gear.add_stat(spell_trace_and_scoll_stat)
+        gear = gear.add_stat(spell_trace_and_scoll_stat)
 
         # Apply Starforce
-        gear.add_stat(self.starforce.calculate_improvement(gear))
+        gear = gear.add_stat(self.starforce.calculate_improvement(gear))
 
         # Apply bonus
-        gear.add_stat(bonus_stat)
+        gear = gear.add_stat(bonus_stat)
 
         return gear
 

@@ -243,11 +243,12 @@ class Gearset(BaseModel):
         )
 
     def set_empty_potential(self) -> None:
-        for slot in self.get_weaponry_slots():
-            slot.get_gear().potential = Potential(options=[])
+        self.change_weaponry_potentials(
+            (Potential(options=[]), Potential(options=[]), Potential(options=[]))
+        )
 
     def change_weaponry_potentials(
         self, weaponry_potentials: Tuple[Potential, Potential, Potential]
     ) -> None:
         for slot, potential in zip(self.get_weaponry_slots(), weaponry_potentials):
-            slot.get_gear().potential = potential
+            slot.equip(slot.get_gear().set_potential(potential))
