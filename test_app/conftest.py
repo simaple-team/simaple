@@ -63,7 +63,7 @@ def baseline_configuration():
 
 @pytest.fixture
 def record_file_name():
-    return os.path.join(os.path.dirname(__file__), "record.tsv")
+    return os.path.join(os.path.dirname(__file__), "saved_record.tsv")
 
 
 @pytest.fixture
