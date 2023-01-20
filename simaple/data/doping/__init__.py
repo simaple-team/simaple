@@ -10,7 +10,7 @@ level: doping level.
 import os
 from pathlib import Path
 
-from simaple.core import Stat
+from simaple.core import ExtendedStat, Stat
 from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.repository import DirectorySpecRepository
 from simaple.system import Doping, NamedStat
@@ -21,11 +21,11 @@ def get_doping_loader() -> SpecBasedLoader:
     return SpecBasedLoader(repository)
 
 
-def get_normal_doping() -> Stat:
+def get_normal_doping() -> ExtendedStat:
     loader = get_doping_loader()
 
     dopings: list[NamedStat] = loader.load_all(
         query={"kind": "NamedStat", "level": "normal"}
     )
 
-    return sum((doping.get_stat() for doping in dopings), Stat())
+    return sum((doping.get_extended_stat() for doping in dopings), ExtendedStat())

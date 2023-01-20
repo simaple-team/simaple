@@ -142,6 +142,7 @@ data:
   stat:
     final_damage_multiplier: 5
     ignored_defence: 10
+    elemental_resistance: 10
 ---
 kind: Component
 version: simaple.io/CosmicShower

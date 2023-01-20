@@ -22,7 +22,7 @@ def test_interpreter_get_gearset(baseline_name):
         JobCategory.warrior,
         JobType.adele,
     )
-    assert gearset.get_total_stat()
+    assert gearset.get_total_extended_stat()
 
 
 def test_gearset_ok():
@@ -33,6 +33,10 @@ def test_gearset_ok():
     )
 
     assert (
-        int(gearset.get_total_stat().get_base_stat_coefficient(BaseStatType.STR))
+        int(
+            gearset.get_total_extended_stat().stat.get_base_stat_coefficient(
+                BaseStatType.STR
+            )
+        )
         == 44495
     )

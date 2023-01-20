@@ -1,0 +1,32 @@
+{
+  "stat": {
+    "STR": 4985.0,
+    "LUK": 1084.0,
+    "INT": 1159.0,
+    "DEX": 2692.0,
+    "STR_multiplier": 719.0,
+    "LUK_multiplier": 100.0,
+    "INT_multiplier": 100.0,
+    "DEX_multiplier": 100.0,
+    "STR_static": 16620.0,
+    "LUK_static": 340.0,
+    "INT_static": 400.0,
+    "DEX_static": 500.0,
+    "attack_power": 2284.8,
+    "magic_attack": 1238.0,
+    "attack_power_multiplier": 90.0,
+    "critical_rate": 60.0,
+    "critical_damage": 75.0,
+    "boss_damage_multiplier": 283.0,
+    "damage_multiplier": 106.7,
+    "ignored_defence": 95.01780376019079,
+    "MHP": 26705.0,
+    "MMP": 12835.0
+  },
+  "action_stat": {
+    "cooltime_reduce": 0.0,
+    "summon_duration": 10.0,
+    "buff_duration": 20.0,
+    "cooltime_reduce_rate": 0.0
+  }
+}

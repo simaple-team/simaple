@@ -42,7 +42,6 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
 
     combat_orders_level: int = 1
     force_advantage: float = 1.5
-    elemental_resistance_disadvantage: float = 0.5
     target_armor: int = 300
     mob_level: int = 250
     weapon_attack_power: int = 0
@@ -86,7 +85,6 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
                 self.mob_level, self.character_level
             ),
             force_advantage=self.force_advantage,
-            elemental_resistance_disadvantage=self.elemental_resistance_disadvantage,
         )
 
 

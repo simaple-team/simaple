@@ -14,7 +14,7 @@ coverage = "pytest --cov=simaple --ignore tests/fetch/request"
 coverage-unittest = "pytest --cov=simaple --ignore tests/fetch/request"
 coverage-report = "pytest --cov=simaple --cov-report=xml"
 
-unittest = "pytest -vv -x tests/ --ignore tests/fetch/request"
+unittest = "pytest -vv -x tests/ --ignore tests/fetch/"
 apptest = "pytest -vv -x apptests/"
 rsctest = "pytest -vv -x test_resource/"
 typetest = "mypy simaple tests"

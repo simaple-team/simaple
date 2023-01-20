@@ -45,4 +45,4 @@ def test_preset(test_gearset):
 
     print(preset.union_occupation.get_stat().show())
     print("get_total_stat")
-    print(preset.get_total_stat().show())
+    print(preset.get_stat().show())

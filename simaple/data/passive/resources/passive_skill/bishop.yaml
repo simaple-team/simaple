@@ -112,6 +112,7 @@ data:
     magic_attack: 50
     final_damage_multiplier: 30
     ignored_defence: 20
+    elemental_resistance: 10
 ---
 kind: PassiveSkill
 version: simaple.io/PassiveSkill

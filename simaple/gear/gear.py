@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Extra, Field
 
-from simaple.core import Stat
+from simaple.core import ExtendedStat, Stat
 from simaple.gear.gear_type import GearType
 from simaple.gear.potential import AdditionalPotential, Potential
 
@@ -29,9 +29,14 @@ class Gear(BaseModel):
         self.stat += stat
 
     def sum_stat(self) -> Stat:
-        return (
-            self.stat + self.potential.get_stat() + self.additional_potential.get_stat()
+        return self.sum_extended_stat().stat
+
+    def sum_extended_stat(self) -> ExtendedStat:
+        potential_extended_stats = (
+            self.potential.get_extended_stat()
+            + self.additional_potential.get_extended_stat()
         )
+        return ExtendedStat(stat=self.stat) + potential_extended_stats
 
     def is_weapon(self) -> bool:
         return GearType.is_weapon(self.type)

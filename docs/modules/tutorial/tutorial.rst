@@ -207,7 +207,19 @@ level_advantage와 force_advantage는 각각 레벨과 포스 차이에서 오�
 
     ## Declare Client
     client_configuration = get_client_configuration(JobType.archmagefb)
-    character_stat = Stat(INT=50000, final_damage_multiplier=50)
+    character_stat = Stat(
+        INT=4932.0,
+        INT_multiplier=573.0,
+        INT_static=15460.0,
+        magic_attack=2075.0,
+        magic_attack_multiplier=81.0,
+        critical_rate=100.0,
+        critical_damage=83.0,
+        boss_damage_multiplier=144.0,
+        damage_multiplier=167.7,
+        final_damage_multiplier=110.0,
+        ignored_defence=95,
+    )
     action_stat = ActionStat(buff_duration=185)
 
     client = get_client(

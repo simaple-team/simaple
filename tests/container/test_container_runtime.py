@@ -11,6 +11,8 @@ def test_actor(setting, jobtype, expected):
     container = SimulationContainer()
     container.config.from_pydantic(setting)
 
+    print(container.character().action_stat)
+
     client = container.client()
     actor = container.client_configuration().get_mdc_actor()
 

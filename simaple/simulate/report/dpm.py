@@ -39,7 +39,6 @@ class DamageCalculator(pydantic.BaseModel):
     armor: int = 300
     level_advantage: float = 1.0
     force_advantage: float = 1.0
-    elemental_resistance_disadvantage: float = 0.5
 
     class Config:
         extra = "forbid"
@@ -59,7 +58,6 @@ class DamageCalculator(pydantic.BaseModel):
             * damage_factor
             * self.level_advantage
             * self.force_advantage
-            * self.elemental_resistance_disadvantage
         )
 
     def calculate_damage(self, damage_report: Report):
