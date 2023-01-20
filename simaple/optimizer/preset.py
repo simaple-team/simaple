@@ -189,6 +189,10 @@ class PresetOptimizer(BaseModel):
             slot.get_gear().potential = Potential()
 
         preset.gearset.set_empty_potential()
+
+        if preset.gearset.weapon_potential_tiers is None:
+            raise ValueError("weapon_potential_tier may given when optmization")
+
         preset.gearset.change_weaponry_potentials(
             self.calculate_optimal_weapon_potential(
                 preset.get_stat() + self.default_stat,

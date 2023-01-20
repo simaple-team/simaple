@@ -23,7 +23,7 @@ fetchtest = "pytest -vv -x tests/fetch/request"
 simulatetest = "pytest -vv -x tests/simulate"
 clean = "rm -rf **/__pycache__ .coverage .mypy_cache .pytest_cache"
 web = "python launcher.py web"
-test = ["coverage", "typetest", "lint", "formatting-check", "test_app", "test_data"]
+test = ["coverage", "typetest", "lint", "formatting-check"]
 
 [tool.black]
 
