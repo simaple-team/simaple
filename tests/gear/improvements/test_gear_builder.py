@@ -43,6 +43,28 @@ def test_absolab_17_p30_full(test_case_file):
     with open(os.path.join(base_path, test_case_file), encoding="utf-8") as f:
         test_case = json.load(f)
 
+    test_case["expected"]["meta"] = {}
+    test_case["expected"]["meta"]["id"] = test_case["expected"].pop("id")
+    test_case["expected"]["meta"]["name"] = test_case["expected"].pop("name")
+    test_case["expected"]["meta"]["req_level"] = test_case["expected"].pop("req_level")
+    test_case["expected"]["meta"]["boss_reward"] = test_case["expected"].pop(
+        "boss_reward"
+    )
+    test_case["expected"]["meta"]["superior_eqp"] = test_case["expected"].pop(
+        "superior_eqp"
+    )
+    test_case["expected"]["meta"]["req_job"] = test_case["expected"].pop("req_job")
+    test_case["expected"]["meta"]["set_item_id"] = test_case["expected"].pop(
+        "set_item_id"
+    )
+    test_case["expected"]["meta"]["type"] = test_case["expected"].pop("type")
+    test_case["expected"]["meta"]["base_stat"] = gear_repository.get_by_id(
+        test_case["expected"]["meta"]["id"]
+    ).stat.short_dict()
+    test_case["expected"]["meta"]["max_scroll_chance"] = test_case["expected"][
+        "scroll_chance"
+    ]
+
     blueprint = GeneralizedGearBlueprint.parse_obj(test_case["given"])
 
     gear = blueprint.build(gear_repository=gear_repository)

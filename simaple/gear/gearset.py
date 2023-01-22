@@ -20,10 +20,10 @@ class GearSlot(BaseModel):
     def is_equipped(self):
         return self.gear is not None
 
-    def is_equippable(self, gear):
-        return gear.type in self.enabled_gear_types
+    def is_equippable(self, gear: Gear):
+        return gear.meta.type in self.enabled_gear_types
 
-    def equip(self, gear):
+    def equip(self, gear: Gear):
         if not self.is_equippable(gear):
             raise ValueError
 
@@ -198,7 +198,9 @@ class Gearset(BaseModel):
 
     def _get_eqiuppable_slots(self, gear) -> List[GearSlot]:
         return [
-            slot for slot in self.gear_slots if gear.type in slot.enabled_gear_types
+            slot
+            for slot in self.gear_slots
+            if gear.meta.type in slot.enabled_gear_types
         ]
 
     def get_slot(self, slot_name: SlotName) -> GearSlot:

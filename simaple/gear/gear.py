@@ -9,8 +9,8 @@ from simaple.gear.potential import AdditionalPotential, Potential
 
 class GearMeta(BaseModel):
     id: int
-    base_stat: Stat
     name: str
+    base_stat: Stat
     type: GearType
     req_level: int
     boss_reward: bool = False
@@ -18,25 +18,39 @@ class GearMeta(BaseModel):
     req_job: int = 0
     set_item_id: int = 0
     joker_to_set_item: bool = False
+    max_scroll_chance: int
 
     class Config:
         extra = Extra.forbid
         validate_assignment = True
         allow_mutation = False
 
+    def show(self) -> str:
+        job_string = (
+            "["
+            + ("] [").join(
+                [
+                    (" V " if self.req_job & (1 << i) != 0 else "   ")
+                    for i in range(5)
+                ]
+            )
+            + "]"
+        )
+
+        return f"""
+        ===================================
+        name: {self.name}
+        type: {self.type.name} (type number {self.type})
+        req_level: {self.req_level}
+                 [WAR] [MAG] [ARC] [THF] [PIR]
+        req_job: {job_string}
+        """
+
 
 class Gear(BaseModel):
-    id: int
+    meta: GearMeta
     stat: Stat
-    name: str
-    type: GearType
-    req_level: int
     scroll_chance: int
-    boss_reward: bool = False
-    superior_eqp: bool = False
-    req_job: int = 0
-    set_item_id: int = 0
-    joker_to_set_item: bool = False
     potential: Potential = Field(default_factory=Potential)
     additional_potential: AdditionalPotential = Field(
         default_factory=AdditionalPotential
@@ -78,35 +92,23 @@ class Gear(BaseModel):
         return ExtendedStat(stat=self.stat) + potential_extended_stats
 
     def is_weapon(self) -> bool:
-        return self.type.is_weapon()
+        return self.meta.type.is_weapon()
 
     def is_armor(self) -> bool:
-        return self.type.is_armor()
+        return self.meta.type.is_armor()
 
     def is_accessory(self) -> bool:
-        return self.type.is_accessory()
+        return self.meta.type.is_accessory()
 
     def is_mechanic_gear(self) -> bool:
-        return self.type.is_mechanic_gear()
+        return self.meta.type.is_mechanic_gear()
 
     def is_dragon_gear(self) -> bool:
-        return self.type.is_dragon_gear()
+        return self.meta.type.is_dragon_gear()
 
     def show(self) -> str:
-        job_string = (
-            "["
-            + ("] [").join(
-                [(" V " if self.req_job & (1 << i) != 0 else "   ") for i in range(5)]
-            )
-            + "]"
-        )
-        output = f"""
-        ===================================
-        name: {self.name}
-        type: {self.type.name} (type number {self.type})
-        req_level: {self.req_level}
-                 [WAR] [MAG] [ARC] [THF] [PIR]
-        req_job: {job_string}
+        return f"""
+        {self.meta.show()}
         ===================================
         Basis Stats
 
@@ -123,4 +125,3 @@ class Gear(BaseModel):
 
         ===================================
         """
-        return output

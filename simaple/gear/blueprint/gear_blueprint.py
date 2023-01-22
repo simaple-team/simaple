@@ -46,25 +46,27 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
         ]
 
         bonus_stat = sum(
-            [bonus.calculate_improvement(gear) for bonus in bonuses],
+            [bonus.calculate_improvement(gear.meta) for bonus in bonuses],
             Stat(),
         )
         # Apply spell trace and scroll.
         spell_trace_and_scoll_stat = sum(
             [
-                spell_trace.calculate_improvement(gear)
+                spell_trace.calculate_improvement(gear.meta)
                 for spell_trace in self.spell_traces
             ],
             Stat(),
         ) + sum(
-            [scroll.calculate_improvement(gear) for scroll in self.scrolls],
+            [scroll.calculate_improvement(gear.meta) for scroll in self.scrolls],
             Stat(),
         )
 
         gear = gear.add_stat(spell_trace_and_scoll_stat)
 
         # Apply Starforce
-        gear = gear.add_stat(self.starforce.calculate_improvement(gear))
+        gear = gear.add_stat(
+            self.starforce.calculate_improvement(gear.meta, ref_stat=gear.stat)
+        )
 
         # Apply bonus
         gear = gear.add_stat(bonus_stat)
@@ -101,15 +103,17 @@ class PracticalGearBlueprint(AbstractGearBlueprint):
         scrolls = []
 
         if self.spell_trace is not None:
-            spell_traces = [self.spell_trace for i in range(gear.scroll_chance)]
+            spell_traces = [
+                self.spell_trace for i in range(gear.meta.max_scroll_chance)
+            ]
         elif self.scroll is not None:
-            scrolls = [self.scroll for i in range(gear.scroll_chance)]
+            scrolls = [self.scroll for i in range(gear.meta.max_scroll_chance)]
 
         starforce = Starforce(enhancement_type="Starforce", star=self.star)
-        starforce.apply_star_cutoff(gear)
+        starforce.apply_star_cutoff(gear.meta)
 
         return GeneralizedGearBlueprint(
-            gear_id=gear.id,
+            gear_id=gear.meta.id,
             spell_traces=spell_traces,
             scrolls=scrolls,
             starforce=starforce,
