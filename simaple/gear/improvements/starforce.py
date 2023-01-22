@@ -102,7 +102,7 @@ def get_starforce_increment(
             data = __superior_stat_increments
     elif not amazing_scroll:
         if att:
-            if gear.is_weapon() or gear.type == GearType.katara:
+            if gear.type.is_improved_as_weapon():
                 data = __starforce_weapon_att_increments
             else:
                 data = __starforce_att_increments
@@ -154,9 +154,6 @@ class Enhancement(GearImprovement):
         if data is None:
             return 0
         return data[2 if gear.superior_eqp else 1]
-
-    def gear_starforce_type_is_weapon(self, gear) -> bool:
-        return bool(gear.is_weapon() or gear.type == GearType.katara)
 
 
 class Starforce(Enhancement):
@@ -242,7 +239,7 @@ class Starforce(Enhancement):
                 )
 
         # Add attack props (attack_power, magic_attack)
-        if self.gear_starforce_type_is_weapon(gear):
+        if gear.type.is_improved_as_weapon():
             use_mad = (
                 gear.req_job == 0
                 or gear.req_job // 2 % 2 == 1
@@ -294,7 +291,7 @@ class Starforce(Enhancement):
             GearType.shield,
         ]
 
-        if self.gear_starforce_type_is_weapon(gear):
+        if gear.type.is_improved_as_weapon():
             improvement_stat += Stat(MHP=get_mhp_starforce_bonus(target_star))
             improvement_stat += Stat(MMP=get_mhp_starforce_bonus(target_star))
         elif gear.type in mhp_types:
@@ -352,7 +349,7 @@ class AmazingEnhancement(Enhancement):
                 improvement_stat += Stat.parse_obj(
                     {att_type.value: att_enhancement_increment}
                 )
-                if self.gear_starforce_type_is_weapon(gear):
+                if gear.type.is_improved_as_weapon():
                     improvement_stat += Stat.parse_obj(
                         {att_type.value: gear.stat.get(att_type) // 50 + 1}
                     )

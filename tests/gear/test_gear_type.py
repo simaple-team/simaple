@@ -16,5 +16,5 @@ from simaple.gear.gear_type import GearType
         (GearType.pants, False),
     ],
 )
-def test_is_weaponry(gear_type, expected):
-    assert GearType.is_weaponry(gear_type) == expected
+def test_is_weaponry(gear_type: GearType, expected):
+    assert gear_type.is_weaponry() == expected

@@ -7,6 +7,24 @@ from simaple.gear.gear_type import GearType
 from simaple.gear.potential import AdditionalPotential, Potential
 
 
+class GearMeta(BaseModel):
+    id: int
+    base_stat: Stat
+    name: str
+    type: GearType
+    req_level: int
+    boss_reward: bool = False
+    superior_eqp: bool = False
+    req_job: int = 0
+    set_item_id: int = 0
+    joker_to_set_item: bool = False
+
+    class Config:
+        extra = Extra.forbid
+        validate_assignment = True
+        allow_mutation = False
+
+
 class Gear(BaseModel):
     id: int
     stat: Stat
@@ -60,28 +78,19 @@ class Gear(BaseModel):
         return ExtendedStat(stat=self.stat) + potential_extended_stats
 
     def is_weapon(self) -> bool:
-        return GearType.is_weapon(self.type)
-
-    def is_left_weapon(self) -> bool:
-        return GearType.is_left_weapon(self.type)
-
-    def is_sub_weapon(self) -> bool:
-        return GearType.is_sub_weapon(self.type)
-
-    def is_double_hand_weapon(self) -> bool:
-        return GearType.is_double_hand_weapon(self.type)
+        return self.type.is_weapon()
 
     def is_armor(self) -> bool:
-        return GearType.is_armor(self.type)
+        return self.type.is_armor()
 
     def is_accessory(self) -> bool:
-        return GearType.is_accessory(self.type)
+        return self.type.is_accessory()
 
     def is_mechanic_gear(self) -> bool:
-        return GearType.is_mechanic_gear(self.type)
+        return self.type.is_mechanic_gear()
 
     def is_dragon_gear(self) -> bool:
-        return GearType.is_dragon_gear(self.type)
+        return self.type.is_dragon_gear()
 
     def show(self) -> str:
         job_string = (

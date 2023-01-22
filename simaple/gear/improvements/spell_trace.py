@@ -115,7 +115,7 @@ class SpellTrace(GearImprovement):
             else StatProps.attack_power
         )
 
-        if gear.is_weapon() or gear.type == GearType.katara:
+        if gear.type.is_improved_as_weapon():
             attack_basis, stat_basis, additional_mhp = self.get_weapon_improvement(gear)
         elif gear.type == GearType.glove:
             attack_basis, stat_basis, additional_mhp = self.get_glove_improvement(gear)

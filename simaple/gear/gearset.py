@@ -73,14 +73,14 @@ def get_default_empty_slots():
         GearSlot(
             name=SlotName.subweapon,
             enabled_gear_types=[
-                gear_type for gear_type in GearType if GearType.is_sub_weapon(gear_type)
+                gear_type for gear_type in GearType if gear_type.is_sub_weapon()
             ],
         ),
         GearSlot(name=SlotName.emblem, enabled_gear_types=[GearType.emblem]),
         GearSlot(
             name=SlotName.weapon,
             enabled_gear_types=[
-                gear_type for gear_type in GearType if GearType.is_weapon(gear_type)
+                gear_type for gear_type in GearType if gear_type.is_weapon()
             ],
         ),
     ]
@@ -214,7 +214,7 @@ class Gearset(BaseModel):
     def _get_weapon_slot(self) -> GearSlot:
         for slot in self.gear_slots:
             for gear_type in slot.enabled_gear_types:
-                if GearType.is_weapon(gear_type):
+                if gear_type.is_weapon():
                     return slot
 
         raise ValueError
@@ -222,7 +222,7 @@ class Gearset(BaseModel):
     def _get_sub_weapon_slot(self) -> GearSlot:
         for slot in self.gear_slots:
             for gear_type in slot.enabled_gear_types:
-                if GearType.is_sub_weapon(gear_type):
+                if gear_type.is_sub_weapon():
                     return slot
 
         raise ValueError
