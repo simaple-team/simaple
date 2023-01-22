@@ -91,6 +91,8 @@ class Stat(BaseModel):
     MHP_multiplier: float = 0.0
     MMP_multiplier: float = 0.0
 
+    elemental_resistance: float = 0.0
+
     class Config:
         extra = Extra.forbid
 
@@ -138,6 +140,7 @@ class Stat(BaseModel):
             + 0.01 * self.final_damage_multiplier * arg.final_damage_multiplier,
             ignored_defence=100
             - 0.01 * ((100 - self.ignored_defence) * (100 - arg.ignored_defence)),
+            elemental_resistance=self.elemental_resistance + arg.elemental_resistance,
         )
 
     def __iadd__(self, arg: Stat):
@@ -181,6 +184,7 @@ class Stat(BaseModel):
         self.ignored_defence = 100 - 0.01 * (
             (100 - self.ignored_defence) * (100 - arg.ignored_defence)
         )
+        self.elemental_resistance += arg.elemental_resistance
 
         return self
 
@@ -215,6 +219,7 @@ class Stat(BaseModel):
             MMP_multiplier=self.MMP_multiplier * stack,
             final_damage_multiplier=self.final_damage_multiplier * stack,
             ignored_defence=self.ignored_defence * stack,
+            elemental_resistance=self.elemental_resistance * stack,
         )
 
     def get(self, prop: StatProps):
@@ -266,6 +271,7 @@ class Stat(BaseModel):
         final_damage_multiplier: {self.final_damage_multiplier:7.2f}
 
         ignored_defence        : {self.ignored_defence:7.2f}
+        elemental_resistance   : { self.elemental_resistance:7.2f}
         """
         return output
 
@@ -358,12 +364,5 @@ class ExtendedStat(BaseModel):
             level_stat=self.level_stat + arg.level_stat,
         )
 
-
-class ElementalResistance(BaseModel):
-    value: float
-
-    def get_disadvantage(self) -> float:
-        return 0.5 * (1 + self.value * 0.01)
-
-    def __add__(self, arg: ElementalResistance):
-        return ElementalResistance(value=self.value + arg.value)
+    def compute_by_level(self, level) -> Stat:
+        return self.stat + self.level_stat.get_stat(level)

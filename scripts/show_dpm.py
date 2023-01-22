@@ -1,6 +1,5 @@
 import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.container.simulation import SimulationContainer, SimulationSetting
-from simaple.core import ActionStat, ElementalResistance
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 from simaple.simulate.actor import ActionRecorder
@@ -11,14 +10,10 @@ setting = SimulationSetting(
     jobtype=JobType.archmagefb,
     job_category=JobCategory.magician,
     level=270,
-    action_stat=ActionStat(
-        buff_duration=185,
-    ),
     passive_skill_level=0,
     combat_orders_level=1,
     v_skill_level=30,
     v_improvements_level=60,
-    elemental_resistance=ElementalResistance(value=10),
 )
 
 

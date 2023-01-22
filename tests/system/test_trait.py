@@ -1,11 +1,11 @@
 import pytest
 
-from simaple.core import ActionStat, ElementalResistance, Stat
+from simaple.core import ActionStat, Stat
 from simaple.system.trait import CharacterTrait
 
 
 @pytest.mark.parametrize(
-    "trait, stat, action_stat, elemental_resistance",
+    "trait, stat, action_stat",
     [
         (
             CharacterTrait(
@@ -18,7 +18,6 @@ from simaple.system.trait import CharacterTrait
             ),
             Stat(),
             ActionStat(),
-            ElementalResistance(value=0),
         ),
         (
             CharacterTrait(
@@ -31,7 +30,6 @@ from simaple.system.trait import CharacterTrait
             ),
             Stat(ignored_defence=5),
             ActionStat(),
-            ElementalResistance(value=0),
         ),
         (
             CharacterTrait(
@@ -42,9 +40,8 @@ from simaple.system.trait import CharacterTrait
                 diligence=0,
                 charm=0,
             ),
-            Stat(MHP=500, MMP=400),
+            Stat(MHP=500, MMP=400, elemental_resistance=1),
             ActionStat(buff_duration=2),
-            ElementalResistance(value=1),
         ),
         (
             CharacterTrait(
@@ -55,9 +52,8 @@ from simaple.system.trait import CharacterTrait
                 diligence=100,
                 charm=100,
             ),
-            Stat(MHP=2000, MMP=2000, ignored_defence=10),
+            Stat(MHP=2000, MMP=2000, ignored_defence=10, elemental_resistance=5),
             ActionStat(buff_duration=10),
-            ElementalResistance(value=5),
         ),
     ],
 )
@@ -65,8 +61,6 @@ def test_trait_and_stat(
     trait: CharacterTrait,
     stat: Stat,
     action_stat: ActionStat,
-    elemental_resistance: ElementalResistance,
 ):
     assert trait.get_stat() == stat
     assert trait.get_action_stat() == action_stat
-    assert trait.get_elemental_resistance() == elemental_resistance

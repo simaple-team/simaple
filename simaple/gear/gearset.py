@@ -2,7 +2,7 @@ from typing import List, Optional, Tuple
 
 from pydantic import BaseModel, Field
 
-from simaple.core import Stat
+from simaple.core import ExtendedStat, Stat
 from simaple.gear.arcane_symbol import ArcaneSymbol
 from simaple.gear.authentic_symbol import AuthenticSymbol
 from simaple.gear.gear import Gear
@@ -141,7 +141,23 @@ class Gearset(BaseModel):
 
         return stat
 
-    def get_total_stat(self) -> Stat:
+    def get_total_extended_stat(self) -> ExtendedStat:
+        gear_extended_stat = self._get_gear_slot_extended_stat()
+        return ExtendedStat(
+            stat=self._get_total_stat(),
+            action_stat=gear_extended_stat.action_stat,
+            level_stat=gear_extended_stat.level_stat,
+        )
+
+    def _get_gear_slot_extended_stat(self) -> ExtendedStat:
+        extended_stat = ExtendedStat()
+        for slot in self.gear_slots:
+            if slot.gear is not None:
+                extended_stat += slot.gear.sum_extended_stat()
+
+        return extended_stat
+
+    def _get_total_stat(self) -> Stat:
         stat = Stat()
         stat += self.get_gear_slot_stat()
         stat += self.get_arcane_symbol_stat()

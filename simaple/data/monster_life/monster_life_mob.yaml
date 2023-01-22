@@ -48,6 +48,17 @@ kind: NamedStat
 version: simaple.io/MonsterlifeMob
 metadata:
   label:
+    name: 쁘띠 아카이럼
+    level: normal
+data:  
+  name: 쁘띠 아카이럼
+  action_stat: 
+    buff_duration: 5
+---
+kind: NamedStat 
+version: simaple.io/MonsterlifeMob
+metadata:
+  label:
     name: 쁘띠 반 레온
     level: normal
 data:  

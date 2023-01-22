@@ -32,7 +32,7 @@ Create Gearset From Baseline
     from simaple.gear.gear_repository import GearRepository
 
     gearset = get_baseline_gearset("EpicUnique", JobCategory.warrior)
-    print(gearset.get_total_stat().show())
+    print(gearset.get_total_extended_stat().stat.show())
 
 
 Fetch Example
