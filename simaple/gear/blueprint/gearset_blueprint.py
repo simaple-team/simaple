@@ -40,13 +40,11 @@ class UserGearsetBlueprint(GearsetBlueprint):
 
     gears: dict[SlotName, PracticalGearBlueprint]
 
-    def build(
-        self, gear_repository: GearRepository, set_item_repository: SetItemRepository
-    ) -> Gearset:
+    def build(self, set_item_repository: SetItemRepository) -> Gearset:
         gearset = Gearset()
 
         for slot_name, blueprint in self.gears.items():
-            gearset.equip(blueprint.build(gear_repository=gear_repository), slot_name)
+            gearset.equip(blueprint.build(), slot_name)
 
         gearset.set_title_stat(self.title)
         gearset.annotate_weapon_potential_tiers(self.weapon_potential_tiers)

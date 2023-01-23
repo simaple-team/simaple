@@ -78,8 +78,7 @@ def get_baseline_gearset(
 
     repository = DirectorySpecRepository(str(Path(__file__).parent / "spec"))
     loader = SpecBasedLoader(repository)
-    gear_repository = GearRepository()
     set_item_repository = KMSSetItemRepository()
 
     blueprint: GearsetBlueprint = loader.load(query={"name": name}, patches=patches)
-    return blueprint.build(gear_repository, set_item_repository)
+    return blueprint.build(set_item_repository)

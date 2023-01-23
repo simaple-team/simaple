@@ -65,9 +65,12 @@ def test_absolab_17_p30_full(test_case_file):
         "scroll_chance"
     ]
 
+    test_case["given"]["meta"] = test_case["expected"]["meta"]
+    test_case["given"].pop("gear_id")
+
     blueprint = GeneralizedGearBlueprint.parse_obj(test_case["given"])
 
-    gear = blueprint.build(gear_repository=gear_repository)
+    gear = blueprint.build()
     expected_gear = Gear.parse_obj(test_case["expected"])
 
     assert gear == expected_gear

@@ -51,11 +51,12 @@ class GearTranslator(pydantic.BaseModel):
                 "Base stat not matched. Maybe fetched information incomplete?"
             )
 
-        base_gear = base_gear.add_stat(
-            self.gear_stat_translator.translate(parsed["bonus"])
-        )
-        base_gear = base_gear.add_stat(
-            self.gear_stat_translator.translate(parsed["increment"])
+        base_stat += self.gear_stat_translator.translate(parsed["bonus"])
+
+        base_stat += self.gear_stat_translator.translate(parsed["increment"])
+
+        base_gear = Gear(
+            meta=base_gear.meta, stat=base_stat, scroll_chance=base_gear.scroll_chance
         )
 
         if "potential" in parsed:

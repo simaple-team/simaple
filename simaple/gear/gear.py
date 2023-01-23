@@ -29,10 +29,7 @@ class GearMeta(BaseModel):
         job_string = (
             "["
             + ("] [").join(
-                [
-                    (" V " if self.req_job & (1 << i) != 0 else "   ")
-                    for i in range(5)
-                ]
+                [(" V " if self.req_job & (1 << i) != 0 else "   ") for i in range(5)]
             )
             + "]"
         )
@@ -90,21 +87,6 @@ class Gear(BaseModel):
             + self.additional_potential.get_extended_stat()
         )
         return ExtendedStat(stat=self.stat) + potential_extended_stats
-
-    def is_weapon(self) -> bool:
-        return self.meta.type.is_weapon()
-
-    def is_armor(self) -> bool:
-        return self.meta.type.is_armor()
-
-    def is_accessory(self) -> bool:
-        return self.meta.type.is_accessory()
-
-    def is_mechanic_gear(self) -> bool:
-        return self.meta.type.is_mechanic_gear()
-
-    def is_dragon_gear(self) -> bool:
-        return self.meta.type.is_dragon_gear()
 
     def show(self) -> str:
         return f"""

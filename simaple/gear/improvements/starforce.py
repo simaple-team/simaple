@@ -1,7 +1,7 @@
 from typing import Literal, Optional, Set
 
 from simaple.core import Stat, StatProps
-from simaple.gear.gear import Gear, GearMeta
+from simaple.gear.gear import GearMeta
 from simaple.gear.gear_type import GearType
 from simaple.gear.improvements.base import GearImprovement
 
