@@ -12,7 +12,6 @@ from simaple.data.baseline.patch import (
     stat_patch,
 )
 from simaple.gear.blueprint.gearset_blueprint import GearsetBlueprint
-from simaple.gear.gear_repository import GearRepository
 from simaple.gear.gearset import Gearset
 from simaple.gear.setitem import KMSSetItemRepository
 from simaple.spec.loader import SpecBasedLoader
