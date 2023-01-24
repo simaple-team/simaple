@@ -72,7 +72,7 @@ Entity
 simaple defines a ``State`` to be a set of ``Entity``. An ``Entity`` is the smallest unit of a state that has its own characteristics. 
 For example, a typical buff skill has a duration and a cooldown. Each of these can be modelled in code as ``Cooldown`` and ``Duration`` entities.
 
-The ``State`` of this buff skill can bbe defined as follows:
+The ``State`` of this buff skill can be defined as follows:
 
 .. code-block:: python
     
