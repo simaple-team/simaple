@@ -19,7 +19,7 @@ The ``simulate`` module is a library that uses Redux Pattern to describe these c
 Why Redux?
 ===========
 
-The ``simulate`` module uses Redux Pattern to define the entire system and conduct the simulation.
+The ``simulate`` module uses Redux Pattern to define the entire system and perform the simulation.
 
 To start with, let's think a bit about Skills in MapleStory. Skills normally have states; being on cooldown, for example, is a state. 
 Performing skill-related actions can change these states; using a skill results in that skill's effects occurring, and then that skill goes on cooldown. 
@@ -30,7 +30,7 @@ If each skill has a state, and these states change frequently, we can store thes
 
 All states are stored in the Store, and can be changed by a Dispatcher.
 simaple considers a skill to be a collection of methods that change states. The ``Component`` class is used to express this.
-A Component is a collection of Dispatchers that can be referred to by the same reference. This can correspond to one skill object in the game.
+A Component is a collection of Dispatchers that can be referred to together as one object. This can correspond to one skill object in the game.
 
 All interactions are defined in states.
 For example, consider the case where Skill A changes the cooldown of Skill B. In this case, the action is the use of Skill A, but what actually changes is the state of Skill B. 
@@ -52,20 +52,20 @@ Action
 -------
 Any user behaviour corresponds to an Action. Simulations begin with the user creating and delivering an Action.
 Actions correspond to commands given to the character in-game. The Action is to either press a specific skill, or to wait for a specific time without any actions.
-Actions have the properties ``name``, ``method``, ``payload``. The explanations for these can be seen below under Reducer.
+Actions have the properties ``name``, ``method``, ``payload``. 
 
 Event
 -------
 
 An ``Event`` is the result of an ``Action``. 
-By and large, Events can be divided into things that require handling like action delays and damage dealt, and events that guide the execution of certain skills for logging purposes. 
-Events do not necessarily need to be processed; other than delay events which progress the time of the entire system, events do not need to be processed.
+By and large, Events can be divided into things that require processing like action delays and damage dealt, and events that guide the execution of certain skills for logging purposes. 
+Other than delay events which progress the time of the entire system, events do not necessarily need to be processed.
 The "Elapsed time" event is the only event that requires processing; this is to allow the Player to apply different delays than the normal expected skill delays, e.g. during skill animation cancellation.
 
 State
 -------
 ``State`` refers to the state of the skills of the simulated character. In general, an ``Action`` changes a ``State``, then causes one or more ``Event``. 
-A ``State`` should contain all the information needed to be changed by any ``Action``. Conversely, no state will be modelled by any method other than ``State`` that can be modified by any ``Action``.
+A ``State`` should contain all the information needed to be changed by any ``Action``. At the same time, no state will be modelled by any method other than ``State`` that can be modified by any ``Action``.
 
 Entity
 -------
@@ -101,7 +101,7 @@ A ``Dispatcher`` is a description of a method of change a state. From the defini
 ``(Store, Action) -> (Event)``
 
 Paying attention to the signature, the Dispatcher does not simply change a state, but it changes the ``Store`` received as a parameter. 
-Because of this, Dispatchers do not necessarily guarantee immutability of States in the Store.
+Because of this, Dispatchers do not guarantee immutability of States in the Store, and hence are not pure functions.
 
 Reducer
 ----------
@@ -123,7 +123,7 @@ So, to simplify things, Components can be used to easily create Reducers, and th
 Component
 ----------
 
-``Component`` are the core of simaple's simulation procedure. ``Component`` instance methods are easily converted into ``Reducer`` via the ``@reducer_method`` decorator.
+Components are the core of simaple's simulation procedure. ``Component`` instance methods are easily converted into Reducers via the ``@reducer_method`` decorator.
 
 Let's look at a simple example:
 
@@ -170,14 +170,14 @@ Since Components inherit ``pydantic.BaseModel``, they use the ``pydantic.BaseMod
 Refer to the documentation in ``pydantic.BaseModel`` for more information.
 
 Thirdly, we define a default state via ``get_default_state``.
-All Components must define a method to specify and deliver an initial value when an Entity defined in the Component's State is not supplied as a parameter.
+All Components must define a method to specify and deliver an initial value when an Entity required for one of the Component's Reducers is missing.
 Some Entities have default values defined elsewhere; for example, ``dynamics`` is defined in ``global_property.py``.
 The keys used here must match the variable names in the previously declared ``AttackSkillState``, or else the program will not be able to recognise which Entity the default value provided corresponds to.
 
 Finally, methods decorated with ``@reducer_method`` are defined.
 Note the signature of this function; these are the Reducers we have been looking for.
 The ``elapse`` method takes ``state: AttackSkillState`` as its second parameter.
-This signature is not a dummy variable; it specifies that the value passed should be specifically an ``AttackSkillState`` within the Store.
+This signature specifies that the value passed should be specifically an ``AttackSkillState``-typed object within the Store.
 Based on this signature, the internal implementation will query the Store appropriately and return the appropriate State combination.
 
 This code allows a Component to be well defined by bringing together the actions associated with certain states.
@@ -192,9 +192,9 @@ Sometimes, skills interact with other skills. They will need to either trigger t
 In simaple, these links are supported in two ways. Let's look at the interaction where Absolute Kill increases the Baptism of Light and Darkness stack before the Odium patch change to Baptism.
 
 Actions to be listened for can be defined as a dict via the ``listening_actions`` parameter when defining a Component.
-Passing a key-value pair of of the form ``$target_action_signature:$target_method`` when creating a Component will add the event to be listened for during the Dispatcher building process.
+Passing a key-value pair of the form ``$target_action_signature:$target_method`` when creating a Component will add the event to be listened for during the Dispatcher building process.
 In this case, the component is created as below.
-Recall that the use of skills generally corrsponds to the ``use`` method, and assume that the method for increasing the stacks of Baptism is defined as ``increase_stack``.
+Recall that the use of skills generally corresponds to the ``use`` method, and here we assume that the method for increasing the stacks of Baptism is defined as ``increase_stack``.
 
 .. code-block:: python
 
@@ -225,13 +225,13 @@ The states specified in ``binds`` will query the Store for the state value of th
         def use(self, _, cooltime_state, baptism_of_light_and_darkness_stack_state):
             ...
 
-This method is not recommended because it necessitates the creation of a new Component class.
-This method of managing states is recommended only when the order of a sequence of actions of a Reducer has to be managed in this way.
+This method of defining interactions is not recommended because it necessitates the creation of a new Component class.
+This method of managing states is recommended only when the order of a sequence of actions of a Reducer needs to be forced.
 
 **Key takeaways:**
 
 **The key unit of simaple is a State.**
 
-**Components' creation criteria must be States.**
+**Components' creation parameters must be States.**
 
 **It is not recommended that the State of one Component be referenced by another Component.**
