@@ -39,9 +39,9 @@ This might seem unintuitive at first; it is more natural to see interactions lik
 However, this model results in a single action changing multiple states through multiple sequences.
 We adhere to the following principle:
 
-``One action causes only one state change``
+``All state changes caused by one action will occur at once``
 
-The logic flow by which one action causes multiple state changes makes it difficult to understand the system from the "Player" perspective of controlling the system. 
+The logic flow by which one action causes multiple state changes in sequence makes it difficult to understand the system from the "Player" perspective of controlling the system. 
 "Players" are normally unable to predict what side-effects their actions can have. 
 All in-system action processing must be limited to single action processing and the reinterpretation of Event into Action must be controlled by the "Player".
 
@@ -51,7 +51,7 @@ Definitions
 Action
 -------
 Any user behaviour corresponds to an Action. Simulations begin with the user creating and delivering an Action.
-Actions correspond to commands given to the character in-game. The Action is to either press a specific skill, or to wait for a specific time without any actions.
+Actions correspond to commands given to the character in-game. The Action is to either press a specific skill, or to wait for a specific time without any input.
 Actions have the properties ``name``, ``method``, ``payload``. 
 
 Event
@@ -64,7 +64,7 @@ The "Elapsed time" event is the only event that requires processing; this is to 
 
 State
 -------
-``State`` refers to the state of the skills of the simulated character. In general, an ``Action`` changes a ``State``, then causes one or more ``Event``. 
+``State`` refers to the state of the skills of the simulated character. In general, an ``Action`` changes a ``State``, then may cause one or more ``Event`` (or none).
 A ``State`` should contain all the information needed to be changed by any ``Action``. At the same time, no state will be modelled by any method other than ``State`` that can be modified by any ``Action``.
 
 Entity
