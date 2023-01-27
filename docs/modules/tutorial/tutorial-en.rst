@@ -11,14 +11,15 @@ Introduction
 
 **simaple** is a tool that can be used to define skills and using these defined skills to perform simulations. The goal is to create a perfect simulation of in-game skill usage.
 
-In this tutorial, we will be creating a simulation of a ``Archmage (Fire/Poison)``. Based on this tutorial, any job can be recreated in a similar way.
+In this tutorial, we will be creating a simulation of an ``Archmage (Fire/Poison)``. Based on this tutorial, any job can be recreated in a similar way.
 
 For more advanced features, see the Advanced Features Guide.
 
 Start
 ========
 
-To implement the simulation, we first need to define a set of skills to be used. The results of using each skill should be interpreted by converting it into damage based on the stats of the target character.
+To implement the simulation, we first need to define a set of skills to be used. 
+The results of using each skill will then be interpreted by converting it into damage based on the stats of the target character.
 
 
 Defining Skillsets
@@ -66,10 +67,11 @@ In simaple, a collection of skills available to be used is called a Client. Clie
     )
 
 
-The above code is pretty long! However, all parameters are required to define a Client. Let's focus on a few important elements that we need to know about first.
+The above code is pretty long! However, all parameters are required to define a Client. 
+Let's focus on a few important elements that we need to know about first.
 
 - ``get_client_configuration`` will load pre-defined job configurations as ``client_configuration`` objects. These objects will handle the complex tasks related to the job of interest. 
-- ``ActionStat`` and ``Stat`` represent the stats used to perform the simulation. ``character_stat`` represents the stats of the character, while ``ActionStat`` is an object that contants information such as Buff Duration and Summon Duration. In the above code, buff duration is set to 185%.
+- ``ActionStat`` and ``Stat`` represent the stats used to perform the simulation. ``character_stat`` represents the stats of the character, while ``ActionStat`` is an object that contains information such as Buff Duration and Summon Duration. In the above code, buff duration is set to 185%.
 
 - The 3rd parameter of ``get_client`` is slightly more complicated and specifies a dict of background information required to make the simulation work. The following parameters are required:
 
@@ -185,8 +187,11 @@ simaple does not store any actual outputted damage numbers in the log by default
     )
 
 
-Quite a bit of information really is required to actually calculate the damage output. First of all, the character stat information (``character_stat``) is required.
-``damage_logic`` specifies the damage calculation method. Call the ``get_damage_logic`` function to retrieve the respective damage calculation logic for the job. Specifying ``JobType.archmagefb`` and ``combat_orders_level=1`` specifies that the main stat is INT, Magic Attack is used, the secondary stat is LUK, and that the weapon constant used is 1.2. 
+Quite a bit of information really is required to actually calculate the damage output. 
+First of all, the character stat information (``character_stat``) is required.
+``damage_logic`` specifies the damage calculation method. 
+Call the ``get_damage_logic`` function to retrieve the respective damage calculation logic for the job. 
+Specifying ``JobType.archmagefb`` and ``combat_orders_level=1`` specifies that the main stat is INT, Magic Attack is used, the secondary stat is LUK, and that the weapon constant used is 1.2, and that Decent Combat Orders is used. 
 ``armor=300`` specifies the DEF of the target.
 ``level_advantage`` and ``force_advantage`` specifies the final damage multipliers resulting from level differences and Arcane/Authentic Force differences, respectively. The Level Advantage is inconvenient to calculate, so calling ``LevelAdvantage`` is recommended.
 
