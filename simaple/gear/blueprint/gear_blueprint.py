@@ -1,12 +1,11 @@
 from abc import ABCMeta, abstractmethod
-from typing import List, Optional, Union
+from typing import List, Optional
 
 from pydantic import BaseModel, Extra, Field
 
 from simaple.core import Stat
 from simaple.gear.bonus_factory import BonusFactory, BonusSpec
-from simaple.gear.gear import Gear
-from simaple.gear.gear_repository import GearRepository
+from simaple.gear.gear import Gear, GearMeta
 from simaple.gear.improvements.scroll import Scroll
 from simaple.gear.improvements.spell_trace import SpellTrace
 from simaple.gear.improvements.starforce import Starforce
@@ -18,12 +17,12 @@ class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):
         extra = Extra.forbid
 
     @abstractmethod
-    def build(self, gear_repository: GearRepository) -> Gear:
+    def build(self) -> Gear:
         ...
 
 
 class GeneralizedGearBlueprint(AbstractGearBlueprint):
-    gear_id: int
+    meta: GearMeta
     spell_traces: List[SpellTrace] = Field(default_factory=list)
     scrolls: List[Scroll] = Field(default_factory=list)
     starforce: Starforce
@@ -33,12 +32,24 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
         default_factory=AdditionalPotential
     )
 
-    def build(self, gear_repository: GearRepository) -> Gear:
-        gear = gear_repository.get_by_id(self.gear_id)
+    def build(self) -> Gear:
+        gear_stat = self.meta.base_stat.copy()
 
-        gear.potential = self.potential.copy()
-        gear.additional_potential = self.additional_potential.copy()
+        # Apply spell trace and scroll, starforce
+        spell_trace_and_scoll_stat = sum(
+            [
+                spell_trace.calculate_improvement(self.meta)
+                for spell_trace in self.spell_traces
+            ],
+            Stat(),
+        ) + sum(
+            [scroll.calculate_improvement(self.meta) for scroll in self.scrolls],
+            Stat(),
+        )
+        gear_stat += spell_trace_and_scoll_stat
+        gear_stat += self.starforce.calculate_improvement(self.meta, ref_stat=gear_stat)
 
+        # Apply bonus
         bonus_factory = BonusFactory()
         bonuses = [
             bonus_factory.create(bonus_type=spec.bonus_type, grade=spec.grade)
@@ -46,34 +57,23 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
         ]
 
         bonus_stat = sum(
-            [bonus.calculate_improvement(gear) for bonus in bonuses],
-            Stat(),
-        )
-        # Apply spell trace and scroll.
-        spell_trace_and_scoll_stat = sum(
-            [
-                spell_trace.calculate_improvement(gear)
-                for spell_trace in self.spell_traces
-            ],
-            Stat(),
-        ) + sum(
-            [scroll.calculate_improvement(gear) for scroll in self.scrolls],
+            [bonus.calculate_improvement(self.meta) for bonus in bonuses],
             Stat(),
         )
 
-        gear.add_stat(spell_trace_and_scoll_stat)
+        gear_stat += bonus_stat
 
-        # Apply Starforce
-        gear.add_stat(self.starforce.calculate_improvement(gear))
-
-        # Apply bonus
-        gear.add_stat(bonus_stat)
-
-        return gear
+        return Gear(
+            meta=self.meta,
+            stat=gear_stat,
+            scroll_chance=self.meta.max_scroll_chance,
+            potential=self.potential.copy(),
+            additional_potential=self.additional_potential.copy(),
+        )
 
 
 class PracticalGearBlueprint(AbstractGearBlueprint):
-    gear_id: Union[int, str]
+    meta: GearMeta
     spell_trace: Optional[SpellTrace] = None
     scroll: Optional[Scroll] = None
     star: int = 0
@@ -83,33 +83,29 @@ class PracticalGearBlueprint(AbstractGearBlueprint):
         default_factory=AdditionalPotential
     )
 
-    def build(self, gear_repository):
-        generalized_gear_blueprint = self.translate_into_generalized_gear_blueprint(
-            gear_repository
-        )
-        return generalized_gear_blueprint.build(gear_repository)
+    def build(self):
+        generalized_gear_blueprint = self.translate_into_generalized_gear_blueprint()
+        return generalized_gear_blueprint.build()
 
     def translate_into_generalized_gear_blueprint(
-        self, gear_repository: GearRepository
+        self,
     ) -> GeneralizedGearBlueprint:
-        if isinstance(self.gear_id, str):
-            gear = gear_repository.get_by_name(self.gear_id)
-        else:
-            gear = gear_repository.get_by_id(self.gear_id)
 
         spell_traces = []
         scrolls = []
 
         if self.spell_trace is not None:
-            spell_traces = [self.spell_trace for i in range(gear.scroll_chance)]
+            spell_traces = [
+                self.spell_trace for i in range(self.meta.max_scroll_chance)
+            ]
         elif self.scroll is not None:
-            scrolls = [self.scroll for i in range(gear.scroll_chance)]
+            scrolls = [self.scroll for i in range(self.meta.max_scroll_chance)]
 
         starforce = Starforce(enhancement_type="Starforce", star=self.star)
-        starforce.apply_star_cutoff(gear)
+        starforce.apply_star_cutoff(self.meta)
 
         return GeneralizedGearBlueprint(
-            gear_id=gear.id,
+            meta=self.meta,
             spell_traces=spell_traces,
             scrolls=scrolls,
             starforce=starforce,

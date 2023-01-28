@@ -36,7 +36,7 @@ def test_get_starforce_improvement(gear_id, star, target):
     gear = repository.get_by_id(gear_id)
     amazing_enhancement = AmazingEnhancement(star=star)
 
-    improvement_stat = amazing_enhancement.calculate_improvement(gear)
+    improvement_stat = amazing_enhancement.calculate_improvement(gear.meta, gear.stat)
     logger.info(improvement_stat)
 
     assert improvement_stat == target

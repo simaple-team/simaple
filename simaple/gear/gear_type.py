@@ -115,56 +115,40 @@ class GearType(IntEnum):
     pet_equip = 180
     title = 200
 
-    @staticmethod
-    def is_weaponry(gear_type: GearType) -> bool:
+    def is_weaponry(self) -> bool:
+        return self.is_weapon() or self.is_sub_weapon() or self == GearType.emblem
+
+    def is_improved_as_weapon(self) -> bool:
+        return self.is_weapon() or self == GearType.katara
+
+    def is_weapon(self) -> bool:
+        return self.is_left_weapon() or self.is_double_hand_weapon()
+
+    def is_left_weapon(self) -> bool:
         return (
-            GearType.is_weapon(gear_type)
-            or GearType.is_sub_weapon(gear_type)
-            or gear_type == GearType.emblem
+            121 <= self.value <= 139
+            and self != GearType.katara
+            or self.value // 10 == 121
         )
 
-    @staticmethod
-    def is_weapon(gear_type: GearType) -> bool:
-        return GearType.is_left_weapon(gear_type) or GearType.is_double_hand_weapon(
-            gear_type
-        )
-
-    @staticmethod
-    def is_left_weapon(gear_type: GearType) -> bool:
-        return (
-            121 <= gear_type.value <= 139
-            and gear_type != GearType.katara
-            or gear_type.value // 10 == 121
-        )
-
-    @staticmethod
-    def is_sub_weapon(gear_type: GearType) -> bool:
-        if gear_type in (GearType.shield, GearType.demon_shield, GearType.soul_shield):
+    def is_sub_weapon(self) -> bool:
+        if self in (GearType.shield, GearType.demon_shield, GearType.soul_shield):
             return True
-        if gear_type.value // 1000 == 135:
+        if self.value // 1000 == 135:
             return True
         return False
 
-    @staticmethod
-    def is_double_hand_weapon(gear_type: GearType) -> bool:
-        return 140 <= gear_type.value <= 149 or 152 <= gear_type.value <= 159
+    def is_double_hand_weapon(self) -> bool:
+        return 140 <= self.value <= 149 or 152 <= self.value <= 159
 
-    @staticmethod
-    def is_armor(gear_type: GearType) -> bool:
-        return gear_type.value == 100 or 104 <= gear_type.value <= 110
+    def is_armor(self) -> bool:
+        return self.value == 100 or 104 <= self.value <= 110
 
-    @staticmethod
-    def is_accessory(gear_type: GearType) -> bool:
-        return (
-            101 <= gear_type.value <= 103
-            or 111 <= gear_type.value <= 113
-            or gear_type == 115
-        )
+    def is_accessory(self) -> bool:
+        return 101 <= self.value <= 103 or 111 <= self.value <= 113 or self.value == 115
 
-    @staticmethod
-    def is_mechanic_gear(gear_type: GearType) -> bool:
-        return 161 <= gear_type.value <= 165
+    def is_mechanic_gear(self) -> bool:
+        return 161 <= self.value <= 165
 
-    @staticmethod
-    def is_dragon_gear(gear_type: GearType) -> bool:
-        return 194 <= gear_type.value <= 197
+    def is_dragon_gear(self) -> bool:
+        return 194 <= self.value <= 197

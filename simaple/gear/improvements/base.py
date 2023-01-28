@@ -1,10 +1,10 @@
 from abc import ABCMeta, abstractmethod
-from typing import List, Literal
+from typing import List, Literal, Optional
 
 from pydantic import BaseModel
 
 from simaple.core import Stat
-from simaple.gear.gear import Gear
+from simaple.gear.gear import GearMeta
 from simaple.gear.gear_type import GearType
 
 
@@ -12,7 +12,9 @@ class GearImprovement(BaseModel, metaclass=ABCMeta):
     type: str
 
     @abstractmethod
-    def calculate_improvement(self, gear: Gear) -> Stat:
+    def calculate_improvement(
+        self, meta: GearMeta, ref_stat: Optional[Stat] = None
+    ) -> Stat:
         ...
 
 

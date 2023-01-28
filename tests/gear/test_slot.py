@@ -1,7 +1,7 @@
 import pytest
 
 from simaple.core import Stat
-from simaple.gear.gear import Gear
+from simaple.gear.gear import Gear, GearMeta
 from simaple.gear.gear_type import GearType
 from simaple.gear.gearset import GearSlot
 from simaple.gear.slot_name import SlotName
@@ -16,14 +16,18 @@ class MetaTestcase:
 
     def get_test_gear(self, gear_type):
         return Gear(
-            type=gear_type,
-            id=0,
+            meta=GearMeta(
+                id=0,
+                name="test_gear",
+                req_level=0,
+                boss_reward=False,
+                superior_eqp=False,
+                type=gear_type,
+                base_stat=Stat(),
+                max_scroll_chance=0,
+            ),
             stat=Stat(),
-            name="test_gear",
-            req_level=0,
             scroll_chance=0,
-            boss_reward=False,
-            superior_eqp=False,
         )
 
 

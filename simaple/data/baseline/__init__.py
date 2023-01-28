@@ -12,7 +12,6 @@ from simaple.data.baseline.patch import (
     stat_patch,
 )
 from simaple.gear.blueprint.gearset_blueprint import GearsetBlueprint
-from simaple.gear.gear_repository import GearRepository
 from simaple.gear.gearset import Gearset
 from simaple.gear.setitem import KMSSetItemRepository
 from simaple.spec.loader import SpecBasedLoader
@@ -78,8 +77,7 @@ def get_baseline_gearset(
 
     repository = DirectorySpecRepository(str(Path(__file__).parent / "spec"))
     loader = SpecBasedLoader(repository)
-    gear_repository = GearRepository()
     set_item_repository = KMSSetItemRepository()
 
     blueprint: GearsetBlueprint = loader.load(query={"name": name}, patches=patches)
-    return blueprint.build(gear_repository, set_item_repository)
+    return blueprint.build(set_item_repository)

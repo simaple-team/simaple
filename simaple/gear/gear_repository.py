@@ -73,17 +73,21 @@ class GearRepository:
                     break
 
         gear_opt = {
-            "stat": stat,
-            "req_level": dumped_gear.get("req_level", 0),
-            "name": dumped_gear["name"],
+            "meta": {
+                "id": gear_id,
+                "name": dumped_gear["name"],
+                "req_level": dumped_gear.get("req_level", 0),
+                "boss_reward": dumped_gear.get("boss_reward", False),
+                "superior_eqp": dumped_gear.get("superior_eqp", False),
+                "req_job": dumped_gear.get("req_job", 0),
+                "set_item_id": dumped_gear.get("set_item_id", 0),
+                "joker_to_set_item": dumped_gear.get("joker_to_set_item", False),
+                "type": self.get_gear_type(gear_id),
+                "base_stat": stat.copy(),
+                "max_scroll_chance": dumped_gear.get("tuc", 0),
+            },
+            "stat": stat.copy(),
             "scroll_chance": dumped_gear.get("tuc", 0),
-            "type": self.get_gear_type(gear_id),
-            "id": gear_id,
-            "boss_reward": dumped_gear.get("boss_reward", False),
-            "superior_eqp": dumped_gear.get("superior_eqp", False),
-            "req_job": dumped_gear.get("req_job", 0),
-            "set_item_id": dumped_gear.get("set_item_id", 0),
-            "joker_to_set_item": dumped_gear.get("joker_to_set_item", False),
         }
 
         gear = Gear.parse_obj(gear_opt)

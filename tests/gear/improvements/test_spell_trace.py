@@ -40,7 +40,7 @@ def test_armor_bonus(gear_id, prob, stat_prop, expected):
     gear = repository.get_by_id(gear_id)
     spell_trace = SpellTrace(probability=prob, stat_prop_type=stat_prop)
 
-    improvement = spell_trace.calculate_improvement(gear)
+    improvement = spell_trace.calculate_improvement(gear.meta)
     logger.info(gear)
 
     assert improvement == expected
@@ -71,7 +71,7 @@ def test_fourth_att_bonus(gear_name, prob, stat_prop, expected):
     gear = repository.get_by_name(gear_name)
     spell_trace = SpellTrace(probability=prob, stat_prop_type=stat_prop, order=4)
 
-    improvement = spell_trace.calculate_improvement(gear)
+    improvement = spell_trace.calculate_improvement(gear.meta)
     logger.info(gear)
 
     assert improvement == expected

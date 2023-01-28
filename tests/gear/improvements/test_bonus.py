@@ -109,7 +109,7 @@ def test_armor_bonus(gear_id, bonus, target):
     repository = GearRepository()
 
     gear = repository.get_by_id(gear_id)
-    bonus_stat = bonus.calculate_improvement(gear)
+    bonus_stat = bonus.calculate_improvement(gear.meta)
     logger.info(gear)
 
     assert bonus_stat == target
