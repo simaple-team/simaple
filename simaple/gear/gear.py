@@ -58,6 +58,14 @@ class Gear(BaseModel):
         validate_assignment = True
         allow_mutation = False
 
+    @classmethod
+    def create_bare_gear(cls, meta: GearMeta) -> Gear:
+        return Gear(
+            meta=meta,
+            stat=meta.base_stat.copy(),
+            scroll_chance=meta.max_scroll_chance,
+        )
+
     def add_stat(self, stat: Stat) -> Gear:
         serailized_gear = self.dict()
         serailized_gear["stat"] = Stat.parse_obj(serailized_gear["stat"]) + stat
