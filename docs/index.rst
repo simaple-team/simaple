@@ -29,6 +29,14 @@ Installation
 
 .. toctree::
    :maxdepth: 1
+   :caption: Examples
+   :hidden:
+
+   modules/about/how_to_use_gear.rst
+   modules/about/writing_spec_file.rst
+
+.. toctree::
+   :maxdepth: 1
    :caption: Explanations
    :hidden:
 
