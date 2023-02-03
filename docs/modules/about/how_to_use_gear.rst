@@ -258,5 +258,37 @@ GearBlueprint는 Gear 내에서 존재하는 각각의 강화 시스템을 올�
 
 보다 구체적으로 이야기해서, 게임 내에 존재하는 강화 시스템을 활용하여 장비를 구성하고 싶다면 항상 GearBlueprint를 사용하는 것이 추천됩니다. Gear class를 직접 다루는 것은 다른 방법으로 아이템을 생성하고자 할 때만 사용하세요.
 
+Appendix. handling potential
+=================================
+
+Gear 또는 GearBlueprint에서, 잠재능력 및 에디셔널 잠재능력은 potential / additional_potential field를 통해 정의됩니다.
+다른 강화 속성과 달리, 잠재능력은 Gear의 stat에 합산되지 않음에 유의하세요.
+
+Gear의 잠재능력은 set_potential 또는 set_additional_potential 메서드 호출을 통해 변경할 수 있으며, 다른 함수 호출과 마찬가지로 변경이 적용된 새로운 Gear를 반환합니다.
+
+GearBlueprint는 mutable object이므로, 직접 속성 치환을 통해 잠재능력 값을 설정 또는 변경할 수 있습니다.
+
+Potential 및 AdditionalPotential은 options를 통해 값을 전달받습니다. options Field에는 Stat, ActionStat 또는 LevelStat이 올 수 있습니다.
+두 class의 options는 반드시 길이가 3일 필요는 없습니다. 해당 필드는 임의 길이의 list를 허용합니다.
+
+
+.. code-block:: python
+
+    from simaple.gear.potential import Potential, AdditionalPotential
+    from simaple.core import Stat, ActionStat, LevelStat
+
+    potential = Potential(options=[
+        Stat(INT_multiplier=12),
+        ActionStat(cooltime_reduce=2),
+        LevelStat(),
+    ])
+
+    additional_potential = AdditionalPotential(options=[
+        Stat(INT_multiplier=7),
+    ])
+
+뿐만 아니라, Potential class는 어떠한 종류의 값 검증도 수행하지 않습니다. 따라서, 여러분은 잠재능력을 설정하기 전에, 해당 값이 사용 가능한 값인지 충분히 검증한 상태여야 합니다.
+
+
 
 
