@@ -107,8 +107,6 @@ class SpellTrace(GearImprovement):
         if self.stat_prop_type not in STAT_PROP_TYPES:
             raise TypeError(f"Invalid prop_type: {self.stat_prop_type.value}")
 
-        req_job: int = meta.req_job
-
         attack_type = (
             StatProps.magic_attack
             if self.stat_prop_type == StatProps.INT

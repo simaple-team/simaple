@@ -90,7 +90,7 @@ Congratulations! We have now created a ``Client`` with all the skills necessary.
 
 
 Actor Implementation
-==============
+======================
 
 In the previous section, we have created the *environment* for the desired simulation. In this section, we will discuss how to actually **simulate** skill usage given this environment.
 
