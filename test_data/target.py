@@ -41,21 +41,21 @@ SETTINGS = [
             JobType.archmagetc,
             JobCategory.magician,
         ),
-        6549602605218,
+        6534916107988,
     ),
     (
         (
             JobType.bishop,
             JobCategory.magician,
         ),
-        5387962299243,
+        5324413159316,
     ),
     (
         (
             JobType.mechanic,
             JobCategory.pirate,
         ),
-        5664326354753,
+        5644701182640,
     ),
     (
         (
@@ -76,7 +76,7 @@ SETTINGS = [
                 "weapon_attack_power": 789,
             },
         ),
-        9293806782736,
+        9290299778417,
     ),
     (
         (
@@ -96,7 +96,7 @@ SETTINGS = [
                 "weapon_attack_power": 700,
             },
         ),
-        5382392271117,
+        5354943334938,
     ),
 ]
 
