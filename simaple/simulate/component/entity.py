@@ -197,7 +197,7 @@ class LastingStack(Entity):
 class Keydown(Entity):
     interval: float
     interval_counter: float = 0.0
-    time_left: float = 0
+    time_left: float = -1
 
     @property
     def running(self) -> bool:
