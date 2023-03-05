@@ -4,7 +4,7 @@
 
 `simaple` is a library to analyse the combat environment in MapleStory.
 
-simaple uses client resources to construct a simulation environment for MapleStory jobs with appropriate combat scenarios to calculate the expected DPM and relative DPM-share of each skill.
+simaple uses client resources to construct a simulation environment for MapleStory jobs to calculate the expected DPM and relative DPM-share of each skill. Different combat scenario parameters can be specified.
 
 - Provides a realistic simulation environment based on actual game parameters in MapleStory
 - Generates and analyses battle results including the expected DPM of the character with given specifications
@@ -43,7 +43,7 @@ simaple also provides a web interface to factilitate simulation.
 
 ### In-game simulation
 - Create an interactive simulation environment
-  - Create a simulation environment with all variables present in-game, such as reduced / skipped cooldowns, increased buff duration, and V-matrix enhancements
+  - Create a simulation environment with all variables present in-game, such as reduced/skipped cooldowns, increased buff duration, and V Matrix Enhancement Cores
 - Real-time analyses of simulation results
   - DPM calculation
   - Relative dpm-share of each skill
