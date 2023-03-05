@@ -1,7 +1,7 @@
 import json
 import os
 
-from simaple.gear.gear import Gear
+from simaple.gear.gear import Gear, GearMeta
 from simaple.gear.gear_type import GearType
 
 GEAR_RESOURCE_PATH = os.path.join(
@@ -57,37 +57,39 @@ class GearRepository:
             return GearType(gear_id // 10)
         return GearType(gear_id // 10000)
 
-    def _get_gear(self, gear_id: int) -> Gear:
-        dumped_gear = self._bare_gears[str(gear_id)]
+    def get_gear_meta(self, gear_id: int) -> GearMeta:
+        dumped_gear_meta = self._bare_gears[str(gear_id)]
         stat = {
-            "STR": dumped_gear.get("STR", 0),
-            "INT": dumped_gear.get("INT", 0),
-            "DEX": dumped_gear.get("DEX", 0),
-            "LUK": dumped_gear.get("LUK", 0),
+            "STR": dumped_gear_meta.get("STR", 0),
+            "INT": dumped_gear_meta.get("INT", 0),
+            "DEX": dumped_gear_meta.get("DEX", 0),
+            "LUK": dumped_gear_meta.get("LUK", 0),
         }
 
-        for k, v in dumped_gear.items():
+        for k, v in dumped_gear_meta.items():
             for variable_name, simaple_name in GEAR_VARIABLE_NAMES:
                 if variable_name == k:
                     stat[simaple_name] = v
                     break
 
-        gear_opt = {
-            "stat": stat,
-            "req_level": dumped_gear.get("req_level", 0),
-            "name": dumped_gear["name"],
-            "scroll_chance": dumped_gear.get("tuc", 0),
-            "type": self.get_gear_type(gear_id),
+        gear_meta_opt = {
             "id": gear_id,
-            "boss_reward": dumped_gear.get("boss_reward", False),
-            "superior_eqp": dumped_gear.get("superior_eqp", False),
-            "req_job": dumped_gear.get("req_job", 0),
-            "set_item_id": dumped_gear.get("set_item_id", 0),
-            "joker_to_set_item": dumped_gear.get("joker_to_set_item", False),
+            "name": dumped_gear_meta["name"],
+            "req_level": dumped_gear_meta.get("req_level", 0),
+            "boss_reward": dumped_gear_meta.get("boss_reward", False),
+            "superior_eqp": dumped_gear_meta.get("superior_eqp", False),
+            "req_job": dumped_gear_meta.get("req_job", 0),
+            "set_item_id": dumped_gear_meta.get("set_item_id", 0),
+            "joker_to_set_item": dumped_gear_meta.get("joker_to_set_item", False),
+            "type": self.get_gear_type(gear_id),
+            "base_stat": stat.copy(),
+            "max_scroll_chance": dumped_gear_meta.get("tuc", 0),
         }
 
-        gear = Gear.parse_obj(gear_opt)
-        return gear
+        return GearMeta.parse_obj(gear_meta_opt)
+
+    def _get_gear(self, gear_id: int) -> Gear:
+        return Gear.create_bare_gear(self.get_gear_meta(gear_id))
 
     def get_by_id(self, gear_id: int) -> Gear:
         gear = self._get_gear(gear_id)

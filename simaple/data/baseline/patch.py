@@ -4,7 +4,9 @@ import os
 import pydantic
 
 from simaple.core import JobCategory, JobType
-from simaple.spec.patch import KeywordExtendPatch, Patch, StringPatch
+from simaple.gear.bonus_factory import BonusType
+from simaple.gear.gear_repository import GearRepository
+from simaple.spec.patch import DFSTraversePatch, KeywordExtendPatch, Patch, StringPatch
 
 
 def kms_item_alias():
@@ -32,6 +34,10 @@ class GearIdPatch(Patch):
     weapon_name_alias: dict[str, dict[str, str]] = pydantic.Field(
         default_factory=kms_weapon_alias
     )
+    repository: GearRepository = pydantic.Field(default_factory=GearRepository)
+
+    class Config:
+        arbitrary_types_allowed = True
 
     def interpret_gear_id(self, name: str) -> str:
         if name in self.item_name_alias:
@@ -56,11 +62,20 @@ class GearIdPatch(Patch):
                 interpreted[k] = self.apply(v)
             else:
                 if k == "gear_id":
-                    interpreted["gear_id"] = self.interpret_gear_id(v)
+                    gear = self.repository.get_by_name(self.interpret_gear_id(v))
+                    interpreted["meta"] = gear.meta.dict()
                 else:
                     interpreted[k] = v
 
         return interpreted
+
+
+class DoubleBonusRefinePatch(DFSTraversePatch):
+    def patch_value(self, value, origin: dict):
+        return BonusType.refine_double_key(value)
+
+    def patch_dict(self, k, v, origin: dict):
+        return {k: BonusType.refine_double_key(v)}
 
 
 def all_stat_patch():

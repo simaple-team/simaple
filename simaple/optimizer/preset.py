@@ -8,7 +8,7 @@ from typing import List, Tuple
 
 from pydantic import BaseModel
 
-from simaple.core import DamageLogic, JobType, Stat
+from simaple.core import ActionStat, DamageLogic, JobType, Stat
 from simaple.gear.gearset import Gearset
 from simaple.gear.potential import Potential
 from simaple.optimizer import (
@@ -21,7 +21,11 @@ from simaple.optimizer import (
 )
 from simaple.system.hyperstat import Hyperstat
 from simaple.system.link import LinkSkillset
-from simaple.system.union import UnionOccupation, UnionSquad
+from simaple.system.union import (
+    UnionOccupation,
+    UnionSquad,
+    get_buff_duration_preempted_union_occupation_state,
+)
 from simaple.util import Timer
 
 
@@ -38,14 +42,21 @@ class Preset(BaseModel):
     level: int
     level_stat: Stat
 
-    def get_total_stat(self) -> Stat:
+    def get_stat(self) -> Stat:
         return (
-            self.gearset.get_total_stat()
+            self.gearset.get_total_extended_stat().compute_by_level(self.level)
             + self.hyperstat.get_stat()
             + self.links.get_stat()
             + self.union_squad.get_stat()
             + self.union_occupation.get_stat()
             + self.level_stat
+        )
+
+    def get_action_stat(self) -> ActionStat:
+        return (
+            self.gearset.get_total_extended_stat().action_stat
+            + self.union_squad.get_action_stat()
+            + self.union_occupation.get_action_stat()
         )
 
 
@@ -67,6 +78,7 @@ class PresetOptimizer(BaseModel):
     character_job_type: JobType
     alternate_character_job_types: List[JobType]
     link_count: int
+    buff_duration_preempted: bool = False
 
     def calculate_optimal_hyperstat(self, reference_stat: Stat) -> Hyperstat:
         with Timer("hyperstat"):
@@ -110,10 +122,14 @@ class PresetOptimizer(BaseModel):
     ) -> UnionOccupation:
         with Timer("union_occupation"):
             union_occupation_target = UnionOccupationTarget(
-                reference_stat,
-                self.damage_logic,
-                UnionOccupation(),
+                reference_stat, self.damage_logic, UnionOccupation()
             )
+
+            if self.buff_duration_preempted:
+                union_occupation_target.set_state(
+                    get_buff_duration_preempted_union_occupation_state()
+                )
+
             optimizer = StepwizeOptimizer(union_occupation_target, occupation_count, 2)
             output = optimizer.optimize()
 
@@ -167,36 +183,37 @@ class PresetOptimizer(BaseModel):
 
         return preset
 
-    def _optimize_step(self, preset):
+    def _optimize_step(self, preset: Preset):
         # Cleanse gearset weapon potentials for further optimization.
-        for slot in preset.gearset.get_weaponry_slots():
-            slot.get_gear().potential = Potential()
-
         preset.gearset.set_empty_potential()
+
+        if preset.gearset.weapon_potential_tiers is None:
+            raise ValueError("weapon_potential_tier may given when optmization")
+
         preset.gearset.change_weaponry_potentials(
             self.calculate_optimal_weapon_potential(
-                preset.get_total_stat() + self.default_stat,
+                preset.get_stat() + self.default_stat,
                 preset.gearset.weapon_potential_tiers[0],
             )
         )
 
         preset.links = LinkSkillset.empty()
         preset.links = self.calculate_optimal_links(
-            preset.get_total_stat() + self.default_stat
+            preset.get_stat() + self.default_stat
         )
 
         preset.union_squad = UnionSquad.empty()
         preset.union_squad = self.calculate_optimal_union_squad(
-            preset.get_total_stat() + self.default_stat
+            preset.get_stat() + self.default_stat
         )
 
         preset.hyperstat = Hyperstat()
         preset.hyperstat = self.calculate_optimal_hyperstat(
-            preset.get_total_stat() + self.default_stat
+            preset.get_stat() + self.default_stat
         )
 
         preset.union_occupation = UnionOccupation()
         preset.union_occupation = self.calculate_optimal_union_occupation(
-            preset.get_total_stat() + self.default_stat,
+            preset.get_stat() + self.default_stat,
             preset.union_squad.get_occupation_count(),
         )

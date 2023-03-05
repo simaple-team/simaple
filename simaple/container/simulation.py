@@ -5,14 +5,14 @@ from typing import Callable
 import pydantic
 from dependency_injector import containers, providers
 
-from simaple.core import ActionStat, ElementalResistance, JobCategory, JobType, Stat
+from simaple.core import ActionStat, ExtendedStat, JobCategory, JobType, Stat
 from simaple.data.ability import get_best_ability
 from simaple.data.baseline import get_baseline_gearset
 from simaple.data.client_configuration import get_client_configuration
 from simaple.data.damage_logic import get_damage_logic
 from simaple.data.doping import get_normal_doping
-from simaple.data.monster_life import get_normal_monsterlife_stat
-from simaple.data.passive import get_passive_and_default_active_stat
+from simaple.data.monster_life import get_normal_monsterlife
+from simaple.data.passive import get_passive
 from simaple.gear.gearset import Gearset
 from simaple.optimizer.preset import Preset, PresetOptimizer
 from simaple.simulate.kms import get_client
@@ -26,7 +26,7 @@ class SimulationSetting(pydantic.BaseSettings):
     jobtype: JobType
     job_category: JobCategory
     level: int
-    action_stat: ActionStat
+
     use_doping: bool = True
     passive_skill_level: int
     combat_orders_level: int
@@ -39,10 +39,11 @@ class SimulationSetting(pydantic.BaseSettings):
 
     v_skill_level: int = 30
     v_improvements_level: int = 60
-    elemental_resistance: ElementalResistance
 
-    weapon_attack_power = 0
-    weapon_pure_attack_power = 0
+    weapon_attack_power: int = 0
+    weapon_pure_attack_power: int = 0
+
+    cache_root_dir: str = ""
 
     def get_preset_hash(self) -> str:
         preset_hash = (
@@ -53,36 +54,74 @@ class SimulationSetting(pydantic.BaseSettings):
         )
         return preset_hash
 
+    def is_buff_duration_preemptive(self) -> bool:
+        return self.jobtype in (
+            JobType.archmagefb,
+            JobType.archmagetc,
+            JobType.bishop,
+            JobType.luminous,
+        )
+
 
 def add_stats(*stats):
     return sum(stats, Stat())
 
 
+def add_action_stats(*action_stats):
+    return sum(action_stats, ActionStat())
+
+
+def add_extended_stats(*action_stats):
+    return sum(action_stats, ExtendedStat())
+
+
+def reveal_action_stat(extended_stat: ExtendedStat) -> ActionStat:
+    return extended_stat.action_stat.copy()
+
+
 def preset_optimize_cache_layer(
     setting: SimulationSetting, provider: Callable[[Gearset], Preset], gearset: Gearset
 ):
-    cache_location = f".stat.{setting.get_preset_hash()}.json"
+    cache_location = f".stat.extended.{setting.get_preset_hash()}.json"
+
+    if setting.cache_root_dir:
+        cache_location = os.path.join(setting.cache_root_dir, cache_location)
 
     if os.path.exists(cache_location):
-        return Stat.parse_file(cache_location)
+        return ExtendedStat.parse_file(cache_location)
 
-    value = provider(gearset).get_total_stat()
+    preset = provider(gearset)
+
+    extended_stat_value = ExtendedStat(
+        stat=preset.get_stat(),
+        action_stat=preset.get_action_stat(),
+    )
+
     with open(cache_location, "w", encoding="utf-8") as f:
-        json.dump(value.short_dict(), f, ensure_ascii=False, indent=2)
+        json.dump(
+            {
+                "stat": extended_stat_value.stat.short_dict(),
+                "action_stat": extended_stat_value.action_stat.dict(),
+            },
+            f,
+            ensure_ascii=False,
+            indent=2,
+        )
 
-    return value
+    return extended_stat_value
 
 
 class SimulationContainer(containers.DeclarativeContainer):
     config = providers.Configuration()
     settings = providers.Factory(SimulationSetting.parse_obj, config)
 
-    passive_stat = providers.Factory(
-        get_passive_and_default_active_stat,
+    passive = providers.Factory(
+        get_passive,
         config.jobtype,
         combat_orders_level=config.combat_orders_level,
         passive_skill_level=config.passive_skill_level,
         character_level=config.level,
+        weapon_pure_attack_power=config.weapon_pure_attack_power,
     )
 
     ability_lines = providers.Singleton(
@@ -105,17 +144,17 @@ class SimulationContainer(containers.DeclarativeContainer):
         charm=config.trait_level,
     )
 
-    doping_stat = providers.Factory(get_normal_doping)
+    doping = providers.Factory(get_normal_doping)
 
-    monster_life_stat = providers.Factory(get_normal_monsterlife_stat)
+    monster_life = providers.Factory(get_normal_monsterlife)
 
-    default_stat = providers.Factory(
-        add_stats,
-        passive_stat,
-        doping_stat,
-        monster_life_stat,
-        ability_stat.provided.stat,
-        trait.provided.get_stat.call(),
+    default_extended_stat = providers.Factory(
+        add_extended_stats,
+        passive,
+        doping,
+        monster_life,
+        ability_stat,
+        trait.provided.get_extended_stat.call(),
     )
 
     gearset = providers.Factory(
@@ -137,24 +176,27 @@ class SimulationContainer(containers.DeclarativeContainer):
         character_job_type=config.jobtype,
         alternate_character_job_types=[],
         link_count=config.link_count,
-        default_stat=default_stat,
+        default_stat=default_extended_stat.provided.stat,
+        buff_duration_preempted=settings.provided.is_buff_duration_preemptive.call(),
     )
 
     optimial_preset = providers.Singleton(
         preset_optimizer.provided.create_optimal_preset_from_gearset.call(gearset),
     )
 
-    # Use caching
-    character_stat = providers.Factory(
-        add_stats,
-        providers.Singleton(
-            preset_optimize_cache_layer,
-            settings,
-            preset_optimizer.provided.create_optimal_preset_from_gearset,
-            gearset,
-        ),
-        default_stat,
+    preset_cache = providers.Singleton(
+        preset_optimize_cache_layer,
+        settings,
+        preset_optimizer.provided.create_optimal_preset_from_gearset,
+        gearset,
     )
+
+    character = providers.Factory(
+        add_extended_stats,
+        preset_cache,
+        default_extended_stat,
+    )
+    # Use caching
 
     client_configuration = providers.Factory(get_client_configuration, config.jobtype)
 
@@ -164,19 +206,15 @@ class SimulationContainer(containers.DeclarativeContainer):
 
     dpm_calculator = providers.Factory(
         DamageCalculator,
-        character_spec=character_stat,
+        character_spec=character.provided.stat,
         damage_logic=damage_logic,
         armor=config.armor,
         level_advantage=level_advantage,
         force_advantage=config.force_advantage,
-        elemental_resistance_disadvantage=providers.Factory(
-            ElementalResistance.parse_obj,
-            config.elemental_resistance,
-        ).provided.get_disadvantage.call(),
     )
 
     client_patch_injected_values = providers.Dict(
-        character_stat=character_stat,
+        character_stat=character.provided.stat,
         character_level=config.level,
         weapon_attack_power=config.weapon_attack_power,
         weapon_pure_attack_power=config.weapon_pure_attack_power,
@@ -184,7 +222,7 @@ class SimulationContainer(containers.DeclarativeContainer):
 
     client = providers.Singleton(
         get_client,
-        config.action_stat,
+        character.provided.action_stat,
         client_configuration.provided.get_groups.call(),
         client_patch_injected_values,
         client_configuration.provided.get_filled_v_skill.call(config.v_skill_level),

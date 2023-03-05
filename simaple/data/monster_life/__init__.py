@@ -10,7 +10,7 @@ level:
 import os
 from pathlib import Path
 
-from simaple.core import Stat
+from simaple.core import ExtendedStat, Stat
 from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.repository import DirectorySpecRepository
 from simaple.system import MonsterlifeMob, NamedStat
@@ -21,11 +21,11 @@ def get_monsterlife_loader() -> SpecBasedLoader:
     return SpecBasedLoader(repository)
 
 
-def get_normal_monsterlife_stat() -> Stat:
+def get_normal_monsterlife() -> ExtendedStat:
     loader = get_monsterlife_loader()
 
     monster_life_mobs: list[NamedStat] = loader.load_all(
         query={"kind": "NamedStat", "level": "normal"}
     )
 
-    return sum((mob.get_stat() for mob in monster_life_mobs), Stat())
+    return sum((mob.get_extended_stat() for mob in monster_life_mobs), ExtendedStat())

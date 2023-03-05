@@ -3,6 +3,7 @@ from typing import cast
 
 from simaple.core import JobCategory, JobType
 from simaple.data.baseline.patch import (
+    DoubleBonusRefinePatch,
     GearIdPatch,
     Patch,
     all_att_patch,
@@ -11,7 +12,6 @@ from simaple.data.baseline.patch import (
     stat_patch,
 )
 from simaple.gear.blueprint.gearset_blueprint import GearsetBlueprint
-from simaple.gear.gear_repository import GearRepository
 from simaple.gear.gearset import Gearset
 from simaple.gear.setitem import KMSSetItemRepository
 from simaple.spec.loader import SpecBasedLoader
@@ -41,10 +41,15 @@ __JOB_STAT_PRIORITY = {
 }
 
 # TODO: dex-pirate.
+DEX_PIRATE = [JobType.mechanic]
 
 
 def jobtype_patches(job_category: JobCategory, job_type: JobType) -> list[Patch]:
-    config = __JOB_STAT_PRIORITY[job_category]
+    if job_category == JobCategory.pirate and job_type in DEX_PIRATE:
+        config = __JOB_STAT_PRIORITY[JobCategory.archer]
+    else:
+        config = __JOB_STAT_PRIORITY[job_category]
+
     stat_priority = cast(tuple[str, str, str, str], config["stat_priority"])
     attack_priority = cast(tuple[str, str], config["attack_priority"])
 
@@ -58,6 +63,7 @@ def jobtype_patches(job_category: JobCategory, job_type: JobType) -> list[Patch]
             attack_priority=attack_priority,
         ),
         GearIdPatch(job_type=job_type, job_category=job_category),
+        DoubleBonusRefinePatch(),
     ]
 
 
@@ -71,8 +77,7 @@ def get_baseline_gearset(
 
     repository = DirectorySpecRepository(str(Path(__file__).parent / "spec"))
     loader = SpecBasedLoader(repository)
-    gear_repository = GearRepository()
     set_item_repository = KMSSetItemRepository()
 
     blueprint: GearsetBlueprint = loader.load(query={"name": name}, patches=patches)
-    return blueprint.build(gear_repository, set_item_repository)
+    return blueprint.build(set_item_repository)

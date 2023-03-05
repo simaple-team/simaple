@@ -13,6 +13,7 @@ class AbilityType(enum.Enum):
     cooldown_reset_chance = "cooldown_reset_chance"
     buff_duration = "buff_duration"
     critical_rate = "critical_rate"
+    passive_skill_level = "passive_skill_level"
 
 
 class AbilityLine(pydantic.BaseModel):
@@ -35,7 +36,8 @@ def get_ability_stat_from_line(line: AbilityLine) -> ExtendedStat:
         return ExtendedStat(action_stat=ActionStat(buff_duration=line.value))
     if line.type == AbilityType.critical_rate:
         return ExtendedStat(stat=Stat(critical_rate=line.value))
-
+    if line.type == AbilityType.passive_skill_level:
+        return ExtendedStat()
     raise ValueError("Invelid ability type")
 
 

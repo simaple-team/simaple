@@ -3,6 +3,7 @@ class Tag:
 
     __slots__ = ()
 
+    ACCEPT = "global.accept"
     ELAPSED = "global.elapsed"
     REJECT = "global.reject"
     DELAY = "global.delay"

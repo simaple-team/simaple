@@ -232,6 +232,10 @@ def get_empty_union_occupation_state():
     return [0, 0, 0, 0, 0]
 
 
+def get_buff_duration_preempted_union_occupation_state():
+    return [0, 0, 0, 0, 40]
+
+
 UNION_LENGTH = len(get_all_blocks())
 UNION_OCCUPATION_LENGTH = len(get_union_occupation_values())
 
@@ -283,11 +287,10 @@ class UnionSquad(BaseModel):
 
         return stat
 
-    def get_action_stat(self, mask: List[int]) -> ActionStat:
+    def get_action_stat(self) -> ActionStat:
         stat = ActionStat()
-        for enabled, block, size in zip(mask, self.blocks, self.block_size):
-            if enabled:
-                stat += block.get_action_stat(size)
+        for block, size in zip(self.blocks, self.block_size):
+            stat += block.get_action_stat(size)
 
         return stat
 

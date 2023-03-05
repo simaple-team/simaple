@@ -321,7 +321,6 @@ data:
     도트 퍼니셔.use.emitted.global.damage: use
     퓨리 오브 이프리트.elapse.emitted.global.damage: use
     이프리트.elapse.emitted.global.damage: use
-  type: DamageSkill
   name: 이그나이트
   delay: 0
   damage: 40
@@ -384,7 +383,6 @@ patch:
   - EvalPatch
   - VSkillImprovementPatch
 data:
-  type: DamageSkill
   name: 메기도 플레임
   delay: 690
   cooldown_duration: 50_000

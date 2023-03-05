@@ -25,6 +25,7 @@ TEST_CASES = [
     ("damage_multiplier", 3, 4, 7),
     ("final_damage_multiplier", 10, 20, 32),
     ("ignored_defence", 10, 10, 19),
+    ("elemental_resistance", 10, 12, 22),
 ]
 
 
@@ -68,5 +69,5 @@ def test_get_base_stat_coefficient(stat, label, expected):
         ),
     ],
 )
-def test_get_attack_coefficient(stat, label, expected):
+def test_get_attack_coefficient(stat: Stat, label, expected):
     assert stat.get_attack_coefficient(label) == expected

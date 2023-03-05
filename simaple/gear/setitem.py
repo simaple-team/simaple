@@ -27,21 +27,21 @@ class SetItem(BaseModel):
         return sum([self.effects[i] for i in range(count)], Stat())
 
     def gear_ids(self) -> List[int]:
-        return [v.id for v in self.gears]
+        return [v.meta.id for v in self.gears]
 
     def count(self, gears: Iterable[Gear], joker_gear: Optional[Gear] = None) -> int:
         count = 0
         applied_types = []
-        existing_types = [g.type for g in self.gears]
+        existing_types = [g.meta.type for g in self.gears]
         for gear in gears:
-            if gear.id in self.gear_ids():
+            if gear.meta.id in self.gear_ids():
                 count += 1
-                applied_types.append(gear.type)
+                applied_types.append(gear.meta.type)
 
         if (
             joker_gear is not None
-            and joker_gear.type not in applied_types
-            and joker_gear.type in existing_types
+            and joker_gear.meta.type not in applied_types
+            and joker_gear.meta.type in existing_types
             and count >= 3
         ):
             count += 1
@@ -57,8 +57,8 @@ class SetItem(BaseModel):
                 ]
             )
 
-        joker_gears = [gear for gear in gears if gear.joker_to_set_item]
-        joker_gears.sort(key=lambda x: x.id)
+        joker_gears = [gear for gear in gears if gear.meta.joker_to_set_item]
+        joker_gears.sort(key=lambda x: x.meta.id)
 
         if len(joker_gears) > 0:
             set_item_count_basis = _get_set_item_basis(other_set_items, gears)
@@ -150,8 +150,8 @@ class KMSSetItemRepository(SetItemRepository):
         """
         set_item_ids: Set[int] = set()
         for gear in gears:
-            if gear.set_item_id != 0:
-                set_item_ids.update([gear.set_item_id])
+            if gear.meta.set_item_id != 0:
+                set_item_ids.update([gear.meta.set_item_id])
 
         existing_set_items = [self.get(set_item_id) for set_item_id in set_item_ids]
 

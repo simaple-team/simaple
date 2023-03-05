@@ -29,6 +29,7 @@ class DamageLogic(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="DamageLogic
         ...
 
     def get_maximum_attack_range(self, stat: Stat) -> float:
+        """Maximum stat power in character status window."""
         return (
             (1 + (stat.damage_multiplier) * 0.01)
             * (1 + 0.01 * stat.final_damage_multiplier)
@@ -53,12 +54,14 @@ class DamageLogic(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="DamageLogic
         return 1 + (35 + stat.critical_damage) * min(100, stat.critical_rate) * 0.0001
 
     def get_damage_factor(self, stat: Stat, armor: int = 300) -> float:
+        """Averaged Multiplier for skill damage."""
         return (
             self._get_general_damage_factor(stat)
             * self.get_armor_factor(stat, armor)
             * self.get_critical_factor(stat)
             * self.get_base_stat_factor(stat)
             * self.get_attack_type_factor(stat)
+            * self.get_elemental_disadvantage(stat)
             * self.attack_range_constant
             * 0.01
             * ((1 + self.mastery) / 2)
@@ -71,6 +74,9 @@ class DamageLogic(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="DamageLogic
             * self.attack_range_constant
             * 0.01
         )
+
+    def get_elemental_disadvantage(self, stat: Stat) -> float:
+        return 0.5 * (1 + min(100, stat.elemental_resistance) * 0.01)
 
 
 class STRBasedDamageLogic(DamageLogic):

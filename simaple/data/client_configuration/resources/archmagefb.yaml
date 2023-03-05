@@ -28,6 +28,7 @@ data:
     - common
     - int_based
     - adventurer.magician
+    - mob
   mdc_order:
     - 오버로드 마나
     - 이프리트

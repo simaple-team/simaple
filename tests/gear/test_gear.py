@@ -1,6 +1,35 @@
 import pytest
 
+from simaple.core import Stat
+from simaple.gear.gear import Gear, GearMeta
 from simaple.gear.gear_repository import GearRepository
+from simaple.gear.gear_type import GearType
+
+
+@pytest.fixture(name="sample_gear")
+def fixture_sample_gear():
+    return Gear(
+        meta=GearMeta(
+            id=0,
+            name="test-gear",
+            req_level=150,
+            type=GearType.cap,
+            base_stat=Stat(STR=3),
+            max_scroll_chance=3,
+        ),
+        stat=Stat(STR=3),
+        scroll_chance=3,
+    )
+
+
+def test_gear_is_immutable(sample_gear: Gear):
+    with pytest.raises(Exception):
+        sample_gear.meta.name = "new-name"
+
+
+def test_gear_add_stat(sample_gear: Gear):
+    sample_gear = sample_gear.add_stat(Stat(STR=3))
+    assert sample_gear.stat == Stat(STR=6)
 
 
 def test_gear_repository():

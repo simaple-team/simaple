@@ -64,6 +64,7 @@ data:
   name: 엘리멘탈 리셋
   stat:
     final_damage_multiplier: 40
+    elemental_resistance: 10
 ---
 kind: PassiveSkill
 version: simaple.io/PassiveSkill

@@ -14,8 +14,9 @@ coverage = "pytest --cov=simaple --ignore tests/fetch/request"
 coverage-unittest = "pytest --cov=simaple --ignore tests/fetch/request"
 coverage-report = "pytest --cov=simaple --cov-report=xml"
 
-unittest = "pytest -vv -x tests/ --ignore tests/fetch/request"
-apptest = "pytest -vv -x apptests/"
+unittest = "pytest -vv -x tests/ --ignore tests/fetch/"
+test_app = "pytest -vv -x test_app/"
+test_data = "pytest -vv -x test_data/"
 rsctest = "pytest -vv -x test_resource/"
 typetest = "mypy simaple tests"
 fetchtest = "pytest -vv -x tests/fetch/request"
@@ -33,7 +34,7 @@ skip = "third_party"
 
 [tool.pytest.ini_options]
 addopts = "-vv -x"
-testpaths = ["tests", "apptests"]
+testpaths = ["tests", "test_app", "test_data"]
 
 [tool.coverage.run]
 branch = true

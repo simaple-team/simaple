@@ -40,6 +40,7 @@ def simulator_configuration():
             "MMP": 12705.0,
             "MHP_multiplier": 0.0,
             "MMP_multiplier": 0.0,
+            "elemental_resistance": 10,
         },
     }
 
@@ -52,21 +53,17 @@ def baseline_configuration():
             "jobtype": "archmagefb",
             "job_category": 1,  # 0~4
             "level": 270,
-            "action_stat": {
-                "buff_duration": 185,
-            },
             "passive_skill_level": 0,
             "combat_orders_level": 1,
             "v_skill_level": 30,
             "v_improvements_level": 60,
-            "elemental_resistance": {"value": 10},
         }
     }
 
 
 @pytest.fixture
 def record_file_name():
-    return os.path.join(os.path.dirname(__file__), "record.tsv")
+    return os.path.join(os.path.dirname(__file__), "saved_record.tsv")
 
 
 @pytest.fixture

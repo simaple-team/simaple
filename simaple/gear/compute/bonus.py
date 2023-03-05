@@ -112,7 +112,9 @@ class SDILTableBuilder(pydantic.BaseModel):
     def build(self, gear: Gear):
         bf = BonusFactory()
         cache = {}
-        grade_range = [3, 4, 5, 6, 7] if gear.boss_reward else [1, 2, 3, 4, 5, 6, 7]
+        grade_range = (
+            [3, 4, 5, 6, 7] if gear.meta.boss_reward else [1, 2, 3, 4, 5, 6, 7]
+        )
         for t in _stat_types:
             sdil_list: list[SDIL] = []
             cache[t] = sdil_list
@@ -120,7 +122,7 @@ class SDILTableBuilder(pydantic.BaseModel):
                 if g not in grade_range:
                     sdil_list.append(SDIL(value=(-1, -1, -1, -1)))
                 else:
-                    stat = bf.create(t, g).calculate_improvement(gear)
+                    stat = bf.create(t, g).calculate_improvement(gear.meta)
                     sdil_list.append(SDIL.from_stat(stat))
 
         return cache
@@ -176,7 +178,9 @@ class StatBonusCalculator(pydantic.BaseModel):
 
     def compute(self, stat: Stat, gear: Gear, bonus_count_left: int) -> list[Bonus]:
         self._sdil_table = self.sdil_table_builder.build(gear)
-        self._grades = [5, 4, 6, 3, 7] if gear.boss_reward else [5, 4, 6, 3, 2, 1, 7]
+        self._grades = (
+            [5, 4, 6, 3, 7] if gear.meta.boss_reward else [5, 4, 6, 3, 2, 1, 7]
+        )
 
         target_sdil = SDIL.from_stat(stat)
 
@@ -201,8 +205,8 @@ class StatBonusCalculator(pydantic.BaseModel):
         if target_sdil.is_zero():
             return []
 
-        single_stat_basis = SingleStatBonus.calculate_basis(gear.req_level)
-        dual_stat_basis = DualStatBonus.calculate_basis(gear.req_level)
+        single_stat_basis = SingleStatBonus.calculate_basis(gear.meta.req_level)
+        dual_stat_basis = DualStatBonus.calculate_basis(gear.meta.req_level)
         max_type = target_sdil.max_type
 
         for single_stat_grade, dual_stat_grades in target_sdil.decompose_into_grades(
@@ -297,7 +301,7 @@ class BonusCalculator(GearImprovementCalculator):
 
     def compute(self, stat: Stat, gear: Gear) -> list[Bonus]:
         # 환생의 불꽃 추가옵션 부여 확률이 높은 등급부터 계산
-        grades = [5, 4, 6, 3, 7] if gear.boss_reward else [5, 4, 6, 3, 2, 1, 7]
+        grades = [5, 4, 6, 3, 7] if gear.meta.boss_reward else [5, 4, 6, 3, 2, 1, 7]
         bonus_count_left = _MAX_BONUS
         bonus_list = []
 
@@ -317,9 +321,9 @@ class BonusCalculator(GearImprovementCalculator):
                 error = True
                 for grade in grades:
                     bonus = self.bonus_factory.create(bonus_type, grade)
-                    if bonus.calculate_improvement(gear).get(stat_type) == stat.get(
+                    if bonus.calculate_improvement(gear.meta).get(
                         stat_type
-                    ):
+                    ) == stat.get(stat_type):
                         bonus_list.append(bonus)
                         bonus_count_left -= 1
                         error = False
