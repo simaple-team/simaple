@@ -1,3 +1,6 @@
+[![kr](https://img.shields.io/badge/lang-kr-red.svg)](README.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](README.en.md)
+
 # simaple: Simulation library for Maplestory
 
 `simaple` 은 메이플스토리 내 전투 환경을 분석히기 위한 라이브러리입니다. 
