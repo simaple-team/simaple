@@ -23,6 +23,8 @@ class PlayLogResponse(pydantic.BaseModel):
     delay: float
     action: Action
     checkpoint: dict
+    previous_hash: str
+    hash: str
 
     @classmethod
     def from_playlog(cls, simulator: Simulator, index: int) -> PlayLogResponse:
@@ -39,6 +41,8 @@ class PlayLogResponse(pydantic.BaseModel):
             delay=playlog.get_delay(),
             action=playlog.action,
             checkpoint=playlog.checkpoint,
+            previous_hash=playlog.previous_hash,
+            hash=playlog.hash,
         )
 
 

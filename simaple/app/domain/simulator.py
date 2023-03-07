@@ -44,6 +44,7 @@ class Simulator(pydantic.BaseModel):
                 action=Action(name="*", method="elapse", payload=0),
                 checkpoint=self.client.environment.store.save(),
                 checkpoint_callback=[],
+                previous_hash="",
             )
         )
 
@@ -64,9 +65,14 @@ class Simulator(pydantic.BaseModel):
             events=events,
             checkpoint=self.client.environment.store.save(),
             checkpoint_callback=self.client.export_previous_callbacks(),
+            previous_hash=self.history.logs[-1].hash,
         )
 
         self.history.append(playlog)
+
+    def rollback_by_hash(self, log_hash: str) -> None:
+        index = self.history.get_hash_index(log_hash)
+        self.rollback(index)
 
     def rollback(self, history_index: int) -> None:
         self.history.logs = self.history.logs[: history_index + 1]

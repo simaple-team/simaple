@@ -1,6 +1,7 @@
 import abc
 from typing import Optional
-
+import json
+import hashlib
 import pydantic
 
 from simaple.core.base import Stat
@@ -28,6 +29,12 @@ class PlayLog(pydantic.BaseModel):
     view: SimulationView
     checkpoint: dict[str, dict]
     checkpoint_callback: list[EventCallback]
+    previous_hash: str
+
+    @property
+    def hash(self) -> str:
+        stringified = self.previous_hash + json.dumps(self.dict(), sort_keys=True)
+        return hashlib.sha1(stringified.encode()).hexdigest()
 
     def get_delay(self) -> float:
         delay = 0
@@ -67,6 +74,16 @@ class History(pydantic.BaseModel):
 
     def append(self, playlog: PlayLog) -> None:
         self.logs.append(playlog)
+
+    def get_hash_index(self, log_hash: str) -> int:
+        for idx, log in enumerate(self.logs[1:]):
+            if log.previous_hash == log_hash:
+                return idx
+
+        if self.logs[-1].hash == log_hash:
+            return len(self.logs)
+
+        raise ValueError("No matching hash")
 
     def __len__(self) -> int:
         return len(self.logs)
