@@ -119,6 +119,15 @@ def dispatch_elapse(
     return query_latest_playlog(simulator_id, uow)
 
 
+@router.get("/logs/{simulator_id}/latest", response_model=PlayLogResponse)
+@inject
+def get_latest_log(
+    simulator_id: str,
+    uow: UnitOfWork = UowProvider,
+) -> PlayLogResponse:
+    return query_playlog(simulator_id, -1, uow)
+
+
 @router.get("/logs/{simulator_id}/{log_index}", response_model=PlayLogResponse)
 @inject
 def get_log(

@@ -9,8 +9,8 @@ class DOT(Entity):
     current: dict[str, tuple[float, float]] = pydantic.Field(
         default_factory=dict
     )  # name, damage, lasting_time
-    period_time_left: float = 1_000
-    period: int = 1_000
+    period_time_left: float = 1_000.0
+    period: float = 1_000.0
 
     def new(self, name: str, damage: float, lasting_time: float) -> None:
         self.current[name] = (damage, lasting_time)
