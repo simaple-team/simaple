@@ -28,6 +28,9 @@ class PlayLogResponse(pydantic.BaseModel):
 
     @classmethod
     def from_playlog(cls, simulator: Simulator, index: int) -> PlayLogResponse:
+        if index < 0:
+            index += len(simulator.history)
+
         playlog = simulator.history.get(index)
         return PlayLogResponse(
             events=playlog.events,

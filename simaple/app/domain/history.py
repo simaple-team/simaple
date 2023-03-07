@@ -1,7 +1,8 @@
 import abc
-from typing import Optional
-import json
 import hashlib
+import json
+from typing import Optional
+
 import pydantic
 
 from simaple.core.base import Stat
