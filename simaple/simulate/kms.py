@@ -3,6 +3,7 @@ import simaple.simulate.component.specific  # pylint: disable=W0611
 from simaple.core.base import ActionStat
 from simaple.data.passive.patch import SkillLevelPatch
 from simaple.data.passive_hyper_skill import get_hyper_skill_patch
+from simaple.data.skill import get_kms_skill_loader
 from simaple.data.skill.patch import VSkillImprovementPatch
 from simaple.simulate.base import AddressedStore, Client, ConcreteStore, Environment
 from simaple.simulate.component.base import Component
@@ -14,13 +15,7 @@ from simaple.simulate.component.view import (
 )
 from simaple.simulate.global_property import GlobalProperty
 from simaple.simulate.timer import clock_view, install_timer
-from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.patch import EvalPatch
-from simaple.spec.repository import DirectorySpecRepository
-
-
-def get_kms_component_repository():
-    return DirectorySpecRepository("simaple/data/skill/resources/components")
 
 
 def bare_store(action_stat: ActionStat):
@@ -38,7 +33,7 @@ def get_client(
     combat_orders_level: int = 1,
     passive_skill_level: int = 0,
 ) -> Client:
-    loader = SpecBasedLoader(get_kms_component_repository())
+    loader = get_kms_skill_loader()
 
     store = bare_store(action_stat)
 
