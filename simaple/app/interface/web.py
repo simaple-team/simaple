@@ -1,5 +1,8 @@
+import os
+
 import fastapi
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from simaple.app.interface.container import WebContainer, WebSetting
 from simaple.app.interface.handler import add_exception_handlers
@@ -36,6 +39,12 @@ class SimapleWeb(fastapi.FastAPI):
 
 
 app = SimapleWeb()
+app.mount(
+    "/view",
+    StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static")),
+    name="static",
+)
+
 add_exception_handlers(app)
 
 app.add_middleware(
