@@ -64,7 +64,7 @@ module = [
 
 [tool.poetry]
 name = "simaple"
-version = "0.3.0+web"
+version = "0.3.1"
 description = "Maplestory calculation / Simulation library"
 authors = ["meson324 <meson324@gmail.com>"]
 readme = "README.md"
@@ -72,7 +72,7 @@ license = "MIT"
 repository = "https://github.com/simaple-team/simaple"
 
 [tool.poetry.dependencies]
-python = ">=3.9, <3.11"
+python = ">=3.9, <4.0"
 pydantic = {extras = ["dotenv"], version = "^1.8.2"}
 loguru = "^0.5.3"
 poethepoet = "^0.10.0"
