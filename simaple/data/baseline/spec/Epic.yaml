@@ -30,11 +30,14 @@ anchors:
     star: 12
     potential:
       options:
-        - first_stat_multiplier: 6
-        - first_stat_multiplier: 3
+        - name: first_stat_multiplier
+          value: 6
+        - name: first_stat_multiplier
+          value: 3
     additional_potential:
       options:
-        - first_att: 10
+        - name: first_att
+          value: 10
   acc: &acc
     bonuses: &acc_bonus
       - rank: 4
@@ -49,11 +52,14 @@ anchors:
         first_att: 2.5
     potential:
       options:
-        - first_stat_multiplier: 6
-        - first_stat_multiplier: 3
+        - name: first_stat_multiplier
+          value: 6
+        - name: first_stat_multiplier
+          value: 3
     additional_potential:
       options:
-        - first_att: 10
+        - name: first_att
+          value: 10
     star: 12
 data:
   arcane_symbols: 
@@ -168,17 +174,20 @@ data:
       star: 12
       additional_potential:
         options:
-          - first_att_multiplier: 6
+          - name: first_att_multiplier
+            value: 6
     subweapon:
       gear_id: 노블 브레이슬릿
       additional_potential:
         options:
-          - first_att_multiplier: 6
+          - name: first_att_multiplier
+            value: 6
     emblem:
       gear_id: 골드 나이트 엠블렘
       additional_potential:
         options:
-          - first_att_multiplier: 6
+          - name: first_att_multiplier
+            value: 6
     machine_heart:
       gear_id: 리튬 하트
       <<: *acc

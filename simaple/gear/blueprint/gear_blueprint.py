@@ -10,6 +10,7 @@ from simaple.gear.improvements.scroll import Scroll
 from simaple.gear.improvements.spell_trace import SpellTrace
 from simaple.gear.improvements.starforce import Starforce
 from simaple.gear.potential import AdditionalPotential, Potential
+from simaple.gear.blueprint.potential_blueprint import PotentialTemplate, template_to_potential
 
 
 class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):
@@ -70,10 +71,8 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
     scrolls: List[Scroll] = Field(default_factory=list)
     starforce: Starforce
     bonuses: List[BonusSpec] = Field(default_factory=list)
-    potential: Potential = Field(default_factory=Potential)
-    additional_potential: AdditionalPotential = Field(
-        default_factory=AdditionalPotential
-    )
+    potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
+    additional_potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
 
     def build(self) -> Gear:
         gear_stat = self.meta.base_stat.copy()
@@ -107,8 +106,8 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
             meta=self.meta,
             stat=gear_stat,
             scroll_chance=self.meta.max_scroll_chance,
-            potential=self.potential.copy(),
-            additional_potential=self.additional_potential.copy(),
+            potential=template_to_potential(self.potential),
+            additional_potential=template_to_potential(self.additional_potential),
         )
 
 
@@ -118,10 +117,8 @@ class PracticalGearBlueprint(AbstractGearBlueprint):
     scroll: Optional[Scroll] = None
     star: int = 0
     bonuses: List[BonusSpec] = Field(default_factory=list)
-    potential: Potential = Field(default_factory=Potential)
-    additional_potential: AdditionalPotential = Field(
-        default_factory=AdditionalPotential
-    )
+    potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
+    additional_potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
 
     def build(self):
         generalized_gear_blueprint = self.translate_into_generalized_gear_blueprint()

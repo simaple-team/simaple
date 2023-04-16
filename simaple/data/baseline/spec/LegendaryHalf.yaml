@@ -30,13 +30,18 @@ anchors:
     star: 22
     potential:
       options:
-        - first_stat_multiplier: 12
-        - first_stat_multiplier: 9
-        - first_stat_multiplier: 6
+        - name: first_stat_multiplier
+          value: 12
+        - name: first_stat_multiplier
+          value: 9
+        - name: first_stat_multiplier
+          value: 6
     additional_potential:
       options:
-        - first_stat_multiplier: 5
-        - first_stat_multiplier: 4
+        - name: first_stat_multiplier
+          value: 5
+        - name: first_stat_multiplier
+          value: 4
   acc: &acc
     bonuses: &acc_bonus
       - rank: 3
@@ -51,12 +56,16 @@ anchors:
         first_att: 2.5
     potential:
       options:
-        - first_stat_multiplier: 12
-        - first_stat_multiplier: 9
+        - name: first_stat_multiplier
+          value: 12
+        - name: first_stat_multiplier
+          value: 9
     additional_potential:
       options:
-        - first_att: 10
-        - first_stat_multiplier: 4
+        - name: first_att
+          value: 10
+        - name: first_stat_multiplier
+          value: 4
     star: 18
 data:
   arcane_symbols: 
@@ -101,13 +110,18 @@ data:
       star: 18
       potential:
         options:
-          - first_stat_multiplier: 12
-          - first_stat_multiplier: 9
-          - first_stat_multiplier: 9
+          - name: first_stat_multiplier
+            value: 12
+          - name: first_stat_multiplier
+            value: 9
+          - name: first_stat_multiplier
+            value: 9
       additional_potential:
         options:
-          - first_att: 10
-          - first_stat_multiplier: 4
+          - name: first_att
+            value: 10
+          - name: first_stat_multiplier
+            value: 4
     coat:
       gear_id: 카루타 상의
       <<: *armor
@@ -122,8 +136,10 @@ data:
       <<: *armor
       potential:
         options:
-          - critical_damage: 8
-          - critical_damage: 8
+          - name: critical_damage
+            value: 8
+          - name: critical_damage
+            value: 8
     cape:
       gear_id: 앱솔랩스 망토
       <<: *armor
@@ -196,20 +212,26 @@ data:
       star: 17
       additional_potential:
         options:
-          - first_att_multiplier: 12
-          - first_att_multiplier: 9
+          - name: first_att_multiplier
+            value: 12
+          - name: first_att_multiplier
+            value: 9
     subweapon:
       gear_id: 노블 브레이슬릿
       additional_potential:
         options:
-          - first_att_multiplier: 12
-          - first_att_multiplier: 9
+          - name: first_att_multiplier
+            value: 12
+          - name: first_att_multiplier
+            value: 9
     emblem:
       gear_id: 골드 나이트 엠블렘
       additional_potential:
         options:
-          - first_att_multiplier: 12
-          - first_att_multiplier: 9
+          - name: first_att_multiplier
+            value: 12
+          - name: first_att_multiplier
+            value: 9
     machine_heart:
       gear_id: 리튬 하트
       <<: *acc
