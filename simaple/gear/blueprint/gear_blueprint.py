@@ -1,10 +1,10 @@
 from abc import ABCMeta, abstractmethod
-from typing import List, Optional
+from typing import Annotated, List, Literal, Optional, Tuple
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import BaseModel, Extra, Field, conint, validator
 
 from simaple.core import Stat
-from simaple.gear.bonus_factory import BonusFactory, BonusSpec
+from simaple.gear.bonus_factory import BonusFactory, BonusType
 from simaple.gear.gear import Gear, GearMeta
 from simaple.gear.improvements.scroll import Scroll
 from simaple.gear.improvements.spell_trace import SpellTrace
@@ -19,6 +19,26 @@ class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):
     @abstractmethod
     def build(self) -> Gear:
         ...
+
+
+class BonusSpec(BaseModel):
+    bonus_type: BonusType
+    grade: Optional[conint(ge=1, le=7)]
+    rank: Optional[conint(ge=1, le=7)]
+
+    @validator("rank")
+    def rank_and_grade_may_not_given_together(cls, v, values, **kwargs):
+        if "grade" in values and values["grade"] is not None:
+            raise ValueError("grade and rank may not given together.")
+        return v
+
+
+def _get_bonus_from_spec(bonus_factory: BonusFactory, bonus_spec: BonusSpec):
+    grade = bonus_spec.grade or 8 - bonus_spec.rank
+    return bonus_factory.create(
+        bonus_spec.bonus_type,
+        grade,
+    )
 
 
 class GeneralizedGearBlueprint(AbstractGearBlueprint):
@@ -51,10 +71,7 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
 
         # Apply bonus
         bonus_factory = BonusFactory()
-        bonuses = [
-            bonus_factory.create(bonus_type=spec.bonus_type, grade=spec.grade)
-            for spec in self.bonuses
-        ]
+        bonuses = [_get_bonus_from_spec(bonus_factory, spec) for spec in self.bonuses]
 
         bonus_stat = sum(
             [bonus.calculate_improvement(self.meta) for bonus in bonuses],

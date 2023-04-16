@@ -18,11 +18,11 @@ spec_hint:
 anchors:
   armor: &armor
     bonuses:
-      - grade: 6
+      - rank: 2
         bonus_type: first_stat_second_stat
-      - grade: 5
+      - rank: 3
         bonus_type: first_stat
-      - grade: 6
+      - rank: 2
         bonus_type: all_stat_multiplier
     spell_trace:
       probability: 30
@@ -39,11 +39,11 @@ anchors:
         - first_stat_multiplier: 4
   acc: &acc
     bonuses: &acc_bonus
-      - grade: 6
+      - rank: 2
         bonus_type: first_stat_second_stat
-      - grade: 5
+      - rank: 3
         bonus_type: first_stat
-      - grade: 6
+      - rank: 2
         bonus_type: all_stat_multiplier
     scroll:
       name: 악공
@@ -143,9 +143,9 @@ data:
       <<: *acc
       star: 20
       bonuses:
-        - grade: 4
+        - rank: 4
           bonus_type: first_stat
-        - grade: 3
+        - rank: 5
           bonus_type: all_stat_multiplier
     eye_accessory:
       gear_id: 블랙빈 마크
@@ -191,9 +191,9 @@ data:
       <<: *acc
       star: 20
       bonuses:
-        - grade: 4
+        - rank: 4
           bonus_type: first_stat
-        - grade: 3
+        - rank: 5
           bonus_type: all_stat_multiplier  
     pocket:
       gear_id: 핑크빛 성배
@@ -205,9 +205,9 @@ data:
     weapon:
       gear_id: 아케인셰이드 무기
       bonuses:
-        - grade: 6
+        - rank: 2
           bonus_type: first_att
-        - grade: 5
+        - rank: 3
           bonus_type: boss_damage_multiplier
       spell_trace:
         probability: 15

@@ -237,8 +237,8 @@ Create gear with GearBlueprint
 
 .. code-block:: python
 
-    from simaple.gear.blueprint.gear_blueprint import PracticalGearBlueprint
-    from simaple.gear.bonus_factory import BonusSpec, BonusType
+    from simaple.gear.blueprint.gear_blueprint import PracticalGearBlueprint, BonusSpec
+    from simaple.gear.bonus_factory import BonusType
 
     blueprint = PracticalGearBlueprint(
         meta=gear_repository.get_gear_meta(1005568),

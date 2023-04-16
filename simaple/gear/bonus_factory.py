@@ -56,11 +56,6 @@ class BonusType(enum.Enum):
         return maybe_reversed
 
 
-class BonusSpec(BaseModel):
-    bonus_type: BonusType
-    grade: int
-
-
 class BonusFactory:
     def __init__(self):
         self._bonus_prototypes = {
