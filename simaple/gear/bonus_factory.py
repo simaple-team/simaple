@@ -1,7 +1,5 @@
 import enum
 
-from pydantic import BaseModel
-
 from simaple.core.base import AttackType, BaseStatType
 from simaple.gear.improvements.bonus import (
     AllstatBonus,
@@ -54,11 +52,6 @@ class BonusType(enum.Enum):
                 return bonus_type.value
 
         return maybe_reversed
-
-
-class BonusSpec(BaseModel):
-    bonus_type: BonusType
-    grade: int
 
 
 class BonusFactory:

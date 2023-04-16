@@ -1,10 +1,10 @@
 from abc import ABCMeta, abstractmethod
 from typing import List, Optional
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import BaseModel, Extra, Field, validator
 
 from simaple.core import Stat
-from simaple.gear.bonus_factory import BonusFactory, BonusSpec
+from simaple.gear.bonus_factory import BonusFactory, BonusType
 from simaple.gear.gear import Gear, GearMeta
 from simaple.gear.improvements.scroll import Scroll
 from simaple.gear.improvements.spell_trace import SpellTrace
@@ -19,6 +19,49 @@ class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):
     @abstractmethod
     def build(self) -> Gear:
         ...
+
+
+class BonusSpec(BaseModel):
+    bonus_type: BonusType
+    grade: Optional[int]
+    rank: Optional[int]
+
+    @validator("grade")
+    @classmethod
+    def rank_may_in_proper_range(cls, v):
+        if v is not None:
+            if not 1 <= v <= 7:
+                raise ValueError("grade may in range 1~7")
+
+        return v
+
+    @validator("rank")
+    @classmethod
+    def rank_and_grade_may_not_given_together(cls, v, values, **kwargs):
+        if "grade" in values:
+            if values["grade"] is not None and v is not None:
+                raise ValueError("grade and rank may not given together.")
+        if v is None and values["grade"] is None:
+            raise ValueError("grade or rank may given.")
+
+        if v is not None:
+            if not 1 <= v <= 7:
+                raise ValueError("rank may in range 1~7")
+
+        return v
+
+    def get_grade(self) -> int:
+        if self.grade:
+            return self.grade
+
+        if self.rank is None:
+            raise ValueError("rank and grade may not both None.")
+
+        return 8 - self.rank
+
+
+def _get_bonus_from_spec(bonus_factory: BonusFactory, bonus_spec: BonusSpec):
+    return bonus_factory.create(bonus_spec.bonus_type, bonus_spec.get_grade())
 
 
 class GeneralizedGearBlueprint(AbstractGearBlueprint):
@@ -51,10 +94,7 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
 
         # Apply bonus
         bonus_factory = BonusFactory()
-        bonuses = [
-            bonus_factory.create(bonus_type=spec.bonus_type, grade=spec.grade)
-            for spec in self.bonuses
-        ]
+        bonuses = [_get_bonus_from_spec(bonus_factory, spec) for spec in self.bonuses]
 
         bonus_stat = sum(
             [bonus.calculate_improvement(self.meta) for bonus in bonuses],
