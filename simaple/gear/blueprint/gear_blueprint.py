@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
-from typing import Annotated, List, Literal, Optional, Tuple
+from typing import List, Optional
 
-from pydantic import BaseModel, Extra, Field, conint, validator
+from pydantic import BaseModel, Extra, Field, validator
 
 from simaple.core import Stat
 from simaple.gear.bonus_factory import BonusFactory, BonusType
@@ -23,22 +23,45 @@ class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):
 
 class BonusSpec(BaseModel):
     bonus_type: BonusType
-    grade: Optional[conint(ge=1, le=7)]
-    rank: Optional[conint(ge=1, le=7)]
+    grade: Optional[int]
+    rank: Optional[int]
+
+    @validator("grade")
+    @classmethod
+    def rank_may_in_proper_range(cls, v):
+        if v is not None:
+            if not 1 <= v <= 7:
+                raise ValueError("grade may in range 1~7")
+
+        return v
 
     @validator("rank")
+    @classmethod
     def rank_and_grade_may_not_given_together(cls, v, values, **kwargs):
-        if "grade" in values and values["grade"] is not None:
-            raise ValueError("grade and rank may not given together.")
+        if "grade" in values:
+            if values["grade"] is not None and v is not None:
+                raise ValueError("grade and rank may not given together.")
+        if v is None and values["grade"] is None:
+            raise ValueError("grade or rank may given.")
+
+        if v is not None:
+            if not 1 <= v <= 7:
+                raise ValueError("rank may in range 1~7")
+
         return v
+
+    def get_grade(self) -> int:
+        if self.grade:
+            return self.grade
+
+        if self.rank is None:
+            raise ValueError("rank and grade may not both None.")
+
+        return 8 - self.rank
 
 
 def _get_bonus_from_spec(bonus_factory: BonusFactory, bonus_spec: BonusSpec):
-    grade = bonus_spec.grade or 8 - bonus_spec.rank
-    return bonus_factory.create(
-        bonus_spec.bonus_type,
-        grade,
-    )
+    return bonus_factory.create(bonus_spec.bonus_type, bonus_spec.get_grade())
 
 
 class GeneralizedGearBlueprint(AbstractGearBlueprint):
