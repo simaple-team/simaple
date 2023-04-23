@@ -120,17 +120,17 @@ data:
       potential:
         options:
         - name: first_stat_multiplier
-          value: 12
+          tier: legendary
         - name: first_stat_multiplier
-          value: 9
+          tier: unique
         - name: first_stat_multiplier
-          value: 9
+          tier: unique
       additional_potential:
         options:
           - name: first_att
-            value: 10
+            tier: rare
           - name: first_stat_multiplier 
-            value: 4
+            tier: epic
     coat:
       gear_id: 카루타 상의
       <<: *armor
