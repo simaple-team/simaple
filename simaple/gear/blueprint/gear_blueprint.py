@@ -12,6 +12,7 @@ from simaple.gear.blueprint.potential_blueprint import (
 )
 from simaple.gear.bonus_factory import BonusFactory, BonusType
 from simaple.gear.gear import Gear, GearMeta
+from simaple.gear.improvements.exceptional_enhancement import ExceptionalEnhancement
 from simaple.gear.improvements.scroll import Scroll
 from simaple.gear.improvements.spell_trace import SpellTrace
 from simaple.gear.improvements.starforce import Starforce
@@ -77,6 +78,7 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
     bonuses: List[BonusSpec] = Field(default_factory=list)
     potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
     additional_potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
+    exceptional_enhancement: Optional[ExceptionalEnhancement]
 
     def build(self) -> Gear:
         gear_stat = self.meta.base_stat.copy()
@@ -107,6 +109,9 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
         potential_table = PotentialTierTable.kms()
 
         gear_stat += bonus_stat
+
+        if self.exceptional_enhancement:
+            gear_stat += self.exceptional_enhancement.calculate_improvement(self.meta)
 
         return Gear(
             meta=self.meta,
