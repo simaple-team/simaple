@@ -8,14 +8,14 @@ GEAR_RESOURCE_PATH = os.path.join(
     os.path.dirname(__file__), "resources", "gear_data.json"
 )
 GEAR_VARIABLE_NAMES = [
-    ("boss_pdamage", "boss_damage_multiplier"),
-    ("armor_ignore", "ignored_defence"),
-    ("crit", "critical_rate"),
-    ("crit_damage", "critical_damage"),
-    ("pdamage", "damage_multiplier"),
+    ("boss_damage_multiplier", "boss_damage_multiplier"),
+    ("ignored_defence", "ignored_defence"),
+    ("critical_rate", "critical_rate"),
+    ("critical_damage", "critical_damage"),
+    ("damage_multiplier", "damage_multiplier"),
     ("pdamage_indep", "final_damage_multiplier"),
-    ("att", "attack_power"),
-    ("matt", "magic_attack"),
+    ("attack_power", "attack_power"),
+    ("magic_attack", "magic_attack"),
     ("MHP", "MHP"),
     ("MMP", "MMP"),
 ]
@@ -84,6 +84,7 @@ class GearRepository:
             "type": self.get_gear_type(gear_id),
             "base_stat": stat.copy(),
             "max_scroll_chance": dumped_gear_meta.get("tuc", 0),
+            "exceptional_enhancement": dumped_gear_meta.get("etuc", False),
         }
 
         return GearMeta.parse_obj(gear_meta_opt)

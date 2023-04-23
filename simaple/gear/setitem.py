@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import os
 from abc import ABCMeta, abstractmethod
-from typing import Iterable, List, Optional, Set, Tuple
+from typing import Iterable, List, Optional, Set, Tuple, TypedDict
 
 from pydantic import BaseModel, Field
 
@@ -82,6 +82,34 @@ class SetItemRepository(metaclass=ABCMeta):
         ...
 
 
+class WzresourceStatRepresentation(TypedDict, total=False):
+    incAllStat: int
+
+    incPAD: int
+    incMAD: int
+
+    incMHP: int
+    incMMP: int
+
+    incCriticaldamage: int
+
+    incSTR: int
+    incDEX: int
+    incINT: int
+    incLUK: int
+
+    ignoreTargetDEF: int
+    incBDR: int
+    incDAMr: int
+
+
+class WzresourceSetItemEntity(TypedDict):
+    name: str
+    items: list[int]
+    effect: dict[str, WzresourceStatRepresentation]
+    jokerPossible: bool
+
+
 class KMSSetItemRepository(SetItemRepository):
     def __init__(self):
         self._gear_repository = GearRepository()
@@ -91,25 +119,28 @@ class KMSSetItemRepository(SetItemRepository):
         with open(SET_ITEM_RESOURCE_PATH, encoding="utf-8") as f:
             self._set_items = json.load(f)
 
-    def _interpret_stat(self, raw_stat):
+    def _interpret_stat(self, raw_stat: WzresourceStatRepresentation):
         stat = Stat()
-        stat += Stat.all_stat(raw_stat.get("allstat", 0))
+        stat += Stat.all_stat(raw_stat.get("incAllStat", 0))
         stat += Stat(
-            attack_power=raw_stat.get("att", 0),
-            magic_attack=raw_stat.get("matt", 0),
-            MHP=raw_stat.get("MHP", 0),
-            critical_damage=raw_stat.get("crit_damage", 0),
-            STR=raw_stat.get("STR", 0),
-            DEX=raw_stat.get("DEX", 0),
-            INT=raw_stat.get("INT", 0),
-            LUK=raw_stat.get("LUK", 0),
-            boss_damage_multiplier=raw_stat.get("boss_pdamage", 0),
-            ignored_defence=raw_stat.get("armor_ignore", 0),
-            damage_multiplier=raw_stat.get("pdamage", 0),
+            attack_power=raw_stat.get("incPAD", 0),
+            magic_attack=raw_stat.get("incMAD", 0),
+            MHP=raw_stat.get("incMHP", 0),
+            MMP=raw_stat.get("incMMP", 0),
+            critical_damage=raw_stat.get("incCriticaldamage", 0),
+            STR=raw_stat.get("incSTR", 0),
+            DEX=raw_stat.get("incDEX", 0),
+            INT=raw_stat.get("incINT", 0),
+            LUK=raw_stat.get("incLUK", 0),
+            boss_damage_multiplier=raw_stat.get("incBDR", 0),
+            ignored_defence=raw_stat.get("ignoreTargetDEF", 0),
+            damage_multiplier=raw_stat.get("incDAMr", 0),
         )
         return stat
 
-    def _parse_from_raw(self, set_item_id: int, raw_set_item) -> SetItem:
+    def _parse_from_raw(
+        self, set_item_id: int, raw_set_item: WzresourceSetItemEntity
+    ) -> SetItem:
         maximum_effects = max(map(int, raw_set_item["effect"].keys()))
         effects = [Stat() for i in range(maximum_effects + 1)]
 
@@ -120,12 +151,12 @@ class KMSSetItemRepository(SetItemRepository):
             effects=effects,
             gears=[
                 self._gear_repository.get_by_id(int(gear_id))
-                for gear_id in raw_set_item["item_id"]
+                for gear_id in raw_set_item["items"]
                 if self._gear_repository.exists(gear_id)
             ],
-            name=raw_set_item["set_item_name"],
+            name=raw_set_item["name"],
             id=set_item_id,
-            joker_possible=raw_set_item.get("joker_possible", False),
+            joker_possible=raw_set_item.get("jokerPossible", False),
         )
 
     def get_all(self, gears: Iterable[Gear]) -> list[SetItem]:

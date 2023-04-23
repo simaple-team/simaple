@@ -7,6 +7,10 @@ from simaple.core import Stat
 from simaple.gear.gear import GearMeta
 
 
+class InvalidImprovementException(Exception):
+    ...
+
+
 class GearImprovement(BaseModel, metaclass=ABCMeta):
     type: str
 
