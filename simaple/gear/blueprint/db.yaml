@@ -32,7 +32,7 @@ additional:
     critical_rate:
       critical_rate: 1
     magic_attack:
-      magic_power: 4
+      magic_attack: 4
   - DEX:
       DEX: 4
     DEX_multiplier:
@@ -65,7 +65,7 @@ additional:
     critical_rate:
       critical_rate: 1
     magic_attack:
-      magic_power: 4
+      magic_attack: 4
   - DEX:
       DEX: 6
     DEX_multiplier:
@@ -98,7 +98,7 @@ additional:
     critical_rate:
       critical_rate: 1
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - DEX:
       DEX: 6
     DEX_multiplier:
@@ -131,7 +131,7 @@ additional:
     critical_rate:
       critical_rate: 1
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - DEX:
       DEX: 8
     DEX_multiplier:
@@ -164,7 +164,7 @@ additional:
     critical_rate:
       critical_rate: 1
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - DEX:
       DEX: 10
     DEX_multiplier:
@@ -197,7 +197,7 @@ additional:
     critical_rate:
       critical_rate: 1
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
   - DEX:
       DEX: 10
     DEX_multiplier:
@@ -230,7 +230,7 @@ additional:
     critical_rate:
       critical_rate: 1
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
   - DEX:
       DEX: 12
     DEX_multiplier:
@@ -263,7 +263,7 @@ additional:
     critical_rate:
       critical_rate: 1
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
   - DEX:
       DEX: 12
     DEX_multiplier:
@@ -296,7 +296,7 @@ additional:
     critical_rate:
       critical_rate: 1
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
   - DEX:
       DEX: 14
     DEX_multiplier:
@@ -329,7 +329,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   - DEX:
       DEX: 14
     DEX_multiplier:
@@ -362,7 +362,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   - DEX:
       DEX: 14
     DEX_multiplier:
@@ -395,7 +395,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   - DEX:
       DEX: 14
     DEX_multiplier:
@@ -428,7 +428,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   - DEX:
       DEX: 14
     DEX_multiplier:
@@ -461,7 +461,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   - DEX:
       DEX: 14
     DEX_multiplier:
@@ -494,7 +494,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   - DEX:
       DEX: 14
     DEX_multiplier:
@@ -527,7 +527,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   - DEX:
       DEX: 14
     DEX_multiplier:
@@ -560,7 +560,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   - DEX:
       DEX: 14
     DEX_multiplier:
@@ -593,7 +593,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   - DEX:
       DEX: 14
     DEX_multiplier:
@@ -626,7 +626,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   - DEX:
       DEX: 14
     DEX_multiplier:
@@ -659,7 +659,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   - DEX:
       DEX: 15
     DEX_multiplier:
@@ -692,7 +692,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
   - DEX:
       DEX: 15
     DEX_multiplier:
@@ -725,7 +725,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
   - DEX:
       DEX: 15
     DEX_multiplier:
@@ -758,7 +758,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
   - DEX:
       DEX: 15
     DEX_multiplier:
@@ -791,7 +791,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
   - DEX:
       DEX: 15
     DEX_multiplier:
@@ -824,7 +824,7 @@ additional:
     critical_rate:
       critical_rate: 2
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
   legendary:
   - DEX:
       DEX: 8
@@ -864,7 +864,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -905,7 +905,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -946,7 +946,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -987,7 +987,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -1028,7 +1028,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -1069,7 +1069,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -1110,7 +1110,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -1151,7 +1151,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -1192,7 +1192,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -1233,7 +1233,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -1274,7 +1274,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -1315,7 +1315,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -1356,7 +1356,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -1397,7 +1397,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -1438,7 +1438,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -1479,7 +1479,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -1520,7 +1520,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -1561,7 +1561,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -1602,7 +1602,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -1643,7 +1643,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -1684,7 +1684,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 15
+      magic_attack: 15
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -1725,7 +1725,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 15
+      magic_attack: 15
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -1766,7 +1766,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 15
+      magic_attack: 15
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -1807,7 +1807,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 15
+      magic_attack: 15
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -1848,7 +1848,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 15
+      magic_attack: 15
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   normal:
@@ -1867,7 +1867,7 @@ additional:
     attack_power:
       attack_power: 1
     magic_attack:
-      magic_power: 1
+      magic_attack: 1
   - DEX:
       DEX: 1
     INT:
@@ -1883,7 +1883,7 @@ additional:
     attack_power:
       attack_power: 1
     magic_attack:
-      magic_power: 1
+      magic_attack: 1
   - DEX:
       DEX: 2
     INT:
@@ -1899,7 +1899,7 @@ additional:
     attack_power:
       attack_power: 1
     magic_attack:
-      magic_power: 1
+      magic_attack: 1
   - DEX:
       DEX: 2
     INT:
@@ -1915,7 +1915,7 @@ additional:
     attack_power:
       attack_power: 1
     magic_attack:
-      magic_power: 1
+      magic_attack: 1
   - DEX:
       DEX: 3
     INT:
@@ -1931,7 +1931,7 @@ additional:
     attack_power:
       attack_power: 1
     magic_attack:
-      magic_power: 1
+      magic_attack: 1
   - DEX:
       DEX: 4
     INT:
@@ -1947,7 +1947,7 @@ additional:
     attack_power:
       attack_power: 2
     magic_attack:
-      magic_power: 2
+      magic_attack: 2
   - DEX:
       DEX: 4
     INT:
@@ -1963,7 +1963,7 @@ additional:
     attack_power:
       attack_power: 2
     magic_attack:
-      magic_power: 2
+      magic_attack: 2
   - DEX:
       DEX: 5
     INT:
@@ -1979,7 +1979,7 @@ additional:
     attack_power:
       attack_power: 2
     magic_attack:
-      magic_power: 2
+      magic_attack: 2
   - DEX:
       DEX: 5
     INT:
@@ -1995,7 +1995,7 @@ additional:
     attack_power:
       attack_power: 2
     magic_attack:
-      magic_power: 2
+      magic_attack: 2
   - DEX:
       DEX: 6
     INT:
@@ -2011,7 +2011,7 @@ additional:
     attack_power:
       attack_power: 2
     magic_attack:
-      magic_power: 2
+      magic_attack: 2
   - DEX:
       DEX: 6
     INT:
@@ -2027,7 +2027,7 @@ additional:
     attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - DEX:
       DEX: 6
     INT:
@@ -2043,7 +2043,7 @@ additional:
     attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - DEX:
       DEX: 6
     INT:
@@ -2059,7 +2059,7 @@ additional:
     attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - DEX:
       DEX: 6
     INT:
@@ -2075,7 +2075,7 @@ additional:
     attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - DEX:
       DEX: 6
     INT:
@@ -2091,7 +2091,7 @@ additional:
     attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - DEX:
       DEX: 6
     INT:
@@ -2107,7 +2107,7 @@ additional:
     attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - DEX:
       DEX: 6
     INT:
@@ -2123,7 +2123,7 @@ additional:
     attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - DEX:
       DEX: 6
     INT:
@@ -2139,7 +2139,7 @@ additional:
     attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - DEX:
       DEX: 6
     INT:
@@ -2155,7 +2155,7 @@ additional:
     attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - DEX:
       DEX: 6
     INT:
@@ -2171,7 +2171,7 @@ additional:
     attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - DEX:
       DEX: 6
     INT:
@@ -2187,7 +2187,7 @@ additional:
     attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - DEX:
       DEX: 6
     INT:
@@ -2203,7 +2203,7 @@ additional:
     attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - DEX:
       DEX: 6
     INT:
@@ -2219,7 +2219,7 @@ additional:
     attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - DEX:
       DEX: 6
     INT:
@@ -2235,7 +2235,7 @@ additional:
     attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - DEX:
       DEX: 6
     INT:
@@ -2251,7 +2251,7 @@ additional:
     attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   rare:
   - DEX:
       DEX: 2
@@ -2283,7 +2283,7 @@ additional:
     attack_power:
       attack_power: 1
     magic_attack:
-      magic_power: 1
+      magic_attack: 1
   - DEX:
       DEX: 2
     DEX_multiplier:
@@ -2314,7 +2314,7 @@ additional:
     attack_power:
       attack_power: 1
     magic_attack:
-      magic_power: 1
+      magic_attack: 1
   - DEX:
       DEX: 4
     DEX_multiplier:
@@ -2345,7 +2345,7 @@ additional:
     attack_power:
       attack_power: 2
     magic_attack:
-      magic_power: 2
+      magic_attack: 2
   - DEX:
       DEX: 4
     DEX_multiplier:
@@ -2376,7 +2376,7 @@ additional:
     attack_power:
       attack_power: 2
     magic_attack:
-      magic_power: 2
+      magic_attack: 2
   - DEX:
       DEX: 4
     DEX_multiplier:
@@ -2407,7 +2407,7 @@ additional:
     attack_power:
       attack_power: 4
     magic_attack:
-      magic_power: 4
+      magic_attack: 4
   - DEX:
       DEX: 6
     DEX_multiplier:
@@ -2438,7 +2438,7 @@ additional:
     attack_power:
       attack_power: 4
     magic_attack:
-      magic_power: 4
+      magic_attack: 4
   - DEX:
       DEX: 6
     DEX_multiplier:
@@ -2469,7 +2469,7 @@ additional:
     attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - DEX:
       DEX: 8
     DEX_multiplier:
@@ -2500,7 +2500,7 @@ additional:
     attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - DEX:
       DEX: 8
     DEX_multiplier:
@@ -2531,7 +2531,7 @@ additional:
     attack_power:
       attack_power: 8
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
   - DEX:
       DEX: 10
     DEX_multiplier:
@@ -2562,7 +2562,7 @@ additional:
     attack_power:
       attack_power: 10
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
   - DEX:
       DEX: 10
     DEX_multiplier:
@@ -2593,7 +2593,7 @@ additional:
     attack_power:
       attack_power: 10
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
   - DEX:
       DEX: 10
     DEX_multiplier:
@@ -2624,7 +2624,7 @@ additional:
     attack_power:
       attack_power: 10
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
   - DEX:
       DEX: 10
     DEX_multiplier:
@@ -2655,7 +2655,7 @@ additional:
     attack_power:
       attack_power: 10
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
   - DEX:
       DEX: 10
     DEX_multiplier:
@@ -2686,7 +2686,7 @@ additional:
     attack_power:
       attack_power: 10
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
   - DEX:
       DEX: 10
     DEX_multiplier:
@@ -2717,7 +2717,7 @@ additional:
     attack_power:
       attack_power: 10
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
   - DEX:
       DEX: 10
     DEX_multiplier:
@@ -2748,7 +2748,7 @@ additional:
     attack_power:
       attack_power: 10
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
   - DEX:
       DEX: 10
     DEX_multiplier:
@@ -2779,7 +2779,7 @@ additional:
     attack_power:
       attack_power: 10
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
   - DEX:
       DEX: 10
     DEX_multiplier:
@@ -2810,7 +2810,7 @@ additional:
     attack_power:
       attack_power: 10
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
   - DEX:
       DEX: 10
     DEX_multiplier:
@@ -2841,7 +2841,7 @@ additional:
     attack_power:
       attack_power: 10
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
   - DEX:
       DEX: 10
     DEX_multiplier:
@@ -2872,7 +2872,7 @@ additional:
     attack_power:
       attack_power: 10
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
   - DEX:
       DEX: 11
     DEX_multiplier:
@@ -2903,7 +2903,7 @@ additional:
     attack_power:
       attack_power: 11
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   - DEX:
       DEX: 11
     DEX_multiplier:
@@ -2934,7 +2934,7 @@ additional:
     attack_power:
       attack_power: 11
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   - DEX:
       DEX: 11
     DEX_multiplier:
@@ -2965,7 +2965,7 @@ additional:
     attack_power:
       attack_power: 11
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   - DEX:
       DEX: 11
     DEX_multiplier:
@@ -2996,7 +2996,7 @@ additional:
     attack_power:
       attack_power: 11
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   - DEX:
       DEX: 11
     DEX_multiplier:
@@ -3027,7 +3027,7 @@ additional:
     attack_power:
       attack_power: 11
     magic_attack:
-      magic_power: 11
+      magic_attack: 11
   unique:
   - DEX:
       DEX: 6
@@ -3065,7 +3065,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3104,7 +3104,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3143,7 +3143,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3182,7 +3182,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3221,7 +3221,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3260,7 +3260,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3299,7 +3299,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3338,7 +3338,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3377,7 +3377,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3416,7 +3416,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3455,7 +3455,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3494,7 +3494,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3533,7 +3533,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3572,7 +3572,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3611,7 +3611,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3650,7 +3650,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3689,7 +3689,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3728,7 +3728,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3767,7 +3767,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3806,7 +3806,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3845,7 +3845,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 13
+      magic_attack: 13
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3884,7 +3884,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 13
+      magic_attack: 13
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3923,7 +3923,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 13
+      magic_attack: 13
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -3962,7 +3962,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 13
+      magic_attack: 13
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -4001,7 +4001,7 @@ additional:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 13
+      magic_attack: 13
     magic_attack_multiplier:
       magic_attack_multiplier: 1
 additional_weapon:
@@ -5211,103 +5211,103 @@ additional_weapon:
   - attack_power:
       attack_power: 1
     magic_attack:
-      magic_power: 1
+      magic_attack: 1
   - attack_power:
       attack_power: 1
     magic_attack:
-      magic_power: 1
+      magic_attack: 1
   - attack_power:
       attack_power: 2
     magic_attack:
-      magic_power: 2
+      magic_attack: 2
   - attack_power:
       attack_power: 2
     magic_attack:
-      magic_power: 2
+      magic_attack: 2
   - attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - attack_power:
       attack_power: 3
     magic_attack:
-      magic_power: 3
+      magic_attack: 3
   - attack_power:
       attack_power: 4
     magic_attack:
-      magic_power: 4
+      magic_attack: 4
   - attack_power:
       attack_power: 4
     magic_attack:
-      magic_power: 4
+      magic_attack: 4
   - attack_power:
       attack_power: 5
     magic_attack:
-      magic_power: 5
+      magic_attack: 5
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   - attack_power:
       attack_power: 6
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
   rare:
   - DEX:
       DEX: 2
@@ -5339,7 +5339,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 2
+      magic_attack: 2
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -5372,7 +5372,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 2
+      magic_attack: 2
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -5405,7 +5405,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 1
     magic_attack:
-      magic_power: 4
+      magic_attack: 4
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - DEX:
@@ -5438,7 +5438,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 4
+      magic_attack: 4
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -5471,7 +5471,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -5504,7 +5504,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -5537,7 +5537,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 2
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - DEX:
@@ -5570,7 +5570,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 3
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -5603,7 +5603,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 3
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -5636,7 +5636,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 3
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -5669,7 +5669,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 3
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -5702,7 +5702,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 3
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -5735,7 +5735,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 3
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -5768,7 +5768,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 3
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -5801,7 +5801,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 3
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -5834,7 +5834,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 3
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -5867,7 +5867,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 3
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -5900,7 +5900,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 3
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -5933,7 +5933,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 3
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -5966,7 +5966,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 3
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -5999,7 +5999,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 4
     magic_attack:
-      magic_power: 13
+      magic_attack: 13
     magic_attack_multiplier:
       magic_attack_multiplier: 4
   - DEX:
@@ -6032,7 +6032,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 4
     magic_attack:
-      magic_power: 13
+      magic_attack: 13
     magic_attack_multiplier:
       magic_attack_multiplier: 4
   - DEX:
@@ -6065,7 +6065,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 4
     magic_attack:
-      magic_power: 13
+      magic_attack: 13
     magic_attack_multiplier:
       magic_attack_multiplier: 4
   - DEX:
@@ -6098,7 +6098,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 4
     magic_attack:
-      magic_power: 13
+      magic_attack: 13
     magic_attack_multiplier:
       magic_attack_multiplier: 4
   - DEX:
@@ -6131,7 +6131,7 @@ additional_weapon:
     damage_multiplier:
       damage_multiplier: 4
     magic_attack:
-      magic_power: 13
+      magic_attack: 13
     magic_attack_multiplier:
       magic_attack_multiplier: 4
   unique:
@@ -9954,7 +9954,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 4
+      magic_attack: 4
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - attack_power:
@@ -9968,7 +9968,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 4
+      magic_attack: 4
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - attack_power:
@@ -9982,7 +9982,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - attack_power:
@@ -9996,7 +9996,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
     magic_attack_multiplier:
       magic_attack_multiplier: 4
   - attack_power:
@@ -10010,7 +10010,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 4
   - attack_power:
@@ -10024,7 +10024,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 4
   - attack_power:
@@ -10038,7 +10038,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
     magic_attack_multiplier:
       magic_attack_multiplier: 4
   - attack_power:
@@ -10052,7 +10052,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10066,7 +10066,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10080,7 +10080,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10094,7 +10094,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10108,7 +10108,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10122,7 +10122,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10136,7 +10136,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10150,7 +10150,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10164,7 +10164,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10178,7 +10178,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10192,7 +10192,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10206,7 +10206,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10220,7 +10220,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10234,7 +10234,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 7
   - attack_power:
@@ -10248,7 +10248,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 7
   - attack_power:
@@ -10262,7 +10262,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 7
   - attack_power:
@@ -10276,7 +10276,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 7
   - attack_power:
@@ -10290,7 +10290,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 7
   legendary:
@@ -10307,7 +10307,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10323,7 +10323,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10339,7 +10339,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -10355,7 +10355,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -10371,7 +10371,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -10387,7 +10387,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -10403,7 +10403,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -10419,7 +10419,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 12
   - attack_power:
@@ -10435,7 +10435,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 12
   - attack_power:
@@ -10451,7 +10451,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 12
   - attack_power:
@@ -10467,7 +10467,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 12
   - attack_power:
@@ -10483,7 +10483,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 12
   - attack_power:
@@ -10499,7 +10499,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 12
   - attack_power:
@@ -10515,7 +10515,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 12
   - attack_power:
@@ -10531,7 +10531,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 12
   - attack_power:
@@ -10547,7 +10547,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 12
   - attack_power:
@@ -10563,7 +10563,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 12
   - attack_power:
@@ -10579,7 +10579,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 12
   - attack_power:
@@ -10595,7 +10595,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 12
   - attack_power:
@@ -10611,7 +10611,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 12
   - attack_power:
@@ -10627,7 +10627,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 13
   - attack_power:
@@ -10643,7 +10643,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 13
   - attack_power:
@@ -10659,7 +10659,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 13
   - attack_power:
@@ -10675,7 +10675,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 13
   - attack_power:
@@ -10691,7 +10691,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 40
     magic_attack:
-      magic_power: 18
+      magic_attack: 18
     magic_attack_multiplier:
       magic_attack_multiplier: 13
   normal:
@@ -10728,7 +10728,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 0
     magic_attack:
-      magic_power: 0
+      magic_attack: 0
     magic_attack_multiplier:
       magic_attack_multiplier: 0
   - DEX:
@@ -10764,7 +10764,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 0
     magic_attack:
-      magic_power: 0
+      magic_attack: 0
     magic_attack_multiplier:
       magic_attack_multiplier: 0
   - DEX:
@@ -10800,7 +10800,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 0
     magic_attack:
-      magic_power: 0
+      magic_attack: 0
     magic_attack_multiplier:
       magic_attack_multiplier: 0
   - DEX:
@@ -10836,7 +10836,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 0
     magic_attack:
-      magic_power: 0
+      magic_attack: 0
     magic_attack_multiplier:
       magic_attack_multiplier: 0
   - DEX:
@@ -10872,7 +10872,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 0
     magic_attack:
-      magic_power: 0
+      magic_attack: 0
     magic_attack_multiplier:
       magic_attack_multiplier: 0
   - DEX:
@@ -10908,7 +10908,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 0
     magic_attack:
-      magic_power: 0
+      magic_attack: 0
     magic_attack_multiplier:
       magic_attack_multiplier: 0
   - DEX:
@@ -10944,7 +10944,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 0
     magic_attack:
-      magic_power: 0
+      magic_attack: 0
     magic_attack_multiplier:
       magic_attack_multiplier: 0
   - DEX:
@@ -10980,7 +10980,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 0
     magic_attack:
-      magic_power: 0
+      magic_attack: 0
     magic_attack_multiplier:
       magic_attack_multiplier: 0
   - DEX:
@@ -11016,7 +11016,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 0
     magic_attack:
-      magic_power: 0
+      magic_attack: 0
     magic_attack_multiplier:
       magic_attack_multiplier: 0
   - DEX:
@@ -11052,7 +11052,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -11088,7 +11088,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -11124,7 +11124,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -11160,7 +11160,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -11196,7 +11196,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -11232,7 +11232,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -11268,7 +11268,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -11304,7 +11304,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -11340,7 +11340,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -11376,7 +11376,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -11412,7 +11412,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -11448,7 +11448,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -11484,7 +11484,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -11520,7 +11520,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -11556,7 +11556,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - DEX:
@@ -11592,7 +11592,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 7
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   rare:
@@ -11607,7 +11607,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 2
+      magic_attack: 2
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - attack_power:
@@ -11621,7 +11621,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 2
+      magic_attack: 2
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - attack_power:
@@ -11635,7 +11635,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 4
+      magic_attack: 4
     magic_attack_multiplier:
       magic_attack_multiplier: 1
   - attack_power:
@@ -11649,7 +11649,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 4
+      magic_attack: 4
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - attack_power:
@@ -11663,7 +11663,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - attack_power:
@@ -11677,7 +11677,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - attack_power:
@@ -11691,7 +11691,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 2
   - attack_power:
@@ -11705,7 +11705,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -11719,7 +11719,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -11733,7 +11733,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -11747,7 +11747,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -11761,7 +11761,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -11775,7 +11775,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -11789,7 +11789,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -11803,7 +11803,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -11817,7 +11817,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -11831,7 +11831,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -11845,7 +11845,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -11859,7 +11859,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -11873,7 +11873,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -11887,7 +11887,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 13
+      magic_attack: 13
     magic_attack_multiplier:
       magic_attack_multiplier: 4
   - attack_power:
@@ -11901,7 +11901,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 13
+      magic_attack: 13
     magic_attack_multiplier:
       magic_attack_multiplier: 4
   - attack_power:
@@ -11915,7 +11915,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 13
+      magic_attack: 13
     magic_attack_multiplier:
       magic_attack_multiplier: 4
   - attack_power:
@@ -11929,7 +11929,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 13
+      magic_attack: 13
     magic_attack_multiplier:
       magic_attack_multiplier: 4
   - attack_power:
@@ -11943,7 +11943,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 15
     magic_attack:
-      magic_power: 13
+      magic_attack: 13
     magic_attack_multiplier:
       magic_attack_multiplier: 4
   unique:
@@ -11960,7 +11960,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -11976,7 +11976,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 6
+      magic_attack: 6
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -11992,7 +11992,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 3
   - attack_power:
@@ -12008,7 +12008,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 8
+      magic_attack: 8
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -12024,7 +12024,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -12040,7 +12040,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 10
+      magic_attack: 10
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -12056,7 +12056,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 6
   - attack_power:
@@ -12072,7 +12072,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 12
+      magic_attack: 12
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -12088,7 +12088,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 14
+      magic_attack: 14
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -12104,7 +12104,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -12120,7 +12120,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -12136,7 +12136,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -12152,7 +12152,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -12168,7 +12168,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -12184,7 +12184,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -12200,7 +12200,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -12216,7 +12216,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -12232,7 +12232,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -12248,7 +12248,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -12264,7 +12264,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 9
   - attack_power:
@@ -12280,7 +12280,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 10
   - attack_power:
@@ -12296,7 +12296,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 10
   - attack_power:
@@ -12312,7 +12312,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 10
   - attack_power:
@@ -12328,7 +12328,7 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 10
   - attack_power:
@@ -12344,6 +12344,6 @@ normal_weapon:
     ignored_defence:
       ignored_defence: 30
     magic_attack:
-      magic_power: 16
+      magic_attack: 16
     magic_attack_multiplier:
       magic_attack_multiplier: 10

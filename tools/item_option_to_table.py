@@ -99,7 +99,7 @@ translation_map = {
     "mpconReduce": None,  # 모든 스킬의 MP 소모 -
     "incSpeed": None, # 이동 속도
     "incPAD": "attack_power",
-    "incMAD": "magic_power",
+    "incMAD": "magic_attack",
     "ignoreTargetDEF": "ignored_defence",
     "incEXPr": None, # 경험치 획득 %
     "DAMreflect": None, #'#prop% 확률로 받은 피해의 #DAMreflect%를 반사'
