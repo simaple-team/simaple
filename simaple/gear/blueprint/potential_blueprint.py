@@ -1,15 +1,32 @@
-
-
-
 import enum
+import os
+from typing import Optional, TypedDict
+
+import yaml
+from pydantic import BaseModel, Extra, Field, validator
+
 from simaple.core.base import Stat
 from simaple.gear.potential import Potential
-from pydantic import BaseModel, Extra, Field, validator
 
 
 class PotentialType(enum.Enum):
     normal = "normal"
     additional = "additional"
+    normal_weapon = "normal_weapon"
+    additional_weapon = "additional_weapon"
+
+    @classmethod
+    def get_type(cls, is_additional: bool, is_weapon: bool) -> "PotentialType":
+        if is_additional:
+            if is_weapon:
+                return PotentialType.additional_weapon
+
+            return PotentialType.additional
+
+        if is_weapon:
+            return PotentialType.normal_weapon
+
+        return PotentialType.normal
 
 
 class PotentialFieldName(enum.Enum):
@@ -23,31 +40,160 @@ class PotentialFieldName(enum.Enum):
     LUK = "LUK"
     INT = "INT"
 
+    MHP = "MHP"
+    MMP = "MMP"
+    MHP_multiplier = "MHP_multiplier"
+    MMP_multiplier = "MMP_multiplier"
+
     magic_attack = "magic_attack"
     attack_power = "attack_power"
 
     boss_damage_multiplier = "boss_damage_multiplier"
     all_stat_multiplier = "all_stat_multiplier"
+    damage_multiplier = "damage_multiplier"
+    ignored_defence = "ignored_defence"
+    all_stat = "all_stat"
 
     attack_power_multiplier = "attack_power_multiplier"
     magic_attack_multiplier = "magic_attack_multiplier"
     critical_damage = "critical_damage"
+    critical_rate = "critical_rate"
+
+
+class PotentialTierString(enum.Enum):
+    normal = "normal"
+    rare = "rare"
+    epic = "epic"
+    unique = "unique"
+    legendary = "legendary"
+
+
+class _PotentialTierTableRow(TypedDict):
+    desc: str
+    effect: list[dict[str, int]]
+    key: int
+    name: PotentialFieldName
+
+
+_PotentialSet = dict[PotentialFieldName, dict[str, int]]
+
+
+class PotentialQuery(TypedDict):
+    level: int
+    type: PotentialType
+    tier: PotentialTierString
+    name: PotentialFieldName
+
+
+__potential_db_table = {}
+
+
+def _global_load_kms_potential_table():
+    global __potential_db_table
+    if not __potential_db_table:
+        table_path = os.path.join(os.path.dirname(__file__), "db.yaml")
+
+        with open(table_path) as f:
+            untyped_db = yaml.safe_load(f)
+
+        db: dict[PotentialType, dict[PotentialTierString, list[_PotentialSet]]] = {}
+        for type_key, raw_type_db in untyped_db.items():
+            tier_mapping = {}
+            for tier_key, raw_tier_db in raw_type_db.items():
+                potential_sets = [
+                    {PotentialFieldName(k): v for k, v in name_stat_map.items()}
+                    for name_stat_map in raw_tier_db
+                ]
+                tier_mapping[PotentialTierString(tier_key)] = potential_sets
+
+            db[PotentialType(type_key)] = tier_mapping
+
+        __potential_db_table = PotentialTierTable(db)
+
+    return __potential_db_table
+
+
+class PotentialTierTable:
+    def __init__(
+        self, db: dict[PotentialType, dict[PotentialTierString, list[_PotentialSet]]]
+    ) -> None:
+        self._db = db
+
+    @classmethod
+    def kms(cls) -> "PotentialTierTable":
+        return _global_load_kms_potential_table()
+
+    def get(self, query: PotentialQuery) -> Stat:
+        tier_mapping = self._db[query["type"]]
+
+        effect_list = tier_mapping[query["tier"]]
+        effect = effect_list[self._get_effect_index(query["level"])]
+        stat = effect[query["name"]]
+        # print(Stat.parse_obj(stat).short_dict(), query)
+        return Stat.parse_obj(stat)
+
+        rows = self._db[query["tier"]]
+        for row in rows:
+            if row["name"] == query["name"] and row["type"] == query["type"]:
+                effect = row["effect"][self._get_effect_index(query["level"])]
+                return Stat.parse_obj(effect)
+
+        raise KeyError
+
+    def get_row(self, query: PotentialQuery) -> Stat:
+        rows = self._db[query["tier"]]
+        for row in rows:
+            if row["name"] == query["name"] and row["type"] == query["type"]:
+                effect = row["effect"][self._get_effect_index(query["level"])]
+                return Stat.parse_obj(effect)
+
+        raise KeyError
+
+    def _get_effect_index(self, level: int) -> int:
+        return int((level - 1) // 10)
+
+    def get_by_gear(self, gear):
+        ...
+
 
 class PotentialField(BaseModel):
     name: PotentialFieldName
-    value: int
+    value: Optional[int]
+    tier: Optional[PotentialTierString]
 
 
 class PotentialTemplate(BaseModel):
     options: list[PotentialField] = Field(default_factory=list)
 
 
-def field_to_value(field: PotentialField) -> Stat:
-    return Stat.parse_obj({
-        field.name.value: field.value
-    })
+def field_to_value(
+    field: PotentialField,
+    table: PotentialTierTable,
+    level: int,
+    potential_type: PotentialType,
+) -> Stat:
+    if field.value:
+        return Stat.parse_obj({field.name.value: field.value})
 
-def template_to_potential(spec: PotentialTemplate) -> Potential:
-    return Potential(options=[
-        field_to_value(field) for field in spec.options
-    ])
+    return table.get(
+        {
+            "name": field.name,
+            "level": level,
+            "type": potential_type,
+            "tier": field.tier,
+        }
+    )
+
+
+def template_to_potential(
+    spec: PotentialTemplate,
+    table: PotentialTierTable,
+    level: int,
+    potential_type: PotentialType,
+) -> Potential:
+    return Potential(
+        options=[
+            field_to_value(field, table, level, potential_type)
+            for field in spec.options
+        ]
+    )

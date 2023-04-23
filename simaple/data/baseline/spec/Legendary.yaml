@@ -31,17 +31,17 @@ anchors:
     potential:
       options:
         - name: first_stat_multiplier
-          value: 12
+          tier: legendary
         - name: first_stat_multiplier
-          value: 9
+          tier: unique
         - name: first_stat_multiplier
-          value: 6
+          tier: epic
     additional_potential:
       options:
         - name: first_stat_multiplier
-          value: 5
+          tier: unique
         - name: first_stat_multiplier
-          value: 4
+          tier: epic
   acc: &acc
     bonuses: &acc_bonus
       - rank: 2
