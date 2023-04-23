@@ -84,6 +84,7 @@ class GearRepository:
             "type": self.get_gear_type(gear_id),
             "base_stat": stat.copy(),
             "max_scroll_chance": dumped_gear_meta.get("tuc", 0),
+            "exceptional_enhancement": dumped_gear_meta.get("etuc", False),
         }
 
         return GearMeta.parse_obj(gear_meta_opt)

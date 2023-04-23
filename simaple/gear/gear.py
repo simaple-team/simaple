@@ -19,6 +19,7 @@ class GearMeta(BaseModel):
     set_item_id: int = 0
     joker_to_set_item: bool = False
     max_scroll_chance: int
+    exceptional_enhancement: bool = False
 
     class Config:
         extra = Extra.forbid
