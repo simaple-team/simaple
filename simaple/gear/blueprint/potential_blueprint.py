@@ -6,7 +6,7 @@ import yaml
 from pydantic import BaseModel, Field
 
 from simaple.core.base import Stat
-from simaple.gear.potential import Potential
+from simaple.gear.potential import Potential, PotentialTier
 
 
 class PotentialType(enum.Enum):
@@ -60,27 +60,19 @@ class PotentialFieldName(enum.Enum):
     critical_rate = "critical_rate"
 
 
-class PotentialTierString(enum.Enum):
-    normal = "normal"
-    rare = "rare"
-    epic = "epic"
-    unique = "unique"
-    legendary = "legendary"
-
-
 _PotentialSet = dict[PotentialFieldName, dict[str, int]]
 
 
 class PotentialQuery(TypedDict):
     level: int
     type: PotentialType
-    tier: PotentialTierString
+    tier: PotentialTier
     name: PotentialFieldName
 
 
 class PotentialTierTable:
     def __init__(
-        self, db: dict[PotentialType, dict[PotentialTierString, list[_PotentialSet]]]
+        self, db: dict[PotentialType, dict[PotentialTier, list[_PotentialSet]]]
     ) -> None:
         self._db = db
 
@@ -115,7 +107,7 @@ def _global_load_kms_potential_table() -> PotentialTierTable:
         with open(table_path, encoding="utf-8") as f:
             untyped_db = yaml.safe_load(f)
 
-        db: dict[PotentialType, dict[PotentialTierString, list[_PotentialSet]]] = {}
+        db: dict[PotentialType, dict[PotentialTier, list[_PotentialSet]]] = {}
         for type_key, raw_type_db in untyped_db.items():
             tier_mapping = {}
             for tier_key, raw_tier_db in raw_type_db.items():
@@ -123,7 +115,7 @@ def _global_load_kms_potential_table() -> PotentialTierTable:
                     {PotentialFieldName(k): v for k, v in name_stat_map.items()}
                     for name_stat_map in raw_tier_db
                 ]
-                tier_mapping[PotentialTierString(tier_key)] = potential_sets
+                tier_mapping[PotentialTier(tier_key)] = potential_sets
 
             db[PotentialType(type_key)] = tier_mapping
 
@@ -135,7 +127,7 @@ def _global_load_kms_potential_table() -> PotentialTierTable:
 class PotentialField(BaseModel):
     name: PotentialFieldName
     value: Optional[int]
-    tier: Optional[PotentialTierString]
+    tier: Optional[PotentialTier]
 
 
 class PotentialTemplate(BaseModel):

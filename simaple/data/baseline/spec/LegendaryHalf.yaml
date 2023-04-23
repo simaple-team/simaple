@@ -94,15 +94,15 @@ data:
     third_stat: 75
     first_att: 40
   weapon_potential_tiers:
-    - - 4
-      - 3
-      - 3
-    - - 4
-      - 3
-      - 3
-    - - 4
-      - 3
-      - 3
+    - - legendary
+      - unique
+      - unique
+    - - legendary
+      - unique
+      - unique
+    - - legendary
+      - unique
+      - unique
   gears:
     cap:
       gear_id: 앱솔랩스 모자

@@ -82,15 +82,15 @@ data:
   cash:
     first_stat: 0
   weapon_potential_tiers:
-    - - 3
-      - 2
-      - 2
-    - - 3
-      - 2
-      - 2
-    - - 3
-      - 2
-      - 2
+    - - unique
+      - epic
+      - epic
+    - - unique
+      - epic
+      - epic
+    - - unique
+      - epic
+      - epic
   gears:
     cap:
       gear_id: 앱솔랩스 모자

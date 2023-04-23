@@ -6,7 +6,9 @@ This may generate DB in simaple/gear/blueprint/db.yaml
 import json
 import yaml
 
-from simaple.gear.blueprint.potential_blueprint import PotentialTierString, PotentialType
+from simaple.gear.blueprint.potential_blueprint import PotentialType
+from simaple.gear.potential import PotentialTier
+
 
 with open("item-option.json") as f:
     raw = json.load(f)
@@ -14,19 +16,19 @@ with open("item-option.json") as f:
 from typing import Optional
 
 
-def get_tier(key_string: str) -> PotentialTierString:
+def get_tier(key_string: str) -> PotentialTier:
     tier_value = int(key_string) // 10000
 
     if tier_value == 0:
-        return PotentialTierString.normal
+        return PotentialTier.normal
     elif tier_value == 1:
-        return PotentialTierString.rare
+        return PotentialTier.rare
     elif tier_value == 2:
-        return PotentialTierString.epic
+        return PotentialTier.epic
     elif tier_value == 3:
-        return PotentialTierString.unique
+        return PotentialTier.unique
     elif tier_value == 4:
-        return PotentialTierString.legendary
+        return PotentialTier.legendary
 
     return None
 

@@ -99,15 +99,15 @@ data:
     third_stat: 75
     first_att: 40
   weapon_potential_tiers:
-    - - 4
-      - 3
-      - 3
-    - - 4
-      - 3
-      - 3
-    - - 4
-      - 3
-      - 3
+    - - legendary
+      - unique
+      - unique
+    - - legendary
+      - unique
+      - unique
+    - - legendary
+      - unique
+      - unique
   title:
     # 핑아일체
     all_stat: 10
