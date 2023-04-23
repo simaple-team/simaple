@@ -30,13 +30,18 @@ anchors:
     star: 22
     potential:
       options:
-        - first_stat_multiplier: 12
-        - first_stat_multiplier: 9
-        - first_stat_multiplier: 6
+        - name: first_stat_multiplier
+          tier: legendary
+        - name: first_stat_multiplier
+          tier: unique
+        - name: first_stat_multiplier
+          tier: epic
     additional_potential:
       options:
-        - first_stat_multiplier: 5
-        - first_stat_multiplier: 4
+        - name: first_stat_multiplier
+          tier: unique
+        - name: first_stat_multiplier
+          tier: epic
   acc: &acc
     bonuses: &acc_bonus
       - rank: 2
@@ -51,13 +56,18 @@ anchors:
         first_att:  4.2
     potential:
       options:
-        - first_stat_multiplier: 12
-        - first_stat_multiplier: 9
-        - first_stat_multiplier: 6
+        - name: first_stat_multiplier
+          tier: legendary
+        - name: first_stat_multiplier
+          tier: unique
+        - name: first_stat_multiplier
+          tier: epic
     additional_potential:
       options:
-        - first_stat_multiplier: 5
-        - first_stat_multiplier: 4
+        - name: first_stat_multiplier
+          tier: unique
+        - name: first_stat_multiplier
+          tier: epic
     star: 21
 data:
   arcane_symbols: 
@@ -89,15 +99,15 @@ data:
     third_stat: 75
     first_att: 40
   weapon_potential_tiers:
-    - - 4
-      - 3
-      - 3
-    - - 4
-      - 3
-      - 3
-    - - 4
-      - 3
-      - 3
+    - - legendary
+      - unique
+      - unique
+    - - legendary
+      - unique
+      - unique
+    - - legendary
+      - unique
+      - unique
   title:
     # 핑아일체
     all_stat: 10
@@ -109,13 +119,18 @@ data:
       <<: *armor
       potential:
         options:
-          - first_stat_multiplier: 12
-          - first_stat_multiplier: 9
-          - first_stat_multiplier: 9
+        - name: first_stat_multiplier
+          tier: legendary
+        - name: first_stat_multiplier
+          tier: unique
+        - name: first_stat_multiplier
+          tier: unique
       additional_potential:
         options:
-          - first_att: 10
-          - first_stat_multiplier: 4
+          - name: first_att
+            tier: rare
+          - name: first_stat_multiplier 
+            tier: epic
     coat:
       gear_id: 카루타 상의
       <<: *armor
@@ -130,8 +145,10 @@ data:
       <<: *armor
       potential:
         options:
-          - critical_damage: 8
-          - critical_damage: 8
+          - name: critical_damage
+            tier: legendary
+          - name: critical_damage
+            tier: legendary
     cape:
       gear_id: 앱솔랩스 망토
       <<: *armor
@@ -215,22 +232,28 @@ data:
       star: 22
       additional_potential:
         options:
-          - first_att_multiplier: 12
-          - first_att_multiplier: 9
+          - name: first_att_multiplier
+            tier: legendary
+          - name: first_att_multiplier
+            tier: unique
     subweapon:
       gear_id: 노블 브레이슬릿
       additional_potential:
         options:
-          - first_att_multiplier: 12
-          - first_att_multiplier: 9
+          - name: first_att_multiplier
+            tier: legendary
+          - name: first_att_multiplier
+            tier: unique
     emblem:
       gear_id: 골드 나이트 엠블렘
       additional_potential:
         options:
-          - first_att_multiplier: 12
-          - first_att_multiplier: 9
+          - name: first_att_multiplier
+            tier: legendary
+          - name: first_att_multiplier
+            tier: unique
     machine_heart:
-      gear_id: 리튬 하트
+      gear_id: 페어리 하트
       <<: *acc
       scroll:
         name: 주문의 흔적

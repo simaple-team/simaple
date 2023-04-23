@@ -30,12 +30,16 @@ anchors:
     star: 18
     potential:
       options:
-        - first_stat_multiplier: 12
-        - first_stat_multiplier: 9
+        - name: first_stat_multiplier
+          tier: legendary
+        - name: first_stat_multiplier
+          tier: unique
     additional_potential:
       options:
-        - first_att: 10
-        - first_stat_multiplier: 4
+        - name: first_att
+          tier: rare
+        - name: first_stat_multiplier
+          tier: epic
   acc: &acc
     bonuses: &acc_bonus
       - rank: 3
@@ -50,12 +54,16 @@ anchors:
         first_att: 2.5
     potential:
       options:
-        - first_stat_multiplier: 12
-        - first_stat_multiplier: 9
+        - name: first_stat_multiplier
+          tier: legendary
+        - name: first_stat_multiplier
+          tier: unique
     additional_potential:
       options:
-        - first_att: 10
-        - first_stat_multiplier: 4
+        - name: first_att
+          tier: rare
+        - name: first_stat_multiplier
+          tier: epic
     star: 18
 data:
   arcane_symbols: 
@@ -84,28 +92,33 @@ data:
     third_stat: 75
     first_att: 40
   weapon_potential_tiers:
-    - - 4
-      - 3
-      - 3
-    - - 3
-      - 2
-      - 2
-    - - 3
-      - 2
-      - 2
+    - - legendary
+      - unique
+      - unique
+    - - unique
+      - epic
+      - epic
+    - - unique
+      - epic
+      - epic
   gears:
     cap:
       gear_id: 앱솔랩스 모자
       <<: *armor
       potential:
         options:
-          - first_stat_multiplier: 12
-          - first_stat_multiplier: 9
-          - first_stat_multiplier: 9
+          - name: first_stat_multiplier
+            tier: legendary
+          - name: first_stat_multiplier
+            tier: unique
+          - name: first_stat_multiplier
+            tier: unique
       additional_potential:
         options:
-          - first_att: 10
-          - first_stat_multiplier: 4
+          - name: first_att
+            tier: rare
+          - name: first_stat_multiplier
+            tier: epic
     coat:
       gear_id: 카루타 상의
       <<: *armor
@@ -120,8 +133,10 @@ data:
       <<: *armor
       potential:
         options:
-          - critical_damage: 8
-          - critical_damage: 8
+          - name: critical_damage
+            tier: legendary
+          - name: critical_damage
+            tier: legendary
     cape:
       gear_id: 앱솔랩스 망토
       <<: *armor
@@ -194,22 +209,28 @@ data:
       star: 17
       additional_potential:
         options:
-          - first_att_multiplier: 12
-          - first_att_multiplier: 9
+          - name: first_att_multiplier
+            tier: legendary
+          - name: first_att_multiplier
+            tier: unique
     subweapon:
       gear_id: 노블 브레이슬릿
       additional_potential:
         options:
-          - first_att_multiplier: 12
-          - first_att_multiplier: 9
+          - name: first_att_multiplier
+            tier: legendary
+          - name: first_att_multiplier
+            tier: unique
     emblem:
       gear_id: 골드 나이트 엠블렘
       additional_potential:
         options:
-          - first_att_multiplier: 12
-          - first_att_multiplier: 9
+          - name: first_att_multiplier
+            tier: legendary
+          - name: first_att_multiplier
+            tier: unique
     machine_heart:
-      gear_id: 리튬 하트
+      gear_id: 페어리 하트
       <<: *acc
       scroll:
         name: 주문의 흔적

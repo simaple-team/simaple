@@ -7,13 +7,13 @@ from pydantic import BaseModel, Extra, Field
 from simaple.core import ActionStat, ExtendedStat, LevelStat, Stat
 
 
-class PotentialTier(enum.IntEnum):
-    empty = -1
-    normal = 0
-    rare = 1
-    epic = 2
-    unique = 3
-    legendary = 4
+class PotentialTier(enum.Enum):
+    empty = "empty"
+    normal = "normal"
+    rare = "rare"
+    epic = "epic"
+    unique = "unique"
+    legendary = "legendary"
 
 
 class PotentialInterface(BaseModel, metaclass=ABCMeta):
