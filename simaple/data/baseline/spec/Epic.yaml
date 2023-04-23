@@ -31,9 +31,9 @@ anchors:
     potential:
       options:
         - name: first_stat_multiplier
-          value: 6
+          tier: epic
         - name: first_stat_multiplier
-          value: 3
+          tier: rare
     additional_potential:
       options:
         - name: first_att
@@ -53,9 +53,9 @@ anchors:
     potential:
       options:
         - name: first_stat_multiplier
-          value: 6
+          tier: epic
         - name: first_stat_multiplier
-          value: 3
+          tier: rare
     additional_potential:
       options:
         - name: first_att
@@ -189,7 +189,7 @@ data:
           - name: first_att_multiplier
             value: 6
     machine_heart:
-      gear_id: 리튬 하트
+      gear_id: 페어리 하트
       <<: *acc
       scroll:
         name: 주문의 흔적

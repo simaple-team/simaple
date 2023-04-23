@@ -15,7 +15,6 @@ from simaple.gear.gear import Gear, GearMeta
 from simaple.gear.improvements.scroll import Scroll
 from simaple.gear.improvements.spell_trace import SpellTrace
 from simaple.gear.improvements.starforce import Starforce
-from simaple.gear.potential import AdditionalPotential, Potential
 
 
 class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):

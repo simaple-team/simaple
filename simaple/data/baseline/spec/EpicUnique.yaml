@@ -31,13 +31,13 @@ anchors:
     potential:
       options:
         - name: first_stat_multiplier
-          value: 6
+          tier: epic
         - name: first_stat_multiplier
-          value: 3
+          tier: rare
     additional_potential:
       options:
         - name: first_att
-          value: 10
+          tier: rare
   acc: &acc
     bonuses: &acc_bonus
       - rank: 4
@@ -53,13 +53,13 @@ anchors:
     potential:
       options:
         - name: first_stat_multiplier
-          value: 6
+          tier: epic
         - name: first_stat_multiplier
-          value: 3
+          tier: rare
     additional_potential:
       options:
         - name: first_att
-          value: 10
+          tier: rare
     star: 12
 data:
   arcane_symbols: 
@@ -98,17 +98,17 @@ data:
       potential:
         options:
           - name: first_stat_multiplier
-            value: 12
+            tier: legendary
           - name: first_stat_multiplier
-            value: 9
+            tier: unique
           - name: first_stat_multiplier
-            value: 9
+            tier: unique
       additional_potential:
         options:
-          - name: first_att
-            value: 10
           - name: first_stat_multiplier
-            value: 4
+            tier: epic
+          - name: first_att
+            tier: rare
     coat:
       gear_id: 카루타 상의
       <<: *armor
@@ -125,15 +125,15 @@ data:
       potential:
         options:
           - name: critical_damage
-            value: 8
+            tier: legendary
           - name: first_stat_multiplier
-            value: 9
+            tier: unique
       additional_potential:
         options:
-          - name: first_att
-            value: 10
           - name: first_stat_multiplier
-            value: 4
+            tier: epic
+          - name: first_att
+            tier: rare
     cape:
       gear_id: 앱솔랩스 망토
       <<: *armor
@@ -216,7 +216,7 @@ data:
           - name: first_att_multiplier
             value: 6
     machine_heart:
-      gear_id: 리튬 하트
+      gear_id: 페어리 하트
       <<: *acc
       scroll:
         name: 주문의 흔적

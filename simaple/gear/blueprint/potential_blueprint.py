@@ -3,7 +3,7 @@ import os
 from typing import Optional, TypedDict
 
 import yaml
-from pydantic import BaseModel, Extra, Field, validator
+from pydantic import BaseModel, Field
 
 from simaple.core.base import Stat
 from simaple.gear.potential import Potential
@@ -68,13 +68,6 @@ class PotentialTierString(enum.Enum):
     legendary = "legendary"
 
 
-class _PotentialTierTableRow(TypedDict):
-    desc: str
-    effect: list[dict[str, int]]
-    key: int
-    name: PotentialFieldName
-
-
 _PotentialSet = dict[PotentialFieldName, dict[str, int]]
 
 
@@ -83,34 +76,6 @@ class PotentialQuery(TypedDict):
     type: PotentialType
     tier: PotentialTierString
     name: PotentialFieldName
-
-
-__potential_db_table = {}
-
-
-def _global_load_kms_potential_table():
-    global __potential_db_table
-    if not __potential_db_table:
-        table_path = os.path.join(os.path.dirname(__file__), "db.yaml")
-
-        with open(table_path) as f:
-            untyped_db = yaml.safe_load(f)
-
-        db: dict[PotentialType, dict[PotentialTierString, list[_PotentialSet]]] = {}
-        for type_key, raw_type_db in untyped_db.items():
-            tier_mapping = {}
-            for tier_key, raw_tier_db in raw_type_db.items():
-                potential_sets = [
-                    {PotentialFieldName(k): v for k, v in name_stat_map.items()}
-                    for name_stat_map in raw_tier_db
-                ]
-                tier_mapping[PotentialTierString(tier_key)] = potential_sets
-
-            db[PotentialType(type_key)] = tier_mapping
-
-        __potential_db_table = PotentialTierTable(db)
-
-    return __potential_db_table
 
 
 class PotentialTierTable:
@@ -129,31 +94,39 @@ class PotentialTierTable:
         effect_list = tier_mapping[query["tier"]]
         effect = effect_list[self._get_effect_index(query["level"])]
         stat = effect[query["name"]]
-        # print(Stat.parse_obj(stat).short_dict(), query)
+
         return Stat.parse_obj(stat)
-
-        rows = self._db[query["tier"]]
-        for row in rows:
-            if row["name"] == query["name"] and row["type"] == query["type"]:
-                effect = row["effect"][self._get_effect_index(query["level"])]
-                return Stat.parse_obj(effect)
-
-        raise KeyError
-
-    def get_row(self, query: PotentialQuery) -> Stat:
-        rows = self._db[query["tier"]]
-        for row in rows:
-            if row["name"] == query["name"] and row["type"] == query["type"]:
-                effect = row["effect"][self._get_effect_index(query["level"])]
-                return Stat.parse_obj(effect)
-
-        raise KeyError
 
     def _get_effect_index(self, level: int) -> int:
         return int((level - 1) // 10)
 
-    def get_by_gear(self, gear):
-        ...
+
+__potential_db_table: PotentialTierTable
+
+
+def _global_load_kms_potential_table() -> PotentialTierTable:
+    global __potential_db_table  # pylint:disable=W0603
+    if not __potential_db_table:
+        table_path = os.path.join(os.path.dirname(__file__), "db.yaml")
+
+        with open(table_path, encoding="utf-8") as f:
+            untyped_db = yaml.safe_load(f)
+
+        db: dict[PotentialType, dict[PotentialTierString, list[_PotentialSet]]] = {}
+        for type_key, raw_type_db in untyped_db.items():
+            tier_mapping = {}
+            for tier_key, raw_tier_db in raw_type_db.items():
+                potential_sets = [
+                    {PotentialFieldName(k): v for k, v in name_stat_map.items()}
+                    for name_stat_map in raw_tier_db
+                ]
+                tier_mapping[PotentialTierString(tier_key)] = potential_sets
+
+            db[PotentialType(type_key)] = tier_mapping
+
+        __potential_db_table = PotentialTierTable(db)
+
+    return __potential_db_table
 
 
 class PotentialField(BaseModel):
@@ -174,6 +147,9 @@ def field_to_value(
 ) -> Stat:
     if field.value:
         return Stat.parse_obj({field.name.value: field.value})
+
+    if not field.tier:
+        raise ValueError("value for tier must be given")
 
     return table.get(
         {
