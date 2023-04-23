@@ -84,6 +84,9 @@ class PotentialTierTable:
     ) -> None:
         self._db = db
 
+    def empty(self) -> bool:
+        return len(self._db) == 0
+
     @classmethod
     def kms(cls) -> "PotentialTierTable":
         return _global_load_kms_potential_table()
@@ -101,12 +104,12 @@ class PotentialTierTable:
         return int((level - 1) // 10)
 
 
-__potential_db_table: PotentialTierTable
+__potential_db_table: PotentialTierTable = PotentialTierTable({})
 
 
 def _global_load_kms_potential_table() -> PotentialTierTable:
     global __potential_db_table  # pylint:disable=W0603
-    if not __potential_db_table:
+    if __potential_db_table.empty():
         table_path = os.path.join(os.path.dirname(__file__), "db.yaml")
 
         with open(table_path, encoding="utf-8") as f:
