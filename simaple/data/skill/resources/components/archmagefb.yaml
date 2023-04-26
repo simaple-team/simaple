@@ -4,12 +4,14 @@ metadata:
   label:
     group: archmagefb
     name: 플레임 스윕
+    id: 2121006
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
+  id: 2121006
   name: 플레임 스윕
   delay: 600
   damage: "{{ 130 + 3 * skill_level }}"

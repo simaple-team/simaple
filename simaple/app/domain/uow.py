@@ -3,6 +3,7 @@ import abc
 from simaple.app.domain.component_schema import ComponentSchemaRepository
 from simaple.app.domain.simulator import SimulatorRepository
 from simaple.app.domain.snapshot import SnapshotRepository
+from simaple.spec.repository import SpecRepository
 
 
 class UnitOfWork(metaclass=abc.ABCMeta):
@@ -20,4 +21,8 @@ class UnitOfWork(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def commit(self) -> None:
+        ...
+
+    @abc.abstractmethod
+    def spec_repository(self) -> SpecRepository:
         ...
