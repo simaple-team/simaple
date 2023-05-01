@@ -11,6 +11,7 @@ patch:
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
+  id: 2121006
   name: 플레임 스윕
   delay: 600
   damage: "{{ 130 + 3 * skill_level }}"
@@ -30,11 +31,13 @@ metadata:
   label:
     group: archmagefb
     name: 플레임 헤이즈
+    id: 2121011
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2121011
   name: 플레임 헤이즈
   listening_actions:
     미스트 이럽션.use.emitted.global.damage: reset_cooldown
@@ -56,12 +59,14 @@ metadata:
   label:
     group: archmagefb
     name: 미스트 이럽션
+    id: 2121003
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
+  id: 2121003
   name: 미스트 이럽션
   cooldown_duration: 8000
   delay: 720
@@ -79,9 +84,11 @@ version: simaple.io/BuffSkillComponent
 metadata:
   label:
     group: archmagefb
-    name: 에픽 어드벤처
+    name: 에픽 어드벤쳐
+    id: 2121053
 data:
-  name: 에픽 어드벤처
+  id: 2121053
+  name: 에픽 어드벤쳐
   cooldown_duration: 120000
   delay: 0
   red: false
@@ -96,7 +103,9 @@ metadata:
   label:
     group: archmagefb
     name: 메디테이션
+    id: 2101001
 data:
+  id: 2101001
   name: 메디테이션
   cooldown_duration: 0
   delay: 0
@@ -111,7 +120,9 @@ metadata:
   label:
     group: archmagefb
     name: 익스트림 매직(불,독)
+    id: 2110000
 data:
+  id: 2110000
   name: 익스트림 매직(불,독)
   stat:
     final_damage_multiplier: 20
@@ -122,7 +133,9 @@ metadata:
   label:
     group: archmagefb
     name: 퍼번트 드레인
+    id: 2120014
 data:
+  id: 2120014
   name: 퍼번트 드레인
   stat:
     final_damage_multiplier: 25
@@ -133,7 +146,9 @@ metadata:
   label:
     group: archmagefb
     name: 아케인 에임(액티브)
+    id: 2120010
 data:
+  id: 2120010
   name: 아케인 에임(액티브)
   stat:
     damage_multiplier: 40
@@ -144,10 +159,12 @@ metadata:
   label:
     group: archmagefb
     name: 텔레포트 마스터리
+    id: 2111007
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 2111007
   name: 텔레포트 마스터리
   cooldown_duration: 0
   delay: 0
@@ -160,12 +177,14 @@ metadata:
   label:
     group: archmagefb
     name: 포이즌 노바
+    id: 400021028
   annotation:
     rank: 5
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400021028
   name: 포이즌 노바
   listening_actions:
     "미스트 이럽션.use": trigger
@@ -188,10 +207,12 @@ metadata:
   label:
     group: archmagefb
     name: 도트 퍼니셔
+    id: 400021001
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400021001
   name: 도트 퍼니셔
   cooldown_duration: 25000
   delay: 690
@@ -211,11 +232,13 @@ metadata:
   label:
     group: archmagefb
     name: 메테오
+    id: 2121007
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2121007
   name: 메테오
   cooldown_duration: 45000
   delay: 690
@@ -231,11 +254,13 @@ metadata:
   label:
     group: archmagefb
     name: 메테오(패시브)
+    id: -2121007
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: -2121007
   name: 메테오(패시브)
   listening_actions:
     플레임 스윕.use.emitted.global.damage: use
@@ -259,11 +284,13 @@ metadata:
   label:
     group: archmagefb
     name: 이프리트
+    id: 2121005
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2121005
   name: 이프리트
   damage: 0
   default_skill_level: 30
@@ -287,11 +314,13 @@ metadata:
   label:
     group: archmagefb
     name: 파이어 오라
+    id: 2121054
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2121054
   name: 파이어 오라
   damage: 0
   delay: 0
@@ -311,11 +340,13 @@ metadata:
   label:
     group: archmagefb
     name: 이그나이트
+    id: 2100010
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2100010
   listening_actions:
     플레임 스윕.use.emitted.global.damage: use
     플레임 헤이즈.use.emitted.global.damage: use
@@ -336,7 +367,9 @@ metadata:
   label:
     group: archmagefb
     name: 포이즌 미스트
+    id: 2111003
 data:
+  id: 2111003
   listening_actions:
     플레임 헤이즈.use: use
   name: 포이즌 미스트
@@ -356,10 +389,12 @@ metadata:
   label:
     group: archmagefb
     name: 포이즌 체인
+    id: 400021101
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400021101
   name: 포이즌 체인
   damage: "{{ 250 + 10 * skill_level }}"
   delay: 600
@@ -379,11 +414,13 @@ metadata:
   label:
     group: archmagefb
     name: 메기도 플레임
+    id: 2121052
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2121052
   name: 메기도 플레임
   delay: 690
   cooldown_duration: 50_000
@@ -401,10 +438,12 @@ metadata:
   label:
     group: archmagefb
     name: 퓨리 오브 이프리트
+    id: 400021066
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400021066
   name: 퓨리 오브 이프리트
   damage: 0
   delay: 360
@@ -423,10 +462,12 @@ metadata:
   label:
     group: archmagefb
     name: 오버로드 마나
+    id: 400021000
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400021000
   name: 오버로드 마나
   cooldown_duration: 0
   delay: 0

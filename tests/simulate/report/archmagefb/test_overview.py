@@ -13,7 +13,7 @@ def test_buff_view(archmagefb_client):
 
     current_buff_stat = archmagefb_client.environment.show("buff")
 
-    archmagefb_client.play(Action(name="에픽 어드벤처", method="use"))
+    archmagefb_client.play(Action(name="에픽 어드벤쳐", method="use"))
 
     assert archmagefb_client.environment.show("buff") == current_buff_stat + Stat(
         damage_multiplier=10
