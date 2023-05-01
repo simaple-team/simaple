@@ -258,13 +258,13 @@
       "assigned_duration": 0.0
     }
   },
-  ".메이플 여신의 축복.cooldown": {
+  ".메이플월드 여신의 축복.cooldown": {
     "cls": "Cooldown",
     "payload": {
       "time_left": 0.0
     }
   },
-  ".메이플 여신의 축복.lasting": {
+  ".메이플월드 여신의 축복.lasting": {
     "cls": "Lasting",
     "payload": {
       "time_left": 0.0,

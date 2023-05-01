@@ -4,12 +4,14 @@ version: simaple.io/BuffSkillComponent
 metadata:
   label:
     group: adventurer.magician
-    name: 메이플 여신의 축복
+    name: 메이플월드 여신의 축복
+    id: 400001042-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
-  name: 메이플 여신의 축복
+  id: 400001042-0
+  name: 메이플월드 여신의 축복
   lasting_duration: 60_000
   cooldown_duration: 180_000
   delay: 450
@@ -24,12 +26,14 @@ version: simaple.io/BuffSkillComponent
 metadata:
   label:
     group: adventurer.thief
-    name: 메이플 여신의 축복
+    name: 메이플월드 여신의 축복
+    id: 400001042-1
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
-  name: 메이플 여신의 축복
+  id: 400001042-1
+  name: 메이플월드 여신의 축복
   lasting_duration: 60_000
   cooldown_duration: 180_000
   delay: 450
