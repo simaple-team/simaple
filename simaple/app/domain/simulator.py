@@ -35,6 +35,10 @@ class Simulator(pydantic.BaseModel):
         simulation.add_empty_action_playlog()
         return simulation
 
+    def get_valid_skill_names(self) -> list[str]:
+        validity_view = self.client.environment.show("validitiy")
+        return list(view.name for view in validity_view)
+
     def add_empty_action_playlog(self) -> None:
         self.history.append(
             PlayLog(

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, cast
 
 from simaple.core.base import Stat
 from simaple.simulate.component.base import (
@@ -25,7 +25,7 @@ from simaple.simulate.component.trait.impl import (
     UsePeriodicDamageTrait,
     UseSimpleAttackTrait,
 )
-from simaple.simulate.component.view import Running, Validity
+from simaple.simulate.component.view import ComponentInformation, Running, Validity
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import Dynamics
 
@@ -47,6 +47,10 @@ class SkillComponent(Component):
             return validity
 
         return validity
+
+    @view_method
+    def info(self, _: ReducerState) -> ComponentInformation:
+        return cast(ComponentInformation, self.dict())
 
     def _get_cooldown_duration(self) -> float:
         return self.cooldown_duration

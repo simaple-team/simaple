@@ -1,9 +1,14 @@
-from typing import Optional
+from typing import Optional, TypedDict
 
 import pydantic
 
 from simaple.core.base import Stat
 from simaple.simulate.view import AggregationView
+
+
+class ComponentInformation(TypedDict):
+    id: int
+    name: str
 
 
 class Validity(pydantic.BaseModel):
@@ -25,6 +30,15 @@ class KeydownView(pydantic.BaseModel):
     name: str
     time_left: float
     running: bool
+
+
+class InformationParentView(AggregationView):
+    def aggregate(self, representations: list[ComponentInformation]):
+        return representations
+
+    @classmethod
+    def get_installation_pattern(cls):
+        return r".*\.info"
 
 
 class ValidityParentView(AggregationView):

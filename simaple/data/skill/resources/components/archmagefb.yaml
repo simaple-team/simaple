@@ -4,6 +4,7 @@ metadata:
   label:
     group: archmagefb
     name: 플레임 스윕
+    id: 2121006
 patch:
   - SkillLevelPatch
   - EvalPatch

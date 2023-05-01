@@ -8,6 +8,7 @@ from simaple.app.infrastructure.component_schema_repository import (
     LoadableComponentSchemaRepository,
 )
 from simaple.app.infrastructure.snapshot_repository import SqlSnapshotRepository
+from simaple.spec.repository import SpecRepository
 
 
 class SimpleUnitOfWork(UnitOfWork):
@@ -15,10 +16,13 @@ class SimpleUnitOfWork(UnitOfWork):
         self,
         session_builder: Callable[[], Session],
         simulator_repository: SimulatorRepository,
+        component_schema_repository: LoadableComponentSchemaRepository,
+        spec_repository: SpecRepository,
     ):
         self._session = session_builder()
         self._simulator_repository = simulator_repository
-        self._component_schema_repository = LoadableComponentSchemaRepository()
+        self._component_schema_repository = component_schema_repository
+        self._spec_repository = spec_repository
 
     def snapshot_repository(self) -> SqlSnapshotRepository:
         return SqlSnapshotRepository(self._session)
@@ -31,3 +35,6 @@ class SimpleUnitOfWork(UnitOfWork):
 
     def commit(self) -> None:
         self._session.commit()
+
+    def spec_repository(self) -> SpecRepository:
+        return self._spec_repository

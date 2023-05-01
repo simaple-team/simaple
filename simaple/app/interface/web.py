@@ -8,11 +8,13 @@ from simaple.app.interface.container import WebContainer, WebSetting
 from simaple.app.interface.handler import add_exception_handlers
 from simaple.app.interface.routers import (
     component_spec,
+    skill,
     snapshot,
     statistics,
     workspace,
 )
 from simaple.app.interface.routers.component_spec import component_spec_router
+from simaple.app.interface.routers.skill import skill_router
 from simaple.app.interface.routers.snapshot import snapshot_router
 from simaple.app.interface.routers.statistics import statistics_router
 from simaple.app.interface.routers.workspace import router
@@ -24,7 +26,9 @@ class SimapleWeb(fastapi.FastAPI):
 
         container = WebContainer()
         container.config.from_pydantic(WebSetting())
-        container.wire(packages=[statistics, workspace, snapshot, component_spec])
+        container.wire(
+            packages=[statistics, workspace, snapshot, component_spec, skill]
+        )
 
         self.container: WebContainer = container
 
@@ -32,6 +36,7 @@ class SimapleWeb(fastapi.FastAPI):
         self.include_router(statistics_router)
         self.include_router(snapshot_router)
         self.include_router(component_spec_router)
+        self.include_router(skill_router)
 
     def reset_database(self):
         self.container.sql_database().delete()

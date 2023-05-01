@@ -10,6 +10,8 @@ from simaple.app.infrastructure.component_schema_repository import (
     LoadableComponentSchemaRepository,
 )
 from simaple.app.infrastructure.repository import InmemorySimulatorRepository
+from simaple.spec.repository import DirectorySpecRepository
+from simaple.data.skill import get_kms_spec_resource_path
 
 
 class InmemorySnapshotRepository(SnapshotRepository):
@@ -44,6 +46,9 @@ class InmemoryUnitOfWork(UnitOfWork):
         self._component_schema_repository: LoadableComponentSchemaRepository = (
             LoadableComponentSchemaRepository()
         )
+        self._spec_repository: DirectorySpecRepository = (
+            DirectorySpecRepository(get_kms_spec_resource_path())
+        )
 
     def snapshot_repository(self) -> SnapshotRepository:
         return self._snapshot_repository
@@ -53,6 +58,9 @@ class InmemoryUnitOfWork(UnitOfWork):
 
     def component_schema_repository(self) -> LoadableComponentSchemaRepository:
         return self._component_schema_repository
+
+    def spec_repository(self) -> DirectorySpecRepository:
+        return self._spec_repository
 
     def commit(self) -> None:
         return
