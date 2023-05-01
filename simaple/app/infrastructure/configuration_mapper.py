@@ -5,12 +5,13 @@ from simaple.app.domain.simulator_configuration import (
     MinimalSimulatorConfiguration,
     SimulatorConfiguration,
 )
+from fastapi.encoders import jsonable_encoder
 
 
 class ConfigurationMapper:
     def dump(self, config: SimulatorConfiguration) -> dict:
         config_name = config.get_name()
-        dumped_config = config.dict()
+        dumped_config = jsonable_encoder(config)
         return {
             "name": config_name,
             "dump": dumped_config,
