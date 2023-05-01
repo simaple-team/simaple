@@ -4,10 +4,12 @@ metadata:
   label:
     group: cygnus
     name: 시그너스 팔랑크스
+    id: 400001018-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400001018-0
   name: 시그너스 팔랑크스
   cooldown_duration: 30_000
   delay: 600
@@ -24,10 +26,12 @@ metadata:
   label:
     group: cygnus
     name: 초월자 시그너스의 축복
+    id: 400001044-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400001044-0
   name: 초월자 시그너스의 축복
   cooldown_duration: 240_000
   delay: 480
