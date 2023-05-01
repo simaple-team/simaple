@@ -4,10 +4,12 @@ metadata:
   label:
     group: common
     name: 쓸만한 샤프 아이즈
+    id: 400001002-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400001002-0
   name: 쓸만한 샤프 아이즈
   cooldown_duration: 180_000
   delay: 0 # pet buff
@@ -22,10 +24,12 @@ metadata:
   label:
     group: common
     name: 쓸만한 하이퍼 바디
+    id: 400001003-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400001003-0
   name: 쓸만한 하이퍼 바디
   cooldown_duration: 180_000
   delay: 0 # pet buff
@@ -40,10 +44,12 @@ metadata:
   label:
     group: common
     name: 쓸만한 어드밴스드 블레스
+    id: 400001005-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400001005-0
   name: 쓸만한 어드밴스드 블레스
   cooldown_duration: 180_000
   delay: 0 # pet buff
@@ -60,10 +66,12 @@ metadata:
   label:
     group: common
     name: 스파이더 인 미러
+    id: 400001039-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400001039-0
   name: 스파이더 인 미러
   damage: '{{ 450 + 18 * skill_level }}'
   hit: 15
@@ -82,12 +90,14 @@ version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: common
-    name: 크레센트 오브 더 솔라
+    name: 크레스트 오브 더 솔라
+    id: 400001059-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
-  name: 크레센트 오브 더 솔라
+  id: 400001059-0
+  name: 크레스트 오브 더 솔라
   damage: '{{ 750 + 30 * skill_level }}'
   hit: 12
   delay: 720
