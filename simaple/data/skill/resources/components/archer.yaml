@@ -4,10 +4,12 @@ metadata:
   label:
     group: archer
     name: 크리티컬 리인포스
+    id: 400031023-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400031023-0
   name: 크리티컬 리인포스
   cooldown_duration: 120_000
   delay: 600

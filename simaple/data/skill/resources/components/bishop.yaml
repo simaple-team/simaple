@@ -4,11 +4,13 @@ metadata:
   label:
     group: bishop
     name: 엔젤레이
+    id: 2321007-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2321007-0
   name: 엔젤레이
   delay: 630
   cooldown_duration: 0
@@ -26,11 +28,13 @@ metadata:
   label:
     group: bishop
     name: 제네시스
+    id: 2321008-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2321008-0
   name: 제네시스
   delay: 630
   cooldown_duration: 45_000
@@ -48,11 +52,13 @@ metadata:
   label:
     group: bishop
     name: 파운틴 포 엔젤
+    id: 2311014-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2311014-0
   name: 파운틴 포 엔젤
   damage: 0
   delay: 600 #?
@@ -72,11 +78,13 @@ metadata:
   label:
     group: bishop
     name: 바하뮤트
+    id: 2321003-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2321003-0
   name: 바하뮤트
   damage: 0
   delay: 600
@@ -98,10 +106,12 @@ metadata:
   label:
     group: bishop
     name: 트라이엄프 페더
+    id: 2311015-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 2311015-0
   listening_actions:
     엔젤레이.use.emitted.global.damage: trigger
     제네시스.use.emitted.global.damage: trigger
@@ -119,10 +129,12 @@ metadata:
   label:
     group: bishop
     name: 어드밴스드 블레스
+    id: 2321005-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 2321005-0
   name: 어드밴스드 블레스
   cooldown_duration: 0
   delay: 0
@@ -141,7 +153,9 @@ metadata:
   label:
     group: bishop
     name: 아케인 에임(액티브)
+    id: 2320011-0
 data:
+  id: 2320011-0
   name: 아케인 에임(액티브)
   stat:
     damage_multiplier: 40
@@ -152,10 +166,12 @@ metadata:
   label:
     group: bishop
     name: 홀리 블러드
+    id: 2321016-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 2321016-0
   name: 홀리 블러드
   cooldown_duration: "{{ (260 - 12 * (character_stat.INT // 5000)) * 1000 }}"
   delay: 600 #?
@@ -170,11 +186,13 @@ metadata:
   label:
     group: bishop
     name: 헤븐즈 도어
+    id: 2321052-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2321052-0
   name: 헤븐즈 도어
   delay: 270
   cooldown_duration: 60_000
@@ -188,10 +206,12 @@ metadata:
   label:
     group: bishop
     name: 프레이
+    id: 400021003-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400021003-0
   name: 프레이
   cooldown_duration: 120_000
   delay: 360
@@ -206,13 +226,14 @@ metadata:
   label:
     group: bishop
     name: 엔젤 오브 리브라
+    id: 400021032-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
   binds:
     divine_mark: .바하뮤트.divine_mark
-
+  id: 400021032-0
   name: 엔젤 오브 리브라
   damage: 0
   delay: 540
@@ -236,7 +257,9 @@ metadata:
   label:
     group: bishop
     name: 엔젤릭 터치
+    id: 2301010-0
 data:
+  id: 2301010-0
   name: 엔젤릭 터치
   delay: 750
   damage: 350
@@ -254,10 +277,12 @@ metadata:
   label:
     group: bishop
     name: 피스메이커
+    id: 400021070-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400021070-0
   name: 피스메이커
   delay: 750
   damage: "{{ 350 + 14 * skill_level }}"
@@ -275,10 +300,12 @@ metadata:
   label:
     group: bishop
     name: 디바인 퍼니시먼트
+    id: 400021086-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400021086-0
   name: 디바인 퍼니시먼트
   maximum_keydown_time: 8_160
 
