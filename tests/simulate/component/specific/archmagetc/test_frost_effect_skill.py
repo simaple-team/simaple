@@ -16,6 +16,7 @@ from simaple.simulate.reserved_names import Tag
 @pytest.fixture(name="thunder_attack_skill")
 def fixture_thunder_attack_skill():
     return ThunderAttackSkillComponent(
+        id="test",
         name="test-component",
         damage=130,
         delay=500,

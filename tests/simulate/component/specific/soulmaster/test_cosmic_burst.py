@@ -9,6 +9,7 @@ from tests.simulate.component.util import count_damage_skill
 @pytest.fixture(name="cosmic_burst")
 def fixture_cosmic_burst():
     return CosmicBurst(
+        id="test",
         name="test-cosmic_burst",
         cooldown_duration=15_000,
         damage=300,

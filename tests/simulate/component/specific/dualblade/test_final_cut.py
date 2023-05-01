@@ -10,6 +10,7 @@ from simaple.simulate.global_property import Dynamics
 @pytest.fixture(name="final_cut")
 def fixture_final_cut():
     return FinalCutComponent(
+        id="test",
         name="test-final-cut",
         cooldown_duration=90000,
         delay=450,

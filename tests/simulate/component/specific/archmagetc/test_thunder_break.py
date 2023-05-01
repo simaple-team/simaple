@@ -14,6 +14,7 @@ from simaple.simulate.reserved_names import Tag
 @pytest.fixture(name="thunder_break")
 def fixture_thunder_break():
     return ThunderBreak(
+        id="test",
         name="test-thunder-break",
         delay=690,
         cooldown_duration=40_000,

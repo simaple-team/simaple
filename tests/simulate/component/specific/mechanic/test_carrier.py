@@ -13,6 +13,7 @@ from simaple.simulate.reserved_names import Tag
 @pytest.fixture(name="meca_carrier")
 def fixture_meca_carrier():
     return MecaCarrier(
+        id="test",
         name="test-meca-carrier",
         cooldown_duration=200_000,
         delay=690,

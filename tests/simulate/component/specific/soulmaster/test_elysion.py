@@ -8,6 +8,7 @@ from tests.simulate.component.util import count_damage_skill
 @pytest.fixture(name="elysion")
 def fixture_elysion():
     return Elysion(
+        id="test",
         name="test-elysion",
         cooldown_duration=200_000,
         delay=690,

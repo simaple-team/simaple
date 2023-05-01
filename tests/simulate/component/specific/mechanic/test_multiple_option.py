@@ -18,6 +18,7 @@ class TestMultipleOption:
     @pytest.fixture(name="multiple_option")
     def fixture_multiple_option(self, missile_damage, gatling_damage):
         return MultipleOptionComponent(
+            id="test",
             name="test-multiple-option",
             cooldown_duration=40_000,
             delay=690,

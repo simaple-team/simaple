@@ -9,6 +9,7 @@ from tests.simulate.component.util import count_damage_skill
 @pytest.fixture(name="cosmos")
 def fixture_cosmos():
     return Cosmos(
+        id="test",
         name="test-cosmos",
         delay=690,
         cooldown_duration=150_000,

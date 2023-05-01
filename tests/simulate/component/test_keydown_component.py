@@ -14,6 +14,7 @@ from tests.simulate.component.util import count_damage_skill, is_rejected, total
 def keydown_fixture(request, dynamics: Dynamics):
     delay: float = request.param
     component = KeydownSkillComponent(
+        id="test",
         name="test-keydown",
         damage=100,
         hit=3,

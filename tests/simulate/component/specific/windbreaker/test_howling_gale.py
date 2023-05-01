@@ -11,6 +11,7 @@ from tests.simulate.component.util import count_damage_skill
 @pytest.fixture(name="howling_gale")
 def fixture_howling_gale():
     return HowlingGaleComponent(
+        id="test",
         name="test-howling-gale",
         delay=630,
         maximum_stack=3,

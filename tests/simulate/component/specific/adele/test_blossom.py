@@ -15,6 +15,7 @@ from tests.simulate.component.util import count_damage_skill
 @pytest.fixture(name="blossom")
 def fixture_blossom():
     return AdeleBlossomComponent(
+        id="test",
         name="test-blossom",
         delay=420,
         damage=650,
