@@ -5,12 +5,14 @@ metadata:
   label:
     group: adele
     name: 에테르
+    id: 151100017
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
+  id: 151100017
   name: 에테르
   listening_actions:
     "디바이드.use.emitted.global.delay": "trigger"
@@ -32,11 +34,13 @@ metadata:
   label:
     group: adele
     name: 샤드
+    id: 151001001
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 151001001
   name: 샤드
   delay: 630
   damage: "{{ 80 + 30 + 115 + 135 + 3 * skill_level }}"
@@ -55,11 +59,13 @@ metadata:
   label:
     group: adele
     name: 원더
+    id: 151101013
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 151101013
   name: 원더
   listening_actions:
     디바이드.use.emitted.global.damage: use
@@ -83,11 +89,13 @@ metadata:
   label:
     group: adele
     name: 레조넌스
+    id: 151101004
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 151101004
   name: 레조넌스
   delay: 690
   damage: "{{ 502 + 125 + 175 + 3 * skill_level }}"
@@ -105,7 +113,9 @@ metadata:
   label:
     group: adele
     name: 레조넌스(버프)
+    id: 151101010
 data:
+  id: 151101010
   name: 레조넌스(버프)
   listening_actions:
     레조넌스.use.emitted.global.damage: use
@@ -128,11 +138,13 @@ metadata:
   label:
     group: adele
     name: 크리에이션
+    id: 151101006
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 151101006
   name: 크리에이션
   listening_actions:
     "디바이드.use": "trigger"
@@ -157,12 +169,14 @@ metadata:
   label:
     group: adele
     name: 테리토리
+    id: 151111001
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
+  id: 151111001
   name: 테리토리
   delay: 420
   damage: 0
@@ -189,11 +203,13 @@ metadata:
   label:
     group: adele
     name: 오더
+    id: 151111003
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 151111003
   name: 오더
 
   delay: 0
@@ -218,11 +234,13 @@ metadata:
   label:
     group: adele
     name: 게더링
+    id: 151111002
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 151111002
   name: 게더링
 
   delay: 630
@@ -243,7 +261,9 @@ metadata:
   label:
     group: adele
     name: 게더링(디버프)
+    id: -151111002
 data:
+  id: -151111002
   name: 게더링(디버프)
   listening_actions:
     게더링.use.emitted.global.damage: use
@@ -264,12 +284,14 @@ metadata:
   label:
     group: adele
     name: 블로섬
+    id: 151121003
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
+  id: 151121003
   name: 블로섬
 
   delay: 420
@@ -293,12 +315,14 @@ metadata:
   label:
     group: adele
     name: 디바이드
+    id: 151121000
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
+  id: 151121000
   name: 디바이드
 
   delay: 600
@@ -317,11 +341,13 @@ metadata:
   label:
     group: adele
     name: 그레이브
+    id: 151121001
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 151121001
   name: 그레이브
 
   delay: 630
@@ -342,7 +368,9 @@ metadata:
   label:
     group: adele
     name: 그레이브(디버프)
+    id: -151121001
 data:
+  id: -151121001
   name: 그레이브(디버프)
   listening_actions:
     그레이브.use.emitted.global.damage: use
@@ -364,11 +392,13 @@ metadata:
   label:
     group: adele
     name: 마커
+    id: 151121041
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 151121041
   name: 마커
 
   delay: 690
@@ -389,10 +419,12 @@ metadata:
   label:
     group: adele
     name: 루인
+    id: 400011105
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400011105
   name: 루인
 
   delay: 600
@@ -419,10 +451,12 @@ metadata:
   label:
     group: adele
     name: 인피니트
+    id: 400011108
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400011108
   name: 인피니트
 
   delay: 540
@@ -445,10 +479,12 @@ metadata:
   label:
     group: adele
     name: 리스토어
+    id: 400011109
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400011109
   name: 리스토어
 
   delay: 720
@@ -471,13 +507,14 @@ metadata:
   label:
     group: adele
     name: 리스토어(버프)
+    id: -400011109
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
   listening_actions:
     리스토어.use.emitted.global.delay: use
-
+  id: -400011109
   name: 리스토어(버프)
 
   delay: 0
@@ -499,10 +536,12 @@ metadata:
   label:
     group: adele
     name: 스톰
+    id: 400011136
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400011136
   name: 스톰
 
   delay: 780
