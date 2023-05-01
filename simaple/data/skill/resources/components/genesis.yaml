@@ -4,7 +4,9 @@ metadata:
   label:
     group: genesis
     name: 파괴의 얄다바오트
+    id: 80002632-0
 data:
+  id: 80002632-0
   name: 파괴의 얄다바오트
   stat:
     final_damage_multiplier: 10

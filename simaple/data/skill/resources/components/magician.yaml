@@ -4,10 +4,12 @@ metadata:
   label:
     group: adventurer.magician
     name: 인피니티
+    id: 2121004-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 2121004-0
   name: 인피니티
   cooldown_duration: 120_000
   delay: 600
