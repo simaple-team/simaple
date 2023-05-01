@@ -7,12 +7,14 @@ metadata:
   label:
     group: dualblade
     name: 팬텀 블로우
+    id: 4341009-9
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
+  id: 4341009-0
   name: 팬텀 블로우
   cooldown_duration: 0
   delay: 540
@@ -32,11 +34,13 @@ metadata:
   label:
     group: dualblade
     name: 써든레이드
+    id: 4341011-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 4341011-0
   name: 써든레이드
   cooldown_duration: "{{ 60000 - 2000 * (skill_level // 2) }}"
   red: True
@@ -53,11 +57,13 @@ metadata:
   label:
     group: dualblade
     name: 파이널 컷
+    id: 4341002-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 4341002-0
   name: 파이널 컷
   listening_actions:
     써든레이드.use.emitted.global.delay": sudden_raid
@@ -78,13 +84,14 @@ metadata:
   label:
     group: dualblade
     name: 파이널 컷(버프)
+    id: 4341002-1
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
   listening_actions:
     "파이널 컷.use.emitted.global.delay": use
-
+  id: 4341002-1
   name: 파이널 컷(버프)
   cooldown_duration: 0
   delay: 0
@@ -102,11 +109,13 @@ metadata:
   label:
     group: dualblade
     name: 플래시 뱅
+    id: 4321002-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 4321002-0
   name: 플래시 뱅
   cooldown_duration: 30000
   red: True
@@ -121,9 +130,11 @@ metadata:
   label:
     group: dualblade
     name: 플래시 뱅(버프)
+    id: 4321002-1
 data:
   listening_actions:
     "플래시 뱅.use.emitted.global.delay": use
+  id: 4321002-1
   name: 플래시 뱅(버프)
   cooldown_duration: 0
   delay: 0
@@ -138,11 +149,13 @@ metadata:
   label:
     group: dualblade
     name: 히든 블레이드
+    id: 4341054-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 4341054-0
   name: 히든 블레이드
   listening_actions:
     "아수라.elapse.emitted.global.damage": trigger
@@ -172,11 +185,13 @@ metadata:
   label:
     group: dualblade
     name: 아수라
+    id: 4341052-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 4341052-0
   name: 아수라
 
   damage: 693
@@ -202,10 +217,12 @@ metadata:
   label:
     group: dualblade
     name: 블레이드 스톰
+    id: 400041006-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400041006-0
   name: 블레이드 스톰
 
   damage: "{{ 570 + skill_level * 13 }}"
@@ -234,10 +251,12 @@ metadata:
   label:
     group: dualblade
     name: 카르마 퓨리
+    id: 400041021-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400041021-0
   name: 카르마 퓨리
 
   damage: "{{ 400 + skill_level * 16 }}"
@@ -259,10 +278,12 @@ metadata:
   label:
     group: dualblade
     name: 블레이드 토네이도
+    id: 400041042-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400041042-0
   name: 블레이드 토네이도
 
   delay: 540
@@ -288,10 +309,12 @@ metadata:
   label:
     group: dualblade
     name: 헌티드 엣지 - 나찰
+    id: 400041075-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400041075-0
   name: 헌티드 엣지 - 나찰
   listening_actions:
     "팬텀 블로우.use.emitted.global.delay": use
@@ -315,10 +338,12 @@ metadata:
   label:
     group: dualblade
     name: 얼티밋 다크 사이트
+    id: 400001023-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400001023-0
   name: 얼티밋 다크 사이트
   cooldown_duration: "{{ (220 - skill_level) * 1000 }}"
   red: True
