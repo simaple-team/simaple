@@ -5,7 +5,9 @@ metadata:
   label:
     group: soulmaster
     name: "엘리멘트: 소울"
+    id: 11001022-0
 data:
+  id: 11001022-0
   name: "엘리멘트: 소울"
   binds:
     cosmic_forge_lasting: ".코스믹 포지.lasting"
@@ -27,12 +29,14 @@ metadata:
   label:
     group: soulmaster
     name: 솔라 슬래시/루나 디바이드
+    id: 11120217-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
+  id: 11120217-0
   name: 솔라 슬래시/루나 디바이드
 
   delay: 300
@@ -51,12 +55,14 @@ metadata:
   label:
     group: soulmaster
     name: 크로스 더 스틱스
+    id: 11121052-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
+  id: 11121052-0
   name: 크로스 더 스틱스
   binds:
     elysion_lasting: ".엘리시온.lasting"
@@ -78,10 +84,12 @@ metadata:
   label:
     group: soulmaster
     name: 엘리시온
+    id: 400011055-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400011055-0
   name: 엘리시온
   listening_actions:
     "크로스 더 스틱스.use.emitted.global.delay": "crack"
@@ -133,7 +141,9 @@ metadata:
   label:
     group: soulmaster
     name: 트루 사이트
+    id: 11111023-0
 data:
+  id: 11111023-0
   name: 트루 사이트
   delay: 600
   cooldown_duration: 0
