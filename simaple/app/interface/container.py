@@ -1,6 +1,3 @@
-import os
-import pathlib
-
 import pydantic
 import sqlalchemy
 from dependency_injector import containers, providers
