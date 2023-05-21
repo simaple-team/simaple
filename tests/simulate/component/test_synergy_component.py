@@ -15,6 +15,7 @@ def synergy():
 @pytest.fixture
 def synergy_component(synergy: Stat):
     return SynergySkillComponent(
+        id="test",
         name="test-synergy",
         damage=100,
         hit=3,

@@ -5,10 +5,12 @@ metadata:
   label:
     group: common
     name: 리스트레인트 링
+    id: 80001455-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 80001455-0
   name: 리스트레인트 링
   default_skill_level: 4
   cooldown_duration: 180_000
@@ -26,10 +28,12 @@ metadata:
   label:
     group: common
     name: 리스크테이커 링
+    id: 80001479-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 80001479-0
   name: 리스크테이커 링
   default_skill_level: 4
   cooldown_duration: 180_000
@@ -47,10 +51,12 @@ metadata:
   label:
     group: str_based
     name: 웨폰퍼프-S 링
+    id: 80001470-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 80001470-0
   name: 웨폰퍼프-S 링
   default_skill_level: 4
   cooldown_duration: 180_000
@@ -67,10 +73,12 @@ metadata:
   label:
     group: dex_based
     name: 웨폰퍼프-D 링
+    id: 80001471-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 80001471-0
   name: 웨폰퍼프-D 링
   default_skill_level: 4
   cooldown_duration: 180_000
@@ -87,10 +95,12 @@ metadata:
   label:
     group: int_based
     name: 웨폰퍼프-I 링
+    id: 80001472-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 80001472-0
   name: 웨폰퍼프-I 링
   default_skill_level: 4
   cooldown_duration: 180_000
@@ -107,10 +117,12 @@ metadata:
   label:
     group: luk_based
     name: 웨폰퍼프-L 링
+    id: 80001473-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 80001473-0
   name: 웨폰퍼프-L 링
   default_skill_level: 4
   cooldown_duration: 180_000

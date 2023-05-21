@@ -9,6 +9,7 @@ from simaple.simulate.reserved_names import Tag
 @pytest.fixture(name="ruin")
 def fixture_ruin():
     return AdeleRuinComponent(
+        id="test",
         name="test-ruin",
         delay=600,
         cooldown_duration=60_000,

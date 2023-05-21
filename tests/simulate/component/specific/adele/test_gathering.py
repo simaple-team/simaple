@@ -13,6 +13,7 @@ from tests.simulate.component.util import count_damage_skill
 @pytest.fixture(name="gathering")
 def fixture_gathering():
     return AdeleGatheringComponent(
+        id="test",
         name="test-gathering",
         delay=420,
         damage=650,

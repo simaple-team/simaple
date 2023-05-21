@@ -9,6 +9,7 @@ from simaple.simulate.global_property import Dynamics
 @pytest.fixture(name="infinity_component")
 def fixture_infinity_component():
     return Infinity(
+        id="test",
         name="인피니티",
         cooldown_duration=180_000,
         delay=600,

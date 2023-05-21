@@ -7,7 +7,9 @@ metadata:
   label:
     group: archmagetc
     name: 프로스트 이펙트
+    id: 2220015-0
 data:
+  id: 2220015-0
   listening_actions:
     프로즌 오브.elapse.emitted.global.damage: increase_step
     블리자드.use.emitted.global.damage: increase_step
@@ -25,7 +27,9 @@ metadata:
   label:
     group: archmagetc
     name: 익스트림 매직(썬,콜)
+    id: 2210000-0
 data:
+  id: 2210000-0
   name: 익스트림 매직(썬,콜)
   stat:
     final_damage_multiplier: 20
@@ -36,7 +40,9 @@ metadata:
   label:
     group: archmagetc
     name: 아케인 에임(액티브)
+    id: 2220010-0
 data:
+  id: 2220010-0
   name: 아케인 에임(액티브)
   stat:
     damage_multiplier: 40
@@ -47,7 +53,9 @@ metadata:
   label:
     group: archmagetc
     name: 메디테이션
+    id: 2201001-0
 data:
+  id: 2201001-0
   name: 메디테이션
   cooldown_duration: 0
   delay: 0
@@ -62,11 +70,13 @@ metadata:
   label:
     group: archmagetc
     name: 체인 라이트닝
+    id: 2221006-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2221006-0
   name: 체인 라이트닝
   delay: 600
   cooldown_duration: 0
@@ -85,11 +95,13 @@ metadata:
   label:
     group: archmagetc
     name: 블리자드
+    id: 2221007-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2221007-0
   name: 블리자드
   cooldown_duration: 45000
   delay: 690
@@ -105,11 +117,13 @@ metadata:
   label:
     group: archmagetc
     name: 블리자드(패시브)
+    id: 2221007-1
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2221007-1
   name: 블리자드(패시브)
   delay: 0
   cooldown_duration: 0
@@ -126,11 +140,13 @@ metadata:
   label:
     group: archmagetc
     name: 프로즌 오브
+    id: 2221012-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2221012-0
   name: 프로즌 오브
   damage: 0
   delay: 690
@@ -151,11 +167,13 @@ metadata:
   label:
     group: archmagetc
     name: 엘퀴네스
+    id: 2221005-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2221005-0
   name: 엘퀴네스
   damage: 0
   cooldown_duration: 0
@@ -176,7 +194,9 @@ metadata:
   label:
     group: archmagetc
     name: 아이스 오라
+    id: 2221054-0
 data:
+  id: 2221054-0
   name: 아이스 오라
   damage: 0
   cooldown_duration: 0
@@ -195,11 +215,13 @@ metadata:
   label:
     group: archmagetc
     name: 라이트닝 스피어
+    id: 2221052-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 2221052-0
   name: 라이트닝 스피어
   maximum_keydown_time: 3_600
 
@@ -222,10 +244,12 @@ metadata:
   label:
     group: archmagetc
     name: 아이스 에이지
+    id: 400021002-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400021002-0
   name: 아이스 에이지
   damage: "{{ 500 + skill_level * 20 }}"
   delay: 660
@@ -243,10 +267,12 @@ metadata:
   label:
     group: archmagetc
     name: 썬더 브레이크
+    id: 400021030-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400021030-0
   name: 썬더 브레이크
   delay: 690
   cooldown_duration: 40_000
@@ -265,10 +291,12 @@ metadata:
   label:
     group: archmagetc
     name: 스피릿 오브 스노우
+    id: 400021067-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400021067-0
   name: 스피릿 오브 스노우
   damage: 0
   delay: 720
@@ -286,10 +314,12 @@ metadata:
   label:
     group: archmagetc
     name: 주피터 썬더
+    id: 400021094-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400021094-0
   name: 주피터 썬더
   delay: 690
   cooldown_duration: 120_000

@@ -12,6 +12,7 @@ from simaple.simulate.reserved_names import Tag
 @pytest.fixture(name="magic_curcuit_full_drive")
 def fixture_magic_curcuit_full_drive():
     return MagicCurcuitFullDriveComponent(
+        id="test",
         name="매직 서킷 풀드라이브",
         cooldown_duration=200_000,
         delay=540,

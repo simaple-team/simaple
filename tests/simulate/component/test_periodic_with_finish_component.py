@@ -12,6 +12,7 @@ from simaple.simulate.reserved_names import Tag
 @pytest.fixture
 def periodic_damage_component():
     component = PeriodicWithFinishSkillComponent(
+        id="test",
         name="periodic-damage-component",
         finish_damage=1000,
         finish_hit=1,

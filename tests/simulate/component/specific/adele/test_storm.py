@@ -13,6 +13,7 @@ from simaple.simulate.reserved_names import Tag
 @pytest.fixture(name="storm")
 def fixture_storm():
     return AdeleStormComponent(
+        id="test",
         name="test-storm",
         delay=780,
         cooldown_duration=90_000,

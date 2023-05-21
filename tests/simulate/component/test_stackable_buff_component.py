@@ -12,6 +12,7 @@ from simaple.simulate.global_property import Dynamics
 @pytest.fixture
 def buff_component():
     return StackableBuffSkillComponent(
+        id="test",
         name="buff-component",
         stat=Stat(attack_power=30),
         cooldown_duration=30_000,

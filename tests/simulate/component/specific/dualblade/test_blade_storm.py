@@ -11,6 +11,7 @@ from tests.simulate.component.util import count_damage_skill
 @pytest.fixture(name="blade_storm")
 def fixture_blade_storm():
     return BladeStormComponent(
+        id="test",
         name="test-blade-storm",
         damage=960,
         delay=120,

@@ -13,6 +13,7 @@ from simaple.simulate.global_property import Dynamics
 @pytest.fixture(name="order")
 def fixture_order():
     return AdeleOrderComponent(
+        id="test",
         name="test-order",
         delay=0,
         cooldown_duration=500,

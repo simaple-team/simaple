@@ -5,7 +5,9 @@ metadata:
   label:
     group: flora
     name: 레이스 오브 갓
+    id: 151121042-0
 data:
+  id: 151121042-0
   name: 레이스 오브 갓
   cooldown_duration: 120000
   delay: 0
@@ -20,10 +22,12 @@ metadata:
   label:
     group: flora
     name: 매직 서킷 풀드라이브
+    id: 400001037-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400001037-0
   name: 매직 서킷 풀드라이브
   cooldown_duration: 200_000
   delay: 540
@@ -43,10 +47,12 @@ metadata:
   label:
     group: flora
     name: 그란디스 여신의 축복(레프)
+    id: 400001046-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400001046-0
   name: 그란디스 여신의 축복(레프)
   maximum_stack: 2
   cooldown_duration: 240_000

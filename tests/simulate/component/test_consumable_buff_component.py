@@ -13,6 +13,7 @@ from tests.simulate.component.util import is_rejected
 @pytest.fixture
 def consumable_buff_component():
     return ConsumableBuffSkillComponent(
+        id="test",
         name="consumable-buff-component",
         stat=Stat(attack_power=30),
         delay=600,

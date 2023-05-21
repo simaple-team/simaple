@@ -4,7 +4,9 @@ metadata:
   label:
     group: resistance
     name: 윌 오브 리버티
+    id: 32121053-0
 data:
+  id: 32121053-0
   name: 윌 오브 리버티
   cooldown_duration: 120000
   delay: 0
@@ -19,10 +21,12 @@ metadata:
   label:
     group: resistance
     name: 레지스탕스 라인 인팬트리
+    id: 400001019-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400001019-0
   name: 레지스탕스 라인 인팬트리
   damage: 0
   delay: 360

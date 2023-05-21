@@ -13,6 +13,7 @@ from tests.simulate.component.util import count_damage_skill
 @pytest.fixture(name="triggable_buff_skill")
 def fixture_triggable_buff_skill():
     return TriggableBuffSkillComponent(
+        id="test",
         name="test-triggable",
         cooldown_duration=30_000,
         delay=300,

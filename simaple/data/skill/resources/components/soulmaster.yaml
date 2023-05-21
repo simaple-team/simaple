@@ -5,7 +5,9 @@ metadata:
   label:
     group: soulmaster
     name: "엘리멘트: 소울"
+    id: 11001022-0
 data:
+  id: 11001022-0
   name: "엘리멘트: 소울"
   binds:
     cosmic_forge_lasting: ".코스믹 포지.lasting"
@@ -27,12 +29,14 @@ metadata:
   label:
     group: soulmaster
     name: 솔라 슬래시/루나 디바이드
+    id: 11120217-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
+  id: 11120217-0
   name: 솔라 슬래시/루나 디바이드
 
   delay: 300
@@ -51,12 +55,14 @@ metadata:
   label:
     group: soulmaster
     name: 크로스 더 스틱스
+    id: 11121052-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
+  id: 11121052-0
   name: 크로스 더 스틱스
   binds:
     elysion_lasting: ".엘리시온.lasting"
@@ -78,10 +84,12 @@ metadata:
   label:
     group: soulmaster
     name: 엘리시온
+    id: 400011055-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400011055-0
   name: 엘리시온
   listening_actions:
     "크로스 더 스틱스.use.emitted.global.delay": "crack"
@@ -101,12 +109,14 @@ metadata:
   label:
     group: soulmaster
     name: 코스믹 버스트
+    id: TBD-TBD
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
+  id: TBD-TBD
   name: 코스믹 버스트
   binds:
     orb: ".엘리멘트: 소울.orb"
@@ -133,7 +143,9 @@ metadata:
   label:
     group: soulmaster
     name: 트루 사이트
+    id: 11111023-0
 data:
+  id: 11111023-0
   name: 트루 사이트
   delay: 600
   cooldown_duration: 0
@@ -150,12 +162,14 @@ metadata:
   label:
     group: soulmaster
     name: 코스믹 샤워
+    id: TBD-TBD
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
+  id: TBD-TBD
   name: 코스믹 샤워
   binds:
     orb: ".엘리멘트: 소울.orb"
@@ -183,7 +197,9 @@ metadata:
   label:
     group: soulmaster
     name: 솔루나 타임
+    id: TBD-TBD
 data:
+  id: TBD-TBD
   name: 솔루나 타임
   stat:
     # 1.25 * 1.8 = 2.25
@@ -195,7 +211,9 @@ metadata:
   label:
     group: soulmaster
     name: 코스믹 포지
+    id: TBD-TBD
 data:
+  id: TBD-TBD
   name: 코스믹 포지
   delay: 600
   cooldown_duration: 180_000
@@ -211,10 +229,12 @@ metadata:
   label:
     group: soulmaster
     name: 코스모스
+    id: TBD-TBD
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: TBD-TBD
   name: 코스모스
   binds:
     orb: ".엘리멘트: 소울.orb"
@@ -237,10 +257,12 @@ metadata:
   label:
     group: soulmaster
     name: 소울 이클립스
+    id: TBD-TBD
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: TBD-TBD
   name: 소울 이클립스
   delay: 270
 
@@ -263,10 +285,12 @@ metadata:
   label:
     group: soulmaster
     name: 플레어 슬래시
+    id: TBD-TBD
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: TBD-TBD
   name: 플레어 슬래시
   listening_actions:
     "솔라 슬래시.use.emitted.global.delay": change_stance_trigger

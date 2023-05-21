@@ -12,7 +12,7 @@ skill_router = fastapi.APIRouter(prefix="/skill")
 @skill_router.get("/{skill_id}")
 @inject
 def get_all_component_spec(
-    skill_id: int,
+    skill_id: str,
     uow: UnitOfWork = UowProvider,
 ) -> Spec:
     skill_spec = get_skill(uow, skill_id)

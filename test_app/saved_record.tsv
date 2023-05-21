@@ -6,10 +6,10 @@
 1200.0	{"name": "*", "method": "elapse", "payload": 600}
 1200.0	{"name": "소울 컨트랙트", "method": "use", "payload": null}
 2100.0	{"name": "*", "method": "elapse", "payload": 900}
-2100.0	{"name": "메이플 여신의 축복", "method": "use", "payload": null}
+2100.0	{"name": "메이플월드 여신의 축복", "method": "use", "payload": null}
 2550.0	{"name": "*", "method": "elapse", "payload": 450}
 2550.0	{"name": "메디테이션", "method": "use", "payload": null}
-2550.0	{"name": "에픽 어드벤처", "method": "use", "payload": null}
+2550.0	{"name": "에픽 어드벤쳐", "method": "use", "payload": null}
 2550.0	{"name": "메테오", "method": "use", "payload": null}
 3240.0	{"name": "*", "method": "elapse", "payload": 690}
 3240.0	{"name": "도트 퍼니셔", "method": "use", "payload": null}

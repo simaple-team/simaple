@@ -4,10 +4,12 @@ metadata:
   label:
     group: windbreaker
     name: '엘리멘트 : 스톰'
+    id: 13001022-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 13001022-0
   name: '엘리멘트 : 스톰'
   delay: 0
   cooldown_duration: 0
@@ -21,10 +23,12 @@ metadata:
   label:
     group: windbreaker
     name: 세컨드 윈드
+    id: 13110026-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 13110026-0
   name: 세컨드 윈드
   stat:
     attack_power: 15
@@ -35,11 +39,13 @@ metadata:
   label:
     group: windbreaker
     name: 핀포인트 피어스
+    id: 13111021-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 13111021-0
   name: 핀포인트 피어스
   damage: 340
   hit: 2
@@ -58,10 +64,12 @@ metadata:
   label:
     group: windbreaker
     name: 시그너스 나이츠
+    id: 13121000-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 13121000-0
   name: 시그너스 나이츠
   delay: 0
   cooldown_duration: 0
@@ -78,10 +86,12 @@ metadata:
   label:
     group: windbreaker
     name: 샤프 아이즈
+    id: 13121005-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 13121005-0
   name: 샤프 아이즈
   delay: 690
   cooldown_duration: 0
@@ -99,11 +109,13 @@ metadata:
   label:
     group: windbreaker
     name: 천공의 노래
+    id: 13121001-0
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: 13121001-0
   name: 천공의 노래
   maximum_keydown_time: 999_999_999
 
@@ -128,6 +140,7 @@ metadata:
   label:
     group: windbreaker
     name: 스톰 브링어
+    id: 13121054-0
 patch:
   - SkillLevelPatch
   - EvalPatch
@@ -140,6 +153,7 @@ data:
     하울링 게일.elapse.emitted.global.damage: trigger
     시그너스 팔랑크스.elapse.emitted.global.damage: trigger
     볼텍스 스피어.elapse.emitted.global.damage: trigger
+  id: 13121054-0
   name: 스톰 브링어
   trigger_cooldown_duration: 0
   trigger_damage: '{{ 305 + 5 * skill_level }}'
@@ -159,6 +173,7 @@ metadata:
   label:
     group: windbreaker
     name: 트라이플링 윔
+    id: 13101022-0
 patch:
   - SkillLevelPatch
   - EvalPatch
@@ -171,6 +186,7 @@ data:
     하울링 게일.elapse.emitted.global.damage: trigger
     시그너스 팔랑크스.elapse.emitted.global.damage: trigger
     볼텍스 스피어.elapse.emitted.global.damage: trigger
+  id: 13101022-0
   name: 트라이플링 윔
   trigger_cooldown_duration: 0
   trigger_damage: '{{ (200 + skill_level * 3) * (1 - 0.01 * (10 + skill_level // 3)) + (300 + skill_level * 3) * 0.01 * (10 + skill_level // 3) }}'
@@ -190,11 +206,13 @@ metadata:
   label:
     group: windbreaker
     name: 스톰 윔
+    id: TBD-TBD
 patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
 data:
+  id: TBD-TBD
   listening_actions:
     핀포인트 피어스.use.emitted.global.damage: trigger
     천공의 노래.elapse.emitted.global.damage: trigger
@@ -222,7 +240,9 @@ metadata:
   label:
     group: windbreaker
     name: 글로리 오브 가디언즈
+    id: 13121053-0
 data:
+  id: 13121053-0
   name: 글로리 오브 가디언즈
   cooldown_duration: 120_000
   delay: 0
@@ -238,10 +258,12 @@ metadata:
   label:
     group: windbreaker
     name: 하울링 게일
+    id: 400031003-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400031003-0
   name: 하울링 게일
   delay: 630
   maximum_stack: 3
@@ -265,10 +287,12 @@ metadata:
   label:
     group: windbreaker
     name: 아이들 윔
+    id: 400031022-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400031022-0
   name: 아이들 윔
   damage: '{{ (550 + 22 * skill_level) * (1 + 0.85 * 9) / 10 }}'
   hit: 30
@@ -284,6 +308,7 @@ metadata:
   label:
     group: windbreaker
     name: 윈드 월
+    id: 400031030-0
 patch:
   - SkillLevelPatch
   - EvalPatch
@@ -295,6 +320,7 @@ data:
     하울링 게일.elapse.emitted.global.damage: trigger
     시그너스 팔랑크스.elapse.emitted.global.damage: trigger
     볼텍스 스피어.elapse.emitted.global.damage: trigger
+  id: 400031030-0
   name: 윈드 월
   trigger_cooldown_duration: 2_000
   trigger_damage: '{{ (550 + 22 * skill_level) * (1 + 0.5 * 2) / 3 }}'
@@ -310,10 +336,12 @@ metadata:
   label:
     group: windbreaker
     name: 볼텍스 스피어
+    id: 400031058-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400031058-0
   name: 볼텍스 스피어
   cooldown_duration: 30_000
   delay: 420 # approximate
@@ -331,10 +359,12 @@ metadata:
   label:
     group: windbreaker
     name: 가이디드 애로우
+    id: 400031000-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 400031000-0
   name: 가이디드 애로우
   damage: 0
   hit: 0

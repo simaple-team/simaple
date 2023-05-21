@@ -11,6 +11,7 @@ from simaple.simulate.reserved_names import Tag
 @pytest.fixture(name="component")
 def fixture_component():
     return ProgrammedPeriodicComponent(
+        id="test",
         name="spider-in-mirror",
         damage=100,
         hit=1,

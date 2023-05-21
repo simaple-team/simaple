@@ -28,13 +28,16 @@ def test_view():
 
     environment = Environment(store=store)
 
-    component = ViewTestComponent(name="test_component", delay=0, cooldown_duration=0)
+    component = ViewTestComponent(
+        name="test_component", delay=0, cooldown_duration=0, id="test"
+    )
     component.add_to_environment(environment)
 
     InformationParentView.build_and_install(environment, "info")
 
     assert environment.show("info") == [
         {
+            "id": "test",
             "name": "test_component",
             "listening_actions": {},
             "binds": {"dynamics": "global.dynamics"},

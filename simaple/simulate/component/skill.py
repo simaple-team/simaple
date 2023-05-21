@@ -35,6 +35,7 @@ class SkillComponent(Component):
     modifier: Optional[Stat]
     cooldown_duration: float
     delay: float
+    id: str
 
     @property
     def event_provider(self) -> EventProvider:

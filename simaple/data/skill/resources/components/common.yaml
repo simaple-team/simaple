@@ -5,10 +5,12 @@ metadata:
   label:
     group: common
     name: 소울 컨트랙트
+    id: 80001155-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 80001155-0
   name: 소울 컨트랙트
   cooldown_duration: 90_000
   delay: 900
@@ -24,10 +26,12 @@ metadata:
   label:
     group: str_based
     name: 메이플 용사
+    id: 1121000-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 1121000-0
   name: 메이플 용사
   default_skill_level: 30
   cooldown_duration: 0
@@ -42,10 +46,12 @@ metadata:
   label:
     group: dex_based
     name: 메이플 용사
+    id: 1121000-1
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 1121000-1
   name: 메이플 용사
   default_skill_level: 30
   cooldown_duration: 0
@@ -60,10 +66,12 @@ metadata:
   label:
     group: int_based
     name: 메이플 용사
+    id: 1121000-2
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 1121000-2
   name: 메이플 용사
   default_skill_level: 30
   cooldown_duration: 0
@@ -78,10 +86,12 @@ metadata:
   label:
     group: luk_based
     name: 메이플 용사
+    id: 1121000-3
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
+  id: 1121000-3
   name: 메이플 용사
   default_skill_level: 30
   cooldown_duration: 0

@@ -15,5 +15,5 @@ def test_query_component_schemas(uow: UnitOfWork):
 
 
 def test_query_skill(uow: UnitOfWork):
-    skill_spec = get_skill(uow, 2121006)
+    skill_spec = get_skill(uow, "2121006-0")
     assert isinstance(skill_spec, Spec)

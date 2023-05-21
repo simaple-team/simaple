@@ -12,6 +12,7 @@ from simaple.simulate.global_property import Dynamics
 @pytest.fixture(name="cygnus_blessing_component")
 def fixture_cygnus_blessing_component():
     return TranscendentCygnusBlessing(
+        id="test",
         name="초월자 시그너스의 축복",
         cooldown_duration=180_000,
         delay=600,
