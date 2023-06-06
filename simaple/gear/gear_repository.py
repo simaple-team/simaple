@@ -1,6 +1,7 @@
 import json
 import os
 
+from simaple.core import Stat
 from simaple.gear.gear import Gear, GearMeta
 from simaple.gear.gear_type import GearType
 
@@ -96,10 +97,50 @@ class GearRepository:
         gear = self._get_gear(gear_id)
         return gear
 
-    def get_by_name(self, gear_name: str) -> Gear:
+    def get_by_name(
+        self, gear_name: str, create_empty_item_if_not_exist: bool = False
+    ) -> Gear:
         if self._indexed_by_name is None:
             self._indexed_by_name = {}
             for item_id, item_value in self._bare_gears.items():
-                self._indexed_by_name[item_value["name"]] = int(item_id)
+                if item_value["name"] not in self._indexed_by_name:
+                    self._indexed_by_name[item_value["name"]] = int(item_id)
+
+        if self._is_item_name_indicates_arcane_symbol(gear_name):
+            return self._get_bare_arcane_symbol(gear_name)
+
+        if gear_name not in self._indexed_by_name and create_empty_item_if_not_exist:
+            return self._get_empty_item(gear_name)
 
         return self.get_by_id(self._indexed_by_name[gear_name])
+
+    def _get_bare_arcane_symbol(self, gear_name: str) -> Gear:
+        return Gear(
+            meta=GearMeta(
+                id=-1,
+                name=gear_name,
+                base_stat=Stat(),
+                type=GearType.arcane_symbol,
+                req_level=200,
+                max_scroll_chance=0,
+            ),
+            stat=Stat(),
+            scroll_chance=0,
+        )
+
+    def _get_empty_item(self, gear_name: str) -> Gear:
+        return Gear(
+            meta=GearMeta(
+                id=-1,
+                name=gear_name,
+                base_stat=Stat(),
+                type=GearType.dummy,
+                req_level=0,
+                max_scroll_chance=0,
+            ),
+            stat=Stat(),
+            scroll_chance=0,
+        )
+
+    def _is_item_name_indicates_arcane_symbol(self, gear_name: str) -> bool:
+        return "아케인심볼" in gear_name

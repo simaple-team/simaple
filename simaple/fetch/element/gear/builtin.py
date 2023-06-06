@@ -1,6 +1,6 @@
-from typing import Dict
+from typing import Dict, Literal, NewType, TypedDict
 
-from simaple.fetch.element.base import ElementWrapper
+from simaple.fetch.element.base import Promise
 from simaple.fetch.element.gear.element import GearElement
 from simaple.fetch.element.gear.extractor import (
     ReduceExtractor,
@@ -17,9 +17,40 @@ from simaple.fetch.element.gear.provider import (
 )
 from simaple.fetch.query import NoredirectXMLQuery
 
+StatPrecursor = NewType("StatPrecursor", dict[str, int])
+
+
+class Image_(TypedDict):
+    url: str
+    gear_id: int
+
+
+class Potential_(TypedDict):
+    option: list[StatPrecursor]
+    raw: list[str]
+    grade: Literal["레어", "에픽", "유니크", "레전드리"]
+
+
+class SoulWeapon_(TypedDict):
+    name: str
+    option: StatPrecursor
+
+
+class GearResponse(TypedDict):
+    image: Image_
+    name: str
+    sum: StatPrecursor
+    base: StatPrecursor
+    bonus: StatPrecursor
+    increment: StatPrecursor
+    potential: Potential_
+    additional_potential: Potential_
+    starforce: int
+    surprise: bool
+    soulweapon: StatPrecursor
+
 
 def kms_stat_providers() -> Dict[str, DomElementProvider]:
-    grades = ["레어", "에픽", "유니크", "레전드리"]
     providers: Dict[str, DomElementProvider] = {}
     for k in [
         "STR",
@@ -30,8 +61,6 @@ def kms_stat_providers() -> Dict[str, DomElementProvider]:
         "마력",
         "MaxHP",
         "MaxMP",
-        "공격력",
-        "마력",
     ]:
         providers[k] = StatKeywordProvider()
 
@@ -75,7 +104,7 @@ def standard_gear_element():
 
 
 def standard_gear_promise():
-    return ElementWrapper(
+    return Promise(
         element=standard_gear_element(),
         query=NoredirectXMLQuery(),
     )

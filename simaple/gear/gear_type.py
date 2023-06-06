@@ -115,6 +115,9 @@ class GearType(IntEnum):
     pet_equip = 180
     title = 200
 
+    arcane_symbol = -999
+    dummy = -998
+
     def is_weaponry(self) -> bool:
         return self.is_weapon() or self.is_sub_weapon() or self == GearType.emblem
 

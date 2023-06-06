@@ -26,6 +26,8 @@ def kms_stat_providers() -> dict[str, AbstractStatProvider]:
         "MaxMP": StatProvider(target=StatProps.MMP),
         "공격력": StatProvider(target=StatProps.attack_power),
         "마력": StatProvider(target=StatProps.magic_attack),
+        "공격력%": StatProvider(target=StatProps.attack_power_multiplier),
+        "마력%": StatProvider(target=StatProps.magic_attack_multiplier),
         "보스몬스터공격시데미지": StatProvider(target=StatProps.boss_damage_multiplier),
         "보스몬스터공격시데미지%": StatProvider(target=StatProps.boss_damage_multiplier),
         "올스탯%": AllStatMultiplierProvider(),

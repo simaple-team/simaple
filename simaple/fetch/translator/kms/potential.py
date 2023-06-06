@@ -84,31 +84,31 @@ def kms_potential_provider_patterns() -> list[tuple[re.Pattern, AbstractStatProv
             StatProvider(target=StatProps.MMP_multiplier),
         ),
         (
-            re.compile(r"^캐릭터 기준 10레벨 당 DEX : \+([0-9]+)$"),
+            re.compile(r"^캐릭터 기준 9레벨 당 DEX : \+([0-9]+)$"),
             LevelStatProvider(target=StatProps.DEX),
         ),
         (
-            re.compile(r"^캐릭터 기준 10레벨 당 INT : \+([0-9]+)$"),
+            re.compile(r"^캐릭터 기준 9레벨 당 INT : \+([0-9]+)$"),
             LevelStatProvider(target=StatProps.INT),
         ),
         (
-            re.compile(r"^캐릭터 기준 10레벨 당 LUK : \+([0-9]+)$"),
+            re.compile(r"^캐릭터 기준 9레벨 당 LUK : \+([0-9]+)$"),
             LevelStatProvider(target=StatProps.LUK),
         ),
         (
-            re.compile(r"^캐릭터 기준 10레벨 당 STR : \+([0-9]+)$"),
+            re.compile(r"^캐릭터 기준 9레벨 당 STR : \+([0-9]+)$"),
             LevelStatProvider(target=StatProps.STR),
         ),
         (
-            re.compile(r"^캐릭터 기준 10레벨 당 공격력 : \+([0-9]+)$"),
+            re.compile(r"^캐릭터 기준 9레벨 당 공격력 : \+([0-9]+)$"),
             LevelStatProvider(target=StatProps.attack_power),
         ),
         (
-            re.compile(r"^캐릭터 기준 10레벨 당 마력 : \+([0-9]+)$"),
+            re.compile(r"^캐릭터 기준 9레벨 당 마력 : \+([0-9]+)$"),
             LevelStatProvider(target=StatProps.magic_attack),
         ),
-        # (re.compile(r"^캐릭터 기준 10레벨 당 올스탯 : \+([0-9]+)$"), None),
-        # (re.compile(r"^캐릭터 기준 10레벨 당 체력 : \+([0-9]+)$"), None),
+        # (re.compile(r"^캐릭터 기준 9레벨 당 올스탯 : \+([0-9]+)$"), None),
+        # (re.compile(r"^캐릭터 기준 9레벨 당 체력 : \+([0-9]+)$"), None),
         (
             re.compile(r"^크리티컬 데미지 : \+([0-9]+)%$"),
             StatProvider(target=StatProps.critical_damage),

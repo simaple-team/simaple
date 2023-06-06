@@ -1,0 +1,1476 @@
+{
+  "character": {
+    "name": ".",
+    "level": 216,
+    "overview": {
+      "world": "크로아",
+      "job": "루미너스/루미너스",
+      "pop": 49,
+      "guild": ".",
+      "meso": 1588205,
+      "point": 59708
+    },
+    "stat": {
+      "MHP": 26454,
+      "MP": 83432,
+      "STR": 1416,
+      "DEX": 1401,
+      "INT": 7882,
+      "LUK": 1890,
+      "critical_damage": 57,
+      "boss_damage_multiplier": 158,
+      "ignored_defence": 89,
+      "immunity": 48,
+      "stance": 100,
+      "armor": 8078,
+      "speed": 140,
+      "jump": 123,
+      "starforce": 175,
+      "honor_point": 17498,
+      "arcaneforce": 150,
+      "min_damage_factor": 1251789,
+      "max_damage_factor": 1317670
+    },
+    "ability": {
+      "STR_static": 0,
+      "DEX_static": 0,
+      "INT_static": 0,
+      "LUK_static": 0,
+      "MHP": 0,
+      "MMP": 105.0,
+      "attack_power": 0,
+      "magic_attack": 0,
+      "critical_rate": 0,
+      "attackSpeed": 0,
+      "strToDEX": 0,
+      "dexToSTR": 0,
+      "intToLUK": 0,
+      "lukToDEX": 0,
+      "relativeAttackPower": 0,
+      "relativeMagicAttack": 0,
+      "MHP_multiplier": 0,
+      "MMP_multiplier": 0,
+      "boss_damage_multiplier": 0,
+      "abnormal_status_damage_multiplier": 10.0,
+      "cooldown_reset_chance": 0,
+      "passiveSkill": 0,
+      "multiTarget": 0,
+      "buff_duration": 0
+    },
+    "hyperstat": {
+      "STR_static": 0,
+      "DEX_static": 0,
+      "INT_static": 60.0,
+      "LUK_static": 30.0,
+      "MHP_multiplier": 0,
+      "MMP_multiplier": 0,
+      "DF": 0,
+      "PP": 0,
+      "critical_rate": 9.0,
+      "critical_damage": 7.0,
+      "ignored_defence": 18.0,
+      "damage_multiplier": 30.0,
+      "boss_damage_multiplier": 23.0,
+      "immunity": 0,
+      "attack_power": 9.0,
+      "magic_attack": 9.0,
+      "arcaneforce": 20.0
+    },
+    "trait": {
+      "카리스마": 28,
+      "통찰력": 20,
+      "의지": 22,
+      "손재주": 28,
+      "감성": 12,
+      "매력": 32
+    }
+  },
+  "item": {
+    "ring1": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEODPEPD.png",
+        "gear_id": 1114312
+      },
+      "name": "어드벤처 딥다크 크리티컬링",
+      "sum": {
+        "STR": 20,
+        "DEX": 20,
+        "INT": 20,
+        "LUK": 20,
+        "MaxHP": 1000,
+        "MaxMP": 1000,
+        "공격력": 20,
+        "마력": 20
+      },
+      "base": {
+        "STR": 20,
+        "DEX": 20,
+        "INT": 20,
+        "LUK": 20,
+        "MaxHP": 1000,
+        "MaxMP": 1000,
+        "공격력": 20,
+        "마력": 20
+      },
+      "bonus": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 0,
+        "LUK": 0,
+        "MaxHP": 0,
+        "MaxMP": 0,
+        "공격력": 0,
+        "마력": 0
+      },
+      "increment": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 0,
+        "LUK": 0,
+        "MaxHP": 0,
+        "MaxMP": 0,
+        "공격력": 0,
+        "마력": 0
+      },
+      "starforce": 0,
+      "surprise": false
+    },
+    "cap": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEPCIAHJ.png",
+        "gear_id": 1003798
+      },
+      "name": "하이네스 던위치햇",
+      "sum": {
+        "STR": 40,
+        "DEX": 56,
+        "INT": 173,
+        "LUK": 65,
+        "MaxHP": 1260,
+        "MaxMP": 360,
+        "마력": 3,
+        "몬스터방어력무시": 10
+      },
+      "base": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 40,
+        "LUK": 40,
+        "MaxHP": 360,
+        "MaxMP": 360,
+        "마력": 2,
+        "몬스터방어력무시": 10
+      },
+      "bonus": {
+        "STR": 40,
+        "DEX": 56,
+        "INT": 64,
+        "LUK": 0,
+        "MaxHP": 0,
+        "MaxMP": 0,
+        "마력": 0,
+        "몬스터방어력무시": 0
+      },
+      "increment": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 69,
+        "LUK": 25,
+        "MaxHP": 900,
+        "MaxMP": 0,
+        "마력": 1,
+        "몬스터방어력무시": 0
+      },
+      "potential": {
+        "option": [
+          {
+            "INT%": 6
+          },
+          {
+            "방어력%": 3
+          },
+          {
+            "방어력": 120
+          }
+        ],
+        "raw": [
+          "INT : +6%",
+          "방어력 : +3%",
+          "방어력 : +120"
+        ],
+        "grade": "에픽"
+      },
+      "starforce": 10,
+      "surprise": false
+    },
+    "emblem": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEOLLCPG.png",
+        "gear_id": 1190517
+      },
+      "name": "골드 히어로즈 엠블렘",
+      "sum": {
+        "STR": 10,
+        "DEX": 10,
+        "INT": 10,
+        "LUK": 10,
+        "공격력": 2,
+        "마력": 2
+      },
+      "base": {
+        "STR": 10,
+        "DEX": 10,
+        "INT": 10,
+        "LUK": 10,
+        "공격력": 2,
+        "마력": 2
+      },
+      "bonus": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 0,
+        "LUK": 0,
+        "공격력": 0,
+        "마력": 0
+      },
+      "increment": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 0,
+        "LUK": 0,
+        "공격력": 0,
+        "마력": 0
+      },
+      "potential": {
+        "option": [
+          {
+            "마력%": 6
+          },
+          {
+            "공격시10%확률로2레벨슬로우효과적용": null
+          },
+          {
+            "DEX%": 3
+          }
+        ],
+        "raw": [
+          "마력 : +6%",
+          "공격 시 10% 확률로 2레벨 슬로우효과 적용",
+          "DEX : +3%"
+        ],
+        "grade": "에픽"
+      },
+      "starforce": 0,
+      "surprise": false
+    },
+    "ring2": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEODJBJI.png",
+        "gear_id": 1112679
+      },
+      "name": "플래티넘 크로스 링",
+      "sum": {
+        "STR": 34,
+        "DEX": 34,
+        "INT": 40,
+        "LUK": 34,
+        "MaxHP": 255,
+        "MaxMP": 75,
+        "공격력": 1,
+        "마력": 1
+      },
+      "base": {
+        "STR": 3,
+        "DEX": 3,
+        "INT": 3,
+        "LUK": 3,
+        "MaxHP": 75,
+        "MaxMP": 75,
+        "공격력": 1,
+        "마력": 1
+      },
+      "bonus": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 0,
+        "LUK": 0,
+        "MaxHP": 0,
+        "MaxMP": 0,
+        "공격력": 0,
+        "마력": 0
+      },
+      "increment": {
+        "STR": 31,
+        "DEX": 31,
+        "INT": 37,
+        "LUK": 31,
+        "MaxHP": 180,
+        "MaxMP": 0,
+        "공격력": 0,
+        "마력": 0
+      },
+      "starforce": 12,
+      "surprise": false
+    },
+    "pendant2": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEOAJFLF.png",
+        "gear_id": 1122254
+      },
+      "name": "매커네이터 펜던트",
+      "sum": {
+        "STR": 41,
+        "DEX": 65,
+        "INT": 71,
+        "LUK": 41,
+        "MaxHP": 430,
+        "MaxMP": 2050,
+        "공격력": 1,
+        "마력": 1,
+        "올스탯": 6
+      },
+      "base": {
+        "STR": 10,
+        "DEX": 10,
+        "INT": 10,
+        "LUK": 10,
+        "MaxHP": 250,
+        "MaxMP": 250,
+        "공격력": 1,
+        "마력": 1,
+        "올스탯": 0
+      },
+      "bonus": {
+        "STR": 0,
+        "DEX": 24,
+        "INT": 24,
+        "LUK": 0,
+        "MaxHP": 0,
+        "MaxMP": 1800,
+        "공격력": 0,
+        "마력": 0,
+        "올스탯": 6
+      },
+      "increment": {
+        "STR": 31,
+        "DEX": 31,
+        "INT": 37,
+        "LUK": 31,
+        "MaxHP": 180,
+        "MaxMP": 0,
+        "공격력": 0,
+        "마력": 0,
+        "올스탯": 0
+      },
+      "potential": {
+        "option": [
+          {
+            "INT%": 6
+          },
+          {
+            "4초당24의MP회복": null
+          },
+          {
+            "최대MP%": 3
+          }
+        ],
+        "raw": [
+          "INT : +6%",
+          "4초 당 24의 MP 회복",
+          "최대 MP : +3%"
+        ],
+        "grade": "에픽"
+      },
+      "starforce": 12,
+      "surprise": false
+    },
+    "face_accessory": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEPDJDJJ.png",
+        "gear_id": 1012478
+      },
+      "name": "응축된 힘의 결정석",
+      "sum": {
+        "STR": 30,
+        "DEX": 30,
+        "INT": 40,
+        "LUK": 30,
+        "공격력": 5,
+        "마력": 9,
+        "올스탯": 5
+      },
+      "base": {
+        "STR": 5,
+        "DEX": 5,
+        "INT": 5,
+        "LUK": 5,
+        "공격력": 5,
+        "마력": 5,
+        "올스탯": 0
+      },
+      "bonus": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 0,
+        "LUK": 0,
+        "공격력": 0,
+        "마력": 4,
+        "올스탯": 5
+      },
+      "increment": {
+        "STR": 25,
+        "DEX": 25,
+        "INT": 35,
+        "LUK": 25,
+        "공격력": 0,
+        "마력": 0,
+        "올스탯": 0
+      },
+      "potential": {
+        "option": [
+          {
+            "최대MP%": 6
+          },
+          {
+            "올스탯%": 3
+          },
+          {
+            "INT%": 3
+          }
+        ],
+        "raw": [
+          "최대 MP : +6%",
+          "올스탯 : +3%",
+          "INT : +3%"
+        ],
+        "grade": "에픽"
+      },
+      "starforce": 10,
+      "surprise": false
+    },
+    "badge": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEOKJHGG.png",
+        "gear_id": 1182087
+      },
+      "name": "크리스탈 웬투스 뱃지",
+      "sum": {
+        "STR": 10,
+        "DEX": 10,
+        "INT": 10,
+        "LUK": 10,
+        "공격력": 5,
+        "마력": 5
+      },
+      "base": {
+        "STR": 10,
+        "DEX": 10,
+        "INT": 10,
+        "LUK": 10,
+        "공격력": 5,
+        "마력": 5
+      },
+      "bonus": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 0,
+        "LUK": 0,
+        "공격력": 0,
+        "마력": 0
+      },
+      "increment": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 0,
+        "LUK": 0,
+        "공격력": 0,
+        "마력": 0
+      },
+      "starforce": 0,
+      "surprise": false
+    },
+    "ring3": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEODIGKI.png",
+        "gear_id": 1113149
+      },
+      "name": "실버블라썸 링",
+      "sum": {
+        "STR": 30,
+        "DEX": 29,
+        "INT": 32,
+        "LUK": 30,
+        "MaxHP": 130,
+        "공격력": 2,
+        "마력": 3
+      },
+      "base": {
+        "STR": 5,
+        "DEX": 5,
+        "INT": 5,
+        "LUK": 5,
+        "MaxHP": 0,
+        "공격력": 2,
+        "마력": 2
+      },
+      "bonus": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 0,
+        "LUK": 0,
+        "MaxHP": 0,
+        "공격력": 0,
+        "마력": 0
+      },
+      "increment": {
+        "STR": 25,
+        "DEX": 24,
+        "INT": 27,
+        "LUK": 25,
+        "MaxHP": 130,
+        "공격력": 0,
+        "마력": 1
+      },
+      "potential": {
+        "option": [
+          {
+            "INT%": 6
+          },
+          {
+            "최대MP": 110
+          },
+          {
+            "최대MP": 110
+          }
+        ],
+        "raw": [
+          "INT : +6%",
+          "최대 MP : +110",
+          "최대 MP : +110"
+        ],
+        "grade": "에픽"
+      },
+      "starforce": 10,
+      "surprise": false
+    },
+    "eye_accessory": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEPAJFNA.png",
+        "gear_id": 1022231
+      },
+      "name": "아쿠아틱 레터 눈장식",
+      "sum": {
+        "STR": 25,
+        "DEX": 25,
+        "INT": 61,
+        "LUK": 25,
+        "공격력": 1,
+        "마력": 1,
+        "올스탯": 5
+      },
+      "base": {
+        "STR": 6,
+        "DEX": 6,
+        "INT": 6,
+        "LUK": 6,
+        "공격력": 1,
+        "마력": 1,
+        "올스탯": 0
+      },
+      "bonus": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 30,
+        "LUK": 0,
+        "공격력": 0,
+        "마력": 0,
+        "올스탯": 5
+      },
+      "increment": {
+        "STR": 19,
+        "DEX": 19,
+        "INT": 25,
+        "LUK": 19,
+        "공격력": 0,
+        "마력": 0,
+        "올스탯": 0
+      },
+      "potential": {
+        "option": [
+          {
+            "INT%": 6
+          },
+          {
+            "STR": 12
+          },
+          {
+            "4초당20의HP회복": null
+          }
+        ],
+        "raw": [
+          "INT : +6%",
+          "STR : +12",
+          "4초 당 20의 HP 회복"
+        ],
+        "grade": "에픽"
+      },
+      "starforce": 8,
+      "surprise": false
+    },
+    "earrings": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEPBJFKA.png",
+        "gear_id": 1032241
+      },
+      "name": "데아 시두스 이어링",
+      "sum": {
+        "STR": 30,
+        "DEX": 30,
+        "INT": 100,
+        "LUK": 54,
+        "MaxHP": 1170,
+        "공격력": 2,
+        "마력": 2
+      },
+      "base": {
+        "STR": 5,
+        "DEX": 5,
+        "INT": 5,
+        "LUK": 5,
+        "MaxHP": 0,
+        "공격력": 2,
+        "마력": 2
+      },
+      "bonus": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 52,
+        "LUK": 24,
+        "MaxHP": 1170,
+        "공격력": 0,
+        "마력": 0
+      },
+      "increment": {
+        "STR": 25,
+        "DEX": 25,
+        "INT": 43,
+        "LUK": 25,
+        "MaxHP": 0,
+        "공격력": 0,
+        "마력": 0
+      },
+      "potential": {
+        "option": [
+          {
+            "INT%": 3
+          },
+          {
+            "최대MP": 60
+          },
+          {
+            "최대HP": 60
+          }
+        ],
+        "raw": [
+          "INT : +3%",
+          "최대 MP : +60",
+          "최대 HP : +60"
+        ],
+        "grade": "레어"
+      },
+      "starforce": 10,
+      "surprise": false
+    },
+    "medal": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEOGJDGC.png",
+        "gear_id": 1142483
+      },
+      "name": "운명의 대적자",
+      "sum": {
+        "MaxHP": 50,
+        "마력": 3
+      },
+      "base": {
+        "MaxHP": 50,
+        "마력": 3
+      },
+      "bonus": {
+        "MaxHP": 0,
+        "마력": 0
+      },
+      "increment": {
+        "MaxHP": 0,
+        "마력": 0
+      },
+      "starforce": 0,
+      "surprise": false
+    },
+    "ring4": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEODIFGD.png",
+        "gear_id": 1113282
+      },
+      "name": "고귀한 이피아의 반지",
+      "sum": {
+        "STR": 39,
+        "DEX": 35,
+        "INT": 39,
+        "LUK": 32,
+        "MaxHP": 420,
+        "MaxMP": 210,
+        "공격력": 2,
+        "마력": 4
+      },
+      "base": {
+        "STR": 5,
+        "DEX": 5,
+        "INT": 5,
+        "LUK": 5,
+        "MaxHP": 200,
+        "MaxMP": 200,
+        "공격력": 2,
+        "마력": 2
+      },
+      "bonus": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 0,
+        "LUK": 0,
+        "MaxHP": 0,
+        "MaxMP": 0,
+        "공격력": 0,
+        "마력": 0
+      },
+      "increment": {
+        "STR": 34,
+        "DEX": 30,
+        "INT": 34,
+        "LUK": 27,
+        "MaxHP": 220,
+        "MaxMP": 10,
+        "공격력": 0,
+        "마력": 2
+      },
+      "potential": {
+        "option": [
+          {
+            "INT%": 6
+          },
+          {
+            "방어력%": 3
+          },
+          {
+            "최대HP": 120
+          }
+        ],
+        "raw": [
+          "INT : +6%",
+          "방어력 : +3%",
+          "최대 HP : +120"
+        ],
+        "grade": "에픽"
+      },
+      "starforce": 12,
+      "surprise": false
+    },
+    "weapon": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KENDJGPE.png",
+        "gear_id": 1212115
+      },
+      "name": "앱솔랩스 샤이닝로드",
+      "sum": {
+        "INT": 129,
+        "LUK": 111,
+        "MaxHP": 2580,
+        "MaxMP": 180,
+        "공격력": 232,
+        "마력": 439,
+        "보스몬스터공격시데미지": 30,
+        "몬스터방어력무시": 10
+      },
+      "base": {
+        "INT": 60,
+        "LUK": 60,
+        "MaxHP": 0,
+        "MaxMP": 0,
+        "공격력": 143,
+        "마력": 241,
+        "보스몬스터공격시데미지": 30,
+        "몬스터방어력무시": 10
+      },
+      "bonus": {
+        "INT": 20,
+        "LUK": 20,
+        "MaxHP": 2400,
+        "MaxMP": 0,
+        "공격력": 44,
+        "마력": 73,
+        "보스몬스터공격시데미지": 0,
+        "몬스터방어력무시": 0
+      },
+      "increment": {
+        "INT": 49,
+        "LUK": 31,
+        "MaxHP": 180,
+        "MaxMP": 180,
+        "공격력": 45,
+        "마력": 125,
+        "보스몬스터공격시데미지": 0,
+        "몬스터방어력무시": 0
+      },
+      "potential": {
+        "option": [
+          {
+            "마력%": 6
+          },
+          {
+            "공격시10%확률로2레벨슬로우효과적용": null
+          },
+          {
+            "데미지%": 3
+          }
+        ],
+        "raw": [
+          "마력 : +6%",
+          "공격 시 10% 확률로 2레벨 슬로우효과 적용",
+          "데미지 : +3%"
+        ],
+        "grade": "에픽"
+      },
+      "starforce": 12,
+      "surprise": false,
+      "soulweapon": {
+        "name": "위대한 벨룸의 소울",
+        "option": {
+          "몬스터방어율무시%": 7
+        }
+      }
+    },
+    "coat": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEPGJFLE.png",
+        "gear_id": 1042255
+      },
+      "name": "이글아이 던위치로브",
+      "sum": {
+        "DEX": 40,
+        "INT": 119,
+        "LUK": 83,
+        "MaxHP": 540,
+        "마력": 3,
+        "몬스터방어력무시": 5
+      },
+      "base": {
+        "DEX": 0,
+        "INT": 30,
+        "LUK": 30,
+        "MaxHP": 0,
+        "마력": 2,
+        "몬스터방어력무시": 5
+      },
+      "bonus": {
+        "DEX": 40,
+        "INT": 48,
+        "LUK": 40,
+        "MaxHP": 0,
+        "마력": 0,
+        "몬스터방어력무시": 0
+      },
+      "increment": {
+        "DEX": 0,
+        "INT": 41,
+        "LUK": 13,
+        "MaxHP": 540,
+        "마력": 1,
+        "몬스터방어력무시": 0
+      },
+      "potential": {
+        "option": [
+          {
+            "INT%": 6
+          },
+          {
+            "DEX": 12
+          },
+          {
+            "INT%": 3
+          }
+        ],
+        "raw": [
+          "INT : +6%",
+          "DEX : +12",
+          "INT : +3%"
+        ],
+        "grade": "에픽"
+      },
+      "starforce": 6,
+      "surprise": false
+    },
+    "shoulder_pad": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEOHJGJB.png",
+        "gear_id": 1152170
+      },
+      "name": "로얄 블랙메탈 숄더",
+      "sum": {
+        "STR": 35,
+        "DEX": 35,
+        "INT": 39,
+        "LUK": 34,
+        "MaxHP": 200,
+        "공격력": 6,
+        "마력": 6
+      },
+      "base": {
+        "STR": 10,
+        "DEX": 10,
+        "INT": 10,
+        "LUK": 10,
+        "MaxHP": 0,
+        "공격력": 6,
+        "마력": 6
+      },
+      "bonus": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 0,
+        "LUK": 0,
+        "MaxHP": 0,
+        "공격력": 0,
+        "마력": 0
+      },
+      "increment": {
+        "STR": 25,
+        "DEX": 25,
+        "INT": 29,
+        "LUK": 24,
+        "MaxHP": 200,
+        "공격력": 0,
+        "마력": 0
+      },
+      "potential": {
+        "option": [
+          {
+            "올스탯%": 3
+          },
+          {
+            "INT%": 3
+          },
+          {
+            "최대MP%": 3
+          }
+        ],
+        "raw": [
+          "올스탯 : +3%",
+          "INT : +3%",
+          "최대 MP : +3%"
+        ],
+        "grade": "에픽"
+      },
+      "starforce": 10,
+      "surprise": false
+    },
+    "subweapon": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEMHJDOC.png",
+        "gear_id": 1352403
+      },
+      "name": "카르마 오브",
+      "potential": {
+        "option": [
+          {
+            "마력%": 6
+          },
+          {
+            "STR": 12
+          },
+          {
+            "데미지%": 3
+          }
+        ],
+        "raw": [
+          "마력 : +6%",
+          "STR : +12",
+          "데미지 : +3%"
+        ],
+        "grade": "에픽"
+      },
+      "starforce": 0,
+      "surprise": false
+    },
+    "pocket": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEOEJHME.png",
+        "gear_id": 1162025
+      },
+      "name": "핑크빛 성배",
+      "sum": {
+        "STR": 5,
+        "DEX": 5,
+        "INT": 5,
+        "LUK": 5,
+        "MaxHP": 50,
+        "MaxMP": 50,
+        "공격력": 5,
+        "마력": 9,
+        "올스탯": 7
+      },
+      "base": {
+        "STR": 5,
+        "DEX": 5,
+        "INT": 5,
+        "LUK": 5,
+        "MaxHP": 50,
+        "MaxMP": 50,
+        "공격력": 5,
+        "마력": 5,
+        "올스탯": 0
+      },
+      "bonus": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 0,
+        "LUK": 0,
+        "MaxHP": 0,
+        "MaxMP": 0,
+        "공격력": 0,
+        "마력": 4,
+        "올스탯": 7
+      },
+      "increment": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 0,
+        "LUK": 0,
+        "MaxHP": 0,
+        "MaxMP": 0,
+        "공격력": 0,
+        "마력": 0,
+        "올스탯": 0
+      },
+      "starforce": 0,
+      "surprise": false
+    },
+    "belt": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEOBJFJD.png",
+        "gear_id": 1132272
+      },
+      "name": "골든 클로버 벨트",
+      "sum": {
+        "STR": 41,
+        "DEX": 49,
+        "INT": 50,
+        "LUK": 48,
+        "MaxHP": 350,
+        "MaxMP": 2280,
+        "공격력": 2,
+        "마력": 11,
+        "올스탯": 7
+      },
+      "base": {
+        "STR": 15,
+        "DEX": 15,
+        "INT": 15,
+        "LUK": 15,
+        "MaxHP": 150,
+        "MaxMP": 150,
+        "공격력": 1,
+        "마력": 1,
+        "올스탯": 0
+      },
+      "bonus": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 0,
+        "LUK": 0,
+        "MaxHP": 0,
+        "MaxMP": 2100,
+        "공격력": 0,
+        "마력": 6,
+        "올스탯": 7
+      },
+      "increment": {
+        "STR": 26,
+        "DEX": 34,
+        "INT": 35,
+        "LUK": 33,
+        "MaxHP": 200,
+        "MaxMP": 30,
+        "공격력": 1,
+        "마력": 4,
+        "올스탯": 0
+      },
+      "potential": {
+        "option": [
+          {
+            "INT%": 6
+          },
+          {
+            "방어력": 120
+          },
+          {
+            "방어력%": 3
+          }
+        ],
+        "raw": [
+          "INT : +6%",
+          "방어력 : +120",
+          "방어력 : +3%"
+        ],
+        "grade": "에픽"
+      },
+      "starforce": 12,
+      "surprise": false
+    },
+    "pants": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEPEJGIH.png",
+        "gear_id": 1062166
+      },
+      "name": "트릭스터 던위치팬츠",
+      "sum": {
+        "INT": 71,
+        "LUK": 43,
+        "MaxHP": 540,
+        "마력": 8,
+        "몬스터방어력무시": 5,
+        "올스탯": 5
+      },
+      "base": {
+        "INT": 30,
+        "LUK": 30,
+        "MaxHP": 0,
+        "마력": 2,
+        "몬스터방어력무시": 5,
+        "올스탯": 0
+      },
+      "bonus": {
+        "INT": 0,
+        "LUK": 0,
+        "MaxHP": 0,
+        "마력": 5,
+        "몬스터방어력무시": 0,
+        "올스탯": 5
+      },
+      "increment": {
+        "INT": 41,
+        "LUK": 13,
+        "MaxHP": 540,
+        "마력": 1,
+        "몬스터방어력무시": 0,
+        "올스탯": 0
+      },
+      "potential": {
+        "option": [
+          {
+            "INT%": 6
+          },
+          {
+            "올스탯": 5
+          },
+          {
+            "방어력%": 3
+          }
+        ],
+        "raw": [
+          "INT : +6%",
+          "올스탯 : +5",
+          "방어력 : +3%"
+        ],
+        "grade": "에픽"
+      },
+      "starforce": 6,
+      "surprise": false
+    },
+    "glove": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEPKJFHH.png",
+        "gear_id": 1082296
+      },
+      "name": "드래곤테일 메이지피스트",
+      "sum": {
+        "DEX": 20,
+        "INT": 85,
+        "LUK": 65,
+        "MaxHP": 2030,
+        "마력": 22,
+        "올스탯": 5
+      },
+      "base": {
+        "DEX": 0,
+        "INT": 16,
+        "LUK": 16,
+        "MaxHP": 350,
+        "마력": 5,
+        "올스탯": 0
+      },
+      "bonus": {
+        "DEX": 20,
+        "INT": 44,
+        "LUK": 24,
+        "MaxHP": 1680,
+        "마력": 0,
+        "올스탯": 5
+      },
+      "increment": {
+        "DEX": 0,
+        "INT": 25,
+        "LUK": 25,
+        "MaxHP": 0,
+        "마력": 17,
+        "올스탯": 0
+      },
+      "potential": {
+        "option": [
+          {
+            "INT%": 6
+          },
+          {
+            "최대HP%": 3
+          },
+          {
+            "INT%": 3
+          }
+        ],
+        "raw": [
+          "INT : +6%",
+          "최대 HP : +3%",
+          "INT : +3%"
+        ],
+        "grade": "에픽"
+      },
+      "additional_potential": {
+        "option": [
+          {
+            "마력": 10
+          },
+          {
+            "점프력": 4
+          },
+          {
+            "최대HP": 60
+          }
+        ],
+        "raw": [
+          "마력 : +10",
+          "점프력 : +4",
+          "최대 HP : +60"
+        ],
+        "grade": "레어"
+      },
+      "starforce": 10,
+      "surprise": false
+    },
+    "cape": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEOCJAPF.png",
+        "gear_id": 1102714
+      },
+      "name": "로얄 반 레온 메이지케이프",
+      "sum": {
+        "STR": 47,
+        "DEX": 3,
+        "INT": 122,
+        "LUK": 90,
+        "MaxHP": 670,
+        "마력": 1
+      },
+      "base": {
+        "STR": 3,
+        "DEX": 3,
+        "INT": 3,
+        "LUK": 3,
+        "MaxHP": 50,
+        "마력": 0
+      },
+      "bonus": {
+        "STR": 44,
+        "DEX": 0,
+        "INT": 66,
+        "LUK": 62,
+        "MaxHP": 0,
+        "마력": 0
+      },
+      "increment": {
+        "STR": 0,
+        "DEX": 0,
+        "INT": 53,
+        "LUK": 25,
+        "MaxHP": 620,
+        "마력": 1
+      },
+      "starforce": 10,
+      "surprise": false
+    },
+    "shoes": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEPFJDGH.png",
+        "gear_id": 1072486
+      },
+      "name": "드래곤테일 메이지슈즈",
+      "sum": {
+        "DEX": 12,
+        "INT": 96,
+        "LUK": 56,
+        "MaxHP": 480,
+        "마력": 2,
+        "올스탯": 6
+      },
+      "base": {
+        "DEX": 0,
+        "INT": 15,
+        "LUK": 15,
+        "MaxHP": 0,
+        "마력": 1,
+        "올스탯": 0
+      },
+      "bonus": {
+        "DEX": 12,
+        "INT": 28,
+        "LUK": 16,
+        "MaxHP": 0,
+        "마력": 0,
+        "올스탯": 6
+      },
+      "increment": {
+        "DEX": 0,
+        "INT": 53,
+        "LUK": 25,
+        "MaxHP": 480,
+        "마력": 1,
+        "올스탯": 0
+      },
+      "potential": {
+        "option": [
+          {
+            "INT%": 6
+          },
+          {
+            "INT%": 3
+          },
+          {
+            "최대HP": 120
+          }
+        ],
+        "raw": [
+          "INT : +6%",
+          "INT : +3%",
+          "최대 HP : +120"
+        ],
+        "grade": "에픽"
+      },
+      "additional_potential": {
+        "option": [
+          {
+            "마력": 10
+          },
+          {
+            "방어력": 60
+          },
+          {
+            "마력": 3
+          }
+        ],
+        "raw": [
+          "마력 : +10",
+          "방어력 : +60",
+          "마력 : +3"
+        ],
+        "grade": "레어"
+      },
+      "starforce": 10,
+      "surprise": false
+    },
+    "arcane1": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEIDJHOA.png",
+        "gear_id": 1712001
+      },
+      "name": "아케인심볼 : 소멸의 여로",
+      "sum": {
+        "INT": 700
+      },
+      "base": {
+        "INT": 0
+      },
+      "bonus": {
+        "INT": 0
+      },
+      "increment": {
+        "INT": 700
+      },
+      "starforce": 0,
+      "surprise": false
+    },
+    "arcane2": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEIDJHOD.png",
+        "gear_id": 1712002
+      },
+      "name": "아케인심볼 : 츄츄 아일랜드",
+      "sum": {
+        "INT": 300
+      },
+      "base": {
+        "INT": 0
+      },
+      "bonus": {
+        "INT": 0
+      },
+      "increment": {
+        "INT": 300
+      },
+      "starforce": 0,
+      "surprise": false
+    },
+    "cash_cap": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEPCOBKJ.png",
+        "gear_id": 1005648
+      },
+      "name": "푸른 악몽 머리핀",
+      "starforce": 0,
+      "surprise": false
+    },
+    "cash_weapon": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEICIHKJ.png",
+        "gear_id": 1703048
+      },
+      "name": "푸른 악몽 한 송이",
+      "starforce": 0,
+      "surprise": false
+    },
+    "cash_coat": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEPHLCII.png",
+        "gear_id": 1050569
+      },
+      "name": "푸른 악몽 슈트 (남)",
+      "starforce": 0,
+      "surprise": false
+    },
+    "cash_cape": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEOCIFNF.png",
+        "gear_id": 1103234
+      },
+      "name": "핑크빈 꼬리",
+      "starforce": 0,
+      "surprise": false
+    },
+    "cash_shoes": {
+      "image": {
+        "url": "https://avatar.maplestory.nexon.com/ItemIcon/KEPFIDGJ.png",
+        "gear_id": 1073488
+      },
+      "name": "푸른 악몽 구두",
+      "starforce": 0,
+      "surprise": false
+    }
+  },
+  "pet": {}
+}

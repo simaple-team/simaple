@@ -24,7 +24,9 @@ class SetItem(BaseModel):
     effects: List[Stat] = Field(default_factory=list)
 
     def get_effect(self, count) -> Stat:
-        return sum([self.effects[i] for i in range(count)], Stat())
+        return sum(
+            [self.effects[i] for i in range(min(len(self.effects), count + 1))], Stat()
+        )
 
     def gear_ids(self) -> List[int]:
         return [v.meta.id for v in self.gears]

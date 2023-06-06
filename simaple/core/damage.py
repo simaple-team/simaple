@@ -20,8 +20,11 @@ class DamageLogic(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="DamageLogic
     def get_major_stat(self, stat: Stat) -> float:
         ...
 
-    @abstractmethod
     def get_attack_type_factor(self, stat: Stat) -> float:
+        return stat.get_attack_coefficient(self.get_attack_type())
+
+    @abstractmethod
+    def get_attack_type(self) -> AttackType:
         ...
 
     @abstractmethod
@@ -88,8 +91,8 @@ class STRBasedDamageLogic(DamageLogic):
             BaseStatType.STR
         ) * 4 + stat.get_base_stat_coefficient(BaseStatType.DEX)
 
-    def get_attack_type_factor(self, stat: Stat) -> float:
-        return stat.get_attack_coefficient(AttackType.attack_power)
+    def get_attack_type(self) -> AttackType:
+        return AttackType.attack_power
 
     def get_best_level_based_stat(self, level: int) -> Stat:
         return Stat(
@@ -109,8 +112,8 @@ class INTBasedDamageLogic(DamageLogic):
             BaseStatType.INT
         ) * 4 + stat.get_base_stat_coefficient(BaseStatType.LUK)
 
-    def get_attack_type_factor(self, stat: Stat) -> float:
-        return stat.get_attack_coefficient(AttackType.magic_attack)
+    def get_attack_type(self) -> AttackType:
+        return AttackType.magic_attack
 
     def get_best_level_based_stat(self, level: int) -> Stat:
         return Stat(
@@ -130,8 +133,8 @@ class DEXBasedDamageLogic(DamageLogic):
             BaseStatType.DEX
         ) * 4 + stat.get_base_stat_coefficient(BaseStatType.STR)
 
-    def get_attack_type_factor(self, stat: Stat) -> float:
-        return stat.get_attack_coefficient(AttackType.attack_power)
+    def get_attack_type(self) -> AttackType:
+        return AttackType.attack_power
 
     def get_best_level_based_stat(self, level: int) -> Stat:
         return Stat(
@@ -151,8 +154,8 @@ class LUKBasedDamageLogic(DamageLogic):
             BaseStatType.LUK
         ) * 4 + stat.get_base_stat_coefficient(BaseStatType.DEX)
 
-    def get_attack_type_factor(self, stat: Stat) -> float:
-        return stat.get_attack_coefficient(AttackType.attack_power)
+    def get_attack_type(self) -> AttackType:
+        return AttackType.attack_power
 
     def get_best_level_based_stat(self, level: int) -> Stat:
         return Stat(
@@ -174,8 +177,8 @@ class LUKBasedDualSubDamageLogic(DamageLogic):
             + stat.get_base_stat_coefficient(BaseStatType.STR)
         )
 
-    def get_attack_type_factor(self, stat: Stat) -> float:
-        return stat.get_attack_coefficient(AttackType.attack_power)
+    def get_attack_type(self) -> AttackType:
+        return AttackType.attack_power
 
     def get_best_level_based_stat(self, level: int) -> Stat:
         return Stat(

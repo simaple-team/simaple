@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from simaple.fetch.element.base import Element, ElementWrapper
+from simaple.fetch.element.base import Element, Promise
 from simaple.fetch.query import CookiedQuery
 
 
@@ -15,7 +15,7 @@ class PetListElement(Element):
 
 
 def pet_list_promise():
-    return ElementWrapper(
+    return Promise(
         element=PetListElement(),
         query=CookiedQuery(),
         reserved_path="/Common/Character/Detail/123/Pet",

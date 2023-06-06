@@ -38,5 +38,5 @@ def test_gearset_ok():
                 BaseStatType.STR
             )
         )
-        == 44802
+        == 44964
     )

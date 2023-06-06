@@ -1,0 +1,40 @@
+jobtype: archmagefb
+passive:
+  magic_attack: 73
+  final_damage_multiplier: 40
+  INT: 60
+  damage_multiplier: 50
+candidates:
+  - null
+  - final_damage_multiplier: 70
+  - final_damage_multiplier: 73
+  - final_damage_multiplier: 76
+  - final_damage_multiplier: 79
+  - final_damage_multiplier: 82
+  - final_damage_multiplier: 85
+  - final_damage_multiplier: 88
+  - final_damage_multiplier: 91
+  - final_damage_multiplier: 94
+  - final_damage_multiplier: 97
+  - final_damage_multiplier: 100
+  - final_damage_multiplier: 103
+  - final_damage_multiplier: 106
+  - final_damage_multiplier: 109
+  - final_damage_multiplier: 112
+  - final_damage_multiplier: 115
+  - final_damage_multiplier: 71
+  - final_damage_multiplier: 74
+  - final_damage_multiplier: 77
+  - final_damage_multiplier: 80
+  - final_damage_multiplier: 83
+  - final_damage_multiplier: 86
+  - final_damage_multiplier: 89
+  - final_damage_multiplier: 92
+  - final_damage_multiplier: 95
+  - final_damage_multiplier: 98
+  - final_damage_multiplier: 101
+  - final_damage_multiplier: 104
+  - final_damage_multiplier: 107
+  - final_damage_multiplier: 110
+  - final_damage_multiplier: 113
+  - final_damage_multiplier: 116

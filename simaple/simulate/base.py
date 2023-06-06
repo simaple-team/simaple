@@ -51,7 +51,7 @@ class Event(BaseModel):
     name: str
     method: str = ""
     tag: Optional[str]
-    handler: Optional[str]
+    handler: Optional[str] = None
     payload: dict = Field(default_factory=dict)
 
     class Config:

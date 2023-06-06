@@ -16,7 +16,7 @@ from simaple.fetch.translator.kms.potential import kms_potential_translator
         ("공격력 : +10", Stat(attack_power=10)),
         ("DEX : +6", Stat(DEX=6)),
         ("올스탯 : +3%", Stat.all_stat_multiplier(3)),
-        ("캐릭터 기준 10레벨 당 DEX : +1", LevelStat(DEX=1)),
+        ("캐릭터 기준 9레벨 당 DEX : +1", LevelStat(DEX=1)),
         ("최대 HP : +9%", Stat(MHP_multiplier=9)),
         ("아이템 드롭률 : +20%", Stat()),
         ("이동속도 : +4", Stat()),

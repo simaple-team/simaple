@@ -1,0 +1,9 @@
+jobtype: bishop
+passive:
+  magic_attack: 124
+  final_damage_multiplier: 30
+  INT: 60
+  boss_damage_multiplier: 10
+candidates:
+  - final_damage_multiplier: 4
+  - final_damage_multiplier: 6

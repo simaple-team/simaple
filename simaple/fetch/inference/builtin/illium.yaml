@@ -1,0 +1,11 @@
+jobtype: illium
+passive:
+  magic_attack: 115
+  final_damage_multiplier: 40
+  INT: 40
+  boss_damage_multiplier: 30
+  damage_multiplier: 20
+  magic_attack_multiplier: 10
+candidates:
+  - null
+  - final_damage_multiplier: 25
