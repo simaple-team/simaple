@@ -5,6 +5,7 @@ from simaple.core.damage import DamageLogic
 from simaple.data.damage_logic import get_damage_logic
 from simaple.fetch.response.character import CharacterResponse
 from simaple.gear.slot_name import SlotName
+from itertools import product
 
 PowerFactor = tuple[int, int, int]  # damage_multiplier, attack_multpilier, attack
 
@@ -145,7 +146,7 @@ def _get_power_factor_candidates(
 
 class JobSetting(TypedDict):
     passive: Stat
-    candidates: list[Stat]
+    candidates: list[list[Stat]]
 
 
 def reference_stat_provider(response: CharacterResponse, setting: JobSetting):
@@ -191,8 +192,8 @@ def reference_stat_provider(response: CharacterResponse, setting: JobSetting):
         + _get_reboot_bonus(response)
     )
 
-    for variation in setting["candidates"]:
-        yield _get_bare_stat(base_stat + variation, response.get_character_base_stat())
+    for stat_combination in product(*setting["candidates"]):
+        yield _get_bare_stat(base_stat + sum(stat_combination, Stat()), response.get_character_base_stat())
 
 
 def _calculate_reliability(reference: PowerFactor, inferred: PowerFactor) -> float:

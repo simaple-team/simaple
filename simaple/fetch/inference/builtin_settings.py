@@ -16,28 +16,17 @@ def get_from_file(filename) -> JobSetting:
 
     return {
         "passive": Stat.parse_obj(raw_setting["passive"]),
-        "candidates": [
-            Stat.parse_obj(v) if v else Stat() for v in raw_setting["candidates"]
-        ],
+        "candidates": [[
+            Stat.parse_obj(v) if v else Stat() for v in row
+        ] for row in raw_setting["candidates"]],
     }
-
-
-_LUMINOUS_SETTING = {
-    "passive": Stat(
-        magic_attack=110,
-        final_damage_multiplier=90.4,
-        INT=60,
-        damage_multiplier=15,
-    ),
-    "candidates": [Stat()],
-}
 
 
 _PREDEFINED_SETTING_MAP: dict[JobType, JobSetting] = {
     JobType.archmagefb: get_from_file("archmagefp.yaml"),
     JobType.bishop: get_from_file("bishop.yaml"),
     JobType.illium: get_from_file("illium.yaml"),
-    JobType.luminous: _LUMINOUS_SETTING,
+    JobType.luminous: get_from_file("luminous.yaml"),
 }
 
 

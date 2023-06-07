@@ -7,5 +7,5 @@ passive:
   damage_multiplier: 20
   magic_attack_multiplier: 10
 candidates:
-  - null
-  - final_damage_multiplier: 25
+  - - null
+    - final_damage_multiplier: 25

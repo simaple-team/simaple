@@ -1,0 +1,8 @@
+jobtype: luminous
+passive:
+  magic_attack: 110
+  final_damage_multiplier: 90.4
+  INT: 60
+  damage_multiplier: 15
+candidates:
+  - - null
