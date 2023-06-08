@@ -31,6 +31,10 @@ class DamageLogic(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="DamageLogic
     def get_best_level_based_stat(self, level: int) -> Stat:
         ...
 
+    @abstractmethod
+    def get_symbol_stat(self, value: int) -> Stat:
+        """value may given as hundreds; to represent arcane and authentic both"""
+
     def get_maximum_attack_range(self, stat: Stat) -> float:
         """Maximum stat power in character status window."""
         return (
@@ -102,6 +106,9 @@ class STRBasedDamageLogic(DamageLogic):
             LUK=4,
         )
 
+    def get_symbol_stat(self, value: int) -> Stat:
+        return Stat(STR_static=value)
+
 
 class INTBasedDamageLogic(DamageLogic):
     def get_major_stat(self, stat: Stat) -> float:
@@ -122,6 +129,9 @@ class INTBasedDamageLogic(DamageLogic):
             INT=level * 5 + 18,
             LUK=4,
         )
+
+    def get_symbol_stat(self, value: int) -> Stat:
+        return Stat(INT_static=value)
 
 
 class DEXBasedDamageLogic(DamageLogic):
@@ -144,6 +154,9 @@ class DEXBasedDamageLogic(DamageLogic):
             LUK=4,
         )
 
+    def get_symbol_stat(self, value: int) -> Stat:
+        return Stat(DEX_static=value)
+
 
 class LUKBasedDamageLogic(DamageLogic):
     def get_major_stat(self, stat: Stat) -> float:
@@ -164,6 +177,9 @@ class LUKBasedDamageLogic(DamageLogic):
             INT=4,
             LUK=level * 5 + 18,
         )
+
+    def get_symbol_stat(self, value: int) -> Stat:
+        return Stat(LUK_static=value)
 
 
 class LUKBasedDualSubDamageLogic(DamageLogic):
@@ -187,3 +203,6 @@ class LUKBasedDualSubDamageLogic(DamageLogic):
             INT=4,
             LUK=level * 5 + 18,
         )
+
+    def get_symbol_stat(self, value: int) -> Stat:
+        return Stat(LUK_static=value)

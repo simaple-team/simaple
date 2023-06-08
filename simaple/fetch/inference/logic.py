@@ -1,3 +1,4 @@
+from itertools import product
 from typing import TypedDict
 
 from simaple.core import AttackType, Stat, StatProps
@@ -5,7 +6,6 @@ from simaple.core.damage import DamageLogic
 from simaple.data.damage_logic import get_damage_logic
 from simaple.fetch.response.character import CharacterResponse
 from simaple.gear.slot_name import SlotName
-from itertools import product
 
 PowerFactor = tuple[int, int, int]  # damage_multiplier, attack_multpilier, attack
 
@@ -193,7 +193,10 @@ def reference_stat_provider(response: CharacterResponse, setting: JobSetting):
     )
 
     for stat_combination in product(*setting["candidates"]):
-        yield _get_bare_stat(base_stat + sum(stat_combination, Stat()), response.get_character_base_stat())
+        yield _get_bare_stat(
+            base_stat + sum(stat_combination, Stat()),
+            response.get_character_base_stat(),
+        )
 
 
 def _calculate_reliability(reference: PowerFactor, inferred: PowerFactor) -> float:

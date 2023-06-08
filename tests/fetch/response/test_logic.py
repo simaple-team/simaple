@@ -6,6 +6,7 @@ from loguru import logger
 from simaple.core import JobType
 from simaple.fetch.inference.builtin_settings import get_predefined_setting
 from simaple.fetch.inference.logic import predicate_attack
+from simaple.fetch.inference.stat_logic import predicate_stat
 from simaple.fetch.response.character import CharacterResponse
 from simaple.fetch.translator.gear import GearTranslator
 from simaple.fetch.translator.kms.gear import kms_gear_stat_translator
@@ -78,3 +79,14 @@ def test_from_dumped(filename):
 
     results = predicate_attack(response, setting)
     assert len(results) > 0
+
+
+def test_stat():
+    logger.disable("")
+
+    setting = get_predefined_setting(JobType.archmagefb)
+    results = predicate_stat(
+        _get_response("tests/fetch/response/fp.json"), setting, 270
+    )
+
+    assert results[0][0] == (5902, 560, 20290)

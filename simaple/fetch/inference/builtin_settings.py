@@ -16,9 +16,10 @@ def get_from_file(filename) -> JobSetting:
 
     return {
         "passive": Stat.parse_obj(raw_setting["passive"]),
-        "candidates": [[
-            Stat.parse_obj(v) if v else Stat() for v in row
-        ] for row in raw_setting["candidates"]],
+        "candidates": [
+            [Stat.parse_obj(v) if v else Stat() for v in row]
+            for row in raw_setting["candidates"]
+        ],
     }
 
 
