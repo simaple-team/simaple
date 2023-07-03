@@ -3,10 +3,10 @@ import json
 import pytest
 from loguru import logger
 
-from simaple.core import JobType
+from simaple.core import BaseStatType, JobType
 from simaple.fetch.inference.builtin_settings import get_predefined_setting
 from simaple.fetch.inference.logic import predicate_attack
-from simaple.fetch.inference.stat_logic import predicate_stat
+from simaple.fetch.inference.stat_logic import predicate_stat, predicate_stat_factor
 from simaple.fetch.response.character import CharacterResponse
 from simaple.fetch.translator.gear import GearTranslator
 from simaple.fetch.translator.kms.gear import kms_gear_stat_translator
@@ -85,8 +85,37 @@ def test_stat():
     logger.disable("")
 
     setting = get_predefined_setting(JobType.archmagefb)
-    results = predicate_stat(
-        _get_response("tests/fetch/response/fp.json"), setting, 270
+    results = predicate_stat_factor(
+        _get_response("tests/fetch/response/fp.json"), setting, 270, BaseStatType.INT
     )
 
     assert results[0][0] == (5902, 560, 20290)
+
+
+def test_full_stat_predication():
+    logger.disable("")
+
+    setting = get_predefined_setting(JobType.archmagefb)
+    results = predicate_stat(
+        _get_response("tests/fetch/response/fp.json"),
+        setting,
+        270,
+        size=1,
+    )
+
+    best_result = results[0][0]
+
+    assert best_result.short_dict() == {
+        "STR": 1704.0,
+        "LUK": 2771.0,
+        "INT": 5902.0,
+        "DEX": 1707.0,
+        "STR_multiplier": 175.0,
+        "LUK_multiplier": 180.0,
+        "INT_multiplier": 560.0,
+        "DEX_multiplier": 173.0,
+        "STR_static": 660.0,
+        "LUK_static": 480.0,
+        "INT_static": 20290.0,
+        "DEX_static": 420.0,
+    }

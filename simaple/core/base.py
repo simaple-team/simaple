@@ -54,6 +54,14 @@ class StatProps(enum.Enum):
     MHP_multiplier = "MHP_multiplier"
     MMP_multiplier = "MMP_multiplier"
 
+    @classmethod
+    def multiplier(cls, base_type: BaseStatType):
+        return StatProps(base_type.value + "_multiplier")
+
+    @classmethod
+    def static(cls, base_type: BaseStatType):
+        return StatProps(base_type.value + "_static")
+
 
 class Stat(BaseModel):
     STR: float = 0.0
