@@ -1,0 +1,13 @@
+jobtype: adele
+passive:
+  attack_power: 152
+  magic_attack: 0
+  final_damage_multiplier: 50.65
+  attack_power_multiplier: 10
+  STR: 60
+candidates:
+  - - null
+    - final_damage_multiplier: 10
+    - final_damage_multiplier: 5
+  - - null
+    - final_damage_multiplier: 6

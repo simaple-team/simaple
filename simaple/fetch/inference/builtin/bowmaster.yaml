@@ -1,0 +1,10 @@
+jobtype: bowmaster
+passive:
+  attack_power: 162
+  magic_attack: 0
+  final_damage_multiplier: 37.8
+  attack_power_multiplier: 25
+  STR: 30
+  DEX: 132
+candidates:
+  - - null

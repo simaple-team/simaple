@@ -1,0 +1,16 @@
+jobtype: mihile
+passive:
+  attack_power: 112 # 110 + (31)
+  magic_attack: 0
+  final_damage_multiplier: 41.45
+  attack_power_multiplier: 10
+  STR: 110
+  DEX: 30
+  damage_multiplier: 5
+candidates:
+  - - null
+    - final_damage_multiplier: 26
+  - - null
+    - final_damage_multiplier: 6
+  - - null
+    - final_damage_multiplier: 33

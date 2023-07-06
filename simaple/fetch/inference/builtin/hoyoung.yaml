@@ -1,0 +1,14 @@
+jobtype: hoyoung
+passive:
+  attack_power: 114
+  attack_power_multiplier: 10
+  LUK: 60
+  DEX: 30
+  damage_multiplier: 10
+candidates:
+  - - final_damage_multiplier: 60.16
+    - final_damage_multiplier: 56.09
+  - - null
+    - final_damage_multiplier: 36
+  - - null
+    - final_damage_multiplier: 10

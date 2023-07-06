@@ -10,11 +10,15 @@ def _get_builtin_setting_file_path(filename: str) -> str:
     return os.path.join(os.path.dirname(__file__), "builtin", filename)
 
 
-def get_from_file(filename) -> JobSetting:
+def _get_builtin_setting_file_names() -> str:
+    return os.listdir(os.path.join(os.path.dirname(__file__), "builtin"))
+
+
+def get_from_file(filename) -> tuple[JobType, JobSetting]:
     with open(_get_builtin_setting_file_path(filename), encoding="utf-8") as f:
         raw_setting = yaml.safe_load(f)
 
-    return {
+    return JobType(raw_setting["jobtype"]), {
         "passive": Stat.parse_obj(raw_setting["passive"]),
         "candidates": [
             [Stat.parse_obj(v) if v else Stat() for v in row]
@@ -23,16 +27,23 @@ def get_from_file(filename) -> JobSetting:
     }
 
 
-_PREDEFINED_SETTING_MAP: dict[JobType, JobSetting] = {
-    JobType.archmagefb: get_from_file("archmagefp.yaml"),
-    JobType.bishop: get_from_file("bishop.yaml"),
-    JobType.illium: get_from_file("illium.yaml"),
-    JobType.luminous: get_from_file("luminous.yaml"),
-}
+_PREDEFINED_SETTING_MAP: dict[JobType, JobSetting] = {}
+
+
+def _get_setting_map():
+    global _PREDEFINED_SETTING_MAP
+    if len(_PREDEFINED_SETTING_MAP):
+        return _PREDEFINED_SETTING_MAP
+
+    for file_name in _get_builtin_setting_file_names():
+        jobtype, setting = get_from_file(file_name)
+        _PREDEFINED_SETTING_MAP[jobtype] = setting
+
+    return _PREDEFINED_SETTING_MAP
 
 
 def get_predefined_setting(jobtype: JobType) -> JobSetting:
-    return _PREDEFINED_SETTING_MAP[jobtype]
+    return _get_setting_map()[jobtype]
 
 
 def common_default_passive() -> Stat:

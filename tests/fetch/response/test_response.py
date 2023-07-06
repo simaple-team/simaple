@@ -21,7 +21,7 @@ def fixture_raw_data():
 
 @pytest.fixture(name="new_data")
 def fixture_new_data():
-    with open("tests/fetch/response/fp.json", encoding="utf-8") as f:
+    with open("tests/fetch/response/dumped/archmagefp2.json", encoding="utf-8") as f:
         raw = json.load(f)
 
     return raw

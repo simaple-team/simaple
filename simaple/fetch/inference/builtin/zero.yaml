@@ -1,0 +1,13 @@
+jobtype: zero
+passive:
+  attack_power: 100
+  STR: 50
+  damage_multiplier: 50
+  final_damage_multiplier: 53.75
+candidates:
+  - - null # 오라웨폰
+    - final_damage_multiplier: 6
+  - - null # 오라웨폰
+    - final_damage_multiplier: 5
+  - - null
+    - final_damage_multiplier: 36

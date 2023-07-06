@@ -1,0 +1,14 @@
+jobtype: evan
+passive:
+  magic_attack: 161
+  final_damage_multiplier: 52.1
+  magic_attack_multiplier: 31
+  INT: 60
+  LUK: 10
+  damage_multiplier: 15
+candidates:
+  - - null
+    - final_damage_multiplier: 5
+    - final_damage_multiplier: 10
+    - final_damage_multiplier: 15
+    - final_damage_multiplier: 20

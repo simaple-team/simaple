@@ -1,0 +1,16 @@
+jobtype: dualblade
+passive:
+  attack_power: 92 # 110 + (31)
+  magic_attack: 0
+  final_damage_multiplier: 20
+  LUK: 50
+  DEX: 30
+  damage_multiplier: 10
+candidates:
+  - - null
+    - final_damage_multiplier: 40
+  - - null
+    - final_damage_multiplier: 14
+    - final_damage_multiplier: 34
+  - - null
+    - final_damage_multiplier: 36

@@ -1,0 +1,12 @@
+jobtype: aran
+passive:
+  attack_power: 182
+  magic_attack: 0
+  final_damage_multiplier: 24.2
+  attack_power_multiplier: 5
+  STR: 50
+  DEX: 30
+  damage_multiplier: 40
+candidates:
+  - - null
+    - final_damage_multiplier: 6

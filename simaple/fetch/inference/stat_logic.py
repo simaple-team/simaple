@@ -3,7 +3,7 @@ from typing import Generator, TypedDict
 from simaple.core import AttackType, BaseStatType, Stat, StatProps
 from simaple.core.damage import DamageLogic
 from simaple.data.damage_logic import get_damage_logic
-from simaple.fetch.inference.logic import JobSetting, reference_stat_provider
+from simaple.fetch.inference.attack_logic import JobSetting, reference_stat_provider
 from simaple.fetch.response.character import CharacterResponse
 from simaple.gear.slot_name import SlotName
 
@@ -199,7 +199,6 @@ def _factor_to_stat(factor: StatFactor, stat_type: BaseStatType) -> Stat:
     )
 
 
-
 def predicate_stat_factor(
     response: CharacterResponse,
     setting: JobSetting,
@@ -214,7 +213,7 @@ def predicate_stat(
     response: CharacterResponse,
     setting: JobSetting,
     authentic_force: int,
-    size: int = -1
+    size: int = -1,
 ) -> list[tuple[Stat, int]]:
     ...
     damage_logic = get_damage_logic(response.get_jobtype(), 0)
@@ -230,12 +229,16 @@ def predicate_stat(
             continue
 
         best_factor, _ = get_candidates_with_score(
-            reference_stat, response, stat_type,
+            reference_stat,
+            response,
+            stat_type,
         )[0]
         stat += _factor_to_stat(best_factor, stat_type)
 
     scoring_candidates = get_candidates_with_score(
-        reference_stat, response, stat_type,
+        reference_stat,
+        response,
+        scoring_target_type,
     )
 
     return [

@@ -1,0 +1,9 @@
+jobtype: battlemage
+passive:
+  magic_attack: 81
+  final_damage_multiplier: 31.25
+  attack_power_multiplier: 25
+  INT: 40
+  damage_multiplier: 46
+candidates:
+  - - null

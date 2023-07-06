@@ -1,0 +1,13 @@
+jobtype: shadower
+passive:
+  attack_power: 163
+  magic_attack: 0
+  final_damage_multiplier: 45
+  LUK: 80
+  DEX: 30
+candidates:
+  - - null
+    - final_damage_multiplier: 29
+    - final_damage_multiplier: 15
+  - - null
+    - final_damage_multiplier: 36

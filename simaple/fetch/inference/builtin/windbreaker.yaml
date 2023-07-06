@@ -1,0 +1,13 @@
+jobtype: windbreaker
+passive:
+  attack_power: 131
+  magic_attack: 0
+  attack_power_multiplier: 21
+  final_damage_multiplier: 10
+  DEX: 50
+  STR: 30
+  DEX_multiplier: 16
+  damage_multiplier: 35
+candidates:
+  - - final_damage_multiplier: 35
+    - final_damage_multiplier: 36
