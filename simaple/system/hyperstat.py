@@ -31,7 +31,7 @@ def get_hyperstat_lists() -> List[List[Stat]]:
 
 
 def get_empty_hyperstat_levels() -> List[int]:
-    return [0 for i in HYPERSTAT_COST]
+    return [0 for i in HYPERSTAT_BASIS]
 
 
 def get_hyperstat_cost() -> List[int]:
