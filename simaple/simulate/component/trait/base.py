@@ -58,6 +58,10 @@ class NamedTrait(ComponentTrait):
     def _get_name(self) -> str:
         ...
 
+    @abstractmethod
+    def _get_id(self) -> str:
+        ...
+
 
 class InvalidatableTrait(ComponentTrait):
     @abstractmethod

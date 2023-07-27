@@ -279,6 +279,7 @@ class CosmicShower(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
     @view_method
     def validity(self, state: CosmicShowerState):
         return Validity(
+            id=self.id,
             name=self._get_name(),
             time_left=max(0, state.cooldown.time_left),
             valid=state.cooldown.available and state.orb.stack > 0,
@@ -353,6 +354,7 @@ class Cosmos(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
     @view_method
     def validity(self, state: CosmosState):
         return Validity(
+            id=self.id,
             name=self._get_name(),
             time_left=max(0, state.cooldown.time_left),
             valid=state.cooldown.available and state.orb.stack > 0,
@@ -413,6 +415,7 @@ class FlareSlash(SkillComponent, UseSimpleAttackTrait):
     @view_method
     def validity(self, state: FlareSlashState):
         return Validity(
+            id=self.id,
             name=self._get_name(),
             time_left=max(0, state.cooldown.time_left),
             valid=False,

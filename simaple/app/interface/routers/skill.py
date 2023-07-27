@@ -1,7 +1,7 @@
 import fastapi
 from dependency_injector.wiring import inject
 
-from simaple.app.application.query.skill import get_skill, get_all_skill
+from simaple.app.application.query.skill import get_all_skill, get_skill
 from simaple.app.domain.uow import UnitOfWork
 from simaple.app.interface.routers.base import UowProvider
 from simaple.spec.spec import Spec
@@ -30,4 +30,3 @@ def get_skill_spec(
         raise fastapi.HTTPException(status_code=404, detail="Skill not found")
 
     return skill_spec
-

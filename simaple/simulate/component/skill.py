@@ -62,6 +62,9 @@ class SkillComponent(Component):
     def _get_name(self) -> str:
         return self.name
 
+    def _get_id(self) -> str:
+        return self.id
+
 
 class AttackSkillState(ReducerState):
     cooldown: Cooldown
