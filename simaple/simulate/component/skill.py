@@ -250,6 +250,7 @@ class NoState(ReducerState):
 
 
 class AlwaysEnabledComponent(Component):
+    id: str
     stat: Stat
 
     def get_default_state(self):
