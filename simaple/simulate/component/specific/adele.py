@@ -576,7 +576,7 @@ class AdeleRestoreBuffComponent(SkillComponent):
         return Running(
             name=self.name,
             time_left=state.lasting.time_left,
-            lasting_duration=self.lasting_duration,
+            lasting_duration=state.lasting.assigned_duration,
         )
 
 
