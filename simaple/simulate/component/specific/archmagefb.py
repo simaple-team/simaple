@@ -185,6 +185,7 @@ class PoisonChainComponent(
     @view_method
     def running(self, state: PoisonChainState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),
@@ -308,6 +309,7 @@ class IfrittComponent(
     @view_method
     def running(self, state: IfrittState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),

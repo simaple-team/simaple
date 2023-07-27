@@ -289,6 +289,7 @@ class CosmicShower(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
     @view_method
     def running(self, state: CosmicShowerState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),
@@ -364,6 +365,7 @@ class Cosmos(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
     @view_method
     def running(self, state: CosmosState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),

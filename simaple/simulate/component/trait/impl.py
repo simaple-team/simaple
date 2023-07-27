@@ -156,6 +156,7 @@ class BuffTrait(
 
     def running_in_buff_trait(self, state: LastingProtocol) -> Running:
         return Running(
+            id=self._get_id(),
             name=self._get_name(),
             time_left=state.lasting.time_left,
             lasting_duration=state.lasting.assigned_duration,
