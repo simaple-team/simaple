@@ -54,6 +54,7 @@ class UltimateDarkSightComponent(SkillComponent, BuffTrait, CooldownValidityTrai
     @view_method
     def running(self, state: UltimateDarkSightState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.lasting.time_left,
             lasting_duration=state.lasting.assigned_duration,

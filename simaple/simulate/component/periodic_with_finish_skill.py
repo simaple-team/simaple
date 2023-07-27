@@ -61,6 +61,7 @@ class PeriodicWithFinishSkillComponent(
     @view_method
     def running(self, state: PeriodicWithFinishState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),

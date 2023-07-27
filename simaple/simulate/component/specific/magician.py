@@ -53,6 +53,7 @@ class Infinity(SkillComponent, BuffTrait, CooldownValidityTrait):
     @view_method
     def running(self, state: InfinityState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.lasting.time_left,
             lasting_duration=state.lasting.assigned_duration,

@@ -61,6 +61,7 @@ class MagicCurcuitFullDriveComponent(
     @view_method
     def running(self, state: MagicCurcuitFullDriveState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self.lasting_duration,
