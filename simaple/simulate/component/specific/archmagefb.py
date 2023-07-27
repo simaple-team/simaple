@@ -103,6 +103,7 @@ class PoisonNovaComponent(SkillComponent, AddDOTDamageTrait):
     @view_method
     def validity(self, state: PoisonNovaState):
         return Validity(
+            id=self.id,
             name=self.name,
             time_left=max(0, state.cooldown.time_left),
             valid=state.cooldown.available,
