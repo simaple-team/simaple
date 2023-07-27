@@ -6,7 +6,7 @@ from simaple.app.domain.uow import UnitOfWork
 from simaple.app.interface.routers.base import UowProvider
 from simaple.spec.spec import Spec
 
-skill_router = fastapi.APIRouter(prefix="/skill")
+skill_router = fastapi.APIRouter(prefix="/skills")
 
 
 @skill_router.get("/")
