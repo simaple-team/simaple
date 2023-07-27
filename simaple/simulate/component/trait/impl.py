@@ -155,7 +155,7 @@ class BuffTrait(
         return Running(
             name=self._get_name(),
             time_left=state.lasting.time_left,
-            lasting_duration=self._get_lasting_duration(state),
+            lasting_duration=state.lasting.assigned_duration,
         )
 
 
