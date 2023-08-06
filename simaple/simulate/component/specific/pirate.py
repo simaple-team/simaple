@@ -52,6 +52,7 @@ class PenalizedBuffSkill(SkillComponent, CooldownValidityTrait, BuffTrait):
     @view_method
     def running(self, state: PenalizedBuffSkillState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.lasting.time_left,
             lasting_duration=state.lasting.assigned_duration,

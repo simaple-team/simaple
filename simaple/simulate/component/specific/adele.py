@@ -49,6 +49,7 @@ class EtherState(ReducerState):
 
 
 class AdeleEtherComponent(Component):
+    id: str
     maximum_stack: int
     periodic_interval: float
     stack_per_period: int
@@ -128,6 +129,7 @@ class AdeleEtherComponent(Component):
         state: EtherState,
     ):
         return Running(
+            id=self.id,
             name=self.name,
             time_left=999_999_999,
             lasting_duration=999_999_999,
@@ -301,6 +303,7 @@ class AdeleOrderComponent(SkillComponent):
     @view_method
     def validity(self, state: AdeleOrderState):
         return Validity(
+            id=self.id,
             name=self._get_name(),
             time_left=max(0, state.cooldown.time_left),
             valid=state.cooldown.available and state.ether_gauge.is_order_valid(),
@@ -310,6 +313,7 @@ class AdeleOrderComponent(SkillComponent):
     @view_method
     def running(self, state: AdeleOrderState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.order_sword.get_time_left(),
             lasting_duration=self.lasting_duration,
@@ -355,6 +359,7 @@ class AdeleGatheringComponent(SkillComponent, UseSimpleAttackTrait):
     @view_method
     def validity(self, state: AdeleOrderUsingState):
         return Validity(
+            id=self.id,
             name=self.name,
             time_left=max(0, state.cooldown.time_left),
             valid=state.cooldown.available and state.order_sword.get_sword_count() > 0,
@@ -423,6 +428,7 @@ class AdeleBlossomComponent(SkillComponent, UseSimpleAttackTrait):
         state: AdeleOrderUsingState,
     ):
         return Validity(
+            id=self.id,
             name=self.name,
             time_left=max(0, state.cooldown.time_left),
             valid=state.cooldown.available and state.order_sword.get_sword_count() > 0,
@@ -527,6 +533,7 @@ class AdeleRuinComponent(
         state: AdeleRuinState,
     ) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.interval_state_second.time_left,
             lasting_duration=self.lasting_duration_first + self.lasting_duration_second,
@@ -574,6 +581,7 @@ class AdeleRestoreBuffComponent(SkillComponent):
     @view_method
     def running(self, state: AdeleRestoreState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.lasting.time_left,
             lasting_duration=state.lasting.assigned_duration,
@@ -630,6 +638,7 @@ class AdeleStormComponent(
     @view_method
     def validity(self, state: AdeleStormState):
         return Validity(
+            id=self.id,
             name=self._get_name(),
             time_left=max(0, state.cooldown.time_left),
             valid=state.cooldown.available and state.order_sword.get_sword_count() > 0,
@@ -639,6 +648,7 @@ class AdeleStormComponent(
     @view_method
     def running(self, state: AdeleStormState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),

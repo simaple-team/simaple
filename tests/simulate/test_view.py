@@ -30,7 +30,7 @@ def test_view():
 
     environment = Environment(store=store)
 
-    component = ViewTestComponent(name="test_component")
+    component = ViewTestComponent(id="dummy", name="test_component")
     component.add_to_environment(environment)
 
     assert environment.show("test_component.naming") == str(3 + 5)
@@ -43,7 +43,7 @@ def test_view_query():
 
     environment = Environment(store=store)
 
-    component = ViewTestComponent(name="test_component")
+    component = ViewTestComponent(id="dummy", name="test_component")
     component.add_to_environment(environment)
 
     view = environment.get_views(r".*\.naming")[0]

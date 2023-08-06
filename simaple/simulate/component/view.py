@@ -12,6 +12,7 @@ class ComponentInformation(TypedDict):
 
 
 class Validity(pydantic.BaseModel):
+    id: str
     name: str
     time_left: float
     valid: bool
@@ -20,6 +21,7 @@ class Validity(pydantic.BaseModel):
 
 
 class Running(pydantic.BaseModel):
+    id: str
     name: str
     time_left: float
     lasting_duration: float

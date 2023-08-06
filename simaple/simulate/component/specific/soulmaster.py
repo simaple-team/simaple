@@ -171,6 +171,7 @@ class CrossTheStyx(SkillComponent):
     @view_method
     def validity(self, state: CrossTheStyxState):
         return Validity(
+            id=self.id,
             name=self.name,
             time_left=0.0,
             valid=state.elysion_lasting.enabled(),
@@ -279,6 +280,7 @@ class CosmicShower(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
     @view_method
     def validity(self, state: CosmicShowerState):
         return Validity(
+            id=self.id,
             name=self._get_name(),
             time_left=max(0, state.cooldown.time_left),
             valid=state.cooldown.available and state.orb.stack > 0,
@@ -288,6 +290,7 @@ class CosmicShower(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
     @view_method
     def running(self, state: CosmicShowerState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),
@@ -353,6 +356,7 @@ class Cosmos(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
     @view_method
     def validity(self, state: CosmosState):
         return Validity(
+            id=self.id,
             name=self._get_name(),
             time_left=max(0, state.cooldown.time_left),
             valid=state.cooldown.available and state.orb.stack > 0,
@@ -362,6 +366,7 @@ class Cosmos(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
     @view_method
     def running(self, state: CosmosState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),
@@ -413,6 +418,7 @@ class FlareSlash(SkillComponent, UseSimpleAttackTrait):
     @view_method
     def validity(self, state: FlareSlashState):
         return Validity(
+            id=self.id,
             name=self._get_name(),
             time_left=max(0, state.cooldown.time_left),
             valid=False,

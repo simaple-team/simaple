@@ -64,6 +64,7 @@ class FrostEffect(Component):
     @view_method
     def running(self, state: FrostEffectState):
         return Running(
+            id=self.id,
             name=self.name,
             lasting_duration=999_999_999,
             time_left=999_999_999,

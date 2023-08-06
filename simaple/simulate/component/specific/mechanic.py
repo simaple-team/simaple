@@ -99,6 +99,7 @@ class RobotSetupBuff(SkillComponent, BuffTrait, CooldownValidityTrait):
     @view_method
     def running(self, state: RobotSetupBuffState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.lasting.time_left,
             lasting_duration=state.lasting.assigned_duration,
@@ -170,6 +171,7 @@ class RobotSummonSkill(
     @view_method
     def running(self, state: RobotSummonState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),
@@ -257,6 +259,7 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
     @view_method
     def running(self, state: HommingMissileState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),
@@ -439,6 +442,7 @@ class MultipleOptionComponent(SkillComponent, CooldownValidityTrait):
     @view_method
     def running(self, state: MultipleOptionState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),
@@ -572,6 +576,7 @@ class MecaCarrier(SkillComponent, CooldownValidityTrait):
     @view_method
     def running(self, state: MecaCarrierState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             stack=state.periodic.count if state.periodic.time_left > 0 else 0,

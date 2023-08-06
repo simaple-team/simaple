@@ -101,6 +101,7 @@ class ProgrammedPeriodicComponent(SkillComponent, InvalidatableCooldownTrait):
     @view_method
     def running(self, state: ProgrammedPeriodicState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.programmed_periodic.time_left,
             lasting_duration=self.lasting_duration,

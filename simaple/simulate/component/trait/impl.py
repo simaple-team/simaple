@@ -31,6 +31,7 @@ from simaple.simulate.reserved_names import Tag
 class CooldownValidityTrait(CooldownTrait, NamedTrait):
     def validity_in_cooldown_trait(self, state: CooldownProtocol) -> Validity:
         return Validity(
+            id=self._get_id(),
             name=self._get_name(),
             time_left=max(0, state.cooldown.time_left),
             valid=state.cooldown.available,
@@ -44,6 +45,7 @@ class InvalidatableCooldownTrait(CooldownTrait, InvalidatableTrait, NamedTrait):
     ) -> Validity:
         return self.invalidate_if_disabled(
             Validity(
+                id=self._get_id(),
                 name=self._get_name(),
                 time_left=max(0, state.cooldown.time_left),
                 valid=state.cooldown.available,
@@ -55,6 +57,7 @@ class InvalidatableCooldownTrait(CooldownTrait, InvalidatableTrait, NamedTrait):
 class ConsumableValidityTrait(CooldownTrait, NamedTrait):
     def validity_in_consumable_trait(self, state: ConsumableProtocol) -> Validity:
         return Validity(
+            id=self._get_id(),
             name=self._get_name(),
             time_left=max(0, state.consumable.time_left),
             valid=state.consumable.available,
@@ -153,6 +156,7 @@ class BuffTrait(
 
     def running_in_buff_trait(self, state: LastingProtocol) -> Running:
         return Running(
+            id=self._get_id(),
             name=self._get_name(),
             time_left=state.lasting.time_left,
             lasting_duration=state.lasting.assigned_duration,

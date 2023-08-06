@@ -317,6 +317,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     Component는 어떠한 상태도 가지지 않는 순수-함수로서 기능해야만 합니다.
     """
 
+    id: str
     name: str
     listening_actions: dict[str, Union[str, StaticPayloadReducerInfo]] = Field(
         default_factory=dict

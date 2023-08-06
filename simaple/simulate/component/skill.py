@@ -62,6 +62,9 @@ class SkillComponent(Component):
     def _get_name(self) -> str:
         return self.name
 
+    def _get_id(self) -> str:
+        return self.id
+
 
 class AttackSkillState(ReducerState):
     cooldown: Cooldown
@@ -247,6 +250,7 @@ class NoState(ReducerState):
 
 
 class AlwaysEnabledComponent(Component):
+    id: str
     stat: Stat
 
     def get_default_state(self):
@@ -259,7 +263,10 @@ class AlwaysEnabledComponent(Component):
     @view_method
     def running(self, _: NoState) -> Running:
         return Running(
-            name=self.name, time_left=999_999_999, lasting_duration=999_999_999
+            id=self.id,
+            name=self.name,
+            time_left=999_999_999,
+            lasting_duration=999_999_999,
         )
 
 
@@ -322,6 +329,7 @@ class StackableBuffSkillComponent(
     @view_method
     def running(self, state: StackableBuffSkillState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.lasting.time_left,
             lasting_duration=state.lasting.assigned_duration,
@@ -381,6 +389,7 @@ class ConsumableBuffSkillComponent(
     @view_method
     def running(self, state: ConsumableBuffSkillState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.lasting.time_left,
             lasting_duration=self._get_lasting_duration(state),
@@ -434,6 +443,7 @@ class PeriodicDamageConfiguratedAttackSkillComponent(
     @view_method
     def running(self, state: PeriodicDamageState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),

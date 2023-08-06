@@ -103,6 +103,7 @@ class PoisonNovaComponent(SkillComponent, AddDOTDamageTrait):
     @view_method
     def validity(self, state: PoisonNovaState):
         return Validity(
+            id=self.id,
             name=self.name,
             time_left=max(0, state.cooldown.time_left),
             valid=state.cooldown.available,
@@ -184,6 +185,7 @@ class PoisonChainComponent(
     @view_method
     def running(self, state: PoisonChainState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),
@@ -307,6 +309,7 @@ class IfrittComponent(
     @view_method
     def running(self, state: IfrittState) -> Running:
         return Running(
+            id=self.id,
             name=self.name,
             time_left=state.periodic.time_left,
             lasting_duration=self._get_lasting_duration(state),
