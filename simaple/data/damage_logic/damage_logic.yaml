@@ -151,3 +151,367 @@ data:
   mastery: "{{ 0.90 + 0.01 * ((skill_level+1) // 2) }}"
   default_skill_level: 0
   combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/STRBasedDamageLogic
+metadata:
+  label:
+    group: demonslayer
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.2
+  mastery: "{{ 0.90 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/INTBasedDamageLogic
+metadata:
+  label:
+    group: evan
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.2
+  mastery: "{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/STRBasedDamageLogic
+metadata:
+  label:
+    group: buccaneer
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.7
+  mastery: "{{ 0.90 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/LUKBasedDamageLogic
+metadata:
+  label:
+    group: nightwalker
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.75
+  mastery: "{{ 0.85 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/LUKBasedDamageLogic
+metadata:
+  label:
+    group: shadower
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.3
+  mastery: "{{ 0.90 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/LUKBasedDamageLogic
+metadata:
+  label:
+    group: dualblader
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.3
+  mastery: "{{ 0.90 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/INTBasedDamageLogic
+metadata:
+  label:
+    group: flamewizard
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.2
+  mastery: "{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/DEXBasedDamageLogic
+metadata:
+  label:
+    group: bowmaster
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.3
+  mastery: "{{ 0.85 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/DEXBasedDamageLogic
+metadata:
+  label:
+    group: mercedes
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.3
+  mastery: "{{ 0.85 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/STRBasedDamageLogic
+metadata:
+  label:
+    group: darkknight
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.49
+  mastery: "{{ 0.9 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/INTBasedDamageLogic
+metadata:
+  label:
+    group: battlemage
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.2
+  mastery: "{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/STRBasedDamageLogic
+metadata:
+  label:
+    group: eunwol
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.7
+  mastery: "{{ 0.9 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/DEXBasedDamageLogic
+metadata:
+  label:
+    group: sniper
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.35
+  mastery: "{{ 0.85 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/STRBasedDamageLogic
+metadata:
+  label:
+    group: paladin
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.34
+  mastery: "{{ 0.9 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/STRBasedDamageLogic
+metadata:
+  label:
+    group: ark
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.7
+  mastery: "{{ 0.9 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/DEXBasedDamageLogic
+metadata:
+  label:
+    group: pathfinder
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.3
+  mastery: "{{ 0.85 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/STRBasedDamageLogic
+metadata:
+  label:
+    group: blaster
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.7
+  mastery: "{{ 0.9 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/STRBasedDamageLogic
+metadata:
+  label:
+    group: cannoneer
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.5
+  mastery: "{{ 0.85 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/DEXBasedDamageLogic
+metadata:
+  label:
+    group: corsair
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.5
+  mastery: "{{ 0.85 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/INTBasedDamageLogic
+metadata:
+  label:
+    group: lara
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.5
+  mastery: "{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/DEXBasedDamageLogic
+metadata:
+  label:
+    group: angelicbuster
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.7
+  mastery: "{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/LUKBasedDamageLogic
+metadata:
+  label:
+    group: phantom
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.3
+  mastery: "{{ 0.9 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/STRBasedDamageLogic
+metadata:
+  label:
+    group: striker
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.7
+  mastery: "{{ 0.90 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/LUKBasedDamageLogic
+metadata:
+  label:
+    group: nightlord
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.75
+  mastery: "{{ 0.85 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/LUKBasedDamageLogic
+metadata:
+  label:
+    group: cadena
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.3
+  mastery: "{{ 0.90 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+---
+kind: DamageLogic
+version: simaple.io/DEXBasedDamageLogic
+metadata:
+  label:
+    group: kain
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  attack_range_constant: 1.3
+  mastery: "{{ 0.85 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True

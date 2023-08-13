@@ -98,7 +98,7 @@ def test_stat():
         BaseStatType.INT,
     )
 
-    assert results[0][0] == (5902, 560, 20290)
+    assert results[0][0] == (5855, 560, 20600)
 
 
 def test_full_stat_predication():
@@ -117,7 +117,7 @@ def test_full_stat_predication():
     assert best_result.short_dict() == {
         "STR": 1704.0,
         "LUK": 2771.0,
-        "INT": 5902.0,
+        "INT": 5855.0,
         "DEX": 1707.0,
         "STR_multiplier": 175.0,
         "LUK_multiplier": 180.0,
@@ -125,7 +125,7 @@ def test_full_stat_predication():
         "DEX_multiplier": 173.0,
         "STR_static": 660.0,
         "LUK_static": 480.0,
-        "INT_static": 20290.0,
+        "INT_static": 20600.0,
         "DEX_static": 420.0,
     }
 
@@ -147,7 +147,7 @@ def test_full_stat_predication2():
         "STR": 2295.0,
         "LUK": 1251.0,
         "INT": 1138.0,
-        "DEX": 5326.0,
+        "DEX": 5279.0,
         "STR_multiplier": 144.0,
         "LUK_multiplier": 135.0,
         "INT_multiplier": 159.0,
@@ -155,7 +155,7 @@ def test_full_stat_predication2():
         "STR_static": 733.0,
         "LUK_static": 386.0,
         "INT_static": 630.0,
-        "DEX_static": 20210.0,
+        "DEX_static": 20500.0,
     }
 
 

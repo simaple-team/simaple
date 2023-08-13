@@ -10,7 +10,7 @@ def _get_builtin_setting_file_path(filename: str) -> str:
     return os.path.join(os.path.dirname(__file__), "builtin", filename)
 
 
-def _get_builtin_setting_file_names() -> str:
+def _get_builtin_setting_file_names() -> list[str]:
     return os.listdir(os.path.join(os.path.dirname(__file__), "builtin"))
 
 
@@ -30,8 +30,7 @@ def get_from_file(filename) -> tuple[JobType, JobSetting]:
 _PREDEFINED_SETTING_MAP: dict[JobType, JobSetting] = {}
 
 
-def _get_setting_map():
-    global _PREDEFINED_SETTING_MAP
+def _get_setting_map() -> dict[JobType, JobSetting]:
     if len(_PREDEFINED_SETTING_MAP):
         return _PREDEFINED_SETTING_MAP
 

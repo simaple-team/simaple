@@ -93,9 +93,9 @@ def all_att_patch():
 def stat_patch(stat_priority: tuple[str, str, str, str]):
     return StringPatch(
         as_is=["first_stat", "second_stat", "third_stat", "fourth_stat"],
-        to_be=stat_priority,
+        to_be=list(stat_priority),
     )
 
 
 def attack_patch(attack_priority: tuple[str, str]):
-    return StringPatch(as_is=["first_att", "second_att"], to_be=attack_priority)
+    return StringPatch(as_is=["first_att", "second_att"], to_be=list(attack_priority))

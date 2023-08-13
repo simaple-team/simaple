@@ -1,3 +1,5 @@
+from typing import Any
+
 from simaple.core.base import ActionStat
 from simaple.simulate.base import (
     Action,
@@ -26,8 +28,8 @@ class ViewTestComponent(Component):
         return {"some_state": SomeEntity()}
 
     @reducer_method
-    def some_reducer(self, payload: None, state: SomeTestState):
-        return payload, [Event(name=self.name, payload=payload)]
+    def some_reducer(self, payload: dict[Any, Any], state: SomeTestState):
+        return payload, [Event(name=self.name, payload=payload, tag=None)]
 
 
 def test_paramterizd_reducer():

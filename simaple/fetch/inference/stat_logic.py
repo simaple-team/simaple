@@ -1,9 +1,9 @@
-from typing import Generator, TypedDict
+from typing import Generator
 
-from simaple.core import AttackType, BaseStatType, Stat, StatProps
+from simaple.core import BaseStatType, Stat, StatProps
 from simaple.core.damage import DamageLogic
 from simaple.data.damage_logic import get_damage_logic
-from simaple.fetch.inference.attack_logic import JobSetting, reference_stat_provider
+from simaple.fetch.inference.attack_logic import JobSetting
 from simaple.fetch.response.character import CharacterResponse
 from simaple.gear.slot_name import SlotName
 
@@ -55,10 +55,19 @@ def _get_authentic_force_increment(level: int, authentic_force: int) -> int:
     if level >= 260:  # Sernium
         static_stat += 500
         authentic_level -= 10
-    if level >= 270:  # Arkus
+    if level >= 265:  # Arkus
+        static_stat += 500
+        authentic_level -= 10
+    if level >= 270:  # Odium
         static_stat += 500
         authentic_level -= 10
     if level >= 275:  # Odium
+        static_stat += 500
+        authentic_level -= 10
+    if level >= 280:  # Odium
+        static_stat += 500
+        authentic_level -= 10
+    if level >= 285:  # Odium
         static_stat += 500
         authentic_level -= 10
 
@@ -68,21 +77,16 @@ def _get_authentic_force_increment(level: int, authentic_force: int) -> int:
 def _calculate_stat_reliability(
     reference: StatFactor,
     inferred: StatFactor,
-    stat_props: StatProps,
+    stat_props: BaseStatType,
 ) -> float:
     """
     Calculate reliability. 0 means exactly reliable.
     You can expect "1" deivation as 1/e reliable, i.e. prob that given value is exact is 1/e.
     """
 
-    """
-    STR: 8 + zenon
-    DEX: 5 + zenon
-    LUK: 5 + zenon
-    INT: 8 
-    """
-
-    def _static_term_reliability(ref: int, value: int, stat_type: BaseStatType):
+    def _static_term_reliability(
+        ref: int, value: int, stat_type: BaseStatType
+    ) -> float:
         offsets = {
             BaseStatType.STR: 8 * 80 + 20,
             BaseStatType.DEX: 5 * 80 + 20,
@@ -101,9 +105,9 @@ def _calculate_stat_reliability(
     def _multiplier_term_reliability(ref: int, value: int) -> float:
         if ref + 10 == value:
             return 0
-        elif ref == value:
+        if ref == value:
             return 4
-        elif ref + 5 == value:
+        if ref + 5 == value:
             return 8
 
         return 12
@@ -124,7 +128,7 @@ def get_candidates(
         margin = 0
         while True:
             static_cand = static + margin * 10
-            mult_cand = mult + mult_additive
+            mult_cand = int(mult + mult_additive)
 
             expected_product = total - static_cand
             stat_multiplier = 1 + 0.01 * mult_cand
@@ -147,7 +151,7 @@ def _create_task(
     response: CharacterResponse, reference_stat: Stat, base_type: BaseStatType
 ) -> tuple[StatFactor, int]:
     base_factor = (
-        reference_stat.get(base_type),
+        reference_stat.get(StatProps(base_type.value)),
         reference_stat.get(StatProps.multiplier(base_type)),
         reference_stat.get(StatProps.static(base_type)),
     )
@@ -158,7 +162,7 @@ def _create_task(
 
 def get_candidates_with_score(
     reference_stat: Stat, response: CharacterResponse, base_type: BaseStatType
-) -> list[StatFactor, int]:
+) -> list[tuple[StatFactor, float]]:
     base_factor, total = _create_task(response, reference_stat, base_type)
     candidates = sorted(
         [
@@ -178,14 +182,14 @@ def _get_scoring_target(logic: DamageLogic) -> BaseStatType:
     level_based_stat = logic.get_best_level_based_stat(250)
     if level_based_stat.STR > 4:
         return BaseStatType.STR
-    elif level_based_stat.DEX > 4:
+    if level_based_stat.DEX > 4:
         return BaseStatType.DEX
-    elif level_based_stat.INT > 4:
+    if level_based_stat.INT > 4:
         return BaseStatType.INT
-    elif level_based_stat.LUK > 4:
+    if level_based_stat.LUK > 4:
         return BaseStatType.LUK
-    else:
-        raise ValueError
+
+    raise ValueError
 
 
 def _factor_to_stat(factor: StatFactor, stat_type: BaseStatType) -> Stat:
@@ -204,7 +208,7 @@ def predicate_stat_factor(
     setting: JobSetting,
     authentic_force: int,
     base_type: BaseStatType,
-) -> list[StatFactor, int]:
+) -> list[tuple[StatFactor, float]]:
     reference_stat = compute_setup(response, setting, authentic_force)
     return get_candidates_with_score(reference_stat, response, base_type)
 
@@ -214,8 +218,7 @@ def predicate_stat(
     setting: JobSetting,
     authentic_force: int,
     size: int = -1,
-) -> list[tuple[Stat, int]]:
-    ...
+) -> list[tuple[Stat, float]]:
     damage_logic = get_damage_logic(response.get_jobtype(), 0)
     scoring_target_type = _get_scoring_target(damage_logic)
 

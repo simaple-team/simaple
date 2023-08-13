@@ -21,7 +21,7 @@ from simaple.app.interface.routers.workspace import router
 
 
 class SimapleWeb(fastapi.FastAPI):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         container = WebContainer()

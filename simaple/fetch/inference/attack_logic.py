@@ -13,9 +13,9 @@ PowerFactor = tuple[int, int, int]  # damage_multiplier, attack_multpilier, atta
 def _get_power_factor(reference_stat: Stat, damage_logic: DamageLogic) -> PowerFactor:
     attack_type = damage_logic.get_attack_type()
     return (
-        reference_stat.damage_multiplier,
-        reference_stat.get(StatProps(attack_type.value + "_multiplier")),
-        reference_stat.get(StatProps(attack_type.value)),
+        int(reference_stat.damage_multiplier),
+        int(reference_stat.get(StatProps(attack_type.value + "_multiplier"))),
+        int(reference_stat.get(StatProps(attack_type.value))),
     )
 
 
@@ -24,7 +24,7 @@ def _get_damage_multiplier_candidates(
     maximum_attack_range: int,
     damage_logic: DamageLogic,
     damage_multiplier_margin: int = 100,
-) -> list[int, int]:
+) -> list[tuple[int, int]]:
     """
     returns list of [damage_multiplier, attack_power_multiplier_candidate]
     """
@@ -69,7 +69,7 @@ def _get_damage_multiplier_candidates(
         if int(lower_bound) == int(upper_bound):
             continue
 
-        valid_multipliers.append((predicated_damage_multiplier, int(upper_bound)))
+        valid_multipliers.append((int(predicated_damage_multiplier), int(upper_bound)))
 
     return valid_multipliers
 
@@ -223,7 +223,7 @@ def _calculate_reliability(reference: PowerFactor, inferred: PowerFactor) -> flo
 
 def predicate_attack_factor(
     response: CharacterResponse, setting: JobSetting
-) -> list[PowerFactor, int]:
+) -> list[tuple[PowerFactor, float]]:
     power_factor_candidates = []
     damage_logic = get_damage_logic(response.get_jobtype(), 0)
 

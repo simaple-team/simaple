@@ -50,7 +50,7 @@ class ComponentMethodWrapper:
     def __call__(self, *args) -> tuple[Union[tuple[Entity], Entity], Any]:
         return self._func(*args)
 
-    def translate_payload(self, payload: Optional[Union[int, str, dict]]):
+    def translate_payload(self, payload: Optional[Union[int, str, float, dict]]):
         if not self._has_payload:
             raise ValueError("no skip_count do not support payload translation")
 

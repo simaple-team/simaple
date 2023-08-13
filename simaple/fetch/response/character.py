@@ -12,7 +12,7 @@ RawType = dict
 
 
 def _get_level(raw_data: RawType) -> int:
-    return raw_data["character"]["level"]
+    return int(raw_data["character"]["level"])
 
 
 def _get_ability_stat(raw_data: RawType) -> Stat:
@@ -84,6 +84,7 @@ _kms_job_names: dict[str, JobType] = {
     "캐논슈터": JobType.cannoneer,
     "미하일": JobType.mihile,
     "듀얼블레이더": JobType.dualblade,
+    "듀얼블레이드": JobType.dualblade,
     "카이저": JobType.kaiser,
     "캡틴": JobType.corsair,
     "엔젤릭버스터": JobType.angelicbuster,
@@ -104,6 +105,8 @@ _kms_job_names: dict[str, JobType] = {
     "데몬어벤져": JobType.demonavenger,
     "제논": JobType.zenon,
     "아델": JobType.adele,
+    "라라": JobType.lara,
+    "카인": JobType.kain,
 }
 
 
@@ -124,10 +127,10 @@ class CharacterResponse(AbstractCharacter):
         return self._raw["character"]["stat"]
 
     def get_maximum_attack_range(self) -> int:
-        return self._raw["character"]["stat"]["max_damage_factor"]
+        return int(self._raw["character"]["stat"]["max_damage_factor"])
 
     def get_level(self) -> int:
-        return self._raw["character"]["level"]
+        return int(self._raw["character"]["level"])
 
     def is_reboot(self) -> bool:
         return "리부트" in self._raw["character"]["overview"]["world"]

@@ -102,6 +102,8 @@ class GearType(IntEnum):
     fan_tassel = 135380
     bracelet = 135400
     weapon_belt = 135401
+    lara_subweapon = 135402
+
     machine_engine = 161
     machine_arms = 162
     machine_legs = 163

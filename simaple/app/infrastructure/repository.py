@@ -5,7 +5,7 @@ from simaple.app.domain.simulator import Simulator, SimulatorRepository
 
 
 class InmemorySimulatorRepository(SimulatorRepository):
-    def __init__(self):
+    def __init__(self) -> None:
         self._workspaces: dict[str, Simulator] = {}
 
     def add(self, simulator: Simulator) -> None:
@@ -22,7 +22,7 @@ class InmemorySimulatorRepository(SimulatorRepository):
 
 
 class InmemoryHistoryRepository(HistoryRepository):
-    def __init__(self):
+    def __init__(self) -> None:
         self._histories: dict[str, History] = {}
 
     def add(self, history: History) -> None:

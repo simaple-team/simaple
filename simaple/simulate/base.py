@@ -25,7 +25,7 @@ class Action(BaseModel):
 
     name: str
     method: str
-    payload: Optional[Union[int, str, dict]]
+    payload: Optional[Union[int, str, float, dict]] = None
 
     class Config:
         extra = Extra.forbid
@@ -94,10 +94,10 @@ class Store(metaclass=ABCMeta):
 
 
 class ConcreteStore(Store):
-    def __init__(self):
+    def __init__(self) -> None:
         self._entities: dict[str, Entity] = {}
 
-    def set_entity(self, name: str, entity: Entity):
+    def set_entity(self, name: str, entity: Entity) -> None:
         self._entities[name] = entity
 
     def read_entity(self, name: str, default: Optional[Entity]):
