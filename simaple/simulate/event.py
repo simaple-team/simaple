@@ -35,13 +35,13 @@ class NamedEventProvider(EventProvider):
         self._name = name
         self._default_modifier = default_modifier
 
-    def elapsed(self, time) -> Event:
+    def elapsed(self, time: float) -> Event:
         return Event(name=self._name, tag=Tag.ELAPSED, payload={"time": time})
 
     def rejected(self) -> Event:
         return Event(name=self._name, tag=Tag.REJECT)
 
-    def delayed(self, time) -> Event:
+    def delayed(self, time: float) -> Event:
         return Event(name=self._name, tag=Tag.DELAY, payload={"time": time})
 
     def dealt(

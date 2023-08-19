@@ -2,7 +2,7 @@ import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
-from simaple.simulate.actor import ActionRecorder
+from simaple.simulate.policy.base import OperationRecorder, get_interpreter
 from simaple.simulate.report.base import Report, ReportEventHandler
 
 setting = SimulationSetting(
@@ -22,20 +22,20 @@ def test_actor():
     container.config.from_pydantic(setting)
 
     archmagefb_client = container.client()
-    actor = container.client_configuration().get_mdc_actor()
+    policy = container.client_configuration().get_default_policy()
 
     environment = archmagefb_client.environment
 
-    recorder = ActionRecorder("record.tsv")
+    recorder = OperationRecorder("record.tsv")
     report = Report()
     archmagefb_client.add_handler(ReportEventHandler(report))
+    interpreter = get_interpreter(archmagefb_client)
 
-    events = []
     with recorder.start() as rec:
         while environment.show("clock") < 180_000:
-            action = actor.decide(environment, events)
-            events = archmagefb_client.play(action)
-            rec.write(action, environment.show("clock"))
+            operand = policy.decide(environment)
+            recorder.write(operand)
+            interpreter.exec(operand)
 
     print(
         f"{environment.show('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "

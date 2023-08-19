@@ -1,6 +1,5 @@
 import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.core.base import Stat
-from simaple.simulate.actor import time_elapsing_action
 from simaple.simulate.base import Action
 from simaple.simulate.component.view import BuffParentView
 from simaple.simulate.reserved_names import Tag
@@ -23,7 +22,7 @@ def test_buff_view(archmagefb_client):
 def test_poison_nova(archmagefb_client):
     actions = [
         Action(name="포이즌 노바", method="use"),
-        time_elapsing_action(2000),
+        Action(name="*", method="elapse", payload=2000),
         Action(name="미스트 이럽션", method="use"),
     ]
 
@@ -38,8 +37,8 @@ def test_poison_nova(archmagefb_client):
 def test_poison_chain(archmagefb_client):
     actions = [
         Action(name="포이즌 체인", method="use"),
-        time_elapsing_action(25000),
-        time_elapsing_action(25000),
+        Action(name="*", method="elapse", payload=25000),
+        Action(name="*", method="elapse", payload=25000),
     ]
 
     events = []
