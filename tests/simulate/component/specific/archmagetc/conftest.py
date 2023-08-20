@@ -41,6 +41,7 @@ def jupyter_thunder_periodic():
 @pytest.fixture
 def frost_effect():
     return FrostEffect(
+        id="dummy",
         name="프로스트 이펙트",
         critical_damage_per_stack=3,
         maximum_stack=5,

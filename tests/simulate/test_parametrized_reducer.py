@@ -44,6 +44,7 @@ def test_paramterizd_reducer():
     environment = Environment(store=store)
 
     component = ViewTestComponent(
+        id="dummy",
         name="test_component",
         listening_actions={
             "some_action.use": "some_reducer",

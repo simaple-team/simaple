@@ -7,6 +7,7 @@ from simaple.simulate.component.skill import AlwaysEnabledComponent, NoState
 @pytest.fixture(name="always_enabled_component")
 def fixture_always_enabled_component():
     return AlwaysEnabledComponent(
+        id="dummy",
         name="always-enabled",
         stat=Stat(attack_power=30),
     )

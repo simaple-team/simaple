@@ -11,7 +11,7 @@ from tests.simulate.component.util import count_dot_skill
 
 @pytest.fixture(name="mob_component")
 def fixture_mob_component():
-    return MobComponent(name="mob")
+    return MobComponent(id="dummy", name="mob")
 
 
 @pytest.fixture(name="mob_state")
