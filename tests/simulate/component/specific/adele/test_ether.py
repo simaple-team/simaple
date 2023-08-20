@@ -13,6 +13,7 @@ from simaple.simulate.global_property import Dynamics
 @pytest.fixture(name="ether")
 def fixture_ether():
     return AdeleEtherComponent(
+        id="dummy",
         name="에테르",
         maximum_stack=400,
         periodic_interval=10020,

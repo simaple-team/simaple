@@ -171,6 +171,7 @@ class CrossTheStyx(SkillComponent):
     @view_method
     def validity(self, state: CrossTheStyxState):
         return Validity(
+            id=self.id,
             name=self.name,
             time_left=0.0,
             valid=state.elysion_lasting.enabled(),

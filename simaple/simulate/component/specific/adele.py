@@ -49,6 +49,7 @@ class EtherState(ReducerState):
 
 
 class AdeleEtherComponent(Component):
+    id: str
     maximum_stack: int
     periodic_interval: float
     stack_per_period: int
