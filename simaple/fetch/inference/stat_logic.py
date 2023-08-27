@@ -44,34 +44,14 @@ def compute_setup(
 
     base_stat += damage_logic.get_best_level_based_stat(response.get_level())
     base_stat += damage_logic.get_symbol_stat(
-        _get_authentic_force_increment(response.get_level(), authentic_force)
+        get_authentic_force_increment(response.get_level(), authentic_force)
     )
     return base_stat
 
 
-def _get_authentic_force_increment(level: int, authentic_force: int) -> int:
-    authentic_level = authentic_force
-    static_stat = 0
-    if level >= 260:  # Sernium
-        static_stat += 500
-        authentic_level -= 10
-    if level >= 265:  # Arkus
-        static_stat += 500
-        authentic_level -= 10
-    if level >= 270:  # Odium
-        static_stat += 500
-        authentic_level -= 10
-    if level >= 275:  # Odium
-        static_stat += 500
-        authentic_level -= 10
-    if level >= 280:  # Odium
-        static_stat += 500
-        authentic_level -= 10
-    if level >= 285:  # Odium
-        static_stat += 500
-        authentic_level -= 10
-
-    return static_stat + authentic_level * 20
+def get_authentic_force_increment(level: int, authentic_force: int) -> int:
+    authentic_count = (level - 260) // 5 + 1
+    return authentic_force * 20 + authentic_count * 300
 
 
 def _calculate_stat_reliability(
