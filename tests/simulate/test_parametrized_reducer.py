@@ -1,5 +1,3 @@
-from typing import Any
-
 from pydantic import BaseModel
 
 from simaple.core.base import ActionStat
@@ -35,7 +33,7 @@ class ViewTestComponent(Component):
 
     @reducer_method
     def some_reducer(self, payload: ViewTestPayload, state: SomeTestState):
-        return payload, [Event(name=self.name, payload=payload, tag=None)]
+        return payload, [Event(name=self.name, payload=payload.dict(), tag=None)]
 
 
 def test_paramterizd_reducer():
