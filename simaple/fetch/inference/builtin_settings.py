@@ -3,7 +3,8 @@ import os
 import yaml
 
 from simaple.core import JobType, Stat
-from simaple.fetch.inference.logic import JobSetting
+from simaple.fetch.inference.logic import JobSetting, infer_stat
+from simaple.fetch.response.character import CharacterResponse
 
 
 def _get_builtin_setting_file_path(filename: str) -> str:
@@ -53,3 +54,16 @@ def common_default_passive() -> Stat:
     stat += Stat(attack_power=15, magic_attack=15, STR=40, DEX=40, INT=40, LUK=40)  # 길드
 
     return stat
+
+
+def infer_stat_by_default(
+    response: CharacterResponse,
+    authentic_force: int,
+    size: int = -1,
+):
+    """
+    Infer stat by default setting.
+    Default setting is defined in `simaple/fetch/inference/builtin_settings.py`.
+    """
+    setting = get_predefined_setting(response.get_jobtype())
+    return infer_stat(response, setting, authentic_force, size=size)

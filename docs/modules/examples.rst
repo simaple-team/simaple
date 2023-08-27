@@ -51,6 +51,24 @@ Hompage data fetch
     character_response = app.run("Character-Name")
 
 
+
+Infer Character Spec 
+--------------------
+
+::
+
+    from simaple.fetch.application.base import KMSFetchApplication
+    from simaple.gear.slot_name import SlotName
+    from simaple.fetch.inference.builtin_settings import infer_stat_by_default
+
+    app = KMSFetchApplication()
+
+    character_response = app.run("Character-Name")
+    result = infer_stat_by_default(character_response, authentic_force=390, size=5)
+    assert len(result) == 
+    print(result[0].short_dict())
+
+
 Load Item information
 ---------------------
 

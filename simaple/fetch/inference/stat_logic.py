@@ -67,6 +67,9 @@ def _calculate_stat_reliability(
     def _static_term_reliability(
         ref: int, value: int, stat_type: BaseStatType
     ) -> float:
+        """Heuristic score for static term inference.
+        Offsets are determined by maximum Union stat bonus.
+        """
         offsets = {
             BaseStatType.STR: 8 * 80 + 20,
             BaseStatType.DEX: 5 * 80 + 20,
@@ -83,6 +86,10 @@ def _calculate_stat_reliability(
         return float(abs(ref - value)) * 0.01
 
     def _multiplier_term_reliability(ref: int, value: int) -> float:
+        """An heuristic score for multiplier term inference.
+        +10 is most appropirate, since Zenon link(lev2) is 10%.
+        +0 is second most appropirate, no zenon link.
+        """
         if ref + 10 == value:
             return 0
         if ref == value:
