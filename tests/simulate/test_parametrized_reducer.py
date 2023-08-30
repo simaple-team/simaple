@@ -56,13 +56,9 @@ def test_paramterizd_reducer():
 
     component.add_to_environment(environment)
 
-    assert environment.resolve(
-        Action(
-            name="some_parametrized_action",
-            method="use",
-            payload={"value": 1324},
-        )
-    )[0].payload == {"value": 2}
+    assert environment.resolve(Action(name="some_parametrized_action", method="use",))[
+        0
+    ].payload == {"value": 2}
 
     assert environment.resolve(
         Action(

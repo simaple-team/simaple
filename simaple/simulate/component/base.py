@@ -54,8 +54,8 @@ class ComponentMethodWrapper:
         if not self._has_payload:
             raise ValueError("no skip_count do not support payload translation")
 
-        if self._static_payload:
-            return copy.deepcopy(self._static_payload)
+        if self._static_payload and payload is None:
+            payload = copy.deepcopy(self._static_payload)
 
         if not isinstance(payload, dict) or self._payload_type is None:
             return payload
