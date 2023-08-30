@@ -393,6 +393,7 @@ class ConsumableBuffSkillComponent(
             name=self.name,
             time_left=state.lasting.time_left,
             lasting_duration=self._get_lasting_duration(state),
+            assigned_duration=state.lasting.assigned_duration,
         )
 
     def _get_lasting_duration(self, state) -> float:

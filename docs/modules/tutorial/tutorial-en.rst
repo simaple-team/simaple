@@ -101,7 +101,7 @@ In simaple, ``Actor`` is the class for defining decisions such as which skill to
     ...
 
     client_configuration = get_client_configuration(JobType.archmagefb)
-    actor = client_configuration.get_mdc_actor()
+    actor = client_configuration.get_default_policy()
 
 
 Now we have both the ``Client`` and the ``Actor``. Next is to actually perform the simulation.
@@ -248,14 +248,14 @@ Finally, this will be the full code assembled from all the sections written abov
         passive_skill_level=0,
     )
 
-    ## Declare Actor
+    ## Declare Policy
 
     client_configuration = get_client_configuration(JobType.archmagefb)
-    actor = client_configuration.get_mdc_actor()
+    policy = client_configuration.get_default_policy()
 
     ## Run simulation
 
-    from simaple.simulate.actor import ActionRecorder
+    from simaple.simulate.policy import ActionRecorder
     from simaple.simulate.report.base import Report, ReportEventHandler
 
     recorder = ActionRecorder("record.tsv")
