@@ -110,7 +110,7 @@ pycln = "^2.1.2"
 yappi = "^1.4.0"
 snakeviz = "^2.1.1"
 types-requests = "^2.31.0.1"
-mypy = "^1.0.0"
+mypy = "^1.4.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
