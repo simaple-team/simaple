@@ -25,8 +25,9 @@ def test_actor(setting, jobtype, expected):
     interpreter = get_interpreter(client)
 
     while environment.show("clock") < 50_000:
-        operand = policy.decide(environment)
-        interpreter.exec(operand, early_stop=50_000)
+        operations = policy.decide(environment)
+        for operation in operations:
+            interpreter.exec(operation, early_stop=50_000)
 
     dpm = container.dpm_calculator().calculate_dpm(report)
     print(f"{environment.show('clock')} | {jobtype} | {dpm:,} ")

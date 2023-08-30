@@ -1,6 +1,7 @@
 import functools
 from contextlib import contextmanager
 from typing import Callable, Generator, Literal, Union, Optional, TypeVar, cast, Type, Any
+import re
 
 from pydantic import BaseModel
 
@@ -200,31 +201,42 @@ class OperandCompiler:
     def __init__(self, operations: dict[str, Operation]) -> None:
         self._operations = operations
 
-    def __call__(self, op_string: str) -> Operation:
+    def __call__(self, op_string: str) -> list[Operation]:
         # Too many spaced skill name; therefore sep is 2 space.
         argv = op_string.strip().split("  ")
+        mult = 1
+
+        if re.compile(r"x[0-9]+").match(argv[0]):
+            mult = int(argv[0][1:])
+            argv = argv[1:]
+
         command = argv[0].upper()
 
         operation_type = self._operations[command]
+
+
         if operation_type == NamedOperation:
-            return NamedOperation(
+            op = NamedOperation(
                 command=command,
                 name=argv[1],
             )
         elif operation_type == TimeOperation:
-            return TimeOperation(
+            op =  TimeOperation(
                 command=command,
                 time=int(argv[1]),
             )
         elif operation_type == KeydownOperation:
-            return KeydownOperation(
+            op = KeydownOperation(
                 command=command,
                 name=argv[1],
                 stopby=argv[3:],
             )
+        else:
+            raise ValueError
 
-        raise ValueError
-
+        return [
+            op for _ in range(mult)
+        ]
 
 class SimulationInterpreter:
     def __init__(self, client: Client, handlers: dict[str, tuple[Any, Callable[[Operation], _BehaviorGenerator]]]):
@@ -284,7 +296,7 @@ def get_operand_compiler() -> OperandCompiler:
 
 class Policy(metaclass=ABCMeta):
     @abstractmethod
-    def decide(self, environment: Environment) -> Operation:
+    def decide(self, environment: Environment) -> list[Operation]:
         """
         Decide next action based on current environment.
         """
@@ -299,5 +311,5 @@ class DSLBasedPolicy(Policy):
         Decide next action based on current environment.
         """
 
-    def decide(self, environment: Environment) -> Operation:
+    def decide(self, environment: Environment) -> list[Operation]:
         return self._compiler(self.decide_by_dsl(environment))

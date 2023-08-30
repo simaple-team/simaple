@@ -33,9 +33,10 @@ def test_actor():
 
     with recorder.start() as rec:
         while environment.show("clock") < 180_000:
-            operand = policy.decide(environment)
-            recorder.write(operand)
-            interpreter.exec(operand)
+            operations = policy.decide(environment)
+            for operation in operations:
+                interpreter.exec(operation)
+                rec.write(operation)
 
     print(
         f"{environment.show('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "

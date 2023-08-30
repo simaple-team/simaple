@@ -6,7 +6,6 @@ import pydantic
 
 from simaple.simulate.base import Action, Environment, Event
 from simaple.simulate.component.view import KeydownView, Running, Validity
-from simaple.simulate.policy.base import NamedOperation, TimeOperation, KeydownOperation, Operation, get_operand_compiler
 from simaple.simulate.reserved_names import Tag
 from simaple.simulate.policy.base import DSLBasedPolicy
 

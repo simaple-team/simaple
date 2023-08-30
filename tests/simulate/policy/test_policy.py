@@ -14,4 +14,4 @@ from simaple.simulate.policy.base import TimeOperation, KeydownOperation, Operat
 )
 def test_operand_serializer(op, op_string):
     compiler = get_operand_compiler()
-    assert compiler(op_string) == op
+    assert compiler(op_string) == [op]
