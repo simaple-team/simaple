@@ -1,0 +1,14 @@
+jobtype: hero
+passive:
+  attack_power: 81
+  STR: 50
+  DEX: 30
+  damage_multiplier: 5
+  final_damage_multiplier: 10
+candidates:
+  - - final_damage_multiplier: 130
+    - final_damage_multiplier: 120
+  - - null
+    - final_damage_multiplier: 25
+  - - null
+    - final_damage_multiplier: 6

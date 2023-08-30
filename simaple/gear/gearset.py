@@ -103,7 +103,7 @@ class Gearset(BaseModel):
             list[PotentialTier],
             list[PotentialTier],
         ]
-    ]
+    ] = None
 
     def annotate_weapon_potential_tiers(
         self,

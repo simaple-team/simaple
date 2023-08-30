@@ -1,0 +1,13 @@
+jobtype: soulmaster
+passive:
+  attack_power: 101
+  magic_attack: 0
+  final_damage_multiplier: 25
+  attack_power_multiplier: 10
+  STR: 131
+  DEX: 51
+candidates:
+  - - null
+    - final_damage_multiplier: 6
+  - - null
+    - final_damage_multiplier: 10

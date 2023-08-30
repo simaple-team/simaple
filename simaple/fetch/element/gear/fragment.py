@@ -9,8 +9,8 @@ class ItemFragment(BaseModel):
     html: bs4.element.Tag
 
     @property
-    def name(self):
-        return (
+    def name(self) -> str:
+        return str(
             self.html.select_one(".stet_th span")
             .text.strip()
             .replace("\n", "")
@@ -18,7 +18,7 @@ class ItemFragment(BaseModel):
         )
 
     @property
-    def children_text(self):
+    def children_text(self) -> list[bs4.element.NavigableString]:
         return [
             el
             for el in self.embedding.children
@@ -26,8 +26,8 @@ class ItemFragment(BaseModel):
         ]
 
     @property
-    def text(self):
-        return self.embedding.text
+    def text(self) -> str:
+        return str(self.embedding.text)
 
     @property
     def embedding(self):

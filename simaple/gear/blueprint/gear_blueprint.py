@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import List, Optional
+from typing import List, Optional, cast
 
 from pydantic import BaseModel, Extra, Field, validator
 
@@ -16,6 +16,7 @@ from simaple.gear.improvements.exceptional_enhancement import ExceptionalEnhance
 from simaple.gear.improvements.scroll import Scroll
 from simaple.gear.improvements.spell_trace import SpellTrace
 from simaple.gear.improvements.starforce import Starforce
+from simaple.gear.potential import AdditionalPotential
 
 
 class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):
@@ -78,7 +79,7 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
     bonuses: List[BonusSpec] = Field(default_factory=list)
     potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
     additional_potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
-    exceptional_enhancement: Optional[ExceptionalEnhancement]
+    exceptional_enhancement: Optional[ExceptionalEnhancement] = None
 
     def build(self) -> Gear:
         gear_stat = self.meta.base_stat.copy()
@@ -125,12 +126,15 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
                     is_additional=False, is_weapon=self.meta.type.is_weaponry()
                 ),
             ),
-            additional_potential=template_to_potential(
-                self.additional_potential,
-                potential_table,
-                self.meta.req_level,
-                PotentialType.get_type(
-                    is_additional=True, is_weapon=self.meta.type.is_weaponry()
+            additional_potential=cast(
+                AdditionalPotential,
+                template_to_potential(
+                    self.additional_potential,
+                    potential_table,
+                    self.meta.req_level,
+                    PotentialType.get_type(
+                        is_additional=True, is_weapon=self.meta.type.is_weaponry()
+                    ),
                 ),
             ),
         )

@@ -1,4 +1,4 @@
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 from typing import List
 
 import numpy as np
@@ -11,6 +11,7 @@ from simaple.core.damage import DamageLogic
 
 
 class Metric(metaclass=ABCMeta):
+    @abstractmethod
     def evaluate(self, stat: Stat) -> float:
         ...
 

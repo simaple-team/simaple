@@ -14,7 +14,7 @@ coverage = "pytest --cov=simaple --ignore tests/fetch/request"
 coverage-unittest = "pytest --cov=simaple --ignore tests/fetch/request"
 coverage-report = "pytest --cov=simaple --cov-report=xml"
 
-unittest = "pytest -vv -x tests/ --ignore tests/fetch/"
+unittest = "pytest -vv -x tests/ --ignore tests/fetch/request"
 test_app = "pytest -vv -x test_app/"
 test_data = "pytest -vv -x test_data/"
 rsctest = "pytest -vv -x test_resource/"
@@ -99,18 +99,18 @@ pytest = "^6.2.5"
 isort = "^5.9.3"
 coverage = "^6.0.2"
 pylint = "=2.13.1"
-mypy = "^0.981"
 black = "^22.6"
 pytest-cov = "^3.0.0"
 build = "^0.8.0"
 twine = "^4.0.1"
-types-requests = "^2.28.3"
 
 [tool.poetry.group.dev.dependencies]
 jupyter = "^1.0.0"
 pycln = "^2.1.2"
 yappi = "^1.4.0"
 snakeviz = "^2.1.1"
+types-requests = "^2.31.0.1"
+mypy = "^1.4.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

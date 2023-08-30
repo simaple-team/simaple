@@ -7,7 +7,7 @@ from simaple.simulate.reserved_names import Tag
 
 
 class LevelAdvantage:
-    def __init__(self):
+    def __init__(self) -> None:
         self._advantage_table: list[float] = [
             # fmt: off
             1.2, 1.18, 1.16, 1.14, 1.12, 1.1,

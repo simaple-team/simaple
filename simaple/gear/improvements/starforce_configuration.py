@@ -277,7 +277,7 @@ class AmazingStatIncrementProvider(StarforceIncrementProvider):
 
 class AmazingAttackIncrementProvider(StarforceIncrementProvider):
     def get_increment(self, meta: GearMeta, target_star: int, _: Stat) -> Stat:
-        ...
+        raise NotImplementedError()
 
 
 class StarforceIndex:

@@ -1,4 +1,4 @@
-from typing import cast
+from typing import Union, cast
 from urllib import parse
 
 import requests
@@ -6,10 +6,10 @@ from bs4 import BeautifulSoup
 
 
 class TokenRepository:
-    def __init__(self):
+    def __init__(self, reboot: bool = False) -> None:
         self._url = "https://maplestory.nexon.com/Ranking/World/Total"
         self._loaded_token: str = ""
-        self._any_number_for_query_detail = 0
+        self._reboot = reboot
 
     def get(self, name: str) -> str:
         if not self._loaded_token:
@@ -17,10 +17,13 @@ class TokenRepository:
 
         return self._loaded_token
 
-    def load(self, name: str):
-        data = requests.get(
-            self._url, params={"c": name, "w": self._any_number_for_query_detail}
-        )
+    def load(self, name: str) -> None:
+        params: dict[str, Union[str, int]] = {
+            "c": name,
+            "w": 254 if self._reboot else 0,
+        }
+
+        data = requests.get(self._url, params=params)
 
         soup = BeautifulSoup(data.text, "html.parser")
         url = cast(str, soup.find(class_="search_com_chk").find("a")["href"])

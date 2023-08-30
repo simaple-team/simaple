@@ -6,7 +6,7 @@ from pydantic.main import BaseModel, ModelMetaclass
 
 
 class NamespaceRepository:
-    def __init__(self):
+    def __init__(self) -> None:
         self._db: dict[str, dict[str, Type[BaseModel]]] = {}
 
     def add(self, name: str, cls: Type[BaseModel], kind: str) -> None:

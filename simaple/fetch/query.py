@@ -10,13 +10,13 @@ from simaple.fetch.cookie import get_cookie
 
 
 class Query(BaseModel, metaclass=ABCMeta):
-    def url(self, path) -> str:
+    def url(self, path: str) -> str:
         if path[0] == "/":
             path = path[1:]
         return f"https://maplestory.nexon.com/{path}"
 
     @abstractmethod
-    async def get(self, path, token) -> str:
+    async def get(self, path: str, token: str) -> str:
         ...
 
 
@@ -24,7 +24,7 @@ class CookiedQuery(Query):
     max_retry: int = 5
     retry_await: float = 0.5
 
-    async def get(self, path, token) -> str:
+    async def get(self, path: str, token: str) -> str:
         header = {
             "Connection": "keep-alive",
             "Cache-Control": "max-age=0",
@@ -57,7 +57,7 @@ class NoredirectXMLQuery(Query):
     max_retry: int = 5
     retry_await: float = 0.5
 
-    async def get(self, path, token) -> str:
+    async def get(self, path: str, token: str) -> str:
         header = {
             "Connection": "keep-alive",
             "X-Requested-With": "XMLHttpRequest",
@@ -83,4 +83,5 @@ class NoredirectXMLQuery(Query):
 
                 return text
 
+        logger.error(f"Failed {path}")
         raise ConnectionRefusedError("Connection Refused from homepage")

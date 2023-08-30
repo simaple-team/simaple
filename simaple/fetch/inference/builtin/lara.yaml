@@ -1,0 +1,16 @@
+jobtype: lara
+passive:
+  attack_power: 141 # 110 + (31)
+  magic_attack: 0
+  final_damage_multiplier: 92.57
+  INT: 40
+  damage_multiplier: 20
+candidates:
+  - - null
+    - final_damage_multiplier: 11
+    - final_damage_multiplier: 10
+    - final_damage_multiplier: 9
+    - final_damage_multiplier: 8
+    - final_damage_multiplier: 7
+    - final_damage_multiplier: 6
+    - final_damage_multiplier: 5

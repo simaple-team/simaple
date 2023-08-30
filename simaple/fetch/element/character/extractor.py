@@ -1,5 +1,6 @@
 import re
 from abc import ABCMeta, abstractmethod
+from typing import Any
 
 import bs4
 import pydantic
@@ -21,7 +22,7 @@ class NumberString:
 
 class CharacterPropertyExtractor(pydantic.BaseModel, metaclass=ABCMeta):
     @abstractmethod
-    def extract(self, soup: bs4.BeautifulSoup):
+    def extract(self, soup: bs4.BeautifulSoup) -> Any:
         ...
 
     def sanitize(self, result) -> dict:
@@ -36,25 +37,33 @@ class CharacterPropertyExtractor(pydantic.BaseModel, metaclass=ABCMeta):
 
 
 class CharacterNameExtractor(CharacterPropertyExtractor):
-    def extract(self, soup):
+    def extract(self, soup: bs4.BeautifulSoup):
         name_element = soup.select_one(".char_info_top .char_name span")
         name_regex = re.compile("(.+)님$")
-        name = re.search(name_regex, name_element.text).group(1)
+        match = re.search(name_regex, name_element.text)
+        if match is None:
+            raise ValueError("Character name not found")
+
+        name = match.group(1)
 
         return name
 
 
 class CharacterLevelExtractor(CharacterPropertyExtractor):
-    def extract(self, soup):
+    def extract(self, soup: bs4.BeautifulSoup) -> int:
         level_element = soup.select_one(".char_info_top .char_info dd")
         level_regex = re.compile(r"LV\.([0-9]+)")
-        level = int(level_regex.match(level_element.text).group(1))
+        match = level_regex.match(level_element.text)
+        if match is None:
+            raise ValueError("Level not found")
+
+        level = int(match.group(1))
 
         return level
 
 
 class CharacterOverviewExtractor(CharacterPropertyExtractor):
-    def extract(self, soup):
+    def extract(self, soup: bs4.BeautifulSoup):
         objectives = soup.select(".tab01_con_wrap table:nth-of-type(1) tbody td")
         overview_key_list = ("world", "job", "pop", "guild", "meso", "point")
 
@@ -66,7 +75,7 @@ class CharacterOverviewExtractor(CharacterPropertyExtractor):
 
 
 class CharacterStatExtractor(CharacterPropertyExtractor):
-    def extract(self, soup):
+    def extract(self, soup: bs4.BeautifulSoup):
         stat_elements = soup.select(".tab01_con_wrap table:nth-of-type(2) tr")[:-2]
         result = {}
 
@@ -94,7 +103,7 @@ class CharacterStatExtractor(CharacterPropertyExtractor):
 
 
 class CharacterAbilityExtractor(CharacterPropertyExtractor):
-    def extract(self, soup):
+    def extract(self, soup: bs4.BeautifulSoup):
         stat_elements = [
             el.text
             for el in soup.select_one(
@@ -145,7 +154,7 @@ class CharacterAbilityExtractor(CharacterPropertyExtractor):
             # 메소 획득량 \d+% 증가
         }
 
-        result = {}
+        result: dict[str, float] = {}
 
         for (key, patttern) in regexes.items():
             # default value of key is 0
@@ -166,7 +175,7 @@ class CharacterAbilityExtractor(CharacterPropertyExtractor):
 
 
 class CharacterHyperstatExtractor(CharacterPropertyExtractor):
-    def extract(self, soup):
+    def extract(self, soup: bs4.BeautifulSoup):
         """
         # STR, DEX, INT, LUK, HP%, MP%, DF/TF/PP/영력, 크확, 크뎀, 방무, 데미지, 보뎀, 일뎀, 내성, 공마, 경험치, 아케인포스
         # 스탯에는 스탯퍼 미적용
@@ -200,7 +209,7 @@ class CharacterHyperstatExtractor(CharacterPropertyExtractor):
             "arcaneforce": re.compile(r"아케인포스 \d+ 증가"),
         }
 
-        result = {}
+        result: dict[str, float] = {}
 
         for (key, patttern) in regexes.items():
             # default value of key is 0
@@ -214,7 +223,7 @@ class CharacterHyperstatExtractor(CharacterPropertyExtractor):
 
 
 class CharacterTraitExtractor(CharacterPropertyExtractor):
-    def extract(self, soup):
+    def extract(self, soup: bs4.BeautifulSoup):
         def extract_level(level_text: str) -> int:
             match = re.compile("^Lv. ([0-9]+)").match(level_text)
             if not match:

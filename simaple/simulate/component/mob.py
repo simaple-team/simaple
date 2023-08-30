@@ -59,7 +59,7 @@ class DOTRequestPayload(pydantic.BaseModel):
 
 class MobComponent(Component):
     def get_default_state(self) -> dict[str, Entity]:
-        return {"dot": DOT(current=[])}
+        return {"dot": DOT(current={})}
 
     @reducer_method
     def add_dot(self, payload: DOTRequestPayload, state: MobState):

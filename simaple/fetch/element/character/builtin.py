@@ -1,4 +1,4 @@
-from simaple.fetch.element.base import ElementWrapper
+from simaple.fetch.element.base import Promise
 from simaple.fetch.element.character.element import CharacterElement
 from simaple.fetch.element.character.extractor import (
     CharacterAbilityExtractor,
@@ -26,8 +26,8 @@ def standard_character_element() -> CharacterElement:
     )
 
 
-def character_promise() -> ElementWrapper:
-    return ElementWrapper(
+def character_promise() -> Promise:
+    return Promise(
         element=standard_character_element(),
         query=CookiedQuery(),
         reserved_path="/Common/Character/Detail/123",

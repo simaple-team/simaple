@@ -46,11 +46,16 @@ class StatKeywordProvider(DomElementProvider):
 class MultiplierProvider(DomElementProvider):
     def get_value(self, fragment: ItemFragment) -> Dict[StatType, Any]:
         sum_, base, bonus, increment = self._get_value(fragment)
+
+        name = fragment.name
+        if name == "올스탯":
+            name += "%"
+
         return {
-            StatType.sum: {fragment.name: sum_},
-            StatType.base: {fragment.name: base},
-            StatType.bonus: {fragment.name: bonus},
-            StatType.increment: {fragment.name: increment},
+            StatType.sum: {name: sum_},
+            StatType.base: {name: base},
+            StatType.bonus: {name: bonus},
+            StatType.increment: {name: increment},
         }
 
     def _get_value(self, fragment: ItemFragment) -> Tuple[int, int, int, int]:

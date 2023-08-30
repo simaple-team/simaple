@@ -1,9 +1,9 @@
-from simaple.data.passive_hyper_skill.spec import PassiveHyperskill
+from simaple.data.passive_hyper_skill.spec import PassiveHyperskillInterface
 from simaple.spec.patch import Patch
 
 
 class PassiveHyperskillPatch(Patch):
-    hyper_skills: list[PassiveHyperskill]
+    hyper_skills: list[PassiveHyperskillInterface]
 
     def apply(self, raw: dict) -> dict:
         output = raw

@@ -102,6 +102,8 @@ class GearType(IntEnum):
     fan_tassel = 135380
     bracelet = 135400
     weapon_belt = 135401
+    lara_subweapon = 135402
+
     machine_engine = 161
     machine_arms = 162
     machine_legs = 163
@@ -114,6 +116,9 @@ class GearType(IntEnum):
     dragon_tail = 197
     pet_equip = 180
     title = 200
+
+    arcane_symbol = -999
+    dummy = -998
 
     def is_weaponry(self) -> bool:
         return self.is_weapon() or self.is_sub_weapon() or self == GearType.emblem

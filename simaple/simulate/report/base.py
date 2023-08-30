@@ -18,7 +18,7 @@ class DamageLog(pydantic.BaseModel):
 
 
 class Report:
-    def __init__(self):
+    def __init__(self) -> None:
         self._logs: list[DamageLog] = []
 
     def __iter__(self):
@@ -36,7 +36,7 @@ class Report:
                     name=event.name,
                     damage=event.payload["damage"],
                     hit=event.payload["hit"],
-                    buff=buff_stat.short_dict(),
+                    buff=buff_stat,
                     tag=event.tag,
                 )
             )

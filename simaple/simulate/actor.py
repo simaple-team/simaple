@@ -1,4 +1,4 @@
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 from contextlib import contextmanager
 from typing import Optional
 
@@ -29,6 +29,7 @@ def time_elapsing_action(time: float) -> Action:
 
 
 class Actor(metaclass=ABCMeta):
+    @abstractmethod
     def decide(self, environment: Environment, events: list[Event]) -> Action:
         ...
 

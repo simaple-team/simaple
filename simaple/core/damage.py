@@ -20,13 +20,20 @@ class DamageLogic(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="DamageLogic
     def get_major_stat(self, stat: Stat) -> float:
         ...
 
-    @abstractmethod
     def get_attack_type_factor(self, stat: Stat) -> float:
+        return stat.get_attack_coefficient(self.get_attack_type())
+
+    @abstractmethod
+    def get_attack_type(self) -> AttackType:
         ...
 
     @abstractmethod
     def get_best_level_based_stat(self, level: int) -> Stat:
         ...
+
+    @abstractmethod
+    def get_symbol_stat(self, value: int) -> Stat:
+        """value may given as hundreds; to represent arcane and authentic both"""
 
     def get_maximum_attack_range(self, stat: Stat) -> float:
         """Maximum stat power in character status window."""
@@ -88,8 +95,8 @@ class STRBasedDamageLogic(DamageLogic):
             BaseStatType.STR
         ) * 4 + stat.get_base_stat_coefficient(BaseStatType.DEX)
 
-    def get_attack_type_factor(self, stat: Stat) -> float:
-        return stat.get_attack_coefficient(AttackType.attack_power)
+    def get_attack_type(self) -> AttackType:
+        return AttackType.attack_power
 
     def get_best_level_based_stat(self, level: int) -> Stat:
         return Stat(
@@ -98,6 +105,9 @@ class STRBasedDamageLogic(DamageLogic):
             INT=4,
             LUK=4,
         )
+
+    def get_symbol_stat(self, value: int) -> Stat:
+        return Stat(STR_static=value)
 
 
 class INTBasedDamageLogic(DamageLogic):
@@ -109,8 +119,8 @@ class INTBasedDamageLogic(DamageLogic):
             BaseStatType.INT
         ) * 4 + stat.get_base_stat_coefficient(BaseStatType.LUK)
 
-    def get_attack_type_factor(self, stat: Stat) -> float:
-        return stat.get_attack_coefficient(AttackType.magic_attack)
+    def get_attack_type(self) -> AttackType:
+        return AttackType.magic_attack
 
     def get_best_level_based_stat(self, level: int) -> Stat:
         return Stat(
@@ -119,6 +129,9 @@ class INTBasedDamageLogic(DamageLogic):
             INT=level * 5 + 18,
             LUK=4,
         )
+
+    def get_symbol_stat(self, value: int) -> Stat:
+        return Stat(INT_static=value)
 
 
 class DEXBasedDamageLogic(DamageLogic):
@@ -130,8 +143,8 @@ class DEXBasedDamageLogic(DamageLogic):
             BaseStatType.DEX
         ) * 4 + stat.get_base_stat_coefficient(BaseStatType.STR)
 
-    def get_attack_type_factor(self, stat: Stat) -> float:
-        return stat.get_attack_coefficient(AttackType.attack_power)
+    def get_attack_type(self) -> AttackType:
+        return AttackType.attack_power
 
     def get_best_level_based_stat(self, level: int) -> Stat:
         return Stat(
@@ -140,6 +153,9 @@ class DEXBasedDamageLogic(DamageLogic):
             INT=4,
             LUK=4,
         )
+
+    def get_symbol_stat(self, value: int) -> Stat:
+        return Stat(DEX_static=value)
 
 
 class LUKBasedDamageLogic(DamageLogic):
@@ -151,8 +167,8 @@ class LUKBasedDamageLogic(DamageLogic):
             BaseStatType.LUK
         ) * 4 + stat.get_base_stat_coefficient(BaseStatType.DEX)
 
-    def get_attack_type_factor(self, stat: Stat) -> float:
-        return stat.get_attack_coefficient(AttackType.attack_power)
+    def get_attack_type(self) -> AttackType:
+        return AttackType.attack_power
 
     def get_best_level_based_stat(self, level: int) -> Stat:
         return Stat(
@@ -161,6 +177,9 @@ class LUKBasedDamageLogic(DamageLogic):
             INT=4,
             LUK=level * 5 + 18,
         )
+
+    def get_symbol_stat(self, value: int) -> Stat:
+        return Stat(LUK_static=value)
 
 
 class LUKBasedDualSubDamageLogic(DamageLogic):
@@ -174,8 +193,8 @@ class LUKBasedDualSubDamageLogic(DamageLogic):
             + stat.get_base_stat_coefficient(BaseStatType.STR)
         )
 
-    def get_attack_type_factor(self, stat: Stat) -> float:
-        return stat.get_attack_coefficient(AttackType.attack_power)
+    def get_attack_type(self) -> AttackType:
+        return AttackType.attack_power
 
     def get_best_level_based_stat(self, level: int) -> Stat:
         return Stat(
@@ -184,3 +203,6 @@ class LUKBasedDualSubDamageLogic(DamageLogic):
             INT=4,
             LUK=level * 5 + 18,
         )
+
+    def get_symbol_stat(self, value: int) -> Stat:
+        return Stat(LUK_static=value)

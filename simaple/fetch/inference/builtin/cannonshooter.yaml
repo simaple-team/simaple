@@ -1,0 +1,9 @@
+jobtype: cannoneer
+passive:
+  attack_power: 60
+  STR: 111
+  DEX: 91
+  final_damage_multiplier: 21.275
+candidates:
+  - - final_damage_multiplier: 31
+    - final_damage_multiplier: 30

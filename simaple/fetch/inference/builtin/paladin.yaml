@@ -1,0 +1,11 @@
+jobtype: paladin
+passive:
+  attack_power: 30
+  DEX: 30
+  STR: 50
+  final_damage_multiplier: 71.82
+candidates:
+  - - null
+    - final_damage_multiplier: 6
+  - - null
+    - final_damage_multiplier: 75

@@ -20,20 +20,21 @@ class Application:
 
 
 class KMSFetchApplication(Application):
-    def __init__(self):
+    def __init__(self, reboot: bool = False) -> None:
         self._translator = GearTranslator(
             gear_stat_translator=kms_gear_stat_translator(),
             potential_translator=kms_potential_translator(),
             gear_repository=GearRepository(),
         )
+        self._reboot = reboot
 
-    def run(self, name: str):
+    def run(self, name: str) -> CharacterResponse:
         raw = asyncio.run(self.async_run(name))
 
         return CharacterResponse(raw, self._translator)
 
     async def async_run(self, name: str):
-        token_repository = TokenRepository()
+        token_repository = TokenRepository(reboot=self._reboot)
         token = token_repository.get(name)
 
         item = maple_gearset_promise().then(

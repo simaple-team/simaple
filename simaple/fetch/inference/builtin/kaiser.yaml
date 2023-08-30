@@ -1,0 +1,12 @@
+jobtype: kaiser
+passive:
+  attack_power: 116
+  attack_power_multiplier: 30
+  STR: 50
+  DEX: 30
+  final_damage_multiplier: 32
+candidates:
+  - - null # 오라웨폰
+    - final_damage_multiplier: 6
+  - - null
+    - final_damage_multiplier: 15

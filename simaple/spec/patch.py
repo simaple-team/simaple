@@ -8,6 +8,7 @@ from pydantic import BaseModel, PrivateAttr
 
 
 class Patch(BaseModel, metaclass=ABCMeta):
+    @abstractmethod
     def apply(self, raw: dict) -> dict:
         """Modify gien raw-dict"""
 

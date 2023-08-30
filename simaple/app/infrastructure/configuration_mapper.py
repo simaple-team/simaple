@@ -24,7 +24,7 @@ class ConfigurationMapper:
 
     def _get_configuration_cls(self, config_name: str) -> Type[SimulatorConfiguration]:
         cls_list = [MinimalSimulatorConfiguration, BaselineConfiguration]
-        cls_map = {cls.get_name(): cls for cls in cls_list}  # type: ignore
+        cls_map: dict[str, Type[SimulatorConfiguration]] = {cls.get_name(): cls for cls in cls_list}  # type: ignore
 
         if config_name not in cls_map:
             raise KeyError("Configuration name not exist.")

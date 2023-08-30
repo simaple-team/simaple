@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from simaple.fetch.element.base import Element, ElementWrapper
+from simaple.fetch.element.base import Element, Promise
 from simaple.fetch.query import CookiedQuery
 from simaple.gear.slot_name import SlotName
 
@@ -74,7 +74,7 @@ class MapleGearsetElement(Element):
 
 
 def maple_gearset_promise():
-    return ElementWrapper(
+    return Promise(
         element=MapleGearsetElement(),
         query=CookiedQuery(),
         reserved_path="/Common/Character/Detail/123/Equipment",

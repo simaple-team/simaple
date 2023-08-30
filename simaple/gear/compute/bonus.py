@@ -169,8 +169,10 @@ class StatBonusCalculator(pydantic.BaseModel):
         default_factory=CachedBonusTypeTable
     )
 
-    _sdil_table: dict[BonusType, list[SDIL]]
-    _grades: list[int]
+    _sdil_table: dict[BonusType, list[SDIL]] = pydantic.PrivateAttr(
+        default_factory=dict
+    )
+    _grades: list[int] = pydantic.PrivateAttr(default_factory=list)
 
     class Config:
         arbitrary_types_allowed = True

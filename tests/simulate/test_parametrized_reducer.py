@@ -1,3 +1,5 @@
+from pydantic import BaseModel
+
 from simaple.core.base import ActionStat
 from simaple.simulate.base import (
     Action,
@@ -15,6 +17,10 @@ class SomeEntity(Entity):
     obj: int = 3
 
 
+class ViewTestPayload(BaseModel):
+    value: int
+
+
 class SomeTestState(ReducerState):
     some_state: SomeEntity
 
@@ -26,8 +32,8 @@ class ViewTestComponent(Component):
         return {"some_state": SomeEntity()}
 
     @reducer_method
-    def some_reducer(self, payload: None, state: SomeTestState):
-        return payload, [Event(name=self.name, payload=payload)]
+    def some_reducer(self, payload: ViewTestPayload, state: SomeTestState):
+        return payload, [Event(name=self.name, payload=payload.dict(), tag=None)]
 
 
 def test_paramterizd_reducer():
@@ -42,19 +48,18 @@ def test_paramterizd_reducer():
         name="test_component",
         listening_actions={
             "some_action.use": "some_reducer",
-            "some_parametrized_action.use": {"name": "some_reducer", "payload": {3: 5}},
+            "some_parametrized_action.use": {
+                "name": "some_reducer",
+                "payload": {"value": 2},
+            },
         },
     )
 
     component.add_to_environment(environment)
 
-    assert environment.resolve(
-        Action(
-            name="some_parametrized_action",
-            method="use",
-            payload={"value": 1324},
-        )
-    )[0].payload == {3: 5}
+    assert environment.resolve(Action(name="some_parametrized_action", method="use",))[
+        0
+    ].payload == {"value": 2}
 
     assert environment.resolve(
         Action(
