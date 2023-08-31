@@ -1,69 +1,119 @@
 from abc import ABCMeta
 from contextlib import contextmanager
-from typing import Optional
+from typing import Callable, Generator, Optional
 
 import pydantic
 
 from simaple.simulate.base import Action, Environment, Event
 from simaple.simulate.component.view import KeydownView, Running, Validity
+from simaple.simulate.policy.base import (
+    DSLGeneratorProto,
+    OperationGeneratorProto,
+    PolicyContextType,
+    PolicyWrapper,
+    interpret_dsl_generator,
+)
 from simaple.simulate.reserved_names import Tag
-from simaple.simulate.policy.base import DSLBasedPolicy
 
 
-class DefaultOrderedPolicy(DSLBasedPolicy):
-    def __init__(self, order: list[str]) -> None:
-        super().__init__()
-        self.order = order
+def _get_keydown(environment: Environment) -> Optional[str]:
+    keydowns: list[KeydownView] = environment.show("keydown")
+    keydown_running_list = [k.name for k in keydowns if k.running]
 
-    def decide_by_dsl(
-        self,
-        environment: Environment,
-    ) -> str:
-        validities: list[Validity] = environment.show("validity")
-        runnings: list[Running] = environment.show("running")
+    return next(iter(keydown_running_list), None)
 
-        validity_map = {v.name: v for v in validities if v.valid}
-        running_map = {r.name: r.time_left for r in runnings}
 
-        target_name = self._decide_target_name(
-            validity_map,
-            running_map,
-        )
+def get_next_elapse_time(events: list[Event]) -> float:
+    for event in events:
+        if event.tag in (Tag.DELAY,) and event.payload["time"] > 0:
+            return event.payload["time"]  # type: ignore
 
-        if target_name in self._get_keydown_names(environment):
-            stopby = []
-            for name in self.order:
-                if name == target_name:
-                    break
-                stopby.append(name)
+    return 0.0
 
-            return f"KEYDOWN  {target_name}  STOPBY  {'  '.join(stopby)}"
 
-        if target_name:
-            return f"CAST  {target_name}"
+def running_map(environment: Environment):
+    runnings: list[Running] = environment.show("running")
+    running_map = {r.name: r.time_left for r in runnings}
+    return running_map
 
-        raise ValueError(
-            "No valid element exist! Maybe unintended component was built?"
-        )
 
-    def _decide_target_name(
-        self,
-        validity_map: dict[str, Validity],
-        running_map: dict[str, float],
-    ):
-        for name in self.order:
-            if validity_map.get(name):
-                if running_map.get(name, 0) > 0:
+def validity_map(environment: Environment):
+    validities: list[Validity] = environment.show("validity")
+    validity_map = {v.name: v for v in validities if v.valid}
+    return validity_map
+
+
+def cast_by_priority(order: list[str]) -> DSLGeneratorProto:
+    def _gen(ctx: PolicyContextType):
+        environment, _ = ctx
+        validities = validity_map(environment)
+        runnings = running_map(environment)
+
+        for name in order:
+            if validities.get(name):
+                if runnings.get(name, 0) > 0:
                     continue
 
-                return name
+                return (yield f"CAST  {name}")
 
-        for v in validity_map.values():
+        for v in validities.values():
             if v.valid:
-                return v.name
+                return (yield f"CAST  {v.name}")
 
-        return None
+        raise ValueError
 
-    def _get_keydown_names(self, environment: Environment) -> list[str]:
-        keydowns: list[KeydownView] = environment.show("keydown")
-        return [k.name for k in keydowns]
+    return _gen
+
+
+def keydown_until_interrupt(
+    keydown_skill_name: str, order: list[str]
+) -> DSLGeneratorProto:
+    def _gen(ctx: PolicyContextType):
+        stopby = []
+        for name in order:
+            if name == keydown_skill_name:
+                break
+            stopby.append(name)
+
+        while True:
+            environment, events = ctx
+
+            validities = validity_map(environment)
+            runnings = running_map(environment)
+
+            for name in stopby:
+                if validities.get(name):
+                    if runnings.get(name, 0) > 0:
+                        continue
+
+                    return (yield f"KEYDOWNSTOP  {keydown_skill_name}")
+
+            elapse_time = get_next_elapse_time(events)
+            return (yield f"ELAPSE  {elapse_time}")
+
+    return _gen
+
+
+def default_ordered_policy(order: list[str]) -> OperationGeneratorProto:
+    priority_policy = cast_by_priority(order)
+
+    def _gen(ctx: PolicyContextType):
+        while True:
+            environment, events = ctx
+
+            current_keydown = _get_keydown(environment)
+            if current_keydown:
+                ctx = yield from keydown_until_interrupt(current_keydown, order)(ctx)
+                continue
+
+            elapse_time = get_next_elapse_time(events)
+            if elapse_time > 0:
+                ctx = yield f"ELAPSE  {elapse_time}"
+                continue
+
+            ctx = yield from priority_policy(ctx)
+
+    return _gen
+
+
+normal_default_ordered_policy = interpret_dsl_generator(default_ordered_policy)

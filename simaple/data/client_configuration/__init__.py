@@ -4,7 +4,8 @@ from typing import cast
 import pydantic
 
 from simaple.core.jobtype import JobType
-from simaple.simulate.policy.default import DefaultOrderedPolicy
+from simaple.simulate.policy.base import PolicyWrapper
+from simaple.simulate.policy.default import normal_default_ordered_policy
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
 )
@@ -40,8 +41,8 @@ class ClientConfiguration(
     def get_groups(self) -> list[str]:
         return self.component_groups
 
-    def get_default_policy(self) -> DefaultOrderedPolicy:
-        return DefaultOrderedPolicy(order=self.mdc_order)
+    def get_default_policy(self):
+        return PolicyWrapper(normal_default_ordered_policy(order=self.mdc_order))
 
 
 def get_client_configuration(jobtype: JobType) -> ClientConfiguration:
