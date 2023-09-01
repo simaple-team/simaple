@@ -2,7 +2,7 @@ import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
-from simaple.simulate.policy.base import OperationRecorder, get_interpreter
+from simaple.simulate.policy import get_shell
 from simaple.simulate.report.base import Report, ReportEventHandler
 
 setting = SimulationSetting(
@@ -26,17 +26,12 @@ def test_actor():
 
     environment = archmagefb_client.environment
 
-    recorder = OperationRecorder("record.tsv")
     report = Report()
     archmagefb_client.add_handler(ReportEventHandler(report))
-    interpreter = get_interpreter(archmagefb_client)
+    shell = get_shell(archmagefb_client)
 
-    with recorder.start() as rec:
-        while environment.show("clock") < 180_000:
-            operations = policy.decide(environment)
-            for operation in operations:
-                interpreter.exec(operation)
-                rec.write(operation)
+    while environment.show("clock") < 50_000:
+        shell.exec_policy(policy, early_stop=50_000)
 
     print(
         f"{environment.show('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "

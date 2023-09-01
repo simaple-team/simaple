@@ -1,18 +1,9 @@
-from abc import ABCMeta
-from contextlib import contextmanager
-from typing import Callable, Generator, Optional
+from typing import Optional
 
-import pydantic
-
-from simaple.simulate.base import Action, Environment, Event
+from simaple.simulate.base import Environment, Event
 from simaple.simulate.component.view import KeydownView, Running, Validity
-from simaple.simulate.policy.base import (
-    DSLGeneratorProto,
-    OperationGeneratorProto,
-    PolicyContextType,
-    PolicyWrapper,
-    interpret_dsl_generator,
-)
+from simaple.simulate.policy.base import PolicyContextType
+from simaple.simulate.policy.dsl import DSLGeneratorProto, interpret_dsl_generator
 from simaple.simulate.reserved_names import Tag
 
 
@@ -21,6 +12,10 @@ def _get_keydown(environment: Environment) -> Optional[str]:
     keydown_running_list = [k.name for k in keydowns if k.running]
 
     return next(iter(keydown_running_list), None)
+
+
+def keydown_ended(events: list[Event]) -> bool:
+    return any(event.tag == Tag.KEYDOWN_END for event in events)
 
 
 def get_next_elapse_time(events: list[Event]) -> float:
@@ -33,14 +28,12 @@ def get_next_elapse_time(events: list[Event]) -> float:
 
 def running_map(environment: Environment):
     runnings: list[Running] = environment.show("running")
-    running_map = {r.name: r.time_left for r in runnings}
-    return running_map
+    return {r.name: r.time_left for r in runnings}
 
 
 def validity_map(environment: Environment):
     validities: list[Validity] = environment.show("validity")
-    validity_map = {v.name: v for v in validities if v.valid}
-    return validity_map
+    return {v.name: v for v in validities if v.valid}
 
 
 def cast_by_priority(order: list[str]) -> DSLGeneratorProto:
@@ -89,12 +82,16 @@ def keydown_until_interrupt(
                     return (yield f"KEYDOWNSTOP  {keydown_skill_name}")
 
             elapse_time = get_next_elapse_time(events)
-            return (yield f"ELAPSE  {elapse_time}")
+
+            if keydown_ended(events):
+                return (yield f"ELAPSE  {elapse_time}")
+
+            ctx = yield f"ELAPSE  {elapse_time}"
 
     return _gen
 
 
-def default_ordered_policy(order: list[str]) -> OperationGeneratorProto:
+def default_ordered_policy(order: list[str]) -> DSLGeneratorProto:
     priority_policy = cast_by_priority(order)
 
     def _gen(ctx: PolicyContextType):

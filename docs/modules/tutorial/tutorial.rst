@@ -112,18 +112,17 @@ Policy 구현하기
 .. code-block:: python
 
     ...
-    from simaple.simulate.policy.base import get_interpreter
+    from simaple.simulate.policy import get_shell
 
-    interpreter = get_interpreter(client)
+    shell = get_shell(archmagefb_client)
 
     while client.environment.show("clock") < 50_000:
-        operation = policy.decide(client.environment)
-        interpreter.exec(operation)
+        shell.exec_policy(policy, early_stop=50_000)
 
-총 시뮬레이션 시간은 ``client.environment.show("clock")`` 을 통해 얻을 수 있습니다. 시간이 다할때까지, 우리는 policy의 결정을 받아와서, interpreter를 거쳐 client에 전달합니다.
+총 시뮬레이션 시간은 ``client.environment.show("clock")`` 을 통해 얻을 수 있습니다. 시간이 다할때까지, 우리는 policy의 결정을 받아와서, shell을 거쳐 client에 전달합니다.
 그런데, 시뮬레이션이 동작했지만, 시뮬레이션의 결과를 볼 방법이 없네요. simaple은 동작 분석을 위해 아래의 두 가지 개념을 추적할 방법을 제공합니다.
 
-- 매 순간, Policy가 행동하기로 한 결정 (Record)
+- 매 순간, Policy가 행동하기로 한 결정 (Operation History)
 - 매 순간, Policy의 결정으로 인해 발생한 피해량 (Report)
 
 이 두가지를 한 번 기록해 보겠습니다. 위 코드를 아래 코드로 대체해 주세요.
@@ -133,27 +132,22 @@ Policy 구현하기
 
     ...
 
-    from simaple.simulate.policy.base import OperationRecorder
     from simaple.simulate.report.base import Report, ReportEventHandler
-    from simaple.simulate.policy.base import get_interpreter
+    from simaple.simulate.policy import get_shell
 
-    interpreter = get_interpreter(client)
-
-    recorder = OperationRecorder("record.tsv")
     report = Report()
     client.add_handler(ReportEventHandler(report))
 
-    interpreter = get_interpreter(client)
+    shell = get_shell(client)
 
-    with recorder.start() as rec:
-        while client.environment.show("clock") < 50_000:
-            operation = policy.decide(client.environment)
-            interpreter.exec(operation)
-            rec.write(operation)
+    while client.environment.show("clock") < 50_000:
+        shell.exec_policy(policy, early_stop=50_000)
+    
+    shell.history.dump("history.log")
 
 
-``recorder`` 는 우리의 시뮬레이션 과정에서 Policy의 결정, 즉 Record를 기록합니다. 매 동작마다 ``rec.write`` 를 실행하여, 우리는 무슨 일이 일어나고 있는지 손쉽게 저장할 수 있습니다.
-코드가 수행된 이후 record.tsv를 열어보세요. 지금 당장은 이해할 수 없을지도 모르지만, 스킬의 이름과 그것들을 언제 use했는지 묘사되어 있을겁니다.
+``shell.history`` 는 우리의 시뮬레이션 과정에서 Policy의 결정, 즉 Operation을 기록합니다. ``history.dump`` 를 통해, 손쉽게 history를 저장할 수 있습니다.
+코드가 수행된 이후 history.log를 열어보세요. 지금 당장은 이해할 수 없을지도 모르지만, 스킬의 이름과 그것들을 언제 use했는지 묘사되어 있을겁니다.
 
 ``report`` 는 그 순간 발생한 피해량에 관한 정보를 담고 있습니다. 우리가 ``add_handler`` 를 통해 report를 client에 등록함으로서, 시뮬레이션 과정에서 발생한 모든 피해량은 Report 객체에 저장됩니다.
 ``len(report)`` 를 수행해서, report에 실제로 데이터가 쌓여있는지 확인해 보세요. 동작 시간을 변경하고, 실제로 report에 길이가 바뀌는지 확인해 보아도 좋습니다.
@@ -248,23 +242,18 @@ level_advantage와 force_advantage는 각각 레벨과 포스 차이에서 오�
 
     ## Run simulation
 
-    from simaple.simulate.policy.base import OperationRecorder
     from simaple.simulate.report.base import Report, ReportEventHandler
-    from simaple.simulate.policy.base import get_interpreter
+    from simaple.simulate.policy import get_shell
 
-    interpreter = get_interpreter(client)
-
-    recorder = OperationRecorder("record.tsv")
     report = Report()
     client.add_handler(ReportEventHandler(report))
 
-    interpreter = get_interpreter(client)
+    shell = get_shell(client)
 
-    with recorder.start() as rec:
-        while client.environment.show("clock") < 50_000:
-            operation = policy.decide(client.environment)
-            events = interpreter.exec(operation)
-            rec.write(operation)
+    while client.environment.show("clock") < 50_000:
+        shell.exec_policy(policy, early_stop=50_000)
+    
+    shell.history.dump("history.log")
 
     from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
     from simaple.data.damage_logic import get_damage_logic

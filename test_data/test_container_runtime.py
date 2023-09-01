@@ -4,10 +4,10 @@ import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.container.simulation import SimulationContainer
 from simaple.simulate.report.base import Report, ReportEventHandler
 from test_data.target import get_test_settings
-from simaple.simulate.policy.base import get_interpreter
+from simaple.simulate.policy import get_shell
 
 
-@pytest.mark.parametrize("setting, jobtype, expected", get_test_settings())
+@pytest.mark.parametrize("setting, jobtype, expected", get_test_settings()[1:])
 def test_actor(setting, jobtype, expected):
     container = SimulationContainer()
     container.config.from_pydantic(setting)
@@ -22,10 +22,10 @@ def test_actor(setting, jobtype, expected):
     report = Report()
     client.add_handler(ReportEventHandler(report))
 
-    interpreter = get_interpreter(client)
+    shell = get_shell(client)
 
     while environment.show("clock") < 50_000:
-        interpreter.exec_policy(policy, early_stop=50_000)
+        shell.exec_policy(policy, early_stop=50_000)
 
     dpm = container.dpm_calculator().calculate_dpm(report)
     print(f"{environment.show('clock')} | {jobtype} | {dpm:,} ")

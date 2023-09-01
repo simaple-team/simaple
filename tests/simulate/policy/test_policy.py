@@ -1,26 +1,17 @@
 import pytest
 
-from simaple.simulate.policy.base import (
-    KeydownOperation,
-    NamedOperation,
-    Operation,
-    TimeOperation,
-    get_operand_compiler,
-)
+from simaple.simulate.policy.base import Operation
+from simaple.simulate.policy.dsl import OperandDSLParser
 
 
 @pytest.mark.parametrize(
     "op, op_string",
     [
-        (NamedOperation(command="USE", name="skill"), "USE  skill"),
-        (NamedOperation(command="CAST", name="skill"), "CAST  skill"),
-        (TimeOperation(command="ELAPSE", time=100), "ELAPSE  100"),
-        (
-            KeydownOperation(command="KEYDOWN", name="skill", stopby=["A", "B", "C"]),
-            "KEYDOWN  skill  STOPBY  A  B  C",
-        ),
+        (Operation(command="USE", name="skill"), "USE  skill"),
+        (Operation(command="CAST", name="skill"), "CAST  skill"),
+        (Operation(command="ELAPSE", time=100, name=""), "ELAPSE  100"),
     ],
 )
 def test_operand_serializer(op, op_string):
-    compiler = get_operand_compiler()
-    assert compiler(op_string) == [op]
+    parser = OperandDSLParser()
+    assert parser(op_string) == [op]
