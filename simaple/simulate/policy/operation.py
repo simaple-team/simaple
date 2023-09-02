@@ -5,7 +5,6 @@ from simaple.simulate.policy.base import (
     ActionGeneratorType,
     BehaviorGenerator,
     Operation,
-    SimulationShell,
 )
 from simaple.simulate.reserved_names import Tag
 
@@ -57,7 +56,3 @@ def get_operations() -> dict[
         "ELAPSE": exec_elapse,
         "KEYDOWNSTOP": exec_keydownstop,
     }
-
-
-def get_shell(client):
-    return SimulationShell(client, get_operations())

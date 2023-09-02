@@ -1,12 +1,15 @@
 import functools
 import re
-from typing import Callable, Generator
+from typing import Callable, Generator, Optional
 
 from simaple.simulate.policy.base import (
     Operation,
     OperationGeneratorProto,
+    OperationHistory,
     PolicyContextType,
+    SimulationShell,
 )
+from simaple.simulate.policy.operation import get_operations
 
 
 def parse(dsl: str) -> Operation:
@@ -47,8 +50,43 @@ class OperandDSLParser:
 
         return [op for _ in range(mult)]
 
-    def dump(self, op: Operation) -> str:
-        return dump(op)
+
+class DSLOperationHistory(OperationHistory):
+    def __init__(self) -> None:
+        self._operations: list[Operation] = []
+
+    def append(self, op: Operation) -> None:
+        self._operations.append(op)
+
+    def dump(self, file_name: str) -> None:
+        with open(file_name, "w", encoding="utf-8") as f:
+            previous_op: Optional[Operation] = None
+            op_count = 0
+
+            for op in self._operations:
+                if previous_op is None:
+                    previous_op = op
+                    op_count = 1
+                    continue
+
+                if previous_op == op:
+                    op_count += 1
+                    continue
+
+                if op_count > 1:
+                    f.write(f"x{op_count} {dump(previous_op)}\n")
+                else:
+                    f.write(f"{dump(previous_op)}\n")
+
+                previous_op = op
+                op_count = 0
+                continue
+            
+            assert previous_op is not None
+            if op_count > 1:
+                f.write(f"x{op_count} {dump(previous_op)}\n")
+            else:
+                f.write(f"{dump(previous_op)}\n")
 
 
 DSLGenerator = Generator[str, PolicyContextType, PolicyContextType]
@@ -73,3 +111,7 @@ def interpret_dsl_generator(
         return _gen
 
     return _gen_proto
+
+
+def get_dsl_shell(client):
+    return SimulationShell(client, get_operations(), DSLOperationHistory())

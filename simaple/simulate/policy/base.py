@@ -1,3 +1,4 @@
+import abc
 import functools
 from typing import Callable, Generator, Optional, cast
 
@@ -108,7 +109,16 @@ class PolicyWrapper:
         return self._operation_generator.send(context)
 
 
-class OperationHistory:
+class OperationHistory(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def append(self, op: Operation) -> None:
+        """Append operation to history"""
+
+    def dump(self, file_name: str) -> None:
+        """Dump history to file"""
+
+
+class BaseOperationHistory(OperationHistory):
     def __init__(self) -> None:
         self._operations: list[Operation] = []
 
@@ -126,11 +136,12 @@ class SimulationShell:
         self,
         client: Client,
         handlers: dict[str, Callable[[Operation], _BehaviorGenerator]],
+        history: OperationHistory,
     ):
         self._client = client
         self._handlers = handlers
         self._buffered_events: list[Event] = []
-        self.history = OperationHistory()
+        self.history = history
 
     def exec(self, op: Operation, early_stop: int = -1) -> None:
         self.history.append(op)

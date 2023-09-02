@@ -116,9 +116,9 @@ The following code runs the simulation through the ``Client`` and ``Policy`` def
 .. code-block:: python
 
     ...
-    from simaple.simulate.policy import get_shell
+    from simaple.simulate.policy import get_dsl_shell
 
-    shell = get_shell(archmagefb_client)
+    shell = get_dsl_shell(archmagefb_client)
 
     while client.environment.show("clock") < 50_000:
         shell.exec_policy(policy, early_stop=50_000)
@@ -139,12 +139,12 @@ If we run the code below *instead of* the one above, we can store these two thin
     ...
 
     from simaple.simulate.report.base import Report, ReportEventHandler
-    from simaple.simulate.policy import get_shell
+    from simaple.simulate.policy import get_dsl_shell
 
     report = Report()
     client.add_handler(ReportEventHandler(report))
 
-    shell = get_shell(client)
+    shell = get_dsl_shell(client)
 
     while client.environment.show("clock") < 50_000:
         shell.exec_policy(policy, early_stop=50_000)
@@ -253,12 +253,12 @@ Finally, this will be the full code assembled from all the sections written abov
     ## Run simulation
 
     from simaple.simulate.report.base import Report, ReportEventHandler
-    from simaple.simulate.policy import get_shell
+    from simaple.simulate.policy import get_dsl_shell
 
     report = Report()
     client.add_handler(ReportEventHandler(report))
 
-    shell = get_shell(client)
+    shell = get_dsl_shell(client)
 
     while client.environment.show("clock") < 50_000:
         shell.exec_policy(policy, early_stop=50_000)

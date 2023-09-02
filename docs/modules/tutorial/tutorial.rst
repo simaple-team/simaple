@@ -112,9 +112,9 @@ Policy 구현하기
 .. code-block:: python
 
     ...
-    from simaple.simulate.policy import get_shell
+    from simaple.simulate.policy import get_dsl_shell
 
-    shell = get_shell(archmagefb_client)
+    shell = get_dsl_shell(archmagefb_client)
 
     while client.environment.show("clock") < 50_000:
         shell.exec_policy(policy, early_stop=50_000)
@@ -133,12 +133,12 @@ Policy 구현하기
     ...
 
     from simaple.simulate.report.base import Report, ReportEventHandler
-    from simaple.simulate.policy import get_shell
+    from simaple.simulate.policy import get_dsl_shell
 
     report = Report()
     client.add_handler(ReportEventHandler(report))
 
-    shell = get_shell(client)
+    shell = get_dsl_shell(client)
 
     while client.environment.show("clock") < 50_000:
         shell.exec_policy(policy, early_stop=50_000)
@@ -243,12 +243,12 @@ level_advantage와 force_advantage는 각각 레벨과 포스 차이에서 오�
     ## Run simulation
 
     from simaple.simulate.report.base import Report, ReportEventHandler
-    from simaple.simulate.policy import get_shell
+    from simaple.simulate.policy import get_dsl_shell
 
     report = Report()
     client.add_handler(ReportEventHandler(report))
 
-    shell = get_shell(client)
+    shell = get_dsl_shell(client)
 
     while client.environment.show("clock") < 50_000:
         shell.exec_policy(policy, early_stop=50_000)
