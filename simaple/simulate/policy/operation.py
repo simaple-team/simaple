@@ -43,6 +43,12 @@ def exec_elapse(op: Operation, events: list[Event]) -> ActionGeneratorType:
 
 
 @BehaviorGenerator.operation_handler
+def exec_resolve(op: Operation, events: list[Event]) -> ActionGeneratorType:
+    elapse_time = get_next_elapse_time([ev for ev in events if ev.name == op.name])
+    _ = yield Action(name="*", method="elapse", payload=elapse_time)
+
+
+@BehaviorGenerator.operation_handler
 def exec_keydownstop(op: Operation, events: list[Event]) -> ActionGeneratorType:
     _ = yield Action(name=op.name, method="stop")
 
@@ -56,4 +62,5 @@ def get_operations() -> dict[
         "USE": exec_use,
         "ELAPSE": exec_elapse,
         "KEYDOWNSTOP": exec_keydownstop,
+        "RESOLVE": exec_resolve,
     }

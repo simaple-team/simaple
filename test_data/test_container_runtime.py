@@ -27,7 +27,6 @@ def test_actor(setting, jobtype, expected):
     while environment.show("clock") < 50_000:
         shell.exec_policy(policy, early_stop=50_000)
 
-    shell.history.dump('result.agg.txt')
     dpm = container.dpm_calculator().calculate_dpm(report)
     print(f"{environment.show('clock')} | {jobtype} | {dpm:,} ")
     assert int(dpm) == expected

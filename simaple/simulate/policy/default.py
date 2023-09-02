@@ -84,7 +84,7 @@ def keydown_until_interrupt(
             elapse_time = get_next_elapse_time(events)
 
             if keydown_ended(events):
-                return (yield f"ELAPSE  {elapse_time}")
+                return (yield f"RESOLVE  {keydown_skill_name}")
 
             ctx = yield f"ELAPSE  {elapse_time}"
 
