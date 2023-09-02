@@ -17,7 +17,7 @@ setting = SimulationSetting(
 )
 
 
-def test_actor():
+def run():
     container = SimulationContainer()
     container.config.from_pydantic(setting)
 
@@ -30,8 +30,7 @@ def test_actor():
     archmagefb_client.add_handler(ReportEventHandler(report))
     shell = get_dsl_shell(archmagefb_client)
 
-    while environment.show("clock") < 50_000:
-        shell.exec_policy(policy, early_stop=50_000)
+    shell.REPL()
 
     print(
         f"{environment.show('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
@@ -39,4 +38,4 @@ def test_actor():
 
 
 if __name__ == "__main__":
-    test_actor()
+    run()

@@ -7,7 +7,7 @@ from test_data.target import get_test_settings
 from simaple.simulate.policy import get_dsl_shell
 
 
-@pytest.mark.parametrize("setting, jobtype, expected", get_test_settings()[1:])
+@pytest.mark.parametrize("setting, jobtype, expected", get_test_settings())
 def test_actor(setting, jobtype, expected):
     container = SimulationContainer()
     container.config.from_pydantic(setting)

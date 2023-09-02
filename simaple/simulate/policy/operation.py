@@ -5,6 +5,7 @@ from simaple.simulate.policy.base import (
     ActionGeneratorType,
     BehaviorGenerator,
     Operation,
+    _BehaviorGenerator,
 )
 from simaple.simulate.reserved_names import Tag
 
@@ -48,7 +49,7 @@ def exec_keydownstop(op: Operation, events: list[Event]) -> ActionGeneratorType:
 
 def get_operations() -> dict[
     str,
-    Callable[[Operation, list[Event]], ActionGeneratorType],
+    Callable[[Operation], _BehaviorGenerator],
 ]:
     return {
         "CAST": exec_cast,
