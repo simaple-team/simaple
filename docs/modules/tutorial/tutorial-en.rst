@@ -89,45 +89,47 @@ With all the information provided, ``get_client`` returns a ``Client`` object wh
 Congratulations! We have now created a ``Client`` with all the skills necessary.
 
 
-Actor Implementation
+Policy Implementation
 ======================
 
 In the previous section, we have created the *environment* for the desired simulation. In this section, we will discuss how to actually **simulate** skill usage given this environment.
 
-In simaple, ``Actor`` is the class for defining decisions such as which skill to use in which sequence. For a predefined Actor that works simply for all jobs, simaple offers ``MDCActor``. Let's create it with ``client_configuration``. 
+In simaple, ``Policy`` is the class for defining decisions such as which skill to use in which sequence. For a predefined Policy that works simply for all jobs, simaple offers ``DefaultOrderPolicy``. Let's create it with ``client_configuration``. 
 
 .. code-block:: python
 
     ...
 
     client_configuration = get_client_configuration(JobType.archmagefb)
-    actor = client_configuration.get_mdc_actor()
+    policy = client_configuration.get_default_policy()
 
 
-Now we have both the ``Client`` and the ``Actor``. Next is to actually perform the simulation.
+Now we have both the ``Client`` and the ``Policy``. Next is to actually perform the simulation.
 
 
 Performing the Simulation
 ===========================
 
-The following code runs the simulation through the ``Client`` and ``Actor`` defined earlier. Let's run a simulation for 50 seconds; keep in mind that this code follows from the previous blocks.
+The following code runs the simulation through the ``Client`` and ``Policy`` defined earlier. Let's run a simulation for 50 seconds; keep in mind that this code follows from the previous blocks.
 
 
 .. code-block:: python
 
     ...
+    from simaple.simulate.policy import get_dsl_shell
 
-    events = []
+    shell = get_dsl_shell(archmagefb_client)
+
     while client.environment.show("clock") < 50_000:
-        action = actor.decide(client.environment, events)
-        events = client.play(action)
+        shell.exec_policy(policy, early_stop=50_000)
 
-The total time for which the simulation has been run can be obtained from ``client.environment.show("clock")``. For the duration of the simulation, we take the decision of the ``Actor``, perform it in the ``Client``, and then the resulting list of ``events`` is passed to the next decision.
+
+The total time for which the simulation has been run can be obtained from ``client.environment.show("clock")``. For the duration of the simulation, we take the decision of the ``Policy``, perform it in the ``Client``, and then the resulting list of ``events`` is passed to the next decision.
 
 The simulation has run, but at the moment the results aren't displayed yet. simaple has methods to track the following two results for analysis.    
 
-- The sequence of decisions made by the ``Actor`` at each point in time (Record)
-- The damage amount caused by the ``Actor``'s decision (Report)
+- The sequence of decisions made by the ``Policy`` at each point in time (Operation History)
+- The damage amount caused by the ``Policy``'s decision (Report)
 
 If we run the code below *instead of* the one above, we can store these two things to be viewed after the simulation is run.
 
@@ -136,26 +138,21 @@ If we run the code below *instead of* the one above, we can store these two thin
 
     ...
 
-    from simaple.simulate.actor import ActionRecorder
     from simaple.simulate.report.base import Report, ReportEventHandler
+    from simaple.simulate.policy import get_dsl_shell
 
-    recorder = ActionRecorder("record.tsv")
     report = Report()
     client.add_handler(ReportEventHandler(report))
 
-    events = []
-    with recorder.start() as rec:
-        while client.environment.show("clock") < 50_000:
-            action = actor.decide(client.environment, events)
-            events = client.play(action)
-            rec.write(action, client.environment.show("clock"))
+    shell = get_dsl_shell(client)
+
+    while client.environment.show("clock") < 50_000:
+        shell.exec_policy(policy, early_stop=50_000)
     
-    report.save("report.tsv")
-
-    
+    shell.history.dump("history.log")
 
 
-``recorder`` records the ``Actor``'s decisions at each instant in time. Every action taken, ``rec.write`` is called to record the decisions made.
+``recorder`` records the ``Policy``'s decisions at each instant in time. Every action taken, ``rec.write`` is called to record the decisions made.
 The record will be stored in ``record.tsv`` after the code has been executed. Parsing the information there might be a bit hard since it's pretty raw data, but it would describe the names of the skills used and the time (in the simulation) at which they were used.
 
 ``report`` contains information about the damage numbers that occurred at each instant. By calling ``add_handler`` to register  ``report`` with the ``Client``, all the damage that occurred during the simulation process is stored in the ``report`` object.
@@ -248,26 +245,25 @@ Finally, this will be the full code assembled from all the sections written abov
         passive_skill_level=0,
     )
 
-    ## Declare Actor
+    ## Declare Policy
 
     client_configuration = get_client_configuration(JobType.archmagefb)
-    actor = client_configuration.get_mdc_actor()
+    policy = client_configuration.get_default_policy()
 
     ## Run simulation
 
-    from simaple.simulate.actor import ActionRecorder
     from simaple.simulate.report.base import Report, ReportEventHandler
+    from simaple.simulate.policy import get_dsl_shell
 
-    recorder = ActionRecorder("record.tsv")
     report = Report()
     client.add_handler(ReportEventHandler(report))
 
-    events = []
-    with recorder.start() as rec:
-        while client.environment.show("clock") < 50_000:
-            action = actor.decide(client.environment, events)
-            events = client.play(action)
-            rec.write(action, client.environment.show("clock"))
+    shell = get_dsl_shell(client)
+
+    while client.environment.show("clock") < 50_000:
+        shell.exec_policy(policy, early_stop=50_000)
+    
+    shell.history.dump("history.log")
 
     from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
     from simaple.data.damage_logic import get_damage_logic

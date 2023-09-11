@@ -61,3 +61,16 @@ class ReportEventHandler(EventHandler):
             current_buff_state = environment.show("buff")
             current_clock = environment.show("clock")
             self.report.add(current_clock, event, current_buff_state)
+
+
+class LogEventHandler(EventHandler):
+    def __init__(self, report: Report):
+        self.report = report
+
+    def __call__(
+        self, event: Event, environment: Environment, all_events: list[Event]
+    ) -> None:
+        if event.tag in (Tag.DAMAGE, Tag.DOT):
+            current_buff_state = environment.show("buff")
+            current_clock = environment.show("clock")
+            self.report.add(current_clock, event, current_buff_state)

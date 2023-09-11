@@ -17,7 +17,7 @@ setting = SimulationSetting(
 )
 
 
-def test_actor():
+def run():
     container = SimulationContainer()
     container.config.from_pydantic(setting)
 
@@ -36,7 +36,13 @@ def test_actor():
     print(
         f"{environment.show('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
     )
+    assert 8_264_622_367_162.877 == container.dpm_calculator().calculate_dpm(report)
 
 
 if __name__ == "__main__":
-    test_actor()
+    from cProfile import Profile
+
+    profiler = Profile()
+    profiler.run("run()")
+
+    profiler.dump_stats("test.prof")

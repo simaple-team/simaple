@@ -86,43 +86,44 @@ simaple에서 사용 가능한 스킬 묶음은 Client라고 불립니다. get_c
 축하합니다! 우리는 이제 우리가 사용하고자하는 스킬들이 모두 정의된 ``Client`` 를 생성했습니다. 
 
 
-Actor 구현하기
+Policy 구현하기
 ==============
 
 우리는 앞선 내용을 통해, 우리가 시뮬레이션하고자 하는 환경을 만들었습니다. 이제 이 환경에서 **어떻게** 시뮬레이션해야 할 지 이야기할 시간입니다.
-어떻게 동작할지 정의된 모듈을 simaple에서는 ``Actor`` 라고 부릅니다. simaple은 모든 직업에 대해 굉장히 단순하게 동작하는 ``MDCActor`` 를 제공합니다. ``client_configuration`` 을 통해 이를 생성해 봅시다.
+어떻게 동작할지 정의된 모듈을 simaple에서는 ``Policy`` 라고 부릅니다. simaple은 모든 직업에 대해 굉장히 단순하게 동작하는 ``DefaultOrderPolicy`` 를 제공합니다. ``client_configuration`` 을 통해 이를 생성해 봅시다.
 
 .. code-block:: python
 
     ...
 
     client_configuration = get_client_configuration(JobType.archmagefb)
-    actor = client_configuration.get_mdc_actor()
+    policy = client_configuration.get_default_policy()
 
 
-이제 우리는 Client도 있고, Actor도 있습니다. 이제 시뮬레이션을 수행해 보죠!
+이제 우리는 Client도 있고, Policy도 있습니다. 이제 시뮬레이션을 수행해 보죠!
 
 
 시뮬레이션 수행하기
 ===========================
 
-시뮬레이션을 앞서 만든 client와 actor를 통해 작동시켜봅시다. 50초동안 시뮬레이션을 동작시켜 보죠. 아래와 같은 코드를 입력해주세요. 앞의 코드에서 이어진다는 사실을 명심하세요!
+시뮬레이션을 앞서 만든 client와 Policy를 통해 작동시켜봅시다. 50초동안 시뮬레이션을 동작시켜 보죠. 아래와 같은 코드를 입력해주세요. 앞의 코드에서 이어진다는 사실을 명심하세요!
 
 
 .. code-block:: python
 
     ...
+    from simaple.simulate.policy import get_dsl_shell
 
-    events = []
+    shell = get_dsl_shell(archmagefb_client)
+
     while client.environment.show("clock") < 50_000:
-        action = actor.decide(client.environment, events)
-        events = client.play(action)
+        shell.exec_policy(policy, early_stop=50_000)
 
-총 시뮬레이션 시간은 ``client.environment.show("clock")`` 을 통해 얻을 수 있습니다. 시간이 다할때까지, 우리는 actor의 결정을 받아와서, client에서 수행하고, 발생한 이벤트를 다음 actor의 결정에 전달합니다.
+총 시뮬레이션 시간은 ``client.environment.show("clock")`` 을 통해 얻을 수 있습니다. 시간이 다할때까지, 우리는 policy의 결정을 받아와서, shell을 거쳐 client에 전달합니다.
 그런데, 시뮬레이션이 동작했지만, 시뮬레이션의 결과를 볼 방법이 없네요. simaple은 동작 분석을 위해 아래의 두 가지 개념을 추적할 방법을 제공합니다.
 
-- 매 순간, Actor가 행동하기로 한 결정 (Record)
-- 매 순간, Actor의 결정으로 인해 발생한 피해량 (Report)
+- 매 순간, Policy가 행동하기로 한 결정 (Operation History)
+- 매 순간, Policy의 결정으로 인해 발생한 피해량 (Report)
 
 이 두가지를 한 번 기록해 보겠습니다. 위 코드를 아래 코드로 대체해 주세요.
 
@@ -131,25 +132,22 @@ Actor 구현하기
 
     ...
 
-    from simaple.simulate.actor import ActionRecorder
     from simaple.simulate.report.base import Report, ReportEventHandler
+    from simaple.simulate.policy import get_dsl_shell
 
-    recorder = ActionRecorder("record.tsv")
     report = Report()
     client.add_handler(ReportEventHandler(report))
 
-    events = []
-    with recorder.start() as rec:
-        while client.environment.show("clock") < 50_000:
-            action = actor.decide(client.environment, events)
-            events = client.play(action)
-            rec.write(action, client.environment.show("clock"))
+    shell = get_dsl_shell(client)
 
+    while client.environment.show("clock") < 50_000:
+        shell.exec_policy(policy, early_stop=50_000)
     
+    shell.history.dump("history.log")
 
 
-``recorder`` 는 우리의 시뮬레이션 과정에서 Actor의 결정, 즉 Record를 기록합니다. 매 동작마다 ``rec.write`` 를 실행하여, 우리는 무슨 일이 일어나고 있는지 손쉽게 저장할 수 있습니다.
-코드가 수행된 이후 record.tsv를 열어보세요. 지금 당장은 이해할 수 없을지도 모르지만, 스킬의 이름과 그것들을 언제 use했는지 묘사되어 있을겁니다.
+``shell.history`` 는 우리의 시뮬레이션 과정에서 Policy의 결정, 즉 Operation을 기록합니다. ``history.dump`` 를 통해, 손쉽게 history를 저장할 수 있습니다.
+코드가 수행된 이후 history.log를 열어보세요. 지금 당장은 이해할 수 없을지도 모르지만, 스킬의 이름과 그것들을 언제 use했는지 묘사되어 있을겁니다.
 
 ``report`` 는 그 순간 발생한 피해량에 관한 정보를 담고 있습니다. 우리가 ``add_handler`` 를 통해 report를 client에 등록함으로서, 시뮬레이션 과정에서 발생한 모든 피해량은 Report 객체에 저장됩니다.
 ``len(report)`` 를 수행해서, report에 실제로 데이터가 쌓여있는지 확인해 보세요. 동작 시간을 변경하고, 실제로 report에 길이가 바뀌는지 확인해 보아도 좋습니다.
@@ -237,26 +235,25 @@ level_advantage와 force_advantage는 각각 레벨과 포스 차이에서 오�
         passive_skill_level=0,
     )
 
-    ## Declare Actor
+    ## Declare Policy
 
     client_configuration = get_client_configuration(JobType.archmagefb)
-    actor = client_configuration.get_mdc_actor()
+    policy = client_configuration.get_default_policy()
 
     ## Run simulation
 
-    from simaple.simulate.actor import ActionRecorder
     from simaple.simulate.report.base import Report, ReportEventHandler
+    from simaple.simulate.policy import get_dsl_shell
 
-    recorder = ActionRecorder("record.tsv")
     report = Report()
     client.add_handler(ReportEventHandler(report))
 
-    events = []
-    with recorder.start() as rec:
-        while client.environment.show("clock") < 50_000:
-            action = actor.decide(client.environment, events)
-            events = client.play(action)
-            rec.write(action, client.environment.show("clock"))
+    shell = get_dsl_shell(client)
+
+    while client.environment.show("clock") < 50_000:
+        shell.exec_policy(policy, early_stop=50_000)
+    
+    shell.history.dump("history.log")
 
     from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
     from simaple.data.damage_logic import get_damage_logic
