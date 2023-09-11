@@ -15,7 +15,10 @@ from simaple.simulate.policy.operation import get_operations
 
 
 def parse(dsl: str) -> Operation:
-    command, arg0 = dsl.strip().split("  ")
+    argv = dsl.strip().split(" ")
+    command = argv[0]
+    arg0 = " ".join(argv[1:])
+
     name = ""
     time: Optional[float] = None
     if arg0.isdigit() or arg0.replace(".", "").isdigit():

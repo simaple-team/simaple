@@ -30,12 +30,19 @@ def run():
     archmagefb_client.add_handler(ReportEventHandler(report))
     shell = get_dsl_shell(archmagefb_client)
 
-    shell.REPL()
+    while environment.show("clock") < 50_000:
+        shell.exec_policy(policy, early_stop=50_000)
 
     print(
         f"{environment.show('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
     )
+    assert 8_264_622_367_162.877 == container.dpm_calculator().calculate_dpm(report)
 
 
 if __name__ == "__main__":
-    run()
+    from cProfile import Profile
+
+    profiler = Profile()
+    profiler.run("run()")
+
+    profiler.dump_stats("test.prof")
