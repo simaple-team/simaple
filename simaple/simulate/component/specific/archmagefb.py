@@ -105,7 +105,7 @@ class PoisonNovaComponent(SkillComponent, AddDOTDamageTrait):
         return Validity(
             id=self.id,
             name=self.name,
-            time_left=max(0, state.cooldown.time_left),
+            time_left=state.cooldown.minimum_time_to_available(),
             valid=state.cooldown.available,
             cooldown_duration=self.cooldown_duration,
         )
