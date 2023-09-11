@@ -7,3 +7,4 @@ record.tsv
 report.tsv
 /.stat*
 .sqlite.db
+*.log
