@@ -33,7 +33,7 @@ class CooldownValidityTrait(CooldownTrait, NamedTrait):
         return Validity(
             id=self._get_id(),
             name=self._get_name(),
-            time_left=max(0, state.cooldown.time_left),
+            time_left=state.cooldown.minimum_time_to_available(),
             valid=state.cooldown.available,
             cooldown_duration=self._get_cooldown_duration(),
         )
@@ -47,7 +47,7 @@ class InvalidatableCooldownTrait(CooldownTrait, InvalidatableTrait, NamedTrait):
             Validity(
                 id=self._get_id(),
                 name=self._get_name(),
-                time_left=max(0, state.cooldown.time_left),
+                time_left=state.cooldown.minimum_time_to_available(),
                 valid=state.cooldown.available,
                 cooldown_duration=self._get_cooldown_duration(),
             )

@@ -305,7 +305,7 @@ class AdeleOrderComponent(SkillComponent):
         return Validity(
             id=self.id,
             name=self._get_name(),
-            time_left=max(0, state.cooldown.time_left),
+            time_left=state.cooldown.minimum_time_to_available(),
             valid=state.cooldown.available and state.ether_gauge.is_order_valid(),
             cooldown_duration=self._get_cooldown_duration(),
         )
@@ -361,7 +361,7 @@ class AdeleGatheringComponent(SkillComponent, UseSimpleAttackTrait):
         return Validity(
             id=self.id,
             name=self.name,
-            time_left=max(0, state.cooldown.time_left),
+            time_left=state.cooldown.minimum_time_to_available(),
             valid=state.cooldown.available and state.order_sword.get_sword_count() > 0,
             cooldown_duration=self._get_cooldown_duration(),
         )
@@ -430,7 +430,7 @@ class AdeleBlossomComponent(SkillComponent, UseSimpleAttackTrait):
         return Validity(
             id=self.id,
             name=self.name,
-            time_left=max(0, state.cooldown.time_left),
+            time_left=state.cooldown.minimum_time_to_available(),
             valid=state.cooldown.available and state.order_sword.get_sword_count() > 0,
             cooldown_duration=self._is_valid(state),
         )
@@ -640,7 +640,7 @@ class AdeleStormComponent(
         return Validity(
             id=self.id,
             name=self._get_name(),
-            time_left=max(0, state.cooldown.time_left),
+            time_left=state.cooldown.minimum_time_to_available(),
             valid=state.cooldown.available and state.order_sword.get_sword_count() > 0,
             cooldown_duration=self._get_cooldown_duration(),
         )

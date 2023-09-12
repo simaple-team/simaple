@@ -34,6 +34,15 @@ class Cooldown(Entity):
     def set_time_left(self, time: float):
         self.time_left = time
 
+    def minimum_time_to_available(self) -> float:
+        return max(0, self.time_left)
+
+    def reduce_by_rate(self, rate: float):
+        self.time_left *= 1 - rate
+
+    def reduce_by_value(self, time: float):
+        self.time_left -= time
+
 
 class Consumable(Entity):
     maximum_stack: int

@@ -282,7 +282,7 @@ class CosmicShower(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
         return Validity(
             id=self.id,
             name=self._get_name(),
-            time_left=max(0, state.cooldown.time_left),
+            time_left=state.cooldown.minimum_time_to_available(),
             valid=state.cooldown.available and state.orb.stack > 0,
             cooldown_duration=self._get_cooldown_duration(),
         )
@@ -358,7 +358,7 @@ class Cosmos(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
         return Validity(
             id=self.id,
             name=self._get_name(),
-            time_left=max(0, state.cooldown.time_left),
+            time_left=state.cooldown.minimum_time_to_available(),
             valid=state.cooldown.available and state.orb.stack > 0,
             cooldown_duration=self._get_cooldown_duration(),
         )
@@ -406,13 +406,13 @@ class FlareSlash(SkillComponent, UseSimpleAttackTrait):
     @reducer_method
     def change_stance_trigger(self, _: None, state: FlareSlashState):
         state = state.deepcopy()
-        state.cooldown.time_left -= self.cooldown_reduece_when_stance_changed
+        state.cooldown.reduce_by_value(self.cooldown_reduece_when_stance_changed)
         return self.use_simple_attack(state)
 
     @reducer_method
     def styx_trigger(self, _: None, state: FlareSlashState):
         state = state.deepcopy()
-        state.cooldown.time_left -= self.cooldown_reduce_when_cross_the_styx_hit
+        state.cooldown.reduce_by_value(self.cooldown_reduce_when_cross_the_styx_hit)
         return self.use_simple_attack(state)
 
     @view_method
@@ -420,7 +420,7 @@ class FlareSlash(SkillComponent, UseSimpleAttackTrait):
         return Validity(
             id=self.id,
             name=self._get_name(),
-            time_left=max(0, state.cooldown.time_left),
+            time_left=state.cooldown.minimum_time_to_available(),
             valid=False,
             cooldown_duration=self._get_cooldown_duration(),
         )

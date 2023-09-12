@@ -40,9 +40,7 @@ class FinalCutComponent(SkillComponent, UseSimpleAttackTrait, CooldownValidityTr
     @reducer_method
     def sudden_raid(self, _: None, state: FinalCutState):
         state = state.deepcopy()
-        state.cooldown.set_time_left(
-            state.cooldown.time_left * (100 - self.sudden_raid_cooltime_reduce) / 100
-        )
+        state.cooldown.reduce_by_rate(self.sudden_raid_cooltime_reduce * 0.01)
         return state, []
 
     @view_method
