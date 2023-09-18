@@ -4,6 +4,7 @@ import copy
 import re
 from abc import ABCMeta, abstractmethod
 from typing import Any, Callable, Optional, Union, cast
+from collections import defaultdict
 
 from pydantic import BaseModel, Field
 
@@ -158,12 +159,34 @@ class AddressedStore(Store):
         return self._concrete_store.load(saved_store)
 
 
-
 class Dispatcher(metaclass=ABCMeta):
     @abstractmethod
-    def __call__(self, action: Action, store: Store):
+    def __call__(self, action: Action, store: Store) -> list[Event]:
         ...
 
+
+class DirectedDispatcher(Dispatcher):
+    def __init__(self) -> None:
+        self._dispatchers: dict[str, list[Dispatcher]] = defaultdict(list)
+
+        self._directions: dict[str, list[Dispatcher]] = defaultdict(list)
+
+    def add(self, direction: str, dispatcher: Dispatcher):
+        self._directions[dispatcher].append(direction)
+
+    def install(self, dispatcher: DirectedDispatcher):
+        for direction in dispatcher.directions():
+            self._dispatchers[direction].append(dispatcher)
+
+    def directions(self) -> list[str]:
+        return list(self._dispatchers.keys())
+
+    def __call__(self, action: Action, store: Store) -> list[Event]:
+        events = []
+        for dispatcher in self._dispatchers[action.signature]:
+            events += dispatcher(action, store)
+
+        return events
 
 View = Callable[[Store], Any]
 
