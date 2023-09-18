@@ -158,8 +158,6 @@ class AddressedStore(Store):
         return self._concrete_store.load(saved_store)
 
 
-DispatcherType = Callable[[Action, Store], list[Event]]
-
 
 class Dispatcher(metaclass=ABCMeta):
     @abstractmethod
@@ -172,11 +170,11 @@ View = Callable[[Store], Any]
 
 class Environment:
     def __init__(self, store: AddressedStore):
-        self.dispatchers: list[DispatcherType] = []
+        self.dispatchers: list[Dispatcher] = []
         self.store = store
         self._views: dict[str, View] = {}
 
-    def add_dispatcher(self, dispatcher: DispatcherType):
+    def add_dispatcher(self, dispatcher: Dispatcher):
         self.dispatchers.append(dispatcher)
 
     def add_view(self, view_name: str, view: View):
