@@ -7,6 +7,7 @@ from collections import defaultdict
 from typing import Any, Callable, Optional, Union, cast
 
 from pydantic import BaseModel, Field
+from dataclasses import dataclass
 
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
@@ -18,7 +19,8 @@ class Entity(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="Entity")):
     ...
 
 
-class Action(BaseModel):
+@dataclass
+class Action:
     """
     Action is primitive value-object which indicated
     what `Component` and Which `method` will be triggerd.
