@@ -38,7 +38,8 @@ class Action:
         return f"{self.name}.{self.method}"
 
 
-class Event(BaseModel):
+@dataclass
+class Event:
     """
     Event is primitive value-object, which indicated
     "something happened" via action-handlers.
@@ -49,10 +50,10 @@ class Event(BaseModel):
     """
 
     name: str
+    payload: dict
     method: str = ""
     tag: Optional[str] = None
     handler: Optional[str] = None
-    payload: dict = Field(default_factory=dict)
 
     @property
     def signature(self) -> str:

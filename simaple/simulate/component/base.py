@@ -182,11 +182,13 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
     ) -> list[Event]:
         tagged_events = []
         for event in events:
-            tagged_event = event.model_copy()
-            tagged_event.method = method_name
-            if tagged_event.tag is None:
-                tagged_event.tag = method_name
-
+            tagged_event = Event(
+                name=event.name,
+                payload=event.payload,
+                method=method_name,
+                tag=event.tag or method_name,
+                handler=event.handler,
+            )
             tagged_events.append(tagged_event)
 
         if all(event.tag not in (Tag.REJECT, Tag.ACCEPT) for event in events):
@@ -310,9 +312,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         for view_name, view in self.get_views().items():
             environment.add_view(f"{self.name}.{view_name}", view)
 
-    def get_method_mappings(
-        self,
-    ) -> tuple[dict[str, str], dict[str, ComponentMethodWrapper]]:
+    def get_method_mappings(self) -> tuple[dict[str, str], dict[str, ComponentMethodWrapper]]:
         reducer_methods = self.get_every_reducer_methods()
 
         wild_card_mappings = {
