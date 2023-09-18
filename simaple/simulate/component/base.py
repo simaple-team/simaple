@@ -112,19 +112,20 @@ class StoreAdapter:
         return names
 
 
-class ReducerMethodWrappingDispatcher(Dispatcher):
+class ReducerMethodWrappingDispatcher(DirectedDispatcher):
     def __init__(
         self,
         name: str,
         method_mappings: dict[str, str],
-        mappings: dict[str, ComponentMethodWrapper],
+        reducer_mappings: dict[str, ComponentMethodWrapper],
         default_state: dict[str, Entity],
         binds=None,
     ):
+        super().__init__()
         self._name = name
         self._default_state = default_state
         self.method_mappings = method_mappings
-        self.mappings = mappings
+        self.reducer_mappings = reducer_mappings
         self._store_adapter = StoreAdapter(self._default_state, binds)
 
     def init_store(self, store: Store):
@@ -133,13 +134,14 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
             local_store.read_entity(name, default=self._default_state[name])
 
     def __call__(self, action: Action, store: Store) -> list[Event]:
-        if not self.is_enabled_action(action):
+        mapping_name = self._find_mapping_name(action.signature, self.reducer_mappings)
+        if not mapping_name:
             return []
 
         local_store = store.local(self._name)
 
-        reducer = self.get_matching_reducer(action)
-        method_name = self.get_matching_method_name(action)
+        reducer = self.reducer_mappings[mapping_name]
+        method_name = self.method_mappings[mapping_name]
 
         if reducer is None or method_name is None:
             return []
@@ -189,24 +191,6 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
             ]
 
         return tagged_events
-
-
-    def is_enabled_action(self, action: Action) -> bool:
-        mapping = self._find_mapping_name(action.signature, self.mappings)
-        return mapping is not None
-
-    def get_matching_reducer(self, action: Action) -> Optional[ComponentMethodWrapper]:
-        mapping_name = self._find_mapping_name(action.signature, self.mappings)
-        if mapping_name is None:
-            return None
-        return self.mappings[mapping_name]
-
-    def get_matching_method_name(self, action: Action) -> Optional[str]:
-        mapping_name = self._find_mapping_name(action.signature, self.method_mappings)
-        if mapping_name is None:
-            return None
-
-        return self.method_mappings[mapping_name]
 
     def _find_mapping_name(self, target: str, mappings) -> Optional[str]:
         if target in mappings:
