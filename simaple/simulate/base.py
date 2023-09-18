@@ -104,7 +104,7 @@ class ConcreteStore(Store):
             raise ValueError(
                 f"No entity exists: {name}. None-default only enabled for external-property binding. Maybe missing global proeperty installation?"
             )
-        return value.model_copy()
+        return value
 
     def local(self, address):
         return self
@@ -309,13 +309,13 @@ class Client:
         emiited_event_action = Action(
             name=event.name,
             method=f"{event.method}.emitted.{event.tag or ''}",
-            payload=copy.deepcopy(event.payload),
+            payload=event.payload,
         )
 
         done_event_action = Action(
             name=event.name,
             method=f"{event.method}.done.{event.tag or ''}",
-            payload=copy.deepcopy(event.payload),
+            payload=event.payload,
         )
 
         return (emiited_event_action, done_event_action)
