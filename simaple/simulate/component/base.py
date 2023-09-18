@@ -5,7 +5,7 @@ from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union, cast
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
-from simaple.simulate.base import Action, DirectedDispatcher, Dispatcher, Entity, Environment, Event, Store
+from simaple.simulate.base import Action, Dispatcher, Entity, Environment, Event, Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import GlobalProperty
 from simaple.simulate.reserved_names import Tag
@@ -112,7 +112,7 @@ class StoreAdapter:
         return names
 
 
-class ReducerMethodWrappingDispatcher(DirectedDispatcher):
+class ReducerMethodWrappingDispatcher(Dispatcher):
     def __init__(
         self,
         name: str,
@@ -121,12 +121,14 @@ class ReducerMethodWrappingDispatcher(DirectedDispatcher):
         default_state: dict[str, Entity],
         binds=None,
     ):
-        super().__init__()
         self._name = name
         self._default_state = default_state
         self.method_mappings = method_mappings
         self.reducer_mappings = reducer_mappings
         self._store_adapter = StoreAdapter(self._default_state, binds)
+
+    def includes(self, signature: str) -> bool:
+        return self._find_mapping_name(signature) is not None
 
     def init_store(self, store: Store):
         local_store = store.local(self._name)
@@ -134,8 +136,10 @@ class ReducerMethodWrappingDispatcher(DirectedDispatcher):
             local_store.read_entity(name, default=self._default_state[name])
 
     def __call__(self, action: Action, store: Store) -> list[Event]:
-        mapping_name = self._find_mapping_name(action.signature, self.reducer_mappings)
+        mapping_name = self._find_mapping_name(action.signature)
+
         if not mapping_name:
+            raise ValueError
             return []
 
         local_store = store.local(self._name)
@@ -192,16 +196,15 @@ class ReducerMethodWrappingDispatcher(DirectedDispatcher):
 
         return tagged_events
 
-    def _find_mapping_name(self, target: str, mappings) -> Optional[str]:
-        if target in mappings:
+    def _find_mapping_name(self, target: str) -> Optional[str]:
+        if target in self.reducer_mappings:
             return target
 
-        for mapping_name in mappings:
+        for mapping_name in self.reducer_mappings:
             if mapping_name[0] == "$" and mapping_name.replace("$", "") in target:
                 return cast(str, mapping_name)
 
         return None
-
 
 
 class WrappedView:
@@ -307,7 +310,9 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         for view_name, view in self.get_views().items():
             environment.add_view(f"{self.name}.{view_name}", view)
 
-    def get_method_mappings(self) -> tuple[dict[str, str], dict[str, ComponentMethodWrapper]]:
+    def get_method_mappings(
+        self,
+    ) -> tuple[dict[str, str], dict[str, ComponentMethodWrapper]]:
         reducer_methods = self.get_every_reducer_methods()
 
         wild_card_mappings = {

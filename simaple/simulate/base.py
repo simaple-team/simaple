@@ -3,8 +3,8 @@ from __future__ import annotations
 import copy
 import re
 from abc import ABCMeta, abstractmethod
-from typing import Any, Callable, Optional, Union, cast
 from collections import defaultdict
+from typing import Any, Callable, Optional, Union, cast
 
 from pydantic import BaseModel, Field
 
@@ -164,55 +164,70 @@ class Dispatcher(metaclass=ABCMeta):
     def __call__(self, action: Action, store: Store) -> list[Event]:
         ...
 
+    @abstractmethod
+    def includes(self, signature: str) -> bool:
+        ...
 
-class DirectedDispatcher(Dispatcher):
+
+def named_dispatcher(direction: str):
+    def decorator(dispatcher: Dispatcher):
+        def _includes(signature: str) -> bool:
+            return signature == direction
+
+        dispatcher.includes = _includes
+        return dispatcher
+
+    return decorator
+
+
+class RouterDispatcher(Dispatcher):
     def __init__(self) -> None:
-        self._dispatchers: dict[str, list[Dispatcher]] = defaultdict(list)
+        self._dispatchers: list[Dispatcher] = []
+        self._route_cache: dict[str, list[Dispatcher]] = defaultdict(list)
 
-        self._directions: dict[str, list[Dispatcher]] = defaultdict(list)
+    def install(self, dispatcher: Dispatcher):
+        self._dispatchers.append(dispatcher)
 
-    def add(self, direction: str, dispatcher: Dispatcher):
-        self._directions[dispatcher].append(direction)
-
-    def install(self, dispatcher: DirectedDispatcher):
-        for direction in dispatcher.directions():
-            self._dispatchers[direction].append(dispatcher)
-
-    def directions(self) -> list[str]:
-        return list(self._dispatchers.keys())
+    def includes(self, signature: str) -> bool:
+        return signature in self._dispatchers.keys()
 
     def __call__(self, action: Action, store: Store) -> list[Event]:
         events = []
-        for dispatcher in self._dispatchers[action.signature]:
-            events += dispatcher(action, store)
+        signature = action.signature
+        if signature in self._route_cache:
+            for dispatcher in self._route_cache[signature]:
+                events += dispatcher(action, store)
 
+            return events
+
+        cache = []
+
+        for dispatcher in self._dispatchers:
+            if dispatcher.includes(signature):
+                cache.append(dispatcher)
+                events += dispatcher(action, store)
+
+        self._route_cache[signature] = cache
         return events
+
 
 View = Callable[[Store], Any]
 
 
 class Environment:
     def __init__(self, store: AddressedStore):
-        self.dispatchers: list[Dispatcher] = []
+        self._router = RouterDispatcher()
         self.store = store
         self._views: dict[str, View] = {}
 
     def add_dispatcher(self, dispatcher: Dispatcher):
-        self.dispatchers.append(dispatcher)
+        self._router.install(dispatcher)
 
     def add_view(self, view_name: str, view: View):
         self._views[view_name] = view
 
     def resolve(self, action: Action) -> list[Event]:
-        events = []
-        for dispatcher in self.dispatchers:
-            try:
-                events += dispatcher(action, self.store)
-            except Exception as e:
-                raise Exception(
-                    f"Exception raised during resolving {action.signature}\nError: {e}"
-                ) from e
-        return events
+        return self._router(action, self.store)
 
     def show(self, view_name: str):
         return self._views[view_name](self.store)
