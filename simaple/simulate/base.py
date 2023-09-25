@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-import copy
 import re
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
 from typing import Any, Callable, Optional, Union, cast
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from dataclasses import dataclass
 
 from simaple.spec.loadable import (  # pylint:disable=unused-import
@@ -177,7 +176,7 @@ def named_dispatcher(direction: str):
         def _includes(signature: str) -> bool:
             return signature == direction
 
-        dispatcher.includes = _includes
+        setattr(dispatcher, "includes", _includes)
         return dispatcher
 
     return decorator
@@ -192,7 +191,7 @@ class RouterDispatcher(Dispatcher):
         self._dispatchers.append(dispatcher)
 
     def includes(self, signature: str) -> bool:
-        return signature in self._dispatchers.keys()
+        return signature in self._route_cache.keys()
 
     def __call__(self, action: Action, store: Store) -> list[Event]:
         events = []

@@ -39,7 +39,7 @@ class NamedEventProvider(EventProvider):
         return Event(name=self._name, tag=Tag.ELAPSED, payload={"time": time})
 
     def rejected(self) -> Event:
-        return Event(name=self._name, tag=Tag.REJECT)
+        return Event(name=self._name, tag=Tag.REJECT, payload={})
 
     def delayed(self, time: float) -> Event:
         return Event(name=self._name, tag=Tag.DELAY, payload={"time": time})
@@ -68,4 +68,4 @@ class NamedEventProvider(EventProvider):
         )
 
     def keydown_end(self) -> Event:
-        return Event(name=self._name, tag=Tag.KEYDOWN_END)
+        return Event(name=self._name, tag=Tag.KEYDOWN_END, payload={})

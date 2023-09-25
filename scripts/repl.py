@@ -1,3 +1,6 @@
+import time
+from cProfile import Profile
+
 import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
@@ -16,7 +19,6 @@ setting = SimulationSetting(
     v_improvements_level=60,
 )
 
-from cProfile import Profile
 
 container = SimulationContainer()
 container.config.from_dict(setting.model_dump())
@@ -32,8 +34,6 @@ shell = get_dsl_shell(archmagefb_client)
 
 
 def run():
-    import time
-
     start = time.time()
     while environment.show("clock") < 50_000:
         shell.exec_policy(policy, early_stop=50_000)

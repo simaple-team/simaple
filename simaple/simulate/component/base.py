@@ -1,6 +1,6 @@
 import copy
 import inspect
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod
 from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union, cast
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
@@ -140,7 +140,6 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
 
         if not mapping_name:
             raise ValueError
-            return []
 
         local_store = store.local(self._name)
 
@@ -312,7 +311,9 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         for view_name, view in self.get_views().items():
             environment.add_view(f"{self.name}.{view_name}", view)
 
-    def get_method_mappings(self) -> tuple[dict[str, str], dict[str, ComponentMethodWrapper]]:
+    def get_method_mappings(
+        self,
+    ) -> tuple[dict[str, str], dict[str, ComponentMethodWrapper]]:
         reducer_methods = self.get_every_reducer_methods()
 
         wild_card_mappings = {
