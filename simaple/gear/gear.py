@@ -23,7 +23,7 @@ class GearMeta(BaseModel):
 
     class Config:
         validate_assignment = True
-        allow_mutation = False
+        frozen = True
 
     def show(self) -> str:
         job_string = (
@@ -49,13 +49,13 @@ class Gear(BaseModel):
     stat: Stat
     scroll_chance: int
     potential: Potential = Field(default_factory=Potential)
-    additional_potential: AdditionalPotential = Field(
-        default_factory=AdditionalPotential
+    additional_potential: Potential = Field(
+        default_factory=Potential
     )
 
     class Config:
         validate_assignment = True
-        allow_mutation = False
+        frozen = True
 
     @classmethod
     def create_bare_gear(cls, meta: GearMeta) -> Gear:

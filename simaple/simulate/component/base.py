@@ -326,7 +326,6 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
 
     class Config:
         arbitrary_types_allowed = True
-        underscore_attrs_are_private = True
 
     @abstractmethod
     def get_default_state(self) -> dict[str, Entity]:

@@ -126,8 +126,8 @@ def _global_load_kms_potential_table() -> PotentialTierTable:
 
 class PotentialField(BaseModel):
     name: PotentialFieldName
-    value: Optional[int]
-    tier: Optional[PotentialTier]
+    value: Optional[int] = None
+    tier: Optional[PotentialTier] = None
 
 
 class PotentialTemplate(BaseModel):

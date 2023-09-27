@@ -15,7 +15,7 @@ from simaple.gear.slot_name import SlotName
 class GearSlot(BaseModel):
     name: SlotName
     enabled_gear_types: List[GearType]
-    gear: Optional[Gear]
+    gear: Optional[Gear] = None
 
     def is_equipped(self):
         return self.gear is not None

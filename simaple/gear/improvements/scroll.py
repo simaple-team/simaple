@@ -11,7 +11,7 @@ class Scroll(BaseModel):
     type: Literal["Scroll"] = "Scroll"
     stat: Stat
     name: str
-    gear_types: Optional[List[GearType]]
+    gear_types: Optional[List[GearType]] = None
 
     def calculate_improvement(self, meta: GearMeta, _: Optional[Stat] = None) -> Stat:
         if not self.is_gear_acceptable(meta):

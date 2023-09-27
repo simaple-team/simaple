@@ -176,7 +176,6 @@ class StatBonusCalculator(pydantic.BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
-        underscore_attrs_are_private = True
 
     def compute(self, stat: Stat, gear: Gear, bonus_count_left: int) -> list[Bonus]:
         self._sdil_table = self.sdil_table_builder.build(gear)

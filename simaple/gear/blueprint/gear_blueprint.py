@@ -27,8 +27,8 @@ class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):
 
 class BonusSpec(BaseModel):
     bonus_type: BonusType
-    grade: Optional[int]
-    rank: Optional[int]
+    grade: Optional[int] = None
+    rank: Optional[int] = None
 
     @validator("grade")
     @classmethod
