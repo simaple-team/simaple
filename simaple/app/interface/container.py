@@ -11,9 +11,9 @@ from simaple.app.infrastructure.repository import InmemorySimulatorRepository
 from simaple.app.infrastructure.uow import SimpleUnitOfWork
 from simaple.data.skill import get_kms_spec_resource_path
 from simaple.spec.repository import DirectorySpecRepository
+from pydantic_settings import BaseSettings
 
-
-class WebSetting(pydantic.BaseSettings):
+class WebSetting(BaseSettings):
     sqlite_url: str = "sqlite:///.sqlite.db"
     spec_file_path: str = pydantic.Field(default_factory=get_kms_spec_resource_path)
 

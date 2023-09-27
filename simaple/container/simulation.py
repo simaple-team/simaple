@@ -19,9 +19,9 @@ from simaple.simulate.kms import get_client
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 from simaple.system.ability import get_ability_stat
 from simaple.system.trait import CharacterTrait
+from pydantic_settings import BaseSettings
 
-
-class SimulationSetting(pydantic.BaseSettings):
+class SimulationSetting(BaseSettings):
     tier: str
     jobtype: JobType
     job_category: JobCategory
