@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Type
 
-from pydantic.main import BaseModel, ModelMetaclass
+from pydantic.main import BaseModel
+from pydantic._internal._model_construction import ModelMetaclass
 
 
 class NamespaceRepository:
