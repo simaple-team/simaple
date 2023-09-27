@@ -14,9 +14,6 @@ class Operation(BaseModel):
     only operand-to-action translation is possible.
     """
 
-    class Config:
-        extra = "forbid"
-
     command: str
     name: str
     time: Optional[float] = None

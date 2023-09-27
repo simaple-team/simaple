@@ -27,9 +27,6 @@ class Action(BaseModel):
     method: str
     payload: Optional[Union[int, str, float, dict]] = None
 
-    class Config:
-        extra = Extra.forbid
-
     @property
     def signature(self) -> str:
         if len(self.method) == 0:
@@ -53,9 +50,6 @@ class Event(BaseModel):
     tag: Optional[str]
     handler: Optional[str] = None
     payload: dict = Field(default_factory=dict)
-
-    class Config:
-        extra = Extra.forbid
 
     @property
     def signature(self) -> str:

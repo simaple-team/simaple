@@ -38,9 +38,6 @@ class PotentialInterface(BaseModel, metaclass=ABCMeta):
 
 
 class AbstractPotential(PotentialInterface):
-    class Config:
-        extra = Extra.forbid
-
     options: List[Union[Stat, ActionStat, LevelStat]] = Field(default_factory=list)
 
     def get_stat(self, level: int = 0) -> Stat:

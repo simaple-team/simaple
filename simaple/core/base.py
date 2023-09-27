@@ -101,9 +101,6 @@ class Stat(BaseModel):
 
     elemental_resistance: float = 0.0
 
-    class Config:
-        extra = Extra.forbid
-
     @classmethod
     def all_stat(cls, v) -> Stat:
         return Stat(STR=v, LUK=v, INT=v, DEX=v)
@@ -294,9 +291,6 @@ class ActionStat(BaseModel):
     buff_duration: float = 0.0
     cooltime_reduce_rate: float = 0.0
 
-    class Config:
-        extra = Extra.forbid
-
     def __add__(self, arg: ActionStat) -> ActionStat:
         return ActionStat(
             cooltime_reduce=self.cooltime_reduce + arg.cooltime_reduce,
@@ -331,9 +325,6 @@ class LevelStat(BaseModel):
 
     attack_power: float = 0.0
     magic_attack: float = 0.0
-
-    class Config:
-        extra = Extra.forbid
 
     def get_stat(self, level: int) -> Stat:
         multiplier = level // 10

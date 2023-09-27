@@ -22,7 +22,6 @@ class GearMeta(BaseModel):
     exceptional_enhancement: bool = False
 
     class Config:
-        extra = Extra.forbid
         validate_assignment = True
         allow_mutation = False
 
@@ -55,7 +54,6 @@ class Gear(BaseModel):
     )
 
     class Config:
-        extra = Extra.forbid
         validate_assignment = True
         allow_mutation = False
 

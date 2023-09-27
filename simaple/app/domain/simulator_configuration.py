@@ -16,9 +16,6 @@ from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 
 
 class SimulatorConfiguration(pydantic.BaseModel, metaclass=ABCMeta):
-    class Config:
-        extra = "forbid"
-
     @abstractmethod
     def create_client(self) -> Client:
         ...

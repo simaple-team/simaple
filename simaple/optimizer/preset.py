@@ -68,9 +68,6 @@ class PresetOptimizer(BaseModel):
     Optimzation may not optimal; also takes long time (more than 1 minute).
     """
 
-    class Config:
-        extra = "forbid"
-
     union_block_count: int
     default_stat: Stat
     level: int

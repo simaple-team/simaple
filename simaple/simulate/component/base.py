@@ -325,7 +325,6 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     binds: dict[str, str] = Field(default_factory=dict)
 
     class Config:
-        # extra = Extra.forbid
         arbitrary_types_allowed = True
         underscore_attrs_are_private = True
 

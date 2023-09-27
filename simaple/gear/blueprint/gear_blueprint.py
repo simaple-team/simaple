@@ -20,9 +20,6 @@ from simaple.gear.potential import AdditionalPotential
 
 
 class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):
-    class Config:
-        extra = Extra.forbid
-
     @abstractmethod
     def build(self) -> Gear:
         ...
