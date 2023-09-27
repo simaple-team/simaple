@@ -19,7 +19,7 @@ setting = SimulationSetting(
 
 def test_actor():
     container = SimulationContainer()
-    container.config.from_pydantic(setting)
+    container.config.from_dict(setting.model_dump())
 
     archmagefb_client = container.client()
     policy = container.client_configuration().get_default_policy()

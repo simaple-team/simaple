@@ -33,7 +33,7 @@ class ViewTestComponent(Component):
 
     @reducer_method
     def some_reducer(self, payload: ViewTestPayload, state: SomeTestState):
-        return payload, [Event(name=self.name, payload=payload.dict(), tag=None)]
+        return payload, [Event(name=self.name, payload=payload.model_dump(), tag=None)]
 
 
 def test_paramterizd_reducer():

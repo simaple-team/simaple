@@ -4,6 +4,7 @@ from typing import Callable
 
 import pydantic
 from dependency_injector import containers, providers
+from pydantic_settings import BaseSettings
 
 from simaple.core import ActionStat, ExtendedStat, JobCategory, JobType, Stat
 from simaple.data.ability import get_best_ability
@@ -19,9 +20,9 @@ from simaple.simulate.kms import get_client
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 from simaple.system.ability import get_ability_stat
 from simaple.system.trait import CharacterTrait
-from pydantic_settings import BaseSettings
 
-class SimulationSetting(BaseSettings):
+
+class SimulationSetting(pydantic.BaseModel):
     tier: str
     jobtype: JobType
     job_category: JobCategory
@@ -88,7 +89,9 @@ def preset_optimize_cache_layer(
         cache_location = os.path.join(setting.cache_root_dir, cache_location)
 
     if os.path.exists(cache_location):
-        return ExtendedStat.parse_file(cache_location)
+        with open(cache_location, encoding="utf-8") as f:
+            cache = json.load(f)
+        return ExtendedStat.model_validate(cache)
 
     preset = provider(gearset)
 
@@ -113,7 +116,7 @@ def preset_optimize_cache_layer(
 
 class SimulationContainer(containers.DeclarativeContainer):
     config = providers.Configuration()
-    settings = providers.Factory(SimulationSetting.parse_obj, config)
+    settings = providers.Factory(SimulationSetting.model_validate, config)
 
     passive = providers.Factory(
         get_passive,

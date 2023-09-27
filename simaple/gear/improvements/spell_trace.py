@@ -130,7 +130,7 @@ class SpellTrace(GearImprovement):
                 additional_mhp,
             ) = self.get_machine_heart_improvement(meta)
 
-        improvement += Stat.parse_obj(
+        improvement += Stat.model_validate(
             {attack_type.value: attack_basis, self.stat_prop_type.value: stat_basis}
         )
 

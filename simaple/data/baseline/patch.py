@@ -63,7 +63,7 @@ class GearIdPatch(Patch):
             else:
                 if k == "gear_id":
                     gear = self.repository.get_by_name(self.interpret_gear_id(v))
-                    interpreted["meta"] = gear.meta.dict()
+                    interpreted["meta"] = gear.meta.model_dump()
                 else:
                     interpreted[k] = v
 

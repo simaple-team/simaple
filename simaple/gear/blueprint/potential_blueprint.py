@@ -90,7 +90,7 @@ class PotentialTierTable:
         effect = effect_list[self._get_effect_index(query["level"])]
         stat = effect[query["name"]]
 
-        return Stat.parse_obj(stat)
+        return Stat.model_validate(stat)
 
     def _get_effect_index(self, level: int) -> int:
         return int((level - 1) // 10)

@@ -26,7 +26,7 @@ def keydown_fixture(request, dynamics: Dynamics):
         finish_damage=500,
         finish_hit=15,
     )
-    state = KeydownSkillState.parse_obj(
+    state = KeydownSkillState.model_validate(
         {
             **component.get_default_state(),
             "dynamics": dynamics,

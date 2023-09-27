@@ -57,7 +57,7 @@ class DirectorySpecRepository(SpecRepository):
             try:
                 raw_configurations = yaml.safe_load_all(f)
                 for raw_configuration in raw_configurations:
-                    yield Spec.parse_obj(raw_configuration)
+                    yield Spec.model_validate(raw_configuration)
             except Exception as e:
                 raise ValueError(f"{file_path} loading failed.") from e
 
@@ -65,13 +65,13 @@ class DirectorySpecRepository(SpecRepository):
         for k, v in kwargs.items():
             if k in self._index:
                 spec = self._index[k][v]
-                return spec.copy()
+                return spec.model_copy()
 
         for spec in self._db:
             if kind is not None and spec.kind != kind:
                 continue
             if spec.metadata.matches(**kwargs):
-                return spec.copy()
+                return spec.model_copy()
 
         return None
 
@@ -81,6 +81,6 @@ class DirectorySpecRepository(SpecRepository):
             if kind is not None and spec.kind != kind:
                 continue
             if spec.metadata.matches(**kwargs):
-                specs.append(spec.copy())
+                specs.append(spec.model_copy())
 
         return specs

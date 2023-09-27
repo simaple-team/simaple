@@ -11,4 +11,4 @@ def get_best_ability(jobtype: JobType) -> list[AbilityLine]:
 
     ability_lines = best_abilities[jobtype.value]
 
-    return [AbilityLine.parse_obj(line) for line in ability_lines]
+    return [AbilityLine.model_validate(line) for line in ability_lines]

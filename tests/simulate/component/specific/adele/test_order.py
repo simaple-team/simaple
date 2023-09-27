@@ -31,7 +31,7 @@ def order_state(
     order: AdeleOrderComponent,
     dynamics: Dynamics,
 ):
-    return AdeleOrderState.parse_obj(
+    return AdeleOrderState.model_validate(
         {
             **order.get_default_state(),
             "ether_gauge": EtherGauge(

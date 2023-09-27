@@ -88,7 +88,7 @@ class GearRepository:
             "exceptional_enhancement": dumped_gear_meta.get("etuc", False),
         }
 
-        return GearMeta.parse_obj(gear_meta_opt)
+        return GearMeta.model_validate(gear_meta_opt)
 
     def _get_gear(self, gear_id: int) -> Gear:
         return Gear.create_bare_gear(self.get_gear_meta(gear_id))

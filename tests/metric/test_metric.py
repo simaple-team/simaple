@@ -29,12 +29,12 @@ def test_metric():
 
     for reference_file in reference_list:
         with open(reference_file, encoding="utf-8") as f:
-            stat = Stat.parse_obj(json.load(f))
+            stat = Stat.model_validate(json.load(f))
 
         metric.add_reference(stat)
 
     with open(reference_list[-1], encoding="utf-8") as f:
-        target = Stat.parse_obj(json.load(f))
+        target = Stat.model_validate(json.load(f))
 
     result = metric.evaluate(target)
     print(result)

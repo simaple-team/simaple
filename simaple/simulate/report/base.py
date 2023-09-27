@@ -28,7 +28,7 @@ class Report:
         buff_stat = buff
         if event.payload["damage"] != 0 and event.payload["hit"] != 0:
             if event.payload.get("modifier") is not None:
-                buff_stat = buff_stat + Stat.parse_obj(event.payload["modifier"])
+                buff_stat = buff_stat + Stat.model_validate(event.payload["modifier"])
 
             self._logs.append(
                 DamageLog(

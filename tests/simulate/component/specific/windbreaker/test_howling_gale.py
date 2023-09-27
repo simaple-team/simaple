@@ -25,7 +25,7 @@ def fixture_howling_gale():
 
 @pytest.fixture(name="howling_gale_state")
 def fixture_blade_storm_state(howling_gale: HowlingGaleComponent, dynamics: Dynamics):
-    return HowlingGaleState.parse_obj(
+    return HowlingGaleState.model_validate(
         {**howling_gale.get_default_state(), "dynamics": dynamics}
     )
 

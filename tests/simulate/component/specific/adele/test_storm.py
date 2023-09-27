@@ -30,7 +30,7 @@ def storm_state_1pair(
     storm: AdeleStormComponent,
     dynamics: Dynamics,
 ):
-    return AdeleStormState.parse_obj(
+    return AdeleStormState.model_validate(
         {
             **storm.get_default_state(),
             "order_sword": OrderSword(interval=1020, running_swords=[(0, 40000)]),
@@ -44,7 +44,7 @@ def storm_state_3pair(
     storm: AdeleStormComponent,
     dynamics: Dynamics,
 ):
-    return AdeleStormState.parse_obj(
+    return AdeleStormState.model_validate(
         {
             **storm.get_default_state(),
             "order_sword": OrderSword(

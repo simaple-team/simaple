@@ -27,7 +27,7 @@ def consumable_buff_component():
 def consumable_buff_state(
     consumable_buff_component: ConsumableBuffSkillComponent, dynamics: Dynamics
 ):
-    return ConsumableBuffSkillState.parse_obj(
+    return ConsumableBuffSkillState.model_validate(
         {
             **consumable_buff_component.get_default_state(),
             "dynamics": dynamics,

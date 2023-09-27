@@ -68,9 +68,9 @@ def test_absolab_17_p30_full(test_case_file):
     test_case["given"]["meta"] = test_case["expected"]["meta"]
     test_case["given"].pop("gear_id")
 
-    blueprint = GeneralizedGearBlueprint.parse_obj(test_case["given"])
+    blueprint = GeneralizedGearBlueprint.model_validate(test_case["given"])
 
     gear = blueprint.build()
-    expected_gear = Gear.parse_obj(test_case["expected"])
+    expected_gear = Gear.model_validate(test_case["expected"])
 
     assert gear == expected_gear

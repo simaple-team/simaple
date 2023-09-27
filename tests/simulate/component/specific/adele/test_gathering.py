@@ -27,7 +27,7 @@ def gathering_state_1pair(
     gathering: AdeleGatheringComponent,
     dynamics: Dynamics,
 ):
-    return AdeleOrderUsingState.parse_obj(
+    return AdeleOrderUsingState.model_validate(
         {
             **gathering.get_default_state(),
             "order_sword": OrderSword(interval=1020, running_swords=[(0, 40000)]),
@@ -41,7 +41,7 @@ def gathering_state_3pair(
     gathering: AdeleGatheringComponent,
     dynamics: Dynamics,
 ):
-    return AdeleOrderUsingState.parse_obj(
+    return AdeleOrderUsingState.model_validate(
         {
             **gathering.get_default_state(),
             "order_sword": OrderSword(

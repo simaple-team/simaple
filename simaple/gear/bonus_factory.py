@@ -97,7 +97,7 @@ class BonusFactory:
             raise ValueError
 
         bonus_prototype: Bonus = self._bonus_prototypes[bonus_type]
-        bonus = bonus_prototype.copy()
+        bonus = bonus_prototype.model_copy()
         bonus.grade = grade
 
         return bonus

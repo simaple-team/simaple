@@ -281,7 +281,7 @@ class Stat(BaseModel):
         return output
 
     def short_dict(self) -> dict[str, float]:
-        long_dict = self.dict()
+        long_dict = self.model_dump()
         return {k: v for k, v in long_dict.items() if v != 0}
 
 

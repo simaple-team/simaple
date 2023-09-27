@@ -17,7 +17,7 @@ class Scroll(BaseModel):
         if not self.is_gear_acceptable(meta):
             raise TypeError("Given gear type is not available to use this scroll")
 
-        return self.stat.copy()
+        return self.stat.model_copy()
 
     def is_gear_acceptable(self, meta: GearMeta) -> bool:
         return self.gear_types is None or meta.type in self.gear_types

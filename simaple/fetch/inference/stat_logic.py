@@ -181,7 +181,7 @@ def _get_scoring_target(logic: DamageLogic) -> BaseStatType:
 
 def _factor_to_stat(factor: StatFactor, stat_type: BaseStatType) -> Stat:
     base, mult, static = factor
-    return Stat.parse_obj(
+    return Stat.model_validate(
         {
             StatProps(stat_type.value).value: base,
             StatProps.multiplier(stat_type).value: mult,

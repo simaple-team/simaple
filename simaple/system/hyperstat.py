@@ -25,7 +25,7 @@ HYPERSTAT_COST = [1, 2, 4, 8, 10, 15, 20, 25, 30, 35, 50, 65, 80, 95, 110, 99999
 
 def get_hyperstat_lists() -> List[List[Stat]]:
     return [
-        [Stat.parse_obj({name: value}) for value in value_list]
+        [Stat.model_validate({name: value}) for value in value_list]
         for name, value_list in HYPERSTAT_BASIS.items()
     ]
 

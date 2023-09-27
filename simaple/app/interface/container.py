@@ -1,6 +1,7 @@
 import pydantic
 import sqlalchemy
 from dependency_injector import containers, providers
+from pydantic_settings import BaseSettings
 from sqlalchemy.orm import sessionmaker
 
 from simaple.app.infrastructure.component_schema_repository import (
@@ -11,9 +12,9 @@ from simaple.app.infrastructure.repository import InmemorySimulatorRepository
 from simaple.app.infrastructure.uow import SimpleUnitOfWork
 from simaple.data.skill import get_kms_spec_resource_path
 from simaple.spec.repository import DirectorySpecRepository
-from pydantic_settings import BaseSettings
 
-class WebSetting(BaseSettings):
+
+class WebSetting(pydantic.BaseModel):
     sqlite_url: str = "sqlite:///.sqlite.db"
     spec_file_path: str = pydantic.Field(default_factory=get_kms_spec_resource_path)
 

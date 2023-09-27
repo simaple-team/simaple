@@ -27,7 +27,7 @@ def fixture_blade_storm():
 
 @pytest.fixture(name="blade_storm_state")
 def fixture_blade_storm_state(blade_storm: BladeStormComponent, dynamics: Dynamics):
-    return BladeStormState.parse_obj(
+    return BladeStormState.model_validate(
         {**blade_storm.get_default_state(), "dynamics": dynamics}
     )
 

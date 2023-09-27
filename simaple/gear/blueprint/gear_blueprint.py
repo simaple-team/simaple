@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from typing import List, Optional, cast
 
-from pydantic import BaseModel, Extra, Field, validator
+from pydantic import BaseModel, Extra, Field, field_validator, model_validator
 
 from simaple.core import Stat
 from simaple.gear.blueprint.potential_blueprint import (
@@ -30,7 +30,7 @@ class BonusSpec(BaseModel):
     grade: Optional[int] = None
     rank: Optional[int] = None
 
-    @validator("grade")
+    @field_validator("grade")
     @classmethod
     def rank_may_in_proper_range(cls, v):
         if v is not None:
@@ -39,20 +39,18 @@ class BonusSpec(BaseModel):
 
         return v
 
-    @validator("rank")
-    @classmethod
-    def rank_and_grade_may_not_given_together(cls, v, values, **kwargs):
-        if "grade" in values:
-            if values["grade"] is not None and v is not None:
-                raise ValueError("grade and rank may not given together.")
-        if v is None and values["grade"] is None:
+    @model_validator(mode="after")
+    def rank_and_grade_may_not_given_together(self):
+        if self.grade and self.rank:
+            raise ValueError("grade and rank may not given together.")
+        if self.grade is None and self.rank is None:
             raise ValueError("grade or rank may given.")
 
-        if v is not None:
-            if not 1 <= v <= 7:
+        if self.rank:
+            if not 1 <= self.rank <= 7:
                 raise ValueError("rank may in range 1~7")
 
-        return v
+        return self
 
     def get_grade(self) -> int:
         if self.grade:
@@ -79,7 +77,7 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
     exceptional_enhancement: Optional[ExceptionalEnhancement] = None
 
     def build(self) -> Gear:
-        gear_stat = self.meta.base_stat.copy()
+        gear_stat = self.meta.base_stat.model_copy()
 
         # Apply spell trace and scroll, starforce
         spell_trace_and_scoll_stat = sum(

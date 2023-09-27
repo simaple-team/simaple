@@ -37,7 +37,7 @@ def fixture_dsl_test_setting():
 
 def test_dsl(dsl_list: list[str], dsl_test_setting: SimulationSetting) -> None:
     container = SimulationContainer()
-    container.config.from_pydantic(dsl_test_setting)
+    container.config.from_dict(dsl_test_setting.model_dump())
 
     test_client = container.client()
     environment = test_client.environment

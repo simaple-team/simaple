@@ -30,7 +30,7 @@ def ether_state(
     ether: AdeleEtherComponent,
     dynamics: Dynamics,
 ):
-    return EtherState.parse_obj(
+    return EtherState.model_validate(
         {
             **ether.get_default_state(),
             "restore_lasting": RestoreLasting(time_left=0, ether_multiplier=80),

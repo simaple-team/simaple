@@ -18,7 +18,7 @@ class VSkillImprovementPatch(Patch):
                 "VSkillImprovementPatch assigned but no `v_improvement`."
             ) from e
 
-        previous_modifier = Stat.parse_obj(output.get("modifier", {}))
+        previous_modifier = Stat.model_validate(output.get("modifier", {}))
         scale = self.improvements.get(output["name"], 0)
         new_modifier = previous_modifier + Stat(
             final_damage_multiplier=improvement_scale * scale

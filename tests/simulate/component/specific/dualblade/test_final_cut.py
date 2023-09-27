@@ -22,7 +22,7 @@ def fixture_final_cut():
 
 @pytest.fixture(name="final_cut_state")
 def fixture_final_cut_state(final_cut: FinalCutComponent, dynamics: Dynamics):
-    return FinalCutState.parse_obj(
+    return FinalCutState.model_validate(
         {**final_cut.get_default_state(), "dynamics": dynamics}
     )
 

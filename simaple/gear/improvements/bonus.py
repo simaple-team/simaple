@@ -31,7 +31,7 @@ class SingleStatBonus(Bonus):
         basis = self.calculate_basis(meta.req_level)
         increment = basis * self.grade
 
-        return Stat.parse_obj({self.stat_type.value: increment})
+        return Stat.model_validate({self.stat_type.value: increment})
 
 
 class DualStatBonus(Bonus):
@@ -47,7 +47,7 @@ class DualStatBonus(Bonus):
         basis = self.calculate_basis(meta.req_level)
         increment = basis * self.grade
 
-        return Stat.parse_obj(
+        return Stat.model_validate(
             {first_type.value: increment, second_type.value: increment}
         )
 
@@ -75,7 +75,9 @@ class ResourcePointBonus(Bonus):
 
     def calculate_improvement(self, meta: GearMeta, _: Optional[Stat] = None) -> Stat:
         self.validate_grade(meta)
-        return Stat.parse_obj({self.stat_type: meta.req_level // 10 * 30 * self.grade})
+        return Stat.model_validate(
+            {self.stat_type: meta.req_level // 10 * 30 * self.grade}
+        )
 
 
 class AttackTypeBonus(Bonus):
@@ -150,7 +152,7 @@ class AttackTypeBonus(Bonus):
         else:
             value = self.grade
 
-        return Stat.parse_obj({self.attack_type.value: value})
+        return Stat.model_validate({self.attack_type.value: value})
 
 
 def bonus_key_func(bonus: Bonus):

@@ -17,4 +17,4 @@ class ExceptionalEnhancement(GearImprovement):
                 "Given gear cannot improved by exceptional parts"
             )
 
-        return self.stat.copy()
+        return self.stat.model_copy()

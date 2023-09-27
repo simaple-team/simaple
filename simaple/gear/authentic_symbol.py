@@ -12,7 +12,7 @@ class AuthenticSymbol(BaseModel):
             return Stat()
 
         if self.stat_type.value in ["INT", "LUK", "DEX", "STR"]:
-            return Stat.parse_obj(
+            return Stat.model_validate(
                 {self.stat_type.value + "_static": (self.level * 2 + 3) * 100}
             )
 

@@ -55,12 +55,11 @@ class StringPatch(DFSTraversePatch):
     as_is: list[str]
     to_be: list[str]
 
-    @pydantic.validator("to_be")
-    @classmethod
-    def to_be_and_as_is_must_have_same_length(cls, v, values, **kwargs):
-        if len(v) != len(values["as_is"]):
+    @pydantic.model_validator(mode="after")
+    def to_be_and_as_is_must_have_same_length(self):
+        if len(self.to_be) != len(self.as_is):
             raise ValueError("As-is and To-be must be same length.")
-        return v
+        return self
 
     def patch_value(self, value, origin: dict):
         return self.translate(value)

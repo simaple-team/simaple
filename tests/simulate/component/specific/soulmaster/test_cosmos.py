@@ -26,7 +26,7 @@ def fixture_cosmos_state(
     cosmos: Cosmos,
     dynamics: Dynamics,
 ):
-    return CosmosState.parse_obj(
+    return CosmosState.model_validate(
         {
             **cosmos.get_default_state(),
             "dynamics": dynamics,

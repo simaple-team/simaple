@@ -246,7 +246,7 @@ def predicate_attack_factor(
 def attack_factor_to_stat(factor: PowerFactor, damage_logic: DamageLogic) -> Stat:
     damage_multiplier, attack_multpilier, attack = factor
 
-    return Stat.parse_obj(
+    return Stat.model_validate(
         {
             damage_logic.get_attack_type().value: attack,
             damage_logic.get_attack_type().value + "_multiplier": attack_multpilier,

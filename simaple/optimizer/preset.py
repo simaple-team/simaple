@@ -163,7 +163,7 @@ class PresetOptimizer(BaseModel):
         """
         Return optimal preset, based on given gearset ``gearset_prototype``.
         """
-        gearset = gearset_prototype.copy()
+        gearset = gearset_prototype.model_copy()
 
         preset = Preset(
             gearset=gearset,
