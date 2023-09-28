@@ -73,4 +73,4 @@ def uow():
 
 @pytest.fixture
 def minimal_conf(simulator_configuration):
-    return MinimalSimulatorConfiguration.parse_obj(simulator_configuration)
+    return MinimalSimulatorConfiguration.model_validate(simulator_configuration)

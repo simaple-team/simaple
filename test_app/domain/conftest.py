@@ -6,7 +6,7 @@ from simaple.app.domain.simulator_configuration import MinimalSimulatorConfigura
 
 @pytest.fixture(name="minimal_simulator_configuration")
 def fixture_minimal_simulator_configuration(simulator_configuration):
-    return MinimalSimulatorConfiguration.parse_obj(simulator_configuration)
+    return MinimalSimulatorConfiguration.model_validate(simulator_configuration)
 
 
 @pytest.fixture
