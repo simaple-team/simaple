@@ -3,10 +3,10 @@ from __future__ import annotations
 import re
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
+from dataclasses import dataclass
 from typing import Any, Callable, Optional, Union, cast
 
 from pydantic import BaseModel
-from dataclasses import dataclass
 
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
@@ -293,7 +293,7 @@ class Client:
         self._previous_callbacks = []
 
     def export_previous_callbacks(self) -> list[EventCallback]:
-        return [(x.copy(), y.copy()) for x, y in self._previous_callbacks]
+        return [(x, y) for x, y in self._previous_callbacks]
 
     def restore_previous_callbacks(self, callbacks: list[EventCallback]) -> None:
         self._previous_callbacks = callbacks
