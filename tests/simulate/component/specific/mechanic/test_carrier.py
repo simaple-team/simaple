@@ -31,7 +31,7 @@ def fixture_meca_carrier():
 def meca_carrier_state(
     meca_carrier: MecaCarrier, dynamics: Dynamics, robot_mastery: RobotMastery
 ):
-    return MecaCarrierState.parse_obj(
+    return MecaCarrierState.model_validate(
         {
             **meca_carrier.get_default_state(),
             "dynamics": dynamics,

@@ -23,7 +23,7 @@ def fixture_infinity_component():
 
 @pytest.fixture(name="infinity_state")
 def fixture_infinity_state(infinity_component: Infinity, dynamics: Dynamics):
-    return InfinityState.parse_obj(
+    return InfinityState.model_validate(
         {**infinity_component.get_default_state(), "dynamics": dynamics}
     )
 

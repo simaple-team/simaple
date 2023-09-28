@@ -39,7 +39,7 @@ class TestMultipleOption:
         dynamics: Dynamics,
         robot_mastery: RobotMastery,
     ):
-        return MultipleOptionState.parse_obj(
+        return MultipleOptionState.model_validate(
             {
                 **multiple_option.get_default_state(),
                 "dynamics": dynamics,

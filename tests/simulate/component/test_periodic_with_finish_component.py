@@ -31,7 +31,7 @@ def periodic_damage_state(
     periodic_damage_component: PeriodicWithFinishSkillComponent,
     dynamics: Dynamics,
 ):
-    return PeriodicWithFinishState.parse_obj(
+    return PeriodicWithFinishState.model_validate(
         {
             **periodic_damage_component.get_default_state(),
             "dynamics": dynamics,

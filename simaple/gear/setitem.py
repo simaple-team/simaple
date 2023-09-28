@@ -5,7 +5,7 @@ import os
 from abc import ABCMeta, abstractmethod
 from typing import Iterable, List, Optional, Set, Tuple, TypedDict
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from simaple.core import Stat
 from simaple.gear.gear import Gear
@@ -20,8 +20,8 @@ class SetItem(BaseModel):
     id: int = 0
     name: str
     joker_possible: bool = False
-    gears: List[Gear] = Field(default_factory=list)
-    effects: List[Stat] = Field(default_factory=list)
+    gears: list[Gear] = []
+    effects: list[Stat] = []
 
     def get_effect(self, count) -> Stat:
         return sum(

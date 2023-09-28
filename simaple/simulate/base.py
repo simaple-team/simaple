@@ -5,7 +5,7 @@ import re
 from abc import ABCMeta, abstractmethod
 from typing import Any, Callable, Optional, Union, cast
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import BaseModel, Field
 
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
@@ -27,9 +27,6 @@ class Action(BaseModel):
     method: str
     payload: Optional[Union[int, str, float, dict]] = None
 
-    class Config:
-        extra = Extra.forbid
-
     @property
     def signature(self) -> str:
         if len(self.method) == 0:
@@ -50,12 +47,9 @@ class Event(BaseModel):
 
     name: str
     method: str = ""
-    tag: Optional[str]
+    tag: Optional[str] = None
     handler: Optional[str] = None
     payload: dict = Field(default_factory=dict)
-
-    class Config:
-        extra = Extra.forbid
 
     @property
     def signature(self) -> str:
@@ -109,7 +103,7 @@ class ConcreteStore(Store):
             raise ValueError(
                 f"No entity exists: {name}. None-default only enabled for external-property binding. Maybe missing global proeperty installation?"
             )
-        return value.copy()
+        return value.model_copy()
 
     def local(self, address):
         return self
@@ -124,12 +118,12 @@ class ConcreteStore(Store):
         entity_clsname = entity.__class__.__name__
         return {
             "cls": entity_clsname,
-            "payload": entity.dict(),
+            "payload": entity.model_dump(),
         }
 
     def _load_entity(self, saved_entity_dict: dict) -> Entity:
         clsname, payload = saved_entity_dict["cls"], saved_entity_dict["payload"]
-        return cast(Entity, get_class(clsname, kind="Entity").parse_obj(payload))
+        return cast(Entity, get_class(clsname, kind="Entity").model_validate(payload))
 
 
 class AddressedStore(Store):

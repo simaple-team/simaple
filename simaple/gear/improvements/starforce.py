@@ -141,7 +141,7 @@ class AmazingEnhancement(Enhancement):
 
         for prop_type in (StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK):
             if ref_stat.get(prop_type) > 0:
-                improvement_stat += Stat.parse_obj(
+                improvement_stat += Stat.model_validate(
                     {prop_type.value: stat_enhancement_increment}
                 )
 
@@ -151,11 +151,11 @@ class AmazingEnhancement(Enhancement):
 
         for att_type in (StatProps.attack_power, StatProps.magic_attack):
             if ref_stat.get(att_type) > 0:
-                improvement_stat += Stat.parse_obj(
+                improvement_stat += Stat.model_validate(
                     {att_type.value: att_enhancement_increment}
                 )
                 if meta.type.is_improved_as_weapon():
-                    improvement_stat += Stat.parse_obj(
+                    improvement_stat += Stat.model_validate(
                         {att_type.value: ref_stat.get(att_type) // 50 + 1}
                     )
 

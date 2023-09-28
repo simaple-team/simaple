@@ -23,7 +23,9 @@ class PassiveSkill(BaseModel, metaclass=TaggedNamespacedABCMeta("PassiveSkill"))
     name: str
 
     def get_extended_stat(self) -> ExtendedStat:
-        return ExtendedStat(stat=self.stat.copy(), action_stat=self.action_stat.copy())
+        return ExtendedStat(
+            stat=self.stat.model_copy(), action_stat=self.action_stat.model_copy()
+        )
 
 
 def get_patches(

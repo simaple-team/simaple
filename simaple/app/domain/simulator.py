@@ -19,8 +19,7 @@ class Simulator(pydantic.BaseModel):
     conf: SimulatorConfiguration  # polymorphic
     history: History
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = pydantic.ConfigDict(arbitrary_types_allowed=True)
 
     @classmethod
     def create_from_config(cls, conf: SimulatorConfiguration) -> Simulator:

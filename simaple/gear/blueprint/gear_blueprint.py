@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
-from typing import List, Optional, cast
+from typing import List, Optional
 
-from pydantic import BaseModel, Extra, Field, validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from simaple.core import Stat
 from simaple.gear.blueprint.potential_blueprint import (
@@ -16,13 +16,9 @@ from simaple.gear.improvements.exceptional_enhancement import ExceptionalEnhance
 from simaple.gear.improvements.scroll import Scroll
 from simaple.gear.improvements.spell_trace import SpellTrace
 from simaple.gear.improvements.starforce import Starforce
-from simaple.gear.potential import AdditionalPotential
 
 
 class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):
-    class Config:
-        extra = Extra.forbid
-
     @abstractmethod
     def build(self) -> Gear:
         ...
@@ -30,10 +26,10 @@ class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):
 
 class BonusSpec(BaseModel):
     bonus_type: BonusType
-    grade: Optional[int]
-    rank: Optional[int]
+    grade: Optional[int] = None
+    rank: Optional[int] = None
 
-    @validator("grade")
+    @field_validator("grade")
     @classmethod
     def rank_may_in_proper_range(cls, v):
         if v is not None:
@@ -42,20 +38,18 @@ class BonusSpec(BaseModel):
 
         return v
 
-    @validator("rank")
-    @classmethod
-    def rank_and_grade_may_not_given_together(cls, v, values, **kwargs):
-        if "grade" in values:
-            if values["grade"] is not None and v is not None:
-                raise ValueError("grade and rank may not given together.")
-        if v is None and values["grade"] is None:
+    @model_validator(mode="after")
+    def rank_and_grade_may_not_given_together(self):
+        if self.grade and self.rank:
+            raise ValueError("grade and rank may not given together.")
+        if self.grade is None and self.rank is None:
             raise ValueError("grade or rank may given.")
 
-        if v is not None:
-            if not 1 <= v <= 7:
+        if self.rank:
+            if not 1 <= self.rank <= 7:
                 raise ValueError("rank may in range 1~7")
 
-        return v
+        return self
 
     def get_grade(self) -> int:
         if self.grade:
@@ -73,16 +67,16 @@ def _get_bonus_from_spec(bonus_factory: BonusFactory, bonus_spec: BonusSpec):
 
 class GeneralizedGearBlueprint(AbstractGearBlueprint):
     meta: GearMeta
-    spell_traces: List[SpellTrace] = Field(default_factory=list)
-    scrolls: List[Scroll] = Field(default_factory=list)
+    spell_traces: List[SpellTrace] = []
+    scrolls: List[Scroll] = []
     starforce: Starforce
-    bonuses: List[BonusSpec] = Field(default_factory=list)
+    bonuses: List[BonusSpec] = []
     potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
     additional_potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
     exceptional_enhancement: Optional[ExceptionalEnhancement] = None
 
     def build(self) -> Gear:
-        gear_stat = self.meta.base_stat.copy()
+        gear_stat = self.meta.base_stat.model_copy()
 
         # Apply spell trace and scroll, starforce
         spell_trace_and_scoll_stat = sum(
@@ -126,15 +120,12 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
                     is_additional=False, is_weapon=self.meta.type.is_weaponry()
                 ),
             ),
-            additional_potential=cast(
-                AdditionalPotential,
-                template_to_potential(
-                    self.additional_potential,
-                    potential_table,
-                    self.meta.req_level,
-                    PotentialType.get_type(
-                        is_additional=True, is_weapon=self.meta.type.is_weaponry()
-                    ),
+            additional_potential=template_to_potential(
+                self.additional_potential,
+                potential_table,
+                self.meta.req_level,
+                PotentialType.get_type(
+                    is_additional=True, is_weapon=self.meta.type.is_weaponry()
                 ),
             ),
         )
@@ -145,7 +136,7 @@ class PracticalGearBlueprint(AbstractGearBlueprint):
     spell_trace: Optional[SpellTrace] = None
     scroll: Optional[Scroll] = None
     star: int = 0
-    bonuses: List[BonusSpec] = Field(default_factory=list)
+    bonuses: List[BonusSpec] = []
     potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
     additional_potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
 

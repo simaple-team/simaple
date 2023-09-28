@@ -106,7 +106,9 @@ class StarforceStatIncrementProvider(StarforceIncrementProvider):
             if prop_type in target_stats or (
                 target_star > 15 and current_gear_stat.get(prop_type) > 0
             ):
-                increment += Stat.parse_obj({prop_type.value: stat_starforce_increment})
+                increment += Stat.model_validate(
+                    {prop_type.value: stat_starforce_increment}
+                )
 
         return increment
 

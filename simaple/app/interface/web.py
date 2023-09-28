@@ -25,7 +25,7 @@ class SimapleWeb(fastapi.FastAPI):
         super().__init__()
 
         container = WebContainer()
-        container.config.from_pydantic(WebSetting())
+        container.config.from_dict(WebSetting().model_dump())
         container.wire(
             packages=[statistics, workspace, snapshot, component_spec, skill]
         )

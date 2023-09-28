@@ -2,7 +2,7 @@ import enum
 from abc import ABCMeta, abstractmethod
 from typing import List, Union
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import BaseModel
 
 from simaple.core import ActionStat, ExtendedStat, LevelStat, Stat
 
@@ -38,10 +38,7 @@ class PotentialInterface(BaseModel, metaclass=ABCMeta):
 
 
 class AbstractPotential(PotentialInterface):
-    class Config:
-        extra = Extra.forbid
-
-    options: List[Union[Stat, ActionStat, LevelStat]] = Field(default_factory=list)
+    options: List[Union[Stat, ActionStat, LevelStat]] = []
 
     def get_stat(self, level: int = 0) -> Stat:
         stat = Stat()

@@ -3,8 +3,7 @@ import inspect
 from abc import ABCMeta, abstractmethod
 from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union, cast
 
-from pydantic import BaseModel, Field
-from pydantic.error_wrappers import ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from simaple.simulate.base import Action, Dispatcher, Entity, Environment, Event, Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
@@ -26,7 +25,7 @@ class ReducerState(BaseModel):
         raise NotImplementedError("copy() is disabled in ReducerState")
 
     def deepcopy(self: T) -> T:
-        return super().copy(deep=True)  # type: ignore
+        return super().model_copy(deep=True)  # type: ignore
 
 
 class ComponentMethodWrapper:
@@ -60,7 +59,7 @@ class ComponentMethodWrapper:
         if not isinstance(payload, dict) or self._payload_type is None:
             return payload
 
-        return self._payload_type.parse_obj(payload)
+        return self._payload_type.model_validate(payload)
 
     def get_state_type(self):
         return self._state_type
@@ -79,8 +78,7 @@ def view_method(func):
 
 
 class ActionRouter(BaseModel, metaclass=ABCMeta):
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @abstractmethod
     def is_enabled_action(self, action: Action):
@@ -224,7 +222,7 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
     ) -> list[Event]:
         tagged_events = []
         for event in events:
-            tagged_event = event.copy()
+            tagged_event = event.model_copy()
             tagged_event.method = method_name
             if tagged_event.tag is None:
                 tagged_event.tag = method_name
@@ -324,10 +322,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     )
     binds: dict[str, str] = Field(default_factory=dict)
 
-    class Config:
-        # extra = Extra.forbid
-        arbitrary_types_allowed = True
-        underscore_attrs_are_private = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @abstractmethod
     def get_default_state(self) -> dict[str, Entity]:

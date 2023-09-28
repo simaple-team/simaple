@@ -26,7 +26,7 @@ def fixture_elysion_state(
     elysion: Elysion,
     dynamics: Dynamics,
 ):
-    return ElysionState.parse_obj(
+    return ElysionState.model_validate(
         {
             **elysion.get_default_state(),
             "dynamics": dynamics,

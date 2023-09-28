@@ -25,10 +25,7 @@ class Promise(pydantic.BaseModel, metaclass=ABCMeta):
     retry_when_html_error: int = 2
     retry_await: float = 0.3
 
-    reserved_path: Optional[str]
-
-    class Config:
-        underscore_attrs_are_private = True
+    reserved_path: Optional[str] = None
 
     def then(self, promises: Dict[str, "Promise"]):
         self._reserved_promise.update(promises)

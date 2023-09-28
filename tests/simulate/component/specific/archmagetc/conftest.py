@@ -50,4 +50,4 @@ def frost_effect():
 
 @pytest.fixture
 def frost_effect_state(frost_effect: FrostEffect):
-    return FrostEffectState.parse_obj(frost_effect.get_default_state())
+    return FrostEffectState.model_validate(frost_effect.get_default_state())

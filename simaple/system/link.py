@@ -18,7 +18,7 @@ class LinkSkill(BaseModel):
     def get_stat(self, size: int) -> Stat:
         if size == 0:
             return Stat()
-        return self.options[size - 1].copy()
+        return self.options[size - 1].model_copy()
 
     def get_max_level(self) -> int:
         return len(self.options)

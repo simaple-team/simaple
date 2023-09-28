@@ -25,7 +25,7 @@ def fixture_cosmic_burst_state(
     cosmic_burst: CosmicBurst,
     dynamics: Dynamics,
 ):
-    return CosmicBurstState.parse_obj(
+    return CosmicBurstState.model_validate(
         {
             **cosmic_burst.get_default_state(),
             "dynamics": dynamics,

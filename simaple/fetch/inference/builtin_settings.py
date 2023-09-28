@@ -20,9 +20,9 @@ def get_from_file(filename) -> tuple[JobType, JobSetting]:
         raw_setting = yaml.safe_load(f)
 
     return JobType(raw_setting["jobtype"]), {
-        "passive": Stat.parse_obj(raw_setting["passive"]),
+        "passive": Stat.model_validate(raw_setting["passive"]),
         "candidates": [
-            [Stat.parse_obj(v) if v else Stat() for v in row]
+            [Stat.model_validate(v) if v else Stat() for v in row]
             for row in raw_setting["candidates"]
         ],
     }

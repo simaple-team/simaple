@@ -3,7 +3,7 @@ from __future__ import annotations
 import enum
 from typing import Union
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import BaseModel, Field
 
 
 class BaseStatType(enum.Enum):
@@ -100,9 +100,6 @@ class Stat(BaseModel):
     MMP_multiplier: float = 0.0
 
     elemental_resistance: float = 0.0
-
-    class Config:
-        extra = Extra.forbid
 
     @classmethod
     def all_stat(cls, v) -> Stat:
@@ -284,7 +281,7 @@ class Stat(BaseModel):
         return output
 
     def short_dict(self) -> dict[str, float]:
-        long_dict = self.dict()
+        long_dict = self.model_dump()
         return {k: v for k, v in long_dict.items() if v != 0}
 
 
@@ -293,9 +290,6 @@ class ActionStat(BaseModel):
     summon_duration: float = 0.0
     buff_duration: float = 0.0
     cooltime_reduce_rate: float = 0.0
-
-    class Config:
-        extra = Extra.forbid
 
     def __add__(self, arg: ActionStat) -> ActionStat:
         return ActionStat(
@@ -331,9 +325,6 @@ class LevelStat(BaseModel):
 
     attack_power: float = 0.0
     magic_attack: float = 0.0
-
-    class Config:
-        extra = Extra.forbid
 
     def get_stat(self, level: int) -> Stat:
         multiplier = level // 10

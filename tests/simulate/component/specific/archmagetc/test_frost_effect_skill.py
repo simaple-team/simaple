@@ -32,7 +32,7 @@ def thunder_attack_skill_state(
     frost_effect_state: FrostEffectState,
     jupyter_thunder_periodic: Periodic,
 ):
-    return ThunderAttackSkillState.parse_obj(
+    return ThunderAttackSkillState.model_validate(
         {
             **thunder_attack_skill.get_default_state(),
             "dynamics": dynamics,
@@ -61,7 +61,7 @@ def test_with_no_stack(
     damage_events = [e for e in events if e.tag == Tag.DAMAGE]
 
     # then
-    assert damage_events[0].payload["modifier"] == Stat()
+    assert damage_events[0].payload["modifier"] == Stat().model_dump()
 
 
 def test_with_some_stack(
@@ -79,4 +79,7 @@ def test_with_some_stack(
 
     # then
     damage_events = [e for e in events if e.tag == Tag.DAMAGE]
-    assert damage_events[0].payload["modifier"] == Stat(damage_multiplier=12 * 3)
+    assert (
+        damage_events[0].payload["modifier"]
+        == Stat(damage_multiplier=12 * 3).model_dump()
+    )

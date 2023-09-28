@@ -63,7 +63,7 @@ class StatIncreasePassiveHyperskill(PassiveHyperskill):
     increment: Stat
 
     def modify(self, origin: dict) -> dict:
-        original_stat = Stat.parse_obj(origin.get(self.key, Stat()))
+        original_stat = Stat.model_validate(origin.get(self.key, Stat()))
         modified_stat = original_stat + self.increment
 
         modified = copy.deepcopy(origin)

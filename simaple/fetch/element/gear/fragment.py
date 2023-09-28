@@ -1,12 +1,11 @@
 import bs4
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class ItemFragment(BaseModel):
-    class Config:
-        arbitrary_types_allowed = True
 
     html: bs4.element.Tag
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @property
     def name(self) -> str:

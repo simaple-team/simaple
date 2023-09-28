@@ -24,7 +24,7 @@ def buff_component():
 
 @pytest.fixture
 def buff_state(buff_component: StackableBuffSkillComponent, dynamics: Dynamics):
-    return StackableBuffSkillState.parse_obj(
+    return StackableBuffSkillState.model_validate(
         {**buff_component.get_default_state(), "dynamics": dynamics}
     )
 

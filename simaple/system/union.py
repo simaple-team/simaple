@@ -17,19 +17,19 @@ def empty_action_stats():
 
 class UnionBlock(BaseModel):
     job: JobType
-    options: List[Stat] = Field(default_factory=empty_options)
-    action_stat_options: List[ActionStat] = Field(default_factory=empty_action_stats)
+    options: list[Stat] = empty_options()
+    action_stat_options: list[ActionStat] = empty_action_stats()
 
     def get_stat(self, size: int) -> Stat:
         if size == 0:
             return Stat()
-        return self.options[size - 1].copy()
+        return self.options[size - 1].model_copy()
 
     def get_action_stat(self, size: int) -> ActionStat:
         if self.action_stat_options is None or size == 0:
             return ActionStat()
 
-        return self.action_stat_options[size - 1].copy()
+        return self.action_stat_options[size - 1].model_copy()
 
 
 def get_all_blocks():

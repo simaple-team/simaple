@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-from typing import List
-
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from simaple.core import Stat
 
@@ -23,25 +21,25 @@ HYPERSTAT_BASIS = {
 HYPERSTAT_COST = [1, 2, 4, 8, 10, 15, 20, 25, 30, 35, 50, 65, 80, 95, 110, 999999]
 
 
-def get_hyperstat_lists() -> List[List[Stat]]:
+def get_hyperstat_lists() -> list[list[Stat]]:
     return [
-        [Stat.parse_obj({name: value}) for value in value_list]
+        [Stat.model_validate({name: value}) for value in value_list]
         for name, value_list in HYPERSTAT_BASIS.items()
     ]
 
 
-def get_empty_hyperstat_levels() -> List[int]:
+def get_empty_hyperstat_levels() -> list[int]:
     return [0 for i in HYPERSTAT_BASIS]
 
 
-def get_hyperstat_cost() -> List[int]:
+def get_hyperstat_cost() -> list[int]:
     return list(HYPERSTAT_COST)
 
 
 class Hyperstat(BaseModel):
-    options: List[List[Stat]] = Field(default_factory=get_hyperstat_lists)
-    cost: List[int] = Field(default_factory=get_hyperstat_cost)
-    levels: List[int] = Field(default_factory=get_empty_hyperstat_levels)
+    options: list[list[Stat]] = get_hyperstat_lists()
+    cost: list[int] = get_hyperstat_cost()
+    levels: list[int] = get_empty_hyperstat_levels()
 
     @classmethod
     def get_maximum_cost_from_level(cls, character_level: int) -> int:
@@ -80,7 +78,7 @@ class Hyperstat(BaseModel):
             [option[lv] for option, lv in zip(self.options, self.levels)], Stat()
         )
 
-    def get_level_rearranged(self, levels: List[int]) -> Hyperstat:
+    def get_level_rearranged(self, levels: list[int]) -> Hyperstat:
         assert len(levels) == self.length()
 
         return Hyperstat(

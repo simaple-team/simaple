@@ -16,7 +16,7 @@ from simaple.simulate.global_property import Dynamics
 
 
 class DivineMark(Entity):
-    advantage: Optional[Stat]
+    advantage: Optional[Stat] = None
 
     def mark(self, advantage: Stat):
         self.advantage = advantage
@@ -46,7 +46,7 @@ class DivineAttackSkillComponent(
     hit: float
     cooldown_duration: float
     delay: float
-    synergy: Optional[Stat]
+    synergy: Optional[Stat] = None
 
     def get_default_state(self):
         return {
@@ -109,7 +109,7 @@ class DivineMinion(
     lasting_duration: float
 
     mark_advantage: Stat
-    stat: Optional[Stat]
+    stat: Optional[Stat] = None
 
     def get_default_state(self):
         if self.name == "바하뮤트":

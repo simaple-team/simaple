@@ -37,7 +37,7 @@ def test_dot(elapse_time, count):
     emits = dot.elapse(elapse_time)
 
     if count == 0:
-        assert emits == {}
+        assert not emits
     else:
         assert emits == {("dot0", 300): count}
 

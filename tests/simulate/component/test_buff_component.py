@@ -20,7 +20,7 @@ def buff_component():
 
 @pytest.fixture
 def buff_state(buff_component: BuffSkillComponent, dynamics: Dynamics):
-    return BuffSkillState.parse_obj(
+    return BuffSkillState.model_validate(
         {**buff_component.get_default_state(), "dynamics": dynamics}
     )
 

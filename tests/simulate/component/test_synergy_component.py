@@ -28,7 +28,7 @@ def synergy_component(synergy: Stat):
 
 @pytest.fixture
 def synergy_state(synergy_component: SynergySkillComponent, dynamics: Dynamics):
-    return SynergyState.parse_obj(
+    return SynergyState.model_validate(
         {**synergy_component.get_default_state(), "dynamics": dynamics}
     )
 

@@ -63,7 +63,7 @@ class NamedEventProvider(EventProvider):
             payload={
                 "damage": damage,
                 "hit": hit,
-                "modifier": total_modifier.dict() if total_modifier else None,
+                "modifier": total_modifier.model_dump() if total_modifier else None,
             },
         )
 

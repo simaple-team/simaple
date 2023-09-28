@@ -16,7 +16,7 @@ class DomElementProvider(BaseModel, metaclass=ABCMeta):
 
 class StatKeywordProvider(DomElementProvider):
     def get_value(self, fragment: ItemFragment) -> Dict[StatType, Any]:
-        sum_, base, bonus, increment = self._get_value(fragment)
+        sum_, base, bonus, increment = self._get_value_from_fragment(fragment)
         return {
             StatType.sum: {fragment.name: sum_},
             StatType.base: {fragment.name: base},
@@ -24,7 +24,9 @@ class StatKeywordProvider(DomElementProvider):
             StatType.increment: {fragment.name: increment},
         }
 
-    def _get_value(self, fragment: ItemFragment) -> Tuple[int, int, int, int]:
+    def _get_value_from_fragment(
+        self, fragment: ItemFragment
+    ) -> Tuple[int, int, int, int]:
         upgradable = re.compile(r"\+([0-9]+) \(([0-9]+) \+ ([0-9]+) \+ ([0-9]+)\)")
         match = upgradable.match(fragment.text)
         if match is not None:
@@ -45,7 +47,7 @@ class StatKeywordProvider(DomElementProvider):
 
 class MultiplierProvider(DomElementProvider):
     def get_value(self, fragment: ItemFragment) -> Dict[StatType, Any]:
-        sum_, base, bonus, increment = self._get_value(fragment)
+        sum_, base, bonus, increment = self._get_value_from_fragment(fragment)
 
         name = fragment.name
         if name == "올스탯":
@@ -58,7 +60,9 @@ class MultiplierProvider(DomElementProvider):
             StatType.increment: {name: increment},
         }
 
-    def _get_value(self, fragment: ItemFragment) -> Tuple[int, int, int, int]:
+    def _get_value_from_fragment(
+        self, fragment: ItemFragment
+    ) -> Tuple[int, int, int, int]:
         upgradable = re.compile(r"\+([0-9]+)% \(([0-9]+)% \+ ([0-9]+)%\)")
         match = upgradable.match(fragment.text)
         if match is not None:

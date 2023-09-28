@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple
+from typing import Optional, Tuple
 
 from pydantic import BaseModel, Field
 
@@ -14,8 +14,8 @@ from simaple.gear.slot_name import SlotName
 
 class GearSlot(BaseModel):
     name: SlotName
-    enabled_gear_types: List[GearType]
-    gear: Optional[Gear]
+    enabled_gear_types: list[GearType]
+    gear: Optional[Gear] = None
 
     def is_equipped(self):
         return self.gear is not None
@@ -87,16 +87,16 @@ def get_default_empty_slots():
 
 
 class Gearset(BaseModel):
-    arcane_symbols: List[ArcaneSymbol] = Field(default_factory=list)
-    authentic_symbols: List[AuthenticSymbol] = Field(default_factory=list)
+    arcane_symbols: list[ArcaneSymbol] = []
+    authentic_symbols: list[AuthenticSymbol] = []
     pet_equip: Stat = Field(default_factory=Stat)
     pet_set_option: Stat = Field(default_factory=Stat)
     cash_item_stat: Stat = Field(default_factory=Stat)
 
-    gear_slots: List[GearSlot] = Field(default_factory=get_default_empty_slots)
+    gear_slots: list[GearSlot] = get_default_empty_slots()
 
     title: Stat = Field(default_factory=Stat)
-    set_items: list[SetItem] = Field(default_factory=list)
+    set_items: list[SetItem] = []
     weapon_potential_tiers: Optional[
         tuple[
             list[PotentialTier],
@@ -121,10 +121,10 @@ class Gearset(BaseModel):
     def get_gears(self):
         return [slot.gear for slot in self.gear_slots if slot.gear is not None]
 
-    def set_arcane_symbols(self, arcane_symbols: List[ArcaneSymbol]):
+    def set_arcane_symbols(self, arcane_symbols: list[ArcaneSymbol]):
         self.arcane_symbols = list(arcane_symbols)
 
-    def set_authentic_symbols(self, authentic_symbols: List[AuthenticSymbol]):
+    def set_authentic_symbols(self, authentic_symbols: list[AuthenticSymbol]):
         self.authentic_symbols = list(authentic_symbols)
 
     def get_arcane_symbol_stat(self) -> Stat:
@@ -196,7 +196,7 @@ class Gearset(BaseModel):
 
         return True
 
-    def _get_eqiuppable_slots(self, gear) -> List[GearSlot]:
+    def _get_eqiuppable_slots(self, gear) -> list[GearSlot]:
         return [
             slot
             for slot in self.gear_slots

@@ -40,9 +40,6 @@ class DamageCalculator(pydantic.BaseModel):
     level_advantage: float = 1.0
     force_advantage: float = 1.0
 
-    class Config:
-        extra = "forbid"
-
     def get_damage(self, log: DamageLog):
         buffed_stat = self.character_spec + log.buff
         if log.tag == Tag.DAMAGE:

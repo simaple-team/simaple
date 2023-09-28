@@ -13,7 +13,7 @@ from simaple.data.skill import get_kms_spec_resource_path
 from simaple.spec.repository import DirectorySpecRepository
 
 
-class WebSetting(pydantic.BaseSettings):
+class WebSetting(pydantic.BaseModel):
     sqlite_url: str = "sqlite:///.sqlite.db"
     spec_file_path: str = pydantic.Field(default_factory=get_kms_spec_resource_path)
 

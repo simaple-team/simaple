@@ -32,7 +32,7 @@ from simaple.simulate.global_property import Dynamics
 
 class SkillComponent(Component):
     disable_validity: bool = False
-    modifier: Optional[Stat]
+    modifier: Optional[Stat] = None
     cooldown_duration: float
     delay: float
     id: str
@@ -51,7 +51,7 @@ class SkillComponent(Component):
 
     @view_method
     def info(self, _: ReducerState) -> ComponentInformation:
-        return cast(ComponentInformation, self.dict())
+        return cast(ComponentInformation, self.model_dump())
 
     def _get_cooldown_duration(self) -> float:
         return self.cooldown_duration

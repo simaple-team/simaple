@@ -22,7 +22,7 @@ class Spec(pydantic.BaseModel):
     version: str
     metadata: SpecMetadata
     data: dict[str, Any]
-    patch: Optional[list[str]]
+    patch: Optional[list[str]] = None
     ignore_overflowing_patch: bool = True
 
     def get_classname(self):

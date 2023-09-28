@@ -3,7 +3,7 @@ import os
 from typing import Optional, TypedDict
 
 import yaml
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from simaple.core.base import Stat
 from simaple.gear.potential import Potential, PotentialTier
@@ -90,7 +90,7 @@ class PotentialTierTable:
         effect = effect_list[self._get_effect_index(query["level"])]
         stat = effect[query["name"]]
 
-        return Stat.parse_obj(stat)
+        return Stat.model_validate(stat)
 
     def _get_effect_index(self, level: int) -> int:
         return int((level - 1) // 10)
@@ -126,12 +126,12 @@ def _global_load_kms_potential_table() -> PotentialTierTable:
 
 class PotentialField(BaseModel):
     name: PotentialFieldName
-    value: Optional[int]
-    tier: Optional[PotentialTier]
+    value: Optional[int] = None
+    tier: Optional[PotentialTier] = None
 
 
 class PotentialTemplate(BaseModel):
-    options: list[PotentialField] = Field(default_factory=list)
+    options: list[PotentialField] = []
 
 
 def field_to_value(

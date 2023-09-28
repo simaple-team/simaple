@@ -1,5 +1,6 @@
 import json
 import os
+from typing import cast
 
 import pydantic
 
@@ -9,35 +10,30 @@ from simaple.gear.gear_repository import GearRepository
 from simaple.spec.patch import DFSTraversePatch, KeywordExtendPatch, Patch, StringPatch
 
 
-def kms_item_alias():
+def kms_item_alias() -> dict[str, list[str]]:
     INTERPETER_RESOURCE_PATH = os.path.join(os.path.dirname(__file__), "resources")
     path = os.path.join(INTERPETER_RESOURCE_PATH, "item_name_alias.json")
 
     with open(path, encoding="utf-8") as f:
-        return json.load(f)
+        return cast(dict[str, list[str]], json.load(f))
 
 
-def kms_weapon_alias():
+def kms_weapon_alias() -> dict[str, dict[str, str]]:
     INTERPETER_RESOURCE_PATH = os.path.join(os.path.dirname(__file__), "resources")
     path = os.path.join(INTERPETER_RESOURCE_PATH, "weapon_name_alias.json")
 
     with open(path, encoding="utf-8") as f:
-        return json.load(f)
+        return cast(dict[str, dict[str, str]], json.load(f))
 
 
 class GearIdPatch(Patch):
     job_category: JobCategory
     job_type: JobType
-    item_name_alias: dict[str, list[str]] = pydantic.Field(
-        default_factory=kms_item_alias
-    )
-    weapon_name_alias: dict[str, dict[str, str]] = pydantic.Field(
-        default_factory=kms_weapon_alias
-    )
+    item_name_alias: dict[str, list[str]] = kms_item_alias()
+    weapon_name_alias: dict[str, dict[str, str]] = kms_weapon_alias()
     repository: GearRepository = pydantic.Field(default_factory=GearRepository)
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = pydantic.ConfigDict(arbitrary_types_allowed=True)
 
     def interpret_gear_id(self, name: str) -> str:
         if name in self.item_name_alias:
@@ -63,7 +59,7 @@ class GearIdPatch(Patch):
             else:
                 if k == "gear_id":
                     gear = self.repository.get_by_name(self.interpret_gear_id(v))
-                    interpreted["meta"] = gear.meta.dict()
+                    interpreted["meta"] = gear.meta.model_dump()
                 else:
                     interpreted[k] = v
 

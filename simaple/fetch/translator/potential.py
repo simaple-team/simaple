@@ -10,8 +10,7 @@ from simaple.gear.potential import Potential
 class PotentialTranslator(pydantic.BaseModel):
     patterns: list[tuple[re.Pattern, AbstractStatProvider]]
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = pydantic.ConfigDict(arbitrary_types_allowed=True)
 
     def translate(self, expressions: list[str]) -> Potential:
         return Potential(
