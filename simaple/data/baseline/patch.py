@@ -33,8 +33,7 @@ class GearIdPatch(Patch):
     weapon_name_alias: dict[str, dict[str, str]] = kms_weapon_alias()
     repository: GearRepository = pydantic.Field(default_factory=GearRepository)
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = pydantic.ConfigDict(arbitrary_types_allowed=True)
 
     def interpret_gear_id(self, name: str) -> str:
         if name in self.item_name_alias:

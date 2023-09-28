@@ -15,8 +15,7 @@ from simaple.gear.potential import AdditionalPotential
 class GearStatTranslator(pydantic.BaseModel):
     patterns: dict[str, AbstractStatProvider]
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = pydantic.ConfigDict(arbitrary_types_allowed=True)
 
     def translate(self, parsed_stat: dict[str, int]) -> Stat:
         stat = Stat()
@@ -51,8 +50,7 @@ class GearTranslator(pydantic.BaseModel):
     potential_translator: PotentialTranslator
     gear_repository: GearRepository
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = pydantic.ConfigDict(arbitrary_types_allowed=True)
 
     def translate(self, parsed: dict[str, Any]) -> Gear:
         gear_name: str = parsed["name"]

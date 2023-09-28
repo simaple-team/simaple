@@ -3,7 +3,7 @@ import inspect
 from abc import ABCMeta, abstractmethod
 from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union, cast
 
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from simaple.simulate.base import Action, Dispatcher, Entity, Environment, Event, Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
@@ -78,8 +78,7 @@ def view_method(func):
 
 
 class ActionRouter(BaseModel, metaclass=ABCMeta):
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @abstractmethod
     def is_enabled_action(self, action: Action):
@@ -323,8 +322,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     )
     binds: dict[str, str] = Field(default_factory=dict)
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @abstractmethod
     def get_default_state(self) -> dict[str, Entity]:

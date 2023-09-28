@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from simaple.core import ExtendedStat, Stat
 from simaple.gear.gear_type import GearType
 from simaple.gear.potential import AdditionalPotential, Potential
 
 
-class GearMeta(BaseModel):
+class GearMeta(BaseModel, frozen=True):
     id: int
     name: str
     base_stat: Stat
@@ -20,10 +20,6 @@ class GearMeta(BaseModel):
     joker_to_set_item: bool = False
     max_scroll_chance: int
     exceptional_enhancement: bool = False
-
-    class Config:
-        validate_assignment = True
-        frozen = True
 
     def show(self) -> str:
         job_string = (
@@ -51,9 +47,7 @@ class Gear(BaseModel):
     potential: Potential = Field(default_factory=Potential)
     additional_potential: Potential = Field(default_factory=Potential)
 
-    class Config:
-        validate_assignment = True
-        frozen = True
+    model_config = ConfigDict(validate_assignment=True, frozen=True)
 
     @classmethod
     def create_bare_gear(cls, meta: GearMeta) -> Gear:

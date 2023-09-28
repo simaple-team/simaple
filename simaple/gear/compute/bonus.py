@@ -174,8 +174,7 @@ class StatBonusCalculator(pydantic.BaseModel):
     )
     _grades: list[int] = pydantic.PrivateAttr(default_factory=list)
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = pydantic.ConfigDict(arbitrary_types_allowed=True)
 
     def compute(self, stat: Stat, gear: Gear, bonus_count_left: int) -> list[Bonus]:
         self._sdil_table = self.sdil_table_builder.build(gear)
@@ -297,8 +296,7 @@ class BonusCalculator(GearImprovementCalculator):
         default_factory=StatBonusCalculator
     )
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = pydantic.ConfigDict(arbitrary_types_allowed=True)
 
     def compute(self, stat: Stat, gear: Gear) -> list[Bonus]:
         # 환생의 불꽃 추가옵션 부여 확률이 높은 등급부터 계산
