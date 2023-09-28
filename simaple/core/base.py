@@ -3,7 +3,7 @@ from __future__ import annotations
 import enum
 from typing import Union
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import BaseModel, Field
 
 
 class BaseStatType(enum.Enum):

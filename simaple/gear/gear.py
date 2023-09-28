@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import BaseModel, Field
 
 from simaple.core import ExtendedStat, Stat
 from simaple.gear.gear_type import GearType

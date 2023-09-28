@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
-from typing import List, Optional, cast
+from typing import List, Optional
 
-from pydantic import BaseModel, Extra, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from simaple.core import Stat
 from simaple.gear.blueprint.potential_blueprint import (
@@ -16,7 +16,6 @@ from simaple.gear.improvements.exceptional_enhancement import ExceptionalEnhance
 from simaple.gear.improvements.scroll import Scroll
 from simaple.gear.improvements.spell_trace import SpellTrace
 from simaple.gear.improvements.starforce import Starforce
-from simaple.gear.potential import AdditionalPotential
 
 
 class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):
@@ -68,10 +67,10 @@ def _get_bonus_from_spec(bonus_factory: BonusFactory, bonus_spec: BonusSpec):
 
 class GeneralizedGearBlueprint(AbstractGearBlueprint):
     meta: GearMeta
-    spell_traces: List[SpellTrace] = Field(default_factory=list)
-    scrolls: List[Scroll] = Field(default_factory=list)
+    spell_traces: List[SpellTrace] = []
+    scrolls: List[Scroll] = []
     starforce: Starforce
-    bonuses: List[BonusSpec] = Field(default_factory=list)
+    bonuses: List[BonusSpec] = []
     potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
     additional_potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
     exceptional_enhancement: Optional[ExceptionalEnhancement] = None
@@ -121,15 +120,12 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
                     is_additional=False, is_weapon=self.meta.type.is_weaponry()
                 ),
             ),
-            additional_potential=cast(
-                AdditionalPotential,
-                template_to_potential(
-                    self.additional_potential,
-                    potential_table,
-                    self.meta.req_level,
-                    PotentialType.get_type(
-                        is_additional=True, is_weapon=self.meta.type.is_weaponry()
-                    ),
+            additional_potential=template_to_potential(
+                self.additional_potential,
+                potential_table,
+                self.meta.req_level,
+                PotentialType.get_type(
+                    is_additional=True, is_weapon=self.meta.type.is_weaponry()
                 ),
             ),
         )
@@ -140,7 +136,7 @@ class PracticalGearBlueprint(AbstractGearBlueprint):
     spell_trace: Optional[SpellTrace] = None
     scroll: Optional[Scroll] = None
     star: int = 0
-    bonuses: List[BonusSpec] = Field(default_factory=list)
+    bonuses: List[BonusSpec] = []
     potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
     additional_potential: PotentialTemplate = Field(default_factory=PotentialTemplate)
 

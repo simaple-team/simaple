@@ -4,7 +4,6 @@ from typing import Callable
 
 import pydantic
 from dependency_injector import containers, providers
-from pydantic_settings import BaseSettings
 
 from simaple.core import ActionStat, ExtendedStat, JobCategory, JobType, Stat
 from simaple.data.ability import get_best_ability

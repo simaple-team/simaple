@@ -17,8 +17,8 @@ def empty_action_stats():
 
 class UnionBlock(BaseModel):
     job: JobType
-    options: List[Stat] = Field(default_factory=empty_options)
-    action_stat_options: List[ActionStat] = Field(default_factory=empty_action_stats)
+    options: list[Stat] = empty_options()
+    action_stat_options: list[ActionStat] = empty_action_stats()
 
     def get_stat(self, size: int) -> Stat:
         if size == 0:

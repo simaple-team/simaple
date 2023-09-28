@@ -1,7 +1,6 @@
 import pydantic
 import sqlalchemy
 from dependency_injector import containers, providers
-from pydantic_settings import BaseSettings
 from sqlalchemy.orm import sessionmaker
 
 from simaple.app.infrastructure.component_schema_repository import (

@@ -3,7 +3,7 @@ import os
 from typing import Optional, TypedDict
 
 import yaml
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from simaple.core.base import Stat
 from simaple.gear.potential import Potential, PotentialTier
@@ -131,7 +131,7 @@ class PotentialField(BaseModel):
 
 
 class PotentialTemplate(BaseModel):
-    options: list[PotentialField] = Field(default_factory=list)
+    options: list[PotentialField] = []
 
 
 def field_to_value(

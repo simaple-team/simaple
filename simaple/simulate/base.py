@@ -5,7 +5,7 @@ import re
 from abc import ABCMeta, abstractmethod
 from typing import Any, Callable, Optional, Union, cast
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import BaseModel, Field
 
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,

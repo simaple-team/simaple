@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from simaple.core import Stat
 from simaple.gear.arcane_symbol import ArcaneSymbol
@@ -23,8 +23,8 @@ class GearsetBlueprint(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="bluepr
 
 # TODO: weapon potential optimizer (stand-alone)
 class UserGearsetBlueprint(GearsetBlueprint):
-    arcane_symbols: list[ArcaneSymbol] = Field(default_factory=list)
-    authentic_symbols: list[AuthenticSymbol] = Field(default_factory=list)
+    arcane_symbols: list[ArcaneSymbol] = []
+    authentic_symbols: list[AuthenticSymbol] = []
     pet_equip: Stat
     pet_set: Stat
     cash: Stat
