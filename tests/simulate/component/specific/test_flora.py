@@ -59,6 +59,6 @@ def test_magic_curcuit_tick_count(
     state, _ = magic_curcuit_full_drive.use(None, magic_curcuit_full_drive_state)
     state, events = magic_curcuit_full_drive.elapse(60_000, state)
 
-    dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
+    dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
 
     assert len(dealing_event) == 14

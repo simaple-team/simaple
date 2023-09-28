@@ -1,5 +1,5 @@
 from simaple.core.base import ActionStat
-from simaple.simulate.base import Action, AddressedStore, ConcreteStore, Environment
+from simaple.simulate.base import AddressedStore, ConcreteStore, Environment
 from simaple.simulate.component.skill import AttackSkillComponent
 from simaple.simulate.global_property import GlobalProperty
 
@@ -22,7 +22,7 @@ def test_scenario():
     attack_skill_1.add_to_environment(environment)
     attack_skill_2.add_to_environment(environment)
     event = environment.resolve(
-        Action(
+        dict(
             name="test-A",
             method="use",
             payload=None,
@@ -30,7 +30,7 @@ def test_scenario():
     )
 
     event = environment.resolve(
-        Action(
+        dict(
             name="test-B",
             method="use",
             payload=None,
@@ -39,7 +39,7 @@ def test_scenario():
     print(event)
 
     event = environment.resolve(
-        Action(
+        dict(
             name="test-B",
             method="elapse",
             payload=3.0,

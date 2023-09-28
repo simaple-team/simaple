@@ -52,7 +52,7 @@ def test_thunder_break_max_use(
     state, events = thunder_break.elapse(12_000, state)
 
     # then
-    dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
+    dealing_count = sum([e["tag"] == Tag.DAMAGE for e in events])
     assert dealing_count == 8
 
 
@@ -64,9 +64,9 @@ def test_thunder_break_decays(
     state, events = thunder_break.elapse(12_000, state)
 
     # then
-    dealing_events = [e for e in events if e.tag == Tag.DAMAGE]
+    dealing_events = [e for e in events if e["tag"] == Tag.DAMAGE]
     for idx in range(7):
         assert (
-            dealing_events[idx].payload["damage"] * 0.8
-            - dealing_events[idx + 1].payload["damage"]
+            dealing_events[idx]["payload"]["damage"] * 0.8
+            - dealing_events[idx + 1]["payload"]["damage"]
         ) < 1e-8

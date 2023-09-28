@@ -3,10 +3,10 @@ from __future__ import annotations
 import re
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
-from dataclasses import dataclass
 from typing import Any, Callable, Optional, Union, cast
 
 from pydantic import BaseModel
+from typing_extensions import TypedDict
 
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
@@ -18,8 +18,7 @@ class Entity(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="Entity")):
     ...
 
 
-@dataclass
-class Action:
+class Action(TypedDict):
     """
     Action is primitive value-object which indicated
     what `Component` and Which `method` will be triggerd.
@@ -27,18 +26,10 @@ class Action:
 
     name: str
     method: str
-    payload: Optional[Union[int, str, float, dict]] = None
-
-    @property
-    def signature(self) -> str:
-        if len(self.method) == 0:
-            return self.name
-
-        return f"{self.name}.{self.method}"
+    payload: Union[int, str, float, dict, None]
 
 
-@dataclass
-class Event:
+class Event(TypedDict):
     """
     Event is primitive value-object, which indicated
     "something happened" via action-handlers.
@@ -50,16 +41,16 @@ class Event:
 
     name: str
     payload: dict
-    method: str = ""
-    tag: Optional[str] = None
-    handler: Optional[str] = None
+    method: str
+    tag: Optional[str]
+    handler: Optional[str]
 
-    @property
-    def signature(self) -> str:
-        if len(self.method) == 0:
-            return self.name
 
-        return f"{self.name}.{self.method}"
+def message_signature(message: Union[Action, Event]) -> str:
+    if len(message["method"]) == 0:
+        return message["name"]
+
+    return f"{message['name']}.{message['method']}"
 
 
 class Store(metaclass=ABCMeta):
@@ -195,7 +186,7 @@ class RouterDispatcher(Dispatcher):
 
     def __call__(self, action: Action, store: Store) -> list[Event]:
         events = []
-        signature = action.signature
+        signature = message_signature(action)
         if signature in self._route_cache:
             for dispatcher in self._route_cache[signature]:
                 events += dispatcher(action, store)
@@ -293,7 +284,7 @@ class Client:
         self._previous_callbacks = []
 
     def export_previous_callbacks(self) -> list[EventCallback]:
-        return [(x, y) for x, y in self._previous_callbacks]
+        return list(self._previous_callbacks)
 
     def restore_previous_callbacks(self, callbacks: list[EventCallback]) -> None:
         self._previous_callbacks = callbacks
@@ -308,16 +299,16 @@ class Client:
         """Wrap-up relay's decision by built-in actionss
         These decisions must provided; this is "forced action"
         """
-        emiited_event_action = Action(
-            name=event.name,
-            method=f"{event.method}.emitted.{event.tag or ''}",
-            payload=event.payload,
-        )
+        emiited_event_action: Action = {
+            "name": event["name"],
+            "method": f"{event['method']}.emitted.{event['tag'] or ''}",
+            "payload": event["payload"],
+        }
 
-        done_event_action = Action(
-            name=event.name,
-            method=f"{event.method}.done.{event.tag or ''}",
-            payload=event.payload,
-        )
+        done_event_action: Action = {
+            "name": event["name"],
+            "method": f"{event['method']}.done.{event['tag'] or ''}",
+            "payload": event["payload"],
+        }
 
         return (emiited_event_action, done_event_action)

@@ -44,7 +44,7 @@ class Simulator(pydantic.BaseModel):
                 events=[],
                 view=self.get_simulation_view(),
                 clock=self.client.environment.show("clock"),
-                action=Action(name="*", method="elapse", payload=0),
+                action=dict(name="*", method="elapse", payload=0),
                 checkpoint=self.client.environment.store.save(),
                 checkpoint_callback=[],
                 previous_hash="",

@@ -42,7 +42,7 @@ def test_using_frozen_synerge_component_provide_buff_and_damage(
     state, events = synergy_component.use(None, synergy_state)
 
     # then
-    dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
+    dealing_count = sum([e["tag"] == Tag.DAMAGE for e in events])
 
     assert dealing_count == 1
     assert synergy_component.buff(state) == synergy
@@ -57,6 +57,6 @@ def test_using_synerge_component_buff_do_not(
     state, events = synergy_component.elapse(30_000, state)
 
     # then
-    dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
+    dealing_count = sum([e["tag"] == Tag.DAMAGE for e in events])
     assert dealing_count == 0
     assert synergy_component.buff(state) == Stat()

@@ -36,13 +36,31 @@ class NamedEventProvider(EventProvider):
         self._default_modifier = default_modifier
 
     def elapsed(self, time: float) -> Event:
-        return Event(name=self._name, tag=Tag.ELAPSED, payload={"time": time})
+        return {
+            "name": self._name,
+            "tag": Tag.ELAPSED,
+            "payload": {"time": time},
+            "method": "",
+            "handler": None,
+        }
 
     def rejected(self) -> Event:
-        return Event(name=self._name, tag=Tag.REJECT, payload={})
+        return {
+            "name": self._name,
+            "tag": Tag.REJECT,
+            "payload": {},
+            "method": "",
+            "handler": None,
+        }
 
     def delayed(self, time: float) -> Event:
-        return Event(name=self._name, tag=Tag.DELAY, payload={"time": time})
+        return {
+            "name": self._name,
+            "tag": Tag.DELAY,
+            "payload": {"time": time},
+            "method": "",
+            "handler": None,
+        }
 
     def dealt(
         self, damage: float, hit: float, modifier: Optional[Stat] = None
@@ -57,15 +75,23 @@ class NamedEventProvider(EventProvider):
             else:
                 total_modifier = modifier + self._default_modifier
 
-        return Event(
-            name=self._name,
-            tag=Tag.DAMAGE,
-            payload={
+        return {
+            "name": self._name,
+            "tag": Tag.DAMAGE,
+            "payload": {
                 "damage": damage,
                 "hit": hit,
                 "modifier": total_modifier.model_dump() if total_modifier else None,
             },
-        )
+            "method": "",
+            "handler": None,
+        }
 
     def keydown_end(self) -> Event:
-        return Event(name=self._name, tag=Tag.KEYDOWN_END, payload={})
+        return {
+            "name": self._name,
+            "tag": Tag.KEYDOWN_END,
+            "payload": {},
+            "method": "",
+            "handler": None,
+        }

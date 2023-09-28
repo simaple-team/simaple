@@ -60,9 +60,9 @@ def test_storm_order_1pair(
 ):
     state, _ = storm.use(None, storm_state_1pair)
     _, events = storm.elapse(500, state)
-    dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
+    dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
 
-    assert dealing_event[0].payload["hit"] == 2
+    assert dealing_event[0]["payload"]["hit"] == 2
 
 
 def test_storm_order_3pair(
@@ -70,6 +70,6 @@ def test_storm_order_3pair(
 ):
     state, _ = storm.use(None, storm_state_3pair)
     _, events = storm.elapse(500, state)
-    dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
+    dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
 
-    assert dealing_event[0].payload["hit"] == 6
+    assert dealing_event[0]["payload"]["hit"] == 6

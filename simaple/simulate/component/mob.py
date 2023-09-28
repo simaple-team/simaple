@@ -1,6 +1,6 @@
 import pydantic
 
-from simaple.simulate.base import Entity, Event
+from simaple.simulate.base import Entity
 from simaple.simulate.component.base import Component, ReducerState, reducer_method
 from simaple.simulate.reserved_names import Tag
 
@@ -74,7 +74,7 @@ class MobComponent(Component):
         emits = state.dot.elapse(time)
 
         events = [
-            Event(name=name, tag=Tag.DOT, payload={"damage": damage, "hit": hit})
+            {"name": name, "tag": Tag.DOT, "payload": {"damage": damage, "hit": hit}}
             for ((name, damage), hit) in emits.items()
         ]
 

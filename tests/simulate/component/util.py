@@ -6,25 +6,25 @@ from simaple.simulate.reserved_names import Tag
 
 
 def count_damage_skill(events: list[Event]) -> int:
-    return sum([e.tag == Tag.DAMAGE for e in events])
+    return sum([e["tag"] == Tag.DAMAGE for e in events])
 
 
 def total_delay(events: list[Event]) -> int:
     return sum(
         [
-            e.payload["time"]
+            e["payload"]["time"]
             for e in events
-            if e.tag == Tag.DELAY and e.payload is not None
+            if e["tag"] == Tag.DELAY and e["payload"] is not None
         ]
     )
 
 
 def count_dot_skill(events: list[Event]) -> int:
-    return sum([e.tag == Tag.DOT for e in events])
+    return sum([e["tag"] == Tag.DOT for e in events])
 
 
 def is_rejected(events: list[Event]) -> bool:
-    return events[0].tag == Tag.REJECT
+    return events[0]["tag"] == Tag.REJECT
 
 
 S = TypeVar("S", bound=ReducerState)

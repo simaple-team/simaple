@@ -43,7 +43,7 @@ class SkillComponent(Component):
 
     def invalidate_if_disabled(self, validity: Validity):
         if self.disable_validity:
-            validity = validity.copy()
+            validity = validity.model_copy()
             validity.valid = False
             return validity
 

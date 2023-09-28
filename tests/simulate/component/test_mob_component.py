@@ -117,7 +117,7 @@ def test_dot_override(mob_component: MobComponent, mob_state: MobState):
 
     mob_state, events = mob_component.elapse(5000, mob_state)
     assert count_dot_skill(events) == 1
-    assert events[0].payload["hit"] == 5
+    assert events[0]["payload"]["hit"] == 5
 
     mob_state, _ = mob_component.add_dot(
         DOTRequestPayload(name="A", damage=100, lasting_time=10_000), mob_state
@@ -125,11 +125,11 @@ def test_dot_override(mob_component: MobComponent, mob_state: MobState):
 
     mob_state, events = mob_component.elapse(7000, mob_state)
     assert count_dot_skill(events) == 1
-    assert events[0].payload["hit"] == 7
+    assert events[0]["payload"]["hit"] == 7
 
     mob_state, events = mob_component.elapse(3000, mob_state)
     assert count_dot_skill(events) == 1
-    assert events[0].payload["hit"] == 3
+    assert events[0]["payload"]["hit"] == 3
 
     mob_state, events = mob_component.elapse(3000, mob_state)
     assert count_dot_skill(events) == 0

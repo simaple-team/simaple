@@ -41,7 +41,7 @@ def test_component_reject(
     state, events = component.use(None, state)
 
     # then
-    assert events[0].tag == Tag.REJECT
+    assert events[0]["tag"] == Tag.REJECT
 
 
 def test_component_emit_initial_damage(
@@ -52,8 +52,8 @@ def test_component_emit_initial_damage(
     _, events = component.use(None, state)
 
     # then
-    assert events[0].payload == {"damage": 100, "hit": 1.0, "modifier": None}
-    assert events[1].payload == {"time": 30.0}
+    assert events[0]["payload"] == {"damage": 100, "hit": 1.0, "modifier": None}
+    assert events[1]["payload"] == {"time": 30.0}
 
 
 @pytest.mark.parametrize(
@@ -81,7 +81,7 @@ def test_component_emit_after(
     state, events = component.elapse(time, state)
 
     # then
-    dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
+    dealing_count = sum([e["tag"] == Tag.DAMAGE for e in events])
     assert dealing_count == count
 
 
@@ -94,5 +94,5 @@ def test_component_full_emit(
     state, events = component.elapse(5_000, state)
 
     # then
-    dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
+    dealing_count = sum([e["tag"] == Tag.DAMAGE for e in events])
     assert dealing_count == 15

@@ -5,7 +5,15 @@ from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union, cast
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
-from simaple.simulate.base import Action, Dispatcher, Entity, Environment, Event, Store
+from simaple.simulate.base import (
+    Action,
+    Dispatcher,
+    Entity,
+    Environment,
+    Event,
+    Store,
+    message_signature,
+)
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import GlobalProperty
 from simaple.simulate.reserved_names import Tag
@@ -136,7 +144,7 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
             local_store.read_entity(name, default=self._default_state[name])
 
     def __call__(self, action: Action, store: Store) -> list[Event]:
-        mapping_name = self._find_mapping_name(action.signature)
+        mapping_name = self._find_mapping_name(message_signature(action))
 
         if not mapping_name:
             raise ValueError
@@ -153,7 +161,7 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
             local_store, reducer.get_state_type()
         )
         output_state, maybe_events = reducer(
-            reducer.translate_payload(action.payload), input_state
+            reducer.translate_payload(action.get("payload")), input_state
         )
 
         self._store_adapter.set_state(
@@ -171,7 +179,7 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
         if maybe_events is None:
             return []
 
-        if isinstance(maybe_events, Event):
+        if not isinstance(maybe_events, list):
             return [maybe_events]
 
         return maybe_events
@@ -179,20 +187,26 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
     def tag_events_by_method_name(
         self, method_name: str, events: list[Event]
     ) -> list[Event]:
-        tagged_events = []
+        tagged_events: list[Event] = []
         for event in events:
-            tagged_event = Event(
-                name=event.name,
-                payload=event.payload,
-                method=method_name,
-                tag=event.tag or method_name,
-                handler=event.handler,
-            )
+            tagged_event: Event = {
+                "name": event["name"],
+                "payload": event["payload"],
+                "method": method_name,
+                "tag": event["tag"] or method_name,
+                "handler": event.get("handler", None),
+            }
             tagged_events.append(tagged_event)
 
-        if all(event.tag not in (Tag.REJECT, Tag.ACCEPT) for event in events):
+        if all(event["tag"] not in (Tag.REJECT, Tag.ACCEPT) for event in events):
             return tagged_events + [
-                Event(name=self._name, method=method_name, tag=Tag.ACCEPT, payload={})
+                {
+                    "name": self._name,
+                    "method": method_name,
+                    "tag": Tag.ACCEPT,
+                    "payload": {},
+                    "handler": None,
+                }
             ]
 
         return tagged_events

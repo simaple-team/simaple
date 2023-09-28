@@ -58,10 +58,10 @@ def test_with_no_stack(
 ):
     # when
     _, events = thunder_attack_skill.use(None, thunder_attack_skill_state)
-    damage_events = [e for e in events if e.tag == Tag.DAMAGE]
+    damage_events = [e for e in events if e["tag"] == Tag.DAMAGE]
 
     # then
-    assert damage_events[0].payload["modifier"] == Stat().model_dump()
+    assert damage_events[0]["payload"]["modifier"] == Stat().model_dump()
 
 
 def test_with_some_stack(
@@ -78,8 +78,8 @@ def test_with_some_stack(
     state, events = thunder_attack_skill.use(None, thunder_attack_skill_state)
 
     # then
-    damage_events = [e for e in events if e.tag == Tag.DAMAGE]
+    damage_events = [e for e in events if e["tag"] == Tag.DAMAGE]
     assert (
-        damage_events[0].payload["modifier"]
+        damage_events[0]["payload"]["modifier"]
         == Stat(damage_multiplier=12 * 3).model_dump()
     )

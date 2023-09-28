@@ -48,7 +48,7 @@ def test_periodic_damage_component_reject(
     state, events = periodic_damage_component.use(None, state)
 
     # then
-    assert events[0].tag == Tag.REJECT
+    assert events[0]["tag"] == Tag.REJECT
 
 
 def test_periodic_damage_component_emit_initial_damage(
@@ -59,8 +59,8 @@ def test_periodic_damage_component_emit_initial_damage(
     _, events = periodic_damage_component.use(None, periodic_damage_state)
 
     # then
-    assert events[0].payload == {"damage": 100, "hit": 1.0, "modifier": None}
-    assert events[1].payload == {"time": 30.0}
+    assert events[0]["payload"] == {"damage": 100, "hit": 1.0, "modifier": None}
+    assert events[1]["payload"] == {"time": 30.0}
 
 
 def test_periodic_damage_component_emit_after(
@@ -72,7 +72,7 @@ def test_periodic_damage_component_emit_after(
     state, events = periodic_damage_component.elapse(120 * 8, state)
 
     # then
-    dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
+    dealing_count = sum([e["tag"] == Tag.DAMAGE for e in events])
     assert dealing_count == 8 - 1
 
 
@@ -85,7 +85,7 @@ def test_periodic_damage_component_partial_emit(
     state, events = periodic_damage_component.elapse(120 * 8 + 60, state)
 
     # then
-    dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
+    dealing_count = sum([e["tag"] == Tag.DAMAGE for e in events])
     assert dealing_count == 8
 
 
@@ -98,5 +98,5 @@ def test_periodic_damage_component_full_emit(
     state, events = periodic_damage_component.elapse(120 * 30, state)
 
     # then
-    dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
+    dealing_count = sum([e["tag"] == Tag.DAMAGE for e in events])
     assert dealing_count == 8

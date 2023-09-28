@@ -48,12 +48,12 @@ def test_meca_carrier_usage_increase_count(
     state, events = meca_carrier.elapse(30_000, state)
 
     # then
-    dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
+    dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
 
     for idx in range(len(dealing_event) - 1):
         assert (
-            dealing_event[idx].payload["hit"]
-            == dealing_event[idx + 1].payload["hit"] - 4
+            dealing_event[idx]["payload"]["hit"]
+            == dealing_event[idx + 1]["payload"]["hit"] - 4
         )
 
 
@@ -65,7 +65,7 @@ def test_meca_carrier_usage_delays_more(
     state, events = meca_carrier.elapse(3000 * 3 + 120 * (8 + 9), state)
 
     # then
-    dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
+    dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
 
     assert len(dealing_event) == 3
 
@@ -78,16 +78,16 @@ def test_meca_carrier_usage_bounds_count(
     state, events = meca_carrier.elapse(120_000, state)
 
     # then
-    dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
+    dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
 
     for idx in range(len(dealing_event) - 1):
-        if dealing_event[idx].payload["hit"] != 64:
+        if dealing_event[idx]["payload"]["hit"] != 64:
             assert (
-                dealing_event[idx].payload["hit"]
-                == dealing_event[idx + 1].payload["hit"] - 4
+                dealing_event[idx]["payload"]["hit"]
+                == dealing_event[idx + 1]["payload"]["hit"] - 4
             )
         else:
             assert (
-                dealing_event[idx].payload["hit"]
-                == dealing_event[idx + 1].payload["hit"]
+                dealing_event[idx]["payload"]["hit"]
+                == dealing_event[idx + 1]["payload"]["hit"]
             )
