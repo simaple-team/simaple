@@ -12,25 +12,7 @@ from simaple.simulate.policy.base import (
     _BehaviorGenerator,
 )
 from simaple.simulate.policy.operation import get_operations
-
-
-def parse(dsl: str) -> Operation:
-    argv = dsl.strip().split(" ")
-    command = argv[0]
-    arg0 = " ".join(argv[1:])
-
-    name = ""
-    time: Optional[float] = None
-    if arg0.isdigit() or arg0.replace(".", "").isdigit():
-        time = float(arg0)
-    else:
-        name = arg0
-
-    return Operation(
-        command=command,
-        name=name,
-        time=time,
-    )
+from simaple.simulate.policy.parser import parse_dsl_to_operation
 
 
 def dump(op: Operation) -> str:
@@ -56,7 +38,7 @@ class OperandDSLParser:
                 mult = int(mult_match.group(1).strip())
                 op_string = op_string.replace(mult_match.group(1), "")
 
-            op = parse(op_string)
+            op = parse_dsl_to_operation(op_string)
 
             return [op for _ in range(mult)]
         except Exception as e:
