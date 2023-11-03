@@ -1,9 +1,8 @@
 from typing import cast
 
-import lark
 from lark import Lark, Transformer
 
-from simaple.simulate.policy.dsl import Operation
+from simaple.simulate.policy.base import Operation
 
 __PARSER = Lark(
     r"""
