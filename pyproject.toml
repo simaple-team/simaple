@@ -94,6 +94,7 @@ dependency-injector = "^4.40.0"
 SQLAlchemy = "^1.4.45"
 scipy = "^1.11.2"
 pydantic-settings = "^2.0.3"
+lark = "^1.1.7"
 
 [tool.poetry.dev-dependencies]
 isort = "^5.9.3"
