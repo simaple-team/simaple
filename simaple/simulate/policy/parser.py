@@ -1,3 +1,5 @@
+from typing import cast
+
 import lark
 from lark import Lark, Transformer
 
@@ -84,4 +86,4 @@ def get_parser():
 
 def parse_dsl_to_operation(dsl: str) -> Operation:
     tree = __PARSER.parse(dsl)
-    return __OperationTreeTransformer.transform(tree)[0]
+    return cast(Operation, __OperationTreeTransformer.transform(tree)[0])

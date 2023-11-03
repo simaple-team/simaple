@@ -287,7 +287,7 @@ class Stat(BaseModel):
     @classmethod
     def sum(cls, stats: list[Stat]) -> Stat:
 
-        final_damage_multiplier = 1
+        final_damage_multiplier: float = 1
         for stat in stats:
             final_damage_multiplier += (
                 stat.final_damage_multiplier * final_damage_multiplier * 0.01
@@ -296,7 +296,7 @@ class Stat(BaseModel):
         final_damage_multiplier -= 1
         final_damage_multiplier *= 100
 
-        defence = 1
+        defence: float = 1
         for stat in stats:
             defence -= defence * 0.01 * stat.ignored_defence
 
