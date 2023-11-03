@@ -88,4 +88,4 @@ def test_sum_stat():
     y = Stat.sum(stats)
 
     for k in x.model_dump():
-        assert y.model_dump()[k] == x.model_dump()
+        assert x.model_dump()[k] == pytest.approx(y.model_dump()[k])
