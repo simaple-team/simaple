@@ -1,9 +1,10 @@
 import lark
-
 from lark import Lark, Transformer
+
 from simaple.simulate.policy.dsl import Operation
 
-__PARSER = Lark(r'''
+__PARSER = Lark(
+    r"""
     operation: full_operation
           | time_operation
           | skill_operation
@@ -21,8 +22,9 @@ __PARSER = Lark(r'''
     %import common.SIGNED_NUMBER
     %import common.WS
 
-    ''', start='operation')
-
+    """,
+    start="operation",
+)
 
 
 class TreeToOperation(Transformer):
@@ -39,7 +41,7 @@ class TreeToOperation(Transformer):
         return float(n)
 
     def _no_ws(self, x):
-        return  [v for v in x if v]
+        return [v for v in x if v]
 
     def WS(self, s):
         return None
@@ -71,6 +73,7 @@ class TreeToOperation(Transformer):
             name=filter_out_x[1],
             time=None,
         )
+
 
 __OperationTreeTransformer = TreeToOperation()
 

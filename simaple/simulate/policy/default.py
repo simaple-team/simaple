@@ -47,11 +47,11 @@ def cast_by_priority(order: list[str]) -> DSLGeneratorProto:
                 if runnings.get(name, 0) > 0:
                     continue
 
-                return (yield f"CAST {name}")
+                return (yield f'CAST "{name}"')
 
         for v in validities.values():
             if v.valid:
-                return (yield f"CAST {v.name}")
+                return (yield f'CAST "{v.name}"')
 
         raise ValueError
 
@@ -79,12 +79,12 @@ def keydown_until_interrupt(
                     if runnings.get(name, 0) > 0:
                         continue
 
-                    return (yield f"KEYDOWNSTOP {keydown_skill_name}")
+                    return (yield f'KEYDOWNSTOP "{keydown_skill_name}"')
 
             elapse_time = get_next_elapse_time(events)
 
             if keydown_ended(events):
-                return (yield f"RESOLVE {keydown_skill_name}")
+                return (yield f'RESOLVE "{keydown_skill_name}"')
 
             ctx = yield f"ELAPSE {elapse_time}"
 

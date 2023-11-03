@@ -20,7 +20,7 @@ def dump(op: Operation) -> str:
         if op.time:
             raise ValueError
 
-        return f"{op.command}  {op.name}"
+        return f'{op.command}  "{op.name}"'
 
     return f"{op.command}  {op.time}"
 
