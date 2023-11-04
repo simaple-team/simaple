@@ -15,13 +15,13 @@ def _get_keydown(environment: Environment) -> Optional[str]:
 
 
 def keydown_ended(events: list[Event]) -> bool:
-    return any(event.tag == Tag.KEYDOWN_END for event in events)
+    return any(event["tag"] == Tag.KEYDOWN_END for event in events)
 
 
 def get_next_elapse_time(events: list[Event]) -> float:
     for event in events:
-        if event.tag in (Tag.DELAY,) and event.payload["time"] > 0:
-            return event.payload["time"]  # type: ignore
+        if event["tag"] in (Tag.DELAY,) and event["payload"]["time"] > 0:
+            return event["payload"]["time"]  # type: ignore
 
     return 0.0
 

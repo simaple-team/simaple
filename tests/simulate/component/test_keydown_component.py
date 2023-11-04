@@ -85,9 +85,9 @@ def test_use_and_stop(
     state, events = component.stop(None, state)
 
     # then
-    damage_events = [e for e in events if e.tag == Tag.DAMAGE]
-    assert damage_events[-1].payload["damage"] == component.finish_damage
-    assert damage_events[-1].payload["hit"] == component.finish_hit
+    damage_events = [e for e in events if e["tag"] == Tag.DAMAGE]
+    assert damage_events[-1]["payload"]["damage"] == component.finish_damage
+    assert damage_events[-1]["payload"]["hit"] == component.finish_hit
     assert total_delay(events) == component.keydown_end_delay
     assert state.keydown.running is False
 
@@ -151,9 +151,9 @@ def test_elapse_until_finish(
     state, elapse_events = component.elapse(delay * 10, state)
 
     # then
-    damage_events = [e for e in elapse_events if e.tag == Tag.DAMAGE]
-    assert damage_events[-1].payload["damage"] == component.finish_damage
-    assert damage_events[-1].payload["hit"] == component.finish_hit
+    damage_events = [e for e in elapse_events if e["tag"] == Tag.DAMAGE]
+    assert damage_events[-1]["payload"]["damage"] == component.finish_damage
+    assert damage_events[-1]["payload"]["hit"] == component.finish_hit
     assert total_delay(elapse_events) == component.keydown_end_delay
     assert state.keydown.running is False
 
@@ -169,9 +169,9 @@ def test_elapse_during_finish_delay(
     state, elapse_events = component.elapse(delay * 10 + 10, state)
 
     # then
-    damage_events = [e for e in elapse_events if e.tag == Tag.DAMAGE]
-    assert damage_events[-1].payload["damage"] == component.finish_damage
-    assert damage_events[-1].payload["hit"] == component.finish_hit
+    damage_events = [e for e in elapse_events if e["tag"] == Tag.DAMAGE]
+    assert damage_events[-1]["payload"]["damage"] == component.finish_damage
+    assert damage_events[-1]["payload"]["hit"] == component.finish_hit
     assert total_delay(elapse_events) == component.keydown_end_delay - 10
     assert state.keydown.running is False
 
@@ -201,8 +201,8 @@ def test_elapse_very_long(
     state, elapse_events = component.elapse(delay * 20, state)
 
     # then
-    damage_events = [e for e in elapse_events if e.tag == Tag.DAMAGE]
-    assert damage_events[-1].payload["damage"] == component.finish_damage
-    assert damage_events[-1].payload["hit"] == component.finish_hit
+    damage_events = [e for e in elapse_events if e["tag"] == Tag.DAMAGE]
+    assert damage_events[-1]["payload"]["damage"] == component.finish_damage
+    assert damage_events[-1]["payload"]["hit"] == component.finish_hit
     assert total_delay(elapse_events) == 0
     assert state.keydown.running is False

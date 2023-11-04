@@ -23,5 +23,5 @@ class LoadableComponentSchemaRepository(ComponentSchemaRepository):
     def _component_cls_to_schema(self, name, model: Type[BaseModel]) -> ComponentSchema:
         return ComponentSchema(
             name=name,
-            value=model.schema(),
+            value=model.model_json_schema(),
         )

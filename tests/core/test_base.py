@@ -71,3 +71,21 @@ def test_get_base_stat_coefficient(stat, label, expected):
 )
 def test_get_attack_coefficient(stat: Stat, label, expected):
     assert stat.get_attack_coefficient(label) == expected
+
+
+def test_sum_stat():
+    stats = [
+        Stat(STR=3, STR_multiplier=100, final_damage_multiplier=10, ignored_defence=10),
+        Stat(STR=3, STR_multiplier=100, final_damage_multiplier=20, ignored_defence=20),
+        Stat(STR=3, STR_multiplier=100, final_damage_multiplier=30, ignored_defence=30),
+        Stat(INT=3, INT_multiplier=100, final_damage_multiplier=30, ignored_defence=30),
+    ]
+
+    x = Stat()
+    for stat in stats:
+        x += stat
+
+    y = Stat.sum(stats)
+
+    for k in x.model_dump():
+        assert pytest.approx(y.model_dump()[k]) == x.model_dump()[k]

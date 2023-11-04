@@ -1,14 +1,7 @@
 from pydantic import BaseModel
 
 from simaple.core.base import ActionStat
-from simaple.simulate.base import (
-    Action,
-    AddressedStore,
-    ConcreteStore,
-    Entity,
-    Environment,
-    Event,
-)
+from simaple.simulate.base import AddressedStore, ConcreteStore, Entity, Environment
 from simaple.simulate.component.base import Component, ReducerState, reducer_method
 from simaple.simulate.global_property import GlobalProperty
 
@@ -33,7 +26,9 @@ class ViewTestComponent(Component):
 
     @reducer_method
     def some_reducer(self, payload: ViewTestPayload, state: SomeTestState):
-        return payload, [Event(name=self.name, payload=payload.model_dump(), tag=None)]
+        return payload, [
+            {"name": self.name, "payload": payload.model_dump(), "tag": None}
+        ]
 
 
 def test_paramterizd_reducer():
@@ -57,14 +52,14 @@ def test_paramterizd_reducer():
 
     component.add_to_environment(environment)
 
-    assert environment.resolve(Action(name="some_parametrized_action", method="use",))[
-        0
-    ].payload == {"value": 2}
+    assert environment.resolve(dict(name="some_parametrized_action", method="use",))[0][
+        "payload"
+    ] == {"value": 2}
 
     assert environment.resolve(
-        Action(
+        dict(
             name="some_action",
             method="use",
             payload={"value": 1324},
         )
-    )[0].payload == {"value": 1324}
+    )[0]["payload"] == {"value": 1324}

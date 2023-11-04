@@ -34,15 +34,15 @@ class PlayLog(pydantic.BaseModel):
 
     @property
     def hash(self) -> str:
-        stringified = self.previous_hash + json.dumps(self.dict(), sort_keys=True)
+        stringified = self.previous_hash + json.dumps(self.model_dump(), sort_keys=True)
         return hashlib.sha1(stringified.encode()).hexdigest()
 
     def get_delay(self) -> float:
         delay = 0
         for event in self.events:
-            if event.tag in (Tag.DELAY,):
-                if event.payload["time"] > 0:
-                    delay += event.payload["time"]
+            if event["tag"] in (Tag.DELAY,):
+                if event["payload"]["time"] > 0:
+                    delay += event["payload"]["time"]
 
         return delay
 
@@ -57,7 +57,7 @@ class PlayLog(pydantic.BaseModel):
     def create_report(self) -> Report:
         report = Report()
         for event in self.events:
-            if event.tag == Tag.DAMAGE:
+            if event["tag"] == Tag.DAMAGE:
                 report.add(0, event, self.view.get_buff())
 
         return report

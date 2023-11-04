@@ -20,7 +20,7 @@ class ConfigurationMapper:
 
     def load(self, dumped_config: dict) -> SimulatorConfiguration:
         config_cls = self._get_configuration_cls(dumped_config["name"])
-        return config_cls.parse_obj(dumped_config["dump"])
+        return config_cls.model_validate(dumped_config["dump"])
 
     def _get_configuration_cls(self, config_name: str) -> Type[SimulatorConfiguration]:
         cls_list = [MinimalSimulatorConfiguration, BaselineConfiguration]

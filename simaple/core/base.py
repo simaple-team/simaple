@@ -284,6 +284,54 @@ class Stat(BaseModel):
         long_dict = self.model_dump()
         return {k: v for k, v in long_dict.items() if v != 0}
 
+    @classmethod
+    def sum(cls, stats: list[Stat]) -> Stat:
+
+        final_damage_multiplier: float = 1
+        for stat in stats:
+            final_damage_multiplier += (
+                stat.final_damage_multiplier * final_damage_multiplier * 0.01
+            )
+
+        final_damage_multiplier -= 1
+        final_damage_multiplier *= 100
+
+        defence: float = 1
+        for stat in stats:
+            defence -= defence * 0.01 * stat.ignored_defence
+
+        ignored_defence = 100 * (1 - defence)
+
+        return Stat(
+            STR=sum([v.STR for v in stats]),
+            LUK=sum([v.LUK for v in stats]),
+            INT=sum([v.INT for v in stats]),
+            DEX=sum([v.DEX for v in stats]),
+            STR_multiplier=sum([v.STR_multiplier for v in stats]),
+            LUK_multiplier=sum([v.LUK_multiplier for v in stats]),
+            INT_multiplier=sum([v.INT_multiplier for v in stats]),
+            DEX_multiplier=sum([v.DEX_multiplier for v in stats]),
+            STR_static=sum([v.STR_static for v in stats]),
+            LUK_static=sum([v.LUK_static for v in stats]),
+            INT_static=sum([v.INT_static for v in stats]),
+            DEX_static=sum([v.DEX_static for v in stats]),
+            attack_power=sum([v.attack_power for v in stats]),
+            magic_attack=sum([v.magic_attack for v in stats]),
+            attack_power_multiplier=sum([v.attack_power_multiplier for v in stats]),
+            magic_attack_multiplier=sum([v.magic_attack_multiplier for v in stats]),
+            critical_rate=sum([v.critical_rate for v in stats]),
+            critical_damage=sum([v.critical_damage for v in stats]),
+            boss_damage_multiplier=sum([v.boss_damage_multiplier for v in stats]),
+            damage_multiplier=sum([v.damage_multiplier for v in stats]),
+            MHP=sum([v.MHP for v in stats]),
+            MMP=sum([v.MMP for v in stats]),
+            MHP_multiplier=sum([v.MHP_multiplier for v in stats]),
+            MMP_multiplier=sum([v.MMP_multiplier for v in stats]),
+            final_damage_multiplier=final_damage_multiplier,
+            ignored_defence=ignored_defence,
+            elemental_resistance=sum([v.elemental_resistance for v in stats]),
+        )
+
 
 class ActionStat(BaseModel):
     cooltime_reduce: float = 0.0

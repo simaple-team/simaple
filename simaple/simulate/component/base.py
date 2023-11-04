@@ -1,11 +1,19 @@
 import copy
 import inspect
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod
 from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union, cast
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
-from simaple.simulate.base import Action, Dispatcher, Entity, Environment, Event, Store
+from simaple.simulate.base import (
+    Action,
+    Dispatcher,
+    Entity,
+    Environment,
+    Event,
+    Store,
+    message_signature,
+)
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import GlobalProperty
 from simaple.simulate.reserved_names import Tag
@@ -77,54 +85,6 @@ def view_method(func):
     return func
 
 
-class ActionRouter(BaseModel, metaclass=ABCMeta):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    @abstractmethod
-    def is_enabled_action(self, action: Action):
-        ...
-
-    @abstractmethod
-    def get_matching_reducer(self, action: Action) -> Optional[ComponentMethodWrapper]:
-        ...
-
-    @abstractmethod
-    def get_matching_method_name(self, action: Action) -> Optional[str]:
-        ...
-
-
-class ConcreteActionRouter(ActionRouter):
-    mappings: dict[str, ComponentMethodWrapper]
-    method_mappings: dict[str, str]
-
-    def is_enabled_action(self, action: Action) -> bool:
-        mapping = self._find_mapping_name(action.signature, self.mappings)
-        return mapping is not None
-
-    def get_matching_reducer(self, action: Action) -> Optional[ComponentMethodWrapper]:
-        mapping_name = self._find_mapping_name(action.signature, self.mappings)
-        if mapping_name is None:
-            return None
-        return self.mappings[mapping_name]
-
-    def get_matching_method_name(self, action: Action) -> Optional[str]:
-        mapping_name = self._find_mapping_name(action.signature, self.method_mappings)
-        if mapping_name is None:
-            return None
-
-        return self.method_mappings[mapping_name]
-
-    def _find_mapping_name(self, target: str, mappings) -> Optional[str]:
-        if target in mappings:
-            return target
-
-        for mapping_name in mappings:
-            if mapping_name[0] == "$" and mapping_name.replace("$", "") in target:
-                return cast(str, mapping_name)
-
-        return None
-
-
 class StoreAdapter:
     def __init__(
         self,
@@ -164,14 +124,19 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
     def __init__(
         self,
         name: str,
-        action_router: ActionRouter,
+        method_mappings: dict[str, str],
+        reducer_mappings: dict[str, ComponentMethodWrapper],
         default_state: dict[str, Entity],
         binds=None,
     ):
         self._name = name
         self._default_state = default_state
-        self._action_router = action_router
+        self.method_mappings = method_mappings
+        self.reducer_mappings = reducer_mappings
         self._store_adapter = StoreAdapter(self._default_state, binds)
+
+    def includes(self, signature: str) -> bool:
+        return self._find_mapping_name(signature) is not None
 
     def init_store(self, store: Store):
         local_store = store.local(self._name)
@@ -179,13 +144,15 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
             local_store.read_entity(name, default=self._default_state[name])
 
     def __call__(self, action: Action, store: Store) -> list[Event]:
-        if not self._action_router.is_enabled_action(action):
-            return []
+        mapping_name = self._find_mapping_name(message_signature(action))
+
+        if not mapping_name:
+            raise ValueError
 
         local_store = store.local(self._name)
 
-        reducer = self._action_router.get_matching_reducer(action)
-        method_name = self._action_router.get_matching_method_name(action)
+        reducer = self.reducer_mappings[mapping_name]
+        method_name = self.method_mappings[mapping_name]
 
         if reducer is None or method_name is None:
             return []
@@ -194,7 +161,7 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
             local_store, reducer.get_state_type()
         )
         output_state, maybe_events = reducer(
-            reducer.translate_payload(action.payload), input_state
+            reducer.translate_payload(action.get("payload")), input_state
         )
 
         self._store_adapter.set_state(
@@ -212,7 +179,7 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
         if maybe_events is None:
             return []
 
-        if isinstance(maybe_events, Event):
+        if not isinstance(maybe_events, list):
             return [maybe_events]
 
         return maybe_events
@@ -220,21 +187,39 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
     def tag_events_by_method_name(
         self, method_name: str, events: list[Event]
     ) -> list[Event]:
-        tagged_events = []
+        tagged_events: list[Event] = []
         for event in events:
-            tagged_event = event.model_copy()
-            tagged_event.method = method_name
-            if tagged_event.tag is None:
-                tagged_event.tag = method_name
-
+            tagged_event: Event = {
+                "name": event["name"],
+                "payload": event["payload"],
+                "method": method_name,
+                "tag": event["tag"] or method_name,
+                "handler": event.get("handler", None),
+            }
             tagged_events.append(tagged_event)
 
-        if all(event.tag not in (Tag.REJECT, Tag.ACCEPT) for event in events):
+        if all(event["tag"] not in (Tag.REJECT, Tag.ACCEPT) for event in events):
             return tagged_events + [
-                Event(name=self._name, method=method_name, tag=Tag.ACCEPT, payload={})
+                {
+                    "name": self._name,
+                    "method": method_name,
+                    "tag": Tag.ACCEPT,
+                    "payload": {},
+                    "handler": None,
+                }
             ]
 
         return tagged_events
+
+    def _find_mapping_name(self, target: str) -> Optional[str]:
+        if target in self.reducer_mappings:
+            return target
+
+        for mapping_name in self.reducer_mappings:
+            if mapping_name[0] == "$" and mapping_name.replace("$", "") in target:
+                return cast(str, mapping_name)
+
+        return None
 
 
 class WrappedView:
@@ -340,7 +325,9 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         for view_name, view in self.get_views().items():
             environment.add_view(f"{self.name}.{view_name}", view)
 
-    def get_action_router(self) -> ActionRouter:
+    def get_method_mappings(
+        self,
+    ) -> tuple[dict[str, str], dict[str, ComponentMethodWrapper]]:
         reducer_methods = self.get_every_reducer_methods()
 
         wild_card_mappings = {
@@ -371,14 +358,14 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
                     reducer_info.payload,
                 )
 
-        return ConcreteActionRouter(
-            method_mappings=method_mappings, mappings=reducer_mappings
-        )
+        return method_mappings, reducer_mappings
 
     def export_dispatcher(self) -> ReducerMethodWrappingDispatcher:
+        method_mappings, reducer_mappings = self.get_method_mappings()
         return ReducerMethodWrappingDispatcher(
             self.name,
-            self.get_action_router(),
+            method_mappings,
+            reducer_mappings,
             self.get_default_state(),
             binds=self.binds,
         )

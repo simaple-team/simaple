@@ -44,7 +44,7 @@ class Simulator(pydantic.BaseModel):
                 events=[],
                 view=self.get_simulation_view(),
                 clock=self.client.environment.show("clock"),
-                action=Action(name="*", method="elapse", payload=0),
+                action=dict(name="*", method="elapse", payload=0),
                 checkpoint=self.client.environment.store.save(),
                 checkpoint_callback=[],
                 previous_hash="",
@@ -88,7 +88,7 @@ class Simulator(pydantic.BaseModel):
         self.rollback(len(history) - 1)
 
     def change_current_checkpoint(self, ckpt: dict) -> None:
-        last_playlog = self.history.logs[-1].copy()
+        last_playlog = self.history.logs[-1].model_copy()
         last_playlog.checkpoint = ckpt
         self.history.logs[-1] = last_playlog
 

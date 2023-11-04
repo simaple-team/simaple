@@ -31,7 +31,7 @@ def play_use(simulator_id: str, name: str, uow: UnitOfWork) -> None:
     if simulator is None:
         raise UnknownSimulatorException()
 
-    simulator.dispatch(Action(name=name, method="use", payload=None))
+    simulator.dispatch(dict(name=name, method="use", payload=None))
     uow.simulator_repository().update(simulator)
 
 
@@ -42,7 +42,7 @@ def play_elapse(simulator_id: str, time: float, uow: UnitOfWork) -> None:
         raise UnknownSimulatorException()
 
     simulator.dispatch(
-        Action(
+        dict(
             name="*",
             method="elapse",
             payload=time,
@@ -57,9 +57,9 @@ def play_use_and_elapse(simulator_id: str, name: str, uow: UnitOfWork) -> None:
     if simulator is None:
         raise UnknownSimulatorException()
 
-    simulator.dispatch(Action(name=name, method="use", payload=None))
+    simulator.dispatch(dict(name=name, method="use", payload=None))
     simulator.dispatch(
-        Action(
+        dict(
             name="*",
             method="elapse",
             payload=simulator.history.get_latest_playlog().get_delay(),

@@ -10,7 +10,7 @@ from simaple.simulate.base import Action
 @pytest.mark.parametrize("index", [8, 10])
 def test_simulator_rollback(sample_simulator: Simulator, index: int):
     for _ in range(10):
-        sample_simulator.dispatch(Action(
+        sample_simulator.dispatch(dict(
             name="*",
             method="elapse",
             payload=10.0,
@@ -25,7 +25,7 @@ def test_simulator_rollback(sample_simulator: Simulator, index: int):
 @pytest.mark.parametrize("index", [8, 10])
 def test_simulator_rollback_by_hash(sample_simulator: Simulator, index: int):
     for _ in range(10):
-        sample_simulator.dispatch(Action(
+        sample_simulator.dispatch(dict(
             name="*",
             method="elapse",
             payload=10.0,

@@ -369,13 +369,14 @@ class KeydownSkillTrait(
 class AddDOTDamageTrait(DOTTrait, NamedTrait):
     def get_dot_add_event(self) -> Event:
         damage, lasting_time = self._get_dot_damage_and_lasting()
-        return Event(
-            name=self._get_name(),
-            payload={
+        return {
+            "name": self._get_name(),
+            "payload": {
                 "damage": damage,
                 "lasting_time": lasting_time,
                 "name": self._get_name(),
             },
-            tag=Tag.MOB,
-            method="add_dot",
-        )
+            "tag": Tag.MOB,
+            "method": "add_dot",
+            "handler": None,
+        }

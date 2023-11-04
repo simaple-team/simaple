@@ -32,10 +32,10 @@ class Snapshot(pydantic.BaseModel):
     @classmethod
     def create_from_simluator(cls, name: str, simulator: Simulator):
         return Snapshot(
-            history=simulator.history.copy(),
+            history=simulator.history.model_copy(),
             updated_at=datetime.now(),
             name=name,
-            configuration=simulator.conf.copy(),
+            configuration=simulator.conf.model_copy(),
         )
 
 

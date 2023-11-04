@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-import copy
 import re
 from abc import ABCMeta, abstractmethod
+from collections import defaultdict
 from typing import Any, Callable, Optional, Union, cast
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from typing_extensions import TypedDict
 
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
@@ -17,7 +18,7 @@ class Entity(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="Entity")):
     ...
 
 
-class Action(BaseModel):
+class Action(TypedDict):
     """
     Action is primitive value-object which indicated
     what `Component` and Which `method` will be triggerd.
@@ -25,17 +26,10 @@ class Action(BaseModel):
 
     name: str
     method: str
-    payload: Optional[Union[int, str, float, dict]] = None
-
-    @property
-    def signature(self) -> str:
-        if len(self.method) == 0:
-            return self.name
-
-        return f"{self.name}.{self.method}"
+    payload: Union[int, str, float, dict, None]
 
 
-class Event(BaseModel):
+class Event(TypedDict):
     """
     Event is primitive value-object, which indicated
     "something happened" via action-handlers.
@@ -46,17 +40,17 @@ class Event(BaseModel):
     """
 
     name: str
-    method: str = ""
-    tag: Optional[str] = None
-    handler: Optional[str] = None
-    payload: dict = Field(default_factory=dict)
+    payload: dict
+    method: str
+    tag: Optional[str]
+    handler: Optional[str]
 
-    @property
-    def signature(self) -> str:
-        if len(self.method) == 0:
-            return self.name
 
-        return f"{self.name}.{self.method}"
+def message_signature(message: Union[Action, Event]) -> str:
+    if len(message["method"]) == 0:
+        return message["name"]
+
+    return f"{message['name']}.{message['method']}"
 
 
 class Store(metaclass=ABCMeta):
@@ -103,7 +97,7 @@ class ConcreteStore(Store):
             raise ValueError(
                 f"No entity exists: {name}. None-default only enabled for external-property binding. Maybe missing global proeperty installation?"
             )
-        return value.model_copy()
+        return value
 
     def local(self, address):
         return self
@@ -158,13 +152,56 @@ class AddressedStore(Store):
         return self._concrete_store.load(saved_store)
 
 
-DispatcherType = Callable[[Action, Store], list[Event]]
-
-
 class Dispatcher(metaclass=ABCMeta):
     @abstractmethod
-    def __call__(self, action: Action, store: Store):
+    def __call__(self, action: Action, store: Store) -> list[Event]:
         ...
+
+    @abstractmethod
+    def includes(self, signature: str) -> bool:
+        ...
+
+
+def named_dispatcher(direction: str):
+    def decorator(dispatcher: Dispatcher):
+        def _includes(signature: str) -> bool:
+            return signature == direction
+
+        setattr(dispatcher, "includes", _includes)
+        return dispatcher
+
+    return decorator
+
+
+class RouterDispatcher(Dispatcher):
+    def __init__(self) -> None:
+        self._dispatchers: list[Dispatcher] = []
+        self._route_cache: dict[str, list[Dispatcher]] = defaultdict(list)
+
+    def install(self, dispatcher: Dispatcher):
+        self._dispatchers.append(dispatcher)
+
+    def includes(self, signature: str) -> bool:
+        return signature in self._route_cache.keys()
+
+    def __call__(self, action: Action, store: Store) -> list[Event]:
+        events = []
+        signature = message_signature(action)
+        if signature in self._route_cache:
+            for dispatcher in self._route_cache[signature]:
+                events += dispatcher(action, store)
+
+            return events
+
+        cache = []
+
+        for dispatcher in self._dispatchers:
+            if dispatcher.includes(signature):
+                cache.append(dispatcher)
+                events += dispatcher(action, store)
+
+        self._route_cache[signature] = cache
+        return events
 
 
 View = Callable[[Store], Any]
@@ -172,26 +209,18 @@ View = Callable[[Store], Any]
 
 class Environment:
     def __init__(self, store: AddressedStore):
-        self.dispatchers: list[DispatcherType] = []
+        self._router = RouterDispatcher()
         self.store = store
         self._views: dict[str, View] = {}
 
-    def add_dispatcher(self, dispatcher: DispatcherType):
-        self.dispatchers.append(dispatcher)
+    def add_dispatcher(self, dispatcher: Dispatcher):
+        self._router.install(dispatcher)
 
     def add_view(self, view_name: str, view: View):
         self._views[view_name] = view
 
     def resolve(self, action: Action) -> list[Event]:
-        events = []
-        for dispatcher in self.dispatchers:
-            try:
-                events += dispatcher(action, self.store)
-            except Exception as e:
-                raise Exception(
-                    f"Exception raised during resolving {action.signature}\nError: {e}"
-                ) from e
-        return events
+        return self._router(action, self.store)
 
     def show(self, view_name: str):
         return self._views[view_name](self.store)
@@ -255,7 +284,7 @@ class Client:
         self._previous_callbacks = []
 
     def export_previous_callbacks(self) -> list[EventCallback]:
-        return [(x.copy(), y.copy()) for x, y in self._previous_callbacks]
+        return list(self._previous_callbacks)
 
     def restore_previous_callbacks(self, callbacks: list[EventCallback]) -> None:
         self._previous_callbacks = callbacks
@@ -270,16 +299,16 @@ class Client:
         """Wrap-up relay's decision by built-in actionss
         These decisions must provided; this is "forced action"
         """
-        emiited_event_action = Action(
-            name=event.name,
-            method=f"{event.method}.emitted.{event.tag or ''}",
-            payload=copy.deepcopy(event.payload),
-        )
+        emiited_event_action: Action = {
+            "name": event["name"],
+            "method": f"{event['method']}.emitted.{event['tag'] or ''}",
+            "payload": event["payload"],
+        }
 
-        done_event_action = Action(
-            name=event.name,
-            method=f"{event.method}.done.{event.tag or ''}",
-            payload=copy.deepcopy(event.payload),
-        )
+        done_event_action: Action = {
+            "name": event["name"],
+            "method": f"{event['method']}.done.{event['tag'] or ''}",
+            "payload": event["payload"],
+        }
 
         return (emiited_event_action, done_event_action)

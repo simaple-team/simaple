@@ -1,6 +1,6 @@
 from typing import Callable
 
-from simaple.simulate.base import Action, Event
+from simaple.simulate.base import Event
 from simaple.simulate.policy.base import (
     ActionGeneratorType,
     BehaviorGenerator,
@@ -12,8 +12,8 @@ from simaple.simulate.reserved_names import Tag
 
 def get_next_elapse_time(events: list[Event]) -> float:
     for event in events:
-        if event.tag in (Tag.DELAY,) and event.payload["time"] > 0:
-            return event.payload["time"]  # type: ignore
+        if event["tag"] in (Tag.DELAY,) and event["payload"]["time"] > 0:
+            return event["payload"]["time"]  # type: ignore
 
     return 0.0
 
@@ -22,35 +22,35 @@ def get_next_elapse_time(events: list[Event]) -> float:
 def exec_cast(op: Operation, events: list[Event]) -> ActionGeneratorType:
     target_name = op.name
 
-    action = Action(name=target_name, method="use")
+    action = dict(name=target_name, method="use")
     events = yield action
 
     elapse_time = get_next_elapse_time(events)
     if elapse_time == 0:
         return
 
-    yield Action(name="*", method="elapse", payload=elapse_time)
+    yield dict(name="*", method="elapse", payload=elapse_time)
 
 
 @BehaviorGenerator.operation_handler
 def exec_use(op: Operation, events: list[Event]) -> ActionGeneratorType:
-    _ = yield Action(name=op.name, method="use")
+    _ = yield dict(name=op.name, method="use", payload=None)
 
 
 @BehaviorGenerator.operation_handler
 def exec_elapse(op: Operation, events: list[Event]) -> ActionGeneratorType:
-    _ = yield Action(name="*", method="elapse", payload=op.time)
+    _ = yield dict(name="*", method="elapse", payload=op.time)
 
 
 @BehaviorGenerator.operation_handler
 def exec_resolve(op: Operation, events: list[Event]) -> ActionGeneratorType:
-    elapse_time = get_next_elapse_time([ev for ev in events if ev.name == op.name])
-    _ = yield Action(name="*", method="elapse", payload=elapse_time)
+    elapse_time = get_next_elapse_time([ev for ev in events if ev["name"] == op.name])
+    _ = yield dict(name="*", method="elapse", payload=elapse_time)
 
 
 @BehaviorGenerator.operation_handler
 def exec_keydownstop(op: Operation, events: list[Event]) -> ActionGeneratorType:
-    _ = yield Action(name=op.name, method="stop")
+    _ = yield dict(name=op.name, method="stop", payload=None)
 
 
 def get_operations() -> dict[

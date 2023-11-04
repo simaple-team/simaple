@@ -57,7 +57,7 @@ class TestMultipleOption:
         state, events = multiple_option.elapse(3_000, state)
 
         # then
-        dealing_count = sum([e.tag == Tag.DAMAGE for e in events])
+        dealing_count = sum([e["tag"] == Tag.DAMAGE for e in events])
         assert dealing_count == 3
 
     def test_multiple_option_many_use(
@@ -72,10 +72,14 @@ class TestMultipleOption:
         state, events = multiple_option.elapse(8_000, state)
 
         # then
-        dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
+        dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
 
-        assert sum([e.payload["damage"] == missile_damage for e in dealing_event]) == 3
-        assert sum([e.payload["damage"] == gatling_damage for e in dealing_event]) == 5
+        assert (
+            sum([e["payload"]["damage"] == missile_damage for e in dealing_event]) == 3
+        )
+        assert (
+            sum([e["payload"]["damage"] == gatling_damage for e in dealing_event]) == 5
+        )
 
     def test_multiple_option_discontinuous_use(
         self,
@@ -94,10 +98,14 @@ class TestMultipleOption:
         )
 
         # then
-        dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
+        dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
 
-        assert sum([e.payload["damage"] == missile_damage for e in dealing_event]) == 3
-        assert sum([e.payload["damage"] == gatling_damage for e in dealing_event]) == 5
+        assert (
+            sum([e["payload"]["damage"] == missile_damage for e in dealing_event]) == 3
+        )
+        assert (
+            sum([e["payload"]["damage"] == gatling_damage for e in dealing_event]) == 5
+        )
 
     def test_multiple_option_larger_than_period(
         self,
@@ -111,11 +119,13 @@ class TestMultipleOption:
         state, events = multiple_option.elapse(14_000, state)
 
         # then
-        dealing_event = [e for e in events if e.tag == Tag.DAMAGE]
+        dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
 
         assert (
-            sum([e.payload["damage"] == missile_damage for e in dealing_event]) == 3 + 3
+            sum([e["payload"]["damage"] == missile_damage for e in dealing_event])
+            == 3 + 3
         )
         assert (
-            sum([e.payload["damage"] == gatling_damage for e in dealing_event]) == 5 + 3
+            sum([e["payload"]["damage"] == gatling_damage for e in dealing_event])
+            == 5 + 3
         )

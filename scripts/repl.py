@@ -1,3 +1,6 @@
+import time
+from cProfile import Profile
+
 import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
@@ -17,31 +20,34 @@ setting = SimulationSetting(
 )
 
 
+container = SimulationContainer()
+container.config.from_dict(setting.model_dump())
+
+archmagefb_client = container.client()
+policy = container.client_configuration().get_default_policy()
+
+environment = archmagefb_client.environment
+
+report = Report()
+archmagefb_client.add_handler(ReportEventHandler(report))
+shell = get_dsl_shell(archmagefb_client)
+
+
 def run():
-    container = SimulationContainer()
-    container.config.from_dict(setting.model_dump())
-
-    archmagefb_client = container.client()
-    policy = container.client_configuration().get_default_policy()
-
-    environment = archmagefb_client.environment
-
-    report = Report()
-    archmagefb_client.add_handler(ReportEventHandler(report))
-    shell = get_dsl_shell(archmagefb_client)
-
+    start = time.time()
     while environment.show("clock") < 50_000:
         shell.exec_policy(policy, early_stop=50_000)
 
     print(
         f"{environment.show('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
     )
+    end = time.time()
+    print(f"elapsed: {end - start}")
+
     assert 8_264_622_367_162.877 == container.dpm_calculator().calculate_dpm(report)
 
 
 if __name__ == "__main__":
-    from cProfile import Profile
-
     profiler = Profile()
     profiler.run("run()")
 
