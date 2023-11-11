@@ -6,7 +6,7 @@ from dependency_injector.wiring import Provide, inject
 
 from simaple.app.application.command import (
     create_simulator,
-    override_checkpint,
+    override_checkpoint,
     play_action,
     play_elapse,
     play_use,
@@ -164,4 +164,4 @@ def override(
     ckpt_json: dict,
     uow: UnitOfWork = UowProvider,
 ) -> None:
-    override_checkpint(simulator_id, ckpt_json, uow)
+    override_checkpoint(simulator_id, ckpt_json, uow)

@@ -7,7 +7,7 @@ from simaple.app.domain.services.statistics import get_cumulative_logs, get_dama
 from simaple.app.domain.simulator import Simulator
 from simaple.app.domain.uow import UnitOfWork
 from simaple.core.base import Stat
-from simaple.simulate.base import Action, Event
+from simaple.simulate.base import Action, Checkpoint, Event
 from simaple.simulate.component.view import Running, Validity
 
 
@@ -22,7 +22,7 @@ class PlayLogResponse(pydantic.BaseModel):
     damages: list[tuple[str, float]]
     delay: float
     action: Action
-    checkpoint: dict
+    checkpoint: Checkpoint
     previous_hash: str
     hash: str
 

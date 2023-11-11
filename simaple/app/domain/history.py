@@ -6,7 +6,7 @@ from typing import Optional
 import pydantic
 
 from simaple.core.base import Stat
-from simaple.simulate.base import Action, Event, EventCallback
+from simaple.simulate.base import Action, Checkpoint, Event
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.report.base import Report
 from simaple.simulate.report.dpm import DamageCalculator
@@ -28,8 +28,7 @@ class PlayLog(pydantic.BaseModel):
     action: Action
     events: list[Event]
     view: SimulationView
-    checkpoint: dict[str, dict]
-    checkpoint_callback: list[EventCallback]
+    checkpoint: Checkpoint
     previous_hash: str
 
     @property

@@ -2,7 +2,7 @@ import json
 import os
 from pathlib import Path
 
-from simaple.app.application.command import create_simulator, override_checkpint
+from simaple.app.application.command import create_simulator, override_checkpoint
 from simaple.app.domain.simulator_configuration import MinimalSimulatorConfiguration
 from simaple.app.domain.uow import UnitOfWork
 
@@ -21,4 +21,4 @@ def test_query_all_snapshot(
     ) as f:
         ckpt = json.load(f)
 
-    override_checkpint(simulator_id, ckpt, uow)
+    override_checkpoint(simulator_id, {"store_ckpt": ckpt, "callbacks": []}, uow)

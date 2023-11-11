@@ -219,6 +219,45 @@ class RouterDispatcher(Dispatcher):
 View = Callable[[Store], Any]
 
 
+EventCallback = tuple[Action, Action]
+
+
+def _get_event_callbacks(event: Event) -> EventCallback:
+    """Wrap-up relay's decision by built-in actionss
+    These decisions must provided; this is "forced action"
+    """
+    emiited_event_action: Action = {
+        "name": event["name"],
+        "method": f"{event['method']}.emitted.{event['tag'] or ''}",
+        "payload": event["payload"],
+    }
+
+    done_event_action: Action = {
+        "name": event["name"],
+        "method": f"{event['method']}.done.{event['tag'] or ''}",
+        "payload": event["payload"],
+    }
+
+    return (emiited_event_action, done_event_action)
+
+
+class Checkpoint(BaseModel):
+    store_ckpt: dict[str, Any]
+    callbacks: list[EventCallback]
+
+    @classmethod
+    def create(
+        cls, store: AddressedStore, callbacks: list[EventCallback]
+    ) -> Checkpoint:
+        return Checkpoint(store_ckpt=store.save(), callbacks=callbacks)
+
+    def restore(self) -> tuple[AddressedStore, list[EventCallback]]:
+        concrete_store = ConcreteStore()
+        concrete_store.load(self.store_ckpt)
+        store = AddressedStore(concrete_store)
+        return store, self.callbacks
+
+
 class Environment:
     def __init__(self, store: AddressedStore):
         self._router = RouterDispatcher()
@@ -228,7 +267,7 @@ class Environment:
 
     def add_dispatcher(self, dispatcher: Dispatcher):
         self._router.install(dispatcher)
-        dispatcher.init_store(self._store) # TODO: remove this
+        dispatcher.init_store(self._store)  # TODO: remove this
 
     def add_view(self, view_name: str, view: View):
         self._views[view_name] = view
@@ -258,17 +297,17 @@ class Environment:
             events += resolved_events
 
         # Save untriggered callbacks
-        self._previous_callbacks = [
-            _get_event_callbacks(event) for event in events
-        ]
+        self._previous_callbacks = [_get_event_callbacks(event) for event in events]
 
         return events
 
-    def export_previous_callbacks(self) -> list[EventCallback]:
-        return list(self._previous_callbacks)
+    def save(self) -> Checkpoint:
+        return Checkpoint.create(self._store, self._previous_callbacks)
 
-    def restore_previous_callbacks(self, callbacks: list[EventCallback]) -> None:
-        self._previous_callbacks = callbacks
+    def load(self, ckpt: Checkpoint) -> None:
+        store, checkpoint = ckpt.restore()
+        self._store = store
+        self._previous_callbacks = checkpoint
 
 
 class EventHandler:
@@ -285,27 +324,6 @@ class EventHandler:
         ...
 
 
-EventCallback = tuple[Action, Action]
-
-def _get_event_callbacks(event: Event) -> EventCallback:
-    """Wrap-up relay's decision by built-in actionss
-    These decisions must provided; this is "forced action"
-    """
-    emiited_event_action: Action = {
-        "name": event["name"],
-        "method": f"{event['method']}.emitted.{event['tag'] or ''}",
-        "payload": event["payload"],
-    }
-
-    done_event_action: Action = {
-        "name": event["name"],
-        "method": f"{event['method']}.done.{event['tag'] or ''}",
-        "payload": event["payload"],
-    }
-
-    return (emiited_event_action, done_event_action)
-
-
 class Client:
     def __init__(self, environment: Environment):
         self.environment = environment
@@ -319,11 +337,11 @@ class Client:
         for event in events:
             for handler in self._event_handlers:
                 handler(event, self.environment, events)
-        
+
         return events
 
-    def export_previous_callbacks(self) -> list[EventCallback]:
-        return self.environment.export_previous_callbacks()
+    def save(self) -> Checkpoint:
+        return self.environment.save()
 
-    def restore_previous_callbacks(self, callbacks: list[EventCallback]) -> None:
-        self.environment.restore_previous_callbacks(callbacks)
+    def load(self, ckpt: Checkpoint) -> None:
+        return self.environment.load(ckpt)

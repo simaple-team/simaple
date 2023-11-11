@@ -26,7 +26,7 @@ def test_override(simulator_configuration, record_file_name, client, sample_ckpt
 
     response = client.post(
         f"/workspaces/override/{simulator_id}",
-        json=sample_ckpt,
+        json={"store_ckpt": sample_ckpt, "callbacks": []},
     )
     assert response.status_code == 200
 

@@ -5,7 +5,7 @@ from simaple.app.application.exception import (
 from simaple.app.domain.simulator import Simulator
 from simaple.app.domain.simulator_configuration import SimulatorConfiguration
 from simaple.app.domain.uow import UnitOfWork
-from simaple.simulate.base import Action
+from simaple.simulate.base import Action, Checkpoint
 
 
 def create_simulator(conf: SimulatorConfiguration, uow: UnitOfWork) -> str:
@@ -79,7 +79,7 @@ def rollback(simulator_id: str, target_index: int, uow: UnitOfWork) -> None:
     uow.simulator_repository().update(simulator)
 
 
-def override_checkpint(simulator_id, checkpoint: dict, uow: UnitOfWork) -> None:
+def override_checkpoint(simulator_id, checkpoint: dict, uow: UnitOfWork) -> None:
     simulator = uow.simulator_repository().get(simulator_id)
 
     if simulator is None:
@@ -88,5 +88,5 @@ def override_checkpint(simulator_id, checkpoint: dict, uow: UnitOfWork) -> None:
     if len(simulator.history) != 1:
         raise ApplicationError("override_checkpoint only valid for no-history")
 
-    simulator.change_current_checkpoint(checkpoint)
+    simulator.change_current_checkpoint(Checkpoint.model_validate(checkpoint))
     uow.simulator_repository().update(simulator)

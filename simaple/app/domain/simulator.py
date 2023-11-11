@@ -8,7 +8,7 @@ import pydantic
 
 from simaple.app.domain.history import History, PlayLog, SimulationView
 from simaple.app.domain.simulator_configuration import SimulatorConfiguration
-from simaple.simulate.base import Action, Client
+from simaple.simulate.base import Action, Checkpoint, Client
 from simaple.simulate.report.dpm import DamageCalculator
 
 
@@ -45,8 +45,7 @@ class Simulator(pydantic.BaseModel):
                 view=self.get_simulation_view(),
                 clock=self.client.environment.show("clock"),
                 action=dict(name="*", method="elapse", payload=0),
-                checkpoint=self.client.environment._store.save(),
-                checkpoint_callback=[],
+                checkpoint=self.client.save(),
                 previous_hash="",
             )
         )
@@ -66,8 +65,7 @@ class Simulator(pydantic.BaseModel):
             view=self.get_simulation_view(),
             action=action,
             events=events,
-            checkpoint=self.client.environment._store.save(),
-            checkpoint_callback=self.client.export_previous_callbacks(),
+            checkpoint=self.client.save(),
             previous_hash=self.history.logs[-1].hash,
         )
 
@@ -80,20 +78,17 @@ class Simulator(pydantic.BaseModel):
     def rollback(self, history_index: int) -> None:
         self.history.logs = self.history.logs[: history_index + 1]
         last_playlog = self.history.logs[-1]
-        self.client.environment._store.load(last_playlog.checkpoint)
-        self.client.restore_previous_callbacks(last_playlog.checkpoint_callback)
+        self.client.load(last_playlog.checkpoint)
 
     def set_history(self, history: History) -> None:
         self.history = history
         self.rollback(len(history) - 1)
 
-    def change_current_checkpoint(self, ckpt: dict) -> None:
+    def change_current_checkpoint(self, ckpt: Checkpoint) -> None:
         last_playlog = self.history.logs[-1].model_copy()
         last_playlog.checkpoint = ckpt
         self.history.logs[-1] = last_playlog
-
-        self.client.environment._store.load(last_playlog.checkpoint)
-        self.client.restore_previous_callbacks(last_playlog.checkpoint_callback)
+        self.client.load(last_playlog.checkpoint)
 
 
 class SimulatorRepository(metaclass=abc.ABCMeta):
