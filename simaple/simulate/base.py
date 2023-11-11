@@ -224,6 +224,7 @@ class Environment:
         self._router = RouterDispatcher()
         self._store = store
         self._views: dict[str, View] = {}
+        self._previous_callbacks: list[EventCallback] = []
 
     def add_dispatcher(self, dispatcher: Dispatcher):
         self._router.install(dispatcher)
@@ -243,6 +244,31 @@ class Environment:
         return [
             view for view_name, view in self._views.items() if regex.match(view_name)
         ]
+
+    def play(self, action: Action) -> list[Event]:
+        events: list[Event] = []
+        action_queue = [action]
+
+        # Join proposed action with previous event's callback
+        for emitted_callback, done_callback in self._previous_callbacks:
+            action_queue = [emitted_callback] + action_queue + [done_callback]
+
+        for target_action in action_queue:
+            resolved_events = self.resolve(target_action)
+            events += resolved_events
+
+        # Save untriggered callbacks
+        self._previous_callbacks = [
+            _get_event_callbacks(event) for event in events
+        ]
+
+        return events
+
+    def export_previous_callbacks(self) -> list[EventCallback]:
+        return list(self._previous_callbacks)
+
+    def restore_previous_callbacks(self, callbacks: list[EventCallback]) -> None:
+        self._previous_callbacks = callbacks
 
 
 class EventHandler:
@@ -284,41 +310,20 @@ class Client:
     def __init__(self, environment: Environment):
         self.environment = environment
         self._event_handlers: list[EventHandler] = []
-        self._previous_callbacks: list[EventCallback] = []
 
     def add_handler(self, event_handler: EventHandler) -> None:
         self._event_handlers.append(event_handler)
 
     def play(self, action: Action) -> list[Event]:
-        events: list[Event] = []
-        action_queue = [action]
-
-        # Join proposed action with previous event's callback
-        for emitted_callback, done_callback in self._previous_callbacks:
-            action_queue = [emitted_callback] + action_queue + [done_callback]
-
-        for target_action in action_queue:
-            resolved_events = self.environment.resolve(target_action)
-            events += resolved_events
-
+        events = self.environment.play(action)
         for event in events:
-            self._handle(event, self.environment, events)
-
-        # Save untriggered callbacks
-        self._previous_callbacks = [
-            _get_event_callbacks(event) for event in events
-        ]
-
+            for handler in self._event_handlers:
+                handler(event, self.environment, events)
+        
         return events
 
     def export_previous_callbacks(self) -> list[EventCallback]:
-        return list(self._previous_callbacks)
+        return self.environment.export_previous_callbacks()
 
     def restore_previous_callbacks(self, callbacks: list[EventCallback]) -> None:
-        self._previous_callbacks = callbacks
-
-    def _handle(
-        self, event: Event, environment: Environment, all_events: list[Event]
-    ) -> None:
-        for handler in self._event_handlers:
-            handler(event, environment, all_events)
+        self.environment.restore_previous_callbacks(callbacks)
