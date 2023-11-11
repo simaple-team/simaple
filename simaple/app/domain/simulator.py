@@ -45,7 +45,7 @@ class Simulator(pydantic.BaseModel):
                 view=self.get_simulation_view(),
                 clock=self.client.environment.show("clock"),
                 action=dict(name="*", method="elapse", payload=0),
-                checkpoint=self.client.environment.store.save(),
+                checkpoint=self.client.environment._store.save(),
                 checkpoint_callback=[],
                 previous_hash="",
             )
@@ -66,7 +66,7 @@ class Simulator(pydantic.BaseModel):
             view=self.get_simulation_view(),
             action=action,
             events=events,
-            checkpoint=self.client.environment.store.save(),
+            checkpoint=self.client.environment._store.save(),
             checkpoint_callback=self.client.export_previous_callbacks(),
             previous_hash=self.history.logs[-1].hash,
         )
@@ -80,7 +80,7 @@ class Simulator(pydantic.BaseModel):
     def rollback(self, history_index: int) -> None:
         self.history.logs = self.history.logs[: history_index + 1]
         last_playlog = self.history.logs[-1]
-        self.client.environment.store.load(last_playlog.checkpoint)
+        self.client.environment._store.load(last_playlog.checkpoint)
         self.client.restore_previous_callbacks(last_playlog.checkpoint_callback)
 
     def set_history(self, history: History) -> None:
@@ -92,7 +92,7 @@ class Simulator(pydantic.BaseModel):
         last_playlog.checkpoint = ckpt
         self.history.logs[-1] = last_playlog
 
-        self.client.environment.store.load(last_playlog.checkpoint)
+        self.client.environment._store.load(last_playlog.checkpoint)
         self.client.restore_previous_callbacks(last_playlog.checkpoint_callback)
 
 

@@ -222,21 +222,21 @@ View = Callable[[Store], Any]
 class Environment:
     def __init__(self, store: AddressedStore):
         self._router = RouterDispatcher()
-        self.store = store
+        self._store = store
         self._views: dict[str, View] = {}
 
     def add_dispatcher(self, dispatcher: Dispatcher):
         self._router.install(dispatcher)
-        dispatcher.init_store(self.store)
+        dispatcher.init_store(self._store) # TODO: remove this
 
     def add_view(self, view_name: str, view: View):
         self._views[view_name] = view
 
     def resolve(self, action: Action) -> list[Event]:
-        return self._router(action, self.store)
+        return self._router(action, self._store)
 
     def show(self, view_name: str):
-        return self._views[view_name](self.store)
+        return self._views[view_name](self._store)
 
     def get_views(self, view_name_pattern: str) -> list[View]:
         regex = re.compile(view_name_pattern)
@@ -260,6 +260,24 @@ class EventHandler:
 
 
 EventCallback = tuple[Action, Action]
+
+def _get_event_callbacks(event: Event) -> EventCallback:
+    """Wrap-up relay's decision by built-in actionss
+    These decisions must provided; this is "forced action"
+    """
+    emiited_event_action: Action = {
+        "name": event["name"],
+        "method": f"{event['method']}.emitted.{event['tag'] or ''}",
+        "payload": event["payload"],
+    }
+
+    done_event_action: Action = {
+        "name": event["name"],
+        "method": f"{event['method']}.done.{event['tag'] or ''}",
+        "payload": event["payload"],
+    }
+
+    return (emiited_event_action, done_event_action)
 
 
 class Client:
@@ -288,13 +306,10 @@ class Client:
 
         # Save untriggered callbacks
         self._previous_callbacks = [
-            self._get_event_callbacks(event) for event in events
+            _get_event_callbacks(event) for event in events
         ]
 
         return events
-
-    def clean(self) -> None:
-        self._previous_callbacks = []
 
     def export_previous_callbacks(self) -> list[EventCallback]:
         return list(self._previous_callbacks)
@@ -307,21 +322,3 @@ class Client:
     ) -> None:
         for handler in self._event_handlers:
             handler(event, environment, all_events)
-
-    def _get_event_callbacks(self, event: Event) -> EventCallback:
-        """Wrap-up relay's decision by built-in actionss
-        These decisions must provided; this is "forced action"
-        """
-        emiited_event_action: Action = {
-            "name": event["name"],
-            "method": f"{event['method']}.emitted.{event['tag'] or ''}",
-            "payload": event["payload"],
-        }
-
-        done_event_action: Action = {
-            "name": event["name"],
-            "method": f"{event['method']}.done.{event['tag'] or ''}",
-            "payload": event["payload"],
-        }
-
-        return (emiited_event_action, done_event_action)

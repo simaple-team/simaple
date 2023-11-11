@@ -8,6 +8,6 @@ def test_snapshot(sample_simulator: Simulator):
     restored_simulator = snapshot.restore_simulator()
 
     assert (
-        sample_simulator.client.environment.store.save()
-        == restored_simulator.client.environment.store.save()
+        sample_simulator.client.environment._store.save()
+        == restored_simulator.client.environment._store.save()
     )

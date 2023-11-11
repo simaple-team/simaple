@@ -47,4 +47,4 @@ def test_view_query():
     component.add_to_environment(environment)
 
     view = environment.get_views(r".*\.naming")[0]
-    assert view(environment.store) == str(3 + 5)
+    assert view(environment._store) == str(3 + 5)
