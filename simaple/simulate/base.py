@@ -161,13 +161,21 @@ class Dispatcher(metaclass=ABCMeta):
     def includes(self, signature: str) -> bool:
         ...
 
+    @abstractmethod
+    def init_store(self, store: Store) -> None:
+        ...
+
 
 def named_dispatcher(direction: str):
     def decorator(dispatcher: Dispatcher):
         def _includes(signature: str) -> bool:
             return signature == direction
 
+        def _init_store(store: Store) -> None:
+            return
+
         setattr(dispatcher, "includes", _includes)
+        setattr(dispatcher, "init_store", _init_store)
         return dispatcher
 
     return decorator
@@ -203,6 +211,10 @@ class RouterDispatcher(Dispatcher):
         self._route_cache[signature] = cache
         return events
 
+    def init_store(self, store: Store) -> None:
+        for dispatcher in self._dispatchers:
+            dispatcher.init_store(store)
+
 
 View = Callable[[Store], Any]
 
@@ -215,6 +227,7 @@ class Environment:
 
     def add_dispatcher(self, dispatcher: Dispatcher):
         self._router.install(dispatcher)
+        dispatcher.init_store(self.store)
 
     def add_view(self, view_name: str, view: View):
         self._views[view_name] = view

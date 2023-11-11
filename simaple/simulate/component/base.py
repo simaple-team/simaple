@@ -320,7 +320,6 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     def add_to_environment(self, environment: Environment):
         dispatcher = self.export_dispatcher()
         environment.add_dispatcher(dispatcher)
-        dispatcher.init_store(environment.store)
 
         for view_name, view in self.get_views().items():
             environment.add_view(f"{self.name}.{view_name}", view)
