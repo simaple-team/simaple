@@ -35,7 +35,7 @@ class Simulator(pydantic.BaseModel):
         return simulation
 
     def get_valid_skill_names(self) -> list[str]:
-        validity_view = self.client.environment.show("validitiy")
+        validity_view = self.client.show("validitiy")
         return list(view.name for view in validity_view)
 
     def add_empty_action_playlog(self) -> None:
@@ -43,7 +43,7 @@ class Simulator(pydantic.BaseModel):
             PlayLog(
                 events=[],
                 view=self.get_simulation_view(),
-                clock=self.client.environment.show("clock"),
+                clock=self.client.show("clock"),
                 action=dict(name="*", method="elapse", payload=0),
                 checkpoint=self.client.save(),
                 previous_hash="",
@@ -52,16 +52,16 @@ class Simulator(pydantic.BaseModel):
 
     def get_simulation_view(self) -> SimulationView:
         return SimulationView(
-            validity_view={v.name: v for v in self.client.environment.show("validity")},
-            running_view={v.name: v for v in self.client.environment.show("running")},
-            buff_view=self.client.environment.show("buff"),
+            validity_view={v.name: v for v in self.client.show("validity")},
+            running_view={v.name: v for v in self.client.show("running")},
+            buff_view=self.client.show("buff"),
         )
 
     def dispatch(self, action: Action) -> None:
         events = self.client.play(action)
 
         playlog = PlayLog(
-            clock=self.client.environment.show("clock"),
+            clock=self.client.show("clock"),
             view=self.get_simulation_view(),
             action=action,
             events=events,

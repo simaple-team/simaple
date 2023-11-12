@@ -26,8 +26,6 @@ container.config.from_dict(setting.model_dump())
 archmagefb_client = container.client()
 policy = container.client_configuration().get_default_policy()
 
-environment = archmagefb_client.environment
-
 report = Report()
 archmagefb_client.add_handler(ReportEventHandler(report))
 shell = get_dsl_shell(archmagefb_client)
@@ -35,11 +33,11 @@ shell = get_dsl_shell(archmagefb_client)
 
 def run():
     start = time.time()
-    while environment.show("clock") < 50_000:
+    while archmagefb_client.show("clock") < 50_000:
         shell.exec_policy(policy, early_stop=50_000)
 
     print(
-        f"{environment.show('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
+        f"{archmagefb_client.show('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
     )
     end = time.time()
     print(f"elapsed: {end - start}")

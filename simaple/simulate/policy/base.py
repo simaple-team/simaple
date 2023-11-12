@@ -143,7 +143,7 @@ class SimulationShell:
     def exec(self, op: Operation, early_stop: int = -1) -> None:
         self.history.append(op)
         for behavior in self.get_behavior_gen(op):
-            if 0 < early_stop <= self.environment.show("clock"):
+            if 0 < early_stop <= self._client.show("clock"):
                 break
             action = behavior(self._buffered_events)
             if action is not None:
@@ -160,7 +160,3 @@ class SimulationShell:
     @property
     def context(self):
         return (self._client.environment, self._buffered_events)
-
-    @property
-    def environment(self):
-        return self._client.environment

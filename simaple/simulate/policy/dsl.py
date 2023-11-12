@@ -129,11 +129,11 @@ class DSLShell(SimulationShell):
 
             if txt == "valid":
                 print("-- valid skills --")
-                for validity in self.environment.show("validity"):
+                for validity in self._client.show("validity"):
                     if validity.valid:
                         print(f"{validity.name}")
             elif txt == "running":
-                for running in self.environment.show("running"):
+                for running in self._client.show("running"):
                     if running.time_left > 0:
                         print(f"{running.name} | {running.time_left}")
             else:

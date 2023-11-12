@@ -17,16 +17,14 @@ def test_actor(setting, jobtype, expected):
     client = container.client()
     policy = container.client_configuration().get_default_policy()
 
-    environment = client.environment
-
     report = Report()
     client.add_handler(ReportEventHandler(report))
 
     shell = get_dsl_shell(client)
 
-    while environment.show("clock") < 50_000:
+    while client.show("clock") < 50_000:
         shell.exec_policy(policy, early_stop=50_000)
 
     dpm = container.dpm_calculator().calculate_dpm(report)
-    print(f"{environment.show('clock')} | {jobtype} | {dpm:,} ")
+    print(f"{client.show('clock')} | {jobtype} | {dpm:,} ")
     assert int(dpm) == expected

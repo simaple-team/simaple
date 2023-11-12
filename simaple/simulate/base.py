@@ -345,3 +345,9 @@ class Client:
 
     def load(self, ckpt: Checkpoint) -> None:
         return self.environment.load(ckpt)
+
+    def resolve(self, action: Action) -> list[Event]:
+        return self.environment.resolve(action)
+
+    def show(self, view_name: str):
+        return self.environment.show(view_name)
