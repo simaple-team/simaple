@@ -1,4 +1,4 @@
-from simaple.simulate.base import Action, Client, Event, Store, named_dispatcher
+from simaple.simulate.base import Action, Environment, Event, Store, named_dispatcher
 from simaple.simulate.global_property import Clock
 
 
@@ -20,5 +20,5 @@ def clock_view(store: Store) -> float:
     return time
 
 
-def install_timer(client: Client):
-    client.environment.add_dispatcher(timer_delay_dispatcher)
+def install_timer(environment: Environment):
+    environment.add_dispatcher(timer_delay_dispatcher)

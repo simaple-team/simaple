@@ -63,14 +63,14 @@ def get_client(
     for component in components:
         component.add_to_environment(environment)
 
-    client = Client(environment)
-
-    install_timer(client)
+    install_timer(environment)
 
     InformationParentView.build_and_install(environment, "info")
     ValidityParentView.build_and_install(environment, "validity")
     BuffParentView.build_and_install(environment, "buff")
     RunningParentView.build_and_install(environment, "running")
     KeydownParentView.build_and_install(environment, "keydown")
+
+    client = Client(environment)
 
     return client

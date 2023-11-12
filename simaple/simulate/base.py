@@ -258,12 +258,30 @@ class Checkpoint(BaseModel):
         return store, self.callbacks
 
 
+class EventHandler:
+    """
+    EventHandler receives "Event" and create "Action" (maybe multiple).
+    Eventhandler receives full context; to provide meaningful decision.
+    Handling given store is not recommended "strongly". Please use store with
+    read-only mode as possible as you can.
+    """
+
+    def __call__(
+        self, event: Event, environment: Environment, all_events: list[Event]
+    ) -> None:
+        ...
+
+
 class Environment:
     def __init__(self, store: AddressedStore):
         self._router = RouterDispatcher()
         self._store = store
         self._views: dict[str, View] = {}
         self._previous_callbacks: list[EventCallback] = []
+        self._event_handlers: list[EventHandler] = []
+
+    def add_handler(self, event_handler: EventHandler) -> None:
+        self._event_handlers.append(event_handler)
 
     def add_dispatcher(self, dispatcher: Dispatcher):
         self._router.install(dispatcher)
@@ -299,6 +317,10 @@ class Environment:
         # Save untriggered callbacks
         self._previous_callbacks = [_get_event_callbacks(event) for event in events]
 
+        for event in events:
+            for handler in self._event_handlers:
+                handler(event, self, events)
+
         return events
 
     def save(self) -> Checkpoint:
@@ -310,35 +332,15 @@ class Environment:
         self._previous_callbacks = checkpoint
 
 
-class EventHandler:
-    """
-    EventHandler receives "Event" and create "Action" (maybe multiple).
-    Eventhandler receives full context; to provide meaningful decision.
-    Handling given store is not recommended "strongly". Please use store with
-    read-only mode as possible as you can.
-    """
-
-    def __call__(
-        self, event: Event, environment: Environment, all_events: list[Event]
-    ) -> None:
-        ...
-
-
 class Client:
     def __init__(self, environment: Environment):
         self.environment = environment
-        self._event_handlers: list[EventHandler] = []
 
     def add_handler(self, event_handler: EventHandler) -> None:
-        self._event_handlers.append(event_handler)
+        self.environment.add_handler(event_handler)
 
     def play(self, action: Action) -> list[Event]:
-        events = self.environment.play(action)
-        for event in events:
-            for handler in self._event_handlers:
-                handler(event, self.environment, events)
-
-        return events
+        return self.environment.play(action)
 
     def save(self) -> Checkpoint:
         return self.environment.save()
