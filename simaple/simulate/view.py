@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from typing import Any
 
-from simaple.simulate.base import Environment, Store, View
+from simaple.simulate.base import Store, View, ViewSet
 
 
 class AggregationView(metaclass=ABCMeta):
@@ -22,16 +22,8 @@ class AggregationView(metaclass=ABCMeta):
         """A Template-method to specify which pattern may used for installation."""
 
     @classmethod
-    def build(cls, environment: Environment):
-        """Build from environment's registered view."""
+    def build(cls, viewset: ViewSet):
+        """Build from viewset's registered view."""
         pattern = cls.get_installation_pattern()
-        views = environment.get_views(pattern)
+        views = viewset.get_views(pattern)
         return cls(views)
-
-    @classmethod
-    def build_and_install(cls, environment: Environment, name: str):
-        """Build from environment's registered view, and install into environment.
-        This is utility-level function; this only prevent code duplication.
-        """
-        my_view = cls.build(environment)
-        environment.add_view(name, my_view)

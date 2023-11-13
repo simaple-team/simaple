@@ -5,7 +5,8 @@ from simaple.data.passive.patch import SkillLevelPatch
 from simaple.data.passive_hyper_skill import get_hyper_skill_patch
 from simaple.data.skill import get_kms_skill_loader
 from simaple.data.skill.patch import VSkillImprovementPatch
-from simaple.simulate.base import AddressedStore, Client, ConcreteStore, Environment
+from simaple.simulate.base import AddressedStore, Client, ConcreteStore
+from simaple.simulate.builder import ClientBuilder
 from simaple.simulate.component.base import Component
 from simaple.simulate.component.view import (
     BuffParentView,
@@ -15,7 +16,7 @@ from simaple.simulate.component.view import (
     ValidityParentView,
 )
 from simaple.simulate.global_property import GlobalProperty
-from simaple.simulate.timer import clock_view, install_timer
+from simaple.simulate.timer import clock_view, timer_delay_dispatcher
 from simaple.spec.patch import EvalPatch
 
 
@@ -36,8 +37,6 @@ def get_client(
 ) -> Client:
     loader = get_kms_skill_loader()
 
-    store = bare_store(action_stat)
-
     component_sets = [
         loader.load_all(
             query={"group": group},
@@ -57,20 +56,19 @@ def get_client(
 
     components: list[Component] = sum(component_sets, [])
 
-    environment = Environment(store=store)
-    environment.add_view("clock", clock_view)
+    client_builder = ClientBuilder(bare_store(action_stat))
+    client_builder.add_view("clock", clock_view)
 
     for component in components:
-        component.add_to_environment(environment)
+        client_builder.add_component(component)
 
-    install_timer(environment)
+    client_builder.add_dispatcher(timer_delay_dispatcher)
+    client_builder.add_aggregation_view(InformationParentView, "info")
+    client_builder.add_aggregation_view(ValidityParentView, "validity")
+    client_builder.add_aggregation_view(BuffParentView, "buff")
+    client_builder.add_aggregation_view(RunningParentView, "running")
+    client_builder.add_aggregation_view(KeydownParentView, "keydown")
 
-    InformationParentView.build_and_install(environment, "info")
-    ValidityParentView.build_and_install(environment, "validity")
-    BuffParentView.build_and_install(environment, "buff")
-    RunningParentView.build_and_install(environment, "running")
-    KeydownParentView.build_and_install(environment, "keydown")
-
-    client = Client(environment)
+    client = client_builder.build_client()
 
     return client

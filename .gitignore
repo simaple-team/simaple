@@ -8,3 +8,4 @@ report.tsv
 /.stat*
 .sqlite.db
 *.log
+.workspace/

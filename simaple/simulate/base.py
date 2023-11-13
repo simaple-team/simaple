@@ -258,6 +258,26 @@ class Checkpoint(BaseModel):
         return store, self.callbacks
 
 
+class ViewSet():
+    def __init__(self):
+        self._views: dict[str, View] = {}
+
+    def add_view(self, view_name: str, view: View) -> None:
+        self._views[view_name] = view
+
+    def show(self, view_name: str, store: Store) -> Any:
+        return self._views[view_name](store)
+
+    def get_views(self, view_name_pattern: str) -> list[View]:
+        regex = re.compile(view_name_pattern)
+        return [
+            view for view_name, view in self._views.items() if regex.match(view_name)
+        ]
+
+
+ViewerType = Callable[[str], Any]
+
+
 class EventHandler:
     """
     EventHandler receives "Event" and create "Action" (maybe multiple).
@@ -267,40 +287,32 @@ class EventHandler:
     """
 
     def __call__(
-        self, event: Event, environment: Environment, all_events: list[Event]
+        self, event: Event, viewer: ViewerType, all_events: list[Event]
     ) -> None:
         ...
 
 
-class Environment:
-    def __init__(self, store: AddressedStore):
-        self._router = RouterDispatcher()
+class Client:
+    def __init__(
+        self, store: AddressedStore, router: RouterDispatcher, viewset: ViewSet
+    ):
+        self._router = router
         self._store = store
-        self._views: dict[str, View] = {}
+        self._viewset = viewset
         self._previous_callbacks: list[EventCallback] = []
         self._event_handlers: list[EventHandler] = []
 
+    def get_viewer(self) -> ViewerType:
+        return self.show
+
     def add_handler(self, event_handler: EventHandler) -> None:
         self._event_handlers.append(event_handler)
-
-    def add_dispatcher(self, dispatcher: Dispatcher):
-        self._router.install(dispatcher)
-        dispatcher.init_store(self._store)  # TODO: remove this
-
-    def add_view(self, view_name: str, view: View):
-        self._views[view_name] = view
 
     def resolve(self, action: Action) -> list[Event]:
         return self._router(action, self._store)
 
     def show(self, view_name: str):
-        return self._views[view_name](self._store)
-
-    def get_views(self, view_name_pattern: str) -> list[View]:
-        regex = re.compile(view_name_pattern)
-        return [
-            view for view_name, view in self._views.items() if regex.match(view_name)
-        ]
+        return self._viewset.show(view_name, self._store)
 
     def play(self, action: Action) -> list[Event]:
         events: list[Event] = []
@@ -319,7 +331,7 @@ class Environment:
 
         for event in events:
             for handler in self._event_handlers:
-                handler(event, self, events)
+                handler(event, self.get_viewer(), events)
 
         return events
 
@@ -330,26 +342,3 @@ class Environment:
         store, checkpoint = ckpt.restore()
         self._store = store
         self._previous_callbacks = checkpoint
-
-
-class Client:
-    def __init__(self, environment: Environment):
-        self.environment = environment
-
-    def add_handler(self, event_handler: EventHandler) -> None:
-        self.environment.add_handler(event_handler)
-
-    def play(self, action: Action) -> list[Event]:
-        return self.environment.play(action)
-
-    def save(self) -> Checkpoint:
-        return self.environment.save()
-
-    def load(self, ckpt: Checkpoint) -> None:
-        return self.environment.load(ckpt)
-
-    def resolve(self, action: Action) -> list[Event]:
-        return self.environment.resolve(action)
-
-    def show(self, view_name: str):
-        return self.environment.show(view_name)

@@ -1,14 +1,14 @@
 from typing import Optional
 
-from simaple.simulate.base import Environment, Event
+from simaple.simulate.base import Event, ViewerType
 from simaple.simulate.component.view import KeydownView, Running, Validity
 from simaple.simulate.policy.base import PolicyContextType
 from simaple.simulate.policy.dsl import DSLGeneratorProto, interpret_dsl_generator
 from simaple.simulate.reserved_names import Tag
 
 
-def _get_keydown(environment: Environment) -> Optional[str]:
-    keydowns: list[KeydownView] = environment.show("keydown")
+def _get_keydown(viewer: ViewerType) -> Optional[str]:
+    keydowns: list[KeydownView] = viewer("keydown")
     keydown_running_list = [k.name for k in keydowns if k.running]
 
     return next(iter(keydown_running_list), None)
@@ -26,21 +26,21 @@ def get_next_elapse_time(events: list[Event]) -> float:
     return 0.0
 
 
-def running_map(environment: Environment):
-    runnings: list[Running] = environment.show("running")
+def running_map(viewer: ViewerType):
+    runnings: list[Running] = viewer("running")
     return {r.name: r.time_left for r in runnings}
 
 
-def validity_map(environment: Environment):
-    validities: list[Validity] = environment.show("validity")
+def validity_map(viewer: ViewerType):
+    validities: list[Validity] = viewer("validity")
     return {v.name: v for v in validities if v.valid}
 
 
 def cast_by_priority(order: list[str]) -> DSLGeneratorProto:
     def _gen(ctx: PolicyContextType):
-        environment, _ = ctx
-        validities = validity_map(environment)
-        runnings = running_map(environment)
+        viewer, _ = ctx
+        validities = validity_map(viewer)
+        runnings = running_map(viewer)
 
         for name in order:
             if validities.get(name):
@@ -69,10 +69,10 @@ def keydown_until_interrupt(
             stopby.append(name)
 
         while True:
-            environment, events = ctx
+            viewer, events = ctx
 
-            validities = validity_map(environment)
-            runnings = running_map(environment)
+            validities = validity_map(viewer)
+            runnings = running_map(viewer)
 
             for name in stopby:
                 if validities.get(name):
@@ -96,9 +96,9 @@ def default_ordered_policy(order: list[str]) -> DSLGeneratorProto:
 
     def _gen(ctx: PolicyContextType):
         while True:
-            environment, events = ctx
+            viewer, events = ctx
 
-            current_keydown = _get_keydown(environment)
+            current_keydown = _get_keydown(viewer)
             if current_keydown:
                 ctx = yield from keydown_until_interrupt(current_keydown, order)(ctx)
                 continue

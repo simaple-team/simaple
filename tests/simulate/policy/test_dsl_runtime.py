@@ -40,7 +40,6 @@ def test_dsl(dsl_list: list[str], dsl_test_setting: SimulationSetting) -> None:
     container.config.from_dict(dsl_test_setting.model_dump())
 
     test_client = container.client()
-    environment = test_client.environment
 
     report = Report()
     test_client.add_handler(ReportEventHandler(report))
@@ -50,6 +49,6 @@ def test_dsl(dsl_list: list[str], dsl_test_setting: SimulationSetting) -> None:
         shell.exec_dsl(dsl)
 
     print(
-        f"{environment.show('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
+        f"{test_client.show('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
     )
     assert 6534916107988.74 == container.dpm_calculator().calculate_dpm(report)

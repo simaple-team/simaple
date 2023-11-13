@@ -4,7 +4,7 @@ from typing import Callable, Generator, Optional, cast
 
 from pydantic import BaseModel
 
-from simaple.simulate.base import Action, Client, Environment, Event
+from simaple.simulate.base import Action, Client, Event, ViewerType
 
 
 class Operation(BaseModel):
@@ -84,7 +84,7 @@ class BehaviorGenerator:
         return _wrapper
 
 
-PolicyContextType = tuple[Environment, list[Event]]
+PolicyContextType = tuple[ViewerType, list[Event]]
 
 OperationGenerator = Generator[Operation, PolicyContextType, PolicyContextType]
 OperationGeneratorProto = Callable[[PolicyContextType], OperationGenerator]
@@ -158,5 +158,5 @@ class SimulationShell:
             self.exec(op, early_stop=early_stop)
 
     @property
-    def context(self):
-        return (self._client.environment, self._buffered_events)
+    def context(self) -> tuple[ViewerType, list[Event]]:
+        return (self._client.get_viewer(), self._buffered_events)

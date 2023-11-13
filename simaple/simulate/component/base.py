@@ -9,7 +9,6 @@ from simaple.simulate.base import (
     Action,
     Dispatcher,
     Entity,
-    Environment,
     Event,
     Store,
     message_signature,
@@ -316,13 +315,6 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     @property
     def event_provider(self) -> EventProvider:
         return NamedEventProvider(self.name)
-
-    def add_to_environment(self, environment: Environment):
-        dispatcher = self.export_dispatcher()
-        environment.add_dispatcher(dispatcher)
-
-        for view_name, view in self.get_views().items():
-            environment.add_view(f"{self.name}.{view_name}", view)
 
     def get_method_mappings(
         self,
