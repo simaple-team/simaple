@@ -1,10 +1,12 @@
 import abc
 import functools
+import hashlib
+import json
 from typing import Callable, Generator, Optional, cast
 
-from pydantic import BaseModel
+from pydantic import BaseModel, PrivateAttr
 
-from simaple.simulate.base import Action, Client, Event, ViewerType
+from simaple.simulate.base import Action, Checkpoint, Client, Event, ViewerType
 
 
 class Operation(BaseModel):
@@ -106,26 +108,58 @@ class PolicyWrapper:
         return self._operation_generator.send(context)
 
 
-class OperationHistory(metaclass=abc.ABCMeta):
+class PlayLog(BaseModel):
+    operation: Operation
+    behaviors: list[tuple[Action, list[Event], float]]
+    checkpoint: Checkpoint
+    previous_hash: str
+    _calculated_hash: Optional[str] = PrivateAttr(default=None)
+
+    @property
+    def hash(self) -> str:
+        if not self._calculated_hash:
+            stringified = self.previous_hash + json.dumps(
+                self.model_dump(), sort_keys=True
+            )
+            self._calculated_hash = hashlib.sha1(stringified.encode()).hexdigest()
+
+        return self._calculated_hash
+
+
+class SimulationHistory(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def append(self, op: Operation) -> None:
-        """Append operation to history"""
+    def commit(
+        self,
+        operation: Operation,
+        behaviors: list[tuple[Action, list[Event], float]],
+        checkpoint: Checkpoint,
+    ):
+        ...
 
-    def dump(self, file_name: str) -> None:
-        """Dump history to file"""
 
-
-class BaseOperationHistory(OperationHistory):
+class ConcreteSimulationHistory(SimulationHistory):
     def __init__(self) -> None:
-        self._operations: list[Operation] = []
+        self._logs: list[PlayLog] = []
 
-    def append(self, op: Operation) -> None:
-        self._operations.append(op)
+    def commit(
+        self,
+        operation: Operation,
+        behaviors: list[tuple[Action, list[Event], float]],
+        checkpoint: Checkpoint,
+    ):
+        if len(self._logs) == 0:
+            previous_hash = ""
+        else:
+            previous_hash = self._logs[-1].hash
 
-    def dump(self, file_name: str) -> None:
-        with open(file_name, "w", encoding="utf-8") as f:
-            for op in self._operations:
-                f.write(str(op) + "\n")
+        self._logs.append(
+            PlayLog(
+                operation=operation,
+                behaviors=behaviors,
+                checkpoint=checkpoint,
+                previous_hash=previous_hash,
+            )
+        )
 
 
 class SimulationShell:
@@ -133,7 +167,7 @@ class SimulationShell:
         self,
         client: Client,
         handlers: dict[str, Callable[[Operation], _BehaviorGenerator]],
-        history: OperationHistory,
+        history: SimulationHistory,
     ):
         self._client = client
         self._handlers = handlers
@@ -141,13 +175,28 @@ class SimulationShell:
         self.history = history
 
     def exec(self, op: Operation, early_stop: int = -1) -> None:
-        self.history.append(op)
+        trace: list[tuple[Action, list[Event], float]] = []
+
         for behavior in self.get_behavior_gen(op):
             if 0 < early_stop <= self._client.show("clock"):
                 break
             action = behavior(self._buffered_events)
-            if action is not None:
-                self._buffered_events = self._client.play(action)
+            if action is None:
+                break
+            self._buffered_events = self._client.play(action)
+            trace.append(
+                (
+                    action,
+                    self._buffered_events,
+                    self._client.show("clock"),
+                )
+            )
+
+        self.history.commit(
+            op,
+            trace,
+            self._client.save(),
+        )
 
     def get_behavior_gen(self, op: Operation) -> _BehaviorGenerator:
         return self._handlers[op.command](op)
@@ -158,5 +207,5 @@ class SimulationShell:
             self.exec(op, early_stop=early_stop)
 
     @property
-    def context(self) -> tuple[ViewerType, list[Event]]:
+    def context(self):
         return (self._client.get_viewer(), self._buffered_events)

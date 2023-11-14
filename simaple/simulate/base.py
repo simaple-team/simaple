@@ -258,7 +258,7 @@ class Checkpoint(BaseModel):
         return store, self.callbacks
 
 
-class ViewSet():
+class ViewSet:
     def __init__(self):
         self._views: dict[str, View] = {}
 

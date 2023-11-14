@@ -1,6 +1,6 @@
 import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.core.base import Stat
-from simaple.simulate.base import Client, message_signature, Action
+from simaple.simulate.base import Action, Client, message_signature
 from simaple.simulate.reserved_names import Tag
 
 

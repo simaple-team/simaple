@@ -1,12 +1,12 @@
 import functools
 import re
-from typing import Callable, Generator, Optional
+from typing import Callable, Generator
 
 from simaple.simulate.base import Client
 from simaple.simulate.policy.base import (
+    ConcreteSimulationHistory,
     Operation,
     OperationGeneratorProto,
-    OperationHistory,
     PolicyContextType,
     SimulationShell,
     _BehaviorGenerator,
@@ -45,44 +45,6 @@ class OperandDSLParser:
             raise DSLError(str(e)) from e
 
 
-class DSLOperationHistory(OperationHistory):
-    def __init__(self) -> None:
-        self._operations: list[Operation] = []
-
-    def append(self, op: Operation) -> None:
-        self._operations.append(op)
-
-    def dump(self, file_name: str) -> None:
-        with open(file_name, "w", encoding="utf-8") as f:
-            previous_op: Optional[Operation] = None
-            op_count = 0
-
-            for op in self._operations:
-                if previous_op is None:
-                    previous_op = op
-                    op_count = 1
-                    continue
-
-                if previous_op == op:
-                    op_count += 1
-                    continue
-
-                if op_count > 1:
-                    f.write(f"x{op_count} {dump(previous_op)}\n")
-                else:
-                    f.write(f"{dump(previous_op)}\n")
-
-                previous_op = op
-                op_count = 0
-                continue
-
-            assert previous_op is not None
-            if op_count > 1:
-                f.write(f"x{op_count} {dump(previous_op)}\n")
-            else:
-                f.write(f"{dump(previous_op)}\n")
-
-
 DSLGenerator = Generator[str, PolicyContextType, PolicyContextType]
 DSLGeneratorProto = Callable[[PolicyContextType], DSLGenerator]
 
@@ -113,7 +75,7 @@ class DSLShell(SimulationShell):
         client: Client,
         handlers: dict[str, Callable[[Operation], _BehaviorGenerator]],
     ):
-        super().__init__(client, handlers, DSLOperationHistory())
+        super().__init__(client, handlers, ConcreteSimulationHistory())
         self._parser = OperandDSLParser()
 
     def exec_dsl(self, txt):
