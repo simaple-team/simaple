@@ -36,7 +36,7 @@ class PlayLog(pydantic.BaseModel):
         stringified = self.previous_hash + json.dumps(self.model_dump(), sort_keys=True)
         return hashlib.sha1(stringified.encode()).hexdigest()
 
-    def get_delay(self) -> float:
+    def get_delay_left(self) -> float:
         delay = 0
         for event in self.events:
             if event["tag"] in (Tag.DELAY,):

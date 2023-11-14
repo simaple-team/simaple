@@ -41,7 +41,7 @@ class PlayLogResponse(pydantic.BaseModel):
             clock=playlog.clock,
             damages=playlog.get_damages(simulator.calculator),
             damage=playlog.get_total_damage(simulator.calculator),
-            delay=playlog.get_delay(),
+            delay=playlog.get_delay_left(),
             action=playlog.action,
             checkpoint=playlog.checkpoint,
             previous_hash=playlog.previous_hash,

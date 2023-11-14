@@ -62,7 +62,7 @@ def play_use_and_elapse(simulator_id: str, name: str, uow: UnitOfWork) -> None:
         dict(
             name="*",
             method="elapse",
-            payload=simulator.history.get_latest_playlog().get_delay(),
+            payload=simulator.history.get_latest_playlog().get_delay_left(),
         )
     )
 
