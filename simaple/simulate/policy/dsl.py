@@ -2,12 +2,21 @@ import functools
 import re
 from typing import Callable, Generator
 
-from simaple.simulate.base import Client
+from simaple.simulate.base import (
+    Action,
+    AddressedStore,
+    Checkpoint,
+    Client,
+    Event,
+    RouterDispatcher,
+    ViewerType,
+    ViewSet,
+)
 from simaple.simulate.policy.base import (
-    ConcreteSimulationHistory,
     Operation,
     OperationGeneratorProto,
     PolicyContextType,
+    SimulationHistory,
     SimulationShell,
     _BehaviorGenerator,
 )
@@ -42,7 +51,7 @@ class OperandDSLParser:
 
             return [op for _ in range(mult)]
         except Exception as e:
-            raise DSLError(str(e)) from e
+            raise DSLError(str(e) + f" was {op_string}") from e
 
 
 DSLGenerator = Generator[str, PolicyContextType, PolicyContextType]
@@ -75,10 +84,10 @@ class DSLShell(SimulationShell):
         client: Client,
         handlers: dict[str, Callable[[Operation], _BehaviorGenerator]],
     ):
-        super().__init__(client, handlers, ConcreteSimulationHistory())
+        super().__init__(client, handlers)
         self._parser = OperandDSLParser()
 
-    def exec_dsl(self, txt):
+    def exec_dsl(self, txt: str):
         ops = self._parser(txt)
         for op in ops:
             self.exec(op)

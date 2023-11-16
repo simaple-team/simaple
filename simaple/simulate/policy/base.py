@@ -2,11 +2,23 @@ import abc
 import functools
 import hashlib
 import json
-from typing import Callable, Generator, Optional, cast
+from typing import Any, Callable, Generator, Optional, cast
 
 from pydantic import BaseModel, PrivateAttr
 
-from simaple.simulate.base import Action, Checkpoint, Client, Event, ViewerType
+from simaple.simulate.base import (
+    Action,
+    AddressedStore,
+    Checkpoint,
+    Client,
+    Event,
+    RouterDispatcher,
+    ViewerType,
+    ViewSet,
+)
+from simaple.simulate.report.base import Report
+from simaple.simulate.report.dpm import DamageCalculator
+from simaple.simulate.reserved_names import Tag
 
 
 class Operation(BaseModel):
@@ -19,6 +31,7 @@ class Operation(BaseModel):
     command: str
     name: str
     time: Optional[float] = None
+    expr: str = ""
 
 
 ActionGeneratorType = Generator[Action, list[Event], None]
@@ -109,9 +122,25 @@ class PolicyWrapper:
 
 
 class PlayLog(BaseModel):
-    operation: Operation
-    behaviors: list[tuple[Action, list[Event], float]]
+    clock: float
+
+    action: Action
+    events: list[Event]
     checkpoint: Checkpoint
+
+    def get_delay_left(self) -> float:
+        delay = 0
+        for event in self.events:
+            if event["tag"] in (Tag.DELAY,):
+                if event["payload"]["time"] > 0:
+                    delay += event["payload"]["time"]
+
+        return delay
+
+
+class OperationLog(BaseModel):
+    operation: Operation
+    playlogs: list[PlayLog]
     previous_hash: str
     _calculated_hash: Optional[str] = PrivateAttr(default=None)
 
@@ -125,26 +154,47 @@ class PlayLog(BaseModel):
 
         return self._calculated_hash
 
-
-class SimulationHistory(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def commit(
-        self,
-        operation: Operation,
-        behaviors: list[tuple[Action, list[Event], float]],
-        checkpoint: Checkpoint,
-    ):
-        ...
+    def last(self) -> PlayLog:
+        return self.playlogs[-1]
 
 
-class ConcreteSimulationHistory(SimulationHistory):
+class SimulationHistory:
     def __init__(self) -> None:
-        self._logs: list[PlayLog] = []
+        self._logs: list[OperationLog] = [
+            OperationLog(
+                operation=Operation(command="init", name="init"),
+                playlogs=[],
+                previous_hash="",
+            )
+        ]
+
+    def discard_after(self, idx: int) -> None:
+        """Discard logs after idx."""
+        self._logs = self._logs[: idx + 1]
+
+    def get(self, idx: int) -> OperationLog:
+        return self._logs[idx]
+
+    def get_hash_index(self, log_hash: str) -> int:
+        for idx, log in enumerate(self._logs[1:]):
+            if log.previous_hash == log_hash:
+                return idx
+
+        if self._logs[-1].hash == log_hash:
+            return len(self._logs)
+
+        raise ValueError("No matching hash")
+
+    def __len__(self) -> int:
+        return len(self._logs)
+
+    def __iter__(self):
+        return iter(self._logs)
 
     def commit(
         self,
         operation: Operation,
-        behaviors: list[tuple[Action, list[Event], float]],
+        playlogs: list[PlayLog],
         checkpoint: Checkpoint,
     ):
         if len(self._logs) == 0:
@@ -153,13 +203,26 @@ class ConcreteSimulationHistory(SimulationHistory):
             previous_hash = self._logs[-1].hash
 
         self._logs.append(
-            PlayLog(
+            OperationLog(
                 operation=operation,
-                behaviors=behaviors,
+                playlogs=playlogs,
                 checkpoint=checkpoint,
                 previous_hash=previous_hash,
             )
         )
+
+    def playlogs(self) -> Generator[PlayLog, None, None]:
+        for log in self._logs:
+            for playlog in log.playlogs:
+                yield playlog
+
+    def save(self) -> dict[str, Any]:
+        return {
+            "logs": [log.model_dump() for log in self._logs],
+        }
+
+    def load(self, saved_history) -> None:
+        self._logs = [OperationLog.parse_obj(log) for log in saved_history["logs"]]
 
 
 class SimulationShell:
@@ -167,15 +230,25 @@ class SimulationShell:
         self,
         client: Client,
         handlers: dict[str, Callable[[Operation], _BehaviorGenerator]],
-        history: SimulationHistory,
     ):
         self._client = client
+        self._viewset = client._viewset
         self._handlers = handlers
         self._buffered_events: list[Event] = []
-        self.history = history
+        self._history = SimulationHistory()
+
+    def save_history(self) -> dict[str, Any]:
+        return self._history.save()
+
+    def load_history(self, saved_history: dict[str, Any]) -> None:
+        self._history.load(saved_history)
+        self._client.load(self._history.get(-1).last().checkpoint.restore())
+
+    def get_client(self) -> Client:
+        return self._client
 
     def exec(self, op: Operation, early_stop: int = -1) -> None:
-        trace: list[tuple[Action, list[Event], float]] = []
+        playlogs: list[tuple[Action, list[Event], float]] = []
 
         for behavior in self.get_behavior_gen(op):
             if 0 < early_stop <= self._client.show("clock"):
@@ -184,17 +257,18 @@ class SimulationShell:
             if action is None:
                 break
             self._buffered_events = self._client.play(action)
-            trace.append(
-                (
-                    action,
-                    self._buffered_events,
-                    self._client.show("clock"),
+            playlogs.append(
+                PlayLog(
+                    action=action,
+                    events=self._buffered_events,
+                    clock=self._client.show("clock"),
+                    checkpoint=self._client.save(),
                 )
             )
 
-        self.history.commit(
+        self._history.commit(
             op,
-            trace,
+            playlogs,
             self._client.save(),
         )
 
@@ -209,3 +283,65 @@ class SimulationShell:
     @property
     def context(self):
         return (self._client.get_viewer(), self._buffered_events)
+
+    def get_viewer(self, playlog: PlayLog) -> ViewerType:
+        store, _ = playlog.checkpoint.restore()
+
+        def _viewer(view_name: str) -> Any:
+            return self._viewset.show(view_name, store)
+
+        return _viewer
+
+    def get_report(self, playlog: PlayLog) -> Report:
+        viewer = self.get_viewer(playlog)
+        report = Report()
+        buff = viewer("buff")
+        for event in playlog.events:
+            if event["tag"] == Tag.DAMAGE:
+                report.add(0, event, buff)
+
+        return report
+
+    def get(self, idx: int) -> OperationLog:
+        return self._history.get(idx)
+
+    def get_hash_index(self, log_hash: str) -> int:
+        for idx, log in enumerate(self._history):
+            if log.previous_hash == log_hash:
+                return idx - 1
+
+        if self._history.get(-1).hash == log_hash:
+            return len(self._history) - 1
+
+        raise ValueError("No matching hash")
+
+    def rollback(self, idx: int):
+        self._history.discard_after(idx)
+        self._client.load(self._history.get(-1).last().checkpoint)
+
+    def length(self) -> int:
+        return len(self._history)
+
+    """
+    @abc.abstractmethod
+    def get_viewer(self, playlog: PlayLog) -> ViewerType:
+        ...
+
+    @abc.abstractmethod
+    def discard(self, idx: int) -> None:
+        ...
+
+    @abc.abstractmethod
+
+    @abc.abstractmethod
+    def get_hash_index(self, log_hash: str) -> int:
+        ...
+
+    @abc.abstractmethod
+    def playlogs(self) -> Generator[PlayLog, None, None]:
+        ...
+
+    @abc.abstractmethod
+    def get_report(self, playlog: PlayLog) -> Report:
+        ...
+    """

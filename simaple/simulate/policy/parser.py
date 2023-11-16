@@ -48,7 +48,6 @@ class TreeToOperation(Transformer):
         return None
 
     def operation(self, x):
-        print(x)
         return x
 
     def full_operation(self, x):
@@ -85,4 +84,6 @@ def get_parser():
 
 def parse_dsl_to_operation(dsl: str) -> Operation:
     tree = __PARSER.parse(dsl)
-    return cast(Operation, __OperationTreeTransformer.transform(tree)[0])
+    op = cast(Operation, __OperationTreeTransformer.transform(tree)[0])
+    op.expr = dsl
+    return op

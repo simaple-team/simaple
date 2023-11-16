@@ -63,7 +63,7 @@ class SqlSnapshotRepository(SnapshotRepository):
     def _to_orm(self, entity: Snapshot) -> SnapshotOrm:
         return SnapshotOrm(
             id=entity.id,
-            history=entity.history.model_dump(),
+            history=entity.history,
             updated_at=entity.updated_at,
             name=entity.name,
             configuration=self._configuration_mapper.dump(entity.configuration),

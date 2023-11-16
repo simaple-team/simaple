@@ -10,12 +10,12 @@ def test_read_main(simulator_configuration, record_file_name, client):
     simulator_id = response.json()["id"]
 
     with open(record_file_name, encoding="utf-8") as f:
-        actions = [line.split("\t")[1] for line in f]
+        operations = [line.strip().split("\t")[1] for line in f]
 
     for idx in range(25):
         resp = client.post(
             f"/workspaces/play/{simulator_id}",
-            json=json.loads(actions[idx]),
+            json={"operation": operations[idx]},
         )
 
     saved_resp = resp
@@ -23,7 +23,7 @@ def test_read_main(simulator_configuration, record_file_name, client):
     for idx in range(25, 50):
         resp = client.post(
             f"/workspaces/play/{simulator_id}",
-            json=json.loads(actions[idx]),
+            json={"operation": operations[idx]},
         )
 
     rollback_resp = client.post(
@@ -34,7 +34,7 @@ def test_read_main(simulator_configuration, record_file_name, client):
 
     new_resp = client.post(
         f"/workspaces/play/{simulator_id}",
-        json=json.loads(actions[24]),
+            json={"operation": operations[24]},
     )
 
     assert saved_resp.json() == new_resp.json()

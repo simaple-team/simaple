@@ -6,18 +6,17 @@ from typing import Optional
 
 import pydantic
 
-from simaple.app.domain.history import History, PlayLog, SimulationView
 from simaple.app.domain.simulator_configuration import SimulatorConfiguration
-from simaple.simulate.base import Action, Checkpoint, Client
+from simaple.simulate.policy.base import Operation, SimulationHistory
+from simaple.simulate.policy.dsl import DSLShell
 from simaple.simulate.report.dpm import DamageCalculator
 
 
 class Simulator(pydantic.BaseModel):
     id: str
-    client: Client
+    shell: DSLShell
     calculator: DamageCalculator
     conf: SimulatorConfiguration  # polymorphic
-    history: History
 
     model_config = pydantic.ConfigDict(arbitrary_types_allowed=True)
 
@@ -26,69 +25,30 @@ class Simulator(pydantic.BaseModel):
         simulator_id = str(uuid.uuid4())
         simulation = Simulator(
             id=simulator_id,
-            client=conf.create_client(),
+            shell=conf.create_shell(),
             calculator=conf.create_damage_calculator(),
             conf=conf,
-            history=History(id=simulator_id, logs=[]),
         )
-        simulation.add_empty_action_playlog()
         return simulation
 
     def get_valid_skill_names(self) -> list[str]:
-        validity_view = self.client.show("validitiy")
+        validity_view = self.shell.get_viewer(self.shell.get(0).playlogs[0])(
+            "validitiy"
+        )
         return list(view.name for view in validity_view)
 
-    def add_empty_action_playlog(self) -> None:
-        self.history.append(
-            PlayLog(
-                events=[],
-                view=self.get_simulation_view(),
-                clock=self.client.show("clock"),
-                action=dict(name="*", method="elapse", payload=0),
-                checkpoint=self.client.save(),
-                previous_hash="",
-            )
-        )
-
-    def get_simulation_view(self) -> SimulationView:
-        return SimulationView(
-            validity_view={v.name: v for v in self.client.show("validity")},
-            running_view={v.name: v for v in self.client.show("running")},
-            buff_view=self.client.show("buff"),
-        )
-
-    def dispatch(self, action: Action) -> None:
-        events = self.client.play(action)
-
-        playlog = PlayLog(
-            clock=self.client.show("clock"),
-            view=self.get_simulation_view(),
-            action=action,
-            events=events,
-            checkpoint=self.client.save(),
-            previous_hash=self.history.logs[-1].hash,
-        )
-
-        self.history.append(playlog)
+    def dispatch(self, dsl: str) -> None:
+        self.shell.exec_dsl(dsl)
 
     def rollback_by_hash(self, log_hash: str) -> None:
-        index = self.history.get_hash_index(log_hash)
-        self.rollback(index)
+        index = self.shell.get_hash_index(log_hash)
+        self.shell.rollback(index)
 
     def rollback(self, history_index: int) -> None:
-        self.history.logs = self.history.logs[: history_index + 1]
-        last_playlog = self.history.logs[-1]
-        self.client.load(last_playlog.checkpoint)
+        self.shell.rollback(history_index)
 
-    def set_history(self, history: History) -> None:
-        self.history = history
-        self.rollback(len(history) - 1)
-
-    def change_current_checkpoint(self, ckpt: Checkpoint) -> None:
-        last_playlog = self.history.logs[-1].model_copy()
-        last_playlog.checkpoint = ckpt
-        self.history.logs[-1] = last_playlog
-        self.client.load(last_playlog.checkpoint)
+    def set_history(self, saved_history: dict) -> None:
+        self.shell.load_history(saved_history)
 
 
 class SimulatorRepository(metaclass=abc.ABCMeta):

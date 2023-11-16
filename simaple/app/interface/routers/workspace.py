@@ -6,7 +6,6 @@ from dependency_injector.wiring import Provide, inject
 
 from simaple.app.application.command import (
     create_simulator,
-    override_checkpoint,
     play_action,
     play_elapse,
     play_use,
@@ -63,14 +62,18 @@ def get_all_simulator(
     return query_all_simulator(uow)
 
 
+class RequestPlay(pydantic.BaseModel):
+    operation: str
+
+
 @router.post("/play/{simulator_id}", response_model=PlayLogResponse)
 @inject
 def play(
     simulator_id: str,
-    action: Action,
+    request: RequestPlay,
     uow: UnitOfWork = UowProvider,
 ) -> PlayLogResponse:
-    play_action(simulator_id, action, uow)
+    play_action(simulator_id, request.operation, uow)
 
     return query_latest_playlog(simulator_id, uow)
 
@@ -155,13 +158,3 @@ def rollback_to_checkpoint(
     uow: UnitOfWork = UowProvider,
 ) -> None:
     rollback(simulator_id, history_index, uow)
-
-
-@router.post("/override/{simulator_id}", response_model=None)
-@inject
-def override(
-    simulator_id: str,
-    ckpt_json: dict,
-    uow: UnitOfWork = UowProvider,
-) -> None:
-    override_checkpoint(simulator_id, ckpt_json, uow)

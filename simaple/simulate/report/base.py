@@ -1,3 +1,5 @@
+from typing import Generator
+
 import pydantic
 
 from simaple.core.base import Stat
@@ -17,12 +19,11 @@ class DamageLog(pydantic.BaseModel):
         return f"{self.clock}\t{self.name}\t{self.tag}\t{self.damage:.3f}\t{self.hit}\t{self.buff.short_dict()}"
 
 
-class Report:
-    def __init__(self) -> None:
-        self._logs: list[DamageLog] = []
+class Report(pydantic.BaseModel):
+    logs: list[DamageLog] = []
 
-    def __iter__(self):
-        return iter(self._logs)
+    def __iter__(self) -> Generator[DamageLog, None, None]:
+        return iter(self.logs)
 
     def add(self, clock: float, event: Event, buff: Stat):
         buff_stat = buff
@@ -32,7 +33,7 @@ class Report:
                     event["payload"]["modifier"]
                 )
 
-            self._logs.append(
+            self.logs.append(
                 DamageLog(
                     clock=clock,
                     name=event["name"],
@@ -45,11 +46,11 @@ class Report:
 
     def save(self, file_name: str):
         with open(file_name, "w", encoding="utf8") as f:
-            for log in self._logs:
+            for log in self.logs:
                 f.write(log.serialize() + "\n")
 
     def total_time(self):
-        return self._logs[-1].clock
+        return self.logs[-1].clock
 
 
 class ReportEventHandler(EventHandler):

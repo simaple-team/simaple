@@ -1,3 +1,5 @@
+import pydantic
+
 from simaple.app.application.exception import (
     ApplicationError,
     UnknownSimulatorException,
@@ -15,13 +17,13 @@ def create_simulator(conf: SimulatorConfiguration, uow: UnitOfWork) -> str:
     return simulator.id
 
 
-def play_action(simulator_id: str, action: Action, uow: UnitOfWork) -> None:
+def play_action(simulator_id: str, operation: str, uow: UnitOfWork) -> None:
     simulator = uow.simulator_repository().get(simulator_id)
 
     if simulator is None:
         raise UnknownSimulatorException()
 
-    simulator.dispatch(action)
+    simulator.dispatch(operation)
     uow.simulator_repository().update(simulator)
 
 
@@ -76,17 +78,4 @@ def rollback(simulator_id: str, target_index: int, uow: UnitOfWork) -> None:
         raise UnknownSimulatorException()
 
     simulator.rollback(target_index)
-    uow.simulator_repository().update(simulator)
-
-
-def override_checkpoint(simulator_id, checkpoint: dict, uow: UnitOfWork) -> None:
-    simulator = uow.simulator_repository().get(simulator_id)
-
-    if simulator is None:
-        raise UnknownSimulatorException()
-
-    if len(simulator.history) != 1:
-        raise ApplicationError("override_checkpoint only valid for no-history")
-
-    simulator.change_current_checkpoint(Checkpoint.model_validate(checkpoint))
     uow.simulator_repository().update(simulator)

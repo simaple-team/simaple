@@ -12,6 +12,7 @@ from simaple.data.client_configuration import (
 from simaple.data.damage_logic import get_damage_logic
 from simaple.simulate.base import Client
 from simaple.simulate.kms import get_client
+from simaple.simulate.policy.dsl import DSLShell, get_dsl_shell
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 
 
@@ -28,6 +29,9 @@ class SimulatorConfiguration(pydantic.BaseModel, metaclass=ABCMeta):
     @abstractmethod
     def get_name(cls) -> str:
         ...
+
+    def create_shell(self) -> DSLShell:
+        return get_dsl_shell(self.create_client())
 
 
 class MinimalSimulatorConfiguration(SimulatorConfiguration):

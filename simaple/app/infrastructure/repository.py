@@ -1,6 +1,5 @@
 from typing import Optional
 
-from simaple.app.domain.history import History, HistoryRepository
 from simaple.app.domain.simulator import Simulator, SimulatorRepository
 
 
@@ -19,17 +18,3 @@ class InmemorySimulatorRepository(SimulatorRepository):
 
     def get_all(self) -> list[Simulator]:
         return list(self._workspaces.values())
-
-
-class InmemoryHistoryRepository(HistoryRepository):
-    def __init__(self) -> None:
-        self._histories: dict[str, History] = {}
-
-    def add(self, history: History) -> None:
-        self._histories[history.id] = history
-
-    def update(self, history: History) -> None:
-        self._histories[history.id] = history
-
-    def get(self, history_id: str) -> Optional[History]:
-        return self._histories.get(history_id)
