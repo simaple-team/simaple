@@ -285,7 +285,7 @@ class SimulationShell:
         return (self._client.get_viewer(), self._buffered_events)
 
     def get_viewer(self, playlog: PlayLog) -> ViewerType:
-        store, _ = playlog.checkpoint.restore()
+        store = playlog.checkpoint.restore()
 
         def _viewer(view_name: str) -> Any:
             return self._viewset.show(view_name, store)

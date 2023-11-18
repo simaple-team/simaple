@@ -243,19 +243,18 @@ def _get_event_callbacks(event: Event) -> EventCallback:
 
 class Checkpoint(BaseModel):
     store_ckpt: dict[str, Any]
-    callbacks: list[EventCallback]
 
     @classmethod
     def create(
-        cls, store: AddressedStore, callbacks: list[EventCallback]
+        cls, store: AddressedStore,
     ) -> Checkpoint:
-        return Checkpoint(store_ckpt=store.save(), callbacks=callbacks)
+        return Checkpoint(store_ckpt=store.save())
 
-    def restore(self) -> tuple[AddressedStore, list[EventCallback]]:
+    def restore(self) -> AddressedStore:
         concrete_store = ConcreteStore()
         concrete_store.load(self.store_ckpt)
         store = AddressedStore(concrete_store)
-        return store, self.callbacks
+        return store
 
 
 class ViewSet:
@@ -292,6 +291,32 @@ class EventHandler:
         ...
 
 
+class PreviousCallback(Entity):
+    events: list[EventCallback]
+
+
+def play(store: Store, action: Action, router: RouterDispatcher) -> list[Event]:
+    events: list[Event] = []
+    action_queue = [action]
+
+    previous_callbacks = store.read_entity("previous_callbacks", default=PreviousCallback(events=[]))
+
+    # Join proposed action with previous event's callback
+    for emitted_callback, done_callback in previous_callbacks.events:
+        action_queue = [emitted_callback] + action_queue + [done_callback]
+
+    for target_action in action_queue:
+        resolved_events = router(target_action, store)
+        events += resolved_events
+
+    # Save untriggered callbacks
+    store.set_entity("previous_callbacks", PreviousCallback(
+        events=[_get_event_callbacks(event) for event in events])
+    )
+
+    return events
+
+
 class Client:
     def __init__(
         self, store: AddressedStore, router: RouterDispatcher, viewset: ViewSet
@@ -315,19 +340,9 @@ class Client:
         return self._viewset.show(view_name, self._store)
 
     def play(self, action: Action) -> list[Event]:
-        events: list[Event] = []
-        action_queue = [action]
-
-        # Join proposed action with previous event's callback
-        for emitted_callback, done_callback in self._previous_callbacks:
-            action_queue = [emitted_callback] + action_queue + [done_callback]
-
-        for target_action in action_queue:
-            resolved_events = self.resolve(target_action)
-            events += resolved_events
-
-        # Save untriggered callbacks
-        self._previous_callbacks = [_get_event_callbacks(event) for event in events]
+        events = play(
+            self._store, action, self._router
+        )
 
         for event in events:
             for handler in self._event_handlers:
@@ -336,9 +351,7 @@ class Client:
         return events
 
     def save(self) -> Checkpoint:
-        return Checkpoint.create(self._store, self._previous_callbacks)
+        return Checkpoint.create(self._store)
 
     def load(self, ckpt: Checkpoint) -> None:
-        store, checkpoint = ckpt.restore()
-        self._store = store
-        self._previous_callbacks = checkpoint
+        self._store = ckpt.restore()
