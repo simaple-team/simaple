@@ -19,7 +19,7 @@ class SnapshotResponse(pydantic.BaseModel):
     def from_snapshot(cls, snapshot: Snapshot) -> SnapshotResponse:
         return SnapshotResponse(
             id=snapshot.id,
-            length=len(snapshot.history),
+            length=len(snapshot.saved_history),
             updated_at=snapshot.updated_at,
             name=snapshot.name,
             configuration_name=snapshot.configuration.get_name(),

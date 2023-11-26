@@ -23,16 +23,16 @@ simaple에서 여러분은 스킬을 정의하고, 정의된 스킬을 활용하
 스킬셋 정의하기
 ===================
 
-simaple에서 사용 가능한 스킬 묶음은 Client라고 불립니다. get_client 메서드를 통해 Client를 생성할 수 있습니다. 
+simaple에서 사용 가능한 스킬 묶음은 Engine라고 불립니다. get_builder 메서드를 통해 Engine builder를 호출하고 Engine을 생성할 수 있습니다. 
 
 .. code-block:: python
 
-    from simaple.simulate.kms import get_client
-    from simaple.data.client_configuration import get_client_configuration
+    from simaple.simulate.kms import get_builder
+    from simaple.data.engine_configuration import get_engine_configuration
     from simaple.core.jobtype import JobType
     from simaple.core import ActionStat, Stat
 
-    client_configuration = get_client_configuration(JobType.archmagefb)
+    engine_configuration = get_engine_configuration(JobType.archmagefb)
     character_stat = Stat(
         INT=4932.0,
         INT_multiplier=573.0,
@@ -49,26 +49,26 @@ simaple에서 사용 가능한 스킬 묶음은 Client라고 불립니다. get_c
         
     action_stat = ActionStat(buff_duration=185)
 
-    client = get_client(
+    engine = get_builder(
         action_stat,
-        client_configuration.get_groups(),
+        engine_configuration.get_groups(),
         {
             "character_stat": character_stat,
             "character_level": 260,
             "weapon_attack_power": 789,
             "weapon_pure_attack_power": 500,
         },
-        client_configuration.get_filled_v_skill(30),
-        client_configuration.get_filled_v_improvements(60),
+        engine_configuration.get_filled_v_skill(30),
+        engine_configuration.get_filled_v_improvements(60),
         combat_orders_level=1,
         passive_skill_level=0,
-    )
+    ).build_operation_engine()
 
 
 코드가 정말 길고 복잡합니다! 하지만 안타깝게도 이것이 여러분이 클라이언트를 구성하기 위해 제공해야 하는 최소한의 정보입니다.
 각각의 요소와 그것들의 의미에 대해, 여러분이 지금 당장 자세히 알 필요는 없습니다. 우리가 알아야 하는 사항에 대해서만 알아봅시다.
 
-- ``get_client_configuration`` 는 여러분이 관심있어하는 직업에 관한 정보를 손쉽게 다루게 해줍니다. ``client_configuration`` 객체가 여러분이 다루고자 하는 직업에 관련된 복잡한 일을 대신 해줄 겁니다.
+- ``get_engine_configuration`` 는 여러분이 관심있어하는 직업에 관한 정보를 손쉽게 다루게 해줍니다. ``engine_configuration`` 객체가 여러분이 다루고자 하는 직업에 관련된 설정을 모두 불러올 것입니다.
 - ``ActionStat`` 과 ``Stat`` 은 내가 시뮬레이션하고자 하는 캐릭터의 스텟 상태를 나타냅니다. ``character_stat`` 에 나의 stat 정보가 오게 되겠죠? ``ActionStat`` 은 버프 지속시간, 소환수 지속시간과 같은 정보가 포함되는 객체입니다. 본문에서는 버프 지속 시간만 185%로 설정했습니다.
 
 - 세 번째 인자는 조금 복잡한데, 여기에는 여러분이 시뮬레이션을 동작시키기 위해 제공해주어야 하는 추가적인 정보가 요구됩니다. 여러분은 반드시, 아래와 같은 값을 제공해주어야 합니다.
@@ -78,48 +78,44 @@ simaple에서 사용 가능한 스킬 묶음은 Client라고 불립니다. get_c
   - ``weapon_attack_power`` : 여러분 무기의 공격력(법사 직업군은 마력)입니다.
   - ``weapon_pure_attack_power`` : 여러분 무기의 순수 공격력(법사 직업군은 마력)입니다.
 
-- ``get_client`` 는 네 번째 인자로 5차 스킬의 레벨 정보를 요구합니다. 이 데이터를 수동으로 입력하는건 상당히 귀찮은 일이므로, 앞에서 정의한 ``client_configuration`` 을 통해 손쉽게 생성합시다. ``client_configuration.get_filled_v_skill(30)`` 는 여러분의 직업의 5차 스킬들이 모두 30레벨인 상태로 초기화되도록 합니다.
-- 이와 유사하게, ``get_client`` 는 다섯 번째 인자로 5차 강화코어로 인한 4차 이하 스킬들의 강화 정보를 요구합니다. ``client_configuration.get_filled_v_improvements(60)`` 는 여러분의 직업의 강화 코어로 인한 4차 이하 스킬들이 모두 60레벨의 강화 효과를 받도록 합니다.
+- ``get_builder`` 는 네 번째 인자로 5차 스킬의 레벨 정보를 요구합니다. 이 데이터를 수동으로 입력하는건 상당히 귀찮은 일이므로, 앞에서 정의한 ``engine_configuration`` 을 통해 손쉽게 생성합시다. ``engine_configuration.get_filled_v_skill(30)`` 는 여러분의 직업의 5차 스킬들이 모두 30레벨인 상태로 초기화되도록 합니다.
+- 이와 유사하게, ``get_builder`` 는 다섯 번째 인자로 5차 강화코어로 인한 4차 이하 스킬들의 강화 정보를 요구합니다. ``engine_configuration.get_filled_v_improvements(60)`` 는 여러분의 직업의 강화 코어로 인한 4차 이하 스킬들이 모두 60레벨의 강화 효과를 받도록 합니다.
 - ``combat_orders_level`` 은 컴뱃 오더스의 레벨, ``passive_skill_level`` 은 어빌리티 내 패시브 스킬 레벨 1 증가 옵션의 여부입니다.
 
-이러한 정보가 제공되었을때, ``get_client`` 함수는 ``Client`` 객체를 반환합니다. 
-축하합니다! 우리는 이제 우리가 사용하고자하는 스킬들이 모두 정의된 ``Client`` 를 생성했습니다. 
+이러한 정보가 제공되었을때, ``get_builder`` 함수는 ``Builder`` 객체를 반환하고, ``get_operation_engine`` 메서드를 통해 엔진을 빌드할 수 있습니다.
+축하합니다! 우리는 이제 우리가 사용하고자하는 스킬들이 모두 정의된 ``Engine`` 를 생성했습니다. 
 
 
 Policy 구현하기
 ==============
 
 우리는 앞선 내용을 통해, 우리가 시뮬레이션하고자 하는 환경을 만들었습니다. 이제 이 환경에서 **어떻게** 시뮬레이션해야 할 지 이야기할 시간입니다.
-어떻게 동작할지 정의된 모듈을 simaple에서는 ``Policy`` 라고 부릅니다. simaple은 모든 직업에 대해 굉장히 단순하게 동작하는 ``DefaultOrderPolicy`` 를 제공합니다. ``client_configuration`` 을 통해 이를 생성해 봅시다.
+어떻게 동작할지 정의된 모듈을 simaple에서는 ``Policy`` 라고 부릅니다. simaple은 모든 직업에 대해 굉장히 단순하게 동작하는 ``DefaultOrderPolicy`` 를 제공합니다. ``engine_configuration`` 을 통해 이를 생성해 봅시다.
 
 .. code-block:: python
 
     ...
 
-    client_configuration = get_client_configuration(JobType.archmagefb)
-    policy = client_configuration.get_default_policy()
+    engine_configuration = get_engine_configuration(JobType.archmagefb)
+    policy = engine_configuration.get_default_policy()
 
 
-이제 우리는 Client도 있고, Policy도 있습니다. 이제 시뮬레이션을 수행해 보죠!
+이제 우리는 Engine도 있고, Policy도 있습니다. 이제 시뮬레이션을 수행해 보죠!
 
 
 시뮬레이션 수행하기
 ===========================
 
-시뮬레이션을 앞서 만든 client와 Policy를 통해 작동시켜봅시다. 50초동안 시뮬레이션을 동작시켜 보죠. 아래와 같은 코드를 입력해주세요. 앞의 코드에서 이어진다는 사실을 명심하세요!
+시뮬레이션을 앞서 만든 engine과 Policy를 통해 작동시켜봅시다. 50초동안 시뮬레이션을 동작시켜 보죠. 아래와 같은 코드를 입력해주세요. 앞의 코드에서 이어진다는 사실을 명심하세요!
 
 
 .. code-block:: python
 
     ...
-    from simaple.simulate.policy import get_dsl_shell
+    while engine.get_current_viewer()("clock") < 50_000:
+        engine.exec_policy(policy, early_stop=50_000)
 
-    shell = get_dsl_shell(archmagefb_client)
-
-    while client.environment.show("clock") < 50_000:
-        shell.exec_policy(policy, early_stop=50_000)
-
-총 시뮬레이션 시간은 ``client.environment.show("clock")`` 을 통해 얻을 수 있습니다. 시간이 다할때까지, 우리는 policy의 결정을 받아와서, shell을 거쳐 client에 전달합니다.
+총 시뮬레이션 시간은 ``engine.get_current_viewer()("clock")`` 을 통해 얻을 수 있습니다. 시간이 다할때까지, 우리는 policy의 결정을 받아와서, shell을 거쳐 engine에 전달합니다.
 그런데, 시뮬레이션이 동작했지만, 시뮬레이션의 결과를 볼 방법이 없네요. simaple은 동작 분석을 위해 아래의 두 가지 개념을 추적할 방법을 제공합니다.
 
 - 매 순간, Policy가 행동하기로 한 결정 (Operation History)
@@ -133,24 +129,25 @@ Policy 구현하기
     ...
 
     from simaple.simulate.report.base import Report, ReportEventHandler
-    from simaple.simulate.policy import get_dsl_shell
 
     report = Report()
-    client.add_handler(ReportEventHandler(report))
+    engine.add_callback(ReportEventHandler(report))
 
-    shell = get_dsl_shell(client)
-
-    while client.environment.show("clock") < 50_000:
-        shell.exec_policy(policy, early_stop=50_000)
+    while engine.get_current_viewer()("clock") < 50_000:
+        engine.exec_policy(policy, early_stop=50_000)
     
-    shell.history.dump("history.log")
+    with open("history.log", "w") as f:
+        for op in engine.get_history().show_ops():
+            f.write(op.model_dump_json())
+
+    report.save("report.tsv")
 
 
-``shell.history`` 는 우리의 시뮬레이션 과정에서 Policy의 결정, 즉 Operation을 기록합니다. ``history.dump`` 를 통해, 손쉽게 history를 저장할 수 있습니다.
+``engine`` 은 우리의 시뮬레이션 과정에서 Policy의 결정, 즉 Operation을 기록합니다.
 코드가 수행된 이후 history.log를 열어보세요. 지금 당장은 이해할 수 없을지도 모르지만, 스킬의 이름과 그것들을 언제 use했는지 묘사되어 있을겁니다.
 
-``report`` 는 그 순간 발생한 피해량에 관한 정보를 담고 있습니다. 우리가 ``add_handler`` 를 통해 report를 client에 등록함으로서, 시뮬레이션 과정에서 발생한 모든 피해량은 Report 객체에 저장됩니다.
-``len(report)`` 를 수행해서, report에 실제로 데이터가 쌓여있는지 확인해 보세요. 동작 시간을 변경하고, 실제로 report에 길이가 바뀌는지 확인해 보아도 좋습니다.
+``Report`` 는 그 순간 발생한 피해량에 관한 정보를 담고 있습니다. 우리가 ``add_callback`` 를 통해 report를 engine 등록함으로서, 시뮬레이션 과정에서 발생한 모든 피해량은 Report 객체에 저장됩니다.
+``len(report.logs)`` 를 수행해서, report에 실제로 데이터가 쌓여있는지 확인해 보세요. 동작 시간을 변경하고, 실제로 report에 길이가 바뀌는지 확인해 보아도 좋습니다.
 작성된 리포트는 ``report.save`` 를 통해 저장할 수 있습니다. ``report.save("report.tsv")`` 를 수행하고, ``report.tsv`` 파일을 열어 확인해보세요.
 
 
@@ -198,13 +195,13 @@ level_advantage와 force_advantage는 각각 레벨과 포스 차이에서 오�
 
 .. code-block:: python
 
-    from simaple.simulate.kms import get_client
-    from simaple.data.client_configuration import get_client_configuration
+    from simaple.simulate.kms import get_builder
+    from simaple.data.engine_configuration import get_engine_configuration
     from simaple.core.jobtype import JobType
     from simaple.core import ActionStat, Stat
 
-    ## Declare Client
-    client_configuration = get_client_configuration(JobType.archmagefb)
+    ## Declare Engine
+    engine_configuration = get_engine_configuration(JobType.archmagefb)
     character_stat = Stat(
         INT=4932.0,
         INT_multiplier=573.0,
@@ -220,40 +217,41 @@ level_advantage와 force_advantage는 각각 레벨과 포스 차이에서 오�
     )
     action_stat = ActionStat(buff_duration=185)
 
-    client = get_client(
+    engine = get_builder(
         action_stat,
-        client_configuration.get_groups(),
+        engine_configuration.get_groups(),
         {
             "character_stat": character_stat,
             "character_level": 260,
             "weapon_attack_power": 789,
             "weapon_pure_attack_power": 500,
         },
-        client_configuration.get_filled_v_skill(30),
-        client_configuration.get_filled_v_improvements(60),
+        engine_configuration.get_filled_v_skill(30),
+        engine_configuration.get_filled_v_improvements(60),
         combat_orders_level=1,
         passive_skill_level=0,
-    )
+    ).build_operation_engine()
 
     ## Declare Policy
 
-    client_configuration = get_client_configuration(JobType.archmagefb)
-    policy = client_configuration.get_default_policy()
+    engine_configuration = get_engine_configuration(JobType.archmagefb)
+    policy = engine_configuration.get_default_policy()
 
     ## Run simulation
 
     from simaple.simulate.report.base import Report, ReportEventHandler
-    from simaple.simulate.policy import get_dsl_shell
 
     report = Report()
-    client.add_handler(ReportEventHandler(report))
+    engine.add_callback(ReportEventHandler(report))
 
-    shell = get_dsl_shell(client)
-
-    while client.environment.show("clock") < 50_000:
-        shell.exec_policy(policy, early_stop=50_000)
+    while engine.get_current_viewer()("clock") < 50_000:
+        engine.exec_policy(policy, early_stop=50_000)
     
-    shell.history.dump("history.log")
+    with open("history.log", "w") as f:
+        for op in engine.get_history().show_ops():
+            f.write(op.model_dump_json())
+
+    report.save("report.tsv")
 
     from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
     from simaple.data.damage_logic import get_damage_logic

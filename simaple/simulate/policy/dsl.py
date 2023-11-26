@@ -2,36 +2,12 @@ import functools
 import re
 from typing import Callable, Generator
 
-from simaple.simulate.base import (
-    Action,
-    AddressedStore,
-    Checkpoint,
-    Client,
-    Event,
-    RouterDispatcher,
-    ViewerType,
-    ViewSet,
-)
 from simaple.simulate.policy.base import (
     Operation,
     OperationGeneratorProto,
     PolicyContextType,
-    SimulationHistory,
-    SimulationShell,
-    _BehaviorGenerator,
 )
-from simaple.simulate.policy.operation import get_operations
 from simaple.simulate.policy.parser import parse_dsl_to_operation
-
-
-def dump(op: Operation) -> str:
-    if op.name:
-        if op.time:
-            raise ValueError
-
-        return f'{op.command}  "{op.name}"'
-
-    return f"{op.command}  {op.time}"
 
 
 class DSLError(Exception):
@@ -76,44 +52,3 @@ def interpret_dsl_generator(
         return _gen
 
     return _gen_proto
-
-
-class DSLShell(SimulationShell):
-    def __init__(
-        self,
-        client: Client,
-        handlers: dict[str, Callable[[Operation], _BehaviorGenerator]],
-    ):
-        super().__init__(client, handlers)
-        self._parser = OperandDSLParser()
-
-    def exec_dsl(self, txt: str):
-        ops = self._parser(txt)
-        for op in ops:
-            self.exec(op)
-
-    def REPL(self):
-        while True:
-            txt = input(">> ")
-            if txt == "exit":
-                break
-
-            if txt == "valid":
-                print("-- valid skills --")
-                for validity in self._client.show("validity"):
-                    if validity.valid:
-                        print(f"{validity.name}")
-            elif txt == "running":
-                for running in self._client.show("running"):
-                    if running.time_left > 0:
-                        print(f"{running.name} | {running.time_left}")
-            else:
-                try:
-                    self.exec_dsl(txt)
-                except DSLError as e:
-                    print("Invalid DSL - try again")
-                    print(f"Error Mesage: {e}")
-
-
-def get_dsl_shell(client) -> DSLShell:
-    return DSLShell(client, get_operations())

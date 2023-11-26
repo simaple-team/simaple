@@ -7,14 +7,13 @@ from typing import Optional
 import pydantic
 
 from simaple.app.domain.simulator_configuration import SimulatorConfiguration
-from simaple.simulate.policy.base import Operation, SimulationHistory
-from simaple.simulate.policy.dsl import DSLShell
+from simaple.simulate.engine import OperationEngine
 from simaple.simulate.report.dpm import DamageCalculator
 
 
 class Simulator(pydantic.BaseModel):
     id: str
-    shell: DSLShell
+    engine: OperationEngine
     calculator: DamageCalculator
     conf: SimulatorConfiguration  # polymorphic
 
@@ -25,30 +24,28 @@ class Simulator(pydantic.BaseModel):
         simulator_id = str(uuid.uuid4())
         simulation = Simulator(
             id=simulator_id,
-            shell=conf.create_shell(),
+            engine=conf.create_operation_engine(),
             calculator=conf.create_damage_calculator(),
             conf=conf,
         )
         return simulation
 
     def get_valid_skill_names(self) -> list[str]:
-        validity_view = self.shell.get_viewer(self.shell.get(0).playlogs[0])(
-            "validitiy"
-        )
+        validity_view = self.engine.get_current_viewer()("validitiy")
         return list(view.name for view in validity_view)
 
     def dispatch(self, dsl: str) -> None:
-        self.shell.exec_dsl(dsl)
+        self.engine.exec_dsl(dsl)
 
     def rollback_by_hash(self, log_hash: str) -> None:
-        index = self.shell.get_hash_index(log_hash)
-        self.shell.rollback(index)
+        index = self.engine.history().get_hash_index(log_hash)
+        self.engine.rollback(index)
 
     def rollback(self, history_index: int) -> None:
-        self.shell.rollback(history_index)
+        self.engine.rollback(history_index)
 
     def set_history(self, saved_history: dict) -> None:
-        self.shell.load_history(saved_history)
+        self.engine.load_history(saved_history)
 
 
 class SimulatorRepository(metaclass=abc.ABCMeta):

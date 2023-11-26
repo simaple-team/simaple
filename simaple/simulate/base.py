@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
-from typing import Any, Callable, Optional, Union, cast
+from typing import Any, Callable, Optional, TypeVar, Union, cast
 
 from pydantic import BaseModel
 from typing_extensions import TypedDict
@@ -246,7 +246,8 @@ class Checkpoint(BaseModel):
 
     @classmethod
     def create(
-        cls, store: AddressedStore,
+        cls,
+        store: AddressedStore,
     ) -> Checkpoint:
         return Checkpoint(store_ckpt=store.save())
 
@@ -257,8 +258,11 @@ class Checkpoint(BaseModel):
         return store
 
 
+ViewerType = Callable[[str], Any]
+
+
 class ViewSet:
-    def __init__(self):
+    def __init__(self) -> None:
         self._views: dict[str, View] = {}
 
     def add_view(self, view_name: str, view: View) -> None:
@@ -273,16 +277,19 @@ class ViewSet:
             view for view_name, view in self._views.items() if regex.match(view_name)
         ]
 
+    def get_viewer(self, ckpt: Checkpoint) -> ViewerType:
+        store = ckpt.restore()
 
-ViewerType = Callable[[str], Any]
+        def _viewer(view_name: str) -> Any:
+            return self.show(view_name, store)
+
+        return _viewer
 
 
 class EventHandler:
     """
     EventHandler receives "Event" and create "Action" (maybe multiple).
     Eventhandler receives full context; to provide meaningful decision.
-    Handling given store is not recommended "strongly". Please use store with
-    read-only mode as possible as you can.
     """
 
     def __call__(
@@ -295,11 +302,16 @@ class PreviousCallback(Entity):
     events: list[EventCallback]
 
 
-def play(store: Store, action: Action, router: RouterDispatcher) -> list[Event]:
+S = TypeVar("S", bound=Store)
+
+
+def play(store: S, action: Action, router: RouterDispatcher) -> tuple[S, list[Event]]:
     events: list[Event] = []
     action_queue = [action]
 
-    previous_callbacks = store.read_entity("previous_callbacks", default=PreviousCallback(events=[]))
+    previous_callbacks = store.read_entity(
+        "previous_callbacks", default=PreviousCallback(events=[])
+    )
 
     # Join proposed action with previous event's callback
     for emitted_callback, done_callback in previous_callbacks.events:
@@ -310,48 +322,9 @@ def play(store: Store, action: Action, router: RouterDispatcher) -> list[Event]:
         events += resolved_events
 
     # Save untriggered callbacks
-    store.set_entity("previous_callbacks", PreviousCallback(
-        events=[_get_event_callbacks(event) for event in events])
+    store.set_entity(
+        "previous_callbacks",
+        PreviousCallback(events=[_get_event_callbacks(event) for event in events]),
     )
 
-    return events
-
-
-class Client:
-    def __init__(
-        self, store: AddressedStore, router: RouterDispatcher, viewset: ViewSet
-    ):
-        self._router = router
-        self._store = store
-        self._viewset = viewset
-        self._previous_callbacks: list[EventCallback] = []
-        self._event_handlers: list[EventHandler] = []
-
-    def get_viewer(self) -> ViewerType:
-        return self.show
-
-    def add_handler(self, event_handler: EventHandler) -> None:
-        self._event_handlers.append(event_handler)
-
-    def resolve(self, action: Action) -> list[Event]:
-        return self._router(action, self._store)
-
-    def show(self, view_name: str):
-        return self._viewset.show(view_name, self._store)
-
-    def play(self, action: Action) -> list[Event]:
-        events = play(
-            self._store, action, self._router
-        )
-
-        for event in events:
-            for handler in self._event_handlers:
-                handler(event, self.get_viewer(), events)
-
-        return events
-
-    def save(self) -> Checkpoint:
-        return Checkpoint.create(self._store)
-
-    def load(self, ckpt: Checkpoint) -> None:
-        self._store = ckpt.restore()
+    return store, events

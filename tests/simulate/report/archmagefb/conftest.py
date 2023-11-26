@@ -4,12 +4,13 @@ import pytest
 import simaple.simulate.component.skill  # pylint: disable=W0611
 import simaple.simulate.component.specific  # pylint: disable=W0611
 from simaple.core.base import ActionStat
-from simaple.simulate.kms import get_client
+from simaple.simulate.engine import MonotonicEngine
+from simaple.simulate.kms import get_builder
 
 
 @pytest.fixture
-def archmagefb_client():
-    return get_client(
+def archmagefb_engine() -> MonotonicEngine:
+    return get_builder(
         ActionStat(),
         ["archmagefb", "common", "adventurer.magician", "mob"],
         {"character_level": 260},
@@ -29,4 +30,4 @@ def archmagefb_client():
             "파이어 오라": 60,
             "이프리트": 60,
         },
-    )
+    ).build_monotonic_engine()

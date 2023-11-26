@@ -25,16 +25,16 @@ The results of using each skill will then be interpreted by converting it into d
 Defining Skillsets
 ===================
 
-In simaple, a collection of skills available to be used is called a Client. Clients can be created using the ``get_client`` method.
+In simaple, a collection of skills available to be used is called an Engine. Engines can be created using the ``get_builder`` method.
 
 .. code-block:: python
 
-    from simaple.simulate.kms import get_client
-    from simaple.data.client_configuration import get_client_configuration
+    from simaple.simulate.kms import get_builder
+    from simaple.data.engine_configuration import get_engine_configuration
     from simaple.core.jobtype import JobType
     from simaple.core import ActionStat, Stat
 
-    client_configuration = get_client_configuration(JobType.archmagefb)
+    engine_configuration = get_engine_configuration(JobType.archmagefb)
     character_stat = Stat(
         INT=4932.0,
         INT_multiplier=573.0,
@@ -51,42 +51,42 @@ In simaple, a collection of skills available to be used is called a Client. Clie
         
     action_stat = ActionStat(buff_duration=185)
 
-    client = get_client(
+    engine = get_builder(
         action_stat,
-        client_configuration.get_groups(),
+        engine_configuration.get_groups(),
         {
             "character_stat": character_stat,
             "character_level": 260,
             "weapon_attack_power": 789,
             "weapon_pure_attack_power": 500,
         },
-        client_configuration.get_filled_v_skill(30),
-        client_configuration.get_filled_v_improvements(60),
+        engine_configuration.get_filled_v_skill(30),
+        engine_configuration.get_filled_v_improvements(60),
         combat_orders_level=1,
         passive_skill_level=0,
-    )
+    ).build_operation_engine()
 
 
-The above code is pretty long! However, all parameters are required to define a Client. 
+The above code is pretty long! However, all parameters are required to define a Engine. 
 Let's focus on a few important elements that we need to know about first.
 
-- ``get_client_configuration`` will load pre-defined job configurations as ``client_configuration`` objects. These objects will handle the complex tasks related to the job of interest. 
+- ``get_engine_configuration`` will load pre-defined job configurations as ``engine_configuration`` objects. These objects will handle the complex tasks related to the job of interest. 
 - ``ActionStat`` and ``Stat`` represent the stats used to perform the simulation. ``character_stat`` represents the stats of the character, while ``ActionStat`` is an object that contains information such as Buff Duration and Summon Duration. In the above code, buff duration is set to 185%.
 
-- The 3rd parameter of ``get_client`` is slightly more complicated and specifies a dict of background information required to make the simulation work. The following parameters are required:
+- The 3rd parameter of ``get_builder`` is slightly more complicated and specifies a dict of background information required to make the simulation work. The following parameters are required:
 
   - ``character_stat``: This is the ``Stat`` object previously defined, which is the simulating character's stats.
   - ``character_level`` : Level of the character (used for level difference damage bonus/penalty calculations and Maple Warrior/AP related calculations).
   - ``weapon_attack_power`` : Total Weapon Attack / Magic Attack (where relevant) value of the weapon used (including flames, stars and scrolling).
   - ``weapon_pure_attack_power`` : Base Weapon Attack / Magic Attack value of the weapon (just the white number on the weapon).
 
-- The 4th parameter of ``get_client`` specifies the levels used for the 5th job skills. It's troublesome to do this manually, but the ``client_configuration`` object earlier allows us to conveniently create a default configuration of all skills at Level 30.
-- Similarly, the 5th parameter specifies the levels of Enhancement Cores. ``client_configuration.get_filled_v_improvements(60)`` specifies an assumption that all skills are enhanced to level 60.
+- The 4th parameter of ``get_builder`` specifies the levels used for the 5th job skills. It's troublesome to do this manually, but the ``engine_configuration`` object earlier allows us to conveniently create a default configuration of all skills at Level 30.
+- Similarly, the 5th parameter specifies the levels of Enhancement Cores. ``engine_configuration.get_filled_v_improvements(60)`` specifies an assumption that all skills are enhanced to level 60.
 - ``combat_orders_level`` is the level of Combat Orders used (1 = Decent, 2 = Paladin), and ``passive_skill_level`` is either 0 or 1 depending on whether the "+1 Levels to Passive Skills" Legendary Ability line is used.
 
-With all the information provided, ``get_client`` returns a ``Client`` object which, in the above code, is referenced as ``client``. 
+With all the information provided, ``get_builder`` returns a ``Builder`` object which, in the above code, is referenced as ``engine``. 
 
-Congratulations! We have now created a ``Client`` with all the skills necessary.
+Congratulations! We have now created a ``Engine`` with all the skills necessary.
 
 
 Policy Implementation
@@ -94,37 +94,33 @@ Policy Implementation
 
 In the previous section, we have created the *environment* for the desired simulation. In this section, we will discuss how to actually **simulate** skill usage given this environment.
 
-In simaple, ``Policy`` is the class for defining decisions such as which skill to use in which sequence. For a predefined Policy that works simply for all jobs, simaple offers ``DefaultOrderPolicy``. Let's create it with ``client_configuration``. 
+In simaple, ``Policy`` is the class for defining decisions such as which skill to use in which sequence. For a predefined Policy that works simply for all jobs, simaple offers ``DefaultOrderPolicy``. Let's create it with ``engine_configuration``. 
 
 .. code-block:: python
 
     ...
 
-    client_configuration = get_client_configuration(JobType.archmagefb)
-    policy = client_configuration.get_default_policy()
+    engine_configuration = get_engine_configuration(JobType.archmagefb)
+    policy = engine_configuration.get_default_policy()
 
 
-Now we have both the ``Client`` and the ``Policy``. Next is to actually perform the simulation.
+Now we have both the ``Engine`` and the ``Policy``. Next is to actually perform the simulation.
 
 
 Performing the Simulation
 ===========================
 
-The following code runs the simulation through the ``Client`` and ``Policy`` defined earlier. Let's run a simulation for 50 seconds; keep in mind that this code follows from the previous blocks.
+The following code runs the simulation through the ``Engine`` and ``Policy`` defined earlier. Let's run a simulation for 50 seconds; keep in mind that this code follows from the previous blocks.
 
 
 .. code-block:: python
 
     ...
-    from simaple.simulate.policy import get_dsl_shell
-
-    shell = get_dsl_shell(archmagefb_client)
-
-    while client.environment.show("clock") < 50_000:
-        shell.exec_policy(policy, early_stop=50_000)
+    while engine.get_current_viewer()("clock") < 50_000:
+        engine.exec_policy(policy, early_stop=50_000)
 
 
-The total time for which the simulation has been run can be obtained from ``client.environment.show("clock")``. For the duration of the simulation, we take the decision of the ``Policy``, perform it in the ``Client``, and then the resulting list of ``events`` is passed to the next decision.
+The total time for which the simulation has been run can be obtained from ``engine.get_current_viewer()("clock")``. For the duration of the simulation, we take the decision of the ``Policy``, perform it in the ``Engine``, and then the resulting list of ``events`` is passed to the next decision.
 
 The simulation has run, but at the moment the results aren't displayed yet. simaple has methods to track the following two results for analysis.    
 
@@ -139,24 +135,26 @@ If we run the code below *instead of* the one above, we can store these two thin
     ...
 
     from simaple.simulate.report.base import Report, ReportEventHandler
-    from simaple.simulate.policy import get_dsl_shell
 
     report = Report()
-    client.add_handler(ReportEventHandler(report))
+    engine.add_callback(ReportEventHandler(report))
 
-    shell = get_dsl_shell(client)
-
-    while client.environment.show("clock") < 50_000:
-        shell.exec_policy(policy, early_stop=50_000)
+    while engine.get_current_viewer()("clock") < 50_000:
+        engine.exec_policy(policy, early_stop=50_000)
     
-    shell.history.dump("history.log")
+    with open("history.log", "w") as f:
+        for op in engine.get_history().show_ops():
+            f.write(op.model_dump_json())
+
+    report.save("report.tsv")
 
 
-``recorder`` records the ``Policy``'s decisions at each instant in time. Every action taken, ``rec.write`` is called to record the decisions made.
-The record will be stored in ``record.tsv`` after the code has been executed. Parsing the information there might be a bit hard since it's pretty raw data, but it would describe the names of the skills used and the time (in the simulation) at which they were used.
 
-``report`` contains information about the damage numbers that occurred at each instant. By calling ``add_handler`` to register  ``report`` with the ``Client``, all the damage that occurred during the simulation process is stored in the ``report`` object.
-``len(report)`` can be used to verify if the ``Report`` has actually piled up. You can also change the simulation duration and rerun the code to see that the length actually changes.  
+``engine`` records the ``Policy``'s decisions at each instant in time.
+The record will be stored in ``engine._history`` after the code has been executed. Parsing the information there might be a bit hard since it's pretty raw data, but it would describe the names of the skills used and the time (in the simulation) at which they were used.
+
+``Report`` contains information about the damage numbers that occurred at each instant. By calling ``add_handler`` to register  ``report`` with the ``Engine``, all the damage that occurred during the simulation process is stored in the ``report`` object.
+``len(report.logs)`` can be used to verify if the ``Report`` has actually piled up. You can also change the simulation duration and rerun the code to see that the length actually changes.  
 
 The ``report.save`` method can be used to output the report as a file.
 
@@ -208,13 +206,13 @@ Finally, this will be the full code assembled from all the sections written abov
 
 .. code-block:: python
 
-    from simaple.simulate.kms import get_client
-    from simaple.data.client_configuration import get_client_configuration
+    from simaple.simulate.kms import get_builder
+    from simaple.data.engine_configuration import get_engine_configuration
     from simaple.core.jobtype import JobType
     from simaple.core import ActionStat, Stat
 
-    ## Declare Client
-    client_configuration = get_client_configuration(JobType.archmagefb)
+    ## Declare Engine
+    engine_configuration = get_engine_configuration(JobType.archmagefb)
     character_stat = Stat(
         INT=4932.0,
         INT_multiplier=573.0,
@@ -230,40 +228,41 @@ Finally, this will be the full code assembled from all the sections written abov
     )
     action_stat = ActionStat(buff_duration=185)
 
-    client = get_client(
+    engine = get_builder(
         action_stat,
-        client_configuration.get_groups(),
+        engine_configuration.get_groups(),
         {
             "character_stat": character_stat,
             "character_level": 260,
             "weapon_attack_power": 789,
             "weapon_pure_attack_power": 500,
         },
-        client_configuration.get_filled_v_skill(30),
-        client_configuration.get_filled_v_improvements(60),
+        engine_configuration.get_filled_v_skill(30),
+        engine_configuration.get_filled_v_improvements(60),
         combat_orders_level=1,
         passive_skill_level=0,
-    )
+    ).build_operation_engine()
 
     ## Declare Policy
 
-    client_configuration = get_client_configuration(JobType.archmagefb)
-    policy = client_configuration.get_default_policy()
+    engine_configuration = get_engine_configuration(JobType.archmagefb)
+    policy = engine_configuration.get_default_policy()
 
     ## Run simulation
 
     from simaple.simulate.report.base import Report, ReportEventHandler
-    from simaple.simulate.policy import get_dsl_shell
 
     report = Report()
-    client.add_handler(ReportEventHandler(report))
+    engine.add_callback(ReportEventHandler(report))
 
-    shell = get_dsl_shell(client)
-
-    while client.environment.show("clock") < 50_000:
-        shell.exec_policy(policy, early_stop=50_000)
+    while engine.get_current_viewer()("clock") < 50_000:
+        engine.exec_policy(policy, early_stop=50_000)
     
-    shell.history.dump("history.log")
+    with open("history.log", "w") as f:
+        for op in engine.get_history().show_ops():
+            f.write(op.model_dump_json())
+
+    report.save("report.tsv")
 
     from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
     from simaple.data.damage_logic import get_damage_logic

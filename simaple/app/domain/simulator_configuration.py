@@ -5,22 +5,17 @@ import pydantic
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.base import ActionStat, Stat
 from simaple.core.jobtype import JobType
-from simaple.data.client_configuration import (
-    ClientConfiguration,
-    get_client_configuration,
-)
 from simaple.data.damage_logic import get_damage_logic
-from simaple.simulate.base import Client
-from simaple.simulate.kms import get_client
-from simaple.simulate.policy.dsl import DSLShell, get_dsl_shell
+from simaple.data.engine_configuration import (
+    EngineConfiguration,
+    get_engine_configuration,
+)
+from simaple.simulate.engine import MonotonicEngine, OperationEngine
+from simaple.simulate.kms import get_builder
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 
 
 class SimulatorConfiguration(pydantic.BaseModel, metaclass=ABCMeta):
-    @abstractmethod
-    def create_client(self) -> Client:
-        ...
-
     @abstractmethod
     def create_damage_calculator(self) -> DamageCalculator:
         ...
@@ -30,8 +25,13 @@ class SimulatorConfiguration(pydantic.BaseModel, metaclass=ABCMeta):
     def get_name(cls) -> str:
         ...
 
-    def create_shell(self) -> DSLShell:
-        return get_dsl_shell(self.create_client())
+    @abstractmethod
+    def create_monotonic_engine(self) -> MonotonicEngine:
+        ...
+
+    @abstractmethod
+    def create_operation_engine(self) -> OperationEngine:
+        ...
 
 
 class MinimalSimulatorConfiguration(SimulatorConfiguration):
@@ -55,18 +55,28 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
     def get_jobtype(self) -> JobType:
         return JobType(self.job)
 
-    def get_client_configuration(self) -> ClientConfiguration:
-        return get_client_configuration(self.get_jobtype())
+    def get_engine_configuration(self) -> EngineConfiguration:
+        return get_engine_configuration(self.get_jobtype())
 
-    def create_client(self) -> Client:
-        client_configuration = self.get_client_configuration()
-        return get_client(
+    def create_monotonic_engine(self) -> MonotonicEngine:
+        engine_configuration = self.get_engine_configuration()
+        return get_builder(
             self.action_stat,
-            client_configuration.get_groups(),
+            engine_configuration.get_groups(),
             self.get_injected_values(),
-            client_configuration.get_filled_v_skill(),
-            client_configuration.get_filled_v_improvements(),
-        )
+            engine_configuration.get_filled_v_skill(),
+            engine_configuration.get_filled_v_improvements(),
+        ).build_monotonic_engine()
+
+    def create_operation_engine(self) -> OperationEngine:
+        engine_configuration = self.get_engine_configuration()
+        return get_builder(
+            self.action_stat,
+            engine_configuration.get_groups(),
+            self.get_injected_values(),
+            engine_configuration.get_filled_v_skill(),
+            engine_configuration.get_filled_v_improvements(),
+        ).build_operation_engine()
 
     def get_injected_values(self) -> dict:
         return {
@@ -97,8 +107,11 @@ class BaselineConfiguration(SimulatorConfiguration):
         container.config.from_dict(self.simulation_setting.model_dump())
         return container
 
-    def create_client(self) -> Client:
-        return self.get_container().client()
+    def create_monotonic_engine(self) -> MonotonicEngine:
+        return self.get_container().monotonic_engine()
+
+    def create_operation_engine(self) -> OperationEngine:
+        return self.get_container().operation_engine()
 
     def create_damage_calculator(self) -> DamageCalculator:
         return self.get_container().dpm_calculator()

@@ -2,7 +2,6 @@ from typing import Optional, Type
 
 from simaple.simulate.base import (
     AddressedStore,
-    Client,
     ConcreteStore,
     Dispatcher,
     RouterDispatcher,
@@ -10,10 +9,12 @@ from simaple.simulate.base import (
     ViewSet,
 )
 from simaple.simulate.component.base import Component
+from simaple.simulate.engine import MonotonicEngine, OperationEngine
+from simaple.simulate.policy.operation import get_operations
 from simaple.simulate.view import AggregationView
 
 
-class ClientBuilder:
+class EngineBuilder:
     def __init__(self, store: Optional[AddressedStore] = None) -> None:
         self._router = RouterDispatcher()
         self._viewset: ViewSet = ViewSet()
@@ -22,20 +23,28 @@ class ClientBuilder:
         else:
             self._store = store
 
-    def build_client(self) -> Client:
-        return Client(
+    def build_monotonic_engine(self) -> MonotonicEngine:
+        return MonotonicEngine(
             router=self._router,
             store=self._store,
             viewset=self._viewset,
         )
 
-    def add_dispatcher(self, dispatcher: Dispatcher) -> "ClientBuilder":
+    def build_operation_engine(self) -> OperationEngine:
+        return OperationEngine(
+            self._router,
+            self._store,
+            self._viewset,
+            get_operations(),
+        )
+
+    def add_dispatcher(self, dispatcher: Dispatcher) -> "EngineBuilder":
         self._router.install(dispatcher)
         dispatcher.init_store(self._store)  # TODO: remove this
 
         return self
 
-    def add_component(self, component: Component) -> "ClientBuilder":
+    def add_component(self, component: Component) -> "EngineBuilder":
         dispatcher = component.export_dispatcher()
         self.add_dispatcher(dispatcher)
 
@@ -44,14 +53,14 @@ class ClientBuilder:
 
         return self
 
-    def add_view(self, name: str, view: View) -> "ClientBuilder":
+    def add_view(self, name: str, view: View) -> "EngineBuilder":
         self._viewset.add_view(name, view)
 
         return self
 
     def add_aggregation_view(
         self, aggregation_view: Type[AggregationView], name: str
-    ) -> "ClientBuilder":
+    ) -> "EngineBuilder":
         view = aggregation_view.build(self._viewset)  # TODO: remove this (too slow)
         self._viewset.add_view(name, view)
 

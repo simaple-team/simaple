@@ -17,57 +17,13 @@ def create_simulator(conf: SimulatorConfiguration, uow: UnitOfWork) -> str:
     return simulator.id
 
 
-def play_action(simulator_id: str, operation: str, uow: UnitOfWork) -> None:
+def play_operation(simulator_id: str, dsl: str, uow: UnitOfWork) -> None:
     simulator = uow.simulator_repository().get(simulator_id)
 
     if simulator is None:
         raise UnknownSimulatorException()
 
-    simulator.dispatch(operation)
-    uow.simulator_repository().update(simulator)
-
-
-def play_use(simulator_id: str, name: str, uow: UnitOfWork) -> None:
-    simulator = uow.simulator_repository().get(simulator_id)
-
-    if simulator is None:
-        raise UnknownSimulatorException()
-
-    simulator.dispatch(dict(name=name, method="use", payload=None))
-    uow.simulator_repository().update(simulator)
-
-
-def play_elapse(simulator_id: str, time: float, uow: UnitOfWork) -> None:
-    simulator = uow.simulator_repository().get(simulator_id)
-
-    if simulator is None:
-        raise UnknownSimulatorException()
-
-    simulator.dispatch(
-        dict(
-            name="*",
-            method="elapse",
-            payload=time,
-        )
-    )
-    uow.simulator_repository().update(simulator)
-
-
-def play_use_and_elapse(simulator_id: str, name: str, uow: UnitOfWork) -> None:
-    simulator = uow.simulator_repository().get(simulator_id)
-
-    if simulator is None:
-        raise UnknownSimulatorException()
-
-    simulator.dispatch(dict(name=name, method="use", payload=None))
-    simulator.dispatch(
-        dict(
-            name="*",
-            method="elapse",
-            payload=simulator.history.get_latest_playlog().get_delay_left(),
-        )
-    )
-
+    simulator.dispatch(dsl)
     uow.simulator_repository().update(simulator)
 
 

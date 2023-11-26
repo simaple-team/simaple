@@ -1,5 +1,3 @@
-from typing import Generator
-
 import pydantic
 
 from simaple.core.base import Stat
@@ -21,9 +19,6 @@ class DamageLog(pydantic.BaseModel):
 
 class Report(pydantic.BaseModel):
     logs: list[DamageLog] = []
-
-    def __iter__(self) -> Generator[DamageLog, None, None]:
-        return iter(self.logs)
 
     def add(self, clock: float, event: Event, buff: Stat):
         buff_stat = buff

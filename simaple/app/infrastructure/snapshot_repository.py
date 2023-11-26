@@ -12,7 +12,7 @@ class SnapshotOrm(BaseOrm):  # type: ignore
     __tablename__ = "snapshot"
 
     id = Column(String(256), primary_key=True)
-    history = Column(JSON, nullable=False)
+    saved_history = Column(JSON, nullable=False)
     updated_at = Column(DateTime, default=datetime.now, nullable=False)
     name = Column(String(128), nullable=False)
     configuration = Column(JSON, nullable=False)
@@ -52,7 +52,7 @@ class SqlSnapshotRepository(SnapshotRepository):
     def _to_entity(self, snapshot_orm: SnapshotOrm) -> Snapshot:
         return Snapshot(
             id=snapshot_orm.id,
-            history=snapshot_orm.history,
+            saved_history=snapshot_orm.saved_history,
             updated_at=snapshot_orm.updated_at,
             name=snapshot_orm.name,
             configuration=self._configuration_mapper.load(
@@ -63,7 +63,7 @@ class SqlSnapshotRepository(SnapshotRepository):
     def _to_orm(self, entity: Snapshot) -> SnapshotOrm:
         return SnapshotOrm(
             id=entity.id,
-            history=entity.history,
+            saved_history=entity.saved_history,
             updated_at=entity.updated_at,
             name=entity.name,
             configuration=self._configuration_mapper.dump(entity.configuration),

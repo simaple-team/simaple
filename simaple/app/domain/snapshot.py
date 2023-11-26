@@ -9,7 +9,6 @@ import pydantic
 
 from simaple.app.domain.simulator import Simulator
 from simaple.app.domain.simulator_configuration import SimulatorConfiguration
-from simaple.simulate.policy.base import SimulationHistory
 
 
 def get_uuid() -> str:
@@ -18,21 +17,21 @@ def get_uuid() -> str:
 
 class Snapshot(pydantic.BaseModel, arbitrary_types_allowed=True):
     id: str = pydantic.Field(default_factory=get_uuid)
-    history: dict
+    saved_history: dict
     updated_at: datetime
     name: str
     configuration: SimulatorConfiguration
 
     def restore_simulator(self) -> Simulator:
         simulator = Simulator.create_from_config(self.configuration)
-        simulator.shell._history.load(self.history)
+        simulator.engine.load_history(self.saved_history)
 
         return simulator
 
     @classmethod
     def create_from_simluator(cls, name: str, simulator: Simulator):
         return Snapshot(
-            history=simulator.shell._history.save(),
+            saved_history=simulator.engine.save_history(),
             updated_at=datetime.now(),
             name=name,
             configuration=simulator.conf.model_copy(),

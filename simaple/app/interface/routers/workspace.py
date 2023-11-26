@@ -4,21 +4,14 @@ import fastapi
 import pydantic
 from dependency_injector.wiring import Provide, inject
 
-from simaple.app.application.command import (
-    create_simulator,
-    play_action,
-    play_elapse,
-    play_use,
-    play_use_and_elapse,
-    rollback,
-)
+from simaple.app.application.command import create_simulator, play_operation, rollback
 from simaple.app.application.query import (
-    PlayLogResponse,
+    OperationLogResponse,
     SimulatorResponse,
     query_all_simulator,
-    query_every_playlog,
-    query_latest_playlog,
-    query_playlog,
+    query_every_opration_log,
+    query_latest_operation_log,
+    query_operation_log,
 )
 from simaple.app.domain.simulator_configuration import (
     BaselineConfiguration,
@@ -26,7 +19,6 @@ from simaple.app.domain.simulator_configuration import (
 )
 from simaple.app.domain.uow import UnitOfWork
 from simaple.app.interface.container import WebContainer
-from simaple.simulate.base import Action
 
 UowProvider = fastapi.Depends(Provide[WebContainer.unit_of_work])
 router = fastapi.APIRouter(prefix="/workspaces")
@@ -66,88 +58,52 @@ class RequestPlay(pydantic.BaseModel):
     operation: str
 
 
-@router.post("/play/{simulator_id}", response_model=PlayLogResponse)
+@router.post("/play/{simulator_id}", response_model=OperationLogResponse)
 @inject
 def play(
     simulator_id: str,
     request: RequestPlay,
     uow: UnitOfWork = UowProvider,
-) -> PlayLogResponse:
-    play_action(simulator_id, request.operation, uow)
+) -> OperationLogResponse:
+    play_operation(simulator_id, request.operation, uow)
 
-    return query_latest_playlog(simulator_id, uow)
+    return query_latest_operation_log(simulator_id, uow)
 
 
 class RequestDispatchUse(pydantic.BaseModel):
     name: str
 
 
-@router.post("/use/{simulator_id}", response_model=PlayLogResponse)
-@inject
-def dispatch_use(
-    simulator_id: str,
-    request: RequestDispatchUse,
-    uow: UnitOfWork = UowProvider,
-) -> PlayLogResponse:
-    play_use(simulator_id, request.name, uow)
-
-    return query_latest_playlog(simulator_id, uow)
-
-
-@router.post("/use_and_elapse/{simulator_id}", response_model=PlayLogResponse)
-@inject
-def dispatch_use_and_elapse(
-    simulator_id: str,
-    request: RequestDispatchUse,
-    uow: UnitOfWork = UowProvider,
-) -> PlayLogResponse:
-    play_use_and_elapse(simulator_id, request.name, uow)
-
-    return query_latest_playlog(simulator_id, uow)
-
-
 class RequestDispatchElapse(pydantic.BaseModel):
     time: float
 
 
-@router.post("/elapse/{simulator_id}", response_model=PlayLogResponse)
-@inject
-def dispatch_elapse(
-    simulator_id: str,
-    request: RequestDispatchElapse,
-    uow: UnitOfWork = UowProvider,
-) -> PlayLogResponse:
-    play_elapse(simulator_id, request.time, uow)
-
-    return query_latest_playlog(simulator_id, uow)
-
-
-@router.get("/logs/{simulator_id}/latest", response_model=PlayLogResponse)
+@router.get("/logs/{simulator_id}/latest", response_model=OperationLogResponse)
 @inject
 def get_latest_log(
     simulator_id: str,
     uow: UnitOfWork = UowProvider,
-) -> PlayLogResponse:
-    return query_playlog(simulator_id, -1, uow)
+) -> OperationLogResponse:
+    return query_operation_log(simulator_id, -1, uow)
 
 
-@router.get("/logs/{simulator_id}/{log_index}", response_model=PlayLogResponse)
+@router.get("/logs/{simulator_id}/{log_index}", response_model=OperationLogResponse)
 @inject
 def get_log(
     simulator_id: str,
     log_index: int,
     uow: UnitOfWork = UowProvider,
-) -> PlayLogResponse:
-    return query_playlog(simulator_id, log_index, uow)
+) -> OperationLogResponse:
+    return query_operation_log(simulator_id, log_index, uow)
 
 
-@router.get("/logs/{simulator_id}", response_model=list[PlayLogResponse])
+@router.get("/logs/{simulator_id}", response_model=list[OperationLogResponse])
 @inject
 def get_all_log(
     simulator_id: str,
     uow: UnitOfWork = UowProvider,
-) -> list[PlayLogResponse]:
-    return query_every_playlog(simulator_id, uow)
+) -> list[OperationLogResponse]:
+    return query_every_opration_log(simulator_id, uow)
 
 
 @router.post("/rollback/{simulator_id}/{history_index}", response_model=None)

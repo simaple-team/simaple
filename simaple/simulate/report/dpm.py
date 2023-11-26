@@ -59,7 +59,7 @@ class DamageCalculator(pydantic.BaseModel):
 
     def calculate_damage(self, damage_report: Report):
         total_damage = 0
-        for log in damage_report:
+        for log in damage_report.logs:
             total_damage += self.get_damage(log)
 
         return total_damage

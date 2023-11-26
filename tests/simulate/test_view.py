@@ -1,6 +1,6 @@
 from simaple.core.base import ActionStat
 from simaple.simulate.base import AddressedStore, ConcreteStore, Entity
-from simaple.simulate.builder import ClientBuilder
+from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.component.base import Component, ReducerState, view_method
 from simaple.simulate.global_property import GlobalProperty
 
@@ -29,10 +29,10 @@ def test_view():
     global_property = GlobalProperty(ActionStat())
     global_property.install_global_properties(store)
 
-    client = (
-        ClientBuilder(store=store)
+    engine = (
+        EngineBuilder(store=store)
         .add_component(ViewTestComponent(id="dummy", name="test_component"))
-        .build_client()
+        .build_monotonic_engine()
     )
 
-    assert client.show("test_component.naming") == str(3 + 5)
+    assert engine.get_viewer()("test_component.naming") == str(3 + 5)

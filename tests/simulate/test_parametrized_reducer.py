@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 from simaple.core.base import ActionStat
 from simaple.simulate.base import AddressedStore, ConcreteStore, Entity
-from simaple.simulate.builder import ClientBuilder
+from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.component.base import Component, ReducerState, reducer_method
 from simaple.simulate.global_property import GlobalProperty
 
@@ -37,7 +37,7 @@ def test_paramterizd_reducer():
     global_property = GlobalProperty(ActionStat())
     global_property.install_global_properties(store)
 
-    client_builder = ClientBuilder(store=store)
+    engine_builder = EngineBuilder(store=store)
 
     component = ViewTestComponent(
         id="dummy",
@@ -50,13 +50,13 @@ def test_paramterizd_reducer():
             },
         },
     )
-    client_builder.add_component(component)
-    client = client_builder.build_client()
-    assert client.resolve(dict(name="some_parametrized_action", method="use",))[0][
+    engine_builder.add_component(component)
+    engine = engine_builder.build_monotonic_engine()
+    assert engine.resolve(dict(name="some_parametrized_action", method="use",))[0][
         "payload"
     ] == {"value": 2}
 
-    assert client.resolve(
+    assert engine.resolve(
         dict(
             name="some_action",
             method="use",
