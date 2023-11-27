@@ -1,5 +1,5 @@
-kind: ClientConfiguration
-version: simaple.io/ClientConfiguration
+kind: EngineConfiguration
+version: simaple.io/EngineConfiguration
 metadata:
   label:
     group: dualblade

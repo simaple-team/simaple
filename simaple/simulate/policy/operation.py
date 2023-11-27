@@ -22,7 +22,7 @@ def get_next_elapse_time(events: list[Event]) -> float:
 def exec_cast(op: Operation, events: list[Event]) -> ActionGeneratorType:
     target_name = op.name
 
-    action = dict(name=target_name, method="use")
+    action = dict(name=target_name, method="use", payload=None)
     events = yield action
 
     elapse_time = get_next_elapse_time(events)

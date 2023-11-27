@@ -1,28 +1,13 @@
 import functools
 import re
-from typing import Callable, Generator, Optional
+from typing import Callable, Generator
 
-from simaple.simulate.base import Client
 from simaple.simulate.policy.base import (
     Operation,
     OperationGeneratorProto,
-    OperationHistory,
     PolicyContextType,
-    SimulationShell,
-    _BehaviorGenerator,
 )
-from simaple.simulate.policy.operation import get_operations
 from simaple.simulate.policy.parser import parse_dsl_to_operation
-
-
-def dump(op: Operation) -> str:
-    if op.name:
-        if op.time:
-            raise ValueError
-
-        return f'{op.command}  "{op.name}"'
-
-    return f"{op.command}  {op.time}"
 
 
 class DSLError(Exception):
@@ -42,45 +27,7 @@ class OperandDSLParser:
 
             return [op for _ in range(mult)]
         except Exception as e:
-            raise DSLError(str(e)) from e
-
-
-class DSLOperationHistory(OperationHistory):
-    def __init__(self) -> None:
-        self._operations: list[Operation] = []
-
-    def append(self, op: Operation) -> None:
-        self._operations.append(op)
-
-    def dump(self, file_name: str) -> None:
-        with open(file_name, "w", encoding="utf-8") as f:
-            previous_op: Optional[Operation] = None
-            op_count = 0
-
-            for op in self._operations:
-                if previous_op is None:
-                    previous_op = op
-                    op_count = 1
-                    continue
-
-                if previous_op == op:
-                    op_count += 1
-                    continue
-
-                if op_count > 1:
-                    f.write(f"x{op_count} {dump(previous_op)}\n")
-                else:
-                    f.write(f"{dump(previous_op)}\n")
-
-                previous_op = op
-                op_count = 0
-                continue
-
-            assert previous_op is not None
-            if op_count > 1:
-                f.write(f"x{op_count} {dump(previous_op)}\n")
-            else:
-                f.write(f"{dump(previous_op)}\n")
+            raise DSLError(str(e) + f" was {op_string}") from e
 
 
 DSLGenerator = Generator[str, PolicyContextType, PolicyContextType]
@@ -105,44 +52,3 @@ def interpret_dsl_generator(
         return _gen
 
     return _gen_proto
-
-
-class DSLShell(SimulationShell):
-    def __init__(
-        self,
-        client: Client,
-        handlers: dict[str, Callable[[Operation], _BehaviorGenerator]],
-    ):
-        super().__init__(client, handlers, DSLOperationHistory())
-        self._parser = OperandDSLParser()
-
-    def exec_dsl(self, txt):
-        ops = self._parser(txt)
-        for op in ops:
-            self.exec(op)
-
-    def REPL(self):
-        while True:
-            txt = input(">> ")
-            if txt == "exit":
-                break
-
-            if txt == "valid":
-                print("-- valid skills --")
-                for validity in self.environment.show("validity"):
-                    if validity.valid:
-                        print(f"{validity.name}")
-            elif txt == "running":
-                for running in self.environment.show("running"):
-                    if running.time_left > 0:
-                        print(f"{running.name} | {running.time_left}")
-            else:
-                try:
-                    self.exec_dsl(txt)
-                except DSLError as e:
-                    print("Invalid DSL - try again")
-                    print(f"Error Mesage: {e}")
-
-
-def get_dsl_shell(client) -> DSLShell:
-    return DSLShell(client, get_operations())

@@ -8,14 +8,15 @@ from dependency_injector import containers, providers
 from simaple.core import ActionStat, ExtendedStat, JobCategory, JobType, Stat
 from simaple.data.ability import get_best_ability
 from simaple.data.baseline import get_baseline_gearset
-from simaple.data.client_configuration import get_client_configuration
 from simaple.data.damage_logic import get_damage_logic
 from simaple.data.doping import get_normal_doping
+from simaple.data.engine_configuration import get_engine_configuration
 from simaple.data.monster_life import get_normal_monsterlife
 from simaple.data.passive import get_passive
 from simaple.gear.gearset import Gearset
 from simaple.optimizer.preset import Preset, PresetOptimizer
-from simaple.simulate.kms import get_client
+from simaple.simulate.engine import MonotonicEngine, OperationEngine
+from simaple.simulate.kms import get_builder
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 from simaple.system.ability import get_ability_stat
 from simaple.system.trait import CharacterTrait
@@ -200,7 +201,7 @@ class SimulationContainer(containers.DeclarativeContainer):
     )
     # Use caching
 
-    client_configuration = providers.Factory(get_client_configuration, config.jobtype)
+    engine_configuration = providers.Factory(get_engine_configuration, config.jobtype)
 
     level_advantage = providers.Factory(
         LevelAdvantage().get_advantage, config.mob_level, config.level
@@ -215,22 +216,30 @@ class SimulationContainer(containers.DeclarativeContainer):
         force_advantage=config.force_advantage,
     )
 
-    client_patch_injected_values = providers.Dict(
+    engine_patch_injected_values = providers.Dict(
         character_stat=character.provided.stat,
         character_level=config.level,
         weapon_attack_power=config.weapon_attack_power,
         weapon_pure_attack_power=config.weapon_pure_attack_power,
     )
 
-    client = providers.Singleton(
-        get_client,
+    builder = providers.Factory(
+        get_builder,
         character.provided.action_stat,
-        client_configuration.provided.get_groups.call(),
-        client_patch_injected_values,
-        client_configuration.provided.get_filled_v_skill.call(config.v_skill_level),
-        client_configuration.provided.get_filled_v_improvements.call(
+        engine_configuration.provided.get_groups.call(),
+        engine_patch_injected_values,
+        engine_configuration.provided.get_filled_v_skill.call(config.v_skill_level),
+        engine_configuration.provided.get_filled_v_improvements.call(
             config.v_improvements_level
         ),
         passive_skill_level=config.passive_skill_level,
         combat_orders_level=config.combat_orders_level,
+    )
+
+    monotonic_engine: Callable[[], MonotonicEngine] = providers.Factory(
+        builder.provided.build_monotonic_engine.call()
+    )
+
+    operation_engine: Callable[[], OperationEngine] = providers.Factory(
+        builder.provided.build_operation_engine.call()
     )

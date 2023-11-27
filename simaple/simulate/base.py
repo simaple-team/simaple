@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
-from typing import Any, Callable, Optional, Union, cast
+from typing import Any, Callable, Optional, TypeVar, Union, cast
 
 from pydantic import BaseModel
 from typing_extensions import TypedDict
@@ -161,13 +161,21 @@ class Dispatcher(metaclass=ABCMeta):
     def includes(self, signature: str) -> bool:
         ...
 
+    @abstractmethod
+    def init_store(self, store: Store) -> None:
+        ...
+
 
 def named_dispatcher(direction: str):
     def decorator(dispatcher: Dispatcher):
         def _includes(signature: str) -> bool:
             return signature == direction
 
+        def _init_store(store: Store) -> None:
+            return
+
         setattr(dispatcher, "includes", _includes)
+        setattr(dispatcher, "init_store", _init_store)
         return dispatcher
 
     return decorator
@@ -203,27 +211,65 @@ class RouterDispatcher(Dispatcher):
         self._route_cache[signature] = cache
         return events
 
+    def init_store(self, store: Store) -> None:
+        for dispatcher in self._dispatchers:
+            dispatcher.init_store(store)
+
 
 View = Callable[[Store], Any]
 
 
-class Environment:
-    def __init__(self, store: AddressedStore):
-        self._router = RouterDispatcher()
-        self.store = store
+EventCallback = tuple[Action, Action]
+
+
+def _get_event_callbacks(event: Event) -> EventCallback:
+    """Wrap-up relay's decision by built-in actionss
+    These decisions must provided; this is "forced action"
+    """
+    emiited_event_action: Action = {
+        "name": event["name"],
+        "method": f"{event['method']}.emitted.{event['tag'] or ''}",
+        "payload": event["payload"],
+    }
+
+    done_event_action: Action = {
+        "name": event["name"],
+        "method": f"{event['method']}.done.{event['tag'] or ''}",
+        "payload": event["payload"],
+    }
+
+    return (emiited_event_action, done_event_action)
+
+
+class Checkpoint(BaseModel):
+    store_ckpt: dict[str, Any]
+
+    @classmethod
+    def create(
+        cls,
+        store: AddressedStore,
+    ) -> Checkpoint:
+        return Checkpoint(store_ckpt=store.save())
+
+    def restore(self) -> AddressedStore:
+        concrete_store = ConcreteStore()
+        concrete_store.load(self.store_ckpt)
+        store = AddressedStore(concrete_store)
+        return store
+
+
+ViewerType = Callable[[str], Any]
+
+
+class ViewSet:
+    def __init__(self) -> None:
         self._views: dict[str, View] = {}
 
-    def add_dispatcher(self, dispatcher: Dispatcher):
-        self._router.install(dispatcher)
-
-    def add_view(self, view_name: str, view: View):
+    def add_view(self, view_name: str, view: View) -> None:
         self._views[view_name] = view
 
-    def resolve(self, action: Action) -> list[Event]:
-        return self._router(action, self.store)
-
-    def show(self, view_name: str):
-        return self._views[view_name](self.store)
+    def show(self, view_name: str, store: Store) -> Any:
+        return self._views[view_name](store)
 
     def get_views(self, view_name_pattern: str) -> list[View]:
         regex = re.compile(view_name_pattern)
@@ -231,84 +277,54 @@ class Environment:
             view for view_name, view in self._views.items() if regex.match(view_name)
         ]
 
+    def get_viewer(self, ckpt: Checkpoint) -> ViewerType:
+        store = ckpt.restore()
+
+        def _viewer(view_name: str) -> Any:
+            return self.show(view_name, store)
+
+        return _viewer
+
 
 class EventHandler:
     """
     EventHandler receives "Event" and create "Action" (maybe multiple).
     Eventhandler receives full context; to provide meaningful decision.
-    Handling given store is not recommended "strongly". Please use store with
-    read-only mode as possible as you can.
     """
 
     def __call__(
-        self, event: Event, environment: Environment, all_events: list[Event]
+        self, event: Event, viewer: ViewerType, all_events: list[Event]
     ) -> None:
         ...
 
 
-EventCallback = tuple[Action, Action]
+class PreviousCallback(Entity):
+    events: list[EventCallback]
 
 
-class Client:
-    def __init__(self, environment: Environment):
-        self.environment = environment
-        self._event_handlers: list[EventHandler] = []
-        self._previous_callbacks: list[EventCallback] = []
+S = TypeVar("S", bound=Store)
 
-    def add_handler(self, event_handler: EventHandler) -> None:
-        self._event_handlers.append(event_handler)
 
-    def play(self, action: Action) -> list[Event]:
-        events: list[Event] = []
-        action_queue = [action]
+def play(store: S, action: Action, router: RouterDispatcher) -> tuple[S, list[Event]]:
+    events: list[Event] = []
+    action_queue = [action]
 
-        # Join proposed action with previous event's callback
-        for emitted_callback, done_callback in self._previous_callbacks:
-            action_queue = [emitted_callback] + action_queue + [done_callback]
+    previous_callbacks = store.read_entity(
+        "previous_callbacks", default=PreviousCallback(events=[])
+    )
 
-        for target_action in action_queue:
-            resolved_events = self.environment.resolve(target_action)
-            events += resolved_events
+    # Join proposed action with previous event's callback
+    for emitted_callback, done_callback in previous_callbacks.events:
+        action_queue = [emitted_callback] + action_queue + [done_callback]
 
-        for event in events:
-            self._handle(event, self.environment, events)
+    for target_action in action_queue:
+        resolved_events = router(target_action, store)
+        events += resolved_events
 
-        # Save untriggered callbacks
-        self._previous_callbacks = [
-            self._get_event_callbacks(event) for event in events
-        ]
+    # Save untriggered callbacks
+    store.set_entity(
+        "previous_callbacks",
+        PreviousCallback(events=[_get_event_callbacks(event) for event in events]),
+    )
 
-        return events
-
-    def clean(self) -> None:
-        self._previous_callbacks = []
-
-    def export_previous_callbacks(self) -> list[EventCallback]:
-        return list(self._previous_callbacks)
-
-    def restore_previous_callbacks(self, callbacks: list[EventCallback]) -> None:
-        self._previous_callbacks = callbacks
-
-    def _handle(
-        self, event: Event, environment: Environment, all_events: list[Event]
-    ) -> None:
-        for handler in self._event_handlers:
-            handler(event, environment, all_events)
-
-    def _get_event_callbacks(self, event: Event) -> EventCallback:
-        """Wrap-up relay's decision by built-in actionss
-        These decisions must provided; this is "forced action"
-        """
-        emiited_event_action: Action = {
-            "name": event["name"],
-            "method": f"{event['method']}.emitted.{event['tag'] or ''}",
-            "payload": event["payload"],
-        }
-
-        done_event_action: Action = {
-            "name": event["name"],
-            "method": f"{event['method']}.done.{event['tag'] or ''}",
-            "payload": event["payload"],
-        }
-
-        return (emiited_event_action, done_event_action)
+    return store, events

@@ -4,7 +4,6 @@ import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.container.simulation import SimulationContainer
 from simaple.simulate.report.base import Report, ReportEventHandler
 from test_data.target import get_test_settings
-from simaple.simulate.policy import get_dsl_shell
 
 
 @pytest.mark.parametrize("setting, jobtype, expected", get_test_settings())
@@ -14,19 +13,17 @@ def test_actor(setting, jobtype, expected):
 
     print(container.character().action_stat)
 
-    client = container.client()
-    policy = container.client_configuration().get_default_policy()
+    engine = container.monotonic_engine()
 
-    environment = client.environment
-
+    engine = container.operation_engine()
     report = Report()
-    client.add_handler(ReportEventHandler(report))
+    engine.add_callback(ReportEventHandler(report))
 
-    shell = get_dsl_shell(client)
+    policy = container.engine_configuration().get_default_policy()
 
-    while environment.show("clock") < 50_000:
-        shell.exec_policy(policy, early_stop=50_000)
+    while engine.get_current_viewer()("clock") < 50_000:
+        engine.exec_policy(policy, early_stop=50_000)
 
     dpm = container.dpm_calculator().calculate_dpm(report)
-    print(f"{environment.show('clock')} | {jobtype} | {dpm:,} ")
+    print(f"{engine.get_current_viewer()('clock')} | {jobtype} | {dpm:,} ")
     assert int(dpm) == expected

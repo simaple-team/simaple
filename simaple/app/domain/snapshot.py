@@ -7,7 +7,6 @@ from typing import Optional
 
 import pydantic
 
-from simaple.app.domain.history import History
 from simaple.app.domain.simulator import Simulator
 from simaple.app.domain.simulator_configuration import SimulatorConfiguration
 
@@ -16,23 +15,23 @@ def get_uuid() -> str:
     return str(uuid.uuid4())
 
 
-class Snapshot(pydantic.BaseModel):
+class Snapshot(pydantic.BaseModel, arbitrary_types_allowed=True):
     id: str = pydantic.Field(default_factory=get_uuid)
-    history: History
+    saved_history: dict
     updated_at: datetime
     name: str
     configuration: SimulatorConfiguration
 
     def restore_simulator(self) -> Simulator:
         simulator = Simulator.create_from_config(self.configuration)
-        simulator.set_history(self.history)
+        simulator.engine.load_history(self.saved_history)
 
         return simulator
 
     @classmethod
     def create_from_simluator(cls, name: str, simulator: Simulator):
         return Snapshot(
-            history=simulator.history.model_copy(),
+            saved_history=simulator.engine.save_history(),
             updated_at=datetime.now(),
             name=name,
             configuration=simulator.conf.model_copy(),

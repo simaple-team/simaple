@@ -1,5 +1,5 @@
 from simaple.core.base import ActionStat
-from simaple.simulate.base import AddressedStore, ConcreteStore, Entity, Environment
+from simaple.simulate.base import AddressedStore, ConcreteStore, Entity, ViewSet
 from simaple.simulate.component.base import ReducerState
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.view import InformationParentView
@@ -25,17 +25,19 @@ def test_view():
     store = AddressedStore(ConcreteStore())
     global_property = GlobalProperty(ActionStat())
     global_property.install_global_properties(store)
-
-    environment = Environment(store=store)
+    viewset = ViewSet()
 
     component = ViewTestComponent(
         name="test_component", delay=0, cooldown_duration=0, id="test"
     )
-    component.add_to_environment(environment)
 
-    InformationParentView.build_and_install(environment, "info")
+    for view_name, view in component.get_views().items():
+        viewset.add_view(f"{component.name}.{view_name}", view)
 
-    assert environment.show("info") == [
+    component.export_dispatcher().init_store(store)
+    viewset.add_view("info", InformationParentView.build(viewset))
+
+    assert viewset.show("info", store) == [
         {
             "id": "test",
             "name": "test_component",

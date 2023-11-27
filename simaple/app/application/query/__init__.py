@@ -7,78 +7,99 @@ from simaple.app.domain.services.statistics import get_cumulative_logs, get_dama
 from simaple.app.domain.simulator import Simulator
 from simaple.app.domain.uow import UnitOfWork
 from simaple.core.base import Stat
-from simaple.simulate.base import Action, Event
+from simaple.simulate.base import Action, Checkpoint, Event
 from simaple.simulate.component.view import Running, Validity
+from simaple.simulate.engine import OperationEngine, get_report
+from simaple.simulate.policy.base import Operation, PlayLog, ViewerType
+from simaple.simulate.report.base import Report
 
 
 class PlayLogResponse(pydantic.BaseModel):
     events: list[Event]
-    index: int
     validity_view: dict[str, Validity]
     running_view: dict[str, Running]
     buff_view: Stat
+    report: Report
     clock: float
-    damage: float
-    damages: list[tuple[str, float]]
     delay: float
     action: Action
-    checkpoint: dict
-    previous_hash: str
+    checkpoint: Checkpoint
+
+
+class OperationLogResponse(pydantic.BaseModel):
+    logs: list[PlayLogResponse]
     hash: str
+    previous_hash: str
+    operation: Operation
+    index: int
 
     @classmethod
-    def from_playlog(cls, simulator: Simulator, index: int) -> PlayLogResponse:
+    def from_simulator(cls, simulator: Simulator, index: int) -> OperationLogResponse:
         if index < 0:
-            index += len(simulator.history)
+            index += len(simulator.engine.history())
 
-        playlog = simulator.history.get(index)
-        return PlayLogResponse(
-            events=playlog.events,
+        operation_log = simulator.engine.history().get(index)
+
+        playlog_responses = []
+
+        for playlog, viewer in simulator.engine.inspect(operation_log):
+            playlog_responses.append(
+                PlayLogResponse(
+                    events=playlog.events,
+                    validity_view={v.name: v for v in viewer("validity")},
+                    running_view={v.name: v for v in viewer("running")},
+                    buff_view=viewer("buff"),
+                    clock=playlog.clock,
+                    report=get_report(playlog, viewer),
+                    delay=playlog.get_delay_left(),
+                    action=playlog.action,
+                    checkpoint=playlog.checkpoint,
+                )
+            )
+
+        return OperationLogResponse(
             index=index,
-            validity_view=playlog.view.validity_view,
-            running_view=playlog.view.running_view,
-            buff_view=playlog.view.get_buff(),
-            clock=playlog.clock,
-            damages=playlog.get_damages(simulator.calculator),
-            damage=playlog.get_total_damage(simulator.calculator),
-            delay=playlog.get_delay(),
-            action=playlog.action,
-            checkpoint=playlog.checkpoint,
-            previous_hash=playlog.previous_hash,
-            hash=playlog.hash,
+            logs=playlog_responses,
+            hash=operation_log.hash,
+            previous_hash=operation_log.previous_hash,
+            operation=operation_log.operation,
         )
 
 
-def query_latest_playlog(simulator_id: str, uow: UnitOfWork) -> PlayLogResponse:
+def query_latest_operation_log(
+    simulator_id: str, uow: UnitOfWork
+) -> OperationLogResponse:
     simulator = uow.simulator_repository().get(simulator_id)
     if simulator is None:
         raise UnknownSimulatorException()
 
-    latest_index = len(simulator.history) - 1
+    latest_index = len(simulator.engine.history()) - 1
 
-    return PlayLogResponse.from_playlog(simulator, latest_index)
+    return OperationLogResponse.from_simulator(simulator, latest_index)
 
 
-def query_playlog(
+def query_operation_log(
     simulator_id: str, log_index: int, uow: UnitOfWork
-) -> PlayLogResponse:
+) -> OperationLogResponse:
     simulator = uow.simulator_repository().get(simulator_id)
 
     if simulator is None:
         raise UnknownSimulatorException()
 
-    return PlayLogResponse.from_playlog(simulator, log_index)
+    return OperationLogResponse.from_simulator(simulator, log_index)
 
 
-def query_every_playlog(simulator_id: str, uow: UnitOfWork) -> list[PlayLogResponse]:
+def query_every_opration_log(
+    simulator_id: str, uow: UnitOfWork
+) -> list[OperationLogResponse]:
     simulator = uow.simulator_repository().get(simulator_id)
 
     if simulator is None:
         raise UnknownSimulatorException()
 
     return [
-        PlayLogResponse.from_playlog(simulator, log_index)
-        for log_index in range(len(simulator.history))
+        OperationLogResponse.from_simulator(simulator, log_index)
+        for log_index in range(simulator.engine.length())
     ]
 
 
@@ -95,8 +116,8 @@ def query_statistics(simulator_id: str, uow: UnitOfWork) -> StatisticsResponse:
     if simulator is None:
         raise UnknownSimulatorException()
 
-    cumulative_x, cumulative_y = get_cumulative_logs(simulator.history, simulator)
-    value_x, value_y = get_damage_logs(simulator.history, simulator)
+    cumulative_x, cumulative_y = get_cumulative_logs(simulator.engine, simulator)
+    value_x, value_y = get_damage_logs(simulator.engine, simulator)
 
     return StatisticsResponse(
         cumulative_x=cumulative_x,

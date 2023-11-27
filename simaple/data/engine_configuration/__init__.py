@@ -13,11 +13,11 @@ from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.repository import DirectorySpecRepository
 
 
-class ClientConfiguration(
-    pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="ClientConfiguration")
+class EngineConfiguration(
+    pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="EngineConfiguration")
 ):
     """
-    ClientConfiguration
+    EngineConfiguration
     A pre-assigned information to create specific job's components easier
     """
 
@@ -45,12 +45,12 @@ class ClientConfiguration(
         return PolicyWrapper(normal_default_ordered_policy(order=self.mdc_order))
 
 
-def get_client_configuration(jobtype: JobType) -> ClientConfiguration:
+def get_engine_configuration(jobtype: JobType) -> EngineConfiguration:
     repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
     loader = SpecBasedLoader(repository)
     return cast(
-        ClientConfiguration,
+        EngineConfiguration,
         loader.load(
-            query={"group": jobtype.value, "kind": "ClientConfiguration"},
+            query={"group": jobtype.value, "kind": "EngineConfiguration"},
         ),
     )

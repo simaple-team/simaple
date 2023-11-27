@@ -5,7 +5,6 @@ import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
-from simaple.simulate.policy import get_dsl_shell
 from simaple.simulate.report.base import Report, ReportEventHandler
 
 setting = SimulationSetting(
@@ -23,23 +22,20 @@ setting = SimulationSetting(
 container = SimulationContainer()
 container.config.from_dict(setting.model_dump())
 
-archmagefb_client = container.client()
-policy = container.client_configuration().get_default_policy()
-
-environment = archmagefb_client.environment
+engine = container.operation_engine()
+policy = container.engine_configuration().get_default_policy()
 
 report = Report()
-archmagefb_client.add_handler(ReportEventHandler(report))
-shell = get_dsl_shell(archmagefb_client)
+engine.add_callback(ReportEventHandler(report))
 
 
 def run():
     start = time.time()
-    while environment.show("clock") < 50_000:
-        shell.exec_policy(policy, early_stop=50_000)
+    while engine.get_current_viewer()("clock") < 50_000:
+        engine.exec_policy(policy, early_stop=50_000)
 
     print(
-        f"{environment.show('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
+        f"{engine.get_current_viewer()('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
     )
     end = time.time()
     print(f"elapsed: {end - start}")

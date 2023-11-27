@@ -1,5 +1,6 @@
 from simaple.core.base import ActionStat
-from simaple.simulate.base import AddressedStore, ConcreteStore, Environment
+from simaple.simulate.base import AddressedStore, ConcreteStore
+from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.component.skill import AttackSkillComponent
 from simaple.simulate.global_property import GlobalProperty
 
@@ -17,11 +18,12 @@ def test_scenario():
         name="test-B", damage=400, hit=6, cooldown_duration=14.0, delay=0.0, id="test"
     )
 
-    environment = Environment(store)
+    engine_builder = EngineBuilder(store)
 
-    attack_skill_1.add_to_environment(environment)
-    attack_skill_2.add_to_environment(environment)
-    event = environment.resolve(
+    engine_builder.add_component(attack_skill_1).add_component(attack_skill_2)
+    engine = engine_builder.build_monotonic_engine()
+
+    event = engine.resolve(
         dict(
             name="test-A",
             method="use",
@@ -29,7 +31,7 @@ def test_scenario():
         )
     )
 
-    event = environment.resolve(
+    event = engine.resolve(
         dict(
             name="test-B",
             method="use",
@@ -38,7 +40,7 @@ def test_scenario():
     )
     print(event)
 
-    event = environment.resolve(
+    event = engine.resolve(
         dict(
             name="test-B",
             method="elapse",

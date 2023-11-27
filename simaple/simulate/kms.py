@@ -5,7 +5,8 @@ from simaple.data.passive.patch import SkillLevelPatch
 from simaple.data.passive_hyper_skill import get_hyper_skill_patch
 from simaple.data.skill import get_kms_skill_loader
 from simaple.data.skill.patch import VSkillImprovementPatch
-from simaple.simulate.base import AddressedStore, Client, ConcreteStore, Environment
+from simaple.simulate.base import AddressedStore, ConcreteStore
+from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.component.base import Component
 from simaple.simulate.component.view import (
     BuffParentView,
@@ -15,17 +16,17 @@ from simaple.simulate.component.view import (
     ValidityParentView,
 )
 from simaple.simulate.global_property import GlobalProperty
-from simaple.simulate.timer import clock_view, install_timer
+from simaple.simulate.timer import clock_view, timer_delay_dispatcher
 from simaple.spec.patch import EvalPatch
 
 
-def bare_store(action_stat: ActionStat):
+def bare_store(action_stat: ActionStat) -> AddressedStore:
     store = AddressedStore(ConcreteStore())
     GlobalProperty(action_stat).install_global_properties(store)
     return store
 
 
-def get_client(
+def get_builder(
     action_stat: ActionStat,
     groups: list[str],
     injected_values: dict,
@@ -33,10 +34,8 @@ def get_client(
     v_improvements: dict[str, int],
     combat_orders_level: int = 1,
     passive_skill_level: int = 0,
-) -> Client:
+) -> EngineBuilder:
     loader = get_kms_skill_loader()
-
-    store = bare_store(action_stat)
 
     component_sets = [
         loader.load_all(
@@ -57,20 +56,17 @@ def get_client(
 
     components: list[Component] = sum(component_sets, [])
 
-    environment = Environment(store=store)
-    environment.add_view("clock", clock_view)
+    engine_builder = EngineBuilder(bare_store(action_stat))
+    engine_builder.add_view("clock", clock_view)
 
     for component in components:
-        component.add_to_environment(environment)
+        engine_builder.add_component(component)
 
-    client = Client(environment)
+    engine_builder.add_dispatcher(timer_delay_dispatcher)
+    engine_builder.add_aggregation_view(InformationParentView, "info")
+    engine_builder.add_aggregation_view(ValidityParentView, "validity")
+    engine_builder.add_aggregation_view(BuffParentView, "buff")
+    engine_builder.add_aggregation_view(RunningParentView, "running")
+    engine_builder.add_aggregation_view(KeydownParentView, "keydown")
 
-    install_timer(client)
-
-    InformationParentView.build_and_install(environment, "info")
-    ValidityParentView.build_and_install(environment, "validity")
-    BuffParentView.build_and_install(environment, "buff")
-    RunningParentView.build_and_install(environment, "running")
-    KeydownParentView.build_and_install(environment, "keydown")
-
-    return client
+    return engine_builder

@@ -1,5 +1,6 @@
 from simaple.core.base import ActionStat
-from simaple.simulate.base import AddressedStore, ConcreteStore, Entity, Environment
+from simaple.simulate.base import AddressedStore, ConcreteStore, Entity
+from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.component.base import Component, ReducerState, view_method
 from simaple.simulate.global_property import GlobalProperty
 
@@ -28,23 +29,10 @@ def test_view():
     global_property = GlobalProperty(ActionStat())
     global_property.install_global_properties(store)
 
-    environment = Environment(store=store)
+    engine = (
+        EngineBuilder(store=store)
+        .add_component(ViewTestComponent(id="dummy", name="test_component"))
+        .build_monotonic_engine()
+    )
 
-    component = ViewTestComponent(id="dummy", name="test_component")
-    component.add_to_environment(environment)
-
-    assert environment.show("test_component.naming") == str(3 + 5)
-
-
-def test_view_query():
-    store = AddressedStore(ConcreteStore())
-    global_property = GlobalProperty(ActionStat())
-    global_property.install_global_properties(store)
-
-    environment = Environment(store=store)
-
-    component = ViewTestComponent(id="dummy", name="test_component")
-    component.add_to_environment(environment)
-
-    view = environment.get_views(r".*\.naming")[0]
-    assert view(environment.store) == str(3 + 5)
+    assert engine.get_viewer()("test_component.naming") == str(3 + 5)
