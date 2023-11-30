@@ -5,7 +5,7 @@ import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
-from simaple.simulate.report.base import Report, ReportEventHandler
+from simaple.simulate.report.base import Report, ReportWriteCallback
 
 setting = SimulationSetting(
     tier="Legendary",
@@ -26,7 +26,7 @@ engine = container.operation_engine()
 policy = container.engine_configuration().get_default_policy()
 
 report = Report()
-engine.add_callback(ReportEventHandler(report))
+engine.add_callback(ReportWriteCallback(report))
 
 
 def run():

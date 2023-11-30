@@ -7,7 +7,7 @@ from simaple.simulate.base import (
     Checkpoint,
     Event,
     EventCallback,
-    EventHandler,
+    PostActionCallback,
     RouterDispatcher,
     ViewerType,
     ViewSet,
@@ -28,7 +28,7 @@ from simaple.simulate.reserved_names import Tag
 
 class SimulationEngine(metaclass=ABCMeta):
     @abstractmethod
-    def add_callback(self, handler: EventHandler) -> None:
+    def add_callback(self, callback: PostActionCallback) -> None:
         """Simulation Engine may ensure that given engine triggers registered callbacks."""
 
 
@@ -40,10 +40,10 @@ class MonotonicEngine(SimulationEngine):
         self._store = store
         self._viewset = viewset
         self._previous_callbacks: list[EventCallback] = []
-        self._callbacks: list[EventHandler] = []
+        self._callbacks: list[PostActionCallback] = []
 
-    def add_callback(self, handler: EventHandler) -> None:
-        self._callbacks.append(handler)
+    def add_callback(self, callback: PostActionCallback) -> None:
+        self._callbacks.append(callback)
 
     def get_viewer(self) -> ViewerType:
         return self._show
@@ -86,7 +86,7 @@ class OperationEngine(SimulationEngine):
 
         self._history = SimulationHistory(store)
         self._parser = OperandDSLParser()
-        self._callbacks: list[EventHandler] = []
+        self._callbacks: list[PostActionCallback] = []
 
     def inspect(self, log: OperationLog) -> list[tuple[PlayLog, ViewerType]]:
         return [
@@ -94,8 +94,8 @@ class OperationEngine(SimulationEngine):
             for playlog in log.playlogs
         ]
 
-    def add_callback(self, handler: EventHandler) -> None:
-        self._callbacks.append(handler)
+    def add_callback(self, callback: PostActionCallback) -> None:
+        self._callbacks.append(callback)
 
     def save_history(self) -> dict[str, Any]:
         return self._history.save()

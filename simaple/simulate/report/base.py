@@ -1,7 +1,7 @@
 import pydantic
 
 from simaple.core.base import Stat
-from simaple.simulate.base import Event, EventHandler, ViewerType
+from simaple.simulate.base import Event, PostActionCallback, ViewerType
 from simaple.simulate.reserved_names import Tag
 
 
@@ -48,7 +48,7 @@ class Report(pydantic.BaseModel):
         return self.logs[-1].clock
 
 
-class ReportEventHandler(EventHandler):
+class ReportWriteCallback(PostActionCallback):
     def __init__(self, report: Report):
         self.report = report
 
@@ -61,7 +61,7 @@ class ReportEventHandler(EventHandler):
             self.report.add(current_clock, event, current_buff_state)
 
 
-class LogEventHandler(EventHandler):
+class LoggerCallback(PostActionCallback):
     def __init__(self, report: Report):
         self.report = report
 

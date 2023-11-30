@@ -286,10 +286,10 @@ class ViewSet:
         return _viewer
 
 
-class EventHandler:
+class PostActionCallback:
     """
-    EventHandler receives "Event" and create "Action" (maybe multiple).
-    Eventhandler receives full context; to provide meaningful decision.
+    PostActionCallback receives "Event" and do any post-action operations.
+    PostActionCallback receives viewer; this ensure callback can read every state, but cannot modify.
     """
 
     def __call__(
