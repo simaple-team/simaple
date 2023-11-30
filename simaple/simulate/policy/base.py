@@ -180,6 +180,7 @@ class SimulationHistory:
     def discard_after(self, idx: int) -> None:
         """Discard logs after idx."""
         self._logs = self._logs[: idx + 1]
+        self._cached_store = None
 
     def get(self, idx: int) -> OperationLog:
         return self._logs[idx]
