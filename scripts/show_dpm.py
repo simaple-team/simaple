@@ -25,13 +25,22 @@ def test_actor():
     engine.add_callback(ReportWriteCallback(report))
 
     policy = container.engine_configuration().get_default_policy()
+    import time
 
-    while engine.get_current_viewer()("clock") < 50_000:
-        engine.exec_policy(policy, early_stop=50_000)
+    start = time.time()
+    while engine.get_current_viewer()("clock") < 180_000:
+        engine.exec_policy(policy, early_stop=180_000)
+
+    end = time.time()
 
     print(
         f"{engine.get_current_viewer()('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
     )
+
+    for operation_log in engine.operation_logs():
+        timestamp = operation_log.playlogs[0].clock
+        ops = operation_log.operation
+        print(f"{timestamp:.3f} | {ops.expr}")
 
 
 if __name__ == "__main__":

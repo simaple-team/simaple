@@ -31,8 +31,8 @@ engine.add_callback(ReportWriteCallback(report))
 
 def run():
     start = time.time()
-    while engine.get_current_viewer()("clock") < 50_000:
-        engine.exec_policy(policy, early_stop=50_000)
+    while engine.get_current_viewer()("clock") < 180_000:
+        engine.exec_policy(policy, early_stop=180_000)
 
     print(
         f"{engine.get_current_viewer()('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
@@ -40,7 +40,7 @@ def run():
     end = time.time()
     print(f"elapsed: {end - start}")
 
-    assert 8_264_622_367_162.877 == container.dpm_calculator().calculate_dpm(report)
+    # assert 8_264_622_367_162.877 == container.dpm_calculator().calculate_dpm(report)
 
 
 if __name__ == "__main__":

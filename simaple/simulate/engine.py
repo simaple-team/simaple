@@ -90,7 +90,7 @@ class OperationEngine(SimulationEngine):
 
     def inspect(self, log: OperationLog) -> list[tuple[PlayLog, ViewerType]]:
         return [
-            (playlog, self._viewset.get_viewer(playlog.checkpoint))
+            (playlog, self._viewset.get_viewer_from_ckpt(playlog.checkpoint))
             for playlog in log.playlogs
         ]
 
@@ -119,7 +119,7 @@ class OperationEngine(SimulationEngine):
 
     def _exec(self, op: Operation, early_stop: int = -1) -> None:
         playlogs: list[PlayLog] = []
-        store = self._history.current_ckpt().restore()
+        store = self._history.move_store()
 
         for behavior in self._get_behavior_gen(op):
             if 0 < early_stop <= self._viewset.show("clock", store):
@@ -144,13 +144,14 @@ class OperationEngine(SimulationEngine):
                 for handler in self._callbacks:
                     handler(
                         event,
-                        self._viewset.get_viewer(playlogs[-1].checkpoint),
+                        self._viewset.get_viewer(store),
                         self._buffered_events,
                     )
 
         self._history.commit(
             op,
             playlogs,
+            moved_store=store,
         )
 
     def _get_behavior_gen(self, op: Operation) -> _BehaviorGenerator:
@@ -166,11 +167,11 @@ class OperationEngine(SimulationEngine):
         return (self.get_current_viewer(), self._buffered_events)
 
     def get_current_viewer(self) -> ViewerType:
-        ckpt = self._history.current_ckpt()
-        return self._viewset.get_viewer(ckpt)
+        store = self._history.current_store()
+        return self._viewset.get_viewer(store)
 
     def get_report(self, playlog: PlayLog) -> Report:
-        viewer = self._viewset.get_viewer(playlog.checkpoint)
+        viewer = self._viewset.get_viewer_from_ckpt(playlog.checkpoint)
         report = Report()
         buff = viewer("buff")
         for event in playlog.events:

@@ -277,9 +277,10 @@ class ViewSet:
             view for view_name, view in self._views.items() if regex.match(view_name)
         ]
 
-    def get_viewer(self, ckpt: Checkpoint) -> ViewerType:
-        store = ckpt.restore()
+    def get_viewer_from_ckpt(self, ckpt: Checkpoint) -> ViewerType:
+        return self.get_viewer(ckpt.restore())
 
+    def get_viewer(self, store: Store) -> ViewerType:
         def _viewer(view_name: str) -> Any:
             return self.show(view_name, store)
 
