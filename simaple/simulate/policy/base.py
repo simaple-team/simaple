@@ -1,6 +1,5 @@
 import functools
 import hashlib
-import json
 from typing import Any, Callable, Generator, Optional, cast
 
 from pydantic import BaseModel, PrivateAttr
@@ -142,7 +141,8 @@ class OperationLog(BaseModel):
 
     def _fast_dumped_string(self) -> str:
         return self.operation.model_dump_json() + "|".join(
-            playlog.model_dump_json(exclude="checkpoint") for playlog in self.playlogs
+            playlog.model_dump_json(exclude=set(["checkpoint"]))
+            for playlog in self.playlogs
         )
 
     def last(self) -> PlayLog:
@@ -175,7 +175,7 @@ class SimulationHistory:
             assert logs is not None
             self._logs = logs
 
-        self._cached_store = None
+        self._cached_store: Optional[AddressedStore] = None
 
     def discard_after(self, idx: int) -> None:
         """Discard logs after idx."""
