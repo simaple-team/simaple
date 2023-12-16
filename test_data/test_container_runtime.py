@@ -2,7 +2,7 @@ import pytest
 
 import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.container.simulation import SimulationContainer
-from simaple.simulate.report.base import Report, ReportEventHandler
+from simaple.simulate.report.base import Report, ReportWriteCallback
 from test_data.target import get_test_settings
 
 
@@ -17,7 +17,7 @@ def test_actor(setting, jobtype, expected):
 
     engine = container.operation_engine()
     report = Report()
-    engine.add_callback(ReportEventHandler(report))
+    engine.add_callback(ReportWriteCallback(report))
 
     policy = container.engine_configuration().get_default_policy()
 

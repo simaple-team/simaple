@@ -277,19 +277,20 @@ class ViewSet:
             view for view_name, view in self._views.items() if regex.match(view_name)
         ]
 
-    def get_viewer(self, ckpt: Checkpoint) -> ViewerType:
-        store = ckpt.restore()
+    def get_viewer_from_ckpt(self, ckpt: Checkpoint) -> ViewerType:
+        return self.get_viewer(ckpt.restore())
 
+    def get_viewer(self, store: Store) -> ViewerType:
         def _viewer(view_name: str) -> Any:
             return self.show(view_name, store)
 
         return _viewer
 
 
-class EventHandler:
+class PostActionCallback:
     """
-    EventHandler receives "Event" and create "Action" (maybe multiple).
-    Eventhandler receives full context; to provide meaningful decision.
+    PostActionCallback receives "Event" and do any post-action operations.
+    PostActionCallback receives viewer; this ensure callback can read every state, but cannot modify.
     """
 
     def __call__(

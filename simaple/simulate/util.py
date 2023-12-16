@@ -1,10 +1,15 @@
 from loguru import logger
 
-from simaple.simulate.base import Event, EventHandler, ViewerType, message_signature
+from simaple.simulate.base import (
+    Event,
+    PostActionCallback,
+    ViewerType,
+    message_signature,
+)
 from simaple.simulate.reserved_names import Tag
 
 
-class EventDisplayHandler(EventHandler):
+class EventDisplayCallback(PostActionCallback):
     def __call__(self, event: Event, viewer: ViewerType, __: list[Event]) -> None:
         if event["tag"] == Tag.ELAPSED:  # Elapsed log is too verbose
             return
