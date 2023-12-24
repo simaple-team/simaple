@@ -13,8 +13,6 @@ def test_actor(setting, jobtype, expected):
 
     print(container.character().action_stat)
 
-    engine = container.monotonic_engine()
-
     engine = container.operation_engine()
     report = Report()
     engine.add_callback(ReportWriteCallback(report))

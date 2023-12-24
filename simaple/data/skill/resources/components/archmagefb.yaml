@@ -23,7 +23,24 @@ data:
 
   dot_damage: "{{ 120 + 4 * skill_level }}"
   dot_lasting_duration: 10_000
-
+---
+kind: Component
+version: simaple.io/FerventDrain
+metadata:
+  label:
+    group: archmagefb
+    name: 퍼번트 드레인
+    id: 212053-0
+data:
+  id: 212053-0
+  name: 퍼번트 드레인
+  cooldown_duration: 120000
+  delay: 0
+  red: false
+  rem: false
+  lasting_duration: 60000
+  stat:
+    final_damage_multiplier: 10
 ---
 kind: Component
 version: simaple.io/DOTEmittingAttackSkillComponent
@@ -126,19 +143,6 @@ data:
   name: 익스트림 매직(불,독)
   stat:
     final_damage_multiplier: 20
----
-kind: Component
-version: simaple.io/AlwaysEnabledComponent
-metadata:
-  label:
-    group: archmagefb
-    name: 퍼번트 드레인
-    id: 2120014-0
-data:
-  id: 2120014-0
-  name: 퍼번트 드레인
-  stat:
-    final_damage_multiplier: 25
 ---
 kind: Component
 version: simaple.io/AlwaysEnabledComponent

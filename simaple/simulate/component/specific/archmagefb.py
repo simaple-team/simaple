@@ -1,5 +1,5 @@
 from simaple.simulate.base import Entity
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from simaple.simulate.component.base import ReducerState, reducer_method, view_method, Component
 from simaple.simulate.component.entity import Cooldown, Periodic, Stack
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
@@ -10,6 +10,53 @@ from simaple.simulate.component.trait.impl import (
 from simaple.simulate.component.util import is_rejected
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.global_property import Dynamics
+from simaple.core import Stat
+from typing import Optional
+
+
+class FerventDrainStack(Entity):
+    count: int
+    max_count: int
+
+    def set_max_count(self, max_count: int):
+        self.max_count = max_count
+
+    def get_count(self) -> int:
+        return min(self.count, self.max_count)
+
+    def get_buff(self) -> Stat:
+        return Stat(
+            final_damage_multiplier=self.get_count() * 5
+        )
+
+
+class FerventDrainState(ReducerState):
+    drain_stack: FerventDrainStack
+
+
+class FerventDrain(Component):
+    cooldown_duration: float = 0
+    delay: float = 0
+
+    def get_default_state(self):
+        return {
+            "drain_stack": FerventDrainStack(
+                count=5, max_count=5
+            ),
+        }
+
+    @view_method
+    def buff(self, state: FerventDrainState) -> Stat:
+        return state.drain_stack.get_buff()
+
+    @view_method
+    def running(self, state: FerventDrainState) -> Running:
+        return Running(
+            id=self.id,
+            name=self.name,
+            time_left=999_999_999,
+            lasting_duration=999_999_999,
+        )
 
 
 class PoisonNovaEntity(Entity):
@@ -326,3 +373,30 @@ class IfrittComponent(
 
     def _get_dot_damage_and_lasting(self) -> tuple[float, float]:
         return self.dot_damage, self.dot_lasting_duration
+
+
+'''
+class InfernalVenomState(ReducerState):
+    fervent_stack: FerventDrainStack
+
+
+class InfernalVenom(
+    SkillComponent,
+):
+    def get_default_state(self):
+        return {
+            "cooldown": Cooldown(time_left=0),
+        }
+
+    @reducer_method
+    def use(self, state: InfernalVenomState):
+        ...
+
+    @reducer_method
+    def elapse(self, time: float, state: InfernalVenomState):
+        ...
+
+    @view_method
+    def buff(self, stat: InfernalVenomState) -> Optional[Stat]:
+        ...        
+'''
