@@ -3,7 +3,7 @@ import pydantic
 from simaple.core import ActionStat, ExtendedStat, Stat
 
 
-class CharacterTrait(pydantic.BaseModel):
+class Propensity(pydantic.BaseModel):
     ambition: int
     insight: int
     empathy: int

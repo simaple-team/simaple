@@ -3,7 +3,7 @@ import asyncio
 import pytest
 
 from simaple.request.application.base import Token, get_character_id
-from simaple.request.application.hyperstat import get_hyperstat
+from simaple.request.application.props import get_hyperstat
 
 API_KEY = "test_931c08e3c68f6fd9a3084914d7a23cad07ecf4f5fcf67f93fcccd79eabd10d2d109b4615165332e79d3ae3e6ce793a5e"
 

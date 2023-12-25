@@ -222,7 +222,7 @@ class CharacterHyperstatExtractor(CharacterPropertyExtractor):
         return result
 
 
-class CharacterTraitExtractor(CharacterPropertyExtractor):
+class PropensityExtractor(CharacterPropertyExtractor):
     def extract(self, soup: bs4.BeautifulSoup):
         def extract_level(level_text: str) -> int:
             match = re.compile("^Lv. ([0-9]+)").match(level_text)

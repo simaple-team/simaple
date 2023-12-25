@@ -19,7 +19,7 @@ from simaple.simulate.engine import MonotonicEngine, OperationEngine
 from simaple.simulate.kms import get_builder
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 from simaple.system.ability import get_ability_stat
-from simaple.system.trait import CharacterTrait
+from simaple.system.propensity import Propensity
 
 
 class SimulationSetting(pydantic.BaseModel):
@@ -36,7 +36,7 @@ class SimulationSetting(pydantic.BaseModel):
     armor: int = 300
     mob_level: int = 265
     force_advantage: float = 1.0
-    trait_level: int = 100
+    propensity_level: int = 100
 
     v_skill_level: int = 30
     v_improvements_level: int = 60
@@ -137,14 +137,14 @@ class SimulationContainer(containers.DeclarativeContainer):
         ability_lines,
     )
 
-    trait = providers.Factory(
-        CharacterTrait,
-        ambition=config.trait_level,
-        insight=config.trait_level,
-        empathy=config.trait_level,
-        willpower=config.trait_level,
-        diligence=config.trait_level,
-        charm=config.trait_level,
+    propensity = providers.Factory(
+        Propensity,
+        ambition=config.propensity_level,
+        insight=config.propensity_level,
+        empathy=config.propensity_level,
+        willpower=config.propensity_level,
+        diligence=config.propensity_level,
+        charm=config.propensity_level,
     )
 
     doping = providers.Factory(get_normal_doping)
@@ -157,7 +157,7 @@ class SimulationContainer(containers.DeclarativeContainer):
         doping,
         monster_life,
         ability_stat,
-        trait.provided.get_extended_stat.call(),
+        propensity.provided.get_extended_stat.call(),
     )
 
     gearset = providers.Factory(

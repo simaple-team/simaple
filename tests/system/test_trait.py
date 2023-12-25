@@ -1,14 +1,14 @@
 import pytest
 
 from simaple.core import ActionStat, Stat
-from simaple.system.trait import CharacterTrait
+from simaple.system.propensity import Propensity
 
 
 @pytest.mark.parametrize(
-    "trait, stat, action_stat",
+    "propensity, stat, action_stat",
     [
         (
-            CharacterTrait(
+            Propensity(
                 ambition=0,
                 insight=0,
                 empathy=0,
@@ -20,7 +20,7 @@ from simaple.system.trait import CharacterTrait
             ActionStat(),
         ),
         (
-            CharacterTrait(
+            Propensity(
                 ambition=50,
                 insight=0,
                 empathy=0,
@@ -32,7 +32,7 @@ from simaple.system.trait import CharacterTrait
             ActionStat(),
         ),
         (
-            CharacterTrait(
+            Propensity(
                 ambition=0,
                 insight=20,
                 empathy=20,
@@ -44,7 +44,7 @@ from simaple.system.trait import CharacterTrait
             ActionStat(buff_duration=2),
         ),
         (
-            CharacterTrait(
+            Propensity(
                 ambition=100,
                 insight=100,
                 empathy=100,
@@ -57,10 +57,10 @@ from simaple.system.trait import CharacterTrait
         ),
     ],
 )
-def test_trait_and_stat(
-    trait: CharacterTrait,
+def test_propensity_and_stat(
+    propensity: Propensity,
     stat: Stat,
     action_stat: ActionStat,
 ):
-    assert trait.get_stat() == stat
-    assert trait.get_action_stat() == action_stat
+    assert propensity.get_stat() == stat
+    assert propensity.get_action_stat() == action_stat
