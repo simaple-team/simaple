@@ -4,18 +4,17 @@ from pydantic import BaseModel
 
 from simaple.core import Stat
 
-HYPERSTAT_BASIS = {
-    "STR_static": [i * 30 for i in range(16)],
-    "DEX_static": [i * 30 for i in range(16)],
-    "LUK_static": [i * 30 for i in range(16)],
-    "INT_static": [i * 30 for i in range(16)],
-    "attack_power": [i * 3 for i in range(16)],
-    "magic_attack": [i * 3 for i in range(16)],
-    "damage_multiplier": [i * 3 for i in range(16)],
-    "boss_damage_multiplier": [i * 3 + max(i - 5, 0) for i in range(16)],
-    "critical_damage": list(range(16)),
-    "critical_rate": [i + max(i - 5, 0) for i in range(16)],
-    "ignored_defence": [i * 3 for i in range(16)],
+HYPERSTAT_BASIS: dict[str, list[Stat]] = {
+    "STR_static": [Stat(STR_static=i * 30) for i in range(16)],
+    "DEX_static": [Stat(DEX_static=i * 30) for i in range(16)],
+    "LUK_static": [Stat(LUK_static=i * 30) for i in range(16)],
+    "INT_static": [Stat(INT_static=i * 30) for i in range(16)],
+    "attacks": [Stat(attack_power=i * 3, magic_attack=i * 3) for i in range(16)],
+    "damage_multiplier": [Stat(damage_multiplier=i * 3) for i in range(16)],
+    "boss_damage_multiplier": [Stat(boss_damage_multiplier=i * 3 + max(i - 5, 0)) for i in range(16)],
+    "critical_damage": [Stat(critical_damage=i) for i in range(16)],
+    "critical_rate": [Stat(critical_rate=i + max(i - 5, 0)) for i in range(16)],
+    "ignored_defence": [Stat(ignored_defence=i * 3) for i in range(16)],
 }
 
 HYPERSTAT_COST = [1, 2, 4, 8, 10, 15, 20, 25, 30, 35, 50, 65, 80, 95, 110, 999999]
@@ -23,13 +22,13 @@ HYPERSTAT_COST = [1, 2, 4, 8, 10, 15, 20, 25, 30, 35, 50, 65, 80, 95, 110, 99999
 
 def get_hyperstat_lists() -> list[list[Stat]]:
     return [
-        [Stat.model_validate({name: value}) for value in value_list]
-        for name, value_list in HYPERSTAT_BASIS.items()
+        value_list
+        for _, value_list in HYPERSTAT_BASIS.items()
     ]
 
 
 def get_empty_hyperstat_levels() -> list[int]:
-    return [0 for i in HYPERSTAT_BASIS]
+    return [0 for i in range(len(HYPERSTAT_BASIS))]
 
 
 def get_hyperstat_cost() -> list[int]:
