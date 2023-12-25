@@ -1,4 +1,3 @@
-import asyncio
 import datetime
 from typing import Any, TypedDict, cast
 
@@ -53,5 +52,5 @@ async def get_character_id(token: Token, name: str) -> CharacterID:
     resp = await token.request(uri, {"character_name": name})
     return {
         "ocid": resp["ocid"],
-        "date": datetime.datetime.now().date() - datetime.timedelta(days=1),
+        "date": datetime.datetime.now().date() - datetime.timedelta(days=2),
     }

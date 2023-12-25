@@ -33,3 +33,13 @@ class CharacterHyperStat(TypedDict):
     hyper_stat_preset_2_remain_point: int
     hyper_stat_preset_3: list[HyperStatResponseColumn]
     hyper_stat_preset_3_remain_point: int
+
+
+class CharacterPropensity(TypedDict):
+    date: str
+    charisma_level: int
+    sensibility_level: int
+    insight_level: int
+    willingness_level: int
+    handicraft_level: int
+    charm_level: int

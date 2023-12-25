@@ -15,10 +15,6 @@ _STAT_NAME_TO_BASIS_NAME = {
 }
 
 
-def _stat_type_to_basis():
-    ...
-
-
 def get_hyperstat(hyperstat_response: CharacterHyperStat):
     options = []
     levels = []

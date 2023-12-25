@@ -21,7 +21,7 @@ def standard_character_element() -> CharacterElement:
             "stat": CharacterStatExtractor(),
             "ability": CharacterAbilityExtractor(),
             "hyperstat": CharacterHyperstatExtractor(),
-            "trait": PropensityExtractor(),
+            "propensity": PropensityExtractor(),
         }
     )
 
