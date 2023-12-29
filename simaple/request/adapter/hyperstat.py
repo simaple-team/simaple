@@ -20,7 +20,7 @@ def get_hyperstat(hyperstat_response: CharacterHyperStat):
     levels = []
 
     target_preset: list[HyperStatResponseColumn] = hyperstat_response[
-        f"hyper_stat_preset_{hyperstat_response['use_preset_no']}"
+        f"hyper_stat_preset_{hyperstat_response['use_preset_no'] - 1}"  # type: ignore
     ]
     for column in target_preset:
         if column["stat_type"] in _STAT_NAME_TO_BASIS_NAME:

@@ -1,0 +1,70 @@
+{
+  "date": "2023-12-24T00:00+09:00",
+  "character_class": "비숍",
+  "character_skill_grade": "hyperpassive",
+  "character_skill": [
+    {
+      "skill_name": "홀리 매직쉘-엑스트라 가드",
+      "skill_description": "[마스터 레벨 : 1]\r\n홀리 매직쉘의 가드 횟수를 증가시킨다.",
+      "skill_level": 1,
+      "skill_effect": "가드 횟수 2 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAIFOBID.png"
+    },
+    {
+      "skill_name": "홀리 매직쉘-퍼시스트",
+      "skill_description": "[마스터 레벨 : 1]\r\n홀리 매직쉘의 지속 시간을 증가시킨다.",
+      "skill_level": 0,
+      "skill_effect": null,
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAIFOBIE.png"
+    },
+    {
+      "skill_name": "홀리 매직쉘-인핸스",
+      "skill_description": "[마스터 레벨 : 1]\r\n최대 HP의 일정 비율로 피해를 입히는 공격에 피격 시 홀리 매직쉘로 감소하는 피해량을 증가시킨다.",
+      "skill_level": 0,
+      "skill_effect": null,
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAIFOBIF.png"
+    },
+    {
+      "skill_name": "홀리 심볼-익스피리언스",
+      "skill_description": "[마스터 레벨 : 1]\r\n홀리 심볼 사용 시 자신의 경험치 획득량을 증가시킨다.",
+      "skill_level": 1,
+      "skill_effect": "경험치 20% 증가. 자신에게만 적용",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAIFOBIG.png"
+    },
+    {
+      "skill_name": "홀리 심볼-임뷰 바디",
+      "skill_description": "[마스터 레벨 : 1]\r\n홀리 심볼 사용 시 상태 이상 내성과 모든 속성 내성을 증가시킨다. 단, 홀리 심볼을 시전한 캐릭터 근처를 벗어나면 적용되지 않는다. 추가로 내성과 모든 속성 내성이 영구히 증가한다.",
+      "skill_level": 0,
+      "skill_effect": null,
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAIFOBIH.png"
+    },
+    {
+      "skill_name": "홀리 심볼-엑스트라 드롭",
+      "skill_description": "[마스터 레벨 : 1]\r\n홀리 심볼 사용 시 드롭률을 증가시킨다. 단, 홀리 심볼을 시전한 캐릭터 근처를 벗어나면 적용되지 않는다.",
+      "skill_level": 1,
+      "skill_effect": "드롭률 30% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAIFOBII.png"
+    },
+    {
+      "skill_name": "어드밴스드 블레스-보너스 데미지",
+      "skill_description": "[마스터 레벨 : 1]\r\n어드밴스드 블레스로 오르는 공격력 및 마력을 추가로 증가시킨다.",
+      "skill_level": 1,
+      "skill_effect": "공격력 및 마력 20 추가 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAIFOBIJ.png"
+    },
+    {
+      "skill_name": "어드밴스드 블레스-보스 킬러",
+      "skill_description": "[마스터 레벨 : 1]\r\n어드밴스드 블레스 사용 시 보스 몬스터 공격 시 데미지를 증가시킨다.",
+      "skill_level": 1,
+      "skill_effect": "보스 몬스터 공격 시 데미지 10% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAIFOBJA.png"
+    },
+    {
+      "skill_name": "어드밴스드 블레스-엑스트라 포인트",
+      "skill_description": "[마스터 레벨 : 1]\r\n어드밴스드 블레스로 오르는 최대 HP 및 최대 MP를 추가로 증가시킨다.",
+      "skill_level": 0,
+      "skill_effect": null,
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAIFOBJB.png"
+    }
+  ]
+}

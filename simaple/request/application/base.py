@@ -22,6 +22,10 @@ def get_character_id_param(character_id: CharacterID) -> dict:
     }
 
 
+def as_python_datetime(date: str) -> datetime.datetime:
+    return datetime.datetime.strptime(date, "%Y-%m-%d%H:%M:%S+09:00")
+
+
 class Token:
     def __init__(self, access_token: str) -> None:
         self._access_token = access_token
@@ -31,19 +35,17 @@ class Token:
         return self._access_token
 
     async def request(self, uri: str, param: dict[str, Any]) -> dict:
-        print(param)
         async with aiohttp.ClientSession() as session:
-            response = await session.get(
-                uri,
+            async with session.get(
+                f"{uri}",
                 headers={
                     "X-Nxopen-Api-Key": self._access_token,
                     "Accept": "application/json",
                 },
                 params=param,
-                allow_redirects=False,
-            )
-
-        return await cast(dict, response.json())
+                allow_redirects=True,
+            ) as resp:
+                return cast(dict, await resp.json())
 
 
 async def get_character_id(token: Token, name: str) -> CharacterID:

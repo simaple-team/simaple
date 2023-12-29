@@ -3,13 +3,12 @@ from typing import Optional, Tuple
 from pydantic import BaseModel, Field
 
 from simaple.core import ExtendedStat, Stat
-from simaple.gear.arcane_symbol import ArcaneSymbol
-from simaple.gear.authentic_symbol import AuthenticSymbol
 from simaple.gear.gear import Gear
 from simaple.gear.gear_type import GearType
 from simaple.gear.potential import Potential, PotentialTier
 from simaple.gear.setitem import SetItem
 from simaple.gear.slot_name import SlotName
+from simaple.gear.symbol_gear import SymbolGear
 
 
 class GearSlot(BaseModel):
@@ -87,8 +86,7 @@ def get_default_empty_slots():
 
 
 class Gearset(BaseModel):
-    arcane_symbols: list[ArcaneSymbol] = []
-    authentic_symbols: list[AuthenticSymbol] = []
+    symbols: list[SymbolGear] = []
     pet_equip: Stat = Field(default_factory=Stat)
     pet_set_option: Stat = Field(default_factory=Stat)
     cash_item_stat: Stat = Field(default_factory=Stat)
@@ -121,17 +119,11 @@ class Gearset(BaseModel):
     def get_gears(self):
         return [slot.gear for slot in self.gear_slots if slot.gear is not None]
 
-    def set_arcane_symbols(self, arcane_symbols: list[ArcaneSymbol]):
-        self.arcane_symbols = list(arcane_symbols)
+    def set_symbols(self, symbols: list[SymbolGear]):
+        self.symbols = list(symbols)
 
-    def set_authentic_symbols(self, authentic_symbols: list[AuthenticSymbol]):
-        self.authentic_symbols = list(authentic_symbols)
-
-    def get_arcane_symbol_stat(self) -> Stat:
-        return sum([v.get_stat() for v in self.arcane_symbols], Stat())
-
-    def get_authentic_symbol_stat(self) -> Stat:
-        return sum([v.get_stat() for v in self.authentic_symbols], Stat())
+    def get_symbol_stat(self) -> Stat:
+        return sum([v.get_stat() for v in self.symbols], Stat())
 
     def get_gear_slot_stat(self) -> Stat:
         stat = Stat()
@@ -160,8 +152,7 @@ class Gearset(BaseModel):
     def _get_total_stat(self) -> Stat:
         stat = Stat()
         stat += self.get_gear_slot_stat()
-        stat += self.get_arcane_symbol_stat()
-        stat += self.get_authentic_symbol_stat()
+        stat += self.get_symbol_stat()
         stat += self.pet_equip
         stat += self.pet_set_option
         stat += self.cash_item_stat

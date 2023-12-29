@@ -1,5 +1,6 @@
 from simaple.request.adapter.hyperstat import get_hyperstat
 from simaple.request.adapter.propensity import get_propensity
+from simaple.request.adapter.union import get_union_squad, get_union_squad_effect
 from simaple.system.hyperstat import Hyperstat
 from simaple.system.propensity import Propensity
 
@@ -25,3 +26,10 @@ def test_propensity_response(character_propensity_response):
         diligence=66,
         charm=58,
     )
+
+
+def test_union_raiders_response(character_union_raiders_response):
+    union_squad = get_union_squad(character_union_raiders_response)
+    squad_effect = get_union_squad_effect(character_union_raiders_response)
+
+    assert union_squad.get_stat().short_dict() == squad_effect.stat.short_dict()

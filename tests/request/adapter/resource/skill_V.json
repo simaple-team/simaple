@@ -1,0 +1,196 @@
+{
+  "date": "2023-12-24T00:00+09:00",
+  "character_class": "비숍",
+  "character_skill_grade": "5",
+  "character_skill": [
+    {
+      "skill_name": "로프 커넥트",
+      "skill_description": "[마스터 레벨 : 25]\r\n하늘 높이 로프를 던져 빠르게 이동한다.",
+      "skill_level": 13,
+      "skill_effect": "올라가는 도중에 스킬키를 다시 누르면 캔슬가능\n재사용 대기시간 3초\n[패시브 효과 : 올스탯 13 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBMA.png"
+    },
+    {
+      "skill_name": "쓸만한 미스틱 도어",
+      "skill_description": "[마스터 레벨 : 25]\r\n가장 가까운 마을로 통하는 포탈을 만든다. 자신만 문이 사라질 때까지 몇 번이고 드나들 수 있고 포탈 위에서 ↑ 버튼을 누르면 이동된다.",
+      "skill_level": 1,
+      "skill_effect": "최대 HP의 5% 소비, 마법의 돌 2개 소비, 32초 동안 포탈 지속\n재사용 대기시간 130초\n[패시브 효과 : 올스탯 1 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBMB.png"
+    },
+    {
+      "skill_name": "쓸만한 샤프 아이즈",
+      "skill_description": "[마스터 레벨 : 25]\r\n적의 약점을 찾아 치명상을 입힐 수 있는 능력을 자신에게 부여한다. 샤프 아이즈와 중복 사용되지 않는다.",
+      "skill_level": 9,
+      "skill_effect": "최대 HP의 5% 소비, 207초 동안 크리티컬 확률 10%, 크리티컬 데미지 8% 증가\n재사용 대기시간 180초\n[패시브 효과 : 올스탯 2 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBMC.png"
+    },
+    {
+      "skill_name": "쓸만한 하이퍼 바디",
+      "skill_description": "[마스터 레벨 : 25]\r\n최대 HP와 최대 MP의 양이 증가한다. 하이퍼 바디와 중복 사용되지 않는다.",
+      "skill_level": 1,
+      "skill_effect": "최대 HP의 5% 소비, 183초 동안 최대 HP 40%, 최대 MP 40% 증가\n재사용 대기시간 180초\n[패시브 효과 : 올스탯 1 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBMD.png"
+    },
+    {
+      "skill_name": "쓸만한 컴뱃 오더스",
+      "skill_description": "[마스터 레벨 : 25]\r\n일정 시간 동안 자신의 모든 스킬 레벨을 증가시켜준다. 4차 스킬에 한해 마스터 레벨 이상으로 증가시킬 수 있으며 그 외 스킬은 마스터 레벨까지만 올려줄 수 있다.\n예외적으로 일부 특별한 스킬과 초보자 스킬, 컴뱃 오더스, 쓸만한 컴뱃 오더스, 하이퍼 스킬, 5차 스킬, 6차 스킬의 스킬 레벨은 올려줄 수 없다.\n컴뱃 오더스와 중복 사용되지 않는다.",
+      "skill_level": 10,
+      "skill_effect": "최대 HP의 5% 소비, 210초 동안 모든 스킬 레벨 1 증가\n재사용 대기시간 180초\n[패시브 효과 : 상태 이상 내성 2 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBME.png"
+    },
+    {
+      "skill_name": "쓸만한 윈드 부스터",
+      "skill_description": "[마스터 레벨 : 25]\r\n일정 시간 동안 자신의 공격 속도를 1단계 추가 증가시킨다. 기존 부스터와 중복해서 사용할 수 있으며 윈드 부스터와 중복 사용되지 않는다.",
+      "skill_level": 4,
+      "skill_effect": "최대 HP의 5% 소비, 192초 동안 공격 속도 증가\n재사용 대기시간 180초\n[패시브 효과 : 올스탯 1 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBMG.png"
+    },
+    {
+      "skill_name": "블링크",
+      "skill_description": "[마스터 레벨 : 25]\r\n맵 상의 랜덤한 위치로 순간이동한다. 공중에서 키다운으로 사용하면 순간이동 대신 일정시간 부유하며 느린 속도로 이동할 수 있다.",
+      "skill_level": 19,
+      "skill_effect": "최대 HP의 3% 소비\n맵 상의 랜덤한 위치로 순간이동\n공중에서 키다운 시 최대 4.3초 동안 부유\n재사용 대기시간 20초\n[패시브 효과 : 공격력, 마력 19 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBMH.png"
+    },
+    {
+      "skill_name": "에르다 노바",
+      "skill_description": "[마스터 레벨 : 25]\r\n자신과 주변의 에르다를 모은 후 폭발시켜 적을 공격한다. 공격을 받은 적은 체내의 에르다가 흐트러져 행동 불가 상태가 된다. 공격 무시 및 공격 반사 상태의 적에게도 피해를 입힐 수 있다.",
+      "skill_level": 26,
+      "skill_effect": "최대 HP의 15% 소비, 최대 10명의 적을 306% 데미지로 5번 공격하고 10초 동안 행동 불가 상태\n에르다 노바로 적에게 준 데미지에 따라 행동 불가 지속시간 최대 100% 증가\n재사용 대기시간 116초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBMI.png"
+    },
+    {
+      "skill_name": "에르다의 의지",
+      "skill_description": "[마스터 레벨 : 25]\r\n정신을 집중하여 상태 이상으로부터 벗어난다. 사용 후 3초 동안 상태 이상 면역. 단, 일부 상태 이상 효과에는 적용되지 않는다.",
+      "skill_level": 11,
+      "skill_effect": "최대 HP의 5% 소비, 재사용 대기시간 425초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBMJ.png"
+    },
+    {
+      "skill_name": "에르다 샤워",
+      "skill_description": "[마스터 레벨 : 25]\r\n응축되어 있는 에르다를 뿜어내어 주변 적을 공격한다.\n아래 방향키와 함께 스킬 사용 시 순수한 에르다가 고여있는 오브제인 에르다 파운틴을 소환할 수 있다.\n커스텀 커맨드를 사용하면 방향키 입력 없이 스킬 키만으로 에르다 파운틴을 소환할 수 있다.\n커스텀 커맨드 온오프 : 마우스 우클릭",
+      "skill_level": 6,
+      "skill_effect": "HP 3000 소비\n에르다 샤워\n최대 15명의 적을 540%의 데미지로 6번 공격, 공격 후 에르다를 흡수하여 공격한 적마다 에르다 샤워의 재사용 대기시간 2초 감소\n재사용 대기시간 40초\n에르다 파운틴\n60초 동안 오브제 소환, 오브제가 소환된 맵에서 적을 처치할 때마다 적에서 방출된 에르다가 오브제 주위로 응집\n12명 이상 처치 시 모인 에르다가 방출되어 최대 10명의 적을 540%의 데미지로 4번 공격\n재사용 대기시간 60초\n에르다 샤워와 에르다 파운틴은 재사용 대기시간을 공유",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBPG.png"
+    },
+    {
+      "skill_name": "언스태이블 메모라이즈",
+      "skill_description": "[마스터 레벨 : 25]\r\n메모리 초이스로 기억해 둔 마법을 사용한다. 기억에 의존하기에 불안정하다.",
+      "skill_level": 30,
+      "skill_effect": "MP 80 소비, 기억해 둔 스킬 사용\n선택된 스킬의 MP 소비 및 재사용 대기시간을 무시하나 사용 후 언스태이블 메모라이즈의 재사용 대기시간이 각 확률에 따라 지정된 비율로 감소\n재사용 대기시간 340초\n[패시브 효과 : 지력 30 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBOB.png"
+    },
+    {
+      "skill_name": "메모리 초이스",
+      "skill_description": "[마스터 레벨 : 25]\r\n사용했던 마법에 대한 기억을 더듬어 다음에 사용할 마법을 기억한다. 스킬 사용 후 숫자 키를 사용해 특정한 3~4차 스킬 중 하나를 지정한다. 지정된 스킬은 언스태이블 메모라이즈 사용 시 발동된다. 배우지 않은 스킬은 지정할 수 없다.",
+      "skill_level": 30,
+      "skill_effect": "MP 130 소비, 숫자 키를 입력하여 언스태이블 메모라이즈로 발동할 스킬 지정, 5초 내에 숫자 키를 입력하지 않거나 숫자 키가 아닌 다른 키 입력 시 스킬 취소\n재사용 대기시간 4초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBKD.png"
+    },
+    {
+      "skill_name": "스파이더 인 미러",
+      "skill_description": "[마스터 레벨 : 25]\r\n윌의 에르다로 공간을 붕괴시켜 거울 세계와 현실을 연결한 후 거울 속의 거미를 일정 시간 현실에 구현한다. 거울 속의 거미는 공격 반사 상태의 적을 공격해도 피해를 입지 않는다.",
+      "skill_level": 15,
+      "skill_effect": "최대 HP의 15% 소비\n공간 붕괴 : 최대 15명의 적에게 720%의 데미지로 15번 공격한 후 거울 속의 거미를 소환\n거울 속의 거미 : 50초 동안 지속되며 일정 시간마다 공격 상태에 돌입, 공격 상태 동안 280%의 데미지로 8번 공격하는 거미 다리를 10회 사용, 거미 다리가 한명의 적을 5번 연속 공격할 경우 공격 상태 즉시 종료, 공격 상태 종료 후 재돌입 대기시간 3초\n재사용 대기시간 : 250초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBPJ.png"
+    },
+    {
+      "skill_name": "메이플월드 여신의 축복",
+      "skill_description": "[마스터 레벨 : 25]\r\n메이플월드 여신의 축복이 깃들어 모든 스탯과 데미지가 증가된다. 메이플 용사, 시그너스 나이츠, 노바의 용사, 레프의 용사, 이계의 용사, 아니마의 용사, 륀느의 가호 중 1개의 스킬이 적용된 상태에서만 사용가능하다. 재사용 대기시간 감소 효과를 받는다.",
+      "skill_level": 30,
+      "skill_effect": "MP 500 소비, 60초 동안 메이플 용사류 스킬로 증가하는 모든 능력치의 400% 추가 증가, 데미지 20% 증가\n메이플월드 여신의 축복은 180초마다 준비되며 최대 2번까지 축복 가능",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBIC.png"
+    },
+    {
+      "skill_name": "크레스트 오브 더 솔라",
+      "skill_description": "[마스터 레벨 : 25]\r\n미트라의 힘으로 태양의 열기를 방출한 후 불꽃의 분노를 현실에 구현한다. 불꽃의 문양은 공격 반사 상태의 적을 공격해도 피해를 입지 않는다.",
+      "skill_level": 22,
+      "skill_effect": "최대 HP의 15% 소비\n미트라의 불꽃 : 최대 15명의 적에게 1410%의 데미지로 12번 공격한 후 불꽃의 문양을 소환\n불꽃의 문양 : 51초 동안 유지되며 2.1초 마다 최대 2명의 적을 376%로 6번 공격, 1명을 공격할 경우 517%로 공격\n재사용 대기시간 : 250초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBJJ.png"
+    },
+    {
+      "skill_name": "힐/엔젤릭 터치 강화",
+      "skill_description": "[마스터 레벨 : 50]\r\n힐/엔젤릭 터치를 강화한다.\n\n20레벨 : 최대 공격 가능 대상 1 증가\n40레벨 : 몬스터 방어율 무시 20% 증가",
+      "skill_level": 60,
+      "skill_effect": "힐/엔젤릭 터치의 최종 데미지 240% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHKBKD.png"
+    },
+    {
+      "skill_name": "빅뱅 강화",
+      "skill_description": "[마스터 레벨 : 50]\r\n빅뱅을 강화한다.\n\n20레벨 : 최대 공격 가능 대상 1 증가\n40레벨 : 몬스터 방어율 무시 20% 증가",
+      "skill_level": 60,
+      "skill_effect": "빅뱅의 최종 데미지 120% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHKBKG.png"
+    },
+    {
+      "skill_name": "바하뮤트 강화",
+      "skill_description": "[마스터 레벨 : 50]\r\n바하뮤트를 강화한다.\n\n20레벨 : 최대 공격 가능 대상 1 증가\n40레벨 : 몬스터 방어율 무시 20% 증가",
+      "skill_level": 60,
+      "skill_effect": "바하뮤트의 최종 데미지 120% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHKBKH.png"
+    },
+    {
+      "skill_name": "엔젤레이 강화",
+      "skill_description": "[마스터 레벨 : 50]\r\n엔젤레이를 강화한다.\n\n20레벨 : 크리티컬 확률 5% 증가\n40레벨 : 몬스터 방어율 무시 20% 증가",
+      "skill_level": 60,
+      "skill_effect": "엔젤레이의 최종 데미지 120% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHKBKI.png"
+    },
+    {
+      "skill_name": "제네시스/트라이엄프 페더 강화",
+      "skill_description": "[마스터 레벨 : 50]\r\n제네시스/트라이엄프 페더를 강화한다.\n\n20레벨 : 크리티컬 확률 5% 증가\n40레벨 : 몬스터 방어율 무시 20% 증가",
+      "skill_level": 60,
+      "skill_effect": "제네시스/트라이엄프 페더의 최종 데미지 120% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHKBKJ.png"
+    },
+    {
+      "skill_name": "헤븐즈 도어/파운틴 포 엔젤 강화",
+      "skill_description": "[마스터 레벨 : 50]\r\n헤븐즈 도어/파운틴 포 엔젤을 강화한다.\n\n20레벨 : 크리티컬 확률 5% 증가\n40레벨 : 몬스터 방어율 무시 20% 증가",
+      "skill_level": 60,
+      "skill_effect": "헤븐즈 도어/파운틴 포 엔젤의 최종 데미지 120% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHKBLA.png"
+    },
+    {
+      "skill_name": "오버로드 마나",
+      "skill_description": "[마스터 레벨 : 25]\r\n몸 속을 흐르는 마나를 과부하시켜 공격의 위력을 증가시킨다.",
+      "skill_level": 30,
+      "skill_effect": "일부 스킬을 제외한 자신의 공격 스킬 사용 시 최대 MP의 2%를 추가로 사용하여 최종 데미지 8% 증가\nMP가 없는 직업의 경우 최대 HP의 0.3% 사용\n스킬 사용 시 효과가 활성화되고 재사용 시 비활성화되는 온오프 스킬\n재사용 대기시간 30초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLFPBMA.png"
+    },
+    {
+      "skill_name": "에테리얼 폼",
+      "skill_description": "[마스터 레벨 : 25]\r\n잠시 다른 차원으로 이동하여 피해를 줄인다. 에테리얼 폼 상태에서 스킬을 다시 사용하면 원래 차원으로 돌아올 수 있다. 에테리얼 폼 상태에서는 다른 스킬을 사용할 수 없다.",
+      "skill_level": 15,
+      "skill_effect": "HP 1000 소비, 3초 동안 적의 공격을 받았다면 적의 어떠한 공격에도 밀려나지 않고 해당 공격의 피해 대신 MP 8650 소비, MP가 없는 직업군의 경우 HP 2050 소비\n재사용 대기시간 60초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLFPBKA.png"
+    },
+    {
+      "skill_name": "프레이",
+      "skill_description": "[마스터 레벨 : 25]\r\n기도를 통해 성스러운 축복 영역을 만들어 낸다. 프레이 사용 중에는 다른 비숍의 프레이 효과를 받을 수 없다. 프레이 사용 후 일정 시간 안에 스킬을 다시 사용하여 지속시간과 재사용 대기시간을 감소시킬 수 있다. 커스텀 커맨드를 사용하면 스킬을 재사용하지 않고 사용 즉시 감소된 지속시간과 재사용 대기시간이 적용된다.\n커스텀 커맨드 온오프 : 마우스 우클릭",
+      "skill_level": 30,
+      "skill_effect": "MP 1000 소비, 45초 동안 영역 안의 자신을 포함한 파티원의 최종 데미지 5% 증가\n자신을 제외한 파티원들은 일정 시간마다 최대 HP/MP의 1% 회복 및 일부 상태 이상 해제, 공격 속도 증가\n지능 2500당 최종 데미지 증가량 1% 증가, 최대 45%까지 증가 가능\n지능 2000당 HP/MP 회복량 1% 증가, 최대 10%까지 증가 가능\n지능 10000당 공격 속도 1단계 증가, 최대 3단계까지 증가 가능\n사용 후 5초 이내에 스킬 재사용 시 지속시간 15초 감소, 재사용 대기시간 60초 감소\n재사용 대기시간 : 180초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLFPBMD.png"
+    },
+    {
+      "skill_name": "엔젤 오브 리브라",
+      "skill_description": "[마스터 레벨 : 25]\r\n자애와 복수의 천사를 소환한다. 천사는 바하뮤트와 동시에 사용할 수 없다. 복수의 천사는 공격 반사 상태의 적을 공격해도 피해를 입지 않으며 공격할 수 있는 범위 내에서 최대 HP가 높은 보스 몬스터를 우선 공격한다. 엔젤 오브 리브라 사용 후 일정 시간 안에 스킬을 다시 사용하여 지속시간과 재사용 대기시간을 감소시킬 수 있다. 커스텀 커맨드를 사용하면 스킬을 재사용하지 않고 사용 즉시 감소된 지속시간과 재사용 대기시간이 적용된다.\n커스텀 커맨드 온오프 : 마우스 우클릭",
+      "skill_level": 30,
+      "skill_effect": "MP 1000 소비. 40초 동안 자애와 복수의 천사 소환\n사용 후 5초 이내에 스킬 재사용 시 지속시간 10초 감소, 재사용 대기시간 60초 감소\n자애의 천사 : 5초마다 파티원의 최대 HP를 16% 회복시키고 데미지를 4초 동안 5% + 지능 1250 당 1% 증가시키는 버프 사용, 데미지는 최대 100%까지 증가 가능\n복수의 천사 : 최대 12명의 적을 1100%의 데미지로 10번 공격, 공격 당한 적은 60초 동안 천사의 표식이 생기고 적이 자신 및 파티원에게 성 속성 공격을 당할 때 표식이 사라지며 받는 최종 데미지 10% 증가\n재사용 대기시간 180초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLFPBPC.png"
+    },
+    {
+      "skill_name": "피스메이커",
+      "skill_description": "[마스터 레벨 : 25]\r\n신성한 힘이 담긴 오브제를 전방으로 날려 보낸다. 오브제는 접촉한 적은 공격하고 파티원은 HP를 회복시킨다.\n오브제가 소멸할 때 신성한 빛으로 변하며 주변 적을 공격하고 파티원들에게 버프를 준다. 스킬을 한 번 더 사용하면 즉시 소멸시킬 수 있다.\n공격 반사 상태의 적을 공격해도 피해를 입지 않는다.",
+      "skill_level": 30,
+      "skill_effect": "MP 350 소비, 일정 시간마다 최대 6명의 적을 770% 데미지로 4번 공격하거나 오브제에 접촉한 자신을 포함한 파티원의 HP를 비숍 최대 HP의 45% 만큼 회복\n최대 접촉 횟수 12회, 공격과 회복 모두 접촉 횟수 소모\n신성한 빛 : 최대 15명의 적을 770%의 데미지로 12번 공격, 비숍과 빛에 닿은 파티원은 8초 동안 11% + 남은 접촉 횟수마다 1%의 데미지가 증가하는 버프를 받음\n재사용 대기시간 10초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLFPBLA.png"
+    },
+    {
+      "skill_name": "디바인 퍼니시먼트",
+      "skill_description": "[마스터 레벨 : 25]\r\n사악한 자들에게 신의 이름으로 징벌을 내린다. 징벌을 당한 적에게 엔젤레이와 동일한 최종 데미지 증가 디버프를 부여한다.",
+      "skill_level": 30,
+      "skill_effect": "공격당 MP 40 소비, 초당 성스러운 빛 1개 소비\n전방 6명의 적에게 535%의 데미지로 10번 연속 공격\n성스러운 빛은 8.5초 마다 1개씩 준비되며 최대 8개까지 소지 가능\n재사용 대기시간 : 1.50초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLFPBEG.png"
+    }
+  ]
+}

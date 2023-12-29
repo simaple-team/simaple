@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 
 import pydantic
 
-from simaple.core.base import ExtendedStat
+from simaple.core import ExtendedStat
 
 
 class AbstractStatProvider(pydantic.BaseModel, metaclass=ABCMeta):

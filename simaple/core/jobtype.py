@@ -57,6 +57,7 @@ class JobType(enum.Enum):
 
     lara = "lara"
     hoyoung = "hoyoung"
+    khali = "khali"
 
     zero = "zero"
     kinesis = "kinesis"

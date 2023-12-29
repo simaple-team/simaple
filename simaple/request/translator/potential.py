@@ -3,8 +3,8 @@ import re
 import pydantic
 
 from simaple.core import ExtendedStat
-from simaple.fetch.translator.base import AbstractStatProvider, NoMatchedStringError
 from simaple.gear.potential import Potential
+from simaple.request.translator.base import AbstractStatProvider, NoMatchedStringError
 
 
 class PotentialTranslator(pydantic.BaseModel):
@@ -12,16 +12,12 @@ class PotentialTranslator(pydantic.BaseModel):
 
     model_config = pydantic.ConfigDict(arbitrary_types_allowed=True)
 
-    def translate(self, expressions: list[str | None]) -> Potential:
+    def translate(self, expressions: list[str]) -> Potential:
         return Potential(
-            options=[
-                self._translate_expression(expr)
-                for expr in expressions
-                if expr is not None
-            ]
+            options=[self.translate_expression(expr) for expr in expressions]
         )
 
-    def _translate_expression(self, expression: str) -> ExtendedStat:
+    def translate_expression(self, expression: str) -> ExtendedStat:
         for pattern, provider in self.patterns:
             match = pattern.match(expression)
             if match is not None:
