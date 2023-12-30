@@ -1,4 +1,4 @@
-import simaple.simulate.component.skill  # pylint: disable=W0611
+import simaple.simulate.component.skill  # noqa: F401
 from simaple.core.base import Stat
 from simaple.simulate.base import Action, message_signature
 from simaple.simulate.engine import MonotonicEngine

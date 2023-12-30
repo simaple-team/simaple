@@ -41,7 +41,8 @@ def get_all_blocks():
             options=[Stat(STR_static=v) for v in UNION_STAT_VALUE_REFERENCE],
         ),
         UnionBlock(
-            job=JobType.darkknight, options=[Stat() for v in range(5)]
+            job=JobType.darkknight,
+            options=[Stat(MHP_multiplier=v) for v in (2, 3, 4, 5, 6)],
         ),  # HP% 2,3,4,5,6  TODO
         UnionBlock(
             job=JobType.paladin,
@@ -52,7 +53,8 @@ def get_all_blocks():
             options=[Stat(INT_static=v) for v in UNION_STAT_VALUE_REFERENCE],
         ),
         UnionBlock(
-            job=JobType.archmagefb, options=[Stat() for v in UNION_STAT_VALUE_REFERENCE]
+            job=JobType.archmagefb,
+            options=[Stat(MMP_multiplier=v) for v in (2, 3, 4, 5, 6)],
         ),  # MP% 2,3,4,5,6  TODO
         UnionBlock(
             job=JobType.archmagetc,
@@ -210,6 +212,10 @@ def get_all_blocks():
         UnionBlock(
             job=JobType.blaster,
             options=[Stat(ignored_defence=v) for v in (1, 2, 3, 5, 6)],
+        ),
+        UnionBlock(
+            job=JobType.khali,
+            options=[Stat(LUK_static=v) for v in UNION_STAT_VALUE_REFERENCE],
         ),
     ]
 

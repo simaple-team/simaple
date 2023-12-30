@@ -1,5 +1,5 @@
-import simaple.simulate.component.skill  # pylint: disable=W0611
-import simaple.simulate.component.specific  # pylint: disable=W0611
+import simaple.simulate.component.skill  # noqa: F401
+import simaple.simulate.component.specific  # noqa: F401
 from simaple.core.base import ActionStat
 from simaple.data.passive.patch import SkillLevelPatch
 from simaple.data.passive_hyper_skill import get_hyper_skill_patch

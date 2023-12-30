@@ -3,7 +3,7 @@ from __future__ import annotations
 import enum
 from typing import Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class BaseStatType(enum.Enum):
@@ -403,6 +403,8 @@ class ExtendedStat(BaseModel):
     stat: Stat = Field(default_factory=Stat)
     action_stat: ActionStat = Field(default_factory=ActionStat)
     level_stat: LevelStat = Field(default_factory=LevelStat)
+
+    model_config = ConfigDict(extra="forbid")
 
     def __add__(self, arg: ExtendedStat) -> ExtendedStat:
         return ExtendedStat(

@@ -7,8 +7,8 @@ _black = "black simaple tests scripts"
 _isort = "isort simaple tests scripts"
 format = ["_black", "_isort"]
 
-_pylint = "pylint simaple tests scripts"
-lint = ["_pylint"]
+_ruff = "ruff simaple tests scripts"
+lint = ["_ruff"]
 
 coverage = "pytest --cov=simaple --ignore tests/fetch/request"
 coverage-unittest = "pytest --cov=simaple --ignore tests/fetch/request"
@@ -38,6 +38,9 @@ testpaths = ["tests", "test_app", "test_data"]
 
 [tool.coverage.run]
 branch = true
+omit = [
+    "*/fetch/*"
+]
 
 [tool.coverage.report]
 fail_under = 85
@@ -72,7 +75,7 @@ license = "MIT"
 repository = "https://github.com/simaple-team/simaple"
 
 [tool.poetry.dependencies]
-python = ">=3.9, <3.13"
+python = ">=3.10, <3.13"
 pydantic = "^2.4.2"
 loguru = "^0.5.3"
 poethepoet = "^0.10.0"
@@ -95,11 +98,11 @@ SQLAlchemy = "^1.4.45"
 scipy = "^1.11.2"
 pydantic-settings = "^2.0.3"
 lark = "^1.1.7"
+pytest-asyncio = "^0.23.2"
 
 [tool.poetry.dev-dependencies]
 isort = "^5.9.3"
 coverage = "^6.0.2"
-pylint = "=2.13.1"
 black = "^22.6"
 pytest-cov = "^3.0.0"
 build = "^0.8.0"
@@ -113,6 +116,7 @@ yappi = "^1.4.0"
 snakeviz = "^2.1.1"
 types-requests = "^2.31.0.1"
 mypy = "1.5.1"
+ruff = "^0.1.9"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

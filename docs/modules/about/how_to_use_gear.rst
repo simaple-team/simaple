@@ -22,8 +22,8 @@ Gear class는 단순히, 장비 아이템에 대한 속성을 모아둔 값 객�
         stat: Stat
         scroll_chance: int
         potential: Potential = Field(default_factory=Potential)
-        additional_potential: AdditionalPotential = Field(
-            default_factory=AdditionalPotential
+        additional_potential: Potential = Field(
+            default_factory=Potential
         )
 
         class Config:
@@ -65,7 +65,7 @@ Gear class는 단순히, 장비 아이템에 대한 속성을 모아둔 값 객�
         ),
         scroll_chance=11,
         potential=Potential(options=[]), 
-        additional_potential=AdditionalPotential(options=[])
+        additional_potential=Potential(options=[])
     )
 
 아이템을 정의하기 위해서 아이템의 정보를 담고 있는 ``GearMeta`` 객체를 생성하여 넘겨주어야 한다는 점을 확인할 수 있었을 것입니다.
@@ -84,7 +84,7 @@ simaple은 게임 내에 정의된 대부분의 장비 아이템을 생성하여
         stat=gear_meta.base_stat,
         scroll_chance=11,
         potential=Potential(options=[]), 
-        additional_potential=AdditionalPotential(options=[])
+        additional_potential=Potential(options=[])
     )
 
 강화가 전혀 적용되지 않은 장비아이템은 ``GearRepository`` 의 ``get_by_name`` 혹은 ``get_by_id`` 로 손쉽게 얻을 수도 있습니다.
@@ -122,7 +122,7 @@ Modifing Gear
         Stat(INT_multiplier=3),
         Stat(INT_multiplier=3),
     ]))
-    gear = gear.set_additional_potential(AdditionalPotential(options=[
+    gear = gear.set_additional_potential(Potential(options=[
         Stat(magic_attack=12),
         Stat(INT_multiplier=4),
     ]))
@@ -249,7 +249,7 @@ Create gear with GearBlueprint
             BonusSpec(bonus_type=BonusType.all_stat_multiplier, grade=6)
         ]
         potential=Potential(),
-        additional_potential=AdditionalPotential(),
+        additional_potential=Potential(),
     )
 
     gear = blueprint.build() # 30% 주흔작, 17성, 추옵 올텟6/int24/luk24
@@ -268,13 +268,13 @@ Gear의 잠재능력은 set_potential 또는 set_additional_potential 메서드 
 
 GearBlueprint는 mutable object이므로, 직접 속성 치환을 통해 잠재능력 값을 설정 또는 변경할 수 있습니다.
 
-Potential 및 AdditionalPotential은 options를 통해 값을 전달받습니다. options Field에는 Stat, ActionStat 또는 LevelStat이 올 수 있습니다.
+Potential 및 Potential은 options를 통해 값을 전달받습니다. options Field에는 Stat, ActionStat 또는 LevelStat이 올 수 있습니다.
 두 class의 options는 반드시 길이가 3일 필요는 없습니다. 해당 필드는 임의 길이의 list를 허용합니다.
 
 
 .. code-block:: python
 
-    from simaple.gear.potential import Potential, AdditionalPotential
+    from simaple.gear.potential import Potential
     from simaple.core import Stat, ActionStat, LevelStat
 
     potential = Potential(options=[
@@ -283,7 +283,7 @@ Potential 및 AdditionalPotential은 options를 통해 값을 전달받습니다
         LevelStat(),
     ])
 
-    additional_potential = AdditionalPotential(options=[
+    additional_potential = Potential(options=[
         Stat(INT_multiplier=7),
     ])
 

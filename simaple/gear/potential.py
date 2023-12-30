@@ -1,6 +1,6 @@
 import enum
 from abc import ABCMeta, abstractmethod
-from typing import List, Union
+from typing import List
 
 from pydantic import BaseModel
 
@@ -37,39 +37,21 @@ class PotentialInterface(BaseModel, metaclass=ABCMeta):
         ...
 
 
-class AbstractPotential(PotentialInterface):
-    options: List[Union[Stat, ActionStat, LevelStat]] = []
+class Potential(PotentialInterface):
+    options: List[ExtendedStat] = []
+
+    def _get_extended_stat(self) -> ExtendedStat:
+        extended_stat = ExtendedStat()
+        for option in self.options:
+            extended_stat += option
+
+        return extended_stat
 
     def get_stat(self, level: int = 0) -> Stat:
-        stat = Stat()
-        for option in self.options:
-            if isinstance(option, Stat):
-                stat += option
-            if isinstance(option, LevelStat):
-                stat += option.get_stat(level=level)
-
-        return stat
+        return self._get_extended_stat().stat
 
     def get_action_stat(self) -> ActionStat:
-        action_stat = ActionStat()
-        for option in self.options:
-            if isinstance(option, ActionStat):
-                action_stat += option
-
-        return action_stat
+        return self._get_extended_stat().action_stat
 
     def get_level_stat(self) -> LevelStat:
-        level_stat = LevelStat()
-        for option in self.options:
-            if isinstance(option, LevelStat):
-                level_stat += option
-
-        return level_stat
-
-
-class Potential(AbstractPotential):
-    ...
-
-
-class AdditionalPotential(AbstractPotential):
-    ...
+        return self._get_extended_stat().level_stat

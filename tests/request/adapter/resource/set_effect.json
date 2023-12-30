@@ -1,0 +1,115 @@
+{
+  "date": "2023-12-24T00:00+09:00",
+  "set_effect": [
+    {
+      "set_name": "보스 장신구 세트",
+      "total_set_count": 2,
+      "set_effect_info": []
+    },
+    {
+      "set_name": "마이스터 세트",
+      "total_set_count": 1,
+      "set_effect_info": []
+    },
+    {
+      "set_name": "칠흑의 보스 세트",
+      "total_set_count": 4,
+      "set_effect_info": [
+        {
+          "set_count": 2,
+          "set_option": "올스탯 : +10, 최대 HP : +250, 공격력 : +10, 마력 : +10, 보스 몬스터 공격 시 데미지 : +10%"
+        },
+        {
+          "set_count": 3,
+          "set_option": "올스탯 : +10, 최대 HP : +250, 공격력 : +10, 마력 : +10, 방어력 : +250, 몬스터 방어율 무시 : +10%"
+        },
+        {
+          "set_count": 4,
+          "set_option": "올스탯 : +15, 최대 HP : +375, 공격력 : +15, 마력 : +15, 크리티컬 데미지 : +5%"
+        }
+      ]
+    },
+    {
+      "set_name": "루타비스 세트(마법사)",
+      "total_set_count": 4,
+      "set_effect_info": [
+        {
+          "set_count": 2,
+          "set_option": "INT : +20, LUK : +20, 최대 HP : +1000, 최대 MP : +1000"
+        },
+        {
+          "set_count": 3,
+          "set_option": "최대 HP : +10%, 최대 MP : +10%, 마력 : +50"
+        },
+        {
+          "set_count": 4,
+          "set_option": "보스 몬스터 공격 시 데미지 : +30%"
+        }
+      ]
+    },
+    {
+      "set_name": "여명의 보스 세트",
+      "total_set_count": 4,
+      "set_effect_info": [
+        {
+          "set_count": 2,
+          "set_option": "올스탯 : +10, 최대 HP : +250, 공격력 : +10, 마력 : +10, 보스 몬스터 공격 시 데미지 : +10%"
+        },
+        {
+          "set_count": 3,
+          "set_option": "올스탯 : +10, 최대 HP : +250, 공격력 : +10, 마력 : +10"
+        },
+        {
+          "set_count": 4,
+          "set_option": "올스탯 : +10, 최대 HP : +250, 공격력 : +10, 마력 : +10, 방어력 : +100, 몬스터 방어율 무시 : +10%"
+        }
+      ]
+    },
+    {
+      "set_name": "블링 솜사탕 펫",
+      "total_set_count": 2,
+      "set_effect_info": [
+        {
+          "set_count": 1,
+          "set_option": "<블링블링 코튼캔디 Lv.1> 스킬 사용 가능"
+        },
+        {
+          "set_count": 2,
+          "set_option": "<블링블링 코튼캔디 Lv.2> 스킬 사용 가능"
+        }
+      ]
+    },
+    {
+      "set_name": "칠요 세트",
+      "total_set_count": 1,
+      "set_effect_info": []
+    },
+    {
+      "set_name": "에테르넬 세트(마법사)",
+      "total_set_count": 1,
+      "set_effect_info": []
+    },
+    {
+      "set_name": "아케인셰이드 세트(마법사)",
+      "total_set_count": 5,
+      "set_effect_info": [
+        {
+          "set_count": 2,
+          "set_option": "공격력 : +30, 마력 : +30, 보스 몬스터 공격 시 데미지 : +10%"
+        },
+        {
+          "set_count": 3,
+          "set_option": "공격력 : +30, 마력 : +30, 방어력 : +400, 몬스터 방어율 무시 : +10%"
+        },
+        {
+          "set_count": 4,
+          "set_option": "올스탯 : +50, 공격력 : +35, 마력 : +35, 보스 몬스터 공격 시 데미지 : +10%"
+        },
+        {
+          "set_count": 5,
+          "set_option": "최대 HP : +2000, 최대 MP : +2000, 공격력 : +40, 마력 : +40, 보스 몬스터 공격 시 데미지 : +10%"
+        }
+      ]
+    }
+  ]
+}

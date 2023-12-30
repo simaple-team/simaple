@@ -5,7 +5,7 @@ from typing import Optional, TypedDict
 import yaml
 from pydantic import BaseModel
 
-from simaple.core.base import Stat
+from simaple.core.base import ExtendedStat, Stat
 from simaple.gear.potential import Potential, PotentialTier
 
 
@@ -83,14 +83,14 @@ class PotentialTierTable:
     def kms(cls) -> "PotentialTierTable":
         return _global_load_kms_potential_table()
 
-    def get(self, query: PotentialQuery) -> Stat:
+    def get(self, query: PotentialQuery) -> ExtendedStat:
         tier_mapping = self._db[query["type"]]
 
         effect_list = tier_mapping[query["tier"]]
         effect = effect_list[self._get_effect_index(query["level"])]
         stat = effect[query["name"]]
 
-        return Stat.model_validate(stat)
+        return ExtendedStat(stat=Stat.model_validate(stat))
 
     def _get_effect_index(self, level: int) -> int:
         return int((level - 1) // 10)
@@ -139,9 +139,9 @@ def field_to_value(
     table: PotentialTierTable,
     level: int,
     potential_type: PotentialType,
-) -> Stat:
+) -> ExtendedStat:
     if field.value:
-        return Stat.parse_obj({field.name.value: field.value})
+        return ExtendedStat(stat=Stat.model_validate({field.name.value: field.value}))
 
     if not field.tier:
         raise ValueError("value for tier must be given")

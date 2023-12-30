@@ -9,8 +9,8 @@ from simaple.app.domain.uow import UnitOfWork
 from simaple.core.base import Stat
 from simaple.simulate.base import Action, Checkpoint, Event
 from simaple.simulate.component.view import Running, Validity
-from simaple.simulate.engine import OperationEngine, get_report
-from simaple.simulate.policy.base import Operation, PlayLog, ViewerType
+from simaple.simulate.engine import get_report
+from simaple.simulate.policy.base import Operation
 from simaple.simulate.report.base import Report
 
 

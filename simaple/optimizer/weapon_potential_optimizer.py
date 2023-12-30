@@ -5,7 +5,7 @@ from typing import Iterable, Tuple
 
 from pydantic import BaseModel
 
-from simaple.core import DamageLogic, Stat
+from simaple.core import DamageLogic, ExtendedStat, Stat
 from simaple.gear.potential import Potential, PotentialTier
 
 _WEAPON_POTENTIALS = {
@@ -36,6 +36,34 @@ _WEAPON_POTENTIALS = {
     ],
 }
 
+"""_WEAPON_POTENTIALS = {
+    PotentialTier.empty: [
+        ExtendedStat(stat=Stat(attack_power=6)),
+        ExtendedStat(stat=Stat(magic_attack=6)),
+    ],
+    PotentialTier.rare: [
+        ExtendedStat(stat=Stat(attack_power_multiplier=3)),
+        ExtendedStat(stat=Stat(magic_attack_multiplier=3)),
+    ],
+    PotentialTier.epic: [
+        ExtendedStat(stat=Stat(attack_power_multiplier=6)),
+        ExtendedStat(stat=Stat(magic_attack_multiplier=6)),
+        ExtendedStat(stat=Stat(ignored_defence=15)),
+    ],
+    PotentialTier.unique: [
+        ExtendedStat(stat=Stat(attack_power_multiplier=9)),
+        ExtendedStat(stat=Stat(magic_attack_multiplier=9)),
+        ExtendedStat(stat=Stat(ignored_defence=30)),
+        ExtendedStat(stat=Stat(boss_damage_multiplier=30)),
+    ],
+    PotentialTier.legendary: [
+        ExtendedStat(stat=Stat(attack_power_multiplier=12)),
+        ExtendedStat(stat=Stat(magic_attack_multiplier=12)),
+        ExtendedStat(stat=Stat(ignored_defence=40)),
+        ExtendedStat(stat=Stat(boss_damage_multiplier=40)),
+    ],
+}
+"""
 
 # TODO: change into triple-brute-force.
 class WeaponPotentialOptimizer(BaseModel):
@@ -77,7 +105,7 @@ class WeaponPotentialOptimizer(BaseModel):
             if boss_damage_multiplier_count > 2 or ignored_defence_count > 2:
                 continue
 
-            yield Potential(options=list(stats))
+            yield Potential(options=[ExtendedStat(stat=stat) for stat in stats])
 
     def get_reward(self, potential_stat: Stat) -> float:
         stat = self.default_stat + potential_stat

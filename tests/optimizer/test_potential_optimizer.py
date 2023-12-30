@@ -33,7 +33,7 @@ def test_optimizer(tiers):
             tiers=tiers,
             damage_logic=INTBasedDamageLogic(attack_range_constant=1.0, mastery=0.95),
         )
-        output = optimizer.get_optimal_potential()
+        optimizer.get_optimal_potential()
 
 
 @pytest.mark.parametrize(
@@ -62,4 +62,4 @@ def test_triple_optimizer(tiers):
             tiers=tiers,
             damage_logic=INTBasedDamageLogic(attack_range_constant=1.0, mastery=0.95),
         )
-        output = optimizer.get_full_optimal_potential()
+        optimizer.get_full_optimal_potential()

@@ -9,7 +9,7 @@ from simaple.fetch.translator.potential import PotentialTranslator
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository
 from simaple.gear.gear_type import GearType
-from simaple.gear.potential import AdditionalPotential
+from simaple.gear.potential import Potential
 
 
 class GearStatTranslator(pydantic.BaseModel):
@@ -94,7 +94,7 @@ class GearTranslator(pydantic.BaseModel):
             )
         if "additional_potential" in parsed:
             base_gear = base_gear.set_additional_potential(
-                AdditionalPotential(
+                Potential(
                     options=self.potential_translator.translate(
                         parsed["additional_potential"]["raw"]
                     ).options

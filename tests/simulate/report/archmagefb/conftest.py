@@ -1,8 +1,7 @@
-# pylint: disable=W0621
 import pytest
 
-import simaple.simulate.component.skill  # pylint: disable=W0611
-import simaple.simulate.component.specific  # pylint: disable=W0611
+import simaple.simulate.component.skill  # noqa: F401
+import simaple.simulate.component.specific  # noqa: F401
 from simaple.core.base import ActionStat
 from simaple.simulate.engine import MonotonicEngine
 from simaple.simulate.kms import get_builder

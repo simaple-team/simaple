@@ -1,4 +1,4 @@
-import math  # pylint: disable=W0611
+import math  # noqa: F401
 from typing import Union
 
 from simaple.spec.patch import DFSTraversePatch

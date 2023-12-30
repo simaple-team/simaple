@@ -1,3 +1,5 @@
+# ruff: noqa: F401
+
 import simaple.simulate.component.specific.adele
 import simaple.simulate.component.specific.archmagefb
 import simaple.simulate.component.specific.archmagetc

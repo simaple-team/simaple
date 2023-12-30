@@ -4,7 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from simaple.core import ExtendedStat, Stat
 from simaple.gear.gear_type import GearType
-from simaple.gear.potential import AdditionalPotential, Potential
+from simaple.gear.potential import Potential
 
 
 class GearMeta(BaseModel, frozen=True):
@@ -65,15 +65,13 @@ class Gear(BaseModel):
 
     def set_potential(self, potential: Potential) -> Gear:
         serailized_gear = self.model_dump()
-        serailized_gear["potential"] = potential.model_dump()
+        serailized_gear["potential"] = potential.model_copy()
 
         return Gear.model_validate(serailized_gear)
 
-    def set_additional_potential(
-        self, additional_potential: AdditionalPotential
-    ) -> Gear:
+    def set_additional_potential(self, additional_potential: Potential) -> Gear:
         serailized_gear = self.model_dump()
-        serailized_gear["additional_potential"] = additional_potential.model_dump()
+        serailized_gear["additional_potential"] = additional_potential.model_copy()
 
         return Gear.model_validate(serailized_gear)
 
