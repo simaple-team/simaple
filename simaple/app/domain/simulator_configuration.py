@@ -10,6 +10,7 @@ from simaple.data.engine_configuration import (
     EngineConfiguration,
     get_engine_configuration,
 )
+from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.engine import MonotonicEngine, OperationEngine
 from simaple.simulate.kms import get_builder
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
@@ -58,25 +59,21 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
     def get_engine_configuration(self) -> EngineConfiguration:
         return get_engine_configuration(self.get_jobtype())
 
-    def create_monotonic_engine(self) -> MonotonicEngine:
+    def _get_builder(self) -> EngineBuilder:
         engine_configuration = self.get_engine_configuration()
         return get_builder(
             self.action_stat,
             engine_configuration.get_groups(),
             self.get_injected_values(),
-            engine_configuration.get_filled_v_skill(),
+            engine_configuration.get_skill_levels(),
             engine_configuration.get_filled_v_improvements(),
-        ).build_monotonic_engine()
+        )
+
+    def create_monotonic_engine(self) -> MonotonicEngine:
+        return self._get_builder().build_monotonic_engine()
 
     def create_operation_engine(self) -> OperationEngine:
-        engine_configuration = self.get_engine_configuration()
-        return get_builder(
-            self.action_stat,
-            engine_configuration.get_groups(),
-            self.get_injected_values(),
-            engine_configuration.get_filled_v_skill(),
-            engine_configuration.get_filled_v_improvements(),
-        ).build_operation_engine()
+        return self._get_builder().build_operation_engine()
 
     def get_injected_values(self) -> dict:
         return {

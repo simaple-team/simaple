@@ -478,3 +478,31 @@ data:
   lasting_duration: 999_999_999
   stat:
     final_damage_multiplier: "{{ 8 + skill_level // 10 }}"
+
+
+---
+kind: Component
+version: simaple.io/InfernalVenom
+metadata:
+  label:
+    group: archmagefb
+    name: 인페르날 베놈
+    id: 400021410-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  id: 400021410-0
+  name: 인페르날 베놈
+  binds:
+    drain_stack: ".퍼번트 드레인.drain_stack"
+
+  first_damage: "{{ 3600 + 120 * skill_level }}"
+  first_hit: 48
+
+  second_damage: "{{ 2700 + 90 * skill_level }}"
+  second_hit: 96
+
+  cooldown_duration: 360_000
+  delay: 6600
+  lasting_duration: 20_000

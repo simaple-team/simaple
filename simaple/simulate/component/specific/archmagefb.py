@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simaple.core import Stat
 from simaple.simulate.base import Entity
 from simaple.simulate.component.base import (
@@ -13,6 +11,7 @@ from simaple.simulate.component.entity import Cooldown, Lasting, Periodic, Stack
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
     AddDOTDamageTrait,
+    BuffTrait,
     CooldownValidityTrait,
     PeriodicWithSimpleDamageTrait,
 )
@@ -382,7 +381,7 @@ class IfrittComponent(
 
 
 class InfernalVenomState(ReducerState):
-    fervent_stack: FerventDrainStack
+    drain_stack: FerventDrainStack
     cooldown: Cooldown
     dynamics: Dynamics
     lasting: Lasting
@@ -390,6 +389,8 @@ class InfernalVenomState(ReducerState):
 
 class InfernalVenom(
     SkillComponent,
+    CooldownValidityTrait,
+    BuffTrait,
 ):
     first_damage: float
     first_hit: float
@@ -408,7 +409,7 @@ class InfernalVenom(
         }
 
     @reducer_method
-    def use(self, state: InfernalVenomState):
+    def use(self, _: None, state: InfernalVenomState):
         state = state.deepcopy()
 
         if not state.cooldown.available:
@@ -418,8 +419,8 @@ class InfernalVenom(
             state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
         )
 
-        state.fervent_stack.set_max_count(10)
-        state.fervent_stack.set_count(10)
+        state.drain_stack.set_max_count(10)
+        state.drain_stack.set_count(10)
         state.lasting.set_time_left(self.lasting_duration)
 
         return state, [
@@ -440,9 +441,23 @@ class InfernalVenom(
         state.lasting.elapse(time)
 
         if not state.lasting.enabled() and was_enabled:
-            state.fervent_stack.set_max_count(5)
-            state.fervent_stack.set_count(5)
+            state.drain_stack.set_max_count(5)
+            state.drain_stack.set_count(5)
 
         return state, [
             self.event_provider.elapsed(time),
         ]
+
+    @view_method
+    def validity(self, state: InfernalVenomState):
+        return self.validity_in_cooldown_trait(state)
+
+    @view_method
+    def running(self, state: InfernalVenomState) -> Running:
+        return self.running_in_buff_trait(state)
+
+    def _get_lasting_duration(self, state: InfernalVenomState) -> float:
+        return self.lasting_duration
+
+    def _get_cooldown_duration(self) -> float:
+        return self.cooldown_duration

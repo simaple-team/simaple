@@ -1,10 +1,6 @@
-from typing import Optional
-
 from simaple.core import Stat
 from simaple.simulate.component.specific.archmagefb import (
-    FerventDrain,
     FerventDrainStack,
-    FerventDrainState,
     InfernalVenom,
     InfernalVenomState,
 )
@@ -44,16 +40,16 @@ def test_infernal_venom(dynamics: Dynamics) -> None:
         {
             **infernal_venom.get_default_state(),
             "dynamics": dynamics,
-            "fervent_stack": FerventDrainStack(max_count=10, count=10),
+            "drain_stack": FerventDrainStack(max_count=10, count=10),
         }
     )
 
-    state, events = infernal_venom.use(state)
+    state, events = infernal_venom.use(None, state)
 
-    assert state.fervent_stack.get_buff() == Stat(final_damage_multiplier=50)
+    assert state.drain_stack.get_buff() == Stat(final_damage_multiplier=50)
 
     state, events = infernal_venom.elapse(10_000, state)
-    assert state.fervent_stack.get_buff() == Stat(final_damage_multiplier=50)
+    assert state.drain_stack.get_buff() == Stat(final_damage_multiplier=50)
 
     state, events = infernal_venom.elapse(15_000, state)
-    assert state.fervent_stack.get_buff() == Stat(final_damage_multiplier=25)
+    assert state.drain_stack.get_buff() == Stat(final_damage_multiplier=25)

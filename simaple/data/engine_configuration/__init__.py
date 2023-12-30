@@ -25,6 +25,7 @@ class EngineConfiguration(
     v_improvement_names: list[str]
     component_groups: list[str]
     mdc_order: list[str]
+    hexa_skill_names: list[str] = pydantic.Field(default=[])
 
     def validate_v_skills(self, v_skills) -> bool:
         return all((k in self.v_skill_names) for k in v_skills.keys())
@@ -34,6 +35,18 @@ class EngineConfiguration(
 
     def get_filled_v_skill(self, level: int = 30) -> dict[str, int]:
         return {k: level for k in self.v_skill_names}
+
+    def get_skill_levels(self, v_level: int, hexa_level: int) -> dict[str, int]:
+        skill_levels = {}
+        skill_levels.update(self.get_filled_v_skill(v_level))
+        skill_levels.update(self.get_filled_hexa_skill(hexa_level))
+        return skill_levels
+
+    def get_filled_hexa_skill(self, level: int) -> dict[str, int]:
+        """
+        TODO: refactor skill level injection strategy
+        """
+        return {k: level for k in self.hexa_skill_names}
 
     def get_filled_v_improvements(self, level: int = 60) -> dict[str, int]:
         return {k: level for k in self.v_improvement_names}

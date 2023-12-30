@@ -29,14 +29,14 @@ def test_actor():
     while engine.get_current_viewer()("clock") < 180_000:
         engine.exec_policy(policy, early_stop=180_000)
 
-    print(
-        f"{engine.get_current_viewer()('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
-    )
-
     for operation_log in engine.operation_logs():
         timestamp = operation_log.playlogs[0].clock
         ops = operation_log.operation
         print(f"{timestamp:.3f} | {ops.expr}")
+
+    print(
+        f"{engine.get_current_viewer()('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
+    )
 
 
 if __name__ == "__main__":

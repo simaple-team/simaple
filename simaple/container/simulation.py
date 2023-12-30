@@ -39,6 +39,7 @@ class SimulationSetting(pydantic.BaseModel):
     propensity_level: int = 100
 
     v_skill_level: int = 30
+    hexa_skill_level: int = 1
     v_improvements_level: int = 60
 
     weapon_attack_power: int = 0
@@ -228,7 +229,9 @@ class SimulationContainer(containers.DeclarativeContainer):
         character.provided.action_stat,
         engine_configuration.provided.get_groups.call(),
         engine_patch_injected_values,
-        engine_configuration.provided.get_filled_v_skill.call(config.v_skill_level),
+        engine_configuration.provided.get_skill_levels.call(
+            config.v_skill_level, config.hexa_skill_level
+        ),
         engine_configuration.provided.get_filled_v_improvements.call(
             config.v_improvements_level
         ),
