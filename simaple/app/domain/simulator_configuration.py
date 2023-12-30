@@ -65,7 +65,7 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
             self.action_stat,
             engine_configuration.get_groups(),
             self.get_injected_values(),
-            engine_configuration.get_skill_levels(),
+            engine_configuration.get_skill_levels(30, 1),
             engine_configuration.get_filled_v_improvements(),
         )
 

@@ -1,10 +1,13 @@
 from simaple.core import Stat
 from simaple.simulate.component.specific.archmagefb import (
     FerventDrainStack,
+    FlameSwipVI,
+    FlameSwipVIState,
     InfernalVenom,
     InfernalVenomState,
 )
 from simaple.simulate.global_property import Dynamics
+from tests.simulate.component.util import count_damage_skill
 
 
 def test_fervent_drain_buff() -> None:
@@ -53,3 +56,36 @@ def test_infernal_venom(dynamics: Dynamics) -> None:
 
     state, events = infernal_venom.elapse(15_000, state)
     assert state.drain_stack.get_buff() == Stat(final_damage_multiplier=25)
+
+
+def test_flame_swip_vi(dynamics: Dynamics) -> None:
+    flame_swip_vi = FlameSwipVI(
+        id="test",
+        name="test-flame_swip_vi",
+        delay=690,
+        damage=100,
+        hit=1,
+        explode_damage=500,
+        explode_hit=1,
+        dot_damage=100,
+        dot_lasting_duration=10_000,
+        cooldown_duration=0,
+    )
+    state = FlameSwipVIState.model_validate(
+        {
+            **flame_swip_vi.get_default_state(),
+            "dynamics": dynamics,
+        }
+    )
+
+    state, events = flame_swip_vi.use(None, state)
+    assert count_damage_skill(events) == 1
+
+    state, events = flame_swip_vi.explode(None, state)
+    assert count_damage_skill(events) == 0
+
+    state, events = flame_swip_vi.use(None, state)
+    state, events = flame_swip_vi.use(None, state)
+    state, events = flame_swip_vi.explode(None, state)
+
+    assert count_damage_skill(events) == 1

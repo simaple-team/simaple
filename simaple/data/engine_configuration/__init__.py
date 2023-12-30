@@ -27,12 +27,6 @@ class EngineConfiguration(
     mdc_order: list[str]
     hexa_skill_names: list[str] = pydantic.Field(default=[])
 
-    def validate_v_skills(self, v_skills) -> bool:
-        return all((k in self.v_skill_names) for k in v_skills.keys())
-
-    def validate_v_improvements(self, v_improvements) -> bool:
-        return all((k in self.v_improvement_names) for k in v_improvements.keys())
-
     def get_filled_v_skill(self, level: int = 30) -> dict[str, int]:
         return {k: level for k in self.v_skill_names}
 

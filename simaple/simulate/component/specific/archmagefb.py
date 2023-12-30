@@ -14,6 +14,7 @@ from simaple.simulate.component.trait.impl import (
     BuffTrait,
     CooldownValidityTrait,
     PeriodicWithSimpleDamageTrait,
+    UseSimpleAttackTrait,
 )
 from simaple.simulate.component.util import is_rejected
 from simaple.simulate.component.view import Running, Validity
@@ -461,3 +462,53 @@ class InfernalVenom(
 
     def _get_cooldown_duration(self) -> float:
         return self.cooldown_duration
+
+
+class FlameSwipVIState(ReducerState):
+    cooldown: Cooldown
+    dynamics: Dynamics
+    stack: Stack
+
+
+class FlameSwipVI(SkillComponent, UseSimpleAttackTrait, AddDOTDamageTrait):
+    delay: float
+    damage: float
+    hit: int
+
+    explode_damage: float
+    explode_hit: int
+
+    dot_damage: float
+    dot_lasting_duration: float
+
+    def get_default_state(self):
+        return {
+            "cooldown": Cooldown(time_left=0),
+            "stack": Stack(maximum_stack=3),
+        }
+
+    @reducer_method
+    def use(self, _: None, state: FlameSwipVIState):
+        state, event = self.use_simple_attack(state)
+        event += [self.get_dot_add_event()]
+        state.stack.increase(1)
+
+        return state, event
+
+    @reducer_method
+    def explode(self, _: None, state: FlameSwipVIState):
+        if state.stack.get_stack() < 3:
+            return state, []
+
+        state = state.deepcopy()
+        state.stack.reset(0)
+
+        return state, [
+            self.event_provider.dealt(self.explode_damage, self.explode_hit),
+        ]
+
+    def _get_dot_damage_and_lasting(self) -> tuple[float, float]:
+        return self.dot_damage, self.dot_lasting_duration
+
+    def _get_simple_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit
