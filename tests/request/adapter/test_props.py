@@ -1,3 +1,4 @@
+from simaple.core import StatProps
 from simaple.request.adapter.hyperstat import get_hyperstat
 from simaple.request.adapter.propensity import get_propensity
 from simaple.request.adapter.union import get_union_squad, get_union_squad_effect
@@ -8,9 +9,18 @@ from simaple.system.propensity import Propensity
 def test_hyperstat_adapter(character_hyper_stat_response):
     hyperstat = get_hyperstat(character_hyper_stat_response)
 
-    expected = Hyperstat(options=hyperstat.options).get_level_rearranged(
-        [0, 0, 6, 1, 0, 13, 12, 12, 13, 5]
-    )
+    expected = Hyperstat(options=hyperstat.options)
+    for stat_props, level in [
+        (StatProps.INT_static, 5),
+        (StatProps.LUK_static, 1),
+        (StatProps.attack_power, 5),
+        (StatProps.damage_multiplier, 11),
+        (StatProps.boss_damage_multiplier, 12),
+        (StatProps.critical_damage, 11),
+        (StatProps.ignored_defence, 11),
+        (StatProps.critical_rate, 6),
+    ]:
+        expected = expected.set_level(stat_props, level)
 
     assert hyperstat.get_stat().short_dict() == expected.get_stat().short_dict()
 
