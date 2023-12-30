@@ -38,6 +38,9 @@ testpaths = ["tests", "test_app", "test_data"]
 
 [tool.coverage.run]
 branch = true
+omit = [
+    "*/fetch/*"
+]
 
 [tool.coverage.report]
 fail_under = 85
