@@ -38,7 +38,7 @@
 
 ## Prerequisites
 
-- python >=3.9 
+- python >=3.10
 - poetry. 개발 환경은 poetry를 활용하여 구성됩니다.
   - poetry의 설치는 https://python-poetry.org/docs/ 를 참조합니다.
 

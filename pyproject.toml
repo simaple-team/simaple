@@ -72,7 +72,7 @@ license = "MIT"
 repository = "https://github.com/simaple-team/simaple"
 
 [tool.poetry.dependencies]
-python = ">=3.9, <3.13"
+python = ">=3.10, <3.13"
 pydantic = "^2.4.2"
 loguru = "^0.5.3"
 poethepoet = "^0.10.0"
