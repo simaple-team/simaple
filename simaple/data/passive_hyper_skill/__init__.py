@@ -1,11 +1,9 @@
 from pathlib import Path
 from typing import Optional
 
-from simaple.core import Stat
 from simaple.data.passive_hyper_skill.patch import PassiveHyperskillPatch
 from simaple.data.passive_hyper_skill.spec import PassiveHyperskillInterface
 from simaple.spec.loader import SpecBasedLoader
-from simaple.spec.patch import EvalPatch, Patch
 from simaple.spec.repository import DirectorySpecRepository
 
 

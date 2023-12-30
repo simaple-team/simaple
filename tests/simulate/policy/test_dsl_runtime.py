@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-import simaple.simulate.component.skill  # pylint: disable=W0611
+import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
