@@ -1,8 +1,6 @@
-from typing import TypeAlias, TypedDict
+from typing import TypedDict
 
-IntStat: TypeAlias = (
-    int  # use this since "int" option in included in CharacterItemElementOption
-)
+IntStat = int  # use this since "int" option in included in CharacterItemElementOption
 
 
 class CharacterItemElementOption(TypedDict, total=False):
