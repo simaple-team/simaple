@@ -10,9 +10,7 @@ from simaple.simulate.kms import get_builder
 @pytest.fixture
 def archmagefb_engine() -> MonotonicEngine:
     return get_builder(
-        ActionStat(),
         ["archmagefb", "common", "adventurer.magician", "mob"],
-        {"character_level": 260},
         {
             "도트 퍼니셔": 30,
             "포이즌 노바": 30,
@@ -29,4 +27,5 @@ def archmagefb_engine() -> MonotonicEngine:
             "파이어 오라": 60,
             "이프리트": 60,
         },
+        {"character_level": 260, "action_stat": ActionStat()},
     ).build_monotonic_engine()

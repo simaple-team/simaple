@@ -222,19 +222,19 @@ class SimulationContainer(containers.DeclarativeContainer):
         character_level=config.level,
         weapon_attack_power=config.weapon_attack_power,
         weapon_pure_attack_power=config.weapon_pure_attack_power,
+        action_stat=character.provided.action_stat
     )
 
     builder = providers.Factory(
         get_builder,
-        character.provided.action_stat,
         engine_configuration.provided.get_groups.call(),
-        engine_patch_injected_values,
         engine_configuration.provided.get_skill_levels.call(
             config.v_skill_level, config.hexa_skill_level
         ),
         engine_configuration.provided.get_filled_v_improvements.call(
             config.v_improvements_level
         ),
+        engine_patch_injected_values,
         passive_skill_level=config.passive_skill_level,
         combat_orders_level=config.combat_orders_level,
     )

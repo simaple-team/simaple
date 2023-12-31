@@ -1,6 +1,6 @@
 import simaple.simulate.component.skill  # noqa: F401
 import simaple.simulate.component.specific  # noqa: F401
-from simaple.core.base import ActionStat
+from simaple.core.base import ActionStat, Stat
 from simaple.data.passive.patch import SkillLevelPatch
 from simaple.data.passive_hyper_skill import get_hyper_skill_patch
 from simaple.data.skill import get_kms_skill_loader
@@ -26,12 +26,21 @@ def bare_store(action_stat: ActionStat) -> AddressedStore:
     return store
 
 
+from typing import TypedDict
+
+class BuilderInjectedValues(TypedDict):
+    character_level: int
+    character_stat: Stat
+    weapon_attack_power: int
+    weapon_pure_attack_power: int
+    action_stat: ActionStat
+
+
 def get_builder(
-    action_stat: ActionStat,
     groups: list[str],
-    injected_values: dict,
     skill_levels: dict[str, int],
     v_improvements: dict[str, int],
+    injected_values: BuilderInjectedValues,
     combat_orders_level: int = 1,
     passive_skill_level: int = 0,
 ) -> EngineBuilder:
@@ -56,7 +65,7 @@ def get_builder(
 
     components: list[Component] = sum(component_sets, [])
 
-    engine_builder = EngineBuilder(bare_store(action_stat))
+    engine_builder = EngineBuilder(bare_store(injected_values["action_stat"]))
     engine_builder.add_view("clock", clock_view)
 
     for component in components:

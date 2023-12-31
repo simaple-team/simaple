@@ -62,11 +62,10 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
     def _get_builder(self) -> EngineBuilder:
         engine_configuration = self.get_engine_configuration()
         return get_builder(
-            self.action_stat,
             engine_configuration.get_groups(),
-            self.get_injected_values(),
             engine_configuration.get_skill_levels(30, 1),
             engine_configuration.get_filled_v_improvements(),
+            self.get_injected_values(),
         )
 
     def create_monotonic_engine(self) -> MonotonicEngine:
@@ -81,6 +80,7 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
             "character_stat": self.character_stat,
             "weapon_attack_power": self.weapon_pure_attack_power,
             "weapon_pure_attack_power": self.weapon_pure_attack_power,
+            "action_stat": self.action_stat,
         }
 
     def create_damage_calculator(self) -> DamageCalculator:

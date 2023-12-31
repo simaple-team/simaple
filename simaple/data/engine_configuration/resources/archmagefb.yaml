@@ -25,6 +25,8 @@ data:
     - 메테오(패시브)
   hexa_skill_names:
     - 인페르날 베놈
+  hexa_mastery:
+    플레임 스윕: 플레임 스윕 VI
   component_groups:
     - archmagefb
     - common

@@ -3,7 +3,7 @@ from typing import cast
 
 import pydantic
 
-from simaple.core.jobtype import JobType
+from simaple.core import JobType, ActionStat
 from simaple.simulate.policy.base import PolicyWrapper
 from simaple.simulate.policy.default import normal_default_ordered_policy
 from simaple.spec.loadable import (  # pylint:disable=unused-import
@@ -26,6 +26,7 @@ class EngineConfiguration(
     component_groups: list[str]
     mdc_order: list[str]
     hexa_skill_names: list[str] = pydantic.Field(default=[])
+    hexa_mastery: dict[str, str] = pydantic.Field(default={})
 
     def get_filled_v_skill(self, level: int = 30) -> dict[str, int]:
         return {k: level for k in self.v_skill_names}
@@ -50,6 +51,15 @@ class EngineConfiguration(
 
     def get_default_policy(self):
         return PolicyWrapper(normal_default_ordered_policy(order=self.mdc_order))
+
+    def get_engine_builder(
+            self, 
+            action_stat: ActionStat, 
+            combat_orders_level: int,
+            passive_skill_level: int,
+        ):
+
+        ...
 
 
 def get_engine_configuration(jobtype: JobType) -> EngineConfiguration:
