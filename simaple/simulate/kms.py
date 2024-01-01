@@ -1,3 +1,5 @@
+from typing import Any, TypedDict, cast
+
 import simaple.simulate.component.skill  # noqa: F401
 import simaple.simulate.component.specific  # noqa: F401
 from simaple.core.base import ActionStat, Stat
@@ -26,23 +28,21 @@ def bare_store(action_stat: ActionStat) -> AddressedStore:
     return store
 
 
-from typing import TypedDict
-
-class BuilderInjectedValues(TypedDict):
+class BuilderRequiredExtraVariables(TypedDict):
     character_level: int
     character_stat: Stat
     weapon_attack_power: int
     weapon_pure_attack_power: int
     action_stat: ActionStat
+    combat_orders_level: int
+    passive_skill_level: int
 
 
 def get_builder(
     groups: list[str],
     skill_levels: dict[str, int],
     v_improvements: dict[str, int],
-    injected_values: BuilderInjectedValues,
-    combat_orders_level: int = 1,
-    passive_skill_level: int = 0,
+    injected_values: BuilderRequiredExtraVariables,
 ) -> EngineBuilder:
     loader = get_kms_skill_loader()
 
@@ -51,11 +51,11 @@ def get_builder(
             query={"group": group},
             patches=[
                 SkillLevelPatch(
-                    combat_orders_level=combat_orders_level,
-                    passive_skill_level=passive_skill_level,
+                    combat_orders_level=injected_values["combat_orders_level"],
+                    passive_skill_level=injected_values["passive_skill_level"],
                     default_skill_levels=skill_levels,
                 ),
-                EvalPatch(injected_values=injected_values),
+                EvalPatch(injected_values=cast(dict[str, Any], injected_values)),
                 VSkillImprovementPatch(improvements=v_improvements),
                 get_hyper_skill_patch(group),
             ],

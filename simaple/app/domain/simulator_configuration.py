@@ -12,7 +12,7 @@ from simaple.data.engine_configuration import (
 )
 from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.engine import MonotonicEngine, OperationEngine
-from simaple.simulate.kms import get_builder
+from simaple.simulate.kms import BuilderRequiredExtraVariables, get_builder
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 
 
@@ -74,13 +74,15 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
     def create_operation_engine(self) -> OperationEngine:
         return self._get_builder().build_operation_engine()
 
-    def get_injected_values(self) -> dict:
+    def get_injected_values(self) -> BuilderRequiredExtraVariables:
         return {
             "character_level": self.character_level,
             "character_stat": self.character_stat,
             "weapon_attack_power": self.weapon_pure_attack_power,
             "weapon_pure_attack_power": self.weapon_pure_attack_power,
             "action_stat": self.action_stat,
+            "combat_orders_level": self.combat_orders_level,
+            "passive_skill_level": 0,
         }
 
     def create_damage_calculator(self) -> DamageCalculator:

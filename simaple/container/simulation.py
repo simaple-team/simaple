@@ -217,12 +217,14 @@ class SimulationContainer(containers.DeclarativeContainer):
         force_advantage=config.force_advantage,
     )
 
-    engine_patch_injected_values = providers.Dict(
+    engine_builder_required_values = providers.Dict(
         character_stat=character.provided.stat,
         character_level=config.level,
         weapon_attack_power=config.weapon_attack_power,
         weapon_pure_attack_power=config.weapon_pure_attack_power,
-        action_stat=character.provided.action_stat
+        action_stat=character.provided.action_stat,
+        passive_skill_level=config.passive_skill_level,
+        combat_orders_level=config.combat_orders_level,
     )
 
     builder = providers.Factory(
@@ -234,9 +236,7 @@ class SimulationContainer(containers.DeclarativeContainer):
         engine_configuration.provided.get_filled_v_improvements.call(
             config.v_improvements_level
         ),
-        engine_patch_injected_values,
-        passive_skill_level=config.passive_skill_level,
-        combat_orders_level=config.combat_orders_level,
+        engine_builder_required_values,
     )
 
     monotonic_engine: Callable[[], MonotonicEngine] = providers.Factory(

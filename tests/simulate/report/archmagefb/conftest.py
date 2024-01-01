@@ -2,7 +2,7 @@ import pytest
 
 import simaple.simulate.component.skill  # noqa: F401
 import simaple.simulate.component.specific  # noqa: F401
-from simaple.core.base import ActionStat
+from simaple.core import ActionStat, Stat
 from simaple.simulate.engine import MonotonicEngine
 from simaple.simulate.kms import get_builder
 
@@ -27,5 +27,13 @@ def archmagefb_engine() -> MonotonicEngine:
             "파이어 오라": 60,
             "이프리트": 60,
         },
-        {"character_level": 260, "action_stat": ActionStat()},
+        {
+            "character_level": 260,
+            "action_stat": ActionStat(),
+            "character_stat": Stat(),
+            "combat_orders_level": 0,
+            "passive_skill_level": 0,
+            "weapon_pure_attack_power": 0,
+            "weapon_attack_power": 0,
+        },
     ).build_monotonic_engine()
