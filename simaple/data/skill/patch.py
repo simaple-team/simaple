@@ -5,9 +5,49 @@ import pydantic
 from simaple.core import Stat
 from simaple.spec.patch import Patch
 
+from simaple.data.passive_hyper_skill.spec import PassiveHyperskillInterface
+from simaple.data.passive_hyper_skill import get_every_hyper_skills
+from simaple.spec.patch import Patch
+
+
+class PassiveHyperskillPatch(Patch):
+    hyper_skills: list[PassiveHyperskillInterface]
+
+    def apply(self, raw: dict) -> dict:
+        output = raw
+        skill_name = raw["name"]
+        for hyper_skill in self.hyper_skills:
+            if hyper_skill.get_target_name() == skill_name:
+                output = hyper_skill.modify(output)
+
+        return output
+
+
+
+def get_hyper_skill_patch(
+    group: str,
+    skill_names: list[str] | None = None,
+    count=5,
+):
+    hyper_skills = get_every_hyper_skills(group)
+
+    if skill_names is None:
+        hyper_skills = hyper_skills[:count]
+    else:
+        hyper_skills = [sk for sk in hyper_skills if sk.get_name() in skill_names]
+
+    return PassiveHyperskillPatch(hyper_skills=hyper_skills)
+
 
 class VSkillImprovementPatch(Patch):
     improvements: dict[str, int] = pydantic.Field(default_factory=dict)
+
+    def _get_improvement_level(self, raw: dict) -> str:
+        target_name = raw["name"]
+        if "v_improvement_name" in raw:
+            return raw["v_improvement"]
+
+        return self.improvements.get(target_name, 0)
 
     def apply(self, raw: dict) -> dict:
         output = copy.deepcopy(raw)
@@ -19,11 +59,11 @@ class VSkillImprovementPatch(Patch):
             ) from e
 
         previous_modifier = Stat.model_validate(output.get("modifier", {}))
-        scale = self.improvements.get(output["name"], 0)
+        level = self._get_improvement_level(raw)
         new_modifier = previous_modifier + Stat(
-            final_damage_multiplier=improvement_scale * scale
+            final_damage_multiplier=improvement_scale * level
         )
-        if scale > 40:
+        if level > 40:
             new_modifier += Stat(ignored_defence=20)
 
         output["modifier"] = new_modifier.short_dict()

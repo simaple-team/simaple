@@ -4,9 +4,8 @@ import simaple.simulate.component.skill  # noqa: F401
 import simaple.simulate.component.specific  # noqa: F401
 from simaple.core.base import ActionStat, Stat
 from simaple.data.passive.patch import SkillLevelPatch
-from simaple.data.passive_hyper_skill import get_hyper_skill_patch
 from simaple.data.skill import get_kms_skill_loader
-from simaple.data.skill.patch import VSkillImprovementPatch
+from simaple.data.skill.patch import VSkillImprovementPatch, get_hyper_skill_patch
 from simaple.simulate.base import AddressedStore, ConcreteStore
 from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.component.base import Component
@@ -39,16 +38,18 @@ class BuilderRequiredExtraVariables(TypedDict):
 
 
 def _exclude_hexa_skill(
-    components: list[Component], 
-    hexa_replacements: dict[str, str], 
-    skill_levels: dict[str, int]
+    components: list[Component],
+    hexa_replacements: dict[str, str],
+    skill_levels: dict[str, int],
 ) -> list[Component]:
     _component_names = [component.name for component in components]
     components_to_exclude = []
 
     for low_tier, high_tier in hexa_replacements.items():
         assert low_tier in _component_names, f"{low_tier} is not in {_component_names}"
-        assert high_tier in _component_names, f"{high_tier} is not in {_component_names}"
+        assert (
+            high_tier in _component_names
+        ), f"{high_tier} is not in {_component_names}"
 
         if skill_levels[high_tier] > 0:
             components_to_exclude.append(low_tier)
