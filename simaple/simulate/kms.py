@@ -38,10 +38,34 @@ class BuilderRequiredExtraVariables(TypedDict):
     passive_skill_level: int
 
 
+def _exclude_hexa_skill(
+    components: list[Component], 
+    hexa_replacements: dict[str, str], 
+    skill_levels: dict[str, int]
+) -> list[Component]:
+    _component_names = [component.name for component in components]
+    components_to_exclude = []
+
+    for low_tier, high_tier in hexa_replacements.items():
+        assert low_tier in _component_names, f"{low_tier} is not in {_component_names}"
+        assert high_tier in _component_names, f"{high_tier} is not in {_component_names}"
+
+        if skill_levels[high_tier] > 0:
+            components_to_exclude.append(low_tier)
+
+    components = [
+        component
+        for component in components
+        if component.name not in components_to_exclude
+    ]
+    return components
+
+
 def get_builder(
     groups: list[str],
     skill_levels: dict[str, int],
     v_improvements: dict[str, int],
+    hexa_replacements: dict[str, str],
     injected_values: BuilderRequiredExtraVariables,
 ) -> EngineBuilder:
     loader = get_kms_skill_loader()
@@ -64,6 +88,7 @@ def get_builder(
     ]
 
     components: list[Component] = sum(component_sets, [])
+    components = _exclude_hexa_skill(components, hexa_replacements, skill_levels)
 
     engine_builder = EngineBuilder(bare_store(injected_values["action_stat"]))
     engine_builder.add_view("clock", clock_view)

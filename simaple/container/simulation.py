@@ -236,6 +236,7 @@ class SimulationContainer(containers.DeclarativeContainer):
         engine_configuration.provided.get_filled_v_improvements.call(
             config.v_improvements_level
         ),
+        engine_configuration.provided.get_skill_replacements.call(),
         engine_builder_required_values,
     )
 
