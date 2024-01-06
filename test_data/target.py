@@ -20,6 +20,7 @@ def container_test_setting(
         level=270,
         passive_skill_level=0,
         combat_orders_level=1,
+        hexa_mastery_level=1,
         v_skill_level=30,
         v_improvements_level=60,
         cache_root_dir=os.path.join(os.path.dirname(__file__), "cache"),

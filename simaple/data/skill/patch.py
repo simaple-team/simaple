@@ -1,13 +1,26 @@
 import copy
+from typing import Any
 
 import pydantic
 
 from simaple.core import Stat
+from simaple.data.passive_hyper_skill import get_every_hyper_skills
+from simaple.data.passive_hyper_skill.spec import PassiveHyperskillInterface
 from simaple.spec.patch import Patch
 
-from simaple.data.passive_hyper_skill.spec import PassiveHyperskillInterface
-from simaple.data.passive_hyper_skill import get_every_hyper_skills
-from simaple.spec.patch import Patch
+
+def _get_representative_skill_name(raw: dict[str, Any]) -> str:
+    """
+    Returns representative skill name for skill.
+    `Representative skill name` is the skill name that is used to
+    determine which patch may adopted for that skill.
+    """
+    if "representative_name" in raw:
+        assert isinstance(raw["representative_name"], str)
+        return raw["representative_name"]
+
+    assert isinstance(raw["name"], str)
+    return raw["name"]
 
 
 class PassiveHyperskillPatch(Patch):
@@ -15,13 +28,12 @@ class PassiveHyperskillPatch(Patch):
 
     def apply(self, raw: dict) -> dict:
         output = raw
-        skill_name = raw["name"]
+        skill_name = _get_representative_skill_name(raw)
         for hyper_skill in self.hyper_skills:
             if hyper_skill.get_target_name() == skill_name:
                 output = hyper_skill.modify(output)
 
         return output
-
 
 
 def get_hyper_skill_patch(
@@ -42,13 +54,6 @@ def get_hyper_skill_patch(
 class VSkillImprovementPatch(Patch):
     improvements: dict[str, int] = pydantic.Field(default_factory=dict)
 
-    def _get_improvement_level(self, raw: dict) -> str:
-        target_name = raw["name"]
-        if "v_improvement_name" in raw:
-            return raw["v_improvement"]
-
-        return self.improvements.get(target_name, 0)
-
     def apply(self, raw: dict) -> dict:
         output = copy.deepcopy(raw)
         try:
@@ -59,7 +64,7 @@ class VSkillImprovementPatch(Patch):
             ) from e
 
         previous_modifier = Stat.model_validate(output.get("modifier", {}))
-        level = self._get_improvement_level(raw)
+        level = self.improvements.get(_get_representative_skill_name(raw), 0)
         new_modifier = previous_modifier + Stat(
             final_damage_multiplier=improvement_scale * level
         )
@@ -92,7 +97,7 @@ class HexaSkillImprovementPatch(Patch):
         output = copy.deepcopy(raw)
         previous_modifier = Stat.model_validate(output.get("modifier", {}))
 
-        level = self.improvements.get(output["name"], 0)
+        level = self.improvements.get(_get_representative_skill_name(raw), 0)
         new_modifier = previous_modifier + self._compute_final_damage_multiplier(level)
         output["modifier"] = new_modifier.short_dict()
 

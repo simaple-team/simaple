@@ -268,6 +268,7 @@ data:
   name: 메테오(패시브)
   listening_actions:
     플레임 스윕.use.emitted.global.damage: use
+    플레임 스윕 VI.use.emitted.global.damage: use
     플레임 헤이즈.use.emitted.global.damage: use
     미스트 이럽션.use.emitted.global.damage: use
     이그나이트.use.emitted.global.damage: use
@@ -353,6 +354,7 @@ data:
   id: 2100010-0
   listening_actions:
     플레임 스윕.use.emitted.global.damage: use
+    플레임 스윕 VI.use.emitted.global.damage: use
     플레임 헤이즈.use.emitted.global.damage: use
     도트 퍼니셔.use.emitted.global.damage: use
     퓨리 오브 이프리트.elapse.emitted.global.damage: use
@@ -478,8 +480,6 @@ data:
   lasting_duration: 999_999_999
   stat:
     final_damage_multiplier: "{{ 8 + skill_level // 10 }}"
-
-
 ---
 kind: Component
 version: simaple.io/InfernalVenom
@@ -487,12 +487,12 @@ metadata:
   label:
     group: archmagefb
     name: 인페르날 베놈
-    id: 400021410-0
+    id: 400021411-0
 patch:
   - SkillLevelPatch
   - EvalPatch
 data:
-  id: 400021410-0
+  id: 400021411-0
   name: 인페르날 베놈
   binds:
     drain_stack: ".퍼번트 드레인.drain_stack"
@@ -506,3 +506,36 @@ data:
   cooldown_duration: 360_000
   delay: 6600
   lasting_duration: 20_000
+---
+kind: Component
+version: simaple.io/FlameSwipVI
+metadata:
+  label:
+    group: archmagefb
+    name: 플레임 스윕 VI
+    id: 400021410-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  id: 2121006-0
+  name: 플레임 스윕 VI
+  representative_name: 플레임 스윕
+
+  listening_actions:
+    "미스트 이럽션.use": explode
+
+  delay: 600
+  damage: "{{ 235 + 4 * skill_level }}"
+  hit: 7
+
+  cooldown_duration: 0
+  v_improvement: 2
+
+  dot_damage: "{{ 255 + 6 * skill_level }}"
+  dot_lasting_duration: 10_000
+
+  explode_damage: "{{ 135 + 8 * skill_level }}"
+  explode_hit: 8

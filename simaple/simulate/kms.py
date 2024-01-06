@@ -51,7 +51,7 @@ def _exclude_hexa_skill(
             high_tier in _component_names
         ), f"{high_tier} is not in {_component_names}"
 
-        if skill_levels[high_tier] > 0:
+        if skill_levels.get(high_tier, 0) > 0:
             components_to_exclude.append(low_tier)
 
     components = [

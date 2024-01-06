@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Optional
 
 from simaple.data.passive_hyper_skill.spec import PassiveHyperskillInterface
 from simaple.spec.loader import SpecBasedLoader

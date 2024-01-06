@@ -470,10 +470,13 @@ class FlameSwipVIState(ReducerState):
     stack: Stack
 
 
-class FlameSwipVI(SkillComponent, UseSimpleAttackTrait, AddDOTDamageTrait):
+class FlameSwipVI(
+    SkillComponent, UseSimpleAttackTrait, AddDOTDamageTrait, CooldownValidityTrait
+):
     delay: float
     damage: float
     hit: int
+    cooldown_duration: float
 
     explode_damage: float
     explode_hit: int
@@ -506,6 +509,10 @@ class FlameSwipVI(SkillComponent, UseSimpleAttackTrait, AddDOTDamageTrait):
         return state, [
             self.event_provider.dealt(self.explode_damage, self.explode_hit),
         ]
+
+    @view_method
+    def validity(self, state: FlameSwipVIState):
+        return self.validity_in_cooldown_trait(state)
 
     def _get_dot_damage_and_lasting(self) -> tuple[float, float]:
         return self.dot_damage, self.dot_lasting_duration
