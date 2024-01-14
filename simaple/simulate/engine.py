@@ -175,8 +175,17 @@ class OperationEngine(SimulationEngine):
         report = Report()
         buff = viewer("buff")
         for event in playlog.events:
-            if event["tag"] == Tag.DAMAGE:
-                report.add(0, event, buff)
+            if event["tag"] in (Tag.DAMAGE, Tag.DOT):
+                report.add(playlog.clock, event, buff)
+
+        return report
+
+    def create_full_report(self) -> Report:
+        report = Report()
+
+        for operation_log in self._history:
+            for playlog in operation_log.playlogs:
+                report.extend(self.get_report(playlog))
 
         return report
 

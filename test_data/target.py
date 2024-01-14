@@ -35,7 +35,7 @@ SETTINGS = [
             JobType.archmagefb,
             JobCategory.magician,
         ),
-        12753481265900,
+        13027659752019,
     ),
     (
         (

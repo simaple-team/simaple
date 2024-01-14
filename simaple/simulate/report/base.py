@@ -39,6 +39,9 @@ class Report(pydantic.BaseModel):
                 )
             )
 
+    def extend(self, report: "Report"):
+        self.logs.extend(report.logs)
+
     def save(self, file_name: str):
         with open(file_name, "w", encoding="utf8") as f:
             for log in self.logs:
@@ -46,19 +49,6 @@ class Report(pydantic.BaseModel):
 
     def total_time(self):
         return self.logs[-1].clock
-
-
-class ReportWriteCallback(PostActionCallback):
-    def __init__(self, report: Report):
-        self.report = report
-
-    def __call__(
-        self, event: Event, viewer: ViewerType, all_events: list[Event]
-    ) -> None:
-        if event["tag"] in (Tag.DAMAGE, Tag.DOT):
-            current_buff_state = viewer("buff")
-            current_clock = viewer("clock")
-            self.report.add(current_clock, event, current_buff_state)
 
 
 class LoggerCallback(PostActionCallback):

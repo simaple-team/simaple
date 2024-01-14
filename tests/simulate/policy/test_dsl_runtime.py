@@ -6,7 +6,6 @@ import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
-from simaple.simulate.report.base import Report, ReportWriteCallback
 
 
 @pytest.fixture(name="dsl_list")
@@ -38,13 +37,12 @@ def test_dsl(dsl_list: list[str], dsl_test_setting: SimulationSetting) -> None:
     container = SimulationContainer()
     container.config.from_dict(dsl_test_setting.model_dump())
 
-    report = Report()
-
     engine = container.operation_engine()
-    engine.add_callback(ReportWriteCallback(report))
 
     for dsl in dsl_list:
         engine.exec_dsl(dsl)
+
+    report = engine.create_full_report()
 
     print(
         f"{engine.get_current_viewer()('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
