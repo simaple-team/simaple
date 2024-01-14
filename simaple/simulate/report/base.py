@@ -1,8 +1,7 @@
 import pydantic
 
 from simaple.core.base import Stat
-from simaple.simulate.base import Event, PostActionCallback, ViewerType
-from simaple.simulate.reserved_names import Tag
+from simaple.simulate.base import Event
 
 
 class DamageLog(pydantic.BaseModel):
@@ -49,16 +48,3 @@ class Report(pydantic.BaseModel):
 
     def total_time(self):
         return self.logs[-1].clock
-
-
-class LoggerCallback(PostActionCallback):
-    def __init__(self, report: Report):
-        self.report = report
-
-    def __call__(
-        self, event: Event, viewer: ViewerType, all_events: list[Event]
-    ) -> None:
-        if event["tag"] in (Tag.DAMAGE, Tag.DOT):
-            current_buff_state = viewer("buff")
-            current_clock = viewer("clock")
-            self.report.add(current_clock, event, current_buff_state)
