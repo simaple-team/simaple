@@ -9,7 +9,6 @@ from simaple.app.domain.uow import UnitOfWork
 from simaple.core.base import Stat
 from simaple.simulate.base import Action, Checkpoint, Event
 from simaple.simulate.component.view import Running, Validity
-from simaple.simulate.engine import get_report
 from simaple.simulate.policy.base import Operation
 from simaple.simulate.report.base import Report
 
@@ -50,7 +49,7 @@ class OperationLogResponse(pydantic.BaseModel):
                     running_view={v.name: v for v in viewer("running")},
                     buff_view=viewer("buff"),
                     clock=playlog.clock,
-                    report=get_report(playlog, viewer),
+                    report=simulator.engine.get_report(playlog),
                     delay=playlog.get_delay_left(),
                     action=playlog.action,
                     checkpoint=playlog.checkpoint,

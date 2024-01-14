@@ -218,13 +218,3 @@ class OperationEngine(SimulationEngine):
                 except DSLError as e:
                     print("Invalid DSL - try again")
                     print(f"Error Mesage: {e}")
-
-
-def get_report(playlog: PlayLog, viewer: ViewerType) -> Report:
-    report = Report()
-    buff = viewer("buff")
-    for event in playlog.events:
-        if event["tag"] == Tag.DAMAGE:
-            report.add(0, event, buff)
-
-    return report
