@@ -22,7 +22,7 @@ from simaple.simulate.policy.base import (
     _BehaviorGenerator,
 )
 from simaple.simulate.policy.dsl import DSLError, OperandDSLParser
-from simaple.simulate.report.base import Report
+from simaple.simulate.report.base import Report, SimulationEntry
 from simaple.simulate.reserved_names import Tag
 
 
@@ -170,22 +170,17 @@ class OperationEngine(SimulationEngine):
         store = self._history.current_store()
         return self._viewset.get_viewer(store)
 
-    def get_report(self, playlog: PlayLog) -> Report:
+    def get_simulation_entry(self, playlog: PlayLog) -> Report:
         viewer = self._viewset.get_viewer_from_ckpt(playlog.checkpoint)
-        report = Report()
         buff = viewer("buff")
-        for event in playlog.events:
-            if event["tag"] in (Tag.DAMAGE, Tag.DOT):
-                report.add(playlog.clock, event, buff)
-
-        return report
+        return SimulationEntry.build(playlog, buff)
 
     def create_full_report(self) -> Report:
         report = Report()
 
         for operation_log in self._history:
             for playlog in operation_log.playlogs:
-                report.extend(self.get_report(playlog))
+                report.add(self.get_simulation_entry(playlog))
 
         return report
 

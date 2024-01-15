@@ -47,4 +47,6 @@ def test_dsl(dsl_list: list[str], dsl_test_setting: SimulationSetting) -> None:
     print(
         f"{engine.get_current_viewer()('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
     )
-    assert 6534916107988.74 == container.dpm_calculator().calculate_dpm(report)
+    assert 6534916107988.74 == pytest.approx(
+        container.dpm_calculator().calculate_dpm(report)
+    ) 

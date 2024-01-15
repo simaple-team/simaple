@@ -49,7 +49,7 @@ class OperationLogResponse(pydantic.BaseModel):
                     running_view={v.name: v for v in viewer("running")},
                     buff_view=viewer("buff"),
                     clock=playlog.clock,
-                    report=simulator.engine.get_report(playlog),
+                    report=Report(time_series=[simulator.engine.get_simulation_entry(playlog)]),
                     delay=playlog.get_delay_left(),
                     action=playlog.action,
                     checkpoint=playlog.checkpoint,

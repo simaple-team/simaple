@@ -1,50 +1,76 @@
 import pydantic
 
+from typing import Generator
+
 from simaple.core.base import Stat
 from simaple.simulate.base import Event
+from simaple.simulate.base import Action, AddressedStore, Checkpoint, Event, ViewerType
+from simaple.simulate.policy.base import PlayLog
+from simaple.simulate.reserved_names import Tag
 
 
 class DamageLog(pydantic.BaseModel):
-    clock: float
     name: str
     damage: float
     hit: float
     buff: Stat
     tag: str
 
-    def serialize(self):
-        return f"{self.clock}\t{self.name}\t{self.tag}\t{self.damage:.3f}\t{self.hit}\t{self.buff.short_dict()}"
+    def __repr__(self):
+        return f"{self.name}\t{self.tag}\t{self.damage:.3f}\t{self.hit}\t{self.buff.short_dict()}"
+
+
+def _create_damage_log(event: Event, buff: Stat) -> DamageLog | None:
+    if event["tag"] not in (Tag.DAMAGE, Tag.DOT):
+        return
+
+    if event["payload"]["damage"] == 0 or event["payload"]["hit"] == 0:
+        return None
+
+    buff_stat = buff
+    if event["payload"].get("modifier") is not None:
+        buff_stat = buff_stat + Stat.model_validate(
+            event["payload"]["modifier"]
+        )
+    
+    return DamageLog(
+        name=event["name"],
+        damage=event["payload"]["damage"],
+        hit=event["payload"]["hit"],
+        buff=buff_stat,
+        tag=event["tag"] or "",
+    )
+
+
+class SimulationEntry(pydantic.BaseModel):
+    action: Action
+    clock: float
+    damage_logs: list[DamageLog]
+
+    @classmethod
+    def build(cls, playlog:  PlayLog, buff: Stat) -> "SimulationEntry":
+        return SimulationEntry(
+            action=playlog.action,
+            clock=playlog.clock,
+            damage_logs=filter(lambda x:x is not None,
+                               [
+                _create_damage_log(event, buff)
+                for event in playlog.events
+            ])
+        )
 
 
 class Report(pydantic.BaseModel):
-    logs: list[DamageLog] = []
+    time_series: list[SimulationEntry] = []
 
-    def add(self, clock: float, event: Event, buff: Stat):
-        buff_stat = buff
-        if event["payload"]["damage"] != 0 and event["payload"]["hit"] != 0:
-            if event["payload"].get("modifier") is not None:
-                buff_stat = buff_stat + Stat.model_validate(
-                    event["payload"]["modifier"]
-                )
-
-            self.logs.append(
-                DamageLog(
-                    clock=clock,
-                    name=event["name"],
-                    damage=event["payload"]["damage"],
-                    hit=event["payload"]["hit"],
-                    buff=buff_stat,
-                    tag=event["tag"] or "",
-                )
-            )
+    def add(self, entry: SimulationEntry):
+        self.time_series.append(entry)
 
     def extend(self, report: "Report"):
-        self.logs.extend(report.logs)
+        self.time_series.extend(report.time_series)
 
-    def save(self, file_name: str):
-        with open(file_name, "w", encoding="utf8") as f:
-            for log in self.logs:
-                f.write(log.serialize() + "\n")
+    def total_time(self) -> float:
+        return self.time_series[-1].clock
 
-    def total_time(self):
-        return self.logs[-1].clock
+    def entries(self) -> Generator[SimulationEntry, None, None]:
+        return iter(self.time_series)
