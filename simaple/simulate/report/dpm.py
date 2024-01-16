@@ -65,14 +65,10 @@ class DamageCalculator(pydantic.BaseModel):
         return total_damage
 
     def calculate_total_damage(self, report: Report) -> float:
-        return sum([
-            self.calculate_damage(entry) for entry in report.entries()
-        ])
+        return sum([self.calculate_damage(entry) for entry in report.entries()])
 
     def calculate_dpm(self, damage_report: Report) -> float:
-        total_damage = sum([
-            self.calculate_damage(entry) for entry in damage_report.entries()
-        ])
-        return (
-            total_damage / damage_report.total_time() * 60_000
+        total_damage = sum(
+            [self.calculate_damage(entry) for entry in damage_report.entries()]
         )
+        return total_damage / damage_report.total_time() * 60_000

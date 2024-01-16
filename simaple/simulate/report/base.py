@@ -1,9 +1,8 @@
-import pydantic
-
 from typing import Generator
 
+import pydantic
+
 from simaple.core.base import Stat
-from simaple.simulate.base import Event
 from simaple.simulate.base import Action, AddressedStore, Checkpoint, Event, ViewerType
 from simaple.simulate.policy.base import PlayLog
 from simaple.simulate.reserved_names import Tag
@@ -29,10 +28,8 @@ def _create_damage_log(event: Event, buff: Stat) -> DamageLog | None:
 
     buff_stat = buff
     if event["payload"].get("modifier") is not None:
-        buff_stat = buff_stat + Stat.model_validate(
-            event["payload"]["modifier"]
-        )
-    
+        buff_stat = buff_stat + Stat.model_validate(event["payload"]["modifier"])
+
     return DamageLog(
         name=event["name"],
         damage=event["payload"]["damage"],
@@ -49,19 +46,15 @@ class SimulationEntry(pydantic.BaseModel):
     accepted: bool
 
     @classmethod
-    def build(cls, playlog:  PlayLog, buff: Stat) -> "SimulationEntry":
+    def build(cls, playlog: PlayLog, buff: Stat) -> "SimulationEntry":
         return SimulationEntry(
             action=playlog.action,
             clock=playlog.clock,
-            damage_logs=filter(lambda x:x is not None,
-                               [
-                _create_damage_log(event, buff)
-                for event in playlog.events
-            ]),
-            accepted=all([
-                event["tag"] != Tag.REJECT
-                for event in playlog.events
-            ])
+            damage_logs=filter(
+                lambda x: x is not None,
+                [_create_damage_log(event, buff) for event in playlog.events],
+            ),
+            accepted=all([event["tag"] != Tag.REJECT for event in playlog.events]),
         )
 
 

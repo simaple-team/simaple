@@ -49,4 +49,4 @@ def test_dsl(dsl_list: list[str], dsl_test_setting: SimulationSetting) -> None:
     )
     assert 6534916107988.74 == pytest.approx(
         container.dpm_calculator().calculate_dpm(report)
-    ) 
+    )

@@ -117,7 +117,7 @@ class OperationEngine(SimulationEngine):
     def load_history(self, saved_history: dict[str, Any]) -> None:
         self._history.load(saved_history)
 
-    def _exec(self, op: Operation, early_stop: int = -1) -> None:
+    def _exec(self, op: Operation, early_stop: int = -1) -> list[PlayLog]:
         playlogs: list[PlayLog] = []
         store = self._history.move_store()
 
@@ -170,7 +170,7 @@ class OperationEngine(SimulationEngine):
         store = self._history.current_store()
         return self._viewset.get_viewer(store)
 
-    def get_simulation_entry(self, playlog: PlayLog) -> Report:
+    def get_simulation_entry(self, playlog: PlayLog) -> SimulationEntry:
         viewer = self._viewset.get_viewer_from_ckpt(playlog.checkpoint)
         buff = viewer("buff")
         return SimulationEntry.build(playlog, buff)
@@ -187,10 +187,29 @@ class OperationEngine(SimulationEngine):
     def rollback(self, idx: int):
         self._history.discard_after(idx)
 
-    def exec_dsl(self, txt: str):
+    def exec_dsl(self, txt: str, debug: bool = False) -> int:
+        """Returns newly accumulated histories"""
         ops = self._parser(txt)
+        commit_count = 0
+
         for op in ops:
+            if op.debug:
+                if debug:
+                    debug_output = eval(
+                        op.command,
+                        None,
+                        {
+                            "viewer": self.get_current_viewer(),
+                        },
+                    )
+                    print(f"\033[93m[DEBUG_]{debug_output}\033[0m")
+
+                continue
+
             self._exec(op)
+            commit_count += 1
+
+        return commit_count
 
     def REPL(self):
         while True:
