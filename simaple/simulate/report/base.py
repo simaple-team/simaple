@@ -46,6 +46,7 @@ class SimulationEntry(pydantic.BaseModel):
     action: Action
     clock: float
     damage_logs: list[DamageLog]
+    accepted: bool
 
     @classmethod
     def build(cls, playlog:  PlayLog, buff: Stat) -> "SimulationEntry":
@@ -55,6 +56,10 @@ class SimulationEntry(pydantic.BaseModel):
             damage_logs=filter(lambda x:x is not None,
                                [
                 _create_damage_log(event, buff)
+                for event in playlog.events
+            ]),
+            accepted=all([
+                event["tag"] != Tag.REJECT
                 for event in playlog.events
             ])
         )
