@@ -27,6 +27,7 @@ data:
     - 인페르날 베놈
   hexa_mastery:
     플레임 스윕: 플레임 스윕 VI
+    미스트 이럽션: 미스트 이럽션 VI
   component_groups:
     - archmagefb
     - common

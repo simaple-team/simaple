@@ -58,6 +58,7 @@ data:
   name: 플레임 헤이즈
   listening_actions:
     미스트 이럽션.use.emitted.global.damage: reset_cooldown
+    미스트 이럽션 VI.use.emitted.global.damage: reset_cooldown
   cooldown_duration: 10000
   delay: 1080
   red: true
@@ -192,6 +193,7 @@ data:
   name: 포이즌 노바
   listening_actions:
     "미스트 이럽션.use": trigger
+    "미스트 이럽션 VI.use": trigger
   cooldown_duration: 25000
   delay: 570
   red: true
@@ -271,6 +273,7 @@ data:
     플레임 스윕 VI.use.emitted.global.damage: use
     플레임 헤이즈.use.emitted.global.damage: use
     미스트 이럽션.use.emitted.global.damage: use
+    미스트 이럽션 VI.use.emitted.global.damage: use
     이그나이트.use.emitted.global.damage: use
     이프리트.elapse.emitted.global.damage: use
     # TODO: entangle many
@@ -526,6 +529,7 @@ data:
 
   listening_actions:
     "미스트 이럽션.use": explode
+    "미스트 이럽션 VI.use": explode
 
   delay: 600
   damage: "{{ 235 + 4 * skill_level }}"
@@ -539,3 +543,30 @@ data:
 
   explode_damage: "{{ 135 + 8 * skill_level }}"
   explode_hit: 8
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 미스트 이럽션 VI
+    id: 400021412-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  id: 2121003-0
+  name: 미스트 이럽션 VI
+  representative_name: 미스트 이럽션
+  cooldown_duration: 8000
+  delay: 720
+  red: true
+  modifier:
+    final_damage_multiplier: 170
+    ignored_defence: 45
+  damage: "{{ 125 + skill_level * 3 }}"
+  hit: 20
+  default_skill_level: 30
+  v_improvement: 2
