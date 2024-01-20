@@ -2,7 +2,7 @@ import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
-from simaple.simulate.report.base import Report, SimulationEntry
+from simaple.simulate.report.base import Report
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 
 

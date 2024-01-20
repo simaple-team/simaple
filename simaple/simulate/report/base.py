@@ -1,9 +1,9 @@
-from typing import Generator
+from typing import Iterator
 
 import pydantic
 
 from simaple.core.base import Stat
-from simaple.simulate.base import Action, AddressedStore, Checkpoint, Event, ViewerType
+from simaple.simulate.base import Action, Event
 from simaple.simulate.policy.base import PlayLog
 from simaple.simulate.reserved_names import Tag
 
@@ -21,7 +21,7 @@ class DamageLog(pydantic.BaseModel):
 
 def _create_damage_log(event: Event, buff: Stat) -> DamageLog | None:
     if event["tag"] not in (Tag.DAMAGE, Tag.DOT):
-        return
+        return None
 
     if event["payload"]["damage"] == 0 or event["payload"]["hit"] == 0:
         return None
@@ -47,13 +47,15 @@ class SimulationEntry(pydantic.BaseModel):
 
     @classmethod
     def build(cls, playlog: PlayLog, buff: Stat) -> "SimulationEntry":
+        maybe_damage_logs = [_create_damage_log(event, buff) for event in playlog.events]            
+        damage_logs: list[DamageLog] = [
+            damage_logs for damage_logs in maybe_damage_logs if damage_logs is not None
+        ]
+
         return SimulationEntry(
             action=playlog.action,
             clock=playlog.clock,
-            damage_logs=filter(
-                lambda x: x is not None,
-                [_create_damage_log(event, buff) for event in playlog.events],
-            ),
+            damage_logs=damage_logs,
             accepted=all([event["tag"] != Tag.REJECT for event in playlog.events]),
         )
 
@@ -70,5 +72,5 @@ class Report(pydantic.BaseModel):
     def total_time(self) -> float:
         return self.time_series[-1].clock
 
-    def entries(self) -> Generator[SimulationEntry, None, None]:
+    def entries(self) -> Iterator[SimulationEntry]:
         return iter(self.time_series)

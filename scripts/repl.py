@@ -6,7 +6,6 @@ from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 
-
 setting = SimulationSetting(
     tier="Legendary",
     jobtype=JobType.archmagefb,

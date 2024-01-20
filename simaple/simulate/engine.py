@@ -23,7 +23,6 @@ from simaple.simulate.policy.base import (
 )
 from simaple.simulate.policy.dsl import DSLError, OperandDSLParser
 from simaple.simulate.report.base import Report, SimulationEntry
-from simaple.simulate.reserved_names import Tag
 
 
 class SimulationEngine(metaclass=ABCMeta):
@@ -117,7 +116,7 @@ class OperationEngine(SimulationEngine):
     def load_history(self, saved_history: dict[str, Any]) -> None:
         self._history.load(saved_history)
 
-    def _exec(self, op: Operation, early_stop: int = -1) -> list[PlayLog]:
+    def _exec(self, op: Operation, early_stop: int = -1) -> None:
         playlogs: list[PlayLog] = []
         store = self._history.move_store()
 

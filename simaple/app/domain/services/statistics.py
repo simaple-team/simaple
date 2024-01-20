@@ -22,7 +22,7 @@ def get_cumulative_logs(
     x_list: list[float] = []
     y_list: list[float] = []
 
-    cumulated_damage = 0
+    cumulated_damage = 0.0
 
     for playlog in engine._history.playlogs():
         x_list.append(float(playlog.clock))

@@ -13,17 +13,19 @@ class MaximumDealingIntervalFeature:
         for entry in report.entries():
             damage_seq.append((entry.clock, damage_calculator.calculate_damage(entry)))
 
-        best_dealing, best_start, best_end = self._find_maximum_dealing_interval(damage_seq)
+        best_dealing, best_start, best_end = self._find_maximum_dealing_interval(
+            damage_seq
+        )
 
-        print("best DPS", f"{best_dealing * 1000:,}")
-        print(f"Started at {damage_seq[best_start][0]} and ended until {damage_seq[best_end][0]}")
+        return best_dealing, best_start, best_end
 
     def _find_maximum_dealing_interval(
         self, damage_seq: list[tuple[float, float]]
     ) -> tuple[float, int, int]:
         # two_ptr
         start, end = 0, 0
-        best_dealing, best_start, best_end = 0, 0, 0
+        best_dealing: float = 0
+        best_start, best_end = 0, 0
 
         while True:
             if end >= len(damage_seq):
@@ -60,7 +62,7 @@ class MaximumDealingIntervalFeature:
         if interval == 0:
             return 0, 0
 
-        total_damage = 0
+        total_damage = 0.0
         for clk, damage in damage_seq[start:end]:
             total_damage += damage
 
