@@ -104,7 +104,7 @@ class DebugInterface:
             f"{engine.get_current_viewer()('clock')} | {self.get_dpm_calculator().calculate_total_damage(report):,} "
         )
         plan_writer.dump(plan_file.replace(".log", ".result.log"))
-        assert int(self.get_dpm_calculator().calculate_total_damage(report)) == 18_511_468_119_699
+        assert int(self.get_dpm_calculator().calculate_total_damage(report)) == 18_571_889_437_560
 
 if __name__ == "__main__":
     debugger = DebugInterface()

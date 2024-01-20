@@ -272,6 +272,7 @@ data:
     플레임 스윕.use.emitted.global.damage: use
     플레임 스윕 VI.use.emitted.global.damage: use
     플레임 헤이즈.use.emitted.global.damage: use
+    플레임 헤이즈 VI.use.emitted.global.damage: use
     미스트 이럽션.use.emitted.global.damage: use
     미스트 이럽션 VI.use.emitted.global.damage: use
     이그나이트.use.emitted.global.damage: use
@@ -359,6 +360,7 @@ data:
     플레임 스윕.use.emitted.global.damage: use
     플레임 스윕 VI.use.emitted.global.damage: use
     플레임 헤이즈.use.emitted.global.damage: use
+    플레임 헤이즈 VI.use.emitted.global.damage: use
     도트 퍼니셔.use.emitted.global.damage: use
     퓨리 오브 이프리트.elapse.emitted.global.damage: use
     이프리트.elapse.emitted.global.damage: use
@@ -381,6 +383,7 @@ data:
   id: 2111003-0
   listening_actions:
     플레임 헤이즈.use: use
+    플레임 헤이즈 VI.use: use
   name: 포이즌 미스트
   damage: 0
   delay: 0
@@ -570,3 +573,32 @@ data:
   hit: 20
   default_skill_level: 30
   v_improvement: 2
+---
+kind: Component
+version: simaple.io/DOTEmittingAttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 플레임 헤이즈 VI
+    id: 2121011-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 2121011-0
+  name: 플레임 헤이즈 VI
+  representative_name: 플레임 헤이즈
+  listening_actions:
+    미스트 이럽션.use.emitted.global.damage: reset_cooldown
+    미스트 이럽션 VI.use.emitted.global.damage: reset_cooldown
+  cooldown_duration: 10000
+  delay: 1080
+  red: true
+  damage: "{{ 215 + 4 * skill_level }}"
+  hit: 15
+  default_skill_level: 30
+  v_improvement: 2
+
+  dot_damage: "{{ 205 + 4 * skill_level }}"
+  dot_lasting_duration: 20_000
