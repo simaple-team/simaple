@@ -23,6 +23,12 @@ data:
     - 텔레포트 마스터리
     - 메테오
     - 메테오(패시브)
+  hexa_skill_names:
+    - 인페르날 베놈
+  hexa_mastery:
+    플레임 스윕: 플레임 스윕 VI
+    미스트 이럽션: 미스트 이럽션 VI
+    플레임 헤이즈: 플레임 헤이즈 VI
   component_groups:
     - archmagefb
     - common
@@ -39,6 +45,7 @@ data:
     - 소울 컨트랙트
     - 메이플월드 여신의 축복
     - 에픽 어드벤쳐
+    - 인페르날 베놈
     - 메테오
     - 포이즌 노바
     - 도트 퍼니셔

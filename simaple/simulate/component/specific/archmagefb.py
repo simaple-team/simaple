@@ -1,15 +1,68 @@
+from simaple.core import Stat
 from simaple.simulate.base import Entity
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
-from simaple.simulate.component.entity import Cooldown, Periodic, Stack
+from simaple.simulate.component.base import (
+    Component,
+    Event,
+    ReducerState,
+    reducer_method,
+    view_method,
+)
+from simaple.simulate.component.entity import Cooldown, Lasting, Periodic, Stack
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
     AddDOTDamageTrait,
+    BuffTrait,
     CooldownValidityTrait,
     PeriodicWithSimpleDamageTrait,
+    UseSimpleAttackTrait,
 )
 from simaple.simulate.component.util import is_rejected
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.global_property import Dynamics
+
+
+class FerventDrainStack(Entity):
+    count: int
+    max_count: int
+
+    def set_max_count(self, max_count: int):
+        self.max_count = max_count
+
+    def get_count(self) -> int:
+        return min(self.count, self.max_count)
+
+    def set_count(self, count: int):
+        self.count = count
+
+    def get_buff(self) -> Stat:
+        return Stat(final_damage_multiplier=self.get_count() * 5)
+
+
+class FerventDrainState(ReducerState):
+    drain_stack: FerventDrainStack
+
+
+class FerventDrain(Component):
+    cooldown_duration: float = 0
+    delay: float = 0
+
+    def get_default_state(self):
+        return {
+            "drain_stack": FerventDrainStack(count=5, max_count=5),
+        }
+
+    @view_method
+    def buff(self, state: FerventDrainState) -> Stat:
+        return state.drain_stack.get_buff()
+
+    @view_method
+    def running(self, state: FerventDrainState) -> Running:
+        return Running(
+            id=self.id,
+            name=self.name,
+            time_left=999_999_999,
+            lasting_duration=999_999_999,
+        )
 
 
 class PoisonNovaEntity(Entity):
@@ -326,3 +379,143 @@ class IfrittComponent(
 
     def _get_dot_damage_and_lasting(self) -> tuple[float, float]:
         return self.dot_damage, self.dot_lasting_duration
+
+
+class InfernalVenomState(ReducerState):
+    drain_stack: FerventDrainStack
+    cooldown: Cooldown
+    dynamics: Dynamics
+    lasting: Lasting
+
+
+class InfernalVenom(
+    SkillComponent,
+    CooldownValidityTrait,
+    BuffTrait,
+):
+    first_damage: float
+    first_hit: float
+
+    second_damage: float
+    second_hit: float
+
+    cooldown_duration: float
+    delay: float
+    lasting_duration: float
+
+    def get_default_state(self):
+        return {
+            "cooldown": Cooldown(time_left=0),
+            "lasting": Lasting(time_left=0),
+        }
+
+    @reducer_method
+    def use(self, _: None, state: InfernalVenomState):
+        state = state.deepcopy()
+
+        if not state.cooldown.available:
+            return state, [self.event_provider.rejected()]
+
+        state.cooldown.set_time_left(
+            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
+        )
+
+        state.drain_stack.set_max_count(10)
+        state.drain_stack.set_count(10)
+        state.lasting.set_time_left(self.lasting_duration)
+
+        return state, [
+            self.event_provider.dealt(self.first_damage, self.first_hit),
+            self.event_provider.dealt(self.second_damage, self.second_hit),
+            self.event_provider.delayed(self.delay),
+        ]
+
+    @reducer_method
+    def elapse(
+        self, time: float, state: InfernalVenomState
+    ) -> tuple[InfernalVenomState, list[Event]]:
+        state = state.deepcopy()
+
+        was_enabled = state.lasting.enabled()
+
+        state.cooldown.elapse(time)
+        state.lasting.elapse(time)
+
+        if not state.lasting.enabled() and was_enabled:
+            state.drain_stack.set_max_count(5)
+            state.drain_stack.set_count(5)
+
+        return state, [
+            self.event_provider.elapsed(time),
+        ]
+
+    @view_method
+    def validity(self, state: InfernalVenomState):
+        return self.validity_in_cooldown_trait(state)
+
+    @view_method
+    def running(self, state: InfernalVenomState) -> Running:
+        return self.running_in_buff_trait(state)
+
+    def _get_lasting_duration(self, state: InfernalVenomState) -> float:
+        return self.lasting_duration
+
+    def _get_cooldown_duration(self) -> float:
+        return self.cooldown_duration
+
+
+class FlameSwipVIState(ReducerState):
+    cooldown: Cooldown
+    dynamics: Dynamics
+    stack: Stack
+
+
+class FlameSwipVI(
+    SkillComponent, UseSimpleAttackTrait, AddDOTDamageTrait, CooldownValidityTrait
+):
+    delay: float
+    damage: float
+    hit: int
+    cooldown_duration: float
+
+    explode_damage: float
+    explode_hit: int
+
+    dot_damage: float
+    dot_lasting_duration: float
+
+    def get_default_state(self):
+        return {
+            "cooldown": Cooldown(time_left=0),
+            "stack": Stack(maximum_stack=3),
+        }
+
+    @reducer_method
+    def use(self, _: None, state: FlameSwipVIState):
+        state, event = self.use_simple_attack(state)
+        event += [self.get_dot_add_event()]
+        state.stack.increase(1)
+
+        return state, event
+
+    @reducer_method
+    def explode(self, _: None, state: FlameSwipVIState):
+        if state.stack.get_stack() < 3:
+            return state, []
+
+        state = state.deepcopy()
+        state.stack.reset(0)
+
+        return state, [
+            self.event_provider.dealt(self.explode_damage, self.explode_hit),
+        ]
+
+    @view_method
+    def validity(self, state: FlameSwipVIState):
+        return self.validity_in_cooldown_trait(state)
+
+    def _get_dot_damage_and_lasting(self) -> tuple[float, float]:
+        return self.dot_damage, self.dot_lasting_duration
+
+    def _get_simple_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit

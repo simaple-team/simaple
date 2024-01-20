@@ -9,19 +9,27 @@ __PARSER = Lark(
     operation: full_operation
           | time_operation
           | skill_operation
+          | log_operation
 
     full_operation: op_command WS skill WS time
     time_operation: op_command WS time
     skill_operation: op_command WS skill
+    log_operation: "!debug" WS expression
 
     op_command: WORD
     skill: ESCAPED_STRING
     time: SIGNED_NUMBER
+    expression: ESCAPED_STRING
 
     %import common.WORD
     %import common.ESCAPED_STRING
     %import common.SIGNED_NUMBER
     %import common.WS
+
+    %ignore " "
+
+    COMMENT: "#" /[^\n]/*
+    %ignore COMMENT
 
     """,
     start="operation",
@@ -73,6 +81,18 @@ class TreeToOperation(Transformer):
             name=filter_out_x[1],
             time=None,
         )
+
+    def log_operation(self, x):
+        _ws, wrapped_expression = x
+        return Operation(
+            command=wrapped_expression,
+            name="",
+            debug=True,
+        )
+
+    def expression(self, s):
+        (s,) = s
+        return s.value[1:-1]
 
 
 __OperationTreeTransformer = TreeToOperation()

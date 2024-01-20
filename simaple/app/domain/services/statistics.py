@@ -9,9 +9,9 @@ def get_damage_logs(
     y_list = []
 
     for playlog in engine._history.playlogs():
-        report = engine.get_report(playlog)
         x_list.append(playlog.clock)
-        y_list.append(simulator.calculator.calculate_damage(report))
+        entry = engine.get_simulation_entry(playlog)
+        y_list.append(simulator.calculator.calculate_damage(entry))
 
     return x_list, y_list
 
@@ -22,12 +22,12 @@ def get_cumulative_logs(
     x_list: list[float] = []
     y_list: list[float] = []
 
-    cumulated_damage = 0
+    cumulated_damage = 0.0
 
     for playlog in engine._history.playlogs():
-        report = engine.get_report(playlog)
         x_list.append(float(playlog.clock))
-        cumulated_damage += simulator.calculator.calculate_damage(report)
+        entry = engine.get_simulation_entry(playlog)
+        cumulated_damage += simulator.calculator.calculate_damage(entry)
         y_list.append(cumulated_damage)
 
     return x_list, y_list

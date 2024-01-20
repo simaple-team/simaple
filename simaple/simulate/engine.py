@@ -22,8 +22,7 @@ from simaple.simulate.policy.base import (
     _BehaviorGenerator,
 )
 from simaple.simulate.policy.dsl import DSLError, OperandDSLParser
-from simaple.simulate.report.base import Report
-from simaple.simulate.reserved_names import Tag
+from simaple.simulate.report.base import Report, SimulationEntry
 
 
 class SimulationEngine(metaclass=ABCMeta):
@@ -170,23 +169,46 @@ class OperationEngine(SimulationEngine):
         store = self._history.current_store()
         return self._viewset.get_viewer(store)
 
-    def get_report(self, playlog: PlayLog) -> Report:
+    def get_simulation_entry(self, playlog: PlayLog) -> SimulationEntry:
         viewer = self._viewset.get_viewer_from_ckpt(playlog.checkpoint)
-        report = Report()
         buff = viewer("buff")
-        for event in playlog.events:
-            if event["tag"] == Tag.DAMAGE:
-                report.add(0, event, buff)
+        return SimulationEntry.build(playlog, buff)
+
+    def create_full_report(self) -> Report:
+        report = Report()
+
+        for operation_log in self._history:
+            for playlog in operation_log.playlogs:
+                report.add(self.get_simulation_entry(playlog))
 
         return report
 
     def rollback(self, idx: int):
         self._history.discard_after(idx)
 
-    def exec_dsl(self, txt: str):
+    def exec_dsl(self, txt: str, debug: bool = False) -> int:
+        """Returns newly accumulated histories"""
         ops = self._parser(txt)
+        commit_count = 0
+
         for op in ops:
+            if op.debug:
+                if debug:
+                    debug_output = eval(
+                        op.command,
+                        None,
+                        {
+                            "viewer": self.get_current_viewer(),
+                        },
+                    )
+                    print(f"\033[93m[DEBUG_]{debug_output}\033[0m")
+
+                continue
+
             self._exec(op)
+            commit_count += 1
+
+        return commit_count
 
     def REPL(self):
         while True:
@@ -209,13 +231,3 @@ class OperationEngine(SimulationEngine):
                 except DSLError as e:
                     print("Invalid DSL - try again")
                     print(f"Error Mesage: {e}")
-
-
-def get_report(playlog: PlayLog, viewer: ViewerType) -> Report:
-    report = Report()
-    buff = viewer("buff")
-    for event in playlog.events:
-        if event["tag"] == Tag.DAMAGE:
-            report.add(0, event, buff)
-
-    return report

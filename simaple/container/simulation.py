@@ -39,6 +39,8 @@ class SimulationSetting(pydantic.BaseModel):
     propensity_level: int = 100
 
     v_skill_level: int = 30
+    hexa_skill_level: int = 1
+    hexa_mastery_level: int = 1
     v_improvements_level: int = 60
 
     weapon_attack_power: int = 0
@@ -216,24 +218,29 @@ class SimulationContainer(containers.DeclarativeContainer):
         force_advantage=config.force_advantage,
     )
 
-    engine_patch_injected_values = providers.Dict(
+    engine_builder_required_values = providers.Dict(
         character_stat=character.provided.stat,
         character_level=config.level,
         weapon_attack_power=config.weapon_attack_power,
         weapon_pure_attack_power=config.weapon_pure_attack_power,
+        action_stat=character.provided.action_stat,
+        passive_skill_level=config.passive_skill_level,
+        combat_orders_level=config.combat_orders_level,
     )
 
     builder = providers.Factory(
         get_builder,
-        character.provided.action_stat,
         engine_configuration.provided.get_groups.call(),
-        engine_patch_injected_values,
-        engine_configuration.provided.get_filled_v_skill.call(config.v_skill_level),
+        engine_configuration.provided.get_skill_levels.call(
+            config.v_skill_level,
+            config.hexa_skill_level,
+            config.hexa_mastery_level,
+        ),
         engine_configuration.provided.get_filled_v_improvements.call(
             config.v_improvements_level
         ),
-        passive_skill_level=config.passive_skill_level,
-        combat_orders_level=config.combat_orders_level,
+        engine_configuration.provided.get_skill_replacements.call(),
+        engine_builder_required_values,
     )
 
     monotonic_engine: Callable[[], MonotonicEngine] = providers.Factory(

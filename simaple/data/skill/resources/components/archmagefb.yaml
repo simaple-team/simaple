@@ -23,7 +23,24 @@ data:
 
   dot_damage: "{{ 120 + 4 * skill_level }}"
   dot_lasting_duration: 10_000
-
+---
+kind: Component
+version: simaple.io/FerventDrain
+metadata:
+  label:
+    group: archmagefb
+    name: 퍼번트 드레인
+    id: 212053-0
+data:
+  id: 212053-0
+  name: 퍼번트 드레인
+  cooldown_duration: 120000
+  delay: 0
+  red: false
+  rem: false
+  lasting_duration: 60000
+  stat:
+    final_damage_multiplier: 10
 ---
 kind: Component
 version: simaple.io/DOTEmittingAttackSkillComponent
@@ -41,6 +58,7 @@ data:
   name: 플레임 헤이즈
   listening_actions:
     미스트 이럽션.use.emitted.global.damage: reset_cooldown
+    미스트 이럽션 VI.use.emitted.global.damage: reset_cooldown
   cooldown_duration: 10000
   delay: 1080
   red: true
@@ -132,19 +150,6 @@ version: simaple.io/AlwaysEnabledComponent
 metadata:
   label:
     group: archmagefb
-    name: 퍼번트 드레인
-    id: 2120014-0
-data:
-  id: 2120014-0
-  name: 퍼번트 드레인
-  stat:
-    final_damage_multiplier: 25
----
-kind: Component
-version: simaple.io/AlwaysEnabledComponent
-metadata:
-  label:
-    group: archmagefb
     name: 아케인 에임(액티브)
     id: 2120010-0
 data:
@@ -188,6 +193,7 @@ data:
   name: 포이즌 노바
   listening_actions:
     "미스트 이럽션.use": trigger
+    "미스트 이럽션 VI.use": trigger
   cooldown_duration: 25000
   delay: 570
   red: true
@@ -264,8 +270,11 @@ data:
   name: 메테오(패시브)
   listening_actions:
     플레임 스윕.use.emitted.global.damage: use
+    플레임 스윕 VI.use.emitted.global.damage: use
     플레임 헤이즈.use.emitted.global.damage: use
+    플레임 헤이즈 VI.use.emitted.global.damage: use
     미스트 이럽션.use.emitted.global.damage: use
+    미스트 이럽션 VI.use.emitted.global.damage: use
     이그나이트.use.emitted.global.damage: use
     이프리트.elapse.emitted.global.damage: use
     # TODO: entangle many
@@ -349,7 +358,9 @@ data:
   id: 2100010-0
   listening_actions:
     플레임 스윕.use.emitted.global.damage: use
+    플레임 스윕 VI.use.emitted.global.damage: use
     플레임 헤이즈.use.emitted.global.damage: use
+    플레임 헤이즈 VI.use.emitted.global.damage: use
     도트 퍼니셔.use.emitted.global.damage: use
     퓨리 오브 이프리트.elapse.emitted.global.damage: use
     이프리트.elapse.emitted.global.damage: use
@@ -372,6 +383,7 @@ data:
   id: 2111003-0
   listening_actions:
     플레임 헤이즈.use: use
+    플레임 헤이즈 VI.use: use
   name: 포이즌 미스트
   damage: 0
   delay: 0
@@ -474,3 +486,119 @@ data:
   lasting_duration: 999_999_999
   stat:
     final_damage_multiplier: "{{ 8 + skill_level // 10 }}"
+---
+kind: Component
+version: simaple.io/InfernalVenom
+metadata:
+  label:
+    group: archmagefb
+    name: 인페르날 베놈
+    id: 400021411-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  id: 400021411-0
+  name: 인페르날 베놈
+  binds:
+    drain_stack: ".퍼번트 드레인.drain_stack"
+
+  first_damage: "{{ 3600 + 120 * skill_level }}"
+  first_hit: 48
+
+  second_damage: "{{ 2700 + 90 * skill_level }}"
+  second_hit: 96
+
+  cooldown_duration: 360_000
+  delay: 6600
+  lasting_duration: 20_000
+---
+kind: Component
+version: simaple.io/FlameSwipVI
+metadata:
+  label:
+    group: archmagefb
+    name: 플레임 스윕 VI
+    id: 400021410-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  id: 2121006-0
+  name: 플레임 스윕 VI
+  representative_name: 플레임 스윕
+
+  listening_actions:
+    "미스트 이럽션.use": explode
+    "미스트 이럽션 VI.use": explode
+
+  delay: 600
+  damage: "{{ 235 + 4 * skill_level }}"
+  hit: 7
+
+  cooldown_duration: 0
+  v_improvement: 2
+
+  dot_damage: "{{ 255 + 6 * skill_level }}"
+  dot_lasting_duration: 10_000
+
+  explode_damage: "{{ 135 + 8 * skill_level }}"
+  explode_hit: 8
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 미스트 이럽션 VI
+    id: 400021412-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  id: 2121003-0
+  name: 미스트 이럽션 VI
+  representative_name: 미스트 이럽션
+  cooldown_duration: 8000
+  delay: 720
+  red: true
+  modifier:
+    final_damage_multiplier: 170
+    ignored_defence: 45
+  damage: "{{ 125 + skill_level * 3 }}"
+  hit: 20
+  default_skill_level: 30
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/DOTEmittingAttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 플레임 헤이즈 VI
+    id: 2121011-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 2121011-0
+  name: 플레임 헤이즈 VI
+  representative_name: 플레임 헤이즈
+  listening_actions:
+    미스트 이럽션.use.emitted.global.damage: reset_cooldown
+    미스트 이럽션 VI.use.emitted.global.damage: reset_cooldown
+  cooldown_duration: 10000
+  delay: 1080
+  red: true
+  damage: "{{ 215 + 4 * skill_level }}"
+  hit: 15
+  default_skill_level: 30
+  v_improvement: 2
+
+  dot_damage: "{{ 205 + 4 * skill_level }}"
+  dot_lasting_duration: 20_000

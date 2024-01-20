@@ -10,8 +10,9 @@ from simaple.data.engine_configuration import (
     EngineConfiguration,
     get_engine_configuration,
 )
+from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.engine import MonotonicEngine, OperationEngine
-from simaple.simulate.kms import get_builder
+from simaple.simulate.kms import BuilderRequiredExtraVariables, get_builder
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 
 
@@ -58,32 +59,31 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
     def get_engine_configuration(self) -> EngineConfiguration:
         return get_engine_configuration(self.get_jobtype())
 
-    def create_monotonic_engine(self) -> MonotonicEngine:
+    def _get_builder(self) -> EngineBuilder:
         engine_configuration = self.get_engine_configuration()
         return get_builder(
-            self.action_stat,
             engine_configuration.get_groups(),
-            self.get_injected_values(),
-            engine_configuration.get_filled_v_skill(),
+            engine_configuration.get_skill_levels(30, 1, 1),
             engine_configuration.get_filled_v_improvements(),
-        ).build_monotonic_engine()
+            engine_configuration.get_skill_replacements(),
+            self.get_injected_values(),
+        )
+
+    def create_monotonic_engine(self) -> MonotonicEngine:
+        return self._get_builder().build_monotonic_engine()
 
     def create_operation_engine(self) -> OperationEngine:
-        engine_configuration = self.get_engine_configuration()
-        return get_builder(
-            self.action_stat,
-            engine_configuration.get_groups(),
-            self.get_injected_values(),
-            engine_configuration.get_filled_v_skill(),
-            engine_configuration.get_filled_v_improvements(),
-        ).build_operation_engine()
+        return self._get_builder().build_operation_engine()
 
-    def get_injected_values(self) -> dict:
+    def get_injected_values(self) -> BuilderRequiredExtraVariables:
         return {
             "character_level": self.character_level,
             "character_stat": self.character_stat,
             "weapon_attack_power": self.weapon_pure_attack_power,
             "weapon_pure_attack_power": self.weapon_pure_attack_power,
+            "action_stat": self.action_stat,
+            "combat_orders_level": self.combat_orders_level,
+            "passive_skill_level": 0,
         }
 
     def create_damage_calculator(self) -> DamageCalculator:

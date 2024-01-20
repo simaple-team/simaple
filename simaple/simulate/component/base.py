@@ -3,6 +3,7 @@ import inspect
 from abc import abstractmethod
 from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union, cast
 
+from loguru import logger
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from simaple.simulate.base import (
@@ -49,9 +50,13 @@ class ComponentMethodWrapper:
                 0
             ].annotation
 
-        self._state_type = list(inspect.signature(func).parameters.values())[
-            skip_count
-        ].annotation
+        try:
+            self._state_type = list(inspect.signature(func).parameters.values())[
+                skip_count
+            ].annotation
+        except IndexError as e:
+            logger.info(f"Wrapped method doesn't have state parameter: {func}.")
+            raise e
 
     def __call__(self, *args) -> tuple[Union[tuple[Entity], Entity], Any]:
         return self._func(*args)

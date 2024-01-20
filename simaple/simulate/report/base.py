@@ -1,74 +1,78 @@
+from typing import Iterator
+
 import pydantic
 
 from simaple.core.base import Stat
-from simaple.simulate.base import Event, PostActionCallback, ViewerType
+from simaple.simulate.base import Action, Event
+from simaple.simulate.policy.base import PlayLog
 from simaple.simulate.reserved_names import Tag
 
 
 class DamageLog(pydantic.BaseModel):
-    clock: float
     name: str
     damage: float
     hit: float
     buff: Stat
     tag: str
 
-    def serialize(self):
-        return f"{self.clock}\t{self.name}\t{self.tag}\t{self.damage:.3f}\t{self.hit}\t{self.buff.short_dict()}"
+    def __repr__(self):
+        return f"{self.name}\t{self.tag}\t{self.damage:.3f}\t{self.hit}\t{self.buff.short_dict()}"
+
+
+def _create_damage_log(event: Event, buff: Stat) -> DamageLog | None:
+    if event["tag"] not in (Tag.DAMAGE, Tag.DOT):
+        return None
+
+    if event["payload"]["damage"] == 0 or event["payload"]["hit"] == 0:
+        return None
+
+    buff_stat = buff
+    if event["payload"].get("modifier") is not None:
+        buff_stat = buff_stat + Stat.model_validate(event["payload"]["modifier"])
+
+    return DamageLog(
+        name=event["name"],
+        damage=event["payload"]["damage"],
+        hit=event["payload"]["hit"],
+        buff=buff_stat,
+        tag=event["tag"] or "",
+    )
+
+
+class SimulationEntry(pydantic.BaseModel):
+    action: Action
+    clock: float
+    damage_logs: list[DamageLog]
+    accepted: bool
+
+    @classmethod
+    def build(cls, playlog: PlayLog, buff: Stat) -> "SimulationEntry":
+        maybe_damage_logs = [
+            _create_damage_log(event, buff) for event in playlog.events
+        ]
+        damage_logs: list[DamageLog] = [
+            damage_logs for damage_logs in maybe_damage_logs if damage_logs is not None
+        ]
+
+        return SimulationEntry(
+            action=playlog.action,
+            clock=playlog.clock,
+            damage_logs=damage_logs,
+            accepted=all([event["tag"] != Tag.REJECT for event in playlog.events]),
+        )
 
 
 class Report(pydantic.BaseModel):
-    logs: list[DamageLog] = []
+    time_series: list[SimulationEntry] = []
 
-    def add(self, clock: float, event: Event, buff: Stat):
-        buff_stat = buff
-        if event["payload"]["damage"] != 0 and event["payload"]["hit"] != 0:
-            if event["payload"].get("modifier") is not None:
-                buff_stat = buff_stat + Stat.model_validate(
-                    event["payload"]["modifier"]
-                )
+    def add(self, entry: SimulationEntry):
+        self.time_series.append(entry)
 
-            self.logs.append(
-                DamageLog(
-                    clock=clock,
-                    name=event["name"],
-                    damage=event["payload"]["damage"],
-                    hit=event["payload"]["hit"],
-                    buff=buff_stat,
-                    tag=event["tag"] or "",
-                )
-            )
+    def extend(self, report: "Report"):
+        self.time_series.extend(report.time_series)
 
-    def save(self, file_name: str):
-        with open(file_name, "w", encoding="utf8") as f:
-            for log in self.logs:
-                f.write(log.serialize() + "\n")
+    def total_time(self) -> float:
+        return self.time_series[-1].clock
 
-    def total_time(self):
-        return self.logs[-1].clock
-
-
-class ReportWriteCallback(PostActionCallback):
-    def __init__(self, report: Report):
-        self.report = report
-
-    def __call__(
-        self, event: Event, viewer: ViewerType, all_events: list[Event]
-    ) -> None:
-        if event["tag"] in (Tag.DAMAGE, Tag.DOT):
-            current_buff_state = viewer("buff")
-            current_clock = viewer("clock")
-            self.report.add(current_clock, event, current_buff_state)
-
-
-class LoggerCallback(PostActionCallback):
-    def __init__(self, report: Report):
-        self.report = report
-
-    def __call__(
-        self, event: Event, viewer: ViewerType, all_events: list[Event]
-    ) -> None:
-        if event["tag"] in (Tag.DAMAGE, Tag.DOT):
-            current_buff_state = viewer("buff")
-            current_clock = viewer("clock")
-            self.report.add(current_clock, event, current_buff_state)
+    def entries(self) -> Iterator[SimulationEntry]:
+        return iter(self.time_series)
