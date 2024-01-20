@@ -26,6 +26,11 @@ __PARSER = Lark(
     %import common.SIGNED_NUMBER
     %import common.WS
 
+    %ignore " "
+
+    COMMENT: "#" /[^\n]/*
+    %ignore COMMENT
+
     """,
     start="operation",
 )
