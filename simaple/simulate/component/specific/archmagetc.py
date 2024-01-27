@@ -14,6 +14,9 @@ from simaple.simulate.component.trait.impl import (
 )
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
+from simaple.simulate.component.entity import Periodic
+
+import pydantic 
 
 
 def get_frost_modifier(frost_effect: Stack) -> Stat:
@@ -150,12 +153,67 @@ class JupyterThunder(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
     def _get_lasting_duration(self, state: JupyterThunderState) -> float:
         return self.lasting_duration
 
+class CurrentField(pydantic.BaseModel):
+    field_periodics: list[Periodic] = []  # FIFO queue
+    field_interval: float
+    field_duration: float
+
+    max_count: int = 4
+    enabled: bool
+
+    last_force_triggered: float = 0.0
+    force_trigger_interval: float
+
+    stable_rng_counter: float = 0.0
+
+    def stack_rng(self, rng_counter: float) -> bool:
+        if self.last_force_triggered >= self.force_trigger_interval:
+            self.last_force_triggered = 0
+            self.create_new_current()
+            return True
+
+        self.stable_rng_counter += rng_counter
+
+        if self.stable_rng_counter >= 1.0:
+            self.stable_rng_counter -= 1.0
+            self.create_new_current()
+            return True
+
+        return False
+
+    def create_new_current(self):
+        self.field_periodics.append(Periodic(
+            interval=self.field_interval,
+            time_left=self.field_duration,
+        ))
+        self.field_periodics = self.field_periodics[-self.max_count:]
+
+    def elapse(self, time: float) -> int:
+        new_perdiodics = []
+        tick_count = 0
+        
+        # current fields.
+        for periodic in self.field_periodics:
+            for _ in  periodic.resolving(time):
+                tick_count += 1
+            
+            if periodic.enabled():
+                new_perdiodics.append(periodic) 
+
+        self.field_periodics = new_perdiodics
+        self.last_force_triggered += time
+
+        return tick_count
+
+
 
 class ThunderAttackSkillState(ReducerState):
     frost_stack: Stack
     jupyter_thunder_shock: Periodic
     cooldown: Cooldown
     dynamics: Dynamics
+
+    current_fields: CurrentField
 
 
 class ThunderAttackSkillComponent(
@@ -174,6 +232,7 @@ class ThunderAttackSkillComponent(
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
+            "current_fields": CurrentField(durations=[], max_count=4, enabled=False),
         }
 
     @reducer_method
