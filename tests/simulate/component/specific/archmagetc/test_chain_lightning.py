@@ -8,7 +8,6 @@ def test_current_field_entity():
         field_interval = 1000,
         field_duration = 4000,
         max_count = 4,
-        enabled = True,
         force_trigger_interval = 7000,
     )
 
@@ -23,7 +22,6 @@ def test_current_field_entity_elapse():
         field_interval = 1000,
         field_duration = 4000,
         max_count = 4,
-        enabled = True,
         force_trigger_interval = 7000,
     )
 
@@ -59,7 +57,6 @@ def test_current_field_entity_max_count():
         field_interval = 1000,
         field_duration = 4000,
         max_count = 4,
-        enabled = True,
         force_trigger_interval = 7000,
     )
 

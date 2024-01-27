@@ -360,3 +360,39 @@ data:
   periodic_damage: "{{ 850 + skill_level * 34 }}"
   periodic_hit: 9
   lasting_duration: 30_000
+---
+kind: Component
+version: simaple.io/ChainLightningVIComponent
+metadata:
+  label:
+    group: archmagetc
+    name: 체인 라이트닝 VI
+    id: 22210066-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 2221006-0
+  name: 체인 라이트닝 VI
+  representative_name: 체인 라이트닝
+
+  delay: 600
+  cooldown_duration: 0
+  damage: "{{ 245 + 3 * skill_level }}"
+  hit: 10
+
+  combat_orders_enabled: true
+  default_skill_level: 30
+  v_improvement: 2
+  modifier:
+    critical_rate: 25
+
+  electric_current_max_count: 4
+  electric_current_interval: 1000
+  electric_current_duration: 4000
+  electric_current_force_trigger_interval: 7000
+
+  electric_current_prob: "{{ 0.20 + 0.01 * skill_level // 2 }}"
+  electric_current_damage: "{{ 80 + 2 * skill_level }}"
+  electric_current_hit: 2
