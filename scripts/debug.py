@@ -1,7 +1,7 @@
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
-from simaple.core.jobtype import JobType
+from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.report.base import Report
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 
@@ -39,11 +39,11 @@ class _TimestampedPlanWriter:
 
 
 class DebugInterface:
-    def __init__(self) -> None:
+    def __init__(self, jobtype: JobType) -> None:
         self._setting = SimulationSetting(
             tier="Legendary",
-            jobtype=JobType.archmagefb,
-            job_category=JobCategory.magician,
+            jobtype=jobtype,
+            job_category=get_job_category(jobtype),
             level=270,
             passive_skill_level=0,
             combat_orders_level=1,
@@ -111,5 +111,5 @@ class DebugInterface:
 
 
 if __name__ == "__main__":
-    debugger = DebugInterface()
+    debugger = DebugInterface(jobtype=JobType.archmagefb)
     debugger.run("plans/archmage.30s.plan.log")

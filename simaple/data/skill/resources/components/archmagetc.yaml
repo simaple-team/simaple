@@ -336,7 +336,7 @@ version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
 metadata:
   label:
     group: archmagetc
-    name: 스피릿 오브 스노우
+    name: 프로즌 라이트닝
     id: 400021090-0-?
 patch:
   - SkillLevelPatch
@@ -382,7 +382,6 @@ data:
   damage: "{{ 245 + 3 * skill_level }}"
   hit: 10
 
-  combat_orders_enabled: true
   default_skill_level: 30
   v_improvement: 2
   modifier:
