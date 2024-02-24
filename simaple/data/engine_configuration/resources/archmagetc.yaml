@@ -23,6 +23,7 @@ data:
     - 프로즌 라이트닝
   hexa_mastery:
     체인 라이트닝: 체인 라이트닝 VI
+    프로즌 오브: 프로즌 오브 VI
   component_groups:
     - archmagetc
     - common

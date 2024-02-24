@@ -12,6 +12,7 @@ data:
   id: 2220015-0
   listening_actions:
     프로즌 오브.elapse.emitted.global.damage: increase_step
+    프로즌 오브 VI.elapse.emitted.global.damage: increase_step
     블리자드.use.emitted.global.damage: increase_step
     엘퀴네스.elapse.emitted.global.damage: increase_step
     아이스 오라.elapse.emitted.global.damage: increase_step
@@ -395,3 +396,32 @@ data:
   electric_current_prob: "{{ 0.20 + 0.01 * skill_level // 2 }}"
   electric_current_damage: "{{ 80 + 2 * skill_level }}"
   electric_current_hit: 2
+---
+kind: Component
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: archmagetc
+    name: 프로즌 오브 VI
+    id: 2221012-1
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 2221012-1
+  name: 프로즌 오브 VI
+  representative_name: 프로즌 오브
+
+  damage: 0
+  delay: 690
+  hit: 0
+  cooldown_duration: 5_000
+
+  periodic_interval: 210
+  periodic_damage: "{{ 248 + skill_level * 6 }}"
+  periodic_hit: 1
+  lasting_duration: 4_000
+
+  v_improvement: 2
+  default_skill_level: 30
