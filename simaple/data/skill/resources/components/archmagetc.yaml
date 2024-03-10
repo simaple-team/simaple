@@ -126,6 +126,11 @@ patch:
 data:
   id: 2221007-1
   name: 블리자드(패시브)
+  listening_actions:
+    체인 라이트닝.use.emitted.global.damage: use
+    체인 라이트닝 VI.use.emitted.global.damage: use
+    프로즌 오브.elapse.emitted.global.damage: use
+    프로즌 오브 VI.elapse.emitted.global.damage: use
   delay: 0
   cooldown_duration: 0
   rem: false
