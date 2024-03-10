@@ -231,7 +231,7 @@ data:
   name: 라이트닝 스피어
   maximum_keydown_time: 3_600
 
-  damage: 150
+  damage: "{{ 150 + (11 + __every_levels.get('블리자드 VI(패시브)', -22) // 2) }}"
   hit: 15
   delay: 210
   cooldown_duration: 60_000
@@ -239,7 +239,7 @@ data:
   keydown_prepare_delay: 780
   keydown_end_delay: 1080
 
-  finish_damage: 780
+  finish_damage: "{{ 780 + (73 + __every_levels.get('블리자드 VI(패시브)', -36.5) * 2) }}"
   finish_hit: 15
 
   v_improvement: 2
