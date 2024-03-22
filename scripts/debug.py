@@ -1,3 +1,5 @@
+import fire
+
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
@@ -5,7 +7,6 @@ from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.report.base import Report
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 
-import fire
 
 def get_status_string(status: bool):
     if status:
@@ -70,7 +71,7 @@ class DebugInterface:
 
     def run(self, plan_file: str):
         with open(plan_file, "r") as f:
-            plan = f.read().splitlines()
+            plan = filter(lambda x: x, f.read().splitlines())
 
         engine = self.get_engine()
 
