@@ -1,14 +1,13 @@
-from simaple.simulate.component.specific.archmagetc import (
-    CurrentField
-)
 from simaple.simulate.component.entity import Periodic
+from simaple.simulate.component.specific.archmagetc import CurrentField
+
 
 def test_current_field_entity():
     start_current_field = CurrentField(
-        field_interval = 1000,
-        field_duration = 4000,
-        max_count = 4,
-        force_trigger_interval = 7000,
+        field_interval=1000,
+        field_duration=4000,
+        max_count=4,
+        force_trigger_interval=7000,
     )
 
     assert start_current_field.stack_rng(0.5) == False
@@ -19,10 +18,10 @@ def test_current_field_entity():
 
 def test_current_field_entity_elapse():
     start_current_field = CurrentField(
-        field_interval = 1000,
-        field_duration = 4000,
-        max_count = 4,
-        force_trigger_interval = 7000,
+        field_interval=1000,
+        field_duration=4000,
+        max_count=4,
+        force_trigger_interval=7000,
     )
 
     assert start_current_field.stack_rng(0.5) == False
@@ -32,12 +31,7 @@ def test_current_field_entity_elapse():
     start_current_field.elapse(1000)
 
     assert start_current_field.field_periodics == [
-        Periodic(
-            interval=1000,
-            time_left=3000,
-            count=2,
-            interval_counter=1000
-        )
+        Periodic(interval=1000, time_left=3000, count=2, interval_counter=1000)
     ]
 
     assert start_current_field.stack_rng(0.5) == False
@@ -52,12 +46,13 @@ def test_current_field_entity_elapse():
     start_current_field.elapse(4000)
     assert start_current_field.field_periodics == []
 
+
 def test_current_field_entity_max_count():
     start_current_field = CurrentField(
-        field_interval = 1000,
-        field_duration = 4000,
-        max_count = 4,
-        force_trigger_interval = 7000,
+        field_interval=1000,
+        field_duration=4000,
+        max_count=4,
+        force_trigger_interval=7000,
     )
 
     assert start_current_field.stack_rng(1.0) == True

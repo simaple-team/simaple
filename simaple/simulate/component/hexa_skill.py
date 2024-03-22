@@ -5,15 +5,8 @@ Contains common patterns for hexa skill implementation.
 
 import pydantic
 
-from simaple.simulate.component.base import (
-    ReducerState,
-    reducer_method,
-    view_method,
-)
-from simaple.simulate.component.entity import (
-    Cooldown,
-    Periodic,
-)
+from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from simaple.simulate.component.entity import Cooldown, Periodic
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
     InvalidatableCooldownTrait,

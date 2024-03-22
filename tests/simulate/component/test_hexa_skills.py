@@ -14,7 +14,7 @@ def periodic_damage_component():
     component = PeriodicDamageConfiguratedHexaSkillComponent(
         id="test",
         name="periodic-damage-component",
-        damage_and_hits=[{"damage":100, "hit":1}, {"damage":200, "hit":3}],
+        damage_and_hits=[{"damage": 100, "hit": 1}, {"damage": 200, "hit": 3}],
         delay=30,
         periodic_interval=120,
         periodic_damage=50,

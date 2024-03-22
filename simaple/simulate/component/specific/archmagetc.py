@@ -1,4 +1,5 @@
 from simaple.core.base import Stat
+from simaple.simulate.base import Entity
 from simaple.simulate.component.base import (
     Component,
     ReducerState,
@@ -14,9 +15,6 @@ from simaple.simulate.component.trait.impl import (
 )
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
-from simaple.simulate.component.entity import Periodic
-
-from simaple.simulate.base import Entity
 
 
 def get_frost_modifier(frost_effect: Stack) -> Stat:
@@ -243,23 +241,25 @@ class CurrentField(Entity):
         return False
 
     def create_new_current(self):
-        self.field_periodics.append(Periodic(
-            interval=self.field_interval,
-            time_left=self.field_duration,
-        ))
-        self.field_periodics = self.field_periodics[-self.max_count:]
+        self.field_periodics.append(
+            Periodic(
+                interval=self.field_interval,
+                time_left=self.field_duration,
+            )
+        )
+        self.field_periodics = self.field_periodics[-self.max_count :]
 
     def elapse(self, time: float) -> int:
         new_perdiodics = []
         tick_count = 0
-        
+
         # current fields.
         for periodic in self.field_periodics:
-            for _ in  periodic.resolving(time):
+            for _ in periodic.resolving(time):
                 tick_count += 1
-            
+
             if periodic.enabled():
-                new_perdiodics.append(periodic) 
+                new_perdiodics.append(periodic)
 
         self.field_periodics = new_perdiodics
         self.last_force_triggered += time
@@ -340,10 +340,13 @@ class ChainLightningVIComponent(
         state, events = self.elapse_simple_attack(time, state)
 
         electric_current_hits = state.current_fields.elapse(time)
-        events += [self.event_provider.dealt(
-            self.electric_current_damage,
-            self.electric_current_hit,
-        ) for _ in range(electric_current_hits)]
+        events += [
+            self.event_provider.dealt(
+                self.electric_current_damage,
+                self.electric_current_hit,
+            )
+            for _ in range(electric_current_hits)
+        ]
 
         return state, events
 
