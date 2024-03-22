@@ -5,6 +5,7 @@ from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.report.base import Report
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 
+import fire
 
 def get_status_string(status: bool):
     if status:
@@ -39,7 +40,10 @@ class _TimestampedPlanWriter:
 
 
 class DebugInterface:
-    def __init__(self, jobtype: JobType) -> None:
+    def __init__(self, jobtype: JobType | str) -> None:
+        if isinstance(jobtype, str):
+            jobtype = JobType(jobtype)
+
         self._setting = SimulationSetting(
             tier="Legendary",
             jobtype=jobtype,
@@ -104,12 +108,7 @@ class DebugInterface:
             f"{engine.get_current_viewer()('clock')} | {self.get_dpm_calculator().calculate_total_damage(report):,} "
         )
         plan_writer.dump(plan_file.replace(".log", ".result.log"))
-        assert (
-            int(self.get_dpm_calculator().calculate_total_damage(report))
-            == 18_571_889_437_560
-        )
 
 
 if __name__ == "__main__":
-    debugger = DebugInterface(jobtype=JobType.archmagefb)
-    debugger.run("plans/archmage.30s.plan.log")
+    fire.Fire(DebugInterface)
