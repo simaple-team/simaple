@@ -2,7 +2,6 @@ import fire
 
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
-from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.report.base import Report
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
@@ -103,7 +102,7 @@ class DebugInterface:
         report = engine.create_full_report()
 
         feature = MaximumDealingIntervalFeature(30000)
-        feature.find_maximum_dealing_interval(report, damage_calculator)
+        print(feature.find_maximum_dealing_interval(report, damage_calculator))
 
         print(
             f"{engine.get_current_viewer()('clock')} | {self.get_dpm_calculator().calculate_total_damage(report):,} "
