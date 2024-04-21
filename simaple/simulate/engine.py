@@ -22,6 +22,7 @@ from simaple.simulate.policy.base import (
     _BehaviorGenerator,
 )
 from simaple.simulate.policy.dsl import DSLError, OperandDSLParser
+from simaple.simulate.profile import SimulationProfile
 from simaple.simulate.report.base import Report, SimulationEntry
 
 
@@ -194,14 +195,10 @@ class OperationEngine(SimulationEngine):
         for op in ops:
             if op.debug:
                 if debug:
-                    debug_output = eval(
-                        op.command,
-                        None,
-                        {
-                            "viewer": self.get_current_viewer(),
-                        },
+                    output = SimulationProfile(self.get_current_viewer()).inspect(
+                        op.command
                     )
-                    print(f"\033[93m[DEBUG_]{debug_output}\033[0m")
+                    print(f"\033[93m[DEBUG_]{output}\033[0m")
 
                 continue
 

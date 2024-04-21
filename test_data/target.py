@@ -42,7 +42,7 @@ SETTINGS = [
             JobType.archmagetc,
             JobCategory.magician,
         ),
-        6534916107988,
+        8244951605951,
     ),
     (
         (

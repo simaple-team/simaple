@@ -229,10 +229,10 @@ class PeriodicWithSimpleDamageTrait(
         self,
         state: CooldownDynamicsPeriodicGeneric,
     ) -> tuple[CooldownDynamicsPeriodicGeneric, list[Event]]:
-        state = state.deepcopy()
-
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
+
+        state = state.deepcopy()
 
         damage, hit = self._get_simple_damage_hit()
         delay = self._get_delay()

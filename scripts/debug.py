@@ -1,7 +1,8 @@
+import fire
+
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
-from simaple.core.job_category import JobCategory
-from simaple.core.jobtype import JobType
+from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.report.base import Report
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 
@@ -39,11 +40,14 @@ class _TimestampedPlanWriter:
 
 
 class DebugInterface:
-    def __init__(self) -> None:
+    def __init__(self, jobtype: JobType | str) -> None:
+        if isinstance(jobtype, str):
+            jobtype = JobType(jobtype)
+
         self._setting = SimulationSetting(
             tier="Legendary",
-            jobtype=JobType.archmagefb,
-            job_category=JobCategory.magician,
+            jobtype=jobtype,
+            job_category=get_job_category(jobtype),
             level=270,
             passive_skill_level=0,
             combat_orders_level=1,
@@ -66,7 +70,7 @@ class DebugInterface:
 
     def run(self, plan_file: str):
         with open(plan_file, "r") as f:
-            plan = f.read().splitlines()
+            plan = filter(lambda x: x, f.read().splitlines())
 
         engine = self.get_engine()
 
@@ -98,18 +102,13 @@ class DebugInterface:
         report = engine.create_full_report()
 
         feature = MaximumDealingIntervalFeature(30000)
-        feature.find_maximum_dealing_interval(report, damage_calculator)
+        print(feature.find_maximum_dealing_interval(report, damage_calculator))
 
         print(
             f"{engine.get_current_viewer()('clock')} | {self.get_dpm_calculator().calculate_total_damage(report):,} "
         )
         plan_writer.dump(plan_file.replace(".log", ".result.log"))
-        assert (
-            int(self.get_dpm_calculator().calculate_total_damage(report))
-            == 18_571_889_437_560
-        )
 
 
 if __name__ == "__main__":
-    debugger = DebugInterface()
-    debugger.run("plans/archmage.30s.plan.log")
+    fire.Fire(DebugInterface)

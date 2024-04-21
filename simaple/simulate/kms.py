@@ -71,6 +71,9 @@ def get_builder(
 ) -> EngineBuilder:
     loader = get_kms_skill_loader()
 
+    eval_reference_variables = cast(dict[str, Any], injected_values).copy()
+    eval_reference_variables.update({"__every_levels": skill_levels})
+
     component_sets = [
         loader.load_all(
             query={"group": group},
@@ -80,7 +83,7 @@ def get_builder(
                     passive_skill_level=injected_values["passive_skill_level"],
                     default_skill_levels=skill_levels,
                 ),
-                EvalPatch(injected_values=cast(dict[str, Any], injected_values)),
+                EvalPatch(injected_values=eval_reference_variables),
                 VSkillImprovementPatch(improvements=v_improvements),
                 get_hyper_skill_patch(group),
             ],
