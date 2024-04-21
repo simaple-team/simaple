@@ -6,7 +6,6 @@ from simaple.simulate.component.hexa_skill import (
     PeriodicDamageHexaState,
 )
 from simaple.simulate.global_property import Dynamics
-from simaple.simulate.reserved_names import Tag
 
 
 @pytest.fixture

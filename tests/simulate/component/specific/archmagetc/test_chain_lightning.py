@@ -10,10 +10,10 @@ def test_current_field_entity():
         force_trigger_interval=7000,
     )
 
-    assert start_current_field.stack_rng(0.5) == False
-    assert start_current_field.stack_rng(0.5) == True
-    assert start_current_field.stack_rng(0.5) == False
-    assert start_current_field.stack_rng(0.6) == True
+    assert not start_current_field.stack_rng(0.5)
+    assert start_current_field.stack_rng(0.5)
+    assert not start_current_field.stack_rng(0.5)
+    assert start_current_field.stack_rng(0.6)
 
 
 def test_current_field_entity_elapse():
@@ -24,18 +24,18 @@ def test_current_field_entity_elapse():
         force_trigger_interval=7000,
     )
 
-    assert start_current_field.stack_rng(0.5) == False
+    assert not start_current_field.stack_rng(0.5)
     start_current_field.elapse(1000)
 
-    assert start_current_field.stack_rng(0.5) == True
+    assert start_current_field.stack_rng(0.5)
     start_current_field.elapse(1000)
 
     assert start_current_field.field_periodics == [
         Periodic(interval=1000, time_left=3000, count=2, interval_counter=1000)
     ]
 
-    assert start_current_field.stack_rng(0.5) == False
-    assert start_current_field.stack_rng(0.5) == True
+    assert not start_current_field.stack_rng(0.5)
+    assert start_current_field.stack_rng(0.5)
     start_current_field.elapse(1200)
 
     assert start_current_field.field_periodics == [
@@ -55,10 +55,10 @@ def test_current_field_entity_max_count():
         force_trigger_interval=7000,
     )
 
-    assert start_current_field.stack_rng(1.0) == True
-    assert start_current_field.stack_rng(1.0) == True
-    assert start_current_field.stack_rng(1.0) == True
-    assert start_current_field.stack_rng(1.0) == True
-    assert start_current_field.stack_rng(1.0) == True
+    assert start_current_field.stack_rng(1.0)
+    assert start_current_field.stack_rng(1.0)
+    assert start_current_field.stack_rng(1.0)
+    assert start_current_field.stack_rng(1.0)
+    assert start_current_field.stack_rng(1.0)
 
     assert len(start_current_field.field_periodics) == 4
