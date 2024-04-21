@@ -21,6 +21,17 @@ def test_actor(setting, jobtype, expected):
 
     report = engine.create_full_report()
 
+    '''
+    with open("operation.log", "w") as f:
+        for op in engine.operation_logs():
+            f.write(op.operation.expr+'\n')
+
+    with open("history.log", "w") as f:
+        for op in engine.operation_logs():
+            for playlog in op.playlogs:
+                f.write(f"{playlog.clock} | {playlog.action} | {playlog.events} \n")
+    '''
+
     dpm = container.dpm_calculator().calculate_dpm(report)
     print(f"{engine.get_current_viewer()('clock')} | {jobtype} | {dpm:,} ")
     assert int(dpm) == expected
