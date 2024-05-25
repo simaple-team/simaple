@@ -46,7 +46,7 @@ class SimulationSetting(pydantic.BaseModel):
     weapon_attack_power: int = 0
     weapon_pure_attack_power: int = 0
 
-    cache_root_dir: str = ""
+    cache_root_dir: str = ".simaple"
 
     def get_preset_hash(self) -> str:
         preset_hash = (

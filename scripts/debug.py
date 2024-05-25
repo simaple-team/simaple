@@ -70,7 +70,7 @@ class DebugInterface:
 
     def run(self, plan_file: str):
         with open(plan_file, "r") as f:
-            plan = filter(lambda x: x, f.read().splitlines())
+            plan = filter(lambda x: x and (not x.startswith("#")), f.read().splitlines())
 
         engine = self.get_engine()
 
@@ -107,7 +107,7 @@ class DebugInterface:
         print(
             f"{engine.get_current_viewer()('clock')} | {self.get_dpm_calculator().calculate_total_damage(report):,} "
         )
-        plan_writer.dump(plan_file.replace(".log", ".result.log"))
+        plan_writer.dump(plan_file.replace(".simaple", ".result.simaple"))
 
 
 if __name__ == "__main__":
