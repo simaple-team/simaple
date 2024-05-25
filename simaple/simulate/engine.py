@@ -198,7 +198,7 @@ class OperationEngine(SimulationEngine):
                     output = SimulationProfile(self.get_current_viewer()).inspect(
                         op.command
                     )
-                    print(f"\033[93m[DEBUG_]{output}\033[0m")
+                    print(f"\033[90m[DEBUG_]{output}\033[0m")
 
                 continue
 
