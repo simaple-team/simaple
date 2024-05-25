@@ -10,3 +10,4 @@ report.tsv
 .sqlite.db
 *.log
 .workspace/
+.simaple
