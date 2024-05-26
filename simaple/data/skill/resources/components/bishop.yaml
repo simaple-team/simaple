@@ -230,6 +230,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   binds:
     divine_mark: .바하뮤트.divine_mark
@@ -281,6 +282,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400021070-0
   name: 피스메이커
@@ -304,6 +306,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400021086-0
   name: 디바인 퍼니시먼트
@@ -319,3 +322,45 @@ data:
 
   finish_damage: 0
   finish_hit: 0
+
+---
+kind: Component
+version: simaple.io/HolyAdvent
+metadata:
+  label:
+    group: bishop
+    name: 홀리 어드밴트
+    id: 2341500-0-?
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  id: 2341500-0-?
+  name: 홀리 어드밴트
+
+  damage_and_hits:
+  - damage: "{{ 270 + skill_level * 10 }}"
+    hit: "{{8 * 25}}"
+  - damage: "{{ 235 + skill_level * 8 }}"
+    hit: "{{12 * 35}}"
+
+  delay: 3_660
+  cooldown_duration: 360_000
+
+  periodic_01:
+    interval: 3_000
+    damage: "{{ 245 + skill_level * 9 }}"
+    hit: 14
+  periodic_02:
+    interval: 5_000
+    damage: "{{ 260 + skill_level * 8 }}"
+    hit: 12
+  periodic_03:
+    interval: 4_000
+    damage: "{{ 300 + skill_level * 10 }}"
+    hit: 12
+
+  lasting_duration: 60_000
+
+  synergy:
+    final_damage_multiplier: 5
