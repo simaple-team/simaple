@@ -45,6 +45,12 @@ class Cooldown(Entity):
 
 
 class Consumable(Entity):
+    """
+    "Stackable" cooldown.
+
+    쿨타임이 다 찼면 스택이 하나 쌓이고 다시 쿨타임이 도는 Entity.
+    """
+
     maximum_stack: int
     stack: int
     cooldown_duration: float
@@ -143,6 +149,10 @@ class Periodic(Entity):
 
 
 class Stack(Entity):
+    """
+    시간 의존성이 없는 스택.
+    """
+
     stack: int = 0
     maximum_stack: int
 
@@ -151,6 +161,9 @@ class Stack(Entity):
 
     def increase(self, value: int = 1):
         self.stack = min(self.maximum_stack, self.stack + value)
+
+    def is_full(self) -> bool:
+        return self.stack == self.maximum_stack
 
     def get_stack(self) -> int:
         return self.stack
