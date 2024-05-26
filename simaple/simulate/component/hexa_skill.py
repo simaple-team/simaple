@@ -14,17 +14,12 @@ from simaple.simulate.component.trait.impl import (
 )
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
-
+from simaple.simulate.component.feature import DamageAndHit
 
 class PeriodicDamageHexaState(ReducerState):
     cooldown: Cooldown
     periodic: Periodic
     dynamics: Dynamics
-
-
-class _DamageAndHit(pydantic.BaseModel):
-    damage: float
-    hit: float
 
 
 class PeriodicDamageConfiguratedHexaSkillComponent(
@@ -37,7 +32,7 @@ class PeriodicDamageConfiguratedHexaSkillComponent(
       + periodic damage x hit
     """
     name: str
-    damage_and_hits: list[_DamageAndHit]
+    damage_and_hits: list[DamageAndHit]
     delay: float
 
     cooldown_duration: float
