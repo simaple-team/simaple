@@ -42,6 +42,7 @@ class SimulationSetting(pydantic.BaseModel):
     hexa_skill_level: int = 1
     hexa_mastery_level: int = 1
     v_improvements_level: int = 60
+    hexa_improvements_level: int = 0
 
     weapon_attack_power: int = 0
     weapon_pure_attack_power: int = 0

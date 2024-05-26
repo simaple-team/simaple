@@ -254,6 +254,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400021002-0
   name: 아이스 에이지
@@ -277,6 +278,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400021030-0
   name: 썬더 브레이크
@@ -301,6 +303,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400021067-0
   name: 스피릿 오브 스노우
@@ -324,6 +327,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400021094-0
   name: 주피터 썬더

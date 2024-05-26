@@ -170,6 +170,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400021028-0
   name: 포이즌 노바
@@ -199,6 +200,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400021001-0
   name: 도트 퍼니셔
@@ -212,7 +214,6 @@ data:
 
   dot_damage: "{{ 200 + 3 * skill_level }}"
   dot_lasting_duration: 16_000
-
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -387,6 +388,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400021101-0
   name: 포이즌 체인
@@ -436,6 +438,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400021066-0
   name: 퓨리 오브 이프리트
