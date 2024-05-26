@@ -23,6 +23,7 @@ class EngineConfiguration(
 
     v_skill_names: list[str]
     v_improvement_names: list[str]
+    hexa_improvement_names: list[str]
     component_groups: list[str]
     mdc_order: list[str]
     hexa_skill_names: list[str] = pydantic.Field(default=[])
@@ -50,6 +51,9 @@ class EngineConfiguration(
 
     def get_filled_v_improvements(self, level: int = 60) -> dict[str, int]:
         return {k: level for k in self.v_improvement_names}
+
+    def get_filled_hexa_improvements(self, level: int = 1) -> dict[str, int]:
+        return {k: level for k in self.hexa_improvement_names}
 
     def get_groups(self) -> list[str]:
         return self.component_groups

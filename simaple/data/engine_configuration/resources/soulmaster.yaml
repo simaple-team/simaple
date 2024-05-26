@@ -16,6 +16,7 @@ data:
     - 솔라 슬래시/루나 디바이드
     - 코스믹 샤워
     - 코스믹 버스트
+  hexa_improvement_names: []
   component_groups:
     - soulmaster
     - common

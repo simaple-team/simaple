@@ -24,6 +24,7 @@ data:
     - 게더링
     - 샤드
     - 원더
+  hexa_improvement_names: []
   component_groups:
     - adele
     - common

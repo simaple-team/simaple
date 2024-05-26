@@ -19,6 +19,7 @@ data:
     - 프로즌 오브
     - 엘퀴네스
     - 라이트닝 스피어
+  hexa_improvement_names: []
   hexa_skill_names:
     - 프로즌 라이트닝
   hexa_mastery:

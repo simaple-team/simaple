@@ -18,6 +18,9 @@ data:
     - 트라이엄프 페더
     - 헤븐즈 도어
     - 파운틴 포 엔젤
+  hexa_skill_names:
+    - 홀리 어드밴트
+  hexa_improvement_names: []
   component_groups:
     - bishop
     - common

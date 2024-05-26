@@ -28,6 +28,7 @@ def archmagefb_engine() -> MonotonicEngine:
             "이프리트": 60,
         },
         {},
+        {},
         {
             "character_level": 260,
             "action_stat": ActionStat(),

@@ -23,6 +23,7 @@ data:
     - 텔레포트 마스터리
     - 메테오
     - 메테오(패시브)
+  hexa_improvement_names: []
   hexa_skill_names:
     - 인페르날 베놈
   hexa_mastery:
