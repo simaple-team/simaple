@@ -297,14 +297,16 @@ class HexaAngelRayComponent(
 
     punishing_damage: float
     punishing_hit: float
-    max_punishing_stack: int
+    stack_resolve_amount: int
 
     synergy: Stat
 
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "punishing_stack": Stack(maximum_stack=self.max_punishing_stack),
+            "punishing_stack": Stack(
+                maximum_stack=self.stack_resolve_amount * 2 - 1
+            ),  # one-buffer
         }
 
     @reducer_method
@@ -326,11 +328,11 @@ class HexaAngelRayComponent(
         ]
 
     @reducer_method
-    def stack(self, state: HexaAngelRayState):
+    def stack(self, _: None, state: HexaAngelRayState):
         state = state.deepcopy()
         state.punishing_stack.increase(1)
-        if state.punishing_stack.is_full():
-            state.punishing_stack.reset()
+        if state.punishing_stack.get_stack() >= self.stack_resolve_amount:
+            state.punishing_stack.decrease(self.stack_resolve_amount)
 
             return state, [
                 self.event_provider.dealt(self.punishing_damage, self.punishing_hit)

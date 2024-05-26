@@ -310,11 +310,11 @@ patch:
 data:
   id: 400021086-0
   name: 디바인 퍼니시먼트
-  maximum_keydown_time: 8_160
+  maximum_keydown_time: 9_600
 
   damage: "{{ 225 + skill_level * 9 }}"
-  hit: 50
-  delay: 1020
+  hit: 10
+  delay: 240
   cooldown_duration: 68_000
 
   keydown_prepare_delay: 240
@@ -364,3 +364,35 @@ data:
 
   synergy:
     final_damage_multiplier: 5
+---
+kind: Component
+version: simaple.io/HexaAngelRayComponent
+metadata:
+  label:
+    group: bishop
+    name: 엔젤레이
+    id: 2321007-0-vi
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 2321007-0-vi
+  name: 엔젤레이 VI
+  representative_name: 엔젤레이
+  listening_actions:
+    엔젤레이.use.emitted.global.damage: stack
+    엔젤레이 VI.use.emitted.global.damage: stack
+    디바인 퍼니시먼트.use.emitted.global.damage: stack
+  delay: 630
+  cooldown_duration: 0
+  damage: "{{ 235 + 4 * skill_level }}"
+  hit: 14
+  punishing_damage: "{{ 550 + skill_level *  9}}"
+  punishing_hit: 10
+  stack_resolve_amount: 12
+
+  default_skill_level: 30
+  v_improvement: 2
+  synergy:
+    final_damage_multiplier: 10

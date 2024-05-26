@@ -86,7 +86,7 @@ def hexa_angle_ray_component():
         delay=30,
         punishing_damage=10,
         punishing_hit=5,
-        max_punishing_stack=12,
+        stack_resolve_amount=12,
         cooldown_duration=0,
         synergy={},
     )
@@ -118,12 +118,22 @@ def test_hexa_angle_ray(
 
     for _ in range(11):
         hexa_angle_ray_state, events = hexa_angle_ray_component.stack(
-            hexa_angle_ray_state
+            None, hexa_angle_ray_state
         )
         assert count_damage_skill(events) == 0
 
-    hexa_angle_ray_state, events = hexa_angle_ray_component.stack(hexa_angle_ray_state)
+    hexa_angle_ray_state, events = hexa_angle_ray_component.stack(
+        None, hexa_angle_ray_state
+    )
     assert count_damage_skill(events) == 1
 
-    hexa_angle_ray_state, events = hexa_angle_ray_component.stack(hexa_angle_ray_state)
+    hexa_angle_ray_state, events = hexa_angle_ray_component.stack(
+        None, hexa_angle_ray_state
+    )
     assert count_damage_skill(events) == 0
+
+    for _ in range(7):
+        hexa_angle_ray_state, events = hexa_angle_ray_component.stack(
+            None, hexa_angle_ray_state
+        )
+        assert count_damage_skill(events) == 0
