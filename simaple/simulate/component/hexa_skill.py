@@ -30,6 +30,12 @@ class _DamageAndHit(pydantic.BaseModel):
 class PeriodicDamageConfiguratedHexaSkillComponent(
     SkillComponent, PeriodicElapseTrait, InvalidatableCooldownTrait
 ):
+    """
+    PeriodicDamageConfiguratedHexaSkillComponent 
+    This describes skill that act like:
+    - various Initial damage x hit
+      + periodic damage x hit
+    """
     name: str
     damage_and_hits: list[_DamageAndHit]
     delay: float

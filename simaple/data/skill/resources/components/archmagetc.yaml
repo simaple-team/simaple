@@ -338,7 +338,7 @@ data:
   max_count: 30
 ---
 kind: Component
-version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageConfiguratedHexaSkillComponent
 metadata:
   label:
     group: archmagetc
@@ -354,16 +354,13 @@ data:
   - damage: "{{ 395 + skill_level * 14 }}"
     hit: "{{7 * 32}}"
   - damage: "{{ 398 + skill_level * 14 }}"
-    hit: 0
-  - damage: 0
-    hit: 0
-  damage: 0
-  delay: 720
-  hit: 0
-  cooldown_duration: 120_000
+    hit: "{{12 * 24}}"
 
-  periodic_interval: 3_000
-  periodic_damage: "{{ 850 + skill_level * 34 }}"
+  delay: 4_020
+  cooldown_duration: 360_000
+
+  periodic_interval: 2_000
+  periodic_damage: "{{ 840 + skill_level * 28 }}"
   periodic_hit: 9
   lasting_duration: 30_000
 ---
