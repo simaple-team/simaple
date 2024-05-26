@@ -28,6 +28,7 @@ def holy_advent_component():
         },
         lasting_duration=1_000,
         cooldown_duration=30_000,
+        synergy={},
     )
     return component
 

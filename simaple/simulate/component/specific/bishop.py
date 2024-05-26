@@ -199,6 +199,8 @@ class HolyAdvent(SkillComponent, InvalidatableCooldownTrait):
 
     lasting_duration: float
 
+    synergy: Stat
+
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
@@ -257,6 +259,10 @@ class HolyAdvent(SkillComponent, InvalidatableCooldownTrait):
             time_left=state.periodic_01.time_left,
             lasting_duration=self._get_lasting_duration(state),
         )
+
+    @view_method
+    def buff(self, _: HolyAdventState):
+        return self.synergy
 
     def _get_lasting_duration(self, state: HolyAdventState) -> float:
         return self.lasting_duration
