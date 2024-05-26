@@ -43,15 +43,35 @@ class Spec(pydantic.BaseModel):
             for given, expected in zip(patches, self.patch)
         )
 
+    def is_patch_fits_with_overflow(
+        self, patches: Optional[Sequence[Patch]] = None
+    ) -> tuple[bool, list[Patch]]:
+        if self.patch is None:
+            return True, []
+
+        if patches is None:
+            return False, []
+
+        aligned_patches = []
+
+        my_patch_ptr, given_patch_ptr = 0, 0
+        while my_patch_ptr < len(self.patch) and given_patch_ptr < len(patches):
+            if patches[given_patch_ptr].__class__.__name__ == self.patch[my_patch_ptr]:
+                aligned_patches.append(patches[given_patch_ptr])
+                my_patch_ptr += 1
+            given_patch_ptr += 1
+
+        return my_patch_ptr == len(self.patch), aligned_patches
+
     def interpret(self, patches: Optional[Sequence[Patch]] = None):
         if self.ignore_overflowing_patch:
-            if self.patch and patches is not None:
-                patches = patches[: len(self.patch)]
-            else:
-                patches = None
-
-        if not self.is_patch_fits(patches):
-            raise PatchSpecificationMatchFailError()
+            fits, aligned_patches = self.is_patch_fits_with_overflow(patches)
+            if not fits:
+                raise PatchSpecificationMatchFailError()
+            patches = aligned_patches
+        else:
+            if not self.is_patch_fits(patches):
+                raise PatchSpecificationMatchFailError()
 
         data = self.data.copy()
 
