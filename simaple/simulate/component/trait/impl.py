@@ -198,9 +198,10 @@ class PeriodicElapseTrait(
     PeriodicDamageTrait,
     EventProviderTrait,
 ):
-    '''
+    """
     Support Elapse method which emits damage periodically.
-    '''
+    """
+
     def elapse_periodic_damage_trait(
         self,
         time: float,
@@ -233,6 +234,7 @@ class PeriodicWithSimpleDamageTrait(
     Use this trait when `using` skill deals damage.
     If `using` skill does not deals damage, use `UsePeriodicDamageTrait`.
     """
+
     def use_periodic_damage_trait(
         self,
         state: CooldownDynamicsPeriodicGeneric,
@@ -267,6 +269,7 @@ class UsePeriodicDamageTrait(
     Use this trait when `using` skill does not deal damage.
     If `using` skill deals damage, use `PeriodicWithSimpleDamageTrait`.
     """
+
     def use_periodic_damage_trait(
         self,
         state: CooldownDynamicsPeriodicGeneric,

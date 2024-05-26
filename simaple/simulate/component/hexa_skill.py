@@ -7,6 +7,7 @@ import pydantic
 
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic
+from simaple.simulate.component.feature import DamageAndHit
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
     InvalidatableCooldownTrait,
@@ -14,7 +15,7 @@ from simaple.simulate.component.trait.impl import (
 )
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
-from simaple.simulate.component.feature import DamageAndHit
+
 
 class PeriodicDamageHexaState(ReducerState):
     cooldown: Cooldown
@@ -26,11 +27,12 @@ class PeriodicDamageConfiguratedHexaSkillComponent(
     SkillComponent, PeriodicElapseTrait, InvalidatableCooldownTrait
 ):
     """
-    PeriodicDamageConfiguratedHexaSkillComponent 
+    PeriodicDamageConfiguratedHexaSkillComponent
     This describes skill that act like:
     - various Initial damage x hit
       + periodic damage x hit
     """
+
     name: str
     damage_and_hits: list[DamageAndHit]
     delay: float
