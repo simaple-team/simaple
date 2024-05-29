@@ -110,6 +110,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - VSkillImprovementPatch
 data:
   id: 2311015-0
   listening_actions:
@@ -122,6 +123,7 @@ data:
   cooldown_duration: 60_000
   delay: 0
   lasting_duration: 120_000
+  v_improvement: 2
 ---
 kind: Component
 version: simaple.io/BuffSkillComponent
@@ -404,6 +406,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - VSkillImprovementPatch
 data:
   id: 2311015-0
   listening_actions:
@@ -419,3 +422,4 @@ data:
   cooldown_duration: 60_000
   delay: 0
   lasting_duration: 120_000
+  v_improvement: 2
