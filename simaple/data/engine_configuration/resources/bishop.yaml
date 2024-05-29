@@ -25,6 +25,9 @@ data:
     - 엔젤 오브 리브라
     - 피스메이커
     - 디바인 퍼니시먼트
+  hexa_mastery:
+    엔젤레이: 엔젤레이 VI
+    트라이엄프 페더: 트라이엄프 페더 VI
   component_groups:
     - bishop
     - common
