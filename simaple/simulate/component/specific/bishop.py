@@ -1,7 +1,7 @@
 from typing import Optional
 
 from simaple.core.base import Stat
-from simaple.simulate.base import Entity
+from simaple.simulate.base import Entity, Event
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic, Stack
 from simaple.simulate.component.feature import DamageAndHit, PeriodicFeature
@@ -214,7 +214,7 @@ class HolyAdvent(SkillComponent, InvalidatableCooldownTrait):
         state = state.deepcopy()
         state.cooldown.elapse(time)
 
-        damage_events = []
+        damage_events: list[Event] = []
 
         for periodic, feature in self._get_all_periodics(state):
             lapse_count = periodic.elapse(time)
@@ -237,7 +237,7 @@ class HolyAdvent(SkillComponent, InvalidatableCooldownTrait):
         state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        for periodic, _ in self._get_all_periodics(state):
+        for periodic, _feature in self._get_all_periodics(state):
             periodic.set_time_left(self._get_lasting_duration(state))
 
         return state, [
@@ -323,10 +323,14 @@ class HexaAngelRayComponent(
 
         modifier = state.divine_mark.consume_mark()
 
-        return state, [
-            self.event_provider.dealt(self.damage, self.hit, modifier=modifier),
-            self.event_provider.delayed(self.delay),
-        ] + stack_events
+        return (
+            state,
+            [
+                self.event_provider.dealt(self.damage, self.hit, modifier=modifier),
+                self.event_provider.delayed(self.delay),
+            ]
+            + stack_events,
+        )
 
     @reducer_method
     def stack(self, _: None, state: HexaAngelRayState):
@@ -336,7 +340,7 @@ class HexaAngelRayComponent(
         """
         Add 1 stack for Holy Punishing.
 
-        This method can be called internally, or 
+        This method can be called internally, or
         can be called by Divine Punishmenet.
         """
         state = state.deepcopy()

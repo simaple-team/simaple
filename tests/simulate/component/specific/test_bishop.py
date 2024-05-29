@@ -102,7 +102,7 @@ def hexa_angle_ray_state(
         {
             **hexa_angle_ray_component.get_default_state(),
             "dynamics": dynamics,
-            "divine_mark": DivineMark(advantage={}),
+            "divine_mark": DivineMark(advantage=None),
         }
     )
 
