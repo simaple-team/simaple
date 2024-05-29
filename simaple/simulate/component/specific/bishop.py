@@ -319,16 +319,26 @@ class HexaAngelRayComponent(
         state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
         )
+        state, stack_events = self._stack(state)
 
         modifier = state.divine_mark.consume_mark()
 
         return state, [
             self.event_provider.dealt(self.damage, self.hit, modifier=modifier),
             self.event_provider.delayed(self.delay),
-        ]
+        ] + stack_events
 
     @reducer_method
     def stack(self, _: None, state: HexaAngelRayState):
+        return self._stack(state)
+
+    def _stack(self, state: HexaAngelRayState):
+        """
+        Add 1 stack for Holy Punishing.
+
+        This method can be called internally, or 
+        can be called by Divine Punishmenet.
+        """
         state = state.deepcopy()
         state.punishing_stack.increase(1)
         if state.punishing_stack.get_stack() >= self.stack_resolve_amount:
