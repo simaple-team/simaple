@@ -1,12 +1,12 @@
+from enum import Enum
+
 import fire
 
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.jobtype import JobType, get_job_category
-from simaple.simulate.report.base import Report, PlayLog, SimulationEntry
+from simaple.simulate.report.base import PlayLog, Report, SimulationEntry
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
-
-from enum import Enum
 
 
 class PlayStatus(Enum):
@@ -72,6 +72,7 @@ class DebugInterface:
             combat_orders_level=1,
             v_skill_level=30,
             v_improvements_level=60,
+            hexa_improvements_level=10,
         )
 
     def get_engine(self):
@@ -89,7 +90,9 @@ class DebugInterface:
 
     def run(self, plan_file: str):
         with open(plan_file, "r") as f:
-            plan = filter(lambda x: x and (not x.startswith("#")), f.read().splitlines())
+            plan = filter(
+                lambda x: x and (not x.startswith("#")), f.read().splitlines()
+            )
 
         engine = self.get_engine()
 
