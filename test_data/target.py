@@ -42,14 +42,14 @@ SETTINGS = [
             JobType.archmagetc,
             JobCategory.magician,
         ),
-        8244951605951,
+        10843539273896,
     ),
     (
         (
             JobType.bishop,
             JobCategory.magician,
         ),
-        5324413159316,
+        7443133546264,
     ),
     (
         (
