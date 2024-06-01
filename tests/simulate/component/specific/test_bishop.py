@@ -116,7 +116,7 @@ def test_hexa_angle_ray(
     )
     assert count_damage_skill(events) == 1
 
-    for _ in range(11):
+    for _ in range(10):
         hexa_angle_ray_state, events = hexa_angle_ray_component.stack(
             None, hexa_angle_ray_state
         )
