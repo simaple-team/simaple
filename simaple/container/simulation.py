@@ -89,6 +89,9 @@ def preset_optimize_cache_layer(
     cache_location = f".stat.extended.{setting.get_preset_hash()}.json"
 
     if setting.cache_root_dir:
+        if not os.path.exists(setting.cache_root_dir):
+            os.makedirs(setting.cache_root_dir)
+
         cache_location = os.path.join(setting.cache_root_dir, cache_location)
 
     if os.path.exists(cache_location):
