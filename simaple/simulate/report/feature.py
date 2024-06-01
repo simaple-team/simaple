@@ -66,4 +66,4 @@ class MaximumDealingIntervalFeature:
         for clk, damage in damage_seq[start:end]:
             total_damage += damage
 
-        return interval, total_damage / interval
+        return interval, total_damage
