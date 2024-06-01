@@ -52,6 +52,12 @@ def get_hyper_skill_patch(
 
 
 class VSkillImprovementPatch(Patch):
+    """
+    Update 4-th skill damage increased by `v_improvement` value.
+
+    5차 코어에 의한 4차 스킬의 최종 데미지 증가분을 반영합니다.
+    """
+
     improvements: dict[str, int] = pydantic.Field(default_factory=dict)
 
     def apply(self, raw: dict) -> dict:
@@ -77,6 +83,12 @@ class VSkillImprovementPatch(Patch):
 
 
 class HexaSkillImprovementPatch(Patch):
+    """
+    Update 5-th skill damage increased by `vi_improvement` value.
+
+    6차 코어에 의한 5차 스킬의 최종 데미지 증가분을 반영합니다.
+    """
+
     improvements: dict[str, int] = pydantic.Field(default_factory=dict)
 
     def _compute_final_damage_multiplier(self, level: int) -> Stat:

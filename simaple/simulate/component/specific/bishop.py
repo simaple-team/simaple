@@ -1,9 +1,10 @@
 from typing import Optional
 
 from simaple.core.base import Stat
-from simaple.simulate.base import Entity
+from simaple.simulate.base import Entity, Event
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
-from simaple.simulate.component.entity import Cooldown, Periodic
+from simaple.simulate.component.entity import Cooldown, Periodic, Stack
+from simaple.simulate.component.feature import DamageAndHit, PeriodicFeature
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
     CooldownValidityTrait,
@@ -174,3 +175,196 @@ class DivineMinion(
 
     def _get_periodic_damage_hit(self, state: DivineMinionState) -> tuple[float, float]:
         return self.periodic_damage, self.periodic_hit
+
+
+class HolyAdventState(ReducerState):
+    cooldown: Cooldown
+
+    periodic_01: Periodic
+    periodic_02: Periodic
+    periodic_03: Periodic
+
+    dynamics: Dynamics
+
+
+class HolyAdvent(SkillComponent, InvalidatableCooldownTrait):
+    name: str
+    damage_and_hits: list[DamageAndHit]
+    cooldown_duration: float
+    delay: float
+
+    periodic_01: PeriodicFeature
+    periodic_02: PeriodicFeature
+    periodic_03: PeriodicFeature
+
+    lasting_duration: float
+
+    synergy: Stat
+
+    def get_default_state(self):
+        return {
+            "cooldown": Cooldown(time_left=0),
+            "periodic_01": Periodic(interval=self.periodic_01.interval, time_left=0),
+            "periodic_02": Periodic(interval=self.periodic_02.interval, time_left=0),
+            "periodic_03": Periodic(interval=self.periodic_03.interval, time_left=0),
+        }
+
+    @reducer_method
+    def elapse(self, time: float, state: HolyAdventState):
+        state = state.deepcopy()
+        state.cooldown.elapse(time)
+
+        damage_events: list[Event] = []
+
+        for periodic, feature in self._get_all_periodics(state):
+            lapse_count = periodic.elapse(time)
+            damage_events.extend(
+                self.event_provider.dealt(feature.damage, feature.hit)
+                for _ in range(lapse_count)
+            )
+
+        return state, [self.event_provider.elapsed(time)] + damage_events
+
+    @reducer_method
+    def use(self, _: None, state: HolyAdventState):
+        if not state.cooldown.available:
+            return state, [self.event_provider.rejected()]
+
+        state = state.deepcopy()
+
+        delay = self._get_delay()
+
+        state.cooldown.set_time_left(
+            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
+        )
+        for periodic, _feature in self._get_all_periodics(state):
+            periodic.set_time_left(self._get_lasting_duration(state))
+
+        return state, [
+            self.event_provider.dealt(entry.damage, entry.hit)
+            for entry in self.damage_and_hits
+        ] + [
+            self.event_provider.delayed(delay),
+        ]
+
+    @view_method
+    def validity(self, state: HolyAdventState):
+        return self.validity_in_invalidatable_cooldown_trait(state)
+
+    @view_method
+    def running(self, state: HolyAdventState) -> Running:
+        return Running(
+            id=self.id,
+            name=self.name,
+            time_left=state.periodic_01.time_left,
+            lasting_duration=self._get_lasting_duration(state),
+        )
+
+    @view_method
+    def buff(self, _: HolyAdventState):
+        return self.synergy
+
+    def _get_lasting_duration(self, state: HolyAdventState) -> float:
+        return self.lasting_duration
+
+    def _get_all_periodics(
+        self, state: HolyAdventState
+    ) -> list[tuple[Periodic, PeriodicFeature]]:
+        return [
+            (state.periodic_01, self.periodic_01),
+            (state.periodic_02, self.periodic_02),
+            (state.periodic_03, self.periodic_03),
+        ]
+
+
+class HexaAngelRayState(ReducerState):
+    divine_mark: DivineMark
+    cooldown: Cooldown
+    dynamics: Dynamics
+    punishing_stack: Stack
+
+
+class HexaAngelRayComponent(
+    SkillComponent, CooldownValidityTrait, UseSimpleAttackTrait
+):
+    binds: dict[str, str] = {
+        "divine_mark": ".바하뮤트.divine_mark",
+    }
+    name: str
+    damage: float
+    hit: float
+    delay: float
+
+    punishing_damage: float
+    punishing_hit: float
+    stack_resolve_amount: int
+
+    synergy: Stat
+
+    def get_default_state(self):
+        return {
+            "cooldown": Cooldown(time_left=0),
+            "punishing_stack": Stack(
+                maximum_stack=self.stack_resolve_amount * 2 - 1
+            ),  # one-buffer
+        }
+
+    @reducer_method
+    def use(self, _: None, state: HexaAngelRayState):
+        state = state.deepcopy()
+
+        if not state.cooldown.available:
+            return state, self.event_provider.rejected()
+
+        state.cooldown.set_time_left(
+            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
+        )
+        state, stack_events = self._stack(state)
+
+        modifier = state.divine_mark.consume_mark()
+
+        return (
+            state,
+            [
+                self.event_provider.dealt(self.damage, self.hit, modifier=modifier),
+                self.event_provider.delayed(self.delay),
+            ]
+            + stack_events,
+        )
+
+    @reducer_method
+    def stack(self, _: None, state: HexaAngelRayState):
+        return self._stack(state)
+
+    def _stack(self, state: HexaAngelRayState):
+        """
+        Add 1 stack for Holy Punishing.
+
+        This method can be called internally, or
+        can be called by Divine Punishmenet.
+        """
+        state = state.deepcopy()
+        state.punishing_stack.increase(1)
+        if state.punishing_stack.get_stack() >= self.stack_resolve_amount:
+            state.punishing_stack.decrease(self.stack_resolve_amount)
+
+            return state, [
+                self.event_provider.dealt(self.punishing_damage, self.punishing_hit)
+            ]
+
+        return state, []
+
+    @reducer_method
+    def elapse(self, time: float, state: HexaAngelRayState):
+        return self.elapse_simple_attack(time, state)
+
+    @view_method
+    def validity(self, state: HexaAngelRayState):
+        return self.validity_in_cooldown_trait(state)
+
+    @view_method
+    def buff(self, _: HexaAngelRayState):
+        return self.synergy
+
+    def _get_simple_damage_hit(self) -> tuple[float, float]:
+        return self.damage, self.hit

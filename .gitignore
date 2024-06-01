@@ -6,6 +6,8 @@ docs/_build/
 record.tsv
 report.tsv
 /.stat*
+**/.stat*
 .sqlite.db
 *.log
 .workspace/
+.simaple

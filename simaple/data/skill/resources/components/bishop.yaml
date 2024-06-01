@@ -110,6 +110,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - VSkillImprovementPatch
 data:
   id: 2311015-0
   listening_actions:
@@ -118,10 +119,11 @@ data:
   name: 트라이엄프 페더
   trigger_cooldown_duration: 3_000
   trigger_damage: 230
-  trigger_hit: 4
+  trigger_hit: "{{ 4 * 4 }}"
   cooldown_duration: 60_000
   delay: 0
   lasting_duration: 120_000
+  v_improvement: 2
 ---
 kind: Component
 version: simaple.io/BuffSkillComponent
@@ -230,6 +232,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   binds:
     divine_mark: .바하뮤트.divine_mark
@@ -281,6 +284,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400021070-0
   name: 피스메이커
@@ -304,14 +308,15 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400021086-0
   name: 디바인 퍼니시먼트
-  maximum_keydown_time: 8_160
+  maximum_keydown_time: 9_600
 
   damage: "{{ 225 + skill_level * 9 }}"
-  hit: 50
-  delay: 1020
+  hit: 10
+  delay: 240
   cooldown_duration: 68_000
 
   keydown_prepare_delay: 240
@@ -319,3 +324,102 @@ data:
 
   finish_damage: 0
   finish_hit: 0
+
+---
+kind: Component
+version: simaple.io/HolyAdvent
+metadata:
+  label:
+    group: bishop
+    name: 홀리 어드밴트
+    id: 2341500-0-?
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  id: 2341500-0-?
+  name: 홀리 어드밴트
+
+  damage_and_hits:
+  - damage: "{{ 270 + skill_level * 10 }}"
+    hit: "{{8 * 25}}"
+  - damage: "{{ 235 + skill_level * 8 }}"
+    hit: "{{12 * 35}}"
+
+  delay: 3_660
+  cooldown_duration: 360_000
+
+  periodic_01:
+    interval: 3_000
+    damage: "{{ 245 + skill_level * 9 }}"
+    hit: 14
+  periodic_02:
+    interval: 5_000
+    damage: "{{ 260 + skill_level * 8 }}"
+    hit: 12
+  periodic_03:
+    interval: 4_000
+    damage: "{{ 300 + skill_level * 10 }}"
+    hit: 12
+
+  lasting_duration: 60_000
+
+  synergy:
+    final_damage_multiplier: 5
+---
+kind: Component
+version: simaple.io/HexaAngelRayComponent
+metadata:
+  label:
+    group: bishop
+    name: 엔젤레이
+    id: 2321007-0-vi
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 2321007-0-vi
+  name: 엔젤레이 VI
+  representative_name: 엔젤레이
+  listening_actions:
+    디바인 퍼니시먼트.use.emitted.global.damage: stack
+  delay: 630
+  cooldown_duration: 0
+  damage: "{{ 235 + 4 * skill_level }}"
+  hit: 14
+  punishing_damage: "{{ 550 + skill_level *  9}}"
+  punishing_hit: 10
+  stack_resolve_amount: 12
+
+  v_improvement: 2
+  synergy:
+    final_damage_multiplier: 10
+---
+kind: Component
+version: simaple.io/TriggableBuffSkillComponent
+metadata:
+  label:
+    group: bishop
+    name: 트라이엄프 페더 VI
+    id: 2311015-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 2311015-0
+  listening_actions:
+    엔젤레이.use.emitted.global.damage: trigger
+    엔젤레이 VI.use.emitted.global.damage: trigger
+    제네시스.use.emitted.global.damage: trigger
+  name: 트라이엄프 페더 VI
+  representative_name: 트라이엄프 페더
+
+  trigger_cooldown_duration: 3_000
+  trigger_damage: "{{390 + 6 * skill_level}}"
+  trigger_hit: "{{ 4 * (1 + 5 * 0.5) }}"
+  cooldown_duration: 60_000
+  delay: 0
+  lasting_duration: 120_000
+  v_improvement: 2

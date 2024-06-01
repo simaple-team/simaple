@@ -20,3 +20,40 @@ data:
   default_final_damage: "{{ 40 + skill_level }}"
   maximum_final_damage: 115
   default_skill_level: 30
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: adventurer.magician
+    name: 오버로드 마나
+    id: 400021000-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  id: 400021000-0
+  name: 오버로드 마나
+  cooldown_duration: 0
+  delay: 0
+  lasting_duration: 999_999_999
+  stat:
+    final_damage_multiplier: "{{ 8 + skill_level // 10 }}"
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: adventurer.magician
+    name: 에픽 어드벤쳐
+    id: 2121053-0
+data:
+  id: 2121053-0
+  name: 에픽 어드벤쳐
+  cooldown_duration: 120000
+  delay: 0
+  red: false
+  rem: false
+  lasting_duration: 60000
+  stat:
+    damage_multiplier: 10

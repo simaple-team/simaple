@@ -19,6 +19,7 @@ data:
     - 천공의 노래
     - 스톰 윔
     - 스톰 브링어
+  hexa_improvement_names: []
   component_groups:
     - windbreaker
     - common

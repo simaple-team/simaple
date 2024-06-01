@@ -19,6 +19,11 @@ data:
     - 프로즌 오브
     - 엘퀴네스
     - 라이트닝 스피어
+  hexa_improvement_names:
+    - 아이스 에이지
+    - 썬더 브레이크
+    - 스피릿 오브 스노우
+    - 주피터 썬더
   hexa_skill_names:
     - 프로즌 라이트닝
   hexa_mastery:

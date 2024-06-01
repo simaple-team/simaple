@@ -19,6 +19,7 @@ data:
     - "로봇 팩토리: RM1"
     - 마그네틱 필드
     - "로봇 런처: RM7"
+  hexa_improvement_names: []
   component_groups:
     - mechanic
     - common

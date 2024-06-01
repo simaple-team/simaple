@@ -42,11 +42,12 @@ class SimulationSetting(pydantic.BaseModel):
     hexa_skill_level: int = 1
     hexa_mastery_level: int = 1
     v_improvements_level: int = 60
+    hexa_improvements_level: int = 0
 
     weapon_attack_power: int = 0
     weapon_pure_attack_power: int = 0
 
-    cache_root_dir: str = ""
+    cache_root_dir: str = ".simaple"
 
     def get_preset_hash(self) -> str:
         preset_hash = (
@@ -88,6 +89,9 @@ def preset_optimize_cache_layer(
     cache_location = f".stat.extended.{setting.get_preset_hash()}.json"
 
     if setting.cache_root_dir:
+        if not os.path.exists(setting.cache_root_dir):
+            os.makedirs(setting.cache_root_dir)
+
         cache_location = os.path.join(setting.cache_root_dir, cache_location)
 
     if os.path.exists(cache_location):
@@ -238,6 +242,9 @@ class SimulationContainer(containers.DeclarativeContainer):
         ),
         engine_configuration.provided.get_filled_v_improvements.call(
             config.v_improvements_level
+        ),
+        engine_configuration.provided.get_filled_hexa_improvements.call(
+            config.hexa_improvements_level
         ),
         engine_configuration.provided.get_skill_replacements.call(),
         engine_builder_required_values,

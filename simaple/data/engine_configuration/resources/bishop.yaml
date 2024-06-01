@@ -18,6 +18,16 @@ data:
     - 트라이엄프 페더
     - 헤븐즈 도어
     - 파운틴 포 엔젤
+  hexa_skill_names:
+    - 홀리 어드밴트
+  hexa_improvement_names:
+    # - 프레이: 아직 구현되지 않았음. TODO
+    - 엔젤 오브 리브라
+    - 피스메이커
+    - 디바인 퍼니시먼트
+  hexa_mastery:
+    엔젤레이: 엔젤레이 VI
+    트라이엄프 페더: 트라이엄프 페더 VI
   component_groups:
     - bishop
     - common

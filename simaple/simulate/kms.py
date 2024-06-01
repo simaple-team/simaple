@@ -5,7 +5,11 @@ import simaple.simulate.component.specific  # noqa: F401
 from simaple.core.base import ActionStat, Stat
 from simaple.data.passive.patch import SkillLevelPatch
 from simaple.data.skill import get_kms_skill_loader
-from simaple.data.skill.patch import VSkillImprovementPatch, get_hyper_skill_patch
+from simaple.data.skill.patch import (
+    HexaSkillImprovementPatch,
+    VSkillImprovementPatch,
+    get_hyper_skill_patch,
+)
 from simaple.simulate.base import AddressedStore, ConcreteStore
 from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.component.base import Component
@@ -66,6 +70,7 @@ def get_builder(
     groups: list[str],
     skill_levels: dict[str, int],
     v_improvements: dict[str, int],
+    hexa_improvements: dict[str, int],
     hexa_replacements: dict[str, str],
     injected_values: BuilderRequiredExtraVariables,
 ) -> EngineBuilder:
@@ -85,6 +90,7 @@ def get_builder(
                 ),
                 EvalPatch(injected_values=eval_reference_variables),
                 VSkillImprovementPatch(improvements=v_improvements),
+                HexaSkillImprovementPatch(improvements=hexa_improvements),
                 get_hyper_skill_patch(group),
             ],
         )

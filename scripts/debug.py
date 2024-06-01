@@ -1,14 +1,24 @@
+from enum import Enum
+
 import fire
 
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.jobtype import JobType, get_job_category
-from simaple.simulate.report.base import Report
+from simaple.simulate.report.base import PlayLog, Report, SimulationEntry
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 
 
-def get_status_string(status: bool):
-    if status:
+class PlayStatus(Enum):
+    ACCEPT = "ACCEPT"
+    REJECT = "REJECT"
+    PASSED = "PASSED"
+
+
+def get_status_string(status: PlayStatus):
+    if status == PlayStatus.PASSED:
+        return "\033[41m[PASSED]\033[0m"
+    elif status == PlayStatus.ACCEPT:
         return "\033[92m[ACCEPT]\033[0m"
     else:
         return "\033[91m[REJECT]\033[0m"
@@ -39,6 +49,15 @@ class _TimestampedPlanWriter:
             f.write("\n".join(self._commands))
 
 
+def _get_status(playlog: PlayLog, entry: SimulationEntry) -> PlayStatus:
+    if len(playlog.events) == 0:
+        return PlayStatus.PASSED
+    if entry.accepted:
+        return PlayStatus.ACCEPT
+    else:
+        return PlayStatus.REJECT
+
+
 class DebugInterface:
     def __init__(self, jobtype: JobType | str) -> None:
         if isinstance(jobtype, str):
@@ -53,6 +72,7 @@ class DebugInterface:
             combat_orders_level=1,
             v_skill_level=30,
             v_improvements_level=60,
+            hexa_improvements_level=10,
         )
 
     def get_engine(self):
@@ -70,7 +90,9 @@ class DebugInterface:
 
     def run(self, plan_file: str):
         with open(plan_file, "r") as f:
-            plan = filter(lambda x: x, f.read().splitlines())
+            plan = filter(
+                lambda x: x and (not x.startswith("#")), f.read().splitlines()
+            )
 
         engine = self.get_engine()
 
@@ -96,7 +118,7 @@ class DebugInterface:
                     )
 
                     print(
-                        f"{get_status_string(entry.accepted)}{entry.clock:6.0f}s | {show_damage_as_string(total_damage).rjust(8)} | {entry.action}|"
+                        f"{get_status_string(_get_status(playlog, entry))}{entry.clock:6.0f}s | {show_damage_as_string(total_damage).rjust(8)} | {entry.action}|"
                     )
 
         report = engine.create_full_report()
@@ -107,7 +129,7 @@ class DebugInterface:
         print(
             f"{engine.get_current_viewer()('clock')} | {self.get_dpm_calculator().calculate_total_damage(report):,} "
         )
-        plan_writer.dump(plan_file.replace(".log", ".result.log"))
+        plan_writer.dump(plan_file.replace(".simaple", ".result.simaple"))
 
 
 if __name__ == "__main__":
