@@ -25,31 +25,19 @@ CAST "플레임 스윕 VI"          # 94,320ms
 CAST "메테오"                # 94,920ms
 CAST "미스트 이럽션 VI"         # 95,610ms
 CAST "플레임 헤이즈 VI"         # 96,330ms
-CAST "플레임 스윕 VI"          # 97,410ms
-CAST "플레임 스윕 VI"          # 98,010ms
-CAST "플레임 스윕 VI"          # 98,610ms
-CAST "플레임 스윕 VI"          # 99,210ms
+x4 CAST "플레임 스윕 VI"       # 97,410ms
 CAST "미스트 이럽션 VI"         # 99,810ms
 CAST "플레임 헤이즈 VI"         # 100,530ms
-CAST "플레임 스윕 VI"          # 101,610ms
-CAST "플레임 스윕 VI"          # 102,210ms
-CAST "플레임 스윕 VI"          # 102,810ms
-CAST "플레임 스윕 VI"          # 103,410ms
+x4 CAST "플레임 스윕 VI"       # 101,610ms
 CAST "미스트 이럽션 VI"         # 104,010ms
 CAST "플레임 헤이즈 VI"         # 104,730ms
-CAST "플레임 스윕 VI"          # 105,810ms
-CAST "플레임 스윕 VI"          # 106,410ms
-CAST "플레임 스윕 VI"          # 107,010ms
-CAST "플레임 스윕 VI"          # 107,610ms
+x4 CAST "플레임 스윕 VI"       # 105,810ms
 CAST "미스트 이럽션 VI"         # 108,210ms
 CAST "플레임 헤이즈 VI"         # 108,930ms
-CAST "플레임 스윕 VI"          # 110,010ms
-CAST "플레임 스윕 VI"          # 110,610ms
-CAST "플레임 스윕 VI"          # 111,210ms
-CAST "플레임 스윕 VI"          # 111,810ms
+x4 CAST "플레임 스윕 VI"       # 110,010ms
 CAST "미스트 이럽션 VI"         # 112,410ms
 CAST "플레임 헤이즈 VI"         # 113,130ms
-CAST "플레임 스윕 VI"          # 114,210ms
-CAST "플레임 스윕 VI"          # 114,810ms
-CAST "플레임 스윕 VI"          # 115,410ms
-CAST "플레임 스윕 VI"          # 116,010ms
+x4 CAST "플레임 스윕 VI"       # 114,210ms
+CAST "미스트 이럽션 VI"         # 116,610ms
+CAST "플레임 헤이즈 VI"         # 117,330ms
+x4 CAST "플레임 스윕 VI"       # 118,410ms
