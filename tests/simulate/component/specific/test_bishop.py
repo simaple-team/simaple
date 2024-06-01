@@ -2,6 +2,8 @@ import pytest
 
 from simaple.simulate.component.specific.bishop import (
     DivineMark,
+    DivineMinion,
+    DivineMinionState,
     HexaAngelRayComponent,
     HexaAngelRayState,
     HolyAdvent,
@@ -137,3 +139,47 @@ def test_hexa_angle_ray(
             None, hexa_angle_ray_state
         )
         assert count_damage_skill(events) == 0
+
+
+@pytest.fixture
+def divine_minion_component():
+    component = DivineMinion(
+        id="test",
+        name="periodic-damage-component",
+        cooldown_duration=0,
+        damage=10,
+        hit=3,
+        delay=30,
+        periodic_interval=2000,
+        periodic_damage=100,
+        periodic_hit=100,
+        lasting_duration=10000,
+        mark_advantage={
+            "damage": 10,
+        },
+    )
+    return component
+
+
+@pytest.fixture
+def divine_minion_state(
+    divine_minion_component: DivineMinion,
+    dynamics: Dynamics,
+) -> DivineMinionState:
+    return DivineMinionState.model_validate(
+        {
+            **divine_minion_component.get_default_state(),
+            "dynamics": dynamics,
+            "divine_mark": DivineMark(),
+        }
+    )
+
+
+def test_divine_mark(
+    divine_minion_component: DivineMinion,
+    divine_minion_state: DivineMinionState,
+):
+    divine_minion_state, events = divine_minion_component.use(None, divine_minion_state)
+    divine_minion_state, events = divine_minion_component.elapse(
+        300, divine_minion_state
+    )
