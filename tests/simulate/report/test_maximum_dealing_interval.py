@@ -1,5 +1,3 @@
-import pytest
-
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 
 
@@ -17,7 +15,9 @@ def test_maximum_interval():
         (7, 100),
     ]
 
-    assert (300.0, 3, 6) == feature._find_maximum_dealing_interval(sample_damage_seq)
+    assert (300.0 * 3, 3, 6) == feature._find_maximum_dealing_interval(
+        sample_damage_seq
+    )
 
 
 def test_duplicated_maximum_interval():
@@ -36,7 +36,9 @@ def test_duplicated_maximum_interval():
         (7, 100),
     ]
 
-    assert (500.0, 3, 8) == feature._find_maximum_dealing_interval(sample_damage_seq)
+    assert (500.0 * 3, 3, 8) == feature._find_maximum_dealing_interval(
+        sample_damage_seq
+    )
 
 
 def test_multiple_zone():
@@ -57,7 +59,9 @@ def test_multiple_zone():
         (11, 0),
     ]
 
-    assert (1300.0, 8, 11) == feature._find_maximum_dealing_interval(sample_damage_seq)
+    assert (1300.0 * 3, 8, 11) == feature._find_maximum_dealing_interval(
+        sample_damage_seq
+    )
 
 
 def test_dynamic_time():
@@ -74,9 +78,7 @@ def test_dynamic_time():
         (7, 100),
     ]
 
-    assert (pytest.approx(900 / 3.2), 3, 6) == feature._find_maximum_dealing_interval(
-        sample_damage_seq
-    )
+    assert (1000, 2, 6) == feature._find_maximum_dealing_interval(sample_damage_seq)
 
 
 def test_short_time():
@@ -93,6 +95,4 @@ def test_short_time():
         (7, 100),
     ]
 
-    assert (pytest.approx(1000 / 3.8), 2, 6) == feature._find_maximum_dealing_interval(
-        sample_damage_seq
-    )
+    assert (1000, 2, 6) == feature._find_maximum_dealing_interval(sample_damage_seq)

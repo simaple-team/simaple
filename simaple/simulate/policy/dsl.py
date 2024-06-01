@@ -18,10 +18,10 @@ class OperandDSLParser:
     def __call__(self, op_string: str) -> list[Operation]:
         try:
             mult = 1
-            mult_match = re.compile(r"x([0-9]+)  .*").match(op_string)
+            mult_match = re.compile(r"x([0-9]+) .*").match(op_string)
             if mult_match:
                 mult = int(mult_match.group(1).strip())
-                op_string = op_string.replace(mult_match.group(1), "")
+                op_string = op_string.replace(f"x{mult_match.group(1)}", "")
 
             op = parse_dsl_to_operation(op_string)
 

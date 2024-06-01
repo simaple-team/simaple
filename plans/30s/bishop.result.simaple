@@ -1,0 +1,32 @@
+CAST "오버로드 마나"            # 0ms
+CAST "바하뮤트"               # 0ms
+CAST "메이플 용사"             # 600ms
+CAST "인피니티"               # 600ms
+CAST "어드밴스드 블레스"          # 1,200ms
+ELAPSE 78000              # 1,200ms
+CAST "메이플월드 여신의 축복"       # 79,200ms
+CAST "에픽 어드벤쳐"            # 79,650ms
+CAST "트라이엄프 페더 VI"        # 79,650ms
+CAST "엔젤릭 터치"             # 79,650ms
+CAST "프레이"                # 80,400ms
+CAST "엔젤 오브 리브라"          # 80,760ms
+CAST "리스트레인트 링"           # 81,300ms
+CAST "홀리 블러드"             # 81,360ms
+CAST "소울 컨트랙트"            # 81,960ms
+CAST "홀리 어드밴트"            # 82,860ms
+CAST "피스메이커"              # 86,520ms
+CAST "디바인 퍼니시먼트"          # 87,270ms
+x38 RESOLVE "디바인 퍼니시먼트"   # 87,510ms
+KEYDOWNSTOP "디바인 퍼니시먼트"   # 96,630ms
+CAST "헤븐즈 도어"             # 96,630ms
+x3 CAST "엔젤레이 VI"         # 96,900ms
+CAST "피스메이커"              # 98,790ms
+x15 CAST "엔젤레이 VI"        # 99,540ms
+CAST "피스메이커"              # 108,990ms
+x15 CAST "엔젤레이 VI"        # 109,740ms
+CAST "피스메이커"              # 119,190ms
+x15 CAST "엔젤레이 VI"        # 119,940ms
+CAST "피스메이커"              # 129,390ms
+x15 CAST "엔젤레이 VI"        # 130,140ms
+CAST "피스메이커"              # 139,590ms
+x15 CAST "엔젤레이 VI"        # 140,340ms

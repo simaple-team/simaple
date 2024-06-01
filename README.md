@@ -7,10 +7,21 @@
 
 simaple은 클라이언트 리소스를 바탕으로 메이플스토리 내 직업의 시뮬레이션 환경을 구성하고, 적절한 전투 시나리오를 설계하여 스킬별 딜 비중 및 기대 DPM을 계산할 수 있도록 합니다.
 
-- 실제 메이플스토리 내 게임 설정을 바탕으로 한 realistic한 시뮬레이션 환경 제공
-- 제시된 캐릭터의 기대 DPM 을 포함한 전투결과 생성 및 분석
-- 게임 내 유저 정보를 바탕으로 한 시뮬레이션 환경 제공
-- 환산 주스텟을 포함한, 캐릭터 스펙에 대한 다차원적 지표 계산
+## Install from source
+
+```
+git clone https://github.com/simaple-team/simaple
+poetry install
+```
+
+## Run Simulation
+
+```
+poetry run python scripts/debug.py --jobtype $JOBTYPE run $PLAN_FILEPATH
+
+## example
+poetry run python scripts/debug.py --jobtype bishop run plans/30s/bishop.simaple
+```
 
 
 ## Web Client
@@ -21,7 +32,7 @@ simaple은 시뮬레이션을 쉽게 진행하기 위한 웹 인터페이스 또
 - 웹 클라이언트는 [simaple/web](https://github.com/simaple-team/web) 에서 설치할 수 있습니다.
 
 
-## Install
+## Package Install
 
 - `pip install simaple`
 
