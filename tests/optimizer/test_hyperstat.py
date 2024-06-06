@@ -9,8 +9,12 @@ from simaple.optimizer import HyperstatTarget, StepwizeOptimizer
 from simaple.system.hyperstat import Hyperstat
 
 
-@pytest.mark.parametrize("maximum_cost", [50, 300, 1200])
-def test_optimizer(maximum_cost):
+@pytest.mark.parametrize("maximum_cost, expected_state", [
+    (50, [0, 0, 0, 0, 1, 3, 2, 3, 3, 5]),
+    (300, [0, 1, 1, 0, 2, 7, 5, 8, 6, 8]),
+    (1200, [0, 3, 2, 0, 4, 12, 10, 12, 10, 13]),
+])
+def test_optimizer(maximum_cost: int, expected_state: list[int]):
     optimization_target = HyperstatTarget(
         Stat(
             INT=40000,
@@ -29,3 +33,4 @@ def test_optimizer(maximum_cost):
     output = optimizer.optimize()
     elapsed = time.time() - start
     logger.info(f"Optimization output {str(output.state)}; spent: {elapsed:.02f}s")
+    assert output.state == expected_state
