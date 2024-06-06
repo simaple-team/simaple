@@ -3,6 +3,11 @@ from __future__ import annotations
 from pydantic import BaseModel
 
 from simaple.core import Stat, StatProps
+from simaple.system.base import UpgradableUserStat
+
+
+class HyperStatBasis(UpgradableUserStat):
+    ...
 
 
 class Hyperstat(BaseModel):

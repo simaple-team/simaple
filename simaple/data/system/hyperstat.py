@@ -5,8 +5,7 @@ from pydantic import BaseModel
 from simaple.core import Stat, StatProps
 from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.repository import DirectorySpecRepository
-from simaple.system.base import HyperStatBasis
-from simaple.system.hyperstat import Hyperstat
+from simaple.system.hyperstat import Hyperstat, HyperStatBasis
 
 
 def _get_hyperstat_basis_from_spec() -> dict[str, HyperStatBasis]:
