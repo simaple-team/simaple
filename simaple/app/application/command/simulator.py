@@ -29,3 +29,21 @@ def rollback(simulator_id: str, target_index: int, uow: UnitOfWork) -> None:
 
     simulator.rollback(target_index)
     uow.simulator_repository().update(simulator)
+
+
+def run_plan(simulator_id: str, plan: str, uow: UnitOfWork) -> int:
+    simulator = uow.simulator_repository().get(simulator_id)
+
+    if simulator is None:
+        raise UnknownSimulatorException()
+
+    simulator.rollback(0)
+
+    for dsl in plan.strip().split("\n"):
+        if dsl.strip() == "":
+            continue
+
+        simulator.dispatch(dsl)
+
+    uow.simulator_repository().update(simulator)
+    return simulator.engine.length()
