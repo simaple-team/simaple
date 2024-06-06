@@ -21,7 +21,7 @@ from simaple.simulate.policy.base import (
     SimulationHistory,
     _BehaviorGenerator,
 )
-from simaple.simulate.policy.dsl import DSLError, OperandDSLParser
+from simaple.simulate.policy.dsl import OperandDSLParser
 from simaple.simulate.profile import SimulationProfile
 from simaple.simulate.report.base import Report, SimulationEntry
 

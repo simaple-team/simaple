@@ -8,6 +8,7 @@ from simaple.app.application.command.simulator import (
     create_simulator,
     play_operation,
     rollback,
+    run_plan,
 )
 from simaple.app.application.query import (
     OperationLogResponse,
@@ -72,6 +73,22 @@ def play(
     play_operation(simulator_id, request.operation, uow)
 
     return query_latest_operation_log(simulator_id, uow)
+
+
+class RequestRunPlan(pydantic.BaseModel):
+    plan: str
+
+
+@router.post("/run/{simulator_id}")
+@inject
+def run(
+    simulator_id: str,
+    request: RequestRunPlan,
+    uow: UnitOfWork = UowProvider,
+) -> list[OperationLogResponse]:
+    run_plan(simulator_id, request.plan, uow)
+
+    return query_every_opration_log(simulator_id, uow)
 
 
 class RequestDispatchUse(pydantic.BaseModel):
