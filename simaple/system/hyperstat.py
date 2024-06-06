@@ -3,22 +3,26 @@ from __future__ import annotations
 from pydantic import BaseModel
 
 from simaple.core import Stat, StatProps
+from simaple.spec.loader import SpecBasedLoader
+from simaple.spec.repository import DirectorySpecRepository
+from simaple.system.base import HyperStatBasis
+from simaple.system.hyperstat import HyperStatBasis
 
-HYPERSTAT_BASIS: dict[StatProps, list[Stat]] = {
-    StatProps.STR_static: [Stat(STR_static=i * 30) for i in range(16)],
-    StatProps.DEX_static: [Stat(DEX_static=i * 30) for i in range(16)],
-    StatProps.LUK_static: [Stat(LUK_static=i * 30) for i in range(16)],
-    StatProps.INT_static: [Stat(INT_static=i * 30) for i in range(16)],
-    StatProps.attack_power: [
-        Stat(attack_power=i * 3, magic_attack=i * 3) for i in range(16)
-    ],
-    StatProps.damage_multiplier: [Stat(damage_multiplier=i * 3) for i in range(16)],
-    StatProps.boss_damage_multiplier: [
-        Stat(boss_damage_multiplier=i * 3 + max(i - 5, 0)) for i in range(16)
-    ],
-    StatProps.critical_damage: [Stat(critical_damage=i) for i in range(16)],
-    StatProps.critical_rate: [Stat(critical_rate=i + max(i - 5, 0)) for i in range(16)],
-    StatProps.ignored_defence: [Stat(ignored_defence=i * 3) for i in range(16)],
+
+def get_hyperstat_from_spec() -> dict[str, HyperStatBasis]:
+    repository = DirectorySpecRepository("simaple/data/system")
+    loader = SpecBasedLoader(repository)
+
+    hyperstat_basis: list[HyperStatBasis] = loader.load_all(
+        query={"kind": "UpgradableUserStat"},
+    )
+
+    return {basis.name: basis for basis in hyperstat_basis}
+
+
+HYPERSTAT_BASIS = {
+    StatProps(k): [ex_stat.stat for ex_stat in v.values]
+    for k, v in get_hyperstat_from_spec().items()
 }
 
 HYPERSTAT_COST = [1, 2, 4, 8, 10, 15, 20, 25, 30, 35, 50, 65, 80, 95, 110, 999999]
@@ -36,10 +40,18 @@ def get_hyperstat_cost() -> list[int]:
     return list(HYPERSTAT_COST)
 
 
+def get_kms_hyperstat() -> Hyperstat:
+    return Hyperstat(
+        options=get_hyperstat_lists(),
+        cost=get_hyperstat_cost(),
+        levels=get_empty_hyperstat_levels(),
+    )
+
+
 class Hyperstat(BaseModel):
-    options: list[tuple[StatProps, list[Stat]]] = get_hyperstat_lists()
-    cost: list[int] = get_hyperstat_cost()
-    levels: list[int] = get_empty_hyperstat_levels()
+    options: list[tuple[StatProps, list[Stat]]]
+    cost: list[int]
+    levels: list[int]
 
     @classmethod
     def get_maximum_cost_from_level(cls, character_level: int) -> int:

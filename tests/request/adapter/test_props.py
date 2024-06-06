@@ -2,14 +2,15 @@ from simaple.core import StatProps
 from simaple.request.adapter.hyperstat import get_hyperstat
 from simaple.request.adapter.propensity import get_propensity
 from simaple.request.adapter.union import get_union_squad, get_union_squad_effect
-from simaple.system.hyperstat import Hyperstat
+from simaple.system.hyperstat import get_kms_hyperstat
 from simaple.system.propensity import Propensity
 
 
 def test_hyperstat_adapter(character_hyper_stat_response):
     hyperstat = get_hyperstat(character_hyper_stat_response)
 
-    expected = Hyperstat(options=hyperstat.options)
+    expected = get_kms_hyperstat()
+    expected.options = hyperstat.options
     for stat_props, level in [
         (StatProps.INT_static, 5),
         (StatProps.LUK_static, 1),

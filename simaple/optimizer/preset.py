@@ -19,7 +19,7 @@ from simaple.optimizer import (
     UnionSquadTarget,
     WeaponPotentialOptimizer,
 )
-from simaple.system.hyperstat import Hyperstat
+from simaple.system.hyperstat import Hyperstat, get_kms_hyperstat
 from simaple.system.link import LinkSkillset
 from simaple.system.union import (
     UnionOccupation,
@@ -82,7 +82,7 @@ class PresetOptimizer(BaseModel):
             hyperstat_optimization_target = HyperstatTarget(
                 reference_stat,
                 self.damage_logic,
-                Hyperstat(),
+                get_kms_hyperstat(),
             )
             optimizer = StepwizeOptimizer(
                 hyperstat_optimization_target,
@@ -167,7 +167,7 @@ class PresetOptimizer(BaseModel):
 
         preset = Preset(
             gearset=gearset,
-            hyperstat=Hyperstat(),
+            hyperstat=get_kms_hyperstat(),
             links=LinkSkillset.empty(),
             union_squad=UnionSquad.empty(),
             union_occupation=UnionOccupation(),
@@ -204,7 +204,7 @@ class PresetOptimizer(BaseModel):
             preset.get_stat() + self.default_stat
         )
 
-        preset.hyperstat = Hyperstat()
+        preset.hyperstat = get_kms_hyperstat()
         preset.hyperstat = self.calculate_optimal_hyperstat(
             preset.get_stat() + self.default_stat
         )
