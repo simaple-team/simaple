@@ -1,4 +1,4 @@
-def test_read_main(simulator_configuration, client):
+def test_create_workspace(simulator_configuration, client):
     response = client.post(
         "/workspaces/",
         json=simulator_configuration,
