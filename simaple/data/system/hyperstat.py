@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from pydantic import BaseModel
 
 from simaple.core import Stat, StatProps
@@ -9,7 +11,7 @@ from simaple.system.hyperstat import Hyperstat, HyperStatBasis
 
 
 def _get_hyperstat_basis_from_spec() -> dict[str, HyperStatBasis]:
-    repository = DirectorySpecRepository("simaple/data/system")
+    repository = DirectorySpecRepository(str(Path(__file__).parent))
     loader = SpecBasedLoader(repository)
 
     hyperstat_basis: list[HyperStatBasis] = loader.load_all(
