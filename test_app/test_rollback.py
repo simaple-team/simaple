@@ -1,7 +1,7 @@
 import json
 
 
-def test_read_main(simulator_configuration, record_file_name, client):
+def test_rollback(simulator_configuration, record_file_name, client):
     response = client.post(
         "/workspaces/",
         json=simulator_configuration,

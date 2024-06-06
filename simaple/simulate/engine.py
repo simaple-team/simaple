@@ -21,7 +21,7 @@ from simaple.simulate.policy.base import (
     SimulationHistory,
     _BehaviorGenerator,
 )
-from simaple.simulate.policy.dsl import DSLError, OperandDSLParser
+from simaple.simulate.policy.dsl import OperandDSLParser
 from simaple.simulate.profile import SimulationProfile
 from simaple.simulate.report.base import Report, SimulationEntry
 
@@ -206,25 +206,3 @@ class OperationEngine(SimulationEngine):
             commit_count += 1
 
         return commit_count
-
-    def REPL(self):
-        while True:
-            txt = input(">> ")
-            if txt == "exit":
-                break
-
-            if txt == "valid":
-                print("-- valid skills --")
-                for validity in self.get_current_viewer()("validity"):
-                    if validity.valid:
-                        print(f"{validity.name}")
-            elif txt == "running":
-                for running in self.get_current_viewer()("running"):
-                    if running.time_left > 0:
-                        print(f"{running.name} | {running.time_left}")
-            else:
-                try:
-                    self.exec_dsl(txt)
-                except DSLError as e:
-                    print("Invalid DSL - try again")
-                    print(f"Error Mesage: {e}")

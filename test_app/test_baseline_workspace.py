@@ -1,4 +1,4 @@
-def test_read_main(baseline_configuration, client):
+def test_initial_workspace(baseline_configuration, client):
     response = client.post(
         "/workspaces/baseline",
         json=baseline_configuration,

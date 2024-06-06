@@ -1,4 +1,4 @@
-def test_read_main(simulator_configuration, client):
+def test_snapshot_consistency(simulator_configuration, client):
     resp = client.post(
         "/workspaces/",
         json=simulator_configuration,

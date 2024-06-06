@@ -12,6 +12,7 @@ from simaple.simulate.report.dpm import DamageCalculator
 
 
 class Simulator(pydantic.BaseModel):
+    # TODO: Taint?
     id: str
     engine: OperationEngine
     calculator: DamageCalculator
@@ -42,6 +43,11 @@ class Simulator(pydantic.BaseModel):
         self.engine.rollback(index)
 
     def rollback(self, history_index: int) -> None:
+        """
+        Rollback into history {history_index}.
+        This operator maintains history until {history_index} and discards the rest.
+        Be careful that history at "history_index" is not discarded.
+        """
         self.engine.rollback(history_index)
 
     def set_history(self, saved_history: dict) -> None:
