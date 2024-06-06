@@ -1,0 +1,64 @@
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: mercedes
+data:
+  providing_jobs: 
+  - mercedes
+  options:
+  - {}
+  - {}
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: evan
+data:
+  providing_jobs: 
+  - evan
+  options:
+  - {}
+  - {}
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: aran
+data:
+  providing_jobs: 
+  - aran
+  options:
+  - {}
+  - {}
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: adventure_mage
+data:
+  providing_jobs: 
+  - archmagefb
+  - archmagetc
+  - bishop
+  options:
+  - damage_multiplier: 3
+    ignored_defence: 3
+  - damage_multiplier: 3
+    ignored_defence: 3
+  - damage_multiplier: 6
+    ignored_defence: 6
+  - damage_multiplier: 6
+    ignored_defence: 6
+  - damage_multiplier: 9
+    ignored_defence: 9
+  - damage_multiplier: 9
+    ignored_defence: 9

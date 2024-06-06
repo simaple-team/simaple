@@ -9,15 +9,12 @@ from simaple.optimizer import LinkSkillTarget, StepwizeOptimizer
 from simaple.system.link import LinkSkillset
 
 
-@pytest.mark.parametrize(
-    "maximum_cost, expected_reward_value",
-    [
-        (3, 21126700.36418906),
-        (6, 24653420.52341694),
-        (12, 29098017.779391848),
-        (13, 29645888.4070373),
-    ],
-)
+@pytest.mark.parametrize("maximum_cost, expected_reward_value", [
+    (3, 21985589.273639064), 
+    (6, 25495273.619786955),
+    (12, 29919889.43730394),
+    (13, 30476251.017749675)
+])
 def test_optimizer(maximum_cost: int, expected_reward_value: float):
     optimization_target = LinkSkillTarget(
         Stat(

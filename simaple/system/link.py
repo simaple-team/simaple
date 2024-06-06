@@ -5,13 +5,16 @@ from typing import List
 from pydantic import BaseModel
 
 from simaple.core import JobType, Stat
+from simaple.spec.loadable import (  # pylint:disable=unused-import
+    TaggedNamespacedABCMeta,
+)
 
 
 def empty_options(length):
     return [Stat() for v in range(length)]
 
 
-class LinkSkill(BaseModel):
+class LinkSkill(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="LinkSkill")):
     providing_jobs: List[JobType]
     options: List[Stat]
 
@@ -24,6 +27,23 @@ class LinkSkill(BaseModel):
         return len(self.options)
 
 
+def get_skill_from_spec():
+    from pydantic import BaseModel
+
+    from simaple.core import Stat, StatProps
+    from simaple.spec.loader import SpecBasedLoader
+    from simaple.spec.repository import DirectorySpecRepository
+    from simaple.system.hyperstat import Hyperstat, HyperStatBasis
+
+    repository = DirectorySpecRepository("simaple/data/system")
+    loader = SpecBasedLoader(repository)
+
+    link_skills: list[HyperStatBasis] = loader.load_all(
+        query={"kind": "LinkSkill"},
+    )
+    return link_skills
+
+
 def get_all_blocks(
     thief_cunning_utilization_rate: float = 0.5,
     cadena_link_stack: int = 2,
@@ -31,26 +51,7 @@ def get_all_blocks(
     adele_link_membder_count: int = 4,
     kain_link_utilization_rate: float = 0.5,
 ):
-    return [
-        LinkSkill(
-            providing_jobs=[JobType.mercedes],
-            options=empty_options(2),
-        ),
-        LinkSkill(
-            providing_jobs=[JobType.evan],
-            options=empty_options(2),
-        ),
-        LinkSkill(
-            providing_jobs=[JobType.aran],
-            options=empty_options(2),
-        ),
-        LinkSkill(
-            providing_jobs=[JobType.archmagefb, JobType.archmagetc, JobType.bishop],
-            options=[
-                Stat(damage_multiplier=(i + 1) // 2, ignored_defence=(i + 1) // 2)
-                for i in range(6)
-            ],
-        ),
+    return get_skill_from_spec() + [
         LinkSkill(
             providing_jobs=[JobType.bowmaster, JobType.sniper, JobType.pathfinder],
             options=[Stat(critical_rate=v) for v in (3, 4, 5, 7, 8, 10)],
