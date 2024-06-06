@@ -5,8 +5,8 @@ from loguru import logger
 
 from simaple.core import Stat
 from simaple.core.damage import INTBasedDamageLogic
+from simaple.data.system.hyperstat import get_kms_hyperstat
 from simaple.optimizer import HyperstatTarget, StepwizeOptimizer
-from simaple.system.hyperstat import get_kms_hyperstat
 
 
 @pytest.mark.parametrize(

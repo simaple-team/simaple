@@ -3,49 +3,6 @@ from __future__ import annotations
 from pydantic import BaseModel
 
 from simaple.core import Stat, StatProps
-from simaple.spec.loader import SpecBasedLoader
-from simaple.spec.repository import DirectorySpecRepository
-from simaple.system.base import HyperStatBasis
-from simaple.system.hyperstat import HyperStatBasis
-
-
-def get_hyperstat_from_spec() -> dict[str, HyperStatBasis]:
-    repository = DirectorySpecRepository("simaple/data/system")
-    loader = SpecBasedLoader(repository)
-
-    hyperstat_basis: list[HyperStatBasis] = loader.load_all(
-        query={"kind": "UpgradableUserStat"},
-    )
-
-    return {basis.name: basis for basis in hyperstat_basis}
-
-
-HYPERSTAT_BASIS = {
-    StatProps(k): [ex_stat.stat for ex_stat in v.values]
-    for k, v in get_hyperstat_from_spec().items()
-}
-
-HYPERSTAT_COST = [1, 2, 4, 8, 10, 15, 20, 25, 30, 35, 50, 65, 80, 95, 110, 999999]
-
-
-def get_hyperstat_lists() -> list[tuple[StatProps, list[Stat]]]:
-    return list(sorted(HYPERSTAT_BASIS.items(), key=lambda x: x[0].value))
-
-
-def get_empty_hyperstat_levels() -> list[int]:
-    return [0 for i in range(len(HYPERSTAT_BASIS))]
-
-
-def get_hyperstat_cost() -> list[int]:
-    return list(HYPERSTAT_COST)
-
-
-def get_kms_hyperstat() -> Hyperstat:
-    return Hyperstat(
-        options=get_hyperstat_lists(),
-        cost=get_hyperstat_cost(),
-        levels=get_empty_hyperstat_levels(),
-    )
 
 
 class Hyperstat(BaseModel):

@@ -1,8 +1,8 @@
 from simaple.core import StatProps
+from simaple.data.system.hyperstat import get_kms_hyperstat
 from simaple.request.adapter.hyperstat import get_hyperstat
 from simaple.request.adapter.propensity import get_propensity
 from simaple.request.adapter.union import get_union_squad, get_union_squad_effect
-from simaple.system.hyperstat import get_kms_hyperstat
 from simaple.system.propensity import Propensity
 
 

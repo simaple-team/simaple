@@ -1,6 +1,6 @@
 from simaple.core import StatProps
+from simaple.data.system.hyperstat import get_kms_hyperstat
 from simaple.request.schema.character import CharacterHyperStat, HyperStatResponseColumn
-from simaple.system.hyperstat import get_kms_hyperstat
 
 _STAT_NAME_TO_BASIS_NAME = {
     "STR": StatProps.STR_static,

@@ -9,6 +9,7 @@ from typing import List, Tuple
 from pydantic import BaseModel
 
 from simaple.core import ActionStat, DamageLogic, JobType, Stat
+from simaple.data.system.hyperstat import get_kms_hyperstat
 from simaple.gear.gearset import Gearset
 from simaple.gear.potential import Potential
 from simaple.optimizer import (
@@ -19,7 +20,7 @@ from simaple.optimizer import (
     UnionSquadTarget,
     WeaponPotentialOptimizer,
 )
-from simaple.system.hyperstat import Hyperstat, get_kms_hyperstat
+from simaple.system.hyperstat import Hyperstat
 from simaple.system.link import LinkSkillset
 from simaple.system.union import (
     UnionOccupation,
