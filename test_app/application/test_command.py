@@ -2,7 +2,7 @@ import json
 import os
 from pathlib import Path
 
-from simaple.app.application.command import create_simulator
+from simaple.app.application.command.simulator import create_simulator
 from simaple.app.domain.simulator_configuration import MinimalSimulatorConfiguration
 from simaple.app.domain.uow import UnitOfWork
 

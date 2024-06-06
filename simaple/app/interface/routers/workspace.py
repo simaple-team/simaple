@@ -4,7 +4,7 @@ import fastapi
 import pydantic
 from dependency_injector.wiring import Provide, inject
 
-from simaple.app.application.command import create_simulator, play_operation, rollback
+from simaple.app.application.command.simulator import create_simulator, play_operation, rollback
 from simaple.app.application.query import (
     OperationLogResponse,
     SimulatorResponse,
