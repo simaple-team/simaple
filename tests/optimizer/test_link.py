@@ -9,8 +9,16 @@ from simaple.optimizer import LinkSkillTarget, StepwizeOptimizer
 from simaple.system.link import LinkSkillset
 
 
-@pytest.mark.parametrize("maximum_cost", [3, 6, 12, 13])
-def test_optimizer(maximum_cost):
+@pytest.mark.parametrize(
+    "maximum_cost, expected_reward_value",
+    [
+        (3, 21126700.36418906),
+        (6, 24653420.52341694),
+        (12, 29098017.779391848),
+        (13, 29645888.4070373),
+    ],
+)
+def test_optimizer(maximum_cost: int, expected_reward_value: float):
     optimization_target = LinkSkillTarget(
         Stat(
             INT=40000,
@@ -27,9 +35,5 @@ def test_optimizer(maximum_cost):
         preempted_jobs=[JobType.archmagefb],
     )
     optimizer = StepwizeOptimizer(optimization_target, maximum_cost, 1)
-    start = time.time()
     output = optimizer.optimize()
-    elapsed = time.time() - start
-    logger.info(
-        f"Optimization output {str(output.state)}; size {sum(output.state)}; spent: {elapsed:.02f}s"
-    )
+    assert output.get_value() == pytest.approx(expected_reward_value)
