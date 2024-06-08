@@ -10,6 +10,7 @@ from pydantic import BaseModel
 
 from simaple.core import ActionStat, DamageLogic, JobType, Stat
 from simaple.data.system.hyperstat import get_kms_hyperstat
+from simaple.data.system.link import get_kms_link_skill_set
 from simaple.gear.gearset import Gearset
 from simaple.gear.potential import Potential
 from simaple.optimizer import (
@@ -139,7 +140,7 @@ class PresetOptimizer(BaseModel):
             optimization_target = LinkSkillTarget(
                 reference_stat,
                 self.damage_logic,
-                LinkSkillset.KMS(),
+                get_kms_link_skill_set(),
                 preempted_jobs=[self.character_job_type],
             )
             optimizer = StepwizeOptimizer(optimization_target, self.link_count, 1)
