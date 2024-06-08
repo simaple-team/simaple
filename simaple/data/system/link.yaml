@@ -407,13 +407,23 @@ data:
   - nightwalker
   - striker
   options:
-  - damage_multiplier: 7
-  - damage_multiplier: 9
-  - damage_multiplier: 11
-  - damage_multiplier: 13
-  - damage_multiplier: 15
-  - damage_multiplier: 17
-  - damage_multiplier: 19
-  - damage_multiplier: 21
-  - damage_multiplier: 23
-  - damage_multiplier: 25
+  - attack_power: 7
+    magic_attack: 7
+  - attack_power: 9
+    magic_attack: 9
+  - attack_power: 11
+    magic_attack: 11
+  - attack_power: 13
+    magic_attack: 13
+  - attack_power: 15
+    magic_attack: 15
+  - attack_power: 17
+    magic_attack: 17
+  - attack_power: 19
+    magic_attack: 19
+  - attack_power: 21
+    magic_attack: 21
+  - attack_power: 23
+    magic_attack: 23
+  - attack_power: 25
+    magic_attack: 25
