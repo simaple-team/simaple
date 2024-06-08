@@ -2,15 +2,13 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from pydantic import BaseModel
-
 from simaple.core import Stat, StatProps
 from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.repository import DirectorySpecRepository
 from simaple.system.hyperstat import Hyperstat, HyperStatBasis
 
 
-def _get_hyperstat_basis_from_spec() -> dict[str, HyperStatBasis]:
+def _get_hyperstat_basis_from_spec() -> dict[StatProps, list[Stat]]:
     repository = DirectorySpecRepository(str(Path(__file__).parent))
     loader = SpecBasedLoader(repository)
 

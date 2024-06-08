@@ -7,7 +7,6 @@ from simaple.core import JobType, Stat
 from simaple.core.damage import INTBasedDamageLogic
 from simaple.data.system.union_block import create_with_some_large_blocks
 from simaple.optimizer import StepwizeOptimizer, UnionSquadTarget
-from simaple.system.union import UnionSquad
 
 
 @pytest.mark.parametrize(

@@ -1,8 +1,6 @@
-from abc import abstractmethod
-
 from pydantic import BaseModel
 
-from simaple.core.base import AttackType, BaseStatType, ExtendedStat, Stat
+from simaple.core.base import ExtendedStat
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
 )
