@@ -1,6 +1,6 @@
 from simaple.core import StatProps
+from simaple.data.system.hyperstat import get_kms_hyperstat
 from simaple.request.schema.character import CharacterHyperStat, HyperStatResponseColumn
-from simaple.system.hyperstat import Hyperstat
 
 _STAT_NAME_TO_BASIS_NAME = {
     "STR": StatProps.STR_static,
@@ -20,7 +20,7 @@ def get_hyperstat(hyperstat_response: CharacterHyperStat):
     target_preset: list[HyperStatResponseColumn] = hyperstat_response[
         f"hyper_stat_preset_{hyperstat_response['use_preset_no'] - 1}"  # type: ignore
     ]
-    hyperstat = Hyperstat()
+    hyperstat = get_kms_hyperstat()
 
     for column in target_preset:
         if column["stat_type"] in _STAT_NAME_TO_BASIS_NAME:

@@ -1,11 +1,12 @@
 from simaple.core import ExtendedStat, JobType
+from simaple.data.system.union_block import get_all_blocks
 from simaple.request.schema.character import (
     CharacterUnionRaider,
     CharacterUnionRaiderBlock,
 )
 from simaple.request.translator.job_name import translate_kms_name
 from simaple.request.translator.kms.union_raider import kms_union_stat_translator
-from simaple.system.union import UnionSquad, get_all_blocks
+from simaple.system.union import UnionSquad
 
 
 def _get_block_size(level: int) -> int:

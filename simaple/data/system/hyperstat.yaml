@@ -1,0 +1,436 @@
+---
+kind: UpgradableUserStat 
+version: simaple.io/HyperStatBasis
+metadata:
+  label:
+    type: HyperStat
+    stat_name: STR_static
+data:  
+  name: STR_static
+  values: 
+    - stat:
+        STR_static: 0
+    - stat:
+        STR_static: 30
+    - stat:
+        STR_static: 60
+    - stat:
+        STR_static: 90
+    - stat:
+        STR_static: 120
+    - stat:
+        STR_static: 150
+    - stat:
+        STR_static: 180
+    - stat:
+        STR_static: 210
+    - stat:
+        STR_static: 240
+    - stat:
+        STR_static: 270
+    - stat:
+        STR_static: 300
+    - stat:
+        STR_static: 330
+    - stat:
+        STR_static: 360
+    - stat:
+        STR_static: 390
+    - stat:
+        STR_static: 420
+    - stat:
+        STR_static: 450
+---
+kind: UpgradableUserStat 
+version: simaple.io/HyperStatBasis
+metadata:
+  label:
+    type: HyperStat
+    stat_name: DEX_static
+data:  
+  name: DEX_static
+  values: 
+    - stat:
+        DEX_static: 0
+    - stat:
+        DEX_static: 30
+    - stat:
+        DEX_static: 60
+    - stat:
+        DEX_static: 90
+    - stat:
+        DEX_static: 120
+    - stat:
+        DEX_static: 150
+    - stat:
+        DEX_static: 180
+    - stat:
+        DEX_static: 210
+    - stat:
+        DEX_static: 240
+    - stat:
+        DEX_static: 270
+    - stat:
+        DEX_static: 300
+    - stat:
+        DEX_static: 330
+    - stat:
+        DEX_static: 360
+    - stat:
+        DEX_static: 390
+    - stat:
+        DEX_static: 420
+    - stat:
+        DEX_static: 450
+---
+kind: UpgradableUserStat 
+version: simaple.io/HyperStatBasis
+metadata:
+  label:
+    type: HyperStat
+    stat_name: LUK_static
+data:  
+  name: LUK_static
+  values: 
+    - stat:
+        LUK_static: 0
+    - stat:
+        LUK_static: 30
+    - stat:
+        LUK_static: 60
+    - stat:
+        LUK_static: 90
+    - stat:
+        LUK_static: 120
+    - stat:
+        LUK_static: 150
+    - stat:
+        LUK_static: 180
+    - stat:
+        LUK_static: 210
+    - stat:
+        LUK_static: 240
+    - stat:
+        LUK_static: 270
+    - stat:
+        LUK_static: 300
+    - stat:
+        LUK_static: 330
+    - stat:
+        LUK_static: 360
+    - stat:
+        LUK_static: 390
+    - stat:
+        LUK_static: 420
+    - stat:
+        LUK_static: 450
+---
+kind: UpgradableUserStat 
+version: simaple.io/HyperStatBasis
+metadata:
+  label:
+    type: HyperStat
+    stat_name: INT_static
+data:  
+  name: INT_static
+  values: 
+    - stat:
+        INT_static: 0
+    - stat:
+        INT_static: 30
+    - stat:
+        INT_static: 60
+    - stat:
+        INT_static: 90
+    - stat:
+        INT_static: 120
+    - stat:
+        INT_static: 150
+    - stat:
+        INT_static: 180
+    - stat:
+        INT_static: 210
+    - stat:
+        INT_static: 240
+    - stat:
+        INT_static: 270
+    - stat:
+        INT_static: 300
+    - stat:
+        INT_static: 330
+    - stat:
+        INT_static: 360
+    - stat:
+        INT_static: 390
+    - stat:
+        INT_static: 420
+    - stat:
+        INT_static: 450
+---
+kind: UpgradableUserStat 
+version: simaple.io/HyperStatBasis
+metadata:
+  label:
+    type: HyperStat
+    stat_name: attack_power
+data:  
+  name: attack_power
+  values: 
+    - stat:
+        attack_power: 0
+        magic_attack: 0
+    - stat:
+        attack_power: 3
+        magic_attack: 3
+    - stat:
+        attack_power: 6
+        magic_attack: 6
+    - stat:
+        attack_power: 9
+        magic_attack: 9
+    - stat:
+        attack_power: 12
+        magic_attack: 12
+    - stat:
+        attack_power: 15
+        magic_attack: 15
+    - stat:
+        attack_power: 18
+        magic_attack: 18
+    - stat:
+        attack_power: 21
+        magic_attack: 21
+    - stat:
+        attack_power: 24
+        magic_attack: 24
+    - stat:
+        attack_power: 27
+        magic_attack: 27
+    - stat:
+        attack_power: 30
+        magic_attack: 30
+    - stat:
+        attack_power: 33
+        magic_attack: 33
+    - stat:
+        attack_power: 36
+        magic_attack: 36
+    - stat:
+        attack_power: 39
+        magic_attack: 39
+    - stat:
+        attack_power: 42
+        magic_attack: 42
+    - stat:
+        attack_power: 45
+        magic_attack: 45
+---
+kind: UpgradableUserStat 
+version: simaple.io/HyperStatBasis
+metadata:
+  label:
+    type: HyperStat
+    stat_name: damage_multiplier
+data:  
+  name: damage_multiplier
+  values: 
+    - stat:
+        damage_multiplier: 0
+    - stat:
+        damage_multiplier: 3
+    - stat:
+        damage_multiplier: 6
+    - stat:
+        damage_multiplier: 9
+    - stat:
+        damage_multiplier: 12
+    - stat:
+        damage_multiplier: 15
+    - stat:
+        damage_multiplier: 18
+    - stat:
+        damage_multiplier: 21
+    - stat:
+        damage_multiplier: 24
+    - stat:
+        damage_multiplier: 27
+    - stat:
+        damage_multiplier: 30
+    - stat:
+        damage_multiplier: 33
+    - stat:
+        damage_multiplier: 36
+    - stat:
+        damage_multiplier: 39
+    - stat:
+        damage_multiplier: 42
+    - stat:
+        damage_multiplier: 45
+---
+kind: UpgradableUserStat 
+version: simaple.io/HyperStatBasis
+metadata:
+  label:
+    type: HyperStat
+    stat_name: boss_damage_multiplier
+data:  
+  name: boss_damage_multiplier
+  values: 
+    - stat:
+        boss_damage_multiplier: 0
+    - stat:
+        boss_damage_multiplier: 3
+    - stat:
+        boss_damage_multiplier: 6
+    - stat:
+        boss_damage_multiplier: 9
+    - stat:
+        boss_damage_multiplier: 12
+    - stat:
+        boss_damage_multiplier: 15
+    - stat:
+        boss_damage_multiplier: 19
+    - stat:
+        boss_damage_multiplier: 23
+    - stat:
+        boss_damage_multiplier: 27
+    - stat:
+        boss_damage_multiplier: 31
+    - stat:
+        boss_damage_multiplier: 35
+    - stat:
+        boss_damage_multiplier: 39
+    - stat:
+        boss_damage_multiplier: 43
+    - stat:
+        boss_damage_multiplier: 47
+    - stat:
+        boss_damage_multiplier: 51
+    - stat:
+        boss_damage_multiplier: 55
+---
+kind: UpgradableUserStat 
+version: simaple.io/HyperStatBasis
+metadata:
+  label:
+    type: HyperStat
+    stat_name: critical_damage
+data:  
+  name: critical_damage
+  values: 
+    - stat:
+        critical_damage: 0
+    - stat:
+        critical_damage: 1
+    - stat:
+        critical_damage: 2
+    - stat:
+        critical_damage: 3
+    - stat:
+        critical_damage: 4
+    - stat:
+        critical_damage: 5
+    - stat:
+        critical_damage: 6
+    - stat:
+        critical_damage: 7
+    - stat:
+        critical_damage: 8
+    - stat:
+        critical_damage: 9
+    - stat:
+        critical_damage: 10
+    - stat:
+        critical_damage: 11
+    - stat:
+        critical_damage: 12
+    - stat:
+        critical_damage: 13
+    - stat:
+        critical_damage: 14
+    - stat:
+        critical_damage: 15
+---
+kind: UpgradableUserStat 
+version: simaple.io/HyperStatBasis
+metadata:
+  label:
+    type: HyperStat
+    stat_name: critical_rate
+data:  
+  name: critical_rate
+  values: 
+    - stat:
+        critical_rate: 0
+    - stat:
+        critical_rate: 1
+    - stat:
+        critical_rate: 2
+    - stat:
+        critical_rate: 3
+    - stat:
+        critical_rate: 4
+    - stat:
+        critical_rate: 5
+    - stat:
+        critical_rate: 7
+    - stat:
+        critical_rate: 9
+    - stat:
+        critical_rate: 11
+    - stat:
+        critical_rate: 13
+    - stat:
+        critical_rate: 15
+    - stat:
+        critical_rate: 17
+    - stat:
+        critical_rate: 19
+    - stat:
+        critical_rate: 21
+    - stat:
+        critical_rate: 23
+    - stat:
+        critical_rate: 25
+---
+kind: UpgradableUserStat 
+version: simaple.io/HyperStatBasis
+metadata:
+  label:
+    type: HyperStat
+    stat_name: ignored_defence
+data:  
+  name: ignored_defence
+  values: 
+    - stat:
+        ignored_defence: 0
+    - stat:
+        ignored_defence: 3
+    - stat:
+        ignored_defence: 6
+    - stat:
+        ignored_defence: 9
+    - stat:
+        ignored_defence: 12
+    - stat:
+        ignored_defence: 15
+    - stat:
+        ignored_defence: 18
+    - stat:
+        ignored_defence: 21
+    - stat:
+        ignored_defence: 24
+    - stat:
+        ignored_defence: 27
+    - stat:
+        ignored_defence: 30
+    - stat:
+        ignored_defence: 33
+    - stat:
+        ignored_defence: 36
+    - stat:
+        ignored_defence: 39
+    - stat:
+        ignored_defence: 42
+    - stat:
+        ignored_defence: 45

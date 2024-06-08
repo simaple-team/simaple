@@ -1,0 +1,429 @@
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: mercedes
+data:
+  providing_jobs: 
+  - mercedes
+  options:
+  - {}
+  - {}
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: evan
+data:
+  providing_jobs: 
+  - evan
+  options:
+  - {}
+  - {}
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: aran
+data:
+  providing_jobs: 
+  - aran
+  options:
+  - {}
+  - {}
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: adventure_mage
+data:
+  providing_jobs: 
+  - archmagefb
+  - archmagetc
+  - bishop
+  options:
+  - damage_multiplier: 3
+    ignored_defence: 3
+  - damage_multiplier: 3
+    ignored_defence: 3
+  - damage_multiplier: 6
+    ignored_defence: 6
+  - damage_multiplier: 6
+    ignored_defence: 6
+  - damage_multiplier: 9
+    ignored_defence: 9
+  - damage_multiplier: 9
+    ignored_defence: 9
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: adventure_archer
+data:
+  providing_jobs: 
+  - bowmaster
+  - sniper
+  - pathfinder
+  options:
+  - critical_rate: 3
+  - critical_rate: 4
+  - critical_rate: 5
+  - critical_rate: 7
+  - critical_rate: 8
+  - critical_rate: 10
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: adventure_theif
+data:
+  providing_jobs: 
+  - shadower
+  - corsair
+  - dualblade
+  options:
+  # thief_cunning_utilization_rate: 0.5
+  # TODO: support patch
+  - damage_multiplier: 1.5
+  - damage_multiplier: 3
+  - damage_multiplier: 4.5
+  - damage_multiplier: 6
+  - damage_multiplier: 7.5
+  - damage_multiplier: 9
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: adventure_pirate
+data:
+  providing_jobs: 
+  - buccaneer
+  - corsair
+  - cannoneer
+  options:
+  - STR: 20
+    DEX: 20
+    INT: 20
+    LUK: 20
+    MHP: 350
+  - STR: 30
+    DEX: 30
+    INT: 30
+    LUK: 30
+    MHP: 525
+  - STR: 40
+    DEX: 40
+    INT: 40
+    LUK: 40
+    MHP: 700
+  - STR: 50
+    DEX: 50
+    INT: 50
+    LUK: 50
+    MHP: 875
+  - STR: 60
+    DEX: 60
+    INT: 60
+    LUK: 60
+    MHP: 1050
+  - STR: 70
+    DEX: 70
+    INT: 70
+    LUK: 70
+    MHP: 1225
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: demonslayer
+data:
+  providing_jobs: 
+  - demonslayer
+  options:
+  - boss_damage_multiplier: 10
+  - boss_damage_multiplier: 15
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: luminous
+data:
+  providing_jobs: 
+  - luminous
+  options:
+  - ignored_defence: 10
+  - ignored_defence: 15
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: phantom
+data:
+  providing_jobs: 
+  - phantom
+  options:
+  - critical_rate: 10
+  - critical_rate: 15
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: kinesis
+data:
+  providing_jobs: 
+  - kinesis
+  options:
+  - critical_damage: 2
+  - critical_damage: 4
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: angelicbuster
+data:
+  providing_jobs: 
+  - angelicbuster
+  options:
+  - {}
+  - {}
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: zero
+data:
+  providing_jobs: 
+  - zero
+  options:
+  - ignored_defence: 2
+  - ignored_defence: 4
+  - ignored_defence: 6
+  - ignored_defence: 8
+  - ignored_defence: 10
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: zenon
+data:
+  providing_jobs: 
+  - zenon
+  options:
+  - INT_multiplier: 5
+    STR_multiplier: 5
+    DEX_multiplier: 5
+    LUK_multiplier: 5
+  - INT_multiplier: 10
+    STR_multiplier: 10
+    DEX_multiplier: 10
+    LUK_multiplier: 10
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: cadena
+data:
+  providing_jobs: 
+  - cadena
+  options:
+  # TODO: control by mob level
+  # TODO: define whether applied in stat or not
+  - damage_multiplier: 6
+  - damage_multiplier: 12
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: ark
+data:
+  providing_jobs: 
+  - ark
+  options:
+  # TODO: define whether applied in stat or not
+  # TODO: ark_link_stack patch
+  - damage_multiplier: 5
+  - damage_multiplier: 11
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: hoyoung
+data:
+  providing_jobs: 
+  - hoyoung
+  options:
+  - ignored_defence: 5
+  - ignored_defence: 10
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: adele
+data:
+  providing_jobs: 
+  - adele
+  options:
+  # TODO: patch adele party member count. default=4
+  - boss_damage_multiplier: 2
+    damage_multiplier: 4
+  - boss_damage_multiplier: 4
+    damage_multiplier: 8
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: kain
+data:
+  providing_jobs: 
+  - kain
+  options:
+  # TODO: patch kain utility rate. default=0.5
+  - damage_multiplier: 4.5
+  - damage_multiplier: 8.5
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: adventure_warrior
+data:
+  providing_jobs: 
+  - paladin
+  - darkknight
+  - hero
+  options:
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: mihile
+data:
+  providing_jobs: 
+  - mihile
+  options:
+  - {}
+  - {}
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: resistance
+data:
+  providing_jobs: 
+  - blaster
+  - battlemage
+  - wildhunter
+  - mechanic
+  options:
+  - {}
+  - {}
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: kaiser
+data:
+  providing_jobs: 
+  - kaiser
+  options:
+  - {}
+  - {}
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: eunwol
+data:
+  providing_jobs: 
+  - eunwol
+  options:
+  - {}
+  - {}
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: cygnus
+data:
+  providing_jobs: 
+  - soulmaster
+  - flamewizard
+  - windbreaker
+  - nightwalker
+  - striker
+  options:
+  - attack_power: 7
+    magic_attack: 7
+  - attack_power: 9
+    magic_attack: 9
+  - attack_power: 11
+    magic_attack: 11
+  - attack_power: 13
+    magic_attack: 13
+  - attack_power: 15
+    magic_attack: 15
+  - attack_power: 17
+    magic_attack: 17
+  - attack_power: 19
+    magic_attack: 19
+  - attack_power: 21
+    magic_attack: 21
+  - attack_power: 23
+    magic_attack: 23
+  - attack_power: 25
+    magic_attack: 25

@@ -1,16 +1,21 @@
-import time
-
 import pytest
-from loguru import logger
 
 from simaple.core import JobType, Stat
 from simaple.core.damage import INTBasedDamageLogic
+from simaple.data.system.link import get_kms_link_skill_set
 from simaple.optimizer import LinkSkillTarget, StepwizeOptimizer
-from simaple.system.link import LinkSkillset
 
 
-@pytest.mark.parametrize("maximum_cost", [3, 6, 12, 13])
-def test_optimizer(maximum_cost):
+@pytest.mark.parametrize(
+    "maximum_cost, expected_reward_value",
+    [
+        (3, 21985589.273639064),
+        (6, 24803206.28323931),
+        (12, 28930802.18317819),
+        (13, 29456254.7869325),
+    ],
+)
+def test_optimizer(maximum_cost: int, expected_reward_value: float):
     optimization_target = LinkSkillTarget(
         Stat(
             INT=40000,
@@ -23,13 +28,9 @@ def test_optimizer(maximum_cost):
             INT_static=10000,
         ),
         INTBasedDamageLogic(attack_range_constant=1.0, mastery=0.95),
-        LinkSkillset.KMS(),
+        get_kms_link_skill_set(),
         preempted_jobs=[JobType.archmagefb],
     )
     optimizer = StepwizeOptimizer(optimization_target, maximum_cost, 1)
-    start = time.time()
     output = optimizer.optimize()
-    elapsed = time.time() - start
-    logger.info(
-        f"Optimization output {str(output.state)}; size {sum(output.state)}; spent: {elapsed:.02f}s"
-    )
+    assert output.get_value() == pytest.approx(expected_reward_value)

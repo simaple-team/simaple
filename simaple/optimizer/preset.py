@@ -9,6 +9,9 @@ from typing import List, Tuple
 from pydantic import BaseModel
 
 from simaple.core import ActionStat, DamageLogic, JobType, Stat
+from simaple.data.system.hyperstat import get_kms_hyperstat
+from simaple.data.system.link import get_kms_link_skill_set
+from simaple.data.system.union_block import create_with_some_large_blocks
 from simaple.gear.gearset import Gearset
 from simaple.gear.potential import Potential
 from simaple.optimizer import (
@@ -82,7 +85,7 @@ class PresetOptimizer(BaseModel):
             hyperstat_optimization_target = HyperstatTarget(
                 reference_stat,
                 self.damage_logic,
-                Hyperstat(),
+                get_kms_hyperstat(),
             )
             optimizer = StepwizeOptimizer(
                 hyperstat_optimization_target,
@@ -99,7 +102,7 @@ class PresetOptimizer(BaseModel):
             union_squad_optimization_target = UnionSquadTarget(
                 reference_stat,
                 self.damage_logic,
-                UnionSquad.create_with_some_large_blocks(
+                create_with_some_large_blocks(
                     large_block_jobs=[self.character_job_type]
                     + self.alternate_character_job_types,
                 ),
@@ -138,7 +141,7 @@ class PresetOptimizer(BaseModel):
             optimization_target = LinkSkillTarget(
                 reference_stat,
                 self.damage_logic,
-                LinkSkillset.KMS(),
+                get_kms_link_skill_set(),
                 preempted_jobs=[self.character_job_type],
             )
             optimizer = StepwizeOptimizer(optimization_target, self.link_count, 1)
@@ -167,7 +170,7 @@ class PresetOptimizer(BaseModel):
 
         preset = Preset(
             gearset=gearset,
-            hyperstat=Hyperstat(),
+            hyperstat=get_kms_hyperstat(),
             links=LinkSkillset.empty(),
             union_squad=UnionSquad.empty(),
             union_occupation=UnionOccupation(),
@@ -204,7 +207,7 @@ class PresetOptimizer(BaseModel):
             preset.get_stat() + self.default_stat
         )
 
-        preset.hyperstat = Hyperstat()
+        preset.hyperstat = get_kms_hyperstat()
         preset.hyperstat = self.calculate_optimal_hyperstat(
             preset.get_stat() + self.default_stat
         )
