@@ -1,0 +1,690 @@
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: hero
+data:
+  job: hero
+  options:
+  - STR_static: 10
+  - STR_static: 20
+  - STR_static: 40
+  - STR_static: 80
+  - STR_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: darkknight
+data:
+  job: darkknight
+  options:
+  - MHP_multiplier: 2
+  - MHP_multiplier: 3
+  - MHP_multiplier: 4
+  - MHP_multiplier: 5
+  - MHP_multiplier: 6
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: paladin
+data:
+  job: paladin
+  options:
+  - STR_static: 10
+  - STR_static: 20
+  - STR_static: 40
+  - STR_static: 80
+  - STR_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: bishop
+data:
+  job: bishop
+  options:
+  - INT_static: 10
+  - INT_static: 20
+  - INT_static: 40
+  - INT_static: 80
+  - INT_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: archmagefb
+data:
+  job: archmagefb
+  options:
+  - MMP_multiplier: 2
+  - MMP_multiplier: 3
+  - MMP_multiplier: 4
+  - MMP_multiplier: 5
+  - MMP_multiplier: 6
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: archmagetc
+data:
+  job: archmagetc
+  options:
+  - INT_static: 10
+  - INT_static: 20
+  - INT_static: 40
+  - INT_static: 80
+  - INT_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: nightlord
+data:
+  job: nightlord
+  options:
+  - critical_rate: 1
+  - critical_rate: 2
+  - critical_rate: 3
+  - critical_rate: 4
+  - critical_rate: 5
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: shadower
+data:
+  job: shadower
+  options:
+  - LUK_static: 10
+  - LUK_static: 20
+  - LUK_static: 40
+  - LUK_static: 80
+  - LUK_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: dualblade
+data:
+  job: dualblade
+  options:
+  - LUK_static: 10
+  - LUK_static: 20
+  - LUK_static: 40
+  - LUK_static: 80
+  - LUK_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: bowmaster
+data:
+  job: bowmaster
+  options:
+  - DEX_static: 10
+  - DEX_static: 20
+  - DEX_static: 40
+  - DEX_static: 80
+  - DEX_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: sniper
+data:
+  job: sniper
+  options:
+  - critical_rate: 1
+  - critical_rate: 2
+  - critical_rate: 3
+  - critical_rate: 4
+  - critical_rate: 5
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: pathfinder
+data:
+  job: pathfinder
+  options:
+  - DEX_static: 10
+  - DEX_static: 20
+  - DEX_static: 40
+  - DEX_static: 80
+  - DEX_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: corsair
+data:
+  job: corsair
+  action_stat_options:
+  - summon_duration: 4
+  - summon_duration: 6
+  - summon_duration: 8
+  - summon_duration: 10
+  - summon_duration: 12
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: buccaneer
+data:
+  job: buccaneer
+  options:
+  - STR_static: 10
+  - STR_static: 20
+  - STR_static: 40
+  - STR_static: 80
+  - STR_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: cannoneer
+data:
+  job: cannoneer
+  options:
+  - STR_static: 10
+  - STR_static: 20
+  - STR_static: 40
+  - STR_static: 80
+  - STR_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: soulmaster
+data:
+  job: soulmaster
+  options:
+  - MHP: 250
+  - MHP: 500
+  - MHP: 1000
+  - MHP: 2000
+  - MHP: 2500
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: flamewizard
+data:
+  job: flamewizard
+  options:
+  - INT_static: 10
+  - INT_static: 20
+  - INT_static: 40
+  - INT_static: 80
+  - INT_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: windbreaker
+data:
+  job: windbreaker
+  options:
+  - DEX_static: 10
+  - DEX_static: 20
+  - DEX_static: 40
+  - DEX_static: 80
+  - DEX_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: nightwalker
+data:
+  job: nightwalker
+  options:
+  - LUK_static: 10
+  - LUK_static: 20
+  - LUK_static: 40
+  - LUK_static: 80
+  - LUK_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: striker
+data:
+  job: striker
+  options:
+  - STR_static: 10
+  - STR_static: 20
+  - STR_static: 40
+  - STR_static: 80
+  - STR_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: mihile
+data:
+  job: mihile # TODO: static MHP
+  options:
+  - MHP: 250
+  - MHP: 500
+  - MHP: 1000
+  - MHP: 2000
+  - MHP: 2500
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: demonavenger
+data:
+  job: demonavenger
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: demonslayer
+data:
+  job: demonslayer
+  options:
+  - boss_damage_multiplier: 1
+  - boss_damage_multiplier: 2
+  - boss_damage_multiplier: 3
+  - boss_damage_multiplier: 5
+  - boss_damage_multiplier: 6
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: battlemage
+data:
+  job: battlemage
+  options:
+  - INT_static: 10
+  - INT_static: 20
+  - INT_static: 40
+  - INT_static: 80
+  - INT_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: wildhunter
+data:
+  job: wildhunter
+  options:
+  - damage_multiplier: 0.8
+  - damage_multiplier: 1.6
+  - damage_multiplier: 2.4
+  - damage_multiplier: 3.2
+  - damage_multiplier: 4.0
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: mechanic
+data:
+  job: mechanic
+  action_stat_options:
+  - buff_duration: 5
+  - buff_duration: 10
+  - buff_duration: 15
+  - buff_duration: 20
+  - buff_duration: 25
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: zenon
+data:
+  job: zenon
+  options:
+  - LUK_static: 5
+    STR_static: 5
+    DEX_static: 5
+  - LUK_static: 10
+    STR_static: 10
+    DEX_static: 10
+  - LUK_static: 20
+    STR_static: 20
+    DEX_static: 20
+  - LUK_static: 40
+    STR_static: 40
+    DEX_static: 40
+  - LUK_static: 50
+    STR_static: 50
+    DEX_static: 50
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: evan
+data:
+  job: evan
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: luminous
+data:
+  job: luminous
+  options:
+  - INT_static: 10
+  - INT_static: 20
+  - INT_static: 40
+  - INT_static: 80
+  - INT_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: mercedes
+data:
+  job: mercedes
+  action_stat_options:
+  - cooltime_reduce_rate: 2
+  - cooltime_reduce_rate: 3
+  - cooltime_reduce_rate: 4
+  - cooltime_reduce_rate: 5
+  - cooltime_reduce_rate: 6
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: phantom
+data:
+  job: phantom
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: eunwol
+data:
+  job: eunwol
+  options:
+  - critical_damage: 1
+  - critical_damage: 2
+  - critical_damage: 3
+  - critical_damage: 5
+  - critical_damage: 6
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: aran
+data:
+  job: aran
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: kaiser
+data:
+  job: kaiser
+  options:
+  - STR_static: 10
+  - STR_static: 20
+  - STR_static: 40
+  - STR_static: 80
+  - STR_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: kain
+data:
+  job: kain
+  options:
+  - DEX_static: 10
+  - DEX_static: 20
+  - DEX_static: 40
+  - DEX_static: 80
+  - DEX_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: cadena
+data:
+  job: cadena
+  options:
+  - LUK_static: 10
+  - LUK_static: 20
+  - LUK_static: 40
+  - LUK_static: 80
+  - LUK_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: angelicbuster
+data:
+  job: angelicbuster
+  options:
+  - DEX_static: 10
+  - DEX_static: 20
+  - DEX_static: 40
+  - DEX_static: 80
+  - DEX_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: adele
+data:
+  job: adele
+  options:
+  - STR_static: 10
+  - STR_static: 20
+  - STR_static: 40
+  - STR_static: 80
+  - STR_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: illium
+data:
+  job: illium
+  options:
+  - INT_static: 10
+  - INT_static: 20
+  - INT_static: 40
+  - INT_static: 80
+  - INT_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: ark
+data:
+  job: ark
+  options:
+  - STR_static: 10
+  - STR_static: 20
+  - STR_static: 40
+  - STR_static: 80
+  - STR_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: lara
+data:
+  job: lara
+  options:
+  - INT_static: 10
+  - INT_static: 20
+  - INT_static: 40
+  - INT_static: 80
+  - INT_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: hoyoung
+data:
+  job: hoyoung
+  options:
+  - LUK_static: 10
+  - LUK_static: 20
+  - LUK_static: 40
+  - LUK_static: 80
+  - LUK_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: zero
+data:
+  job: zero
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: kinesis
+data:
+  job: kinesis
+  options:
+  - INT_static: 10
+  - INT_static: 20
+  - INT_static: 40
+  - INT_static: 80
+  - INT_static: 100
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: virtual_maplestory_m
+data:
+  job: virtual_maplestory_m
+  options:
+  - magic_attack: 5
+    attack_power: 5
+  - magic_attack: 10
+    attack_power: 10
+  - magic_attack: 15
+    attack_power: 15
+  - magic_attack: 20
+    attack_power: 20
+  - magic_attack: 20
+    attack_power: 20
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: blaster
+data:
+  job: blaster
+  options:
+  - ignored_defence: 1
+  - ignored_defence: 2
+  - ignored_defence: 3
+  - ignored_defence: 5
+  - ignored_defence: 6
+---
+kind: UnionBlock 
+version: simaple.io/UnionBlock
+metadata:
+  label:
+    type: UnionBlock
+    name: khali
+data:
+  job: khali
+  options:
+  - LUK_static: 10
+  - LUK_static: 20
+  - LUK_static: 40
+  - LUK_static: 80
+  - LUK_static: 100

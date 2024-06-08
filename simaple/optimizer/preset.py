@@ -11,6 +11,7 @@ from pydantic import BaseModel
 from simaple.core import ActionStat, DamageLogic, JobType, Stat
 from simaple.data.system.hyperstat import get_kms_hyperstat
 from simaple.data.system.link import get_kms_link_skill_set
+from simaple.data.system.union_block import create_with_some_large_blocks
 from simaple.gear.gearset import Gearset
 from simaple.gear.potential import Potential
 from simaple.optimizer import (
@@ -101,7 +102,7 @@ class PresetOptimizer(BaseModel):
             union_squad_optimization_target = UnionSquadTarget(
                 reference_stat,
                 self.damage_logic,
-                UnionSquad.create_with_some_large_blocks(
+                create_with_some_large_blocks(
                     large_block_jobs=[self.character_job_type]
                     + self.alternate_character_job_types,
                 ),
