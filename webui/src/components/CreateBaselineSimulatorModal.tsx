@@ -39,6 +39,7 @@ const CreateBaselineSimulatorModal: React.FC = () => {
       mob_level: 265,
       force_advantage: 1.0,
       trait_level: 100,
+      artifact_level: 0,
       v_skill_level: 30,
       v_improvements_level: 60,
       weapon_attack_power: 0,
@@ -66,6 +67,7 @@ const CreateBaselineSimulatorModal: React.FC = () => {
         mob_level: values.mob_level,
         force_advantage: values.force_advantage,
         trait_level: values.trait_level,
+        artifact_level: values.artifact_level,
         v_skill_level: values.v_skill_level,
         v_improvements_level: values.v_improvements_level,
         weapon_attack_power: values.weapon_attack_power,
@@ -148,6 +150,8 @@ const CreateBaselineSimulatorModal: React.FC = () => {
             <Input {...register("combat_orders_level")} />
             <Label>유니온 배치 칸</Label>
             <Input {...register("union_block_count")} />
+            <Label>아티팩트 레벨</Label>
+            <Input {...register("artifact_level")} />
             <Label>무기 공격력</Label>
             <Input {...register("weapon_attack_power")} />
             <Label>무기 순수 공격력</Label>

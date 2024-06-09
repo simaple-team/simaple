@@ -16,6 +16,7 @@ export interface SimulationSetting {
   mob_level: number;
   force_advantage: number;
   trait_level: number;
+  artifact_level: number;
 
   v_skill_level: number;
   v_improvements_level: number;
