@@ -1,0 +1,360 @@
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: all_stat
+data:  
+  name: all_stat
+  effects: 
+  - {}
+  - stat:
+      STR_static: 15
+      DEX_static: 15
+      INT_static: 15
+      LUK_static: 15
+  - stat:
+      STR_static: 30
+      DEX_static: 30
+      INT_static: 30
+      LUK_static: 30
+  - stat:
+      STR_static: 45
+      DEX_static: 45
+      INT_static: 45
+      LUK_static: 45
+  - stat:
+      STR_static: 60
+      DEX_static: 60
+      INT_static: 60
+      LUK_static: 60
+  - stat:
+      STR_static: 75
+      DEX_static: 75
+      INT_static: 75
+      LUK_static: 75
+  - stat:
+      STR_static: 90
+      DEX_static: 90
+      INT_static: 90
+      LUK_static: 90
+  - stat:
+      STR_static: 105
+      DEX_static: 105
+      INT_static: 105
+      LUK_static: 105
+  - stat:
+      STR_static: 120
+      DEX_static: 120
+      INT_static: 120
+      LUK_static: 120
+  - stat:
+      STR_static: 135
+      DEX_static: 135
+      INT_static: 135
+      LUK_static: 135
+  - stat:
+      STR_static: 150
+      DEX_static: 150
+      INT_static: 150
+      LUK_static: 150
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: MHP/MP
+data:  
+  name: MHP/MP
+  effects: 
+  - {}
+  - stat:
+      MHP: 750
+      MMP: 750
+  - stat:
+      MHP: 1500
+      MMP: 1500
+  - stat:
+      MHP: 2250
+      MMP: 2250
+  - stat:
+      MHP: 3000
+      MMP: 3000
+  - stat:
+      MHP: 3750
+      MMP: 3750
+  - stat:
+      MHP: 4500
+      MMP: 4500
+  - stat:
+      MHP: 5250
+      MMP: 5250
+  - stat:
+      MHP: 6000
+      MMP: 6000
+  - stat:
+      MHP: 6750
+      MMP: 6750
+  - stat:
+      MHP: 7500
+      MMP: 7500
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: attack/magic_attack
+data:  
+  name: attack/magic_attack
+  effects: 
+  - {}
+  - stat:
+      attack_power: 3
+      magic_attack: 3
+  - stat:
+      attack_power: 6
+      magic_attack: 6
+  - stat:
+      attack_power: 9
+      magic_attack: 9
+  - stat:
+      attack_power: 12
+      magic_attack: 12
+  - stat:
+      attack_power: 15
+      magic_attack: 15
+  - stat:
+      attack_power: 18
+      magic_attack: 18
+  - stat:
+      attack_power: 21
+      magic_attack: 21
+  - stat:
+      attack_power: 24
+      magic_attack: 24
+  - stat:
+      attack_power: 27
+      magic_attack: 27
+  - stat:
+      attack_power: 30
+      magic_attack: 30
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: damage_multiplier
+data:  
+  name: damage_multiplier
+  effects: 
+  - {}
+  - stat:
+      damage_multiplier: 1.5
+  - stat:
+      damage_multiplier: 3
+  - stat:
+      damage_multiplier: 4.5
+  - stat:
+      damage_multiplier: 6
+  - stat:
+      damage_multiplier: 7.5
+  - stat:
+      damage_multiplier: 9
+  - stat:
+      damage_multiplier: 10.5
+  - stat:
+      damage_multiplier: 12
+  - stat:
+      damage_multiplier: 13.5
+  - stat:
+      damage_multiplier: 15
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: boss_damage_multiplier
+data:  
+  name: boss_damage_multiplier
+  effects: 
+  - {}
+  - stat:
+      boss_damage_multiplier: 1.5
+  - stat:
+      boss_damage_multiplier: 3
+  - stat:
+      boss_damage_multiplier: 4.5
+  - stat:
+      boss_damage_multiplier: 6
+  - stat:
+      boss_damage_multiplier: 7.5
+  - stat:
+      boss_damage_multiplier: 9
+  - stat:
+      boss_damage_multiplier: 10.5
+  - stat:
+      boss_damage_multiplier: 12
+  - stat:
+      boss_damage_multiplier: 13.5
+  - stat:
+      boss_damage_multiplier: 15
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: ignored_defence
+data:  
+  name: ignored_defence
+  effects: 
+  - {}
+  - stat:
+      ignored_defence: 2
+  - stat:
+      ignored_defence: 4
+  - stat:
+      ignored_defence: 6
+  - stat:
+      ignored_defence: 8
+  - stat:
+      ignored_defence: 10
+  - stat:
+      ignored_defence: 12
+  - stat:
+      ignored_defence: 14
+  - stat:
+      ignored_defence: 16
+  - stat:
+      ignored_defence: 18
+  - stat:
+      ignored_defence: 20
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: buff_duration
+data:  
+  name: buff_duration
+  effects: 
+  - {}
+  - action_stat:
+      buff_duration: 2
+  - action_stat:
+      buff_duration: 4
+  - action_stat:
+      buff_duration: 6
+  - action_stat:
+      buff_duration: 8
+  - action_stat:
+      buff_duration: 10
+  - action_stat:
+      buff_duration: 12
+  - action_stat:
+      buff_duration: 14
+  - action_stat:
+      buff_duration: 16
+  - action_stat:
+      buff_duration: 18
+  - action_stat:
+      buff_duration: 20
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: critical_rate
+data:  
+  name: critical_rate
+  effects: 
+  - {}
+  - stat:
+      critical_rate: 2
+  - stat:
+      critical_rate: 4
+  - stat:
+      critical_rate: 6
+  - stat:
+      critical_rate: 8
+  - stat:
+      critical_rate: 10
+  - stat:
+      critical_rate: 12
+  - stat:
+      critical_rate: 14
+  - stat:
+      critical_rate: 16
+  - stat:
+      critical_rate: 18
+  - stat:
+      critical_rate: 20
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: critical_damage
+data:  
+  name: critical_damage
+  effects: 
+  - {}
+  - stat:
+      critical_damage: 0.4
+  - stat:
+      critical_damage: 0.8
+  - stat:
+      critical_damage: 1.2
+  - stat:
+      critical_damage: 1.6
+  - stat:
+      critical_damage: 2.0
+  - stat:
+      critical_damage: 2.4
+  - stat:
+      critical_damage: 2.8
+  - stat:
+      critical_damage: 3.2
+  - stat:
+      critical_damage: 3.6
+  - stat:
+      critical_damage: 4.0
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: summon_duration
+data:  
+  name: summon_duration
+  effects: 
+  - {}
+  - action_stat:
+      summon_duration: 2
+  - action_stat:
+      summon_duration: 4
+  - action_stat:
+      summon_duration: 6
+  - action_stat:
+      summon_duration: 8
+  - action_stat:
+      summon_duration: 10
+  - action_stat:
+      summon_duration: 12
+  - action_stat:
+      summon_duration: 14
+  - action_stat:
+      summon_duration: 16
+  - action_stat:
+      summon_duration: 18
+  - action_stat:
+      summon_duration: 20

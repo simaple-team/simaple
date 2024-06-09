@@ -11,7 +11,6 @@ from simaple.data.baseline import get_baseline_gearset
 from simaple.data.damage_logic import get_damage_logic
 from simaple.data.doping import get_normal_doping
 from simaple.data.engine_configuration import get_engine_configuration
-from simaple.data.monster_life import get_normal_monsterlife
 from simaple.data.passive import get_passive
 from simaple.gear.gearset import Gearset
 from simaple.optimizer.preset import Preset, PresetOptimizer
@@ -33,6 +32,7 @@ class SimulationSetting(pydantic.BaseModel):
     combat_orders_level: int
     union_block_count: int = 37
     link_count: int = 12 + 1
+    artifact_level: int
     armor: int = 300
     mob_level: int = 265
     force_advantage: float = 1.0
@@ -155,13 +155,10 @@ class SimulationContainer(containers.DeclarativeContainer):
 
     doping = providers.Factory(get_normal_doping)
 
-    monster_life = providers.Factory(get_normal_monsterlife)
-
     default_extended_stat = providers.Factory(
         add_extended_stats,
         passive,
         doping,
-        monster_life,
         ability_stat,
         propensity.provided.get_extended_stat.call(),
     )
@@ -187,6 +184,7 @@ class SimulationContainer(containers.DeclarativeContainer):
         link_count=config.link_count,
         default_stat=default_extended_stat.provided.stat,
         buff_duration_preempted=settings.provided.is_buff_duration_preemptive.call(),
+        artifact_level=settings.provided.artifact_level,
     )
 
     optimial_preset = providers.Singleton(

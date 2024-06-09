@@ -9,6 +9,7 @@ from typing import List, Tuple
 from pydantic import BaseModel
 
 from simaple.core import ActionStat, DamageLogic, JobType, Stat
+from simaple.data.system.artifact import get_artifact, get_artifact_effects
 from simaple.data.system.hyperstat import get_kms_hyperstat
 from simaple.data.system.link import get_kms_link_skill_set
 from simaple.data.system.union_block import create_with_some_large_blocks
@@ -22,6 +23,7 @@ from simaple.optimizer import (
     UnionSquadTarget,
     WeaponPotentialOptimizer,
 )
+from simaple.system.artifact import Artifact
 from simaple.system.hyperstat import Hyperstat
 from simaple.system.link import LinkSkillset
 from simaple.system.union import (
@@ -40,6 +42,8 @@ class Preset(BaseModel):
     union_squad: UnionSquad
     union_occupation: UnionOccupation
 
+    artifact: Artifact
+
     # inner_ability: InnerAbility
 
     level: int
@@ -52,6 +56,7 @@ class Preset(BaseModel):
             + self.links.get_stat()
             + self.union_squad.get_stat()
             + self.union_occupation.get_stat()
+            + self.artifact.get_extended_stat().stat
             + self.level_stat
         )
 
@@ -60,6 +65,7 @@ class Preset(BaseModel):
             self.gearset.get_total_extended_stat().action_stat
             + self.union_squad.get_action_stat()
             + self.union_occupation.get_action_stat()
+            + self.artifact.get_extended_stat().action_stat
         )
 
 
@@ -79,6 +85,28 @@ class PresetOptimizer(BaseModel):
     alternate_character_job_types: List[JobType]
     link_count: int
     buff_duration_preempted: bool = False
+    artifact_level: int
+
+    def calculate_optimal_artifact(self, reference_stat: Stat) -> Artifact:
+        """
+        This logic first computes card priorities, and then
+        return optimal artifact based on given card priorities.
+        """
+        effects = sorted(
+            get_artifact_effects(),
+            key=lambda x: self.damage_logic.get_damage_factor(
+                reference_stat + x.effects[1].stat
+            ),
+            reverse=True,
+        )
+        effect_names = [effect.name for effect in effects]
+        if self.buff_duration_preempted:
+            effect_names = ["buff_duration"] + effect_names
+
+        return get_artifact(
+            effect_names,
+            self.artifact_level,
+        )
 
     def calculate_optimal_hyperstat(self, reference_stat: Stat) -> Hyperstat:
         with Timer("hyperstat"):
@@ -176,6 +204,7 @@ class PresetOptimizer(BaseModel):
             union_occupation=UnionOccupation(),
             level=self.level,
             level_stat=self.damage_logic.get_best_level_based_stat(self.level),
+            artifact=Artifact(cards=[], effects=[]),
         )
 
         for i in range(2):
@@ -195,6 +224,11 @@ class PresetOptimizer(BaseModel):
                 preset.get_stat() + self.default_stat,
                 preset.gearset.weapon_potential_tiers[0],
             )
+        )
+
+        preset.artifact = Artifact(cards=[], effects=[])
+        preset.artifact = self.calculate_optimal_artifact(
+            preset.get_stat() + self.default_stat
         )
 
         preset.links = LinkSkillset.empty()

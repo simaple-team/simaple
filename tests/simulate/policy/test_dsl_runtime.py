@@ -30,6 +30,7 @@ def fixture_dsl_test_setting():
         v_skill_level=30,
         v_improvements_level=60,
         cache_root_dir=cache_dir,
+        artifact_level=40,
     )
 
 
@@ -47,6 +48,6 @@ def test_dsl(dsl_list: list[str], dsl_test_setting: SimulationSetting) -> None:
     print(
         f"{engine.get_current_viewer()('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "
     )
-    assert 10735001153803.367 == pytest.approx(
+    assert 10438982168263.46 == pytest.approx(
         container.dpm_calculator().calculate_dpm(report)
     )

@@ -57,6 +57,7 @@ def baseline_configuration():
             "combat_orders_level": 1,
             "v_skill_level": 30,
             "v_improvements_level": 60,
+            "artifact_level": 40,
         }
     }
 
