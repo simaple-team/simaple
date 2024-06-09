@@ -1,0 +1,245 @@
+- artifact_level: 8
+  distribution:
+  - level: 3
+    targets: [1, 2, 3]
+  - level: 3
+    targets: [1, 2, 3]
+  - level: 3
+    targets: [1, 2, 3]
+
+- artifact_level: 10
+  distribution:
+  - level: 4
+    targets: [1, 2, 3]
+  - level: 3
+    targets: [1, 2, 3]
+  - level: 3
+    targets: [1, 2, 3]
+  - level: 2
+    targets: [4, 5, 6]
+
+- artifact_level: 12
+  distribution:
+  - level: 4
+    targets: [1, 2, 3]
+  - level: 3
+    targets: [1, 2, 3]
+  - level: 3
+    targets: [1, 2, 3]
+  - level: 3
+    targets: [4, 5, 6]
+
+
+- artifact_level: 14
+  distribution:
+  - level: 4
+    targets: [1, 2, 3]
+  - level: 3
+    targets: [1, 2, 3]
+  - level: 3
+    targets: [1, 2, 3]
+  - level: 4
+    targets: [4, 5, 6]
+
+
+
+- artifact_level: 16
+  distribution:
+  - level: 4
+    targets: [1, 2, 3]
+  - level: 3
+    targets: [1, 2, 3]
+  - level: 3
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [4, 5, 6]
+
+- artifact_level: 19
+  distribution:
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 3
+    targets: [4, 5, 6]
+  - level: 3
+    targets: [4, 5, 6]
+
+
+- artifact_level: 20
+  distribution:
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 3
+    targets: [4, 5, 6]
+  - level: 3
+    targets: [4, 5, 6]
+  - level: 2
+    targets: [4, 5, 6]
+
+- artifact_level: 21
+  distribution:
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 3
+    targets: [4, 5, 6]
+  - level: 3
+    targets: [4, 5, 6]
+  - level: 3
+    targets: [4, 5, 6]
+
+
+- artifact_level: 23
+  distribution:
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 4
+    targets: [4, 5, 6]
+  - level: 3
+    targets: [4, 5, 6]
+  - level: 3
+    targets: [4, 5, 6]
+
+### 6-skill end
+
+- artifact_level: 25
+  distribution:
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 4
+    targets: [4, 5, 6]
+  - level: 4
+    targets: [4, 5, 7]
+  - level: 3
+    targets: [4, 6, 7]
+
+
+- artifact_level: 26
+  distribution:
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 4
+    targets: [4, 5, 6]
+  - level: 4
+    targets: [4, 5, 7]
+  - level: 4
+    targets: [4, 6, 7]
+
+- artifact_level: 29
+  distribution:
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [4, 5, 6]
+  - level: 4
+    targets: [4, 5, 7]
+  - level: 4
+    targets: [4, 6, 7]
+
+
+- artifact_level: 30
+  distribution:
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [4, 5, 6]
+  - level: 5
+    targets: [4, 5, 7]
+  - level: 3
+    targets: [6, 7, 8]
+  - level: 2
+    targets: [6, 7, 8]
+
+### 7-skill end
+
+- artifact_level: 32
+  distribution:
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [4, 5, 6]
+  - level: 5
+    targets: [4, 5, 7]
+  - level: 4
+    targets: [6, 7, 8]
+  - level: 2
+    targets: [6, 7, 8]
+
+
+- artifact_level: 34
+  distribution:
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [4, 5, 6]
+  - level: 5
+    targets: [4, 5, 7]
+  - level: 4
+    targets: [6, 7, 8]
+  - level: 3
+    targets: [6, 7, 8]
+
+
+- artifact_level: 35
+  distribution:
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [4, 5, 6]
+  - level: 5
+    targets: [4, 5, 6]
+  - level: 4
+    targets: [7, 8, 9]
+  - level: 4
+    targets: [7, 8, 9]
+
+
+- artifact_level: 38
+  distribution:
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [4, 5, 6]
+  - level: 5
+    targets: [4, 5, 6]
+  - level: 5
+    targets: [7, 8, 9]
+  - level: 4
+    targets: [7, 8, 9]
+
+- artifact_level: 40
+  distribution:
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [1, 2, 3]
+  - level: 5
+    targets: [4, 5, 6]
+  - level: 5
+    targets: [4, 5, 6]
+  - level: 5
+    targets: [7, 8, 9]
+  - level: 5
+    targets: [7, 8, 9]
