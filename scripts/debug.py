@@ -73,6 +73,7 @@ class DebugInterface:
             v_skill_level=30,
             v_improvements_level=60,
             hexa_improvements_level=10,
+            artifact_level=40,
         )
 
     def get_engine(self):

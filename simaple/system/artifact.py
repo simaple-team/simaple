@@ -35,6 +35,7 @@ class Artifact(BaseModel):
             for effect in card.effects:
                 if effect not in all_effects:
                     raise ValueError(f"effect {effect} not found in effects")
+        return self
 
     def get_levels(self) -> dict[str, int]:
         levels: dict[str, int] = defaultdict(int)

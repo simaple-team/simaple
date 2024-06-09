@@ -30,6 +30,7 @@ def fixture_dsl_test_setting():
         v_skill_level=30,
         v_improvements_level=60,
         cache_root_dir=cache_dir,
+        artifact_level=40,
     )
 
 

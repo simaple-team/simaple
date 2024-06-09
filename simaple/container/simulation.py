@@ -33,6 +33,7 @@ class SimulationSetting(pydantic.BaseModel):
     combat_orders_level: int
     union_block_count: int = 37
     link_count: int = 12 + 1
+    artifact_level: int
     armor: int = 300
     mob_level: int = 265
     force_advantage: float = 1.0
@@ -187,6 +188,7 @@ class SimulationContainer(containers.DeclarativeContainer):
         link_count=config.link_count,
         default_stat=default_extended_stat.provided.stat,
         buff_duration_preempted=settings.provided.is_buff_duration_preemptive.call(),
+        artifact_level=settings.provided.artifact_level,
     )
 
     optimial_preset = providers.Singleton(

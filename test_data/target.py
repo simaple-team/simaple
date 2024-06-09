@@ -26,6 +26,7 @@ def container_test_setting(
         cache_root_dir=os.path.join(os.path.dirname(__file__), "cache"),
         weapon_attack_power=options.get("weapon_attack_power", 0),
         weapon_pure_attack_power=options.get("weapon_pure_attack_power", 0),
+        artifact_level=40,
     )
 
 
