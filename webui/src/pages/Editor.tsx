@@ -22,6 +22,7 @@ const Editor: React.FC = () => {
     <div className="flex">
       <div className="flex flex-col w-[520px] p-4 gap-2">
         <Textarea
+          spellCheck={false}
           className="grow"
           value={plan}
           onChange={(e) => setPlan(e.currentTarget.value)}

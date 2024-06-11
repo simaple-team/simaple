@@ -19,7 +19,13 @@ const colorlist = [
 ];
 
 function damageFormatter(value: number) {
-  return (value / 100000000).toFixed(2) + "억";
+  if (value < 10000) return value.toFixed(0);
+
+  if (value < 100000000) return (value / 10000).toFixed(2) + "만";
+
+  if (value < 1000000000000) return (value / 100000000).toFixed(2) + "억";
+
+  return (value / 1000000000000).toFixed(2) + "조";
 }
 
 function clockFormatter(value: number) {
