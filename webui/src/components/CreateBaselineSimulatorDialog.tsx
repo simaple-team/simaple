@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "./ui/select";
 
-const CreateBaselineSimulatorModal: React.FC = () => {
+const CreateBaselineSimulatorDialog: React.FC = () => {
   const { createBaselineSimulator } = useWorkspace();
   const { register, getValues, control } = useForm({
     defaultValues: {
@@ -137,7 +137,7 @@ const CreateBaselineSimulatorModal: React.FC = () => {
               </Select>
             )}
           />
-          <div className="grid grid-cols-2 gap-x-10">
+          <div className="grid grid-cols-2 gap-x-10 items-center">
             <Label htmlFor="level">레벨</Label>
             <Input id="level" {...register("level")} />
             <Label>몹 레벨</Label>
@@ -169,4 +169,4 @@ const CreateBaselineSimulatorModal: React.FC = () => {
   );
 };
 
-export default CreateBaselineSimulatorModal;
+export default CreateBaselineSimulatorDialog;
