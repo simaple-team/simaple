@@ -6,7 +6,7 @@ from simaple.simulate.policy.base import Operation
 
 __PARSER = Lark(
     r"""
-    simaple: request (WS request)* 
+    simaple: WS? request (NEWLINE request)* 
 
     multiplier: "x" SIGNED_NUMBER
     request: multiplier? WS? operation
@@ -30,6 +30,7 @@ __PARSER = Lark(
     %import common.ESCAPED_STRING
     %import common.SIGNED_NUMBER
     %import common.WS
+    %import common.NEWLINE
 
     %ignore " "
 
@@ -37,7 +38,7 @@ __PARSER = Lark(
     %ignore COMMENT
 
     """,
-    start="request",
+    start="simaple",
 )
 
 
@@ -64,8 +65,14 @@ class TreeToOperation(Transformer):
     def _no_ws(self, x: list[str | None]) -> list[str]:
         return [v for v in x if v is not None]
 
-    def WS(self, white_space: Token) -> None:
+    def WS(self, white_space: Token):
         return Discard
+
+    def NEWLINE(self, new_line: Token):
+        return Discard
+
+    def simaple(self, x: list[list[Operation]]) -> list[Operation]:
+        return sum(x, [])
 
     def request(
         self,
