@@ -21,7 +21,7 @@ from simaple.simulate.policy.base import (
     SimulationHistory,
     _BehaviorGenerator,
 )
-from simaple.simulate.policy.dsl import OperandDSLParser
+from simaple.simulate.policy.parser import parse_dsl_to_operations
 from simaple.simulate.profile import SimulationProfile
 from simaple.simulate.report.base import Report, SimulationEntry
 
@@ -85,7 +85,6 @@ class OperationEngine(SimulationEngine):
         self._buffered_events: list[Event] = []
 
         self._history = SimulationHistory(store)
-        self._parser = OperandDSLParser()
         self._callbacks: list[PostActionCallback] = []
 
     def inspect(self, log: OperationLog) -> list[tuple[PlayLog, ViewerType]]:
@@ -189,7 +188,7 @@ class OperationEngine(SimulationEngine):
 
     def exec_dsl(self, txt: str, debug: bool = False) -> int:
         """Returns newly accumulated histories"""
-        ops = self._parser(txt)
+        ops = parse_dsl_to_operations(txt)
         commit_count = 0
 
         for op in ops:

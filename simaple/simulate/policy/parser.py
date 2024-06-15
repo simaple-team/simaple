@@ -131,8 +131,15 @@ def get_parser():
     return __PARSER
 
 
+class DSLError(Exception):
+    ...
+
+
 def parse_dsl_to_operations(dsl: str) -> list[Operation]:
-    tree = __PARSER.parse(dsl)
-    op, multiplier = __OperationTreeTransformer.transform(tree)
-    op.expr = dsl
-    return [op for _ in range(multiplier)]
+    try:
+        tree = __PARSER.parse(dsl)
+        op, multiplier = __OperationTreeTransformer.transform(tree)
+        op.expr = dsl
+        return [op for _ in range(multiplier)]
+    except Exception as e:
+        raise DSLError(str(e) + f" was {dsl}") from e

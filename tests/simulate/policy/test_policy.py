@@ -1,7 +1,7 @@
 import pytest
 
 from simaple.simulate.policy.base import Operation
-from simaple.simulate.policy.dsl import OperandDSLParser
+from simaple.simulate.policy.parser import parse_dsl_to_operations
 
 
 @pytest.mark.parametrize(
@@ -22,5 +22,4 @@ from simaple.simulate.policy.dsl import OperandDSLParser
     ],
 )
 def test_operand_serializer(op, op_string):
-    parser = OperandDSLParser()
-    assert parser(op_string) == [op]
+    assert parse_dsl_to_operations(op_string) == [op]
