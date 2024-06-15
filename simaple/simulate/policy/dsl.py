@@ -7,7 +7,7 @@ from simaple.simulate.policy.base import (
     OperationGeneratorProto,
     PolicyContextType,
 )
-from simaple.simulate.policy.parser import parse_dsl_to_operation
+from simaple.simulate.policy.parser import parse_dsl_to_operations
 
 
 class DSLError(Exception):
@@ -17,15 +17,7 @@ class DSLError(Exception):
 class OperandDSLParser:
     def __call__(self, op_string: str) -> list[Operation]:
         try:
-            mult = 1
-            mult_match = re.compile(r"x([0-9]+) .*").match(op_string)
-            if mult_match:
-                mult = int(mult_match.group(1).strip())
-                op_string = op_string.replace(f"x{mult_match.group(1)}", "")
-
-            op = parse_dsl_to_operation(op_string)
-
-            return [op for _ in range(mult)]
+            return parse_dsl_to_operations(op_string)
         except Exception as e:
             raise DSLError(str(e) + f" was {op_string}") from e
 

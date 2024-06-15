@@ -1,13 +1,13 @@
-from typing import cast, Any
+from typing import Any, cast
 
-from lark import Lark, Transformer, Discard, Token
+from lark import Discard, Lark, Token, Transformer
 
 from simaple.simulate.policy.base import Operation
 
 __PARSER = Lark(
     r"""
     multiplier: "x" SIGNED_NUMBER
-    request: multiplier? operation
+    request: multiplier? WS? operation
 
     operation: full_operation
           | time_operation
@@ -45,11 +45,15 @@ class TreeToOperation(Transformer):
         return command.value
 
     def skill(self, skill_string):
-        '''
+        """
         Extract skill name from double quote string
-        '''
+        """
         (skill_with_double_quote,) = skill_string
         return skill_with_double_quote[1:-1]
+
+    def multiplier(self, multiplier_syntax) -> int:
+        (multiplier_string,) = multiplier_syntax
+        return int(multiplier_string)
 
     def time(self, time_signed_number) -> float:
         (time_string,) = time_signed_number
@@ -61,12 +65,28 @@ class TreeToOperation(Transformer):
     def WS(self, white_space: Token) -> None:
         return Discard
 
-    def request(self, x):
-        print(x)
-        return x[0]
+    def request(
+        self,
+        x: tuple[
+            Operation,
+        ]
+        | tuple[int, Operation],
+    ) -> tuple[Operation, int]:
+        if len(x) == 2:
+            multiplier, operation = x
+        else:
+            operation = x[0]
+            multiplier = 1
 
-    def operation(self, x: Operation) -> Operation:
-        return x
+        return operation, multiplier
+
+    def operation(
+        self,
+        x: tuple[
+            Operation,
+        ],
+    ) -> Operation:
+        return x[0]
 
     def full_operation(self, x: tuple[str, str, float]) -> Operation:
         command, skill_name, time = x
@@ -111,8 +131,8 @@ def get_parser():
     return __PARSER
 
 
-def parse_dsl_to_operation(dsl: str) -> Operation:
+def parse_dsl_to_operations(dsl: str) -> list[Operation]:
     tree = __PARSER.parse(dsl)
-    op = cast(Operation, __OperationTreeTransformer.transform(tree)[0])
+    op, multiplier = __OperationTreeTransformer.transform(tree)
     op.expr = dsl
-    return op
+    return [op for _ in range(multiplier)]
