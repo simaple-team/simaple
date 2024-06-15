@@ -1,25 +1,30 @@
 from typing import Any, cast
 
 from lark import Discard, Lark, Token, Transformer
+from pydantic import BaseModel
 
 from simaple.simulate.policy.base import Operation
 
+
+class ConsoleText(BaseModel):
+    text: str
+
+
 __PARSER = Lark(
     r"""
-    simaple: WS? request (NEWLINE request)* 
+    simaple: WS? (request|console) (NEWLINE (request|console))* 
 
-    multiplier: "x" SIGNED_NUMBER
     request: multiplier? WS? operation
+    multiplier: "x" SIGNED_NUMBER
 
     operation: full_operation
           | time_operation
           | skill_operation
-          | log_operation
 
     full_operation: op_command WS skill WS time
     time_operation: op_command WS time
     skill_operation: op_command WS skill
-    log_operation: "!debug" WS expression
+    console: "!debug" WS expression
 
     op_command: WORD
     skill: ESCAPED_STRING
@@ -71,7 +76,9 @@ class TreeToOperation(Transformer):
     def NEWLINE(self, new_line: Token):
         return Discard
 
-    def simaple(self, x: list[list[Operation]]) -> list[Operation]:
+    def simaple(
+        self, x: list[list[Operation] | list[ConsoleText]]
+    ) -> list[Operation | ConsoleText]:
         return sum(x, [])
 
     def request(
@@ -117,12 +124,12 @@ class TreeToOperation(Transformer):
             expr=f'{command} "{skill_name}"',
         )
 
-    def log_operation(self, wrapped_expression: str) -> Operation:
-        return Operation(
-            command=wrapped_expression,
-            name="",
-            debug=True,
-        )
+    def console(self, wrapped_expression: str) -> list[ConsoleText]:
+        return [
+            ConsoleText(
+                text=wrapped_expression[0],
+            )
+        ]
 
     def expression(self, s):
         (s,) = s
@@ -140,7 +147,20 @@ class DSLError(Exception):
     ...
 
 
+def is_console_command(op_or_console: ConsoleText | Operation) -> bool:
+    return isinstance(op_or_console, ConsoleText)
+
+
 def parse_dsl_to_operations(dsl: str) -> list[Operation]:
+    try:
+        ops = __OperationTreeTransformer.transform(__PARSER.parse(dsl))
+        assert all(isinstance(op, Operation) for op in ops)
+        return ops
+    except Exception as e:
+        raise DSLError(str(e) + f" was {dsl}") from e
+
+
+def parse_dsl_to_operations_or_console(dsl: str) -> list[ConsoleText | Operation]:
     try:
         return __OperationTreeTransformer.transform(__PARSER.parse(dsl))
     except Exception as e:

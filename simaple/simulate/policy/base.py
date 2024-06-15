@@ -19,7 +19,6 @@ class Operation(BaseModel):
     name: str
     time: Optional[float] = None
     expr: str = ""
-    debug: bool = False
 
 
 ActionGeneratorType = Generator[Action, list[Event], None]

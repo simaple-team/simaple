@@ -21,7 +21,10 @@ from simaple.simulate.policy.base import (
     SimulationHistory,
     _BehaviorGenerator,
 )
-from simaple.simulate.policy.parser import parse_dsl_to_operations
+from simaple.simulate.policy.parser import (
+    is_console_command,
+    parse_dsl_to_operations_or_console,
+)
 from simaple.simulate.profile import SimulationProfile
 from simaple.simulate.report.base import Report, SimulationEntry
 
@@ -188,11 +191,11 @@ class OperationEngine(SimulationEngine):
 
     def exec_dsl(self, txt: str, debug: bool = False) -> int:
         """Returns newly accumulated histories"""
-        ops = parse_dsl_to_operations(txt)
+        ops = parse_dsl_to_operations_or_console(txt)
         commit_count = 0
 
-        for op in ops:
-            if op.debug:
+        for op_or_console in ops:
+            if is_console_command(op_or_console):
                 if debug:
                     output = SimulationProfile(self.get_current_viewer()).inspect(
                         op.command
@@ -201,7 +204,7 @@ class OperationEngine(SimulationEngine):
 
                 continue
 
-            self._exec(op)
+            self._exec(op := op_or_console)
             commit_count += 1
 
         return commit_count
