@@ -16,7 +16,7 @@ from simaple.simulate.policy.parser import parse_dsl_to_operations
             'CAST "skill"',
         ),
         (
-            Operation(command="ELAPSE", time=100, name="", expr="ELAPSE 100"),
+            Operation(command="ELAPSE", time=100, name="", expr="ELAPSE 100.0"),
             "ELAPSE 100",
         ),
     ],

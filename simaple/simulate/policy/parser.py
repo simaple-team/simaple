@@ -6,6 +6,8 @@ from simaple.simulate.policy.base import Operation
 
 __PARSER = Lark(
     r"""
+    simaple: request (WS request)* 
+
     multiplier: "x" SIGNED_NUMBER
     request: multiplier? WS? operation
 
@@ -71,14 +73,12 @@ class TreeToOperation(Transformer):
             Operation,
         ]
         | tuple[int, Operation],
-    ) -> tuple[Operation, int]:
+    ) -> list[Operation]:
         if len(x) == 2:
             multiplier, operation = x
-        else:
-            operation = x[0]
-            multiplier = 1
+            return [operation for _ in range(multiplier)]
 
-        return operation, multiplier
+        return [x[0]]
 
     def operation(
         self,
@@ -94,15 +94,12 @@ class TreeToOperation(Transformer):
             command=command,
             name=skill_name,
             time=time,
+            expr=f'{command} "{skill_name}" {time}',
         )
 
     def time_operation(self, x: tuple[str, float]) -> Operation:
         command, time = x
-        return Operation(
-            command=command,
-            name="",
-            time=time,
-        )
+        return Operation(command=command, name="", time=time, expr=f"{command} {time}")
 
     def skill_operation(self, x: tuple[str, str]) -> Operation:
         command, skill_name = x
@@ -110,6 +107,7 @@ class TreeToOperation(Transformer):
             command=command,
             name=skill_name,
             time=None,
+            expr=f'{command} "{skill_name}"',
         )
 
     def log_operation(self, wrapped_expression: str) -> Operation:
@@ -137,9 +135,6 @@ class DSLError(Exception):
 
 def parse_dsl_to_operations(dsl: str) -> list[Operation]:
     try:
-        tree = __PARSER.parse(dsl)
-        op, multiplier = __OperationTreeTransformer.transform(tree)
-        op.expr = dsl
-        return [op for _ in range(multiplier)]
+        return __OperationTreeTransformer.transform(__PARSER.parse(dsl))
     except Exception as e:
         raise DSLError(str(e) + f" was {dsl}") from e
