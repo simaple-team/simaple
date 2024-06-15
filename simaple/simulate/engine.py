@@ -119,7 +119,7 @@ class OperationEngine(SimulationEngine):
     def load_history(self, saved_history: dict[str, Any]) -> None:
         self._history.load(saved_history)
 
-    def _exec(self, op: Operation, early_stop: int = -1) -> None:
+    def exec(self, op: Operation, early_stop: int = -1) -> None:
         playlogs: list[PlayLog] = []
         store = self._history.move_store()
 
@@ -162,7 +162,7 @@ class OperationEngine(SimulationEngine):
     def exec_policy(self, policy: PolicyType, early_stop: int = -1) -> None:
         operations = policy(self._context)
         for op in operations:
-            self._exec(op, early_stop=early_stop)
+            self.exec(op, early_stop=early_stop)
 
     @property
     def _context(self):
@@ -189,22 +189,20 @@ class OperationEngine(SimulationEngine):
     def rollback(self, idx: int):
         self._history.discard_after(idx)
 
-    def exec_dsl(self, txt: str, debug: bool = False) -> int:
+    def exec_dsl(self, txt: str) -> int:
         """Returns newly accumulated histories"""
         ops = parse_dsl_to_operations_or_console(txt)
         commit_count = 0
 
         for op_or_console in ops:
             if is_console_command(op_or_console):
-                if debug:
-                    output = SimulationProfile(self.get_current_viewer()).inspect(
-                        op.command
-                    )
-                    print(f"\033[90m[DEBUG_]{output}\033[0m")
-
+                output = SimulationProfile(self.get_current_viewer()).inspect(
+                    op.command
+                )
+                print(f"\033[90m[DEBUG_]{output}\033[0m")
                 continue
 
-            self._exec(op := op_or_console)
+            self.exec(op := op_or_console)
             commit_count += 1
 
         return commit_count
