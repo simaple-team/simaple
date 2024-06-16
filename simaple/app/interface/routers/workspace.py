@@ -5,6 +5,7 @@ import pydantic
 from dependency_injector.wiring import Provide, inject
 
 from simaple.app.application.command.simulator import (
+    create_from_plan,
     create_simulator,
     play_operation,
     rollback,
@@ -47,6 +48,21 @@ def create_from_baseline(
     uow: UnitOfWork = UowProvider,
 ) -> Any:
     simulator_id = create_simulator(conf, uow)
+
+    return SimulatorResponse(id=simulator_id)
+
+
+class RequestCreateFromPlan(pydantic.BaseModel):
+    plan: str
+
+
+@router.post("/plan", response_model=SimulatorResponse)
+@inject
+def create_from_simulator(
+    request: RequestCreateFromPlan,
+    uow: UnitOfWork = UowProvider,
+) -> Any:
+    simulator_id = create_from_plan(request.plan, uow)
 
     return SimulatorResponse(id=simulator_id)
 

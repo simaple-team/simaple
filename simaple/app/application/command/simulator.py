@@ -1,4 +1,5 @@
 from simaple.app.application.exception import UnknownSimulatorException
+from simaple.app.domain.services.plan import get_simulator_from_plan
 from simaple.app.domain.simulator import Simulator
 from simaple.app.domain.simulator_configuration import SimulatorConfiguration
 from simaple.app.domain.uow import UnitOfWork
@@ -47,3 +48,9 @@ def run_plan(simulator_id: str, plan: str, uow: UnitOfWork) -> int:
 
     uow.simulator_repository().update(simulator)
     return simulator.engine.length()
+
+
+def create_from_plan(plan: str, uow: UnitOfWork) -> str:
+    simulator = get_simulator_from_plan(plan)
+    uow.simulator_repository().add(simulator)
+    return simulator.id
