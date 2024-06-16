@@ -1,5 +1,6 @@
 from typing import Any, cast
 
+import yaml
 from lark import Discard, Lark, Token, Transformer
 from pydantic import BaseModel
 
@@ -12,7 +13,11 @@ class ConsoleText(BaseModel):
 
 __PARSER = Lark(
     r"""
-    simaple: WS? (request|console) (NEWLINE (request|console))* 
+    simaple: (header WS? NEWLINE)? body
+
+    body: (request|console) (NEWLINE (request|console))* 
+
+    header: /\/\*(\*(?!\/)|[^*])*\*\//
 
     request: multiplier? WS? operation
     multiplier: "x" SIGNED_NUMBER
@@ -31,6 +36,8 @@ __PARSER = Lark(
     time: SIGNED_NUMBER
     expression: ESCAPED_STRING
 
+    MULTILINE_TEXT: /(.|\n)+/s
+
     %import common.WORD
     %import common.ESCAPED_STRING
     %import common.SIGNED_NUMBER
@@ -43,11 +50,28 @@ __PARSER = Lark(
     %ignore COMMENT
 
     """,
-    start="simaple",
+    start=["body", "simaple"],
 )
 
 
 class TreeToOperation(Transformer):
+    def simaple(self, tkns) -> tuple[dict, list[Operation | ConsoleText]]:
+        if len(tkns) == 1:
+            return {}, tkns[0]
+
+        context, body = tkns
+        return yaml.safe_load(context), body
+
+    def header(self, tkns):
+        assert len(tkns) == 1
+        full_text = tkns[0]
+
+        assert full_text[:2] == "/*"
+        assert full_text[-2:] == "*/"
+        context = full_text[2:-2]
+
+        return context
+
     def op_command(self, command_word) -> str:
         (command,) = command_word
         return command.value
@@ -67,16 +91,13 @@ class TreeToOperation(Transformer):
         (time_string,) = time_signed_number
         return float(time_string)
 
-    def _no_ws(self, x: list[str | None]) -> list[str]:
-        return [v for v in x if v is not None]
-
     def WS(self, white_space: Token):
         return Discard
 
     def NEWLINE(self, new_line: Token):
         return Discard
 
-    def simaple(
+    def body(
         self, x: list[list[Operation] | list[ConsoleText]]
     ) -> list[Operation | ConsoleText]:
         return sum(x, [])
@@ -153,7 +174,7 @@ def is_console_command(op_or_console: ConsoleText | Operation) -> bool:
 
 def parse_dsl_to_operations(dsl: str) -> list[Operation]:
     try:
-        ops = __OperationTreeTransformer.transform(__PARSER.parse(dsl))
+        ops = __OperationTreeTransformer.transform(__PARSER.parse(dsl, start="body"))
         assert all(isinstance(op, Operation) for op in ops)
         return ops
     except Exception as e:
@@ -162,6 +183,13 @@ def parse_dsl_to_operations(dsl: str) -> list[Operation]:
 
 def parse_dsl_to_operations_or_console(dsl: str) -> list[ConsoleText | Operation]:
     try:
-        return __OperationTreeTransformer.transform(__PARSER.parse(dsl))
+        return __OperationTreeTransformer.transform(__PARSER.parse(dsl, start="body"))
     except Exception as e:
         raise DSLError(str(e) + f" was {dsl}") from e
+
+
+def parse_simaple_runtime(runtime_text: str) -> list[ConsoleText | Operation]:
+    operations = __OperationTreeTransformer.transform(
+        __PARSER.parse(runtime_text, start="simaple")
+    )
+    return operations
