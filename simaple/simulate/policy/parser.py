@@ -1,4 +1,4 @@
-from typing import Any, cast
+from typing import cast
 
 import yaml
 from lark import Discard, Lark, Token, Transformer
@@ -74,7 +74,7 @@ class TreeToOperation(Transformer):
 
     def op_command(self, command_word) -> str:
         (command,) = command_word
-        return command.value
+        return cast(str, command.value)
 
     def skill(self, skill_string):
         """
@@ -100,7 +100,7 @@ class TreeToOperation(Transformer):
     def body(
         self, x: list[list[Operation] | list[ConsoleText]]
     ) -> list[Operation | ConsoleText]:
-        return sum(x, [])
+        return cast(list[Operation | ConsoleText], sum(x, []))
 
     def request(
         self,
@@ -113,7 +113,7 @@ class TreeToOperation(Transformer):
             multiplier, operation = x
             return [operation for _ in range(multiplier)]
 
-        return [x[0]]
+        return [cast(Operation, x[0])]
 
     def operation(
         self,
@@ -176,20 +176,25 @@ def parse_dsl_to_operations(dsl: str) -> list[Operation]:
     try:
         ops = __OperationTreeTransformer.transform(__PARSER.parse(dsl, start="body"))
         assert all(isinstance(op, Operation) for op in ops)
-        return ops
+        return cast(list[Operation], ops)
     except Exception as e:
         raise DSLError(str(e) + f" was {dsl}") from e
 
 
 def parse_dsl_to_operations_or_console(dsl: str) -> list[ConsoleText | Operation]:
     try:
-        return __OperationTreeTransformer.transform(__PARSER.parse(dsl, start="body"))
+        return cast(
+            list[ConsoleText | Operation],
+            __OperationTreeTransformer.transform(__PARSER.parse(dsl, start="body")),
+        )
     except Exception as e:
         raise DSLError(str(e) + f" was {dsl}") from e
 
 
-def parse_simaple_runtime(runtime_text: str) -> list[ConsoleText | Operation]:
+def parse_simaple_runtime(
+    runtime_text: str,
+) -> tuple[dict, list[Operation | ConsoleText]]:
     operations = __OperationTreeTransformer.transform(
         __PARSER.parse(runtime_text, start="simaple")
     )
-    return operations
+    return cast(tuple[dict, list[Operation | ConsoleText]], operations)

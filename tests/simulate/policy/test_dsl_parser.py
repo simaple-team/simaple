@@ -1,4 +1,4 @@
-from simaple.simulate.policy.dsl import Operation
+from simaple.simulate.policy.base import Operation
 from simaple.simulate.policy.parser import (
     ConsoleText,
     parse_dsl_to_operations,
@@ -43,7 +43,7 @@ ELAPSE 200.0
     ]
 
 
-def test_parse_multiline():
+def test_parse_multiline_with_comment():
     result = parse_dsl_to_operations_or_console(
         """
 USE "플레임 스윕" 200.0

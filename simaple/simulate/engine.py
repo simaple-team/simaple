@@ -21,11 +21,6 @@ from simaple.simulate.policy.base import (
     SimulationHistory,
     _BehaviorGenerator,
 )
-from simaple.simulate.policy.parser import (
-    ConsoleText,
-    is_console_command,
-    parse_dsl_to_operations_or_console,
-)
 from simaple.simulate.profile import SimulationProfile
 from simaple.simulate.report.base import Report, SimulationEntry
 

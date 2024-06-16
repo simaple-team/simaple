@@ -8,6 +8,7 @@ from simaple.app.domain.simulator_configuration import (
     MinimalSimulatorConfiguration,
     SimulatorConfiguration,
 )
+from simaple.simulate.policy.base import Operation
 from simaple.simulate.policy.parser import parse_simaple_runtime
 
 _CONFIGURATION_TEMPLATES: dict[str, Type[SimulatorConfiguration]] = {
@@ -34,6 +35,9 @@ def get_simulator_from_plan(plan_text: str) -> Simulator:
 
     simulator = load_simulator(metadata)
     for op in ops:
+        if not isinstance(op, Operation):
+            continue
+
         simulator.exec(op)
 
     return simulator

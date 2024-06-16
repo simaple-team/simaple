@@ -9,12 +9,7 @@ import pydantic
 from simaple.app.domain.simulator_configuration import SimulatorConfiguration
 from simaple.simulate.engine import OperationEngine
 from simaple.simulate.policy.base import Operation
-from simaple.simulate.policy.parser import (
-    ConsoleText,
-    is_console_command,
-    parse_dsl_to_operations,
-    parse_simaple_runtime,
-)
+from simaple.simulate.policy.parser import parse_dsl_to_operations
 from simaple.simulate.report.dpm import DamageCalculator
 
 

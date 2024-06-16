@@ -6,11 +6,10 @@ import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.policy.parser import (
-    ConsoleText,
     is_console_command,
     parse_dsl_to_operations_or_console,
 )
-from simaple.simulate.report.base import PlayLog, Report, SimulationEntry
+from simaple.simulate.report.base import PlayLog, SimulationEntry
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 
 

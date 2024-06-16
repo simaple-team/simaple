@@ -6,12 +6,7 @@ import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
-from simaple.simulate.policy.parser import (
-    ConsoleText,
-    is_console_command,
-    parse_dsl_to_operations,
-    parse_dsl_to_operations_or_console,
-)
+from simaple.simulate.policy.parser import parse_dsl_to_operations
 
 
 @pytest.fixture(name="dsl_list")
