@@ -8,6 +8,11 @@ import pydantic
 
 from simaple.app.domain.simulator_configuration import SimulatorConfiguration
 from simaple.simulate.engine import OperationEngine
+from simaple.simulate.policy.parser import (
+    ConsoleText,
+    is_console_command,
+    parse_dsl_to_operations,
+)
 from simaple.simulate.report.dpm import DamageCalculator
 
 
@@ -36,7 +41,8 @@ class Simulator(pydantic.BaseModel):
         return list(view.name for view in validity_view)
 
     def dispatch(self, dsl: str) -> None:
-        self.engine.exec_dsl(dsl)
+        for op in parse_dsl_to_operations(dsl):
+            self.engine.exec(op)
 
     def rollback_by_hash(self, log_hash: str) -> None:
         index = self.engine.history().get_hash_index(log_hash)
