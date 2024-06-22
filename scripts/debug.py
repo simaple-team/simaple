@@ -5,7 +5,11 @@ import fire
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.jobtype import JobType, get_job_category
-from simaple.simulate.report.base import PlayLog, Report, SimulationEntry
+from simaple.simulate.policy.parser import (
+    is_console_command,
+    parse_dsl_to_operations_or_console,
+)
+from simaple.simulate.report.base import PlayLog, SimulationEntry
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 
 
@@ -101,26 +105,28 @@ class DebugInterface:
 
         plan_writer = _TimestampedPlanWriter()
 
-        for command in plan:
-            plan_writer.write(command, engine.get_current_viewer()("clock"))
+        for line in plan:
+            plan_writer.write(line, engine.get_current_viewer()("clock"))
 
-            count = engine.exec_dsl(command, debug=True)
-            for idx in range(-count, 0):
-                op_log = engine.history().get(idx)
-                report = Report()
-                for playlog in op_log.playlogs:
-                    entry = engine.get_simulation_entry(playlog)
+            operation_or_consoles = parse_dsl_to_operations_or_console(line)
+            for op_or_console in operation_or_consoles:
 
-                    total_damage = sum(
-                        [
-                            damage_calculator.get_damage(damage_log)
-                            for damage_log in entry.damage_logs
-                        ]
-                    )
-
-                    print(
-                        f"{get_status_string(_get_status(playlog, entry))}{entry.clock:6.0f}s | {show_damage_as_string(total_damage).rjust(8)} | {entry.action}|"
-                    )
+                if is_console_command(op_or_console):
+                    console_output = engine.console(op_or_console.text)
+                    print(f"\033[90m[DEBUG_]{console_output}\033[0m")
+                else:
+                    op_log = engine.exec(op_or_console)
+                    for playlog in op_log.playlogs:
+                        entry = engine.get_simulation_entry(playlog)
+                        total_damage = sum(
+                            [
+                                damage_calculator.get_damage(damage_log)
+                                for damage_log in entry.damage_logs
+                            ]
+                        )
+                        print(
+                            f"{get_status_string(_get_status(playlog, entry))}{entry.clock:6.0f}s | {show_damage_as_string(total_damage).rjust(8)} | {entry.action}|"
+                        )
 
         report = engine.create_full_report()
 

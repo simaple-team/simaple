@@ -6,6 +6,7 @@ import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
+from simaple.simulate.policy.parser import parse_dsl_to_operations
 
 
 @pytest.fixture(name="dsl_list")
@@ -41,7 +42,9 @@ def test_dsl(dsl_list: list[str], dsl_test_setting: SimulationSetting) -> None:
     engine = container.operation_engine()
 
     for dsl in dsl_list:
-        engine.exec_dsl(dsl)
+        operations = parse_dsl_to_operations(dsl)
+        for op in operations:
+            engine.exec(op)
 
     report = engine.create_full_report()
 

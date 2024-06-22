@@ -19,7 +19,6 @@ class Operation(BaseModel):
     name: str
     time: Optional[float] = None
     expr: str = ""
-    debug: bool = False
 
 
 ActionGeneratorType = Generator[Action, list[Event], None]
@@ -197,20 +196,21 @@ class SimulationHistory:
         operation: Operation,
         playlogs: list[PlayLog],
         moved_store: Optional[AddressedStore] = None,
-    ):
+    ) -> OperationLog:
         if len(self._logs) == 0:
             previous_hash = ""
         else:
             previous_hash = self._logs[-1].hash
 
-        self._logs.append(
-            OperationLog(
-                operation=operation,
-                playlogs=playlogs,
-                previous_hash=previous_hash,
-            )
+        operation_log = OperationLog(
+            operation=operation,
+            playlogs=playlogs,
+            previous_hash=previous_hash,
         )
+        self._logs.append(operation_log)
         self._cached_store = moved_store
+
+        return operation_log  # return ptr; maybe dangerous
 
     def playlogs(self) -> Generator[PlayLog, None, None]:
         for log in self._logs:
