@@ -13,11 +13,11 @@ from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.repository import DirectorySpecRepository
 
 
-class EngineConfiguration(
-    pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="EngineConfiguration")
+class SkillProfile(
+    pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="SkillProfile")
 ):
     """
-    EngineConfiguration
+    SkillProfile
     A pre-assigned information to create specific job's components easier
     """
 
@@ -73,12 +73,12 @@ class EngineConfiguration(
         return self.hexa_mastery
 
 
-def get_engine_configuration(jobtype: JobType) -> EngineConfiguration:
+def get_skill_profile(jobtype: JobType) -> SkillProfile:
     repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
     loader = SpecBasedLoader(repository)
     return cast(
-        EngineConfiguration,
+        SkillProfile,
         loader.load(
-            query={"group": jobtype.value, "kind": "EngineConfiguration"},
+            query={"group": jobtype.value, "kind": "SkillProfile"},
         ),
     )

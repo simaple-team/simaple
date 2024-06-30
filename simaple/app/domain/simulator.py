@@ -6,7 +6,7 @@ from typing import Optional
 
 import pydantic
 
-from simaple.app.domain.simulator_configuration import SimulatorConfiguration
+from simaple.simulate.interface.simulator_configuration import SimulatorConfiguration
 from simaple.simulate.engine import OperationEngine
 from simaple.simulate.policy.base import Operation
 from simaple.simulate.policy.parser import parse_dsl_to_operations

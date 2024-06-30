@@ -21,7 +21,7 @@ def test_actor():
 
     engine = container.operation_engine()
 
-    policy = container.engine_configuration().get_default_policy()
+    policy = container.skill_profile().get_default_policy()
 
     while engine.get_current_viewer()("clock") < 180_000:
         engine.exec_policy(policy, early_stop=180_000)

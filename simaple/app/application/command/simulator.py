@@ -1,7 +1,7 @@
 from simaple.app.application.exception import UnknownSimulatorException
 from simaple.app.domain.services.plan import get_simulator_from_plan
 from simaple.app.domain.simulator import Simulator
-from simaple.app.domain.simulator_configuration import SimulatorConfiguration
+from simaple.simulate.interface.simulator_configuration import SimulatorConfiguration
 from simaple.app.domain.uow import UnitOfWork
 
 

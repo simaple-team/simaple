@@ -19,7 +19,7 @@ from simaple.app.application.query import (
     query_latest_operation_log,
     query_operation_log,
 )
-from simaple.app.domain.simulator_configuration import (
+from simaple.simulate.interface.simulator_configuration import (
     BaselineConfiguration,
     MinimalSimulatorConfiguration,
 )

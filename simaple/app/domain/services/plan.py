@@ -3,7 +3,7 @@ from typing import Any, Type
 import pydantic
 
 from simaple.app.domain.simulator import Simulator
-from simaple.app.domain.simulator_configuration import (
+from simaple.simulate.interface.simulator_configuration import (
     BaselineConfiguration,
     MinimalSimulatorConfiguration,
     SimulatorConfiguration,

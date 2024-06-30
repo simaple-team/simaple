@@ -10,7 +10,7 @@ from simaple.data.ability import get_best_ability
 from simaple.data.baseline import get_baseline_gearset
 from simaple.data.damage_logic import get_damage_logic
 from simaple.data.doping import get_normal_doping
-from simaple.data.engine_configuration import get_engine_configuration
+from simaple.data.skill_profile import get_skill_profile
 from simaple.data.passive import get_passive
 from simaple.gear.gearset import Gearset
 from simaple.optimizer.preset import Preset, PresetOptimizer
@@ -205,7 +205,7 @@ class SimulationContainer(containers.DeclarativeContainer):
     )
     # Use caching
 
-    engine_configuration = providers.Factory(get_engine_configuration, config.jobtype)
+    skill_profile = providers.Factory(get_skill_profile, config.jobtype)
 
     level_advantage = providers.Factory(
         LevelAdvantage().get_advantage, config.mob_level, config.level
@@ -232,19 +232,19 @@ class SimulationContainer(containers.DeclarativeContainer):
 
     builder = providers.Factory(
         get_builder,
-        engine_configuration.provided.get_groups.call(),
-        engine_configuration.provided.get_skill_levels.call(
+        skill_profile.provided.get_groups.call(),
+        skill_profile.provided.get_skill_levels.call(
             config.v_skill_level,
             config.hexa_skill_level,
             config.hexa_mastery_level,
         ),
-        engine_configuration.provided.get_filled_v_improvements.call(
+        skill_profile.provided.get_filled_v_improvements.call(
             config.v_improvements_level
         ),
-        engine_configuration.provided.get_filled_hexa_improvements.call(
+        skill_profile.provided.get_filled_hexa_improvements.call(
             config.hexa_improvements_level
         ),
-        engine_configuration.provided.get_skill_replacements.call(),
+        skill_profile.provided.get_skill_replacements.call(),
         engine_builder_required_values,
     )
 

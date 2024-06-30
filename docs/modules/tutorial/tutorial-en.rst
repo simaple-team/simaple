@@ -30,11 +30,11 @@ In simaple, a collection of skills available to be used is called an Engine. Eng
 .. code-block:: python
 
     from simaple.simulate.kms import get_builder
-    from simaple.data.engine_configuration import get_engine_configuration
+    from simaple.data.skill_profile import get_skill_profile
     from simaple.core.jobtype import JobType
     from simaple.core import ActionStat, Stat
 
-    engine_configuration = get_engine_configuration(JobType.archmagefb)
+    skill_profile = get_skill_profile(JobType.archmagefb)
     character_stat = Stat(
         INT=4932.0,
         INT_multiplier=573.0,
@@ -53,15 +53,15 @@ In simaple, a collection of skills available to be used is called an Engine. Eng
 
     engine = get_builder(
         action_stat,
-        engine_configuration.get_groups(),
+        skill_profile.get_groups(),
         {
             "character_stat": character_stat,
             "character_level": 260,
             "weapon_attack_power": 789,
             "weapon_pure_attack_power": 500,
         },
-        engine_configuration.get_filled_v_skill(30),
-        engine_configuration.get_filled_v_improvements(60),
+        skill_profile.get_filled_v_skill(30),
+        skill_profile.get_filled_v_improvements(60),
         combat_orders_level=1,
         passive_skill_level=0,
     ).build_operation_engine()
@@ -70,7 +70,7 @@ In simaple, a collection of skills available to be used is called an Engine. Eng
 The above code is pretty long! However, all parameters are required to define a Engine. 
 Let's focus on a few important elements that we need to know about first.
 
-- ``get_engine_configuration`` will load pre-defined job configurations as ``engine_configuration`` objects. These objects will handle the complex tasks related to the job of interest. 
+- ``get_skill_profile`` will load pre-defined job configurations as ``skill_profile`` objects. These objects will handle the complex tasks related to the job of interest. 
 - ``ActionStat`` and ``Stat`` represent the stats used to perform the simulation. ``character_stat`` represents the stats of the character, while ``ActionStat`` is an object that contains information such as Buff Duration and Summon Duration. In the above code, buff duration is set to 185%.
 
 - The 3rd parameter of ``get_builder`` is slightly more complicated and specifies a dict of background information required to make the simulation work. The following parameters are required:
@@ -80,8 +80,8 @@ Let's focus on a few important elements that we need to know about first.
   - ``weapon_attack_power`` : Total Weapon Attack / Magic Attack (where relevant) value of the weapon used (including flames, stars and scrolling).
   - ``weapon_pure_attack_power`` : Base Weapon Attack / Magic Attack value of the weapon (just the white number on the weapon).
 
-- The 4th parameter of ``get_builder`` specifies the levels used for the 5th job skills. It's troublesome to do this manually, but the ``engine_configuration`` object earlier allows us to conveniently create a default configuration of all skills at Level 30.
-- Similarly, the 5th parameter specifies the levels of Enhancement Cores. ``engine_configuration.get_filled_v_improvements(60)`` specifies an assumption that all skills are enhanced to level 60.
+- The 4th parameter of ``get_builder`` specifies the levels used for the 5th job skills. It's troublesome to do this manually, but the ``skill_profile`` object earlier allows us to conveniently create a default configuration of all skills at Level 30.
+- Similarly, the 5th parameter specifies the levels of Enhancement Cores. ``skill_profile.get_filled_v_improvements(60)`` specifies an assumption that all skills are enhanced to level 60.
 - ``combat_orders_level`` is the level of Combat Orders used (1 = Decent, 2 = Paladin), and ``passive_skill_level`` is either 0 or 1 depending on whether the "+1 Levels to Passive Skills" Legendary Ability line is used.
 
 With all the information provided, ``get_builder`` returns a ``Builder`` object which, in the above code, is referenced as ``engine``. 
@@ -94,14 +94,14 @@ Policy Implementation
 
 In the previous section, we have created the *environment* for the desired simulation. In this section, we will discuss how to actually **simulate** skill usage given this environment.
 
-In simaple, ``Policy`` is the class for defining decisions such as which skill to use in which sequence. For a predefined Policy that works simply for all jobs, simaple offers ``DefaultOrderPolicy``. Let's create it with ``engine_configuration``. 
+In simaple, ``Policy`` is the class for defining decisions such as which skill to use in which sequence. For a predefined Policy that works simply for all jobs, simaple offers ``DefaultOrderPolicy``. Let's create it with ``skill_profile``. 
 
 .. code-block:: python
 
     ...
 
-    engine_configuration = get_engine_configuration(JobType.archmagefb)
-    policy = engine_configuration.get_default_policy()
+    skill_profile = get_skill_profile(JobType.archmagefb)
+    policy = skill_profile.get_default_policy()
 
 
 Now we have both the ``Engine`` and the ``Policy``. Next is to actually perform the simulation.
@@ -207,12 +207,12 @@ Finally, this will be the full code assembled from all the sections written abov
 .. code-block:: python
 
     from simaple.simulate.kms import get_builder
-    from simaple.data.engine_configuration import get_engine_configuration
+    from simaple.data.skill_profile import get_skill_profile
     from simaple.core.jobtype import JobType
     from simaple.core import ActionStat, Stat
 
     ## Declare Engine
-    engine_configuration = get_engine_configuration(JobType.archmagefb)
+    skill_profile = get_skill_profile(JobType.archmagefb)
     character_stat = Stat(
         INT=4932.0,
         INT_multiplier=573.0,
@@ -230,23 +230,23 @@ Finally, this will be the full code assembled from all the sections written abov
 
     engine = get_builder(
         action_stat,
-        engine_configuration.get_groups(),
+        skill_profile.get_groups(),
         {
             "character_stat": character_stat,
             "character_level": 260,
             "weapon_attack_power": 789,
             "weapon_pure_attack_power": 500,
         },
-        engine_configuration.get_filled_v_skill(30),
-        engine_configuration.get_filled_v_improvements(60),
+        skill_profile.get_filled_v_skill(30),
+        skill_profile.get_filled_v_improvements(60),
         combat_orders_level=1,
         passive_skill_level=0,
     ).build_operation_engine()
 
     ## Declare Policy
 
-    engine_configuration = get_engine_configuration(JobType.archmagefb)
-    policy = engine_configuration.get_default_policy()
+    skill_profile = get_skill_profile(JobType.archmagefb)
+    policy = skill_profile.get_default_policy()
 
     ## Run simulation
 

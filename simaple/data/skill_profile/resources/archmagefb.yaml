@@ -1,5 +1,5 @@
-kind: EngineConfiguration
-version: simaple.io/EngineConfiguration
+kind: SkillProfile
+version: simaple.io/SkillProfile
 metadata:
   label:
     group: archmagefb
