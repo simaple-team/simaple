@@ -32,6 +32,9 @@ class SimulationEngine(metaclass=ABCMeta):
 
 
 class MonotonicEngine(SimulationEngine):
+    """
+    MonotonicEngine is a simulation engine that accepts bare Action.
+    """
     def __init__(
         self, store: AddressedStore, router: RouterDispatcher, viewset: ViewSet
     ):
@@ -70,6 +73,9 @@ class MonotonicEngine(SimulationEngine):
 
 
 class OperationEngine(SimulationEngine):
+    """
+    OperationEngine is a simulation engine that accepts Operation for input.
+    """
     def __init__(
         self,
         router: RouterDispatcher,
