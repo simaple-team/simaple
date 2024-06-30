@@ -195,6 +195,6 @@ def parse_simaple_runtime(
     runtime_text: str,
 ) -> tuple[dict, list[Operation | ConsoleText]]:
     operations = __OperationTreeTransformer.transform(
-        __PARSER.parse(runtime_text, start="simaple")
+        __PARSER.parse(runtime_text.strip(), start="simaple")
     )
     return cast(tuple[dict, list[Operation | ConsoleText]], operations)
