@@ -3,7 +3,7 @@ from typing import Optional
 from simaple.simulate.base import Event, ViewerType
 from simaple.simulate.component.view import KeydownView, Running, Validity
 from simaple.simulate.reserved_names import Tag
-from simaple.simulate.strategy.base import PolicyContextType
+from simaple.simulate.strategy.base import RuntimeContextType
 from simaple.simulate.strategy.dsl import DSLGeneratorProto, interpret_dsl_generator
 
 
@@ -37,7 +37,7 @@ def validity_map(viewer: ViewerType):
 
 
 def cast_by_priority(order: list[str]) -> DSLGeneratorProto:
-    def _gen(ctx: PolicyContextType):
+    def _gen(ctx: RuntimeContextType):
         viewer, _ = ctx
         validities = validity_map(viewer)
         runnings = running_map(viewer)
@@ -61,7 +61,7 @@ def cast_by_priority(order: list[str]) -> DSLGeneratorProto:
 def keydown_until_interrupt(
     keydown_skill_name: str, order: list[str]
 ) -> DSLGeneratorProto:
-    def _gen(ctx: PolicyContextType):
+    def _gen(ctx: RuntimeContextType):
         stopby = []
         for name in order:
             if name == keydown_skill_name:
@@ -94,7 +94,7 @@ def keydown_until_interrupt(
 def default_ordered_policy(order: list[str]) -> DSLGeneratorProto:
     priority_policy = cast_by_priority(order)
 
-    def _gen(ctx: PolicyContextType):
+    def _gen(ctx: RuntimeContextType):
         while True:
             viewer, events = ctx
 

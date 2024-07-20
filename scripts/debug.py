@@ -8,11 +8,9 @@ from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.base import PlayLog
 from simaple.simulate.policy.parser import (
     is_console_command,
-    parse_dsl_to_operations_or_console,
     parse_simaple_runtime,
 )
 from simaple.simulate.report.base import SimulationEntry
-from simaple.simulate.report.dpm import DamageCalculator
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 
 

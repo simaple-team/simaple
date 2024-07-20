@@ -1,10 +1,9 @@
 from abc import ABCMeta, abstractmethod
-from typing import Any, Callable, Generator
+from typing import Any, Callable, Generator, Protocol
 
 from simaple.simulate.base import (
     Action,
     AddressedStore,
-    BehaviorGenerator,
     Checkpoint,
     Event,
     EventCallback,
@@ -16,15 +15,43 @@ from simaple.simulate.base import (
     play,
 )
 from simaple.simulate.policy.base import Operation, OperationLog, SimulationHistory
+from simaple.simulate.policy.handlers import BehaviorGenerator
 from simaple.simulate.profile import SimulationProfile
 from simaple.simulate.report.base import Report, SimulationEntry
-from simaple.simulate.strategy.base import PolicyType
 
 
 class SimulationEngine(metaclass=ABCMeta):
     @abstractmethod
     def add_callback(self, callback: PostActionCallback) -> None:
         """Simulation Engine may ensure that given engine triggers registered callbacks."""
+
+
+class MonotonicEngineProtocol(Protocol):
+    def add_callback(self, callback: PostActionCallback) -> None:
+        ...
+
+    def get_viewer(self) -> ViewerType:
+        ...
+
+
+class OperationEngineProtocol(Protocol):
+    def add_callback(self, callback: PostActionCallback) -> None:
+        ...
+
+    def get_current_viewer(self) -> ViewerType:
+        ...
+
+    def exec(self, op: Operation, early_stop: int = -1) -> OperationLog:
+        ...
+
+    def get_buffered_events(self) -> list[Event]:
+        ...
+
+    def create_full_report(self) -> Report:
+        ...
+
+    def operation_logs(self) -> Generator[OperationLog, None, None]:
+        ...
 
 
 class MonotonicEngine(SimulationEngine):
@@ -159,14 +186,12 @@ class OperationEngine(SimulationEngine):
     def _get_behavior_gen(self, op: Operation) -> BehaviorGenerator:
         return self._handlers[op.command](op)
 
-    def exec_policy(self, policy: PolicyType, early_stop: int = -1) -> None:
-        operations = policy(self._context)
-        for op in operations:
-            self.exec(op, early_stop=early_stop)
-
-    @property
-    def _context(self):
-        return (self.get_current_viewer(), self._buffered_events)
+    def get_buffered_events(self) -> list[Event]:
+        """
+        Returns buffered event stored in engine.
+        This return value is read-only; thus wrap internal variable with list().
+        """
+        return list(self._buffered_events)
 
     def get_current_viewer(self) -> ViewerType:
         store = self._history.current_store()
