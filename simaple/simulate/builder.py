@@ -10,7 +10,7 @@ from simaple.simulate.base import (
 )
 from simaple.simulate.component.base import Component
 from simaple.simulate.engine import MonotonicEngine, OperationEngine
-from simaple.simulate.policy.operation import get_operations
+from simaple.simulate.strategy import get_operations
 from simaple.simulate.view import AggregationView
 
 

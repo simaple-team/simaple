@@ -4,8 +4,8 @@ from typing import cast
 import pydantic
 
 from simaple.core import JobType
-from simaple.simulate.policy.base import PolicyWrapper
-from simaple.simulate.policy.default import normal_default_ordered_policy
+from simaple.simulate.strategy.base import PolicyWrapper
+from simaple.simulate.strategy.default import normal_default_ordered_policy
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
 )

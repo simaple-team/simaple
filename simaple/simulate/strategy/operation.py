@@ -2,11 +2,9 @@ from typing import Callable
 
 from simaple.simulate.base import Event
 from simaple.simulate.policy.base import (
-    ActionGeneratorType,
-    BehaviorGenerator,
     Operation,
-    _BehaviorGenerator,
 )
+from simaple.simulate.strategy.base import ActionGeneratorType, BehaviorGenerator, _BehaviorGenerator
 from simaple.simulate.reserved_names import Tag
 
 

@@ -2,8 +2,8 @@ from typing import Optional
 
 from simaple.simulate.base import Event, ViewerType
 from simaple.simulate.component.view import KeydownView, Running, Validity
-from simaple.simulate.policy.base import PolicyContextType
-from simaple.simulate.policy.dsl import DSLGeneratorProto, interpret_dsl_generator
+from simaple.simulate.strategy.base import PolicyContextType
+from simaple.simulate.strategy.dsl import DSLGeneratorProto, interpret_dsl_generator
 from simaple.simulate.reserved_names import Tag
 
 

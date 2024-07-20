@@ -17,8 +17,10 @@ from simaple.simulate.policy.base import (
     Operation,
     OperationLog,
     PlayLog,
-    PolicyType,
     SimulationHistory,
+)
+from simaple.simulate.strategy.base import (
+    PolicyType,
     _BehaviorGenerator,
 )
 from simaple.simulate.profile import SimulationProfile
