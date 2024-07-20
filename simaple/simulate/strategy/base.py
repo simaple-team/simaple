@@ -1,20 +1,18 @@
 import functools
 from typing import Callable, Generator, Optional, cast
 
-from simaple.simulate.base import Action, Event, ViewerType
+from simaple.simulate.base import Action, BehaviorGenerator, Event, ViewerType
 from simaple.simulate.policy.base import Operation
 
 ActionGeneratorType = Generator[Action, list[Event], None]
 
-_BehaviorGenerator = Generator[Callable[[list[Event]], Action], None, None]
 
-
-class BehaviorGenerator:
+class BehaviorStrategy:
     """Generate Exec Op Runtime, and provides a generator interface to handle events.
     use case:
     >>> def exec_use(op, event: list[Event]) -> ExecOpType:
     >>>     ...
-    >>> runtime = BehaviorGenerator(exec_use)
+    >>> runtime = BehaviorStrategy(exec_use)
     >>> for behavior in runtime.handle(op):
     >>>     action = behavior(events)
     >>>     events = engine.play(action)
@@ -31,7 +29,7 @@ class BehaviorGenerator:
     def handle(
         self,
         op: Operation,
-    ) -> _BehaviorGenerator:
+    ) -> BehaviorGenerator:
         self._op: Operation = op
         while not self._end:
             yield self

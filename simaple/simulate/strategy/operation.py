@@ -1,13 +1,9 @@
 from typing import Callable
 
-from simaple.simulate.base import Event
+from simaple.simulate.base import BehaviorGenerator, Event
 from simaple.simulate.policy.base import Operation
 from simaple.simulate.reserved_names import Tag
-from simaple.simulate.strategy.base import (
-    ActionGeneratorType,
-    BehaviorGenerator,
-    _BehaviorGenerator,
-)
+from simaple.simulate.strategy.base import ActionGeneratorType, BehaviorStrategy
 
 
 def get_next_elapse_time(events: list[Event]) -> float:
@@ -18,7 +14,7 @@ def get_next_elapse_time(events: list[Event]) -> float:
     return 0.0
 
 
-@BehaviorGenerator.operation_handler
+@BehaviorStrategy.operation_handler
 def exec_cast(op: Operation, events: list[Event]) -> ActionGeneratorType:
     target_name = op.name
 
@@ -32,30 +28,30 @@ def exec_cast(op: Operation, events: list[Event]) -> ActionGeneratorType:
     yield dict(name="*", method="elapse", payload=elapse_time)
 
 
-@BehaviorGenerator.operation_handler
+@BehaviorStrategy.operation_handler
 def exec_use(op: Operation, events: list[Event]) -> ActionGeneratorType:
     _ = yield dict(name=op.name, method="use", payload=None)
 
 
-@BehaviorGenerator.operation_handler
+@BehaviorStrategy.operation_handler
 def exec_elapse(op: Operation, events: list[Event]) -> ActionGeneratorType:
     _ = yield dict(name="*", method="elapse", payload=op.time)
 
 
-@BehaviorGenerator.operation_handler
+@BehaviorStrategy.operation_handler
 def exec_resolve(op: Operation, events: list[Event]) -> ActionGeneratorType:
     elapse_time = get_next_elapse_time([ev for ev in events if ev["name"] == op.name])
     _ = yield dict(name="*", method="elapse", payload=elapse_time)
 
 
-@BehaviorGenerator.operation_handler
+@BehaviorStrategy.operation_handler
 def exec_keydownstop(op: Operation, events: list[Event]) -> ActionGeneratorType:
     _ = yield dict(name=op.name, method="stop", payload=None)
 
 
 def get_operations() -> dict[
     str,
-    Callable[[Operation], _BehaviorGenerator],
+    Callable[[Operation], BehaviorGenerator],
 ]:
     return {
         "CAST": exec_cast,

@@ -4,7 +4,6 @@ from typing import Any, Generator, Optional
 from pydantic import BaseModel, PrivateAttr
 
 from simaple.simulate.base import AddressedStore, Checkpoint, PlayLog
-from simaple.simulate.reserved_names import Tag
 
 
 class Operation(BaseModel):

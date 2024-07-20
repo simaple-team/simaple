@@ -4,6 +4,7 @@ from typing import Any, Callable, Generator
 from simaple.simulate.base import (
     Action,
     AddressedStore,
+    BehaviorGenerator,
     Checkpoint,
     Event,
     EventCallback,
@@ -17,7 +18,7 @@ from simaple.simulate.base import (
 from simaple.simulate.policy.base import Operation, OperationLog, SimulationHistory
 from simaple.simulate.profile import SimulationProfile
 from simaple.simulate.report.base import Report, SimulationEntry
-from simaple.simulate.strategy.base import PolicyType, _BehaviorGenerator
+from simaple.simulate.strategy.base import PolicyType
 
 
 class SimulationEngine(metaclass=ABCMeta):
@@ -78,7 +79,7 @@ class OperationEngine(SimulationEngine):
         router: RouterDispatcher,
         store: AddressedStore,
         viewset: ViewSet,
-        handlers: dict[str, Callable[[Operation], _BehaviorGenerator]],
+        handlers: dict[str, Callable[[Operation], BehaviorGenerator]],
     ):
         self._router = router
         self._viewset = viewset
@@ -155,7 +156,7 @@ class OperationEngine(SimulationEngine):
             moved_store=store,
         )
 
-    def _get_behavior_gen(self, op: Operation) -> _BehaviorGenerator:
+    def _get_behavior_gen(self, op: Operation) -> BehaviorGenerator:
         return self._handlers[op.command](op)
 
     def exec_policy(self, policy: PolicyType, early_stop: int = -1) -> None:

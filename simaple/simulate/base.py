@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
-from typing import Any, Callable, Optional, TypeVar, Union, cast
+from typing import Any, Callable, Generator, Optional, TypeVar, Union, cast
 
 from pydantic import BaseModel
 from typing_extensions import TypedDict
@@ -347,3 +347,6 @@ class PlayLog(BaseModel):
                     delay += event["payload"]["time"]
 
         return delay
+
+
+BehaviorGenerator = Generator[Callable[[list[Event]], Action], None, None]
