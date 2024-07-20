@@ -7,24 +7,17 @@ from simaple.simulate.base import (
     Checkpoint,
     Event,
     EventCallback,
+    PlayLog,
     PostActionCallback,
     RouterDispatcher,
     ViewerType,
     ViewSet,
     play,
 )
-from simaple.simulate.policy.base import (
-    Operation,
-    OperationLog,
-    PlayLog,
-    SimulationHistory,
-)
-from simaple.simulate.strategy.base import (
-    PolicyType,
-    _BehaviorGenerator,
-)
+from simaple.simulate.policy.base import Operation, OperationLog, SimulationHistory
 from simaple.simulate.profile import SimulationProfile
 from simaple.simulate.report.base import Report, SimulationEntry
+from simaple.simulate.strategy.base import PolicyType, _BehaviorGenerator
 
 
 class SimulationEngine(metaclass=ABCMeta):
@@ -37,6 +30,7 @@ class MonotonicEngine(SimulationEngine):
     """
     MonotonicEngine is a simulation engine that accepts bare Action.
     """
+
     def __init__(
         self, store: AddressedStore, router: RouterDispatcher, viewset: ViewSet
     ):
@@ -78,6 +72,7 @@ class OperationEngine(SimulationEngine):
     """
     OperationEngine is a simulation engine that accepts Operation for input.
     """
+
     def __init__(
         self,
         router: RouterDispatcher,

@@ -10,8 +10,8 @@ from simaple.data.ability import get_best_ability
 from simaple.data.baseline import get_baseline_gearset
 from simaple.data.damage_logic import get_damage_logic
 from simaple.data.doping import get_normal_doping
-from simaple.data.skill_profile import get_skill_profile
 from simaple.data.passive import get_passive
+from simaple.data.skill_profile import get_skill_profile
 from simaple.gear.gearset import Gearset
 from simaple.optimizer.preset import Preset, PresetOptimizer
 from simaple.simulate.engine import MonotonicEngine, OperationEngine

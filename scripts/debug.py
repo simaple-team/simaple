@@ -5,14 +5,15 @@ import fire
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.jobtype import JobType, get_job_category
+from simaple.simulate.base import PlayLog
 from simaple.simulate.policy.parser import (
     is_console_command,
     parse_dsl_to_operations_or_console,
+    parse_simaple_runtime,
 )
-from simaple.simulate.report.base import PlayLog, SimulationEntry
-from simaple.simulate.report.feature import MaximumDealingIntervalFeature
-from simaple.simulate.policy.parser import parse_simaple_runtime
+from simaple.simulate.report.base import SimulationEntry
 from simaple.simulate.report.dpm import DamageCalculator
+from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 
 
 class PlayStatus(Enum):
@@ -105,7 +106,9 @@ class DebugInterface:
 
         for op_or_console in operation_or_consoles:
             if not is_console_command(op_or_console):
-                plan_writer.write(op_or_console.expr, engine.get_current_viewer()("clock"))
+                plan_writer.write(
+                    op_or_console.expr, engine.get_current_viewer()("clock")
+                )
 
             if is_console_command(op_or_console):
                 console_output = engine.console(op_or_console.text)

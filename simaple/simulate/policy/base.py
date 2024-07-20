@@ -3,7 +3,7 @@ from typing import Any, Generator, Optional
 
 from pydantic import BaseModel, PrivateAttr
 
-from simaple.simulate.base import Action, AddressedStore, Checkpoint, Event
+from simaple.simulate.base import AddressedStore, Checkpoint, PlayLog
 from simaple.simulate.reserved_names import Tag
 
 
@@ -18,23 +18,6 @@ class Operation(BaseModel):
     name: str
     time: Optional[float] = None
     expr: str = ""
-
-
-class PlayLog(BaseModel):
-    clock: float
-
-    action: Action
-    events: list[Event]
-    checkpoint: Checkpoint
-
-    def get_delay_left(self) -> float:
-        delay = 0
-        for event in self.events:
-            if event["tag"] in (Tag.DELAY,):
-                if event["payload"]["time"] > 0:
-                    delay += event["payload"]["time"]
-
-        return delay
 
 
 class OperationLog(BaseModel):

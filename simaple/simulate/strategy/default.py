@@ -2,9 +2,9 @@ from typing import Optional
 
 from simaple.simulate.base import Event, ViewerType
 from simaple.simulate.component.view import KeydownView, Running, Validity
+from simaple.simulate.reserved_names import Tag
 from simaple.simulate.strategy.base import PolicyContextType
 from simaple.simulate.strategy.dsl import DSLGeneratorProto, interpret_dsl_generator
-from simaple.simulate.reserved_names import Tag
 
 
 def _get_keydown(viewer: ViewerType) -> Optional[str]:

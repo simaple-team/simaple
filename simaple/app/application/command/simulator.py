@@ -1,8 +1,8 @@
 from simaple.app.application.exception import UnknownSimulatorException
 from simaple.app.domain.services.plan import get_simulator_from_plan
 from simaple.app.domain.simulator import Simulator
-from simaple.simulate.interface.simulator_configuration import SimulatorConfiguration
 from simaple.app.domain.uow import UnitOfWork
+from simaple.simulate.interface.simulator_configuration import SimulatorConfiguration
 
 
 def create_simulator(conf: SimulatorConfiguration, uow: UnitOfWork) -> str:

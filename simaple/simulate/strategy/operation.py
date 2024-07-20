@@ -1,11 +1,13 @@
 from typing import Callable
 
 from simaple.simulate.base import Event
-from simaple.simulate.policy.base import (
-    Operation,
-)
-from simaple.simulate.strategy.base import ActionGeneratorType, BehaviorGenerator, _BehaviorGenerator
+from simaple.simulate.policy.base import Operation
 from simaple.simulate.reserved_names import Tag
+from simaple.simulate.strategy.base import (
+    ActionGeneratorType,
+    BehaviorGenerator,
+    _BehaviorGenerator,
+)
 
 
 def get_next_elapse_time(events: list[Event]) -> float:

@@ -19,12 +19,12 @@ from simaple.app.application.query import (
     query_latest_operation_log,
     query_operation_log,
 )
+from simaple.app.domain.uow import UnitOfWork
+from simaple.app.interface.container import WebContainer
 from simaple.simulate.interface.simulator_configuration import (
     BaselineConfiguration,
     MinimalSimulatorConfiguration,
 )
-from simaple.app.domain.uow import UnitOfWork
-from simaple.app.interface.container import WebContainer
 
 UowProvider = fastapi.Depends(Provide[WebContainer.unit_of_work])
 router = fastapi.APIRouter(prefix="/workspaces")

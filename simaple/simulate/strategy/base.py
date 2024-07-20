@@ -4,7 +4,6 @@ from typing import Callable, Generator, Optional, cast
 from simaple.simulate.base import Action, Event, ViewerType
 from simaple.simulate.policy.base import Operation
 
-
 ActionGeneratorType = Generator[Action, list[Event], None]
 
 _BehaviorGenerator = Generator[Callable[[list[Event]], Action], None, None]

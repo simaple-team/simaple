@@ -1,8 +1,8 @@
 import functools
 from typing import Callable, Generator
 
-from simaple.simulate.strategy.base import OperationGeneratorProto, PolicyContextType
 from simaple.simulate.policy.parser import parse_dsl_to_operations
+from simaple.simulate.strategy.base import OperationGeneratorProto, PolicyContextType
 
 DSLGenerator = Generator[str, PolicyContextType, PolicyContextType]
 DSLGeneratorProto = Callable[[PolicyContextType], DSLGenerator]

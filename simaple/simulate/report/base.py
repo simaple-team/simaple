@@ -3,8 +3,7 @@ from typing import Iterator
 import pydantic
 
 from simaple.core.base import Stat
-from simaple.simulate.base import Action, Event
-from simaple.simulate.policy.base import PlayLog
+from simaple.simulate.base import Action, Event, PlayLog
 from simaple.simulate.reserved_names import Tag
 
 

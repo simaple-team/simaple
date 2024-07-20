@@ -6,10 +6,7 @@ from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.base import ActionStat, Stat
 from simaple.core.jobtype import JobType
 from simaple.data.damage_logic import get_damage_logic
-from simaple.data.skill_profile import (
-    SkillProfile,
-    get_skill_profile,
-)
+from simaple.data.skill_profile import SkillProfile, get_skill_profile
 from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.engine import MonotonicEngine, OperationEngine
 from simaple.simulate.kms import BuilderRequiredExtraVariables, get_builder
