@@ -1,0 +1,23 @@
+kind: BuiltinStrategy
+version: simaple.io/BuiltinStrategy
+metadata:
+  label:
+    group: adele
+data:
+  normal_default_order:
+    - 매직 서킷 풀 드라이브
+    - 그란디스 여신의 축복(레프)
+    - 리스토어
+    - 인피니트
+    - 스톰
+    - 마커
+    - 오더
+    - 그레이브
+    - 테리토리
+    - 루인
+    - 게더링
+    - 블로섬
+    - 레조넌스
+    - 샤드
+    - 디바이드
+

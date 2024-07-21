@@ -15,7 +15,7 @@ def test_actor(setting, jobtype, expected):
 
     engine = container.operation_engine()
 
-    policy = container.skill_profile().get_default_policy()
+    policy = container.builtin_strategy().get_priority_based_policy()
 
     while engine.get_current_viewer()("clock") < 50_000:
         exec_by_strategy(engine, policy, early_stop=50_000)

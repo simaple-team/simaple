@@ -4,8 +4,6 @@ from typing import cast
 import pydantic
 
 from simaple.core import JobType
-from simaple.simulate.strategy.base import PolicyWrapper
-from simaple.simulate.strategy.default import normal_default_ordered_policy
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
 )
@@ -25,7 +23,6 @@ class SkillProfile(
     v_improvement_names: list[str]
     hexa_improvement_names: list[str]
     component_groups: list[str]
-    mdc_order: list[str]
     hexa_skill_names: list[str] = pydantic.Field(default=[])
     hexa_mastery: dict[str, str] = pydantic.Field(default={})
 
@@ -57,17 +54,6 @@ class SkillProfile(
 
     def get_groups(self) -> list[str]:
         return self.component_groups
-
-    def get_default_policy(self) -> PolicyWrapper:
-        skills = []
-
-        for skill in self.mdc_order:
-            if skill in self.hexa_mastery:
-                skills.append(self.hexa_mastery[skill])
-            else:
-                skills.append(skill)
-
-        return PolicyWrapper(normal_default_ordered_policy(order=skills))
 
     def get_skill_replacements(self) -> dict[str, str]:
         return self.hexa_mastery

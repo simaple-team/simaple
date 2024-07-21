@@ -1,0 +1,27 @@
+kind: BuiltinStrategy
+version: simaple.io/BuiltinStrategy
+metadata:
+  label:
+    group: bishop
+data:
+  normal_default_order:
+    - 오버로드 마나
+    - 메이플 용사
+    - 바하뮤트
+    - 트라이엄프 페더
+    - 트라이엄프 페더 VI
+    - 인피니티
+    - 엔젤릭 터치
+    - 소울 컨트랙트
+    - 메이플월드 여신의 축복
+    - 에픽 어드벤쳐
+    - 제네시스
+    - 파운틴 포 엔젤
+    - 헤븐즈 도어
+    - 프레이
+    - 엔젤 오브 리브라
+    - 홀리 블러드
+    - 피스메이커
+    - 디바인 퍼니시먼트
+    - 엔젤레이
+    - 엔젤레이 VI

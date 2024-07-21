@@ -8,6 +8,7 @@ from dependency_injector import containers, providers
 from simaple.core import ActionStat, ExtendedStat, JobCategory, JobType, Stat
 from simaple.data.ability import get_best_ability
 from simaple.data.baseline import get_baseline_gearset
+from simaple.data.builtin_strategy import get_builtin_strategy
 from simaple.data.damage_logic import get_damage_logic
 from simaple.data.doping import get_normal_doping
 from simaple.data.passive import get_passive
@@ -206,6 +207,8 @@ class SimulationContainer(containers.DeclarativeContainer):
     # Use caching
 
     skill_profile = providers.Factory(get_skill_profile, config.jobtype)
+
+    builtin_strategy = providers.Factory(get_builtin_strategy, config.jobtype)
 
     level_advantage = providers.Factory(
         LevelAdvantage().get_advantage, config.mob_level, config.level
