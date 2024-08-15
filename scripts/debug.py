@@ -134,12 +134,13 @@ class DebugInterface:
         report = engine.create_full_report()
 
         feature = MaximumDealingIntervalFeature(30000)
-        print(feature.find_maximum_dealing_interval(report, damage_calculator))
         damage_share.show()
+        damage, _start, _end = feature.find_maximum_dealing_interval(report, damage_calculator)
 
         print(
-            f"{engine.get_current_viewer()('clock')} | {self.get_dpm_calculator().calculate_total_damage(report):,} "
+            f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {self._setting.jobtype}"
         )
+    
         plan_writer.dump(plan_file.replace(".simaple", ".result.simaple"))
 
 
