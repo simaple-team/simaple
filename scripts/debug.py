@@ -8,7 +8,10 @@ from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.base import PlayLog
 from simaple.simulate.policy.parser import is_console_command, parse_simaple_runtime
 from simaple.simulate.report.base import SimulationEntry
-from simaple.simulate.report.feature import MaximumDealingIntervalFeature, DamageShareFeature
+from simaple.simulate.report.feature import (
+    DamageShareFeature,
+    MaximumDealingIntervalFeature,
+)
 
 
 class PlayStatus(Enum):
@@ -90,10 +93,10 @@ class DebugInterface:
         container = SimulationContainer()
         container.config.from_dict(self._setting.model_dump())
 
-        _damage_logic =container.dpm_calculator().damage_logic
-        print("combat_power", _damage_logic.get_compat_power(
-            container.character().stat
-        ))
+        _damage_logic = container.dpm_calculator().damage_logic
+        print(
+            "combat_power", _damage_logic.get_compat_power(container.character().stat)
+        )
 
         return container.dpm_calculator()
 
@@ -135,12 +138,14 @@ class DebugInterface:
 
         feature = MaximumDealingIntervalFeature(30000)
         damage_share.show()
-        damage, _start, _end = feature.find_maximum_dealing_interval(report, damage_calculator)
+        damage, _start, _end = feature.find_maximum_dealing_interval(
+            report, damage_calculator
+        )
 
         print(
             f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {self._setting.jobtype}"
         )
-    
+
         plan_writer.dump(plan_file.replace(".simaple", ".result.simaple"))
 
 

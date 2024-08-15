@@ -57,7 +57,7 @@ SETTINGS = [
             JobType.mechanic,
             JobCategory.pirate,
         ),
-        5469571790445,
+        5712922745016,
     ),
     (
         (

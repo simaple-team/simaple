@@ -1,7 +1,8 @@
+from loguru import logger
+
 from simaple.simulate.report.base import Report, SimulationEntry
 from simaple.simulate.report.dpm import DamageCalculator
 
-from loguru import logger
 
 class MaximumDealingIntervalFeature:
     def __init__(self, interval: int) -> None:
@@ -86,8 +87,12 @@ class DamageShareFeature:
 
     def compute(self) -> dict[str, float]:
         total_damage = sum(self._damage_sum.values())
-        return {name: damage / total_damage for name, damage in self._damage_sum.items()}
+        return {
+            name: damage / total_damage for name, damage in self._damage_sum.items()
+        }
 
     def show(self):
-        for name, share in sorted(self.compute().items(), key=lambda x: x[1], reverse=True):
+        for name, share in sorted(
+            self.compute().items(), key=lambda x: x[1], reverse=True
+        ):
             logger.info(f"{share * 100:.2f} % | {name}")
