@@ -295,6 +295,7 @@ class FullMetalBarrageComponent(
     keydown_end_delay: float
 
     homing_penalty_duration: float
+    final_damage_multiplier_during_keydown: float
 
     def get_default_state(self):
         return {
@@ -329,6 +330,15 @@ class FullMetalBarrageComponent(
             state.penalty_lasting.set_time_left(self.homing_penalty_duration)
 
         return state, event
+
+    @view_method
+    def buff(self, state: FullMetalBarrageState):
+        if state.keydown.running:
+            return Stat(
+                final_damage_multiplier=self.final_damage_multiplier_during_keydown
+            )
+
+        return None
 
     @view_method
     def validity(self, state: FullMetalBarrageState):

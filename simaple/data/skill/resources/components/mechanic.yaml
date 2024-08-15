@@ -51,7 +51,7 @@ data:
   name: 로봇 마스터리
   summon_increment: "{{ 10 + skill_level }}"
   robot_damage_increment: "{{ 15 + 3 * skill_level }}"
-  robot_buff_damage_multiplier: 6
+  robot_buff_damage_multiplier: 0
   combat_orders_enabled: true
   default_skill_level: 30
 ---
@@ -91,7 +91,7 @@ data:
   default_skill_level: 30
   stat:
     ignored_defence: 10
-    final_damage_multiplier: "{{ skill_level // 3 }}"
+    final_damage_multiplier: 7
 
   v_improvement: 2
 ---
@@ -347,7 +347,7 @@ patch:
 data:
   id: 400051041-0
   name: 메탈아머 전탄발사
-  maximum_keydown_time: 10_000
+  maximum_keydown_time: 11_800
 
   damage: "{{ 400 + 16 * skill_level }}"
   hit: 11
@@ -358,6 +358,8 @@ data:
   keydown_end_delay: 1800
 
   homing_penalty_duration: 2000
+  final_damage_multiplier_during_keydown: 65
+
 ---
 kind: Component
 version: simaple.io/MecaCarrier
@@ -384,3 +386,49 @@ data:
   damage_per_intercepter: "{{ 250 + 10 * skill_level }}"
   hit_per_intercepter: 4
   intercepter_penalty: 120
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: mechanic
+    name: "매시브 파이어: IRON-B VI"
+    id: 35121019-0vi
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  id: 35121019-0vi
+  name: "매시브 파이어: IRON-B VI"
+  representative_name: "매시브 파이어: IRON-B"
+  delay: 600
+  damage: "{{ 330 + 8 * skill_level }}"
+  hit: 6
+  v_improvement: 2
+  cooldown_duration: 0
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: mechanic
+    name: "매시브 파이어: IRON-B VI (폭발)"
+    id: 35121019-1vi
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 35121019-1vi
+  name: "매시브 파이어: IRON-B VI (폭발)"
+  representative_name: "매시브 파이어: IRON-B (폭발)"
+  listening_actions:
+    "매시브 파이어: IRON-B VI.use.emitted.global.damage": use
+  delay: 0
+  damage: "{{ 180 + 7 * skill_level }}"
+  hit: 3
+  disable_validity: True
+  v_improvement: 2
+  cooldown_duration: 0
