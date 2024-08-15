@@ -26,7 +26,8 @@ data:
     - 메카 캐리어
     - 마이크로 미사일 컨트롤러
     - "멀티플 옵션: M-FL"
-  hexa_skill_names: []
+  hexa_skill_names:
+    - 그라운드 제로
   hexa_mastery:
     "매시브 파이어: IRON-B": "매시브 파이어: IRON-B VI"
     "호밍 미사일": "호밍 미사일 VI"

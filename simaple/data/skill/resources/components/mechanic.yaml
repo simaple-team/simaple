@@ -459,3 +459,30 @@ data:
   lasting_duration: 999_999_999
 
   v_improvement: 2
+---
+kind: Component
+version: simaple.io/PeriodicDamageConfiguratedHexaSkillComponent
+metadata:
+  label:
+    group: mechanic
+    name: 그라운드 제로
+    id: 400021090-0-?mech
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  id: 400021090-0-?mech
+  name: 그라운드 제로
+  damage_and_hits:
+  - damage: "{{ 1020 + skill_level * 34 }}"
+    hit: "{{8 * 10 }}"
+  - damage: "{{ 1000 + skill_level * 33 }}"
+    hit: "{{ 15 * 32 }}"
+
+  delay: 4_860
+  cooldown_duration: 360_000
+
+  periodic_interval: 2_000
+  periodic_damage: "{{ 1448 + skill_level * 48 }}"
+  periodic_hit: 15
+  lasting_duration: 30_000
