@@ -29,6 +29,7 @@ data:
   hexa_skill_names: []
   hexa_mastery:
     "매시브 파이어: IRON-B": "매시브 파이어: IRON-B VI"
+    "호밍 미사일": "호밍 미사일 VI"
   component_groups:
     - mechanic
     - common
