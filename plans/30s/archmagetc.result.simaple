@@ -4,31 +4,92 @@ CAST "메이플 용사"             # 600ms
 CAST "메디테이션"              # 600ms
 CAST "아이스 오라"             # 600ms
 CAST "인피니티"               # 600ms
-ELAPSE 78000              # 1,200ms
+ELAPSE 78000.0            # 1,200ms
 CAST "메이플월드 여신의 축복"       # 79,200ms
 CAST "에픽 어드벤쳐"            # 79,650ms
 CAST "소울 컨트랙트"            # 79,650ms
 CAST "아이스 에이지"            # 80,550ms
 CAST "스피릿 오브 스노우"         # 81,210ms
-CAST "리스트레인트 링" # seed ring # 81,930ms
+CAST "리스트레인트 링"           # 81,930ms
 CAST "주피터 썬더"             # 81,990ms
 CAST "썬더 브레이크"            # 82,680ms
 CAST "프로즌 라이트닝"           # 83,370ms
 CAST "체인 라이트닝 VI"         # 87,390ms
 CAST "라이트닝 스피어"           # 87,990ms
-x13 RESOLVE "라이트닝 스피어"    # 88,770ms
+RESOLVE "라이트닝 스피어"        # 88,770ms
+RESOLVE "라이트닝 스피어"        # 88,980ms
+RESOLVE "라이트닝 스피어"        # 89,190ms
+RESOLVE "라이트닝 스피어"        # 89,400ms
+RESOLVE "라이트닝 스피어"        # 89,610ms
+RESOLVE "라이트닝 스피어"        # 89,820ms
+RESOLVE "라이트닝 스피어"        # 90,030ms
+RESOLVE "라이트닝 스피어"        # 90,240ms
+RESOLVE "라이트닝 스피어"        # 90,450ms
+RESOLVE "라이트닝 스피어"        # 90,660ms
+RESOLVE "라이트닝 스피어"        # 90,870ms
+RESOLVE "라이트닝 스피어"        # 91,080ms
+RESOLVE "라이트닝 스피어"        # 91,290ms
 KEYDOWNSTOP "라이트닝 스피어"    # 91,500ms
 CAST "프로즌 오브 VI"          # 91,500ms
-x8 CAST "체인 라이트닝 VI"      # 92,190ms
+CAST "체인 라이트닝 VI"         # 92,190ms
+CAST "체인 라이트닝 VI"         # 92,790ms
+CAST "체인 라이트닝 VI"         # 93,390ms
+CAST "체인 라이트닝 VI"         # 93,990ms
+CAST "체인 라이트닝 VI"         # 94,590ms
+CAST "체인 라이트닝 VI"         # 95,190ms
+CAST "체인 라이트닝 VI"         # 95,790ms
+CAST "체인 라이트닝 VI"         # 96,390ms
 CAST "프로즌 오브 VI"          # 96,990ms
-x8 CAST "체인 라이트닝 VI"      # 97,680ms
+CAST "체인 라이트닝 VI"         # 97,680ms
+CAST "체인 라이트닝 VI"         # 98,280ms
+CAST "체인 라이트닝 VI"         # 98,880ms
+CAST "체인 라이트닝 VI"         # 99,480ms
+CAST "체인 라이트닝 VI"         # 100,080ms
+CAST "체인 라이트닝 VI"         # 100,680ms
+CAST "체인 라이트닝 VI"         # 101,280ms
+CAST "체인 라이트닝 VI"         # 101,880ms
 CAST "프로즌 오브 VI"          # 102,480ms
-x8 CAST "체인 라이트닝 VI"      # 103,170ms
+CAST "체인 라이트닝 VI"         # 103,170ms
+CAST "체인 라이트닝 VI"         # 103,770ms
+CAST "체인 라이트닝 VI"         # 104,370ms
+CAST "체인 라이트닝 VI"         # 104,970ms
+CAST "체인 라이트닝 VI"         # 105,570ms
+CAST "체인 라이트닝 VI"         # 106,170ms
+CAST "체인 라이트닝 VI"         # 106,770ms
+CAST "체인 라이트닝 VI"         # 107,370ms
 CAST "프로즌 오브 VI"          # 107,970ms
-x8 CAST "체인 라이트닝 VI"      # 108,660ms
+CAST "체인 라이트닝 VI"         # 108,660ms
+CAST "체인 라이트닝 VI"         # 109,260ms
+CAST "체인 라이트닝 VI"         # 109,860ms
+CAST "체인 라이트닝 VI"         # 110,460ms
+CAST "체인 라이트닝 VI"         # 111,060ms
+CAST "체인 라이트닝 VI"         # 111,660ms
+CAST "체인 라이트닝 VI"         # 112,260ms
+CAST "체인 라이트닝 VI"         # 112,860ms
 CAST "프로즌 오브 VI"          # 113,460ms
-x8 CAST "체인 라이트닝 VI"      # 114,150ms
+CAST "체인 라이트닝 VI"         # 114,150ms
+CAST "체인 라이트닝 VI"         # 114,750ms
+CAST "체인 라이트닝 VI"         # 115,350ms
+CAST "체인 라이트닝 VI"         # 115,950ms
+CAST "체인 라이트닝 VI"         # 116,550ms
+CAST "체인 라이트닝 VI"         # 117,150ms
+CAST "체인 라이트닝 VI"         # 117,750ms
+CAST "체인 라이트닝 VI"         # 118,350ms
 CAST "프로즌 오브 VI"          # 118,950ms
-x8 CAST "체인 라이트닝 VI"      # 119,640ms
+CAST "체인 라이트닝 VI"         # 119,640ms
+CAST "체인 라이트닝 VI"         # 120,240ms
+CAST "체인 라이트닝 VI"         # 120,840ms
+CAST "체인 라이트닝 VI"         # 121,440ms
+CAST "체인 라이트닝 VI"         # 122,040ms
+CAST "체인 라이트닝 VI"         # 122,640ms
+CAST "체인 라이트닝 VI"         # 123,240ms
+CAST "체인 라이트닝 VI"         # 123,840ms
 CAST "프로즌 오브 VI"          # 124,440ms
-x8 CAST "체인 라이트닝 VI"      # 125,130ms
+CAST "체인 라이트닝 VI"         # 125,130ms
+CAST "체인 라이트닝 VI"         # 125,730ms
+CAST "체인 라이트닝 VI"         # 126,330ms
+CAST "체인 라이트닝 VI"         # 126,930ms
+CAST "체인 라이트닝 VI"         # 127,530ms
+CAST "체인 라이트닝 VI"         # 128,130ms
+CAST "체인 라이트닝 VI"         # 128,730ms
+CAST "체인 라이트닝 VI"         # 129,330ms

@@ -3,7 +3,7 @@ CAST "바하뮤트"               # 0ms
 CAST "메이플 용사"             # 600ms
 CAST "인피니티"               # 600ms
 CAST "어드밴스드 블레스"          # 1,200ms
-ELAPSE 78000              # 1,200ms
+ELAPSE 78000.0            # 1,200ms
 CAST "메이플월드 여신의 축복"       # 79,200ms
 CAST "에픽 어드벤쳐"            # 79,650ms
 CAST "트라이엄프 페더 VI"        # 79,650ms
@@ -16,17 +16,126 @@ CAST "소울 컨트랙트"            # 81,960ms
 CAST "홀리 어드밴트"            # 82,860ms
 CAST "피스메이커"              # 86,520ms
 CAST "디바인 퍼니시먼트"          # 87,270ms
-x38 RESOLVE "디바인 퍼니시먼트"   # 87,510ms
+RESOLVE "디바인 퍼니시먼트"       # 87,510ms
+RESOLVE "디바인 퍼니시먼트"       # 87,750ms
+RESOLVE "디바인 퍼니시먼트"       # 87,990ms
+RESOLVE "디바인 퍼니시먼트"       # 88,230ms
+RESOLVE "디바인 퍼니시먼트"       # 88,470ms
+RESOLVE "디바인 퍼니시먼트"       # 88,710ms
+RESOLVE "디바인 퍼니시먼트"       # 88,950ms
+RESOLVE "디바인 퍼니시먼트"       # 89,190ms
+RESOLVE "디바인 퍼니시먼트"       # 89,430ms
+RESOLVE "디바인 퍼니시먼트"       # 89,670ms
+RESOLVE "디바인 퍼니시먼트"       # 89,910ms
+RESOLVE "디바인 퍼니시먼트"       # 90,150ms
+RESOLVE "디바인 퍼니시먼트"       # 90,390ms
+RESOLVE "디바인 퍼니시먼트"       # 90,630ms
+RESOLVE "디바인 퍼니시먼트"       # 90,870ms
+RESOLVE "디바인 퍼니시먼트"       # 91,110ms
+RESOLVE "디바인 퍼니시먼트"       # 91,350ms
+RESOLVE "디바인 퍼니시먼트"       # 91,590ms
+RESOLVE "디바인 퍼니시먼트"       # 91,830ms
+RESOLVE "디바인 퍼니시먼트"       # 92,070ms
+RESOLVE "디바인 퍼니시먼트"       # 92,310ms
+RESOLVE "디바인 퍼니시먼트"       # 92,550ms
+RESOLVE "디바인 퍼니시먼트"       # 92,790ms
+RESOLVE "디바인 퍼니시먼트"       # 93,030ms
+RESOLVE "디바인 퍼니시먼트"       # 93,270ms
+RESOLVE "디바인 퍼니시먼트"       # 93,510ms
+RESOLVE "디바인 퍼니시먼트"       # 93,750ms
+RESOLVE "디바인 퍼니시먼트"       # 93,990ms
+RESOLVE "디바인 퍼니시먼트"       # 94,230ms
+RESOLVE "디바인 퍼니시먼트"       # 94,470ms
+RESOLVE "디바인 퍼니시먼트"       # 94,710ms
+RESOLVE "디바인 퍼니시먼트"       # 94,950ms
+RESOLVE "디바인 퍼니시먼트"       # 95,190ms
+RESOLVE "디바인 퍼니시먼트"       # 95,430ms
+RESOLVE "디바인 퍼니시먼트"       # 95,670ms
+RESOLVE "디바인 퍼니시먼트"       # 95,910ms
+RESOLVE "디바인 퍼니시먼트"       # 96,150ms
+RESOLVE "디바인 퍼니시먼트"       # 96,390ms
 KEYDOWNSTOP "디바인 퍼니시먼트"   # 96,630ms
 CAST "헤븐즈 도어"             # 96,630ms
-x3 CAST "엔젤레이 VI"         # 96,900ms
+CAST "엔젤레이 VI"            # 96,900ms
+CAST "엔젤레이 VI"            # 97,530ms
+CAST "엔젤레이 VI"            # 98,160ms
 CAST "피스메이커"              # 98,790ms
-x15 CAST "엔젤레이 VI"        # 99,540ms
+CAST "엔젤레이 VI"            # 99,540ms
+CAST "엔젤레이 VI"            # 100,170ms
+CAST "엔젤레이 VI"            # 100,800ms
+CAST "엔젤레이 VI"            # 101,430ms
+CAST "엔젤레이 VI"            # 102,060ms
+CAST "엔젤레이 VI"            # 102,690ms
+CAST "엔젤레이 VI"            # 103,320ms
+CAST "엔젤레이 VI"            # 103,950ms
+CAST "엔젤레이 VI"            # 104,580ms
+CAST "엔젤레이 VI"            # 105,210ms
+CAST "엔젤레이 VI"            # 105,840ms
+CAST "엔젤레이 VI"            # 106,470ms
+CAST "엔젤레이 VI"            # 107,100ms
+CAST "엔젤레이 VI"            # 107,730ms
+CAST "엔젤레이 VI"            # 108,360ms
 CAST "피스메이커"              # 108,990ms
-x15 CAST "엔젤레이 VI"        # 109,740ms
+CAST "엔젤레이 VI"            # 109,740ms
+CAST "엔젤레이 VI"            # 110,370ms
+CAST "엔젤레이 VI"            # 111,000ms
+CAST "엔젤레이 VI"            # 111,630ms
+CAST "엔젤레이 VI"            # 112,260ms
+CAST "엔젤레이 VI"            # 112,890ms
+CAST "엔젤레이 VI"            # 113,520ms
+CAST "엔젤레이 VI"            # 114,150ms
+CAST "엔젤레이 VI"            # 114,780ms
+CAST "엔젤레이 VI"            # 115,410ms
+CAST "엔젤레이 VI"            # 116,040ms
+CAST "엔젤레이 VI"            # 116,670ms
+CAST "엔젤레이 VI"            # 117,300ms
+CAST "엔젤레이 VI"            # 117,930ms
+CAST "엔젤레이 VI"            # 118,560ms
 CAST "피스메이커"              # 119,190ms
-x15 CAST "엔젤레이 VI"        # 119,940ms
+CAST "엔젤레이 VI"            # 119,940ms
+CAST "엔젤레이 VI"            # 120,570ms
+CAST "엔젤레이 VI"            # 121,200ms
+CAST "엔젤레이 VI"            # 121,830ms
+CAST "엔젤레이 VI"            # 122,460ms
+CAST "엔젤레이 VI"            # 123,090ms
+CAST "엔젤레이 VI"            # 123,720ms
+CAST "엔젤레이 VI"            # 124,350ms
+CAST "엔젤레이 VI"            # 124,980ms
+CAST "엔젤레이 VI"            # 125,610ms
+CAST "엔젤레이 VI"            # 126,240ms
+CAST "엔젤레이 VI"            # 126,870ms
+CAST "엔젤레이 VI"            # 127,500ms
+CAST "엔젤레이 VI"            # 128,130ms
+CAST "엔젤레이 VI"            # 128,760ms
 CAST "피스메이커"              # 129,390ms
-x15 CAST "엔젤레이 VI"        # 130,140ms
+CAST "엔젤레이 VI"            # 130,140ms
+CAST "엔젤레이 VI"            # 130,770ms
+CAST "엔젤레이 VI"            # 131,400ms
+CAST "엔젤레이 VI"            # 132,030ms
+CAST "엔젤레이 VI"            # 132,660ms
+CAST "엔젤레이 VI"            # 133,290ms
+CAST "엔젤레이 VI"            # 133,920ms
+CAST "엔젤레이 VI"            # 134,550ms
+CAST "엔젤레이 VI"            # 135,180ms
+CAST "엔젤레이 VI"            # 135,810ms
+CAST "엔젤레이 VI"            # 136,440ms
+CAST "엔젤레이 VI"            # 137,070ms
+CAST "엔젤레이 VI"            # 137,700ms
+CAST "엔젤레이 VI"            # 138,330ms
+CAST "엔젤레이 VI"            # 138,960ms
 CAST "피스메이커"              # 139,590ms
-x15 CAST "엔젤레이 VI"        # 140,340ms
+CAST "엔젤레이 VI"            # 140,340ms
+CAST "엔젤레이 VI"            # 140,970ms
+CAST "엔젤레이 VI"            # 141,600ms
+CAST "엔젤레이 VI"            # 142,230ms
+CAST "엔젤레이 VI"            # 142,860ms
+CAST "엔젤레이 VI"            # 143,490ms
+CAST "엔젤레이 VI"            # 144,120ms
+CAST "엔젤레이 VI"            # 144,750ms
+CAST "엔젤레이 VI"            # 145,380ms
+CAST "엔젤레이 VI"            # 146,010ms
+CAST "엔젤레이 VI"            # 146,640ms
+CAST "엔젤레이 VI"            # 147,270ms
+CAST "엔젤레이 VI"            # 147,900ms
+CAST "엔젤레이 VI"            # 148,530ms
+CAST "엔젤레이 VI"            # 149,160ms
