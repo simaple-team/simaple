@@ -1,3 +1,8 @@
+"""
+Pre-defined Constants and Enums for simulation.
+"""
+
+
 class Tag:
     """Reserved constants for event tag"""
 

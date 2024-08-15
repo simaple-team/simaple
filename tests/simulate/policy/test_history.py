@@ -1,12 +1,7 @@
 import pytest
 
-from simaple.simulate.base import Checkpoint
-from simaple.simulate.policy.base import (
-    Operation,
-    OperationLog,
-    PlayLog,
-    SimulationHistory,
-)
+from simaple.simulate.base import Checkpoint, PlayLog
+from simaple.simulate.policy.base import Operation, OperationLog, SimulationHistory
 
 
 @pytest.fixture(name="history_use_playlog")

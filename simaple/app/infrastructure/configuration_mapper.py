@@ -2,7 +2,7 @@ from typing import Type
 
 from fastapi.encoders import jsonable_encoder
 
-from simaple.app.domain.simulator_configuration import (
+from simaple.simulate.interface.simulator_configuration import (
     BaselineConfiguration,
     MinimalSimulatorConfiguration,
     SimulatorConfiguration,

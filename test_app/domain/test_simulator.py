@@ -1,7 +1,7 @@
 import pytest
 
 from simaple.app.domain.simulator import Simulator
-from simaple.app.domain.simulator_configuration import MinimalSimulatorConfiguration
+from simaple.simulate.interface.simulator_configuration import MinimalSimulatorConfiguration
 
 
 from simaple.simulate.base import Action

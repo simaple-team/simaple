@@ -3,7 +3,7 @@ from typing import Optional
 import pytest
 
 from simaple.app.domain.simulator import SimulatorRepository
-from simaple.app.domain.simulator_configuration import MinimalSimulatorConfiguration
+from simaple.simulate.interface.simulator_configuration import MinimalSimulatorConfiguration
 from simaple.app.domain.snapshot import Snapshot, SnapshotRepository
 from simaple.app.domain.uow import UnitOfWork
 from simaple.app.infrastructure.component_schema_repository import (

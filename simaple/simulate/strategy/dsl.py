@@ -1,11 +1,11 @@
 import functools
 from typing import Callable, Generator
 
-from simaple.simulate.policy.base import OperationGeneratorProto, PolicyContextType
 from simaple.simulate.policy.parser import parse_dsl_to_operations
+from simaple.simulate.strategy.base import OperationGeneratorProto, RuntimeContextType
 
-DSLGenerator = Generator[str, PolicyContextType, PolicyContextType]
-DSLGeneratorProto = Callable[[PolicyContextType], DSLGenerator]
+DSLGenerator = Generator[str, RuntimeContextType, RuntimeContextType]
+DSLGeneratorProto = Callable[[RuntimeContextType], DSLGenerator]
 
 
 def interpret_dsl_generator(
@@ -13,7 +13,7 @@ def interpret_dsl_generator(
 ) -> Callable[..., OperationGeneratorProto]:
     @functools.wraps(func)
     def _gen_proto(*args, **kwargs):
-        def _gen(ctx: PolicyContextType):
+        def _gen(ctx: RuntimeContextType):
             dsl_cycle = func(*args, **kwargs)(ctx)
             dsl = next(dsl_cycle)  # pylint:disable=stop-iteration-return
 

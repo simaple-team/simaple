@@ -8,7 +8,7 @@ from typing import Optional
 import pydantic
 
 from simaple.app.domain.simulator import Simulator
-from simaple.app.domain.simulator_configuration import SimulatorConfiguration
+from simaple.simulate.interface.simulator_configuration import SimulatorConfiguration
 
 
 def get_uuid() -> str:

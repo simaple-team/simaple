@@ -1,0 +1,28 @@
+kind: BuiltinStrategy
+version: simaple.io/BuiltinStrategy
+metadata:
+  label:
+    group: archmagetc
+data:
+  normal_default_order:
+    - 오버로드 마나
+    - 엘퀴네스
+    - 메디테이션
+    - 메이플 용사
+    - 아이스 오라
+    - 인피니티
+    - 소울 컨트랙트
+    - 메이플월드 여신의 축복
+    - 에픽 어드벤쳐
+    - 프로즌 라이트닝
+    - 스피릿 오브 스노우
+    - 아이스 에이지
+    - 라이트닝 스피어
+    - 블리자드
+    - 블리자드 VI
+    - 주피터 썬더
+    - 썬더 브레이크
+    - 프로즌 오브
+    - 프로즌 오브 VI
+    - 체인 라이트닝
+    - 체인 라이트닝 VI

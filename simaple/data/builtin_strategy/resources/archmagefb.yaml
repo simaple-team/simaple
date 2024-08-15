@@ -1,0 +1,29 @@
+kind: BuiltinStrategy
+version: simaple.io/BuiltinStrategy
+metadata:
+  label:
+    group: archmagefb
+data:
+  normal_default_order:
+    - 오버로드 마나
+    - 이프리트
+    - 메이플 용사
+    - 메디테이션
+    - 파이어 오라
+    - 인피니티
+    - 소울 컨트랙트
+    - 메이플월드 여신의 축복
+    - 에픽 어드벤쳐
+    - 인페르날 베놈
+    - 메테오
+    - 포이즌 노바
+    - 도트 퍼니셔
+    - 포이즌 체인
+    - 메기도 플레임
+    - 퓨리 오브 이프리트
+    - 미스트 이럽션
+    - 미스트 이럽션 VI
+    - 플레임 헤이즈
+    - 플레임 헤이즈 VI
+    - 플레임 스윕
+    - 플레임 스윕 VI

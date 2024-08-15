@@ -2,6 +2,7 @@ import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
+from simaple.simulate.strategy.base import exec_by_strategy
 
 setting = SimulationSetting(
     tier="Legendary",
@@ -21,10 +22,10 @@ def test_actor():
 
     engine = container.operation_engine()
 
-    policy = container.engine_configuration().get_default_policy()
+    policy = container.skill_profile().get_default_policy()
 
     while engine.get_current_viewer()("clock") < 180_000:
-        engine.exec_policy(policy, early_stop=180_000)
+        exec_by_strategy(engine, policy, early_stop=180_000)
 
     report = engine.create_full_report()
 

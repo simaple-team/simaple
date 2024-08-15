@@ -10,7 +10,7 @@ from simaple.simulate.base import (
 )
 from simaple.simulate.component.base import Component
 from simaple.simulate.engine import MonotonicEngine, OperationEngine
-from simaple.simulate.policy.operation import get_operations
+from simaple.simulate.policy import get_operation_handlers
 from simaple.simulate.view import AggregationView
 
 
@@ -35,7 +35,7 @@ class EngineBuilder:
             self._router,
             self._store,
             self._viewset,
-            get_operations(),
+            get_operation_handlers(),
         )
 
     def add_dispatcher(self, dispatcher: Dispatcher) -> "EngineBuilder":

@@ -1,5 +1,5 @@
-kind: EngineConfiguration
-version: simaple.io/EngineConfiguration
+kind: SkillProfile
+version: simaple.io/SkillProfile
 metadata:
   label:
     group: archmagetc
@@ -37,22 +37,3 @@ data:
     - int_based
     - adventurer.magician
     - mob
-  mdc_order:
-    - 오버로드 마나
-    - 엘퀴네스
-    - 메디테이션
-    - 메이플 용사
-    - 아이스 오라
-    - 인피니티
-    - 소울 컨트랙트
-    - 메이플월드 여신의 축복
-    - 에픽 어드벤쳐
-    - 프로즌 라이트닝
-    - 스피릿 오브 스노우
-    - 아이스 에이지
-    - 라이트닝 스피어
-    - 블리자드
-    - 주피터 썬더
-    - 썬더 브레이크
-    - 프로즌 오브
-    - 체인 라이트닝

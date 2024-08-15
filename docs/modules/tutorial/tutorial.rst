@@ -28,11 +28,11 @@ simaple에서 사용 가능한 스킬 묶음은 Engine라고 불립니다. get_b
 .. code-block:: python
 
     from simaple.simulate.kms import get_builder
-    from simaple.data.engine_configuration import get_engine_configuration
+    from simaple.data.skill_profile import get_skill_profile
     from simaple.core.jobtype import JobType
     from simaple.core import ActionStat, Stat
 
-    engine_configuration = get_engine_configuration(JobType.archmagefb)
+    skill_profile = get_skill_profile(JobType.archmagefb)
     character_stat = Stat(
         INT=4932.0,
         INT_multiplier=573.0,
@@ -51,15 +51,15 @@ simaple에서 사용 가능한 스킬 묶음은 Engine라고 불립니다. get_b
 
     engine = get_builder(
         action_stat,
-        engine_configuration.get_groups(),
+        skill_profile.get_groups(),
         {
             "character_stat": character_stat,
             "character_level": 260,
             "weapon_attack_power": 789,
             "weapon_pure_attack_power": 500,
         },
-        engine_configuration.get_filled_v_skill(30),
-        engine_configuration.get_filled_v_improvements(60),
+        skill_profile.get_filled_v_skill(30),
+        skill_profile.get_filled_v_improvements(60),
         combat_orders_level=1,
         passive_skill_level=0,
     ).build_operation_engine()
@@ -68,7 +68,7 @@ simaple에서 사용 가능한 스킬 묶음은 Engine라고 불립니다. get_b
 코드가 정말 길고 복잡합니다! 하지만 안타깝게도 이것이 여러분이 클라이언트를 구성하기 위해 제공해야 하는 최소한의 정보입니다.
 각각의 요소와 그것들의 의미에 대해, 여러분이 지금 당장 자세히 알 필요는 없습니다. 우리가 알아야 하는 사항에 대해서만 알아봅시다.
 
-- ``get_engine_configuration`` 는 여러분이 관심있어하는 직업에 관한 정보를 손쉽게 다루게 해줍니다. ``engine_configuration`` 객체가 여러분이 다루고자 하는 직업에 관련된 설정을 모두 불러올 것입니다.
+- ``get_skill_profile`` 는 여러분이 관심있어하는 직업에 관한 정보를 손쉽게 다루게 해줍니다. ``skill_profile`` 객체가 여러분이 다루고자 하는 직업에 관련된 설정을 모두 불러올 것입니다.
 - ``ActionStat`` 과 ``Stat`` 은 내가 시뮬레이션하고자 하는 캐릭터의 스텟 상태를 나타냅니다. ``character_stat`` 에 나의 stat 정보가 오게 되겠죠? ``ActionStat`` 은 버프 지속시간, 소환수 지속시간과 같은 정보가 포함되는 객체입니다. 본문에서는 버프 지속 시간만 185%로 설정했습니다.
 
 - 세 번째 인자는 조금 복잡한데, 여기에는 여러분이 시뮬레이션을 동작시키기 위해 제공해주어야 하는 추가적인 정보가 요구됩니다. 여러분은 반드시, 아래와 같은 값을 제공해주어야 합니다.
@@ -78,8 +78,8 @@ simaple에서 사용 가능한 스킬 묶음은 Engine라고 불립니다. get_b
   - ``weapon_attack_power`` : 여러분 무기의 공격력(법사 직업군은 마력)입니다.
   - ``weapon_pure_attack_power`` : 여러분 무기의 순수 공격력(법사 직업군은 마력)입니다.
 
-- ``get_builder`` 는 네 번째 인자로 5차 스킬의 레벨 정보를 요구합니다. 이 데이터를 수동으로 입력하는건 상당히 귀찮은 일이므로, 앞에서 정의한 ``engine_configuration`` 을 통해 손쉽게 생성합시다. ``engine_configuration.get_filled_v_skill(30)`` 는 여러분의 직업의 5차 스킬들이 모두 30레벨인 상태로 초기화되도록 합니다.
-- 이와 유사하게, ``get_builder`` 는 다섯 번째 인자로 5차 강화코어로 인한 4차 이하 스킬들의 강화 정보를 요구합니다. ``engine_configuration.get_filled_v_improvements(60)`` 는 여러분의 직업의 강화 코어로 인한 4차 이하 스킬들이 모두 60레벨의 강화 효과를 받도록 합니다.
+- ``get_builder`` 는 네 번째 인자로 5차 스킬의 레벨 정보를 요구합니다. 이 데이터를 수동으로 입력하는건 상당히 귀찮은 일이므로, 앞에서 정의한 ``skill_profile`` 을 통해 손쉽게 생성합시다. ``skill_profile.get_filled_v_skill(30)`` 는 여러분의 직업의 5차 스킬들이 모두 30레벨인 상태로 초기화되도록 합니다.
+- 이와 유사하게, ``get_builder`` 는 다섯 번째 인자로 5차 강화코어로 인한 4차 이하 스킬들의 강화 정보를 요구합니다. ``skill_profile.get_filled_v_improvements(60)`` 는 여러분의 직업의 강화 코어로 인한 4차 이하 스킬들이 모두 60레벨의 강화 효과를 받도록 합니다.
 - ``combat_orders_level`` 은 컴뱃 오더스의 레벨, ``passive_skill_level`` 은 어빌리티 내 패시브 스킬 레벨 1 증가 옵션의 여부입니다.
 
 이러한 정보가 제공되었을때, ``get_builder`` 함수는 ``Builder`` 객체를 반환하고, ``get_operation_engine`` 메서드를 통해 엔진을 빌드할 수 있습니다.
@@ -90,14 +90,14 @@ Policy 구현하기
 ==============
 
 우리는 앞선 내용을 통해, 우리가 시뮬레이션하고자 하는 환경을 만들었습니다. 이제 이 환경에서 **어떻게** 시뮬레이션해야 할 지 이야기할 시간입니다.
-어떻게 동작할지 정의된 모듈을 simaple에서는 ``Policy`` 라고 부릅니다. simaple은 모든 직업에 대해 굉장히 단순하게 동작하는 ``DefaultOrderPolicy`` 를 제공합니다. ``engine_configuration`` 을 통해 이를 생성해 봅시다.
+어떻게 동작할지 정의된 모듈을 simaple에서는 ``Policy`` 라고 부릅니다. simaple은 모든 직업에 대해 굉장히 단순하게 동작하는 ``DefaultOrderPolicy`` 를 제공합니다. ``skill_profile`` 을 통해 이를 생성해 봅시다.
 
 .. code-block:: python
 
     ...
 
-    engine_configuration = get_engine_configuration(JobType.archmagefb)
-    policy = engine_configuration.get_default_policy()
+    skill_profile = get_skill_profile(JobType.archmagefb)
+    policy = skill_profile.get_default_policy()
 
 
 이제 우리는 Engine도 있고, Policy도 있습니다. 이제 시뮬레이션을 수행해 보죠!
@@ -196,12 +196,12 @@ level_advantage와 force_advantage는 각각 레벨과 포스 차이에서 오�
 .. code-block:: python
 
     from simaple.simulate.kms import get_builder
-    from simaple.data.engine_configuration import get_engine_configuration
+    from simaple.data.skill_profile import get_skill_profile
     from simaple.core.jobtype import JobType
     from simaple.core import ActionStat, Stat
 
     ## Declare Engine
-    engine_configuration = get_engine_configuration(JobType.archmagefb)
+    skill_profile = get_skill_profile(JobType.archmagefb)
     character_stat = Stat(
         INT=4932.0,
         INT_multiplier=573.0,
@@ -219,23 +219,23 @@ level_advantage와 force_advantage는 각각 레벨과 포스 차이에서 오�
 
     engine = get_builder(
         action_stat,
-        engine_configuration.get_groups(),
+        skill_profile.get_groups(),
         {
             "character_stat": character_stat,
             "character_level": 260,
             "weapon_attack_power": 789,
             "weapon_pure_attack_power": 500,
         },
-        engine_configuration.get_filled_v_skill(30),
-        engine_configuration.get_filled_v_improvements(60),
+        skill_profile.get_filled_v_skill(30),
+        skill_profile.get_filled_v_improvements(60),
         combat_orders_level=1,
         passive_skill_level=0,
     ).build_operation_engine()
 
     ## Declare Policy
 
-    engine_configuration = get_engine_configuration(JobType.archmagefb)
-    policy = engine_configuration.get_default_policy()
+    skill_profile = get_skill_profile(JobType.archmagefb)
+    policy = skill_profile.get_default_policy()
 
     ## Run simulation
 

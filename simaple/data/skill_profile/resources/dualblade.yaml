@@ -1,5 +1,5 @@
-kind: EngineConfiguration
-version: simaple.io/EngineConfiguration
+kind: SkillProfile
+version: simaple.io/SkillProfile
 metadata:
   label:
     group: dualblade
@@ -24,18 +24,3 @@ data:
     - luk_based
     - adventurer.thief
     - thief
-  mdc_order:
-    - 메이플 용사
-    - 히든 블레이드
-    - 플래시 뱅
-    - 파이널 컷
-    - 써든레이드
-    - 메이플월드 여신의 축복
-    - 얼티밋 다크 사이트
-    - 에픽 어드벤쳐
-    - 레디 투 다이
-    - 블레이드 토네이도
-    - 카르마 퓨리
-    - 아수라
-    - 블레이드 스톰
-    - 팬텀 블로우

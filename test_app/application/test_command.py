@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 from simaple.app.application.command.simulator import create_simulator, run_plan
-from simaple.app.domain.simulator_configuration import MinimalSimulatorConfiguration
+from simaple.simulate.interface.simulator_configuration import MinimalSimulatorConfiguration
 from simaple.app.domain.uow import UnitOfWork
 
 

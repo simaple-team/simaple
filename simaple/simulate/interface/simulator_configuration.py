@@ -6,10 +6,7 @@ from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.base import ActionStat, Stat
 from simaple.core.jobtype import JobType
 from simaple.data.damage_logic import get_damage_logic
-from simaple.data.engine_configuration import (
-    EngineConfiguration,
-    get_engine_configuration,
-)
+from simaple.data.skill_profile import SkillProfile, get_skill_profile
 from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.engine import MonotonicEngine, OperationEngine
 from simaple.simulate.kms import BuilderRequiredExtraVariables, get_builder
@@ -56,17 +53,17 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
     def get_jobtype(self) -> JobType:
         return JobType(self.job)
 
-    def get_engine_configuration(self) -> EngineConfiguration:
-        return get_engine_configuration(self.get_jobtype())
+    def get_skill_profile(self) -> SkillProfile:
+        return get_skill_profile(self.get_jobtype())
 
     def _get_builder(self) -> EngineBuilder:
-        engine_configuration = self.get_engine_configuration()
+        skill_profile = self.get_skill_profile()
         return get_builder(
-            engine_configuration.get_groups(),
-            engine_configuration.get_skill_levels(30, 1, 1),
-            engine_configuration.get_filled_v_improvements(),
-            engine_configuration.get_filled_hexa_improvements(),
-            engine_configuration.get_skill_replacements(),
+            skill_profile.get_groups(),
+            skill_profile.get_skill_levels(30, 1, 1),
+            skill_profile.get_filled_v_improvements(),
+            skill_profile.get_filled_hexa_improvements(),
+            skill_profile.get_skill_replacements(),
             self.get_injected_values(),
         )
 

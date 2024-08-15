@@ -4,8 +4,6 @@ from typing import cast
 import pydantic
 
 from simaple.core import JobType
-from simaple.simulate.policy.base import PolicyWrapper
-from simaple.simulate.policy.default import normal_default_ordered_policy
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
 )
@@ -13,11 +11,11 @@ from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.repository import DirectorySpecRepository
 
 
-class EngineConfiguration(
-    pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="EngineConfiguration")
+class SkillProfile(
+    pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="SkillProfile")
 ):
     """
-    EngineConfiguration
+    SkillProfile
     A pre-assigned information to create specific job's components easier
     """
 
@@ -25,7 +23,6 @@ class EngineConfiguration(
     v_improvement_names: list[str]
     hexa_improvement_names: list[str]
     component_groups: list[str]
-    mdc_order: list[str]
     hexa_skill_names: list[str] = pydantic.Field(default=[])
     hexa_mastery: dict[str, str] = pydantic.Field(default={})
 
@@ -58,27 +55,16 @@ class EngineConfiguration(
     def get_groups(self) -> list[str]:
         return self.component_groups
 
-    def get_default_policy(self) -> PolicyWrapper:
-        skills = []
-
-        for skill in self.mdc_order:
-            if skill in self.hexa_mastery:
-                skills.append(self.hexa_mastery[skill])
-            else:
-                skills.append(skill)
-
-        return PolicyWrapper(normal_default_ordered_policy(order=skills))
-
     def get_skill_replacements(self) -> dict[str, str]:
         return self.hexa_mastery
 
 
-def get_engine_configuration(jobtype: JobType) -> EngineConfiguration:
+def get_skill_profile(jobtype: JobType) -> SkillProfile:
     repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
     loader = SpecBasedLoader(repository)
     return cast(
-        EngineConfiguration,
+        SkillProfile,
         loader.load(
-            query={"group": jobtype.value, "kind": "EngineConfiguration"},
+            query={"group": jobtype.value, "kind": "SkillProfile"},
         ),
     )

@@ -22,7 +22,7 @@ container = SimulationContainer()
 container.config.from_dict(setting.model_dump())
 
 engine = container.operation_engine()
-policy = container.engine_configuration().get_default_policy()
+policy = container.builtin_strategy().get_priority_based_policy()
 
 
 def run():

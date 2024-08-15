@@ -8,6 +8,7 @@ from typing import Any, Callable, Optional, TypeVar, Union, cast
 from pydantic import BaseModel
 from typing_extensions import TypedDict
 
+from simaple.simulate.reserved_names import Tag
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
     get_class,
@@ -329,3 +330,20 @@ def play(store: S, action: Action, router: RouterDispatcher) -> tuple[S, list[Ev
     )
 
     return store, events
+
+
+class PlayLog(BaseModel):
+    clock: float
+
+    action: Action
+    events: list[Event]
+    checkpoint: Checkpoint
+
+    def get_delay_left(self) -> float:
+        delay = 0
+        for event in self.events:
+            if event["tag"] in (Tag.DELAY,):
+                if event["payload"]["time"] > 0:
+                    delay += event["payload"]["time"]
+
+        return delay

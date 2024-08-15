@@ -1,0 +1,28 @@
+kind: SkillProfile
+version: simaple.io/SkillProfile
+metadata:
+  label:
+    group: windbreaker
+data:
+  v_skill_names:
+    - 하울링 게일
+    - 아이들 윔
+    - 윈드 월
+    - 볼텍스 스피어
+    - 시그너스 팔랑크스
+    - 가이디드 애로우
+    - 크리티컬 리인포스
+    - 초월자 시그너스의 축복
+  v_improvement_names:
+    - 트라이플링 윔
+    - 핀포인트 피어스
+    - 천공의 노래
+    - 스톰 윔
+    - 스톰 브링어
+  hexa_improvement_names: []
+  component_groups:
+    - windbreaker
+    - common
+    - dex_based
+    - cygnus
+    - archer
