@@ -14,7 +14,7 @@ from simaple.simulate.component.trait.impl import (
     PeriodicWithSimpleDamageTrait,
     UseSimpleAttackTrait,
 )
-from simaple.simulate.component.util import is_rejected, ignore_rejected
+from simaple.simulate.component.util import ignore_rejected, is_rejected
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.global_property import Dynamics
 

@@ -16,14 +16,14 @@ from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
 
-
 class MultipleHitHexaSkillState(ReducerState):
     cooldown: Cooldown
     dynamics: Dynamics
 
 
 class MultipleHitHexaSkillComponent(
-    SkillComponent, InvalidatableCooldownTrait,
+    SkillComponent,
+    InvalidatableCooldownTrait,
 ):
     """
     MultipleHitHexaSkillComponent

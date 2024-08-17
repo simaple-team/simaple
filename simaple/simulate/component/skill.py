@@ -25,10 +25,11 @@ from simaple.simulate.component.trait.impl import (
     UsePeriodicDamageTrait,
     UseSimpleAttackTrait,
 )
+from simaple.simulate.component.util import ignore_rejected
 from simaple.simulate.component.view import ComponentInformation, Running, Validity
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import Dynamics
-from simaple.simulate.component.util import ignore_rejected
+
 
 class SkillComponent(Component):
     disable_validity: bool = False

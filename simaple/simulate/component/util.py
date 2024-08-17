@@ -1,7 +1,8 @@
+from functools import wraps
+
 from simaple.simulate.base import Event
 from simaple.simulate.reserved_names import Tag
-from functools import wraps
-from typing import Callable
+
 
 def is_rejected(events: list[Event]) -> bool:
     return any(event["tag"] == Tag.REJECT for event in events)
@@ -16,6 +17,7 @@ def ignore_rejected(func) -> list[Event]:
     Ignores rejected events from action.
     This method is used for actions which yields "intened" rejection.
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         state, events = func(*args, **kwargs)
