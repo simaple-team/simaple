@@ -2,11 +2,12 @@
 
 ELAPSE 70000
 
-CAST "메이플 용사"
+CAST "시그너스 나이츠"
 CAST "엘리멘트 : 스톰"
 CAST "샤프 아이즈"
-CAST "트라이플링 윔"
+CAST "트라이플링 윔 VI"
 CAST "가이디드 애로우"
+CAST "스톰 브링어"
 
 CAST "초월자 시그너스의 축복"
 ELAPSE 10000
@@ -21,7 +22,7 @@ CAST "시그너스 팔랑크스"
 
 !debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"
 
-CAST "오리진" 
+CAST "미스트랄 스프링" 
 
 CAST "스톰 윔" 
 CAST "크리티컬 리인포스" 
@@ -33,20 +34,21 @@ CAST "하울링 게일"
 CAST "볼텍스 스피어"
 
 !debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"
-
-CAST "천공의 노래"
-x80 RESOLVE "천공의 노래"
-KEYDOWNSTOP "천공의 노래"
 CAST "아이들 윔"
 
-CAST "천공의 노래"
-x80 RESOLVE "천공의 노래"
-KEYDOWNSTOP "천공의 노래"
+CAST "천공의 노래 VI"
+x80 RESOLVE "천공의 노래 VI"
+KEYDOWNSTOP "천공의 노래 VI"
 CAST "아이들 윔"
 
-CAST "천공의 노래"
-x80 RESOLVE "천공의 노래"
-KEYDOWNSTOP "천공의 노래"
+CAST "천공의 노래 VI"
+x80 RESOLVE "천공의 노래 VI"
+KEYDOWNSTOP "천공의 노래 VI"
+CAST "아이들 윔"
+
+CAST "천공의 노래 VI"
+x80 RESOLVE "천공의 노래 VI"
+KEYDOWNSTOP "천공의 노래 VI"
 CAST "아이들 윔"
 
 ELAPSE 30000

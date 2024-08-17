@@ -451,3 +451,40 @@ data:
   lasting_duration: 999_999_999 # toggle skill
 
   v_improvement: 2
+---
+kind: Component
+version: simaple.io/TriplePeriodicDamageHexaComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 미스트랄 스프링
+    id: 13141500-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  id: 13141500-0
+  name: 미스트랄 스프링
+
+  damage_and_hits:
+  - damage: "{{ 830 + skill_level * 28 }}"
+    hit: "{{ 10 * 13 }}"
+
+  delay: 4_560
+  cooldown_duration: 360_000
+
+  periodic_01:
+    interval: 3_000
+    damage: "{{ 660 + skill_level * 22 }}"
+    hit: "{{ 5 * 13 }}"
+  periodic_02:
+    interval: 3_000
+    damage: "{{ 720 + skill_level * 24 }}"
+    hit: "{{ 6 * 5 }}"
+  periodic_03:
+    interval: 3_000
+    damage: "{{ 645 + skill_level * 21 }}"
+    hit: "{{ 7 * 3 }}"
+
+  lasting_duration: 24_560
+  synergy: {}
