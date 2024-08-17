@@ -9,6 +9,16 @@ def count_damage_skill(events: list[Event]) -> int:
     return sum([e["tag"] == Tag.DAMAGE for e in events])
 
 
+def compute_total_damage_coefficient(events: list[Event]) -> float:
+    return sum(
+        [
+            e["payload"]["damage"] * e["payload"]["hit"]
+            for e in events
+            if e["tag"] == Tag.DAMAGE and e["payload"] is not None
+        ]
+    )
+
+
 def total_delay(events: list[Event]) -> int:
     return sum(
         [

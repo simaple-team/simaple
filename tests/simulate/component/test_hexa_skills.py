@@ -12,7 +12,6 @@ from simaple.simulate.component.hexa_skill import (
 from simaple.simulate.global_property import Dynamics
 
 
-
 @pytest.fixture
 def multiple_hit_skill():
     component = MultipleHitHexaSkillComponent(
@@ -49,7 +48,6 @@ def test_multiple_hit_skill(
     assert events[0]["payload"] == {"damage": 100, "hit": 1.0, "modifier": None}
     assert events[1]["payload"] == {"damage": 200, "hit": 3.0, "modifier": None}
     assert events[2]["payload"] == {"time": 30.0}
-
 
 
 @pytest.fixture
