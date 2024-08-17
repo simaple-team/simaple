@@ -68,7 +68,7 @@ data:
   id: 151101013-0
   name: 원더
   listening_actions:
-    디바이드.use.emitted.global.damage: use
+    디바이드.use.emitted.global.damage: use_with_ignore_reject
 
   delay: 0
   damage: "{{ 80 + 30 + 115 + 135 + 3 * skill_level }}"
