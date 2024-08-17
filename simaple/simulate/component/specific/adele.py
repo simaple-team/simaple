@@ -338,7 +338,7 @@ class AdeleGatheringComponent(SkillComponent, UseSimpleAttackTrait):
     damage: float
     hit_per_sword: float
 
-    binds: dict[str, str] = {"order_sword": ".오더.order_sword"}
+    binds: dict[str, str] = {"order_sword": ".오더 VI.order_sword"}
 
     def get_default_state(self):
         return {
@@ -376,7 +376,7 @@ class AdeleBlossomComponent(SkillComponent, UseSimpleAttackTrait):
     hit_per_sword: float
     exceeded_stat: Stat
 
-    binds: dict[str, str] = {"order_sword": ".오더.order_sword"}
+    binds: dict[str, str] = {"order_sword": ".오더 VI.order_sword"}
 
     def get_default_state(self):
         return {
@@ -606,7 +606,7 @@ class AdeleStormComponent(
     lasting_duration: float
     maximum_stack: int
 
-    binds: dict[str, str] = {"order_sword": ".오더.order_sword"}
+    binds: dict[str, str] = {"order_sword": ".오더 VI.order_sword"}
 
     def get_default_state(self):
         return {

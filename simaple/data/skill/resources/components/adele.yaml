@@ -19,6 +19,7 @@ data:
     "디바이드 VI.use.emitted.global.damage": "trigger"
     "레조넌스.use.emitted.global.delay": "resonance"
     "오더.use.emitted.global.delay": "order"
+    "오더 VI.use.emitted.global.delay": "order"
   periodic_interval: 10020
   maximum_stack: 400
   stack_per_period: 5
@@ -667,3 +668,32 @@ data:
   v_improvement: 2
 
   disable_validity: True
+---
+kind: Component
+version: simaple.io/AdeleOrderComponent
+metadata:
+  label:
+    group: adele
+    name: 오더 VI
+    id: 151111003-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 151111003-0
+  name: 오더 VI
+  representative_name: 오더
+
+  delay: 0
+  cooldown_duration: 500
+  lasting_duration: "{{ 45_000 + 1000 * (skill_level // 2) }}"
+
+  periodic_interval: 1020
+  periodic_damage: "{{ 380 + skill_level * 14 }}"
+  periodic_hit: 2
+
+  maximum_stack: 6
+  restore_maximum_stack: 8
+
+  v_improvement: 2
