@@ -8,7 +8,10 @@ from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.base import PlayLog
 from simaple.simulate.policy.parser import is_console_command, parse_simaple_runtime
 from simaple.simulate.report.base import SimulationEntry
-from simaple.simulate.report.feature import MaximumDealingIntervalFeature
+from simaple.simulate.report.feature import (
+    DamageShareFeature,
+    MaximumDealingIntervalFeature,
+)
 
 
 class PlayStatus(Enum):
@@ -89,6 +92,12 @@ class DebugInterface:
     def get_dpm_calculator(self):
         container = SimulationContainer()
         container.config.from_dict(self._setting.model_dump())
+
+        _damage_logic = container.dpm_calculator().damage_logic
+        print(
+            "combat_power", _damage_logic.get_compat_power(container.character().stat)
+        )
+
         return container.dpm_calculator()
 
     def run(self, plan_file: str):
@@ -98,6 +107,8 @@ class DebugInterface:
         engine = self.get_engine()
         damage_calculator = self.get_dpm_calculator()
         plan_writer = _TimestampedPlanWriter()
+
+        damage_share = DamageShareFeature(self.get_dpm_calculator())
 
         for op_or_console in operation_or_consoles:
             if not is_console_command(op_or_console):
@@ -112,6 +123,7 @@ class DebugInterface:
                 op_log = engine.exec(op_or_console)
                 for playlog in op_log.playlogs:
                     entry = engine.get_simulation_entry(playlog)
+                    damage_share.update(entry)
                     total_damage = sum(
                         [
                             damage_calculator.get_damage(damage_log)
@@ -125,11 +137,15 @@ class DebugInterface:
         report = engine.create_full_report()
 
         feature = MaximumDealingIntervalFeature(30000)
-        print(feature.find_maximum_dealing_interval(report, damage_calculator))
+        damage_share.show()
+        damage, _start, _end = feature.find_maximum_dealing_interval(
+            report, damage_calculator
+        )
 
         print(
-            f"{engine.get_current_viewer()('clock')} | {self.get_dpm_calculator().calculate_total_damage(report):,} "
+            f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {self._setting.jobtype}"
         )
+
         plan_writer.dump(plan_file.replace(".simaple", ".result.simaple"))
 
 

@@ -1,0 +1,121 @@
+ELAPSE 70000.0            # 0ms
+CAST "로디드 다이스"            # 70,000ms
+CAST "메이플 용사"             # 70,000ms
+CAST "호밍 미사일 VI"          # 70,000ms
+CAST "서포트 웨이버: H-EX"      # 70,000ms
+CAST "로봇 런처: RM7"         # 70,630ms
+CAST "마그네틱 필드"            # 71,260ms
+CAST "로봇 팩토리: RM1"        # 71,890ms
+CAST "메이플월드 여신의 축복"       # 72,520ms
+CAST "윌 오브 리버티"           # 72,970ms
+CAST "레지스탕스 라인 인팬트리"      # 72,970ms
+CAST "멀티플 옵션: M-FL"       # 73,330ms
+CAST "메카 캐리어"             # 74,110ms
+CAST "오버 드라이브"            # 74,830ms
+CAST "소울 컨트랙트"            # 75,250ms
+CAST "디스토션 필드"            # 76,150ms
+CAST "마이크로 미사일 컨테이너"      # 76,840ms
+CAST "리스트레인트 링"           # 77,380ms
+CAST "그라운드 제로"            # 77,440ms
+CAST "봄버 타임"              # 82,300ms
+CAST "메탈아머 전탄발사"          # 83,200ms
+RESOLVE "메탈아머 전탄발사"       # 84,530ms
+RESOLVE "메탈아머 전탄발사"       # 84,730ms
+RESOLVE "메탈아머 전탄발사"       # 84,930ms
+RESOLVE "메탈아머 전탄발사"       # 85,130ms
+RESOLVE "메탈아머 전탄발사"       # 85,330ms
+RESOLVE "메탈아머 전탄발사"       # 85,530ms
+RESOLVE "메탈아머 전탄발사"       # 85,730ms
+RESOLVE "메탈아머 전탄발사"       # 85,930ms
+RESOLVE "메탈아머 전탄발사"       # 86,130ms
+RESOLVE "메탈아머 전탄발사"       # 86,330ms
+RESOLVE "메탈아머 전탄발사"       # 86,530ms
+RESOLVE "메탈아머 전탄발사"       # 86,730ms
+RESOLVE "메탈아머 전탄발사"       # 86,930ms
+RESOLVE "메탈아머 전탄발사"       # 87,130ms
+RESOLVE "메탈아머 전탄발사"       # 87,330ms
+RESOLVE "메탈아머 전탄발사"       # 87,530ms
+RESOLVE "메탈아머 전탄발사"       # 87,730ms
+RESOLVE "메탈아머 전탄발사"       # 87,930ms
+RESOLVE "메탈아머 전탄발사"       # 88,130ms
+RESOLVE "메탈아머 전탄발사"       # 88,330ms
+RESOLVE "메탈아머 전탄발사"       # 88,530ms
+RESOLVE "메탈아머 전탄발사"       # 88,730ms
+RESOLVE "메탈아머 전탄발사"       # 88,930ms
+RESOLVE "메탈아머 전탄발사"       # 89,130ms
+RESOLVE "메탈아머 전탄발사"       # 89,330ms
+RESOLVE "메탈아머 전탄발사"       # 89,530ms
+RESOLVE "메탈아머 전탄발사"       # 89,730ms
+RESOLVE "메탈아머 전탄발사"       # 89,930ms
+RESOLVE "메탈아머 전탄발사"       # 90,130ms
+RESOLVE "메탈아머 전탄발사"       # 90,330ms
+RESOLVE "메탈아머 전탄발사"       # 90,530ms
+RESOLVE "메탈아머 전탄발사"       # 90,730ms
+RESOLVE "메탈아머 전탄발사"       # 90,930ms
+RESOLVE "메탈아머 전탄발사"       # 91,130ms
+RESOLVE "메탈아머 전탄발사"       # 91,330ms
+RESOLVE "메탈아머 전탄발사"       # 91,530ms
+RESOLVE "메탈아머 전탄발사"       # 91,730ms
+RESOLVE "메탈아머 전탄발사"       # 91,930ms
+RESOLVE "메탈아머 전탄발사"       # 92,130ms
+RESOLVE "메탈아머 전탄발사"       # 92,330ms
+RESOLVE "메탈아머 전탄발사"       # 92,530ms
+RESOLVE "메탈아머 전탄발사"       # 92,730ms
+RESOLVE "메탈아머 전탄발사"       # 92,930ms
+RESOLVE "메탈아머 전탄발사"       # 93,130ms
+RESOLVE "메탈아머 전탄발사"       # 93,330ms
+RESOLVE "메탈아머 전탄발사"       # 93,530ms
+RESOLVE "메탈아머 전탄발사"       # 93,730ms
+RESOLVE "메탈아머 전탄발사"       # 93,930ms
+RESOLVE "메탈아머 전탄발사"       # 94,130ms
+RESOLVE "메탈아머 전탄발사"       # 94,330ms
+RESOLVE "메탈아머 전탄발사"       # 94,530ms
+RESOLVE "메탈아머 전탄발사"       # 94,730ms
+RESOLVE "메탈아머 전탄발사"       # 94,930ms
+RESOLVE "메탈아머 전탄발사"       # 95,000ms
+RESOLVE "메탈아머 전탄발사"       # 96,800ms
+KEYDOWNSTOP "메탈아머 전탄발사"   # 96,800ms
+CAST "디스토션 필드"            # 96,800ms
+CAST "매시브 파이어: IRON-B VI" # 97,490ms
+CAST "매시브 파이어: IRON-B VI" # 98,090ms
+CAST "매시브 파이어: IRON-B VI" # 98,690ms
+CAST "매시브 파이어: IRON-B VI" # 99,290ms
+CAST "매시브 파이어: IRON-B VI" # 99,890ms
+CAST "매시브 파이어: IRON-B VI" # 100,490ms
+CAST "매시브 파이어: IRON-B VI" # 101,090ms
+CAST "매시브 파이어: IRON-B VI" # 101,690ms
+CAST "매시브 파이어: IRON-B VI" # 102,290ms
+CAST "마이크로 미사일 컨테이너"      # 102,890ms
+CAST "매시브 파이어: IRON-B VI" # 103,430ms
+CAST "매시브 파이어: IRON-B VI" # 104,030ms
+CAST "매시브 파이어: IRON-B VI" # 104,630ms
+CAST "디스토션 필드"            # 105,230ms
+CAST "매시브 파이어: IRON-B VI" # 105,920ms
+CAST "매시브 파이어: IRON-B VI" # 106,520ms
+CAST "매시브 파이어: IRON-B VI" # 107,120ms
+CAST "매시브 파이어: IRON-B VI" # 107,720ms
+CAST "매시브 파이어: IRON-B VI" # 108,320ms
+CAST "매시브 파이어: IRON-B VI" # 108,920ms
+CAST "매시브 파이어: IRON-B VI" # 109,520ms
+CAST "매시브 파이어: IRON-B VI" # 110,120ms
+CAST "매시브 파이어: IRON-B VI" # 110,720ms
+CAST "매시브 파이어: IRON-B VI" # 111,320ms
+CAST "매시브 파이어: IRON-B VI" # 111,920ms
+CAST "매시브 파이어: IRON-B VI" # 112,520ms
+CAST "매시브 파이어: IRON-B VI" # 113,120ms
+CAST "디스토션 필드"            # 113,720ms
+CAST "매시브 파이어: IRON-B VI" # 114,410ms
+CAST "매시브 파이어: IRON-B VI" # 115,010ms
+CAST "매시브 파이어: IRON-B VI" # 115,610ms
+CAST "매시브 파이어: IRON-B VI" # 116,210ms
+CAST "매시브 파이어: IRON-B VI" # 116,810ms
+CAST "매시브 파이어: IRON-B VI" # 117,410ms
+CAST "매시브 파이어: IRON-B VI" # 118,010ms
+CAST "매시브 파이어: IRON-B VI" # 118,610ms
+CAST "매시브 파이어: IRON-B VI" # 119,210ms
+CAST "매시브 파이어: IRON-B VI" # 119,810ms
+CAST "매시브 파이어: IRON-B VI" # 120,410ms
+CAST "매시브 파이어: IRON-B VI" # 121,010ms
+CAST "매시브 파이어: IRON-B VI" # 121,610ms
+CAST "디스토션 필드"            # 122,210ms
+ELAPSE 30000.0            # 122,900ms

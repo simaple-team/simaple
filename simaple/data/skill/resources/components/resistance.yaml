@@ -37,3 +37,25 @@ data:
   periodic_damage: "{{ 215 + skill_level * 8 }}"
   periodic_hit: 9
   lasting_duration: 10_000
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: resistance.dex
+    name: 메이플월드 여신의 축복
+    id: 400001042-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  id: 400001042-0
+  name: 메이플월드 여신의 축복
+  lasting_duration: 60_000
+  cooldown_duration: 180_000
+  delay: 450
+  red: true
+  rem: false
+  stat:
+    DEX: "{{ math.floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
+    damage_multiplier: "{{ math.floor(5 + 0.5 * skill_level) }}"

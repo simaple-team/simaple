@@ -5,12 +5,14 @@ metadata:
     group: mechanic
 data:
   v_skill_names:
-    - 레지스탕스 라인 인팬트리
     - 메이플월드 여신의 축복
-    - 프레이
+    - 오버 드라이브
+    - 로디드 다이스
+    - 레지스탕스 라인 인팬트리
     - "멀티플 옵션: M-FL"
     - 마이크로 미사일 컨트롤러
     - 메탈아머 전탄발사
+    - 메카 캐리어
   v_improvement_names:
     - 호밍 미사일
     - "매시브 파이어: IRON-B"
@@ -19,7 +21,16 @@ data:
     - "로봇 팩토리: RM1"
     - 마그네틱 필드
     - "로봇 런처: RM7"
-  hexa_improvement_names: []
+  hexa_improvement_names:
+    - 메탈아머 전탄발사
+    - 메카 캐리어
+    - 마이크로 미사일 컨트롤러
+    - "멀티플 옵션: M-FL"
+  hexa_skill_names:
+    - 그라운드 제로
+  hexa_mastery:
+    "매시브 파이어: IRON-B": "매시브 파이어: IRON-B VI"
+    "호밍 미사일": "호밍 미사일 VI"
   component_groups:
     - mechanic
     - common
@@ -27,3 +38,4 @@ data:
     - resistance
     - pirate
     - mob
+    - resistance.dex

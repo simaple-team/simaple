@@ -19,8 +19,20 @@ data:
   name: 메카닉 마스터리
   stat:
     attack_power: 20
-    critical_rate: 10
+    critical_rate: 15
     critical_damage: 5
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: mechanic
+    name: "메탈아머: 탱크"
+data:
+  name: "메탈아머: 탱크"
+  stat:
+    critical_rate: 30
+
 ---
 kind: PassiveSkill
 version: simaple.io/PassiveSkill
@@ -43,6 +55,18 @@ metadata:
 data:
   name: 오버 튜닝
   stat:
-    final_damage_multiplier: 34
+    final_damage_multiplier: 39
     critical_rate: 20
     ignored_defence: 30
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: mechanic
+    name: 로봇 마스터리
+data:
+  name: 로봇 마스터리
+  stat:
+    damage_multiplier: 45
+
