@@ -107,9 +107,7 @@ class TriplePeriodicDamageHexaComponentState(ReducerState):
     dynamics: Dynamics
 
 
-class TriplePeriodicDamageHexaComponent(
-    SkillComponent, InvalidatableCooldownTrait
-):
+class TriplePeriodicDamageHexaComponent(SkillComponent, InvalidatableCooldownTrait):
     """
     TriplePeriodicDamageConfiguratedHexaSkillComponent
     This describes skill that act like:
@@ -117,9 +115,10 @@ class TriplePeriodicDamageHexaComponent(
       + (1) periodic damage x hit
       + (2) periodic damage x hit
       + (3) periodic damage x hit
-    
+
     ex) Holy Advent
     """
+
     name: str
     damage_and_hits: list[DamageAndHit]
     cooldown_duration: float
@@ -196,7 +195,9 @@ class TriplePeriodicDamageHexaComponent(
     def buff(self, _: TriplePeriodicDamageHexaComponentState):
         return self.synergy
 
-    def _get_lasting_duration(self, state: TriplePeriodicDamageHexaComponentState) -> float:
+    def _get_lasting_duration(
+        self, state: TriplePeriodicDamageHexaComponentState
+    ) -> float:
         return self.lasting_duration
 
     def _get_all_periodics(

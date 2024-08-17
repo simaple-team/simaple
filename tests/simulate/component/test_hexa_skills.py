@@ -115,4 +115,3 @@ def test_holy_advent_component_emit_initial_damage(
     holy_advent_state, events = holy_advent_component.elapse(240, holy_advent_state)
 
     assert len(events) == 9  # 2+2+4 event + 1(elapse)
-

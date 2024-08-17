@@ -1,10 +1,9 @@
 from typing import Optional
 
 from simaple.core.base import Stat
-from simaple.simulate.base import Entity, Event
+from simaple.simulate.base import Entity
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic, Stack
-from simaple.simulate.component.feature import DamageAndHit, PeriodicFeature
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
     CooldownValidityTrait,
