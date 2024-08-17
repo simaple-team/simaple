@@ -299,6 +299,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400051009-0
   name: "멀티플 옵션: M-FL"
@@ -326,6 +327,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400051017-0
   name: 마이크로 미사일 컨테이너
@@ -344,6 +346,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400051041-0
   name: 메탈아머 전탄발사
@@ -371,6 +374,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400051068-0
   name: 메카 캐리어
