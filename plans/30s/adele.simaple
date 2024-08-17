@@ -1,0 +1,65 @@
+CAST "샤드 VI"
+CAST "테리토리"
+CAST "원더 VI"
+CAST "그레이브"
+
+x30 CAST "디바이드 VI"
+CAST "오더 VI"
+x5 CAST "디바이드 VI"
+CAST "오더 VI"
+x5 CAST "디바이드 VI"
+CAST "오더 VI"
+x5 CAST "디바이드 VI"
+
+x20 CAST "디바이드 VI"
+CAST "임페일"
+CAST "레조넌스"
+CAST "오더 VI"
+
+CAST "오라 웨폰"
+
+CAST "레이스 오브 갓"
+CAST "매직 서킷 풀드라이브"
+CAST "그란디스 여신의 축복(레프)"
+CAST "리스토어"
+CAST "오더 VI"
+CAST "스톰"
+CAST "인피니트"
+
+CAST "소울 컨트랙트"
+CAST "리스트레인트 링"
+CAST "마에스트로" # origin
+
+!debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"
+
+CAST "루인"
+CAST "마커"
+CAST "게더링"
+CAST "블로섬"
+
+CAST "디바이드 VI"
+CAST "오더 VI"
+CAST "오더 VI"
+CAST "오더 VI"
+
+CAST "디바이드 VI"
+CAST "디바이드 VI"
+CAST "디바이드 VI"
+
+
+x16 CAST "디바이드 VI"
+CAST "게더링"
+CAST "블로섬"
+CAST "오더 VI"
+
+x21 CAST "디바이드 VI"
+CAST "게더링"
+CAST "블로섬"
+CAST "오더 VI"
+
+x21 CAST "디바이드 VI"
+CAST "게더링"
+CAST "블로섬"
+CAST "오더 VI"
+
+ELAPSE 30000
