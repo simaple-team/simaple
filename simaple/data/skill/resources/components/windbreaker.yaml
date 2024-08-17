@@ -400,7 +400,7 @@ patch:
   - EvalPatch
   - VSkillImprovementPatch
 data:
-  id: 13121001-0
+  id: 13121001-0vi
   name: 천공의 노래 VI
   representative_name: 천공의 노래
   maximum_keydown_time: 999_999_999
@@ -415,5 +415,39 @@ data:
 
   finish_damage: 0
   finish_hit: 0
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/TriggableBuffSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 트라이플링 윔 VI
+    id: 13101022-0vi
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  listening_actions:
+    핀포인트 피어스.use.emitted.global.damage: trigger
+    천공의 노래.elapse.emitted.global.damage: trigger
+    천공의 노래.stop.emitted.global.damage: trigger
+    천공의 노래 VI.elapse.emitted.global.damage: trigger
+    천공의 노래 VI.stop.emitted.global.damage: trigger
+    하울링 게일.elapse.emitted.global.damage: trigger
+    시그너스 팔랑크스.elapse.emitted.global.damage: trigger
+    볼텍스 스피어.elapse.emitted.global.damage: trigger
+  id: 13101022-0vi
+  name: 트라이플링 윔 VI
+  representative_name: 트라이플링 윔
+  trigger_cooldown_duration: 0
+  trigger_damage: '{{ (315 + skill_level * 7) * 0.8 + (420 + skill_level * 11) * 0.2 }}'
+  trigger_hit: 0.5
+
+  cooldown_duration: 0
+  delay: 0
+  lasting_duration: 999_999_999 # toggle skill
 
   v_improvement: 2

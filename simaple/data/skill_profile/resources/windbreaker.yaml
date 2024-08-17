@@ -27,6 +27,7 @@ data:
   hexa_skill_names: []
   hexa_mastery:
     천공의 노래: 천공의 노래 VI
+    트라이플링 윔: 트라이플링 윔 VI
   component_groups:
     - windbreaker
     - common
