@@ -16,6 +16,7 @@ data:
   name: 에테르
   listening_actions:
     "디바이드.use.emitted.global.delay": "trigger"
+    "디바이드 VI.use.emitted.global.damage": "trigger"
     "레조넌스.use.emitted.global.delay": "resonance"
     "오더.use.emitted.global.delay": "order"
   periodic_interval: 10020
@@ -69,6 +70,7 @@ data:
   name: 원더
   listening_actions:
     디바이드.use.emitted.global.damage: use_with_ignore_reject
+    "디바이드 VI.use.emitted.global.damage": use_with_ignore_reject
 
   delay: 0
   damage: "{{ 80 + 30 + 115 + 135 + 3 * skill_level }}"
@@ -148,6 +150,7 @@ data:
   name: 크리에이션
   listening_actions:
     "디바이드.use": "trigger"
+    "디바이드 VI.use": "trigger"
   delay: 0
   damage: "{{ 200 + 240 + 180 + 3 * skill_level }}"
   hit_per_sword: 1
@@ -583,3 +586,32 @@ data:
 
   delay: 7_740
   cooldown_duration: 360_000
+---
+kind: Component
+version: simaple.io/AttackSkillIncludeReforged
+metadata:
+  label:
+    group: adele
+    name: 디바이드 VI
+    id: 151121000-0vi
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  id: 151121000-0vi
+  name: 디바이드 VI
+  representative_name: 디바이드
+
+  delay: 600
+  cooldown_duration: 0
+  damage: "{{ 390 + skill_level * 12 }}"
+  hit: 6
+
+  reforged_damage: "{{ 300 + skill_level * 9 }}"
+  reforged_hit: 7
+  reforged_multiple: 3
+  reforge_cooldown_duration: 6_000
+
+  v_improvement: 2

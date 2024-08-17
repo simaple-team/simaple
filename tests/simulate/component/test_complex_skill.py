@@ -21,6 +21,7 @@ def attack_skill_include_reforgedskill():
         reforged_damage=1000,
         reforged_hit=3.0,
         reforge_cooldown_duration=7_000,
+        reforged_multiple=2,
     )
     return component
 
@@ -49,7 +50,7 @@ def test_attack_skill_include_reforgedskill(
     ) = attack_skill_include_reforgedskill.use(
         None, attack_skill_include_reforgedskill_state
     )
-    assert compute_total_damage_coefficient(events) == 3000
+    assert compute_total_damage_coefficient(events) == 6000
 
     (
         attack_skill_include_reforgedskill_state,
@@ -87,4 +88,4 @@ def test_attack_skill_include_reforgedskill(
     ) = attack_skill_include_reforgedskill.use(
         None, attack_skill_include_reforgedskill_state
     )
-    assert compute_total_damage_coefficient(events) == 3000
+    assert compute_total_damage_coefficient(events) == 6000

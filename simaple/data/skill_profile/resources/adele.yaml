@@ -31,7 +31,8 @@ data:
     - 스톰
   hexa_skill_names:
     - 마에스트로
-  hexa_mastery: {}
+  hexa_mastery:
+    디바이드: 디바이드 VI
   component_groups:
     - adele
     - common

@@ -90,6 +90,7 @@ class AttackSkillIncludeReforged(
 
     reforged_damage: float
     reforged_hit: float
+    reforged_multiple: int
 
     reforge_cooldown_duration: float
 
@@ -114,15 +115,18 @@ class AttackSkillIncludeReforged(
             state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
         )
 
-        damage, hit = self.damage, self.hit
+        damage_events = [self.event_provider.dealt(self.damage, self.hit)]
+
         if state.reforged_cooldown.available:
-            damage, hit = self.reforged_damage, self.reforged_hit
+            damage_events = [
+                self.event_provider.dealt(self.reforged_damage, self.reforged_hit)
+                for _ in range(self.reforged_multiple)
+            ]
             state.reforged_cooldown.set_time_left(
                 state.dynamics.stat.calculate_cooldown(self.reforge_cooldown_duration)
             )
 
-        return state, [
-            self.event_provider.dealt(damage, hit),
+        return state, damage_events + [
             self.event_provider.delayed(self.delay),
         ]
 
