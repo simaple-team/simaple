@@ -262,6 +262,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400031003-0
   name: 하울링 게일
@@ -291,6 +292,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400031022-0
   name: 아이들 윔
@@ -312,6 +314,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   listening_actions:
     핀포인트 피어스.use.emitted.global.damage: trigger
@@ -340,6 +343,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400031058-0
   name: 볼텍스 스피어
