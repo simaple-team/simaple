@@ -615,3 +615,55 @@ data:
   reforge_cooldown_duration: 6_000
 
   v_improvement: 2
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 샤드 VI
+    id: 151001001-0vi
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 151001001-0vi
+  name: 샤드 VI
+  representative_name: 샤드
+  delay: 630
+  damage: "{{ 480 + 8 * skill_level }}"
+  hit: 15
+  cooldown_duration: 6000
+  red: true
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 원더 VI
+    id: 151101013-0vi
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 151101013-0vi
+  name: 원더 VI
+  representative_name: 원더
+  listening_actions:
+    디바이드.use.emitted.global.damage: use_with_ignore_reject
+    "디바이드 VI.use.emitted.global.damage": use_with_ignore_reject
+
+  delay: 0
+  damage: "{{ 480 + 8 * skill_level }}"
+  hit: 15
+  cooldown_duration: 6000
+  red: false # TODO: red=True인지 확인 필요
+
+  v_improvement: 2
+
+  disable_validity: True

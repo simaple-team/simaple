@@ -33,6 +33,8 @@ data:
     - 마에스트로
   hexa_mastery:
     디바이드: 디바이드 VI
+    샤드: 샤드 VI
+    원더: 원더 VI
   component_groups:
     - adele
     - common
