@@ -560,3 +560,26 @@ data:
   maximum_stack: 8
 
   default_skill_level: 30
+---
+kind: Component
+version: simaple.io/MultipleHitHexaSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 마에스트로
+    id: 151141500-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  id: 151141500-0
+  name: 마에스트로
+
+  damage_and_hits:
+  - damage: "{{ 680 + skill_level * 23 }}"
+    hit: "{{ 10 * 29 }}"
+  - damage: "{{ 680 + skill_level * 23 }}"
+    hit: "{{ 14 * 57 }}"
+
+  delay: 7_740
+  cooldown_duration: 360_000
