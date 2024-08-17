@@ -12,7 +12,7 @@ def is_keydown_ended(events: list[Event]) -> bool:
     return any(event["tag"] == Tag.KEYDOWN_END for event in events)
 
 
-def ignore_rejected(func) -> list[Event]:
+def ignore_rejected(func):
     """
     Ignores rejected events from action.
     This method is used for actions which yields "intened" rejection.
