@@ -150,6 +150,8 @@ data:
     핀포인트 피어스.use.emitted.global.damage: trigger
     천공의 노래.elapse.emitted.global.damage: trigger
     천공의 노래.stop.emitted.global.damage: trigger
+    천공의 노래 VI.elapse.emitted.global.damage: trigger
+    천공의 노래 VI.stop.emitted.global.damage: trigger
     하울링 게일.elapse.emitted.global.damage: trigger
     시그너스 팔랑크스.elapse.emitted.global.damage: trigger
     볼텍스 스피어.elapse.emitted.global.damage: trigger
@@ -183,6 +185,8 @@ data:
     핀포인트 피어스.use.emitted.global.damage: trigger
     천공의 노래.elapse.emitted.global.damage: trigger
     천공의 노래.stop.emitted.global.damage: trigger
+    천공의 노래 VI.elapse.emitted.global.damage: trigger
+    천공의 노래 VI.stop.emitted.global.damage: trigger
     하울링 게일.elapse.emitted.global.damage: trigger
     시그너스 팔랑크스.elapse.emitted.global.damage: trigger
     볼텍스 스피어.elapse.emitted.global.damage: trigger
@@ -217,6 +221,8 @@ data:
     핀포인트 피어스.use.emitted.global.damage: trigger
     천공의 노래.elapse.emitted.global.damage: trigger
     천공의 노래.stop.emitted.global.damage: trigger
+    천공의 노래 VI.elapse.emitted.global.damage: trigger
+    천공의 노래 VI.stop.emitted.global.damage: trigger
     하울링 게일.elapse.emitted.global.damage: trigger
     시그너스 팔랑크스.elapse.emitted.global.damage: trigger
     볼텍스 스피어.elapse.emitted.global.damage: trigger
@@ -320,6 +326,8 @@ data:
     핀포인트 피어스.use.emitted.global.damage: trigger
     천공의 노래.elapse.emitted.global.damage: trigger
     천공의 노래.stop.emitted.global.damage: trigger
+    천공의 노래 VI.elapse.emitted.global.damage: trigger
+    천공의 노래 VI.stop.emitted.global.damage: trigger
     하울링 게일.elapse.emitted.global.damage: trigger
     시그너스 팔랑크스.elapse.emitted.global.damage: trigger
     볼텍스 스피어.elapse.emitted.global.damage: trigger
@@ -379,3 +387,33 @@ data:
   periodic_damage: '{{ 400 + 16 * skill_level }}'
   periodic_hit: 1
   lasting_duration: 999_999_999  # toggle skill
+---
+kind: Component
+version: simaple.io/KeydownSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 천공의 노래 VI
+    id: 13121001-0vi
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 13121001-0
+  name: 천공의 노래 VI
+  representative_name: 천공의 노래
+  maximum_keydown_time: 999_999_999
+
+  damage: '{{ 540 + 14 * skill_level }}'
+  hit: 1
+  delay: 120
+  cooldown_duration: 0
+
+  keydown_prepare_delay: 300
+  keydown_end_delay: 0
+
+  finish_damage: 0
+  finish_hit: 0
+
+  v_improvement: 2

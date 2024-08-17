@@ -25,7 +25,8 @@ data:
     - 윈드 월
     - 볼텍스 스피어
   hexa_skill_names: []
-  hexa_mastery: {}
+  hexa_mastery:
+    천공의 노래: 천공의 노래 VI
   component_groups:
     - windbreaker
     - common
