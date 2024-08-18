@@ -1,9 +1,8 @@
 import json
 import os
-from typing import Callable
+from typing import Callable, cast
 
 import pydantic
-from dependency_injector import containers, providers
 
 from simaple.core import ActionStat, ExtendedStat, JobCategory, JobType, Stat
 from simaple.data.ability import get_best_ability
@@ -121,140 +120,171 @@ def preset_optimize_cache_layer(
     return extended_stat_value
 
 
-class SimulationContainer(containers.DeclarativeContainer):
-    config = providers.Configuration()
-    settings = providers.Factory(SimulationSetting.model_validate, config)
+class SimulationContainer:
+    def __init__(self, setting: SimulationSetting) -> None:
+        self.setting = setting
 
-    passive = providers.Factory(
-        get_passive,
-        config.jobtype,
-        combat_orders_level=config.combat_orders_level,
-        passive_skill_level=config.passive_skill_level,
-        character_level=config.level,
-        weapon_pure_attack_power=config.weapon_pure_attack_power,
-    )
+    def config(self) -> SimulationSetting:
+        return self.setting
 
-    ability_lines = providers.Singleton(
-        get_best_ability,
-        config.jobtype,
-    )
+    def passive(self) -> ExtendedStat:
+        config = self.config()
 
-    ability_stat = providers.Factory(
-        get_ability_stat,
-        ability_lines,
-    )
+        return get_passive(
+            config.jobtype,
+            combat_orders_level=config.combat_orders_level,
+            passive_skill_level=config.passive_skill_level,
+            character_level=config.level,
+            weapon_pure_attack_power=config.weapon_pure_attack_power,
+        )
 
-    propensity = providers.Factory(
-        Propensity,
-        ambition=config.propensity_level,
-        insight=config.propensity_level,
-        empathy=config.propensity_level,
-        willpower=config.propensity_level,
-        diligence=config.propensity_level,
-        charm=config.propensity_level,
-    )
+    def ability_lines(self):
+        config = self.config()
+        return get_best_ability(config.jobtype)
 
-    doping = providers.Factory(get_normal_doping)
+    def ability_stat(self):
+        ability_lines = self.ability_lines()
+        return get_ability_stat(ability_lines)
 
-    default_extended_stat = providers.Factory(
-        add_extended_stats,
-        passive,
-        doping,
-        ability_stat,
-        propensity.provided.get_extended_stat.call(),
-    )
+    def propensity(self):
+        config = self.config()
+        return Propensity(
+            ambition=config.propensity_level,
+            insight=config.propensity_level,
+            empathy=config.propensity_level,
+            willpower=config.propensity_level,
+            diligence=config.propensity_level,
+            charm=config.propensity_level,
+        )
 
-    gearset = providers.Factory(
-        get_baseline_gearset,
-        config.tier,
-        config.job_category,
-        config.jobtype,
-    )
+    def doping(self):
+        return get_normal_doping()
 
-    damage_logic = providers.Factory(
-        get_damage_logic, config.jobtype, config.combat_orders_level
-    )
+    def default_extended_stat(self):
+        passive = self.passive()
+        doping = self.doping()
+        ability_stat = self.ability_stat()
+        propensity = self.propensity()
 
-    preset_optimizer = providers.Factory(
-        PresetOptimizer,
-        union_block_count=config.union_block_count,
-        level=config.level,
-        damage_logic=damage_logic,
-        character_job_type=config.jobtype,
-        alternate_character_job_types=[],
-        link_count=config.link_count,
-        default_stat=default_extended_stat.provided.stat,
-        buff_duration_preempted=settings.provided.is_buff_duration_preemptive.call(),
-        artifact_level=settings.provided.artifact_level,
-    )
+        return add_extended_stats(
+            passive,
+            doping,
+            ability_stat,
+            propensity.get_extended_stat(),
+        )
 
-    optimial_preset = providers.Singleton(
-        preset_optimizer.provided.create_optimal_preset_from_gearset.call(gearset),
-    )
+    def gearset(self):
+        config = self.config()
+        return get_baseline_gearset(
+            config.tier,
+            config.job_category,
+            config.jobtype,
+        )
 
-    preset_cache = providers.Singleton(
-        preset_optimize_cache_layer,
-        settings,
-        preset_optimizer.provided.create_optimal_preset_from_gearset,
-        gearset,
-    )
+    def damage_logic(self):
+        config = self.config()
+        return get_damage_logic(config.jobtype, config.combat_orders_level)
 
-    character = providers.Factory(
-        add_extended_stats,
-        preset_cache,
-        default_extended_stat,
-    )
-    # Use caching
+    def preset_optimizer(self):
+        config = self.config()
+        damage_logic = self.damage_logic()
+        default_extended_stat = self.default_extended_stat()
+        config = self.config()
+        return PresetOptimizer(
+            union_block_count=config.union_block_count,
+            level=config.level,
+            damage_logic=damage_logic,
+            character_job_type=config.jobtype,
+            alternate_character_job_types=[],
+            link_count=config.link_count,
+            default_stat=default_extended_stat.stat,
+            buff_duration_preempted=config.is_buff_duration_preemptive(),
+            artifact_level=config.artifact_level,
+        )
 
-    skill_profile = providers.Factory(get_skill_profile, config.jobtype)
+    def optimial_preset(self):
+        preset_optimizer = self.preset_optimizer()
+        gearset = self.gearset()
+        return preset_optimizer.create_optimal_preset_from_gearset(
+            gearset,
+        )
 
-    builtin_strategy = providers.Factory(get_builtin_strategy, config.jobtype)
+    def preset_cache(self):
+        config = self.config()
+        preset_optimizer = self.preset_optimizer()
+        gearset = self.gearset()
+        return preset_optimize_cache_layer(
+            config,
+            preset_optimizer.create_optimal_preset_from_gearset,
+            gearset,
+        )
 
-    level_advantage = providers.Factory(
-        LevelAdvantage().get_advantage, config.mob_level, config.level
-    )
+    def character(self):
+        preset_cache = self.preset_cache()
+        default_extended_stat = self.default_extended_stat()
+        return add_extended_stats(
+            preset_cache,
+            default_extended_stat,
+        )
 
-    dpm_calculator = providers.Factory(
-        DamageCalculator,
-        character_spec=character.provided.stat,
-        damage_logic=damage_logic,
-        armor=config.armor,
-        level_advantage=level_advantage,
-        force_advantage=config.force_advantage,
-    )
+    def skill_profile(self):
+        config = self.config()
+        return get_skill_profile(config.jobtype)
 
-    engine_builder_required_values = providers.Dict(
-        character_stat=character.provided.stat,
-        character_level=config.level,
-        weapon_attack_power=config.weapon_attack_power,
-        weapon_pure_attack_power=config.weapon_pure_attack_power,
-        action_stat=character.provided.action_stat,
-        passive_skill_level=config.passive_skill_level,
-        combat_orders_level=config.combat_orders_level,
-    )
+    def builtin_strategy(self):
+        config = self.config()
+        return get_builtin_strategy(config.jobtype)
 
-    builder = providers.Factory(
-        get_builder,
-        skill_profile.provided.get_groups.call(),
-        skill_profile.provided.get_skill_levels.call(
-            config.v_skill_level,
-            config.hexa_skill_level,
-            config.hexa_mastery_level,
-        ),
-        skill_profile.provided.get_filled_v_improvements.call(
-            config.v_improvements_level
-        ),
-        skill_profile.provided.get_filled_hexa_improvements.call(
-            config.hexa_improvements_level
-        ),
-        skill_profile.provided.get_skill_replacements.call(),
-        engine_builder_required_values,
-    )
+    def level_advantage(self):
+        config = self.config()
+        return LevelAdvantage().get_advantage(
+            config.mob_level,
+            config.level,
+        )
 
-    monotonic_engine: Callable[[], MonotonicEngine] = providers.Factory(
-        builder.provided.build_monotonic_engine.call()
-    )
+    def dpm_calculator(self) -> DamageCalculator:
+        character = self.character()
+        damage_logic = self.damage_logic()
+        config = self.config()
+        level_advantage = self.level_advantage()
 
-    operation_engine: Callable[[], OperationEngine] = providers.Factory(
-        builder.provided.build_operation_engine.call()
-    )
+        return DamageCalculator(
+            character_spec=character.stat,
+            damage_logic=damage_logic,
+            armor=config.armor,
+            level_advantage=level_advantage,
+            force_advantage=config.force_advantage,
+        )
+
+    def builder(self):
+        skill_profile = self.skill_profile()
+        config = self.config()
+        character = self.character()
+        return get_builder(
+            skill_profile.get_groups(),
+            skill_profile.get_skill_levels(
+                config.v_skill_level,
+                config.hexa_skill_level,
+                config.hexa_mastery_level,
+            ),
+            skill_profile.get_filled_v_improvements(config.v_improvements_level),
+            skill_profile.get_filled_hexa_improvements(config.hexa_improvements_level),
+            skill_profile.get_skill_replacements(),
+            {
+                "character_stat": character.stat,
+                "character_level": config.level,
+                "weapon_attack_power": config.weapon_attack_power,
+                "weapon_pure_attack_power": config.weapon_pure_attack_power,
+                "action_stat": character.action_stat,
+                "passive_skill_level": config.passive_skill_level,
+                "combat_orders_level": config.combat_orders_level,
+            },
+        )
+
+    def monotonic_engine(self) -> MonotonicEngine:
+        builder = self.builder()
+        return cast(MonotonicEngine, builder.build_monotonic_engine())
+
+    def operation_engine(self) -> OperationEngine:
+        builder = self.builder()
+        return cast(OperationEngine, builder.build_operation_engine())

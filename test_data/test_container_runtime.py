@@ -8,8 +8,7 @@ from simaple.simulate.strategy.base import exec_by_strategy
 
 @pytest.mark.parametrize("setting, jobtype, expected", get_test_settings())
 def test_actor(setting, jobtype, expected):
-    container = SimulationContainer()
-    container.config.from_dict(setting.model_dump())
+    container = SimulationContainer(setting)
 
     print(container.character().action_stat)
 

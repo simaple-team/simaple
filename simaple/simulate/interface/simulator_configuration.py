@@ -101,8 +101,7 @@ class BaselineConfiguration(SimulatorConfiguration):
     simulation_setting: SimulationSetting
 
     def get_container(self) -> SimulationContainer:
-        container = SimulationContainer()
-        container.config.from_dict(self.simulation_setting.model_dump())
+        container = SimulationContainer(self.simulation_setting)
         return container
 
     def create_monotonic_engine(self) -> MonotonicEngine:

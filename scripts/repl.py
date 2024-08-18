@@ -18,8 +18,7 @@ setting = SimulationSetting(
 )
 
 
-container = SimulationContainer()
-container.config.from_dict(setting.model_dump())
+container = SimulationContainer(setting)
 
 engine = container.operation_engine()
 policy = container.builtin_strategy().get_priority_based_policy()
