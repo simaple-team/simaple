@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Callable
+from typing import Callable, cast
 
 import pydantic
 
@@ -14,6 +14,7 @@ from simaple.data.passive import get_passive
 from simaple.data.skill_profile import get_skill_profile
 from simaple.gear.gearset import Gearset
 from simaple.optimizer.preset import Preset, PresetOptimizer
+from simaple.simulate.engine import MonotonicEngine, OperationEngine
 from simaple.simulate.kms import get_builder
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 from simaple.system.ability import get_ability_stat
@@ -241,7 +242,7 @@ class SimulationContainer:
             config.level,
         )
 
-    def dpm_calculator(self):
+    def dpm_calculator(self) -> DamageCalculator:
         character = self.character()
         damage_logic = self.damage_logic()
         config = self.config()
@@ -280,10 +281,10 @@ class SimulationContainer:
             },
         )
 
-    def monotonic_engine(self):
+    def monotonic_engine(self) -> MonotonicEngine:
         builder = self.builder()
-        return builder.build_monotonic_engine()
+        return cast(MonotonicEngine, builder.build_monotonic_engine())
 
-    def operation_engine(self):
+    def operation_engine(self) -> OperationEngine:
         builder = self.builder()
-        return builder.build_operation_engine()
+        return cast(OperationEngine, builder.build_operation_engine())
