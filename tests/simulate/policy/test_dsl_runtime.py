@@ -36,8 +36,7 @@ def fixture_dsl_test_setting():
 
 
 def test_dsl(dsl_list: list[str], dsl_test_setting: SimulationSetting) -> None:
-    container = SimulationContainer()
-    container.config.from_dict(dsl_test_setting.model_dump())
+    container = SimulationContainer(dsl_test_setting)
 
     engine = container.operation_engine()
 

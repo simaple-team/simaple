@@ -17,8 +17,7 @@ setting = SimulationSetting(
 
 
 def test_actor():
-    container = SimulationContainer()
-    container.config.from_dict(setting.model_dump())
+    container = SimulationContainer(setting)
 
     engine = container.operation_engine()
 

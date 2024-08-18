@@ -82,16 +82,14 @@ class DebugInterface:
         )
 
     def get_engine(self):
-        container = SimulationContainer()
-        container.config.from_dict(self._setting.model_dump())
+        container = SimulationContainer(self._setting)
 
         engine = container.operation_engine()
 
         return engine
 
     def get_dpm_calculator(self):
-        container = SimulationContainer()
-        container.config.from_dict(self._setting.model_dump())
+        container = SimulationContainer(self._setting)
 
         _damage_logic = container.dpm_calculator().damage_logic
         print(
