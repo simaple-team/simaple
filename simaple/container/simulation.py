@@ -67,20 +67,8 @@ class SimulationSetting(pydantic.BaseModel):
         )
 
 
-def add_stats(*stats):
-    return sum(stats, Stat())
-
-
-def add_action_stats(*action_stats):
-    return sum(action_stats, ActionStat())
-
-
 def add_extended_stats(*action_stats):
     return sum(action_stats, ExtendedStat())
-
-
-def reveal_action_stat(extended_stat: ExtendedStat) -> ActionStat:
-    return extended_stat.action_stat.copy()
 
 
 def preset_optimize_cache_layer(
