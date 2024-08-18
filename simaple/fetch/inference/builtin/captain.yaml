@@ -1,9 +1,0 @@
-jobtype: corsair
-passive:
-  attack_power: 126
-  attack_power_multiplier: 21
-  STR: 30
-  DEX: 50
-  final_damage_multiplier: 29.6
-candidates:
-  - - null

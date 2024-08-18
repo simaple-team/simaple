@@ -10,16 +10,14 @@ format = ["_black", "_isort"]
 _ruff = "ruff simaple tests scripts"
 lint = ["_ruff"]
 
-coverage = "pytest --cov=simaple --ignore tests/fetch/request"
-coverage-unittest = "pytest --cov=simaple --ignore tests/fetch/request"
+coverage = "pytest --cov=simaple"
 coverage-report = "pytest --cov=simaple --cov-report=xml"
 
-unittest = "pytest -vv -x tests/ --ignore tests/fetch/request"
+unittest = "pytest -vv -x tests/"
 test_app = "pytest -vv -x test_app/"
 test_data = "pytest -vv -x test_data/"
 rsctest = "pytest -vv -x test_resource/"
 typetest = "mypy simaple tests"
-fetchtest = "pytest -vv -x tests/fetch/request"
 simulatetest = "pytest -vv -x tests/simulate"
 clean = "rm -rf **/__pycache__ .coverage .mypy_cache .pytest_cache"
 web = "python launcher.py web"
@@ -38,9 +36,6 @@ testpaths = ["tests", "test_app", "test_data"]
 
 [tool.coverage.run]
 branch = true
-omit = [
-    "*/fetch/*"
-]
 
 [tool.coverage.report]
 fail_under = 85
@@ -60,7 +55,6 @@ module = [
     "sklearn.linear_model",
     "sklearn.pipeline",
     "sklearn.preprocessing",
-    "bs4",
     "sqlalchemy",
     "sqlalchemy.orm",
     "functional",
@@ -79,17 +73,14 @@ repository = "https://github.com/simaple-team/simaple"
 python = ">=3.10, <3.13"
 pydantic = "^2.4.2"
 loguru = "^0.5.3"
-poethepoet = "^0.10.0"
 PyYAML = "^6.0"
 numpy = "^1.22.3"
 scikit-learn = "^1.0.2"
-beautifulsoup4 = "^4.11.1"
-aiohttp = "^3.8.1"
+aiohttp = "^3.10.1"
 requests = "^2.26.0"
-fastapi = "^0.103.1"
+fastapi = "^0.110.1"
 fire = "^0.4.0"
 uvicorn = "^0.20.0"
-httpx = "^0.23.1"
 dependency-injector = "^4.40.0"
 SQLAlchemy = "^1.4.45"
 scipy = "^1.11.2"
@@ -98,12 +89,13 @@ lark = "^1.1.7"
 pyfunctional = "^1.5.0"
 
 [tool.poetry.group.dev.dependencies]
+poethepoet = "^0.10.0"
 jupyter = "^1.0.0"
 pycln = "^2.1.2"
 yappi = "^1.4.0"
 snakeviz = "^2.1.1"
 types-requests = "^2.31.0.1"
-mypy = "1.5.1"
+mypy = "1.8.0"
 ruff = "^0.1.9"
 Sphinx = "^5.1.1"
 sphinx-rtd-theme = "^1.0.0"

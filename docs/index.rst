@@ -52,7 +52,6 @@ Installation
    modules/gear
    modules/baseline
    modules/metric
-   modules/fetch
    modules/preset
 
 Indices and tables
