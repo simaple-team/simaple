@@ -62,7 +62,7 @@ module = [
 
 [tool.poetry]
 name = "simaple"
-version = "0.3.1"
+version = "0.4.0"
 description = "Maplestory calculation / Simulation library"
 authors = ["meson324 <meson324@gmail.com>"]
 readme = "README.md"
@@ -105,7 +105,7 @@ coverage = "^6.0.2"
 black = "^22.6"
 pytest-cov = "^3.0.0"
 build = "^0.8.0"
-twine = "^4.0.1"
+twine = "^5.0.1"
 pytest = "7.4.2"
 pytest-asyncio = "^0.23.2"
 types-PyYAML = "^6.0.4"
