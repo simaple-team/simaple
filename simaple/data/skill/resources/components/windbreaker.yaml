@@ -150,6 +150,8 @@ data:
     핀포인트 피어스.use.emitted.global.damage: trigger
     천공의 노래.elapse.emitted.global.damage: trigger
     천공의 노래.stop.emitted.global.damage: trigger
+    천공의 노래 VI.elapse.emitted.global.damage: trigger
+    천공의 노래 VI.stop.emitted.global.damage: trigger
     하울링 게일.elapse.emitted.global.damage: trigger
     시그너스 팔랑크스.elapse.emitted.global.damage: trigger
     볼텍스 스피어.elapse.emitted.global.damage: trigger
@@ -183,6 +185,8 @@ data:
     핀포인트 피어스.use.emitted.global.damage: trigger
     천공의 노래.elapse.emitted.global.damage: trigger
     천공의 노래.stop.emitted.global.damage: trigger
+    천공의 노래 VI.elapse.emitted.global.damage: trigger
+    천공의 노래 VI.stop.emitted.global.damage: trigger
     하울링 게일.elapse.emitted.global.damage: trigger
     시그너스 팔랑크스.elapse.emitted.global.damage: trigger
     볼텍스 스피어.elapse.emitted.global.damage: trigger
@@ -217,6 +221,8 @@ data:
     핀포인트 피어스.use.emitted.global.damage: trigger
     천공의 노래.elapse.emitted.global.damage: trigger
     천공의 노래.stop.emitted.global.damage: trigger
+    천공의 노래 VI.elapse.emitted.global.damage: trigger
+    천공의 노래 VI.stop.emitted.global.damage: trigger
     하울링 게일.elapse.emitted.global.damage: trigger
     시그너스 팔랑크스.elapse.emitted.global.damage: trigger
     볼텍스 스피어.elapse.emitted.global.damage: trigger
@@ -262,6 +268,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400031003-0
   name: 하울링 게일
@@ -291,6 +298,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400031022-0
   name: 아이들 윔
@@ -312,11 +320,14 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   listening_actions:
     핀포인트 피어스.use.emitted.global.damage: trigger
     천공의 노래.elapse.emitted.global.damage: trigger
     천공의 노래.stop.emitted.global.damage: trigger
+    천공의 노래 VI.elapse.emitted.global.damage: trigger
+    천공의 노래 VI.stop.emitted.global.damage: trigger
     하울링 게일.elapse.emitted.global.damage: trigger
     시그너스 팔랑크스.elapse.emitted.global.damage: trigger
     볼텍스 스피어.elapse.emitted.global.damage: trigger
@@ -340,6 +351,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400031058-0
   name: 볼텍스 스피어
@@ -375,3 +387,104 @@ data:
   periodic_damage: '{{ 400 + 16 * skill_level }}'
   periodic_hit: 1
   lasting_duration: 999_999_999  # toggle skill
+---
+kind: Component
+version: simaple.io/KeydownSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 천공의 노래 VI
+    id: 13121001-0vi
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 13121001-0vi
+  name: 천공의 노래 VI
+  representative_name: 천공의 노래
+  maximum_keydown_time: 999_999_999
+
+  damage: '{{ 540 + 14 * skill_level }}'
+  hit: 1
+  delay: 120
+  cooldown_duration: 0
+
+  keydown_prepare_delay: 300
+  keydown_end_delay: 0
+
+  finish_damage: 0
+  finish_hit: 0
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/TriggableBuffSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 트라이플링 윔 VI
+    id: 13101022-0vi
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  listening_actions:
+    핀포인트 피어스.use.emitted.global.damage: trigger
+    천공의 노래.elapse.emitted.global.damage: trigger
+    천공의 노래.stop.emitted.global.damage: trigger
+    천공의 노래 VI.elapse.emitted.global.damage: trigger
+    천공의 노래 VI.stop.emitted.global.damage: trigger
+    하울링 게일.elapse.emitted.global.damage: trigger
+    시그너스 팔랑크스.elapse.emitted.global.damage: trigger
+    볼텍스 스피어.elapse.emitted.global.damage: trigger
+  id: 13101022-0vi
+  name: 트라이플링 윔 VI
+  representative_name: 트라이플링 윔
+  trigger_cooldown_duration: 0
+  trigger_damage: '{{ (315 + skill_level * 7) * 0.8 + (420 + skill_level * 11) * 0.2 }}'
+  trigger_hit: 0.5
+
+  cooldown_duration: 0
+  delay: 0
+  lasting_duration: 999_999_999 # toggle skill
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/TriplePeriodicDamageHexaComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 미스트랄 스프링
+    id: 13141500-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  id: 13141500-0
+  name: 미스트랄 스프링
+
+  damage_and_hits:
+  - damage: "{{ 830 + skill_level * 28 }}"
+    hit: "{{ 10 * 13 }}"
+
+  delay: 4_560
+  cooldown_duration: 360_000
+
+  periodic_01:
+    interval: 3_000
+    damage: "{{ 660 + skill_level * 22 }}"
+    hit: "{{ 5 * 13 }}"
+  periodic_02:
+    interval: 3_000
+    damage: "{{ 720 + skill_level * 24 }}"
+    hit: "{{ 6 * 5 }}"
+  periodic_03:
+    interval: 3_000
+    damage: "{{ 645 + skill_level * 21 }}"
+    hit: "{{ 7 * 3 }}"
+
+  lasting_duration: 24_560
+  synergy: {}

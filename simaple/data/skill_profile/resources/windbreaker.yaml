@@ -19,7 +19,16 @@ data:
     - 천공의 노래
     - 스톰 윔
     - 스톰 브링어
-  hexa_improvement_names: []
+  hexa_improvement_names:
+    - 하울링 게일
+    - 아이들 윔
+    - 윈드 월
+    - 볼텍스 스피어
+  hexa_skill_names:
+    - 미스트랄 스프링
+  hexa_mastery:
+    천공의 노래: 천공의 노래 VI
+    트라이플링 윔: 트라이플링 윔 VI
   component_groups:
     - windbreaker
     - common

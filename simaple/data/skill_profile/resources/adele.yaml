@@ -9,7 +9,7 @@ data:
     - 인피니트
     - 리스토어
     - 스톰
-    - 매직 서킷 풀 드라이브
+    - 매직 서킷 풀드라이브
     - 그란디스 여신의 축복(레프)
   v_improvement_names:
     - 디바이드
@@ -24,7 +24,18 @@ data:
     - 게더링
     - 샤드
     - 원더
-  hexa_improvement_names: []
+  hexa_improvement_names:
+    - 루인
+    - 인피니트
+    - 리스토어 # TODO: 최종뎀 증가분
+    - 스톰
+  hexa_skill_names:
+    - 마에스트로
+  hexa_mastery:
+    디바이드: 디바이드 VI
+    샤드: 샤드 VI
+    원더: 원더 VI
+    오더: 오더 VI
   component_groups:
     - adele
     - common

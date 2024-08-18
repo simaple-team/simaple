@@ -14,7 +14,7 @@ from simaple.simulate.component.trait.impl import (
     PeriodicWithSimpleDamageTrait,
     UseSimpleAttackTrait,
 )
-from simaple.simulate.component.util import is_rejected
+from simaple.simulate.component.util import ignore_rejected, is_rejected
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.global_property import Dynamics
 
@@ -164,6 +164,7 @@ class AdeleCreationComponent(
         return self.elapse_simple_attack(time, state)
 
     @reducer_method
+    @ignore_rejected
     def trigger(self, _: None, state: CreationState):
         return self.use_multiple_damage(state, state.ether_gauge.get_creation_count())
 
@@ -337,7 +338,7 @@ class AdeleGatheringComponent(SkillComponent, UseSimpleAttackTrait):
     damage: float
     hit_per_sword: float
 
-    binds: dict[str, str] = {"order_sword": ".오더.order_sword"}
+    binds: dict[str, str] = {"order_sword": ".오더 VI.order_sword"}
 
     def get_default_state(self):
         return {
@@ -375,7 +376,7 @@ class AdeleBlossomComponent(SkillComponent, UseSimpleAttackTrait):
     hit_per_sword: float
     exceeded_stat: Stat
 
-    binds: dict[str, str] = {"order_sword": ".오더.order_sword"}
+    binds: dict[str, str] = {"order_sword": ".오더 VI.order_sword"}
 
     def get_default_state(self):
         return {
@@ -605,7 +606,7 @@ class AdeleStormComponent(
     lasting_duration: float
     maximum_stack: int
 
-    binds: dict[str, str] = {"order_sword": ".오더.order_sword"}
+    binds: dict[str, str] = {"order_sword": ".오더 VI.order_sword"}
 
     def get_default_state(self):
         return {

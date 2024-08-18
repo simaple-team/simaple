@@ -25,6 +25,7 @@ from simaple.simulate.component.trait.impl import (
     UsePeriodicDamageTrait,
     UseSimpleAttackTrait,
 )
+from simaple.simulate.component.util import ignore_rejected
 from simaple.simulate.component.view import ComponentInformation, Running, Validity
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import Dynamics
@@ -91,6 +92,15 @@ class AttackSkillComponent(
 
     @reducer_method
     def use(self, _: None, state: AttackSkillState):
+        return self.use_simple_attack(state)
+
+    @reducer_method
+    @ignore_rejected
+    def use_with_ignore_reject(self, _: None, state: AttackSkillState):
+        """
+        This method is used to ignore the rejected event.
+        Useful when automatic triggering is needed.
+        """
         return self.use_simple_attack(state)
 
     @reducer_method

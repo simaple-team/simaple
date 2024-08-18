@@ -16,8 +16,10 @@ data:
   name: 에테르
   listening_actions:
     "디바이드.use.emitted.global.delay": "trigger"
+    "디바이드 VI.use.emitted.global.damage": "trigger"
     "레조넌스.use.emitted.global.delay": "resonance"
     "오더.use.emitted.global.delay": "order"
+    "오더 VI.use.emitted.global.delay": "order"
   periodic_interval: 10020
   maximum_stack: 400
   stack_per_period: 5
@@ -68,7 +70,8 @@ data:
   id: 151101013-0
   name: 원더
   listening_actions:
-    디바이드.use.emitted.global.damage: use
+    디바이드.use.emitted.global.damage: use_with_ignore_reject
+    "디바이드 VI.use.emitted.global.damage": use_with_ignore_reject
 
   delay: 0
   damage: "{{ 80 + 30 + 115 + 135 + 3 * skill_level }}"
@@ -148,6 +151,7 @@ data:
   name: 크리에이션
   listening_actions:
     "디바이드.use": "trigger"
+    "디바이드 VI.use": "trigger"
   delay: 0
   damage: "{{ 200 + 240 + 180 + 3 * skill_level }}"
   hit_per_sword: 1
@@ -423,6 +427,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400011105-0
   name: 루인
@@ -455,6 +460,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400011108-0
   name: 인피니트
@@ -483,6 +489,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400011109-0
   name: 리스토어
@@ -540,6 +547,7 @@ metadata:
 patch:
   - SkillLevelPatch
   - EvalPatch
+  - HexaSkillImprovementPatch
 data:
   id: 400011136-0
   name: 스톰
@@ -556,3 +564,136 @@ data:
   maximum_stack: 8
 
   default_skill_level: 30
+---
+kind: Component
+version: simaple.io/MultipleHitHexaSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 마에스트로
+    id: 151141500-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  id: 151141500-0
+  name: 마에스트로
+
+  damage_and_hits:
+  - damage: "{{ 680 + skill_level * 23 }}"
+    hit: "{{ 10 * 29 }}"
+  - damage: "{{ 680 + skill_level * 23 }}"
+    hit: "{{ 14 * 57 }}"
+
+  delay: 7_740
+  cooldown_duration: 360_000
+---
+kind: Component
+version: simaple.io/AttackSkillIncludeReforged
+metadata:
+  label:
+    group: adele
+    name: 디바이드 VI
+    id: 151121000-0vi
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+data:
+  id: 151121000-0vi
+  name: 디바이드 VI
+  representative_name: 디바이드
+
+  delay: 600
+  cooldown_duration: 0
+  damage: "{{ 390 + skill_level * 12 }}"
+  hit: 6
+
+  reforged_damage: "{{ 300 + skill_level * 9 }}"
+  reforged_hit: 7
+  reforged_multiple: 3
+  reforge_cooldown_duration: 6_000
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 샤드 VI
+    id: 151001001-0vi
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 151001001-0vi
+  name: 샤드 VI
+  representative_name: 샤드
+  delay: 630
+  damage: "{{ 480 + 8 * skill_level }}"
+  hit: 15
+  cooldown_duration: 6000
+  red: true
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: adele
+    name: 원더 VI
+    id: 151101013-0vi
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 151101013-0vi
+  name: 원더 VI
+  representative_name: 원더
+  listening_actions:
+    디바이드.use.emitted.global.damage: use_with_ignore_reject
+    "디바이드 VI.use.emitted.global.damage": use_with_ignore_reject
+
+  delay: 0
+  damage: "{{ 480 + 8 * skill_level }}"
+  hit: 15
+  cooldown_duration: 6000
+  red: false # TODO: red=True인지 확인 필요
+
+  v_improvement: 2
+
+  disable_validity: True
+---
+kind: Component
+version: simaple.io/AdeleOrderComponent
+metadata:
+  label:
+    group: adele
+    name: 오더 VI
+    id: 151111003-0
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+  - VSkillImprovementPatch
+data:
+  id: 151111003-0
+  name: 오더 VI
+  representative_name: 오더
+
+  delay: 0
+  cooldown_duration: 500
+  lasting_duration: "{{ 45_000 + 1000 * (skill_level // 2) }}"
+
+  periodic_interval: 1020
+  periodic_damage: "{{ 380 + skill_level * 14 }}"
+  periodic_hit: 2
+
+  maximum_stack: 6
+  restore_maximum_stack: 8
+
+  v_improvement: 2

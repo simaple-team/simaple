@@ -1,4 +1,4 @@
-from typing import Callable, TypeVar, Union
+from typing import Callable, TypeVar, Union, cast
 
 from simaple.simulate.base import Event
 from simaple.simulate.component.base import ReducerState
@@ -7,6 +7,16 @@ from simaple.simulate.reserved_names import Tag
 
 def count_damage_skill(events: list[Event]) -> int:
     return sum([e["tag"] == Tag.DAMAGE for e in events])
+
+
+def compute_total_damage_coefficient(events: list[Event]) -> float:
+    return sum(
+        [
+            cast(float, e["payload"]["damage"] * e["payload"]["hit"])
+            for e in events
+            if e["tag"] == Tag.DAMAGE and e["payload"] is not None
+        ]
+    )
 
 
 def total_delay(events: list[Event]) -> int:

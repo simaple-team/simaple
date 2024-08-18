@@ -24,7 +24,7 @@ data:
   hexa_improvement_names:
     - 메탈아머 전탄발사
     - 메카 캐리어
-    - 마이크로 미사일 컨트롤러
+    - 마이크로 미사일 컨테이너
     - "멀티플 옵션: M-FL"
   hexa_skill_names:
     - 그라운드 제로
