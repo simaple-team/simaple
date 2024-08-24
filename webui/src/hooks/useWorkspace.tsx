@@ -34,6 +34,7 @@ function useWorkspaceState() {
   async function createMinimalSimulator(
     configuration: MinimalSimulatorConfiguration,
   ) {
+    await sdk.initializeConfiguration();
     const simulator = await sdk.createMinimalSimulator(configuration);
 
     await updateSimulatorId(simulator.id);
@@ -41,6 +42,7 @@ function useWorkspaceState() {
   }
 
   async function createBaselineSimulator(configuration: BaselineConfiguration) {
+    await sdk.initializeConfiguration();
     const simulator = await sdk.createBaselineSimulator(configuration);
 
     await updateSimulatorId(simulator.id);
