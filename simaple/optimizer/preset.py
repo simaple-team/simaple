@@ -4,6 +4,7 @@ preset.py
 Job independant description about character.
 Give gearset / hyperstat / link / union / inner-ability attached property.
 """
+
 from typing import List, Tuple
 
 from pydantic import BaseModel

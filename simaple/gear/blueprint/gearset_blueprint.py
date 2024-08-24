@@ -16,8 +16,7 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 
 class GearsetBlueprint(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="blueprint")):
     @abstractmethod
-    def build(self, set_item_repository: SetItemRepository) -> Gearset:
-        ...
+    def build(self, set_item_repository: SetItemRepository) -> Gearset: ...
 
 
 # TODO: weapon potential optimizer (stand-alone)

@@ -49,7 +49,10 @@ def kms_potential_provider_patterns() -> list[tuple[re.Pattern, AbstractStatProv
             re.compile(r"^데미지 : \+([0-9]+)%$"),
             StatProvider(target=StatProps.damage_multiplier),
         ),
-        (re.compile(r"^마력 : \+([0-9]+)$"), StatProvider(target=StatProps.magic_attack)),
+        (
+            re.compile(r"^마력 : \+([0-9]+)$"),
+            StatProvider(target=StatProps.magic_attack),
+        ),
         (
             re.compile(r"^마력 : \+([0-9]+)%$"),
             StatProvider(target=StatProps.magic_attack_multiplier),
@@ -120,50 +123,115 @@ def kms_potential_provider_patterns() -> list[tuple[re.Pattern, AbstractStatProv
             re.compile(r"^크리티컬 확률 : \+([0-9]+)%$"),
             StatProvider(target=StatProps.critical_rate),
         ),
-        (re.compile(r"^([0-9]+)% 확률로 받은 피해의 ([0-9]+)%를 반사$"), NullStatProvider()),
+        (
+            re.compile(r"^([0-9]+)% 확률로 받은 피해의 ([0-9]+)%를 반사$"),
+            NullStatProvider(),
+        ),
         (re.compile(r"^4초 당 ([0-9]+)의 HP 회복$"), NullStatProvider()),
         (re.compile(r"^4초 당 ([0-9]+)의 MP 회복$"), NullStatProvider()),
         (re.compile(r"^<쓸만한 미스틱 도어> 스킬 사용 가능()$"), NullStatProvider()),
         (re.compile(r"^<쓸만한 샤프 아이즈> 스킬 사용 가능()$"), NullStatProvider()),
-        (re.compile(r"^<쓸만한 어드밴스드 블레스> 스킬 사용 가능()$"), NullStatProvider()),
+        (
+            re.compile(r"^<쓸만한 어드밴스드 블레스> 스킬 사용 가능()$"),
+            NullStatProvider(),
+        ),
         (re.compile(r"^<쓸만한 윈드 부스터> 스킬 사용 가능()$"), NullStatProvider()),
         (re.compile(r"^<쓸만한 컴뱃 오더스> 스킬 사용 가능()$"), NullStatProvider()),
         (re.compile(r"^<쓸만한 하이퍼 바디> 스킬 사용 가능()$"), NullStatProvider()),
         (re.compile(r"^<쓸만한 헤이스트> 스킬 사용 가능()$"), NullStatProvider()),
-        (re.compile(r"^HP 회복 아이템 및 회복 스킬 효율 : \+([0-9]+)%$"), NullStatProvider()),
+        (
+            re.compile(r"^HP 회복 아이템 및 회복 스킬 효율 : \+([0-9]+)%$"),
+            NullStatProvider(),
+        ),
         (re.compile(r"^경험치 획득 : \+([0-9]+)%$"), NullStatProvider()),
-        (re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)레벨 기절효과 적용$"), NullStatProvider()),
-        (re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)레벨 봉인효과 적용$"), NullStatProvider()),
-        (re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)레벨 빙결효과 적용$"), NullStatProvider()),
-        (re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)레벨 슬로우효과 적용$"), NullStatProvider()),
-        (re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)레벨 암흑효과 적용$"), NullStatProvider()),
-        (re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)레벨 중독효과 적용$"), NullStatProvider()),
-        (re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)의 HP 회복$"), NullStatProvider()),
-        (re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)의 MP 회복$"), NullStatProvider()),
+        (
+            re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)레벨 기절효과 적용$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)레벨 봉인효과 적용$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)레벨 빙결효과 적용$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)레벨 슬로우효과 적용$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)레벨 암흑효과 적용$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)레벨 중독효과 적용$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)의 HP 회복$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^공격 시 ([0-9]+)% 확률로 ([0-9]+)의 MP 회복$"),
+            NullStatProvider(),
+        ),
         (re.compile(r"^공격 시 ([0-9]+)% 확률로 오토스틸$"), NullStatProvider()),
         (re.compile(r"^메소 획득량 : \+([0-9]+)%$"), NullStatProvider()),
         (re.compile(r"^모든 속성 내성 : \+([0-9]+)%$"), NullStatProvider()),
         (
-            re.compile(r"^모든 스킬레벨 : \+([0-9]+)\(5차 및 일부 스킬 제외,\\n스킬의 마스터 레벨까지만 증가\)$"),
+            re.compile(
+                r"^모든 스킬레벨 : \+([0-9]+)\(5차 및 일부 스킬 제외,\\n스킬의 마스터 레벨까지만 증가\)$"
+            ),
             NullStatProvider(),
         ),
         (re.compile(r"^모든 스킬의 MP 소모 : -([0-9]+)%$"), NullStatProvider()),
-        (re.compile(r"^몬스터 처치 시 ([0-9]+)% 확률로 ([0-9]+)의 HP 회복$"), NullStatProvider()),
-        (re.compile(r"^몬스터 처치 시 ([0-9]+)% 확률로 ([0-9]+)의 MP 회복$"), NullStatProvider()),
+        (
+            re.compile(r"^몬스터 처치 시 ([0-9]+)% 확률로 ([0-9]+)의 HP 회복$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^몬스터 처치 시 ([0-9]+)% 확률로 ([0-9]+)의 MP 회복$"),
+            NullStatProvider(),
+        ),
         (re.compile(r"^방어력 : \+([0-9]+)$"), NullStatProvider()),
         (re.compile(r"^방어력 : \+([0-9]+)%$"), NullStatProvider()),
         (re.compile(r"^상태 이상 내성 : \+([0-9]+)$"), NullStatProvider()),
         (re.compile(r"^아이템 드롭률 : \+([0-9]+)%$"), NullStatProvider()),
         (re.compile(r"^이동속도 : \+([0-9]+)$"), NullStatProvider()),
         (re.compile(r"^점프력 : \+([0-9]+)$"), NullStatProvider()),
-        (re.compile(r"^피격 시 ([0-9]+)% 확률로 ([0-9]+)의 데미지 무시$"), NullStatProvider()),
-        (re.compile(r"^피격 시 ([0-9]+)% 확률로 ([0-9]+)초간 감동을 느낀다.$"), NullStatProvider()),
-        (re.compile(r"^피격 시 ([0-9]+)% 확률로 ([0-9]+)초간 격노를 느낀다.$"), NullStatProvider()),
-        (re.compile(r"^피격 시 ([0-9]+)% 확률로 ([0-9]+)초간 무적$"), NullStatProvider()),
-        (re.compile(r"^피격 시 ([0-9]+)% 확률로 ([0-9]+)초간 분노를 느낀다.$"), NullStatProvider()),
-        (re.compile(r"^피격 시 ([0-9]+)% 확률로 ([0-9]+)초간 사랑에 빠진다.$"), NullStatProvider()),
-        (re.compile(r"^피격 시 ([0-9]+)% 확률로 ([0-9]+)초간 행복을 느낀다.$"), NullStatProvider()),
-        (re.compile(r"^피격 시 ([0-9]+)% 확률로 데미지의 ([0-9]+)% 무시$"), NullStatProvider()),
+        (
+            re.compile(r"^피격 시 ([0-9]+)% 확률로 ([0-9]+)의 데미지 무시$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^피격 시 ([0-9]+)% 확률로 ([0-9]+)초간 감동을 느낀다.$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^피격 시 ([0-9]+)% 확률로 ([0-9]+)초간 격노를 느낀다.$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^피격 시 ([0-9]+)% 확률로 ([0-9]+)초간 무적$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^피격 시 ([0-9]+)% 확률로 ([0-9]+)초간 분노를 느낀다.$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^피격 시 ([0-9]+)% 확률로 ([0-9]+)초간 사랑에 빠진다.$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^피격 시 ([0-9]+)% 확률로 ([0-9]+)초간 행복을 느낀다.$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^피격 시 ([0-9]+)% 확률로 데미지의 ([0-9]+)% 무시$"),
+            NullStatProvider(),
+        ),
         (re.compile(r"^피격 후 무적시간 : \+([0-9]+)초$"), NullStatProvider()),
     ]
 

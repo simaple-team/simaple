@@ -2,6 +2,7 @@
 Hexa Skill
 Contains common patterns for hexa skill implementation.
 """
+
 from simaple.core.base import Stat
 from simaple.simulate.base import Event
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method

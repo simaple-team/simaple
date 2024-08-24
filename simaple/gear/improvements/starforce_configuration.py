@@ -87,8 +87,7 @@ class StarforceIncrementProvider(metaclass=ABCMeta):
     @abstractmethod
     def get_increment(
         self, meta: GearMeta, target_star: int, current_gear_stat: Stat
-    ) -> Stat:
-        ...
+    ) -> Stat: ...
 
 
 class StarforceStatIncrementProvider(StarforceIncrementProvider):

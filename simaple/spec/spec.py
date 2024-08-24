@@ -13,8 +13,7 @@ class SpecMetadata(pydantic.BaseModel):
         return all(self.label.get(k) == v for k, v in labels.items())
 
 
-class PatchSpecificationMatchFailError(Exception):
-    ...
+class PatchSpecificationMatchFailError(Exception): ...
 
 
 class Spec(pydantic.BaseModel):

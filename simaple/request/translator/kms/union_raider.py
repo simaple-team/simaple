@@ -39,8 +39,14 @@ def kms_union_provider_patterns() -> list[tuple[re.Pattern, AbstractStatProvider
         (re.compile(r"^INT ([0-9]+) 증가$"), StatProvider(target=StatProps.INT_static)),
         (re.compile(r"^LUK ([0-9]+) 증가$"), StatProvider(target=StatProps.LUK_static)),
         (re.compile(r"^STR, DEX, LUK ([0-9]+) 증가$"), ZenonProvider()),
-        (re.compile(r"^적 공격마다 70%의 확률로 순수 HP의 ([0-9]+)% 회복$"), NullStatProvider()),
-        (re.compile(r"^적 공격마다 70%의 확률로 순수 MP의 ([0-9]+)% 회복$"), NullStatProvider()),
+        (
+            re.compile(r"^적 공격마다 70%의 확률로 순수 HP의 ([0-9]+)% 회복$"),
+            NullStatProvider(),
+        ),
+        (
+            re.compile(r"^적 공격마다 70%의 확률로 순수 MP의 ([0-9]+)% 회복$"),
+            NullStatProvider(),
+        ),
         (re.compile(r"^경험치 획득량 ([0-9]+)% 증가$"), NullStatProvider()),
         (re.compile(r"^메소 획득량 ([0-9]+)% 증가$"), NullStatProvider()),
         (
@@ -77,7 +83,10 @@ def kms_union_provider_patterns() -> list[tuple[re.Pattern, AbstractStatProvider
             StatProvider(target=StatProps.MMP_multiplier),
         ),
         (re.compile(r"^최대 HP ([0-9]+) 증가$"), StatProvider(target=StatProps.MHP)),
-        (re.compile(r"^공격 시 20%의 확률로 데미지 ([0-9]+)% 증가$"), WildHunterProvider()),
+        (
+            re.compile(r"^공격 시 20%의 확률로 데미지 ([0-9]+)% 증가$"),
+            WildHunterProvider(),
+        ),
     ]
 
 

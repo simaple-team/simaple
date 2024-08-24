@@ -255,8 +255,7 @@ class BuffSkillComponent(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
         return self.lasting_duration
 
 
-class NoState(ReducerState):
-    ...
+class NoState(ReducerState): ...
 
 
 class AlwaysEnabledComponent(Component):
