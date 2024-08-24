@@ -1,3 +1,13 @@
-from simaple.app.wasm.base import create_uow, run_plan
+from simaple.app.wasm.base import (
+    createSimulatorFromBaseline,
+    createUow,
+    runSimulatorWithPlan,
+    runSimulatorWithPlanConfig,
+)
 
-__all__ = ["create_uow", "run_plan"]
+__all__ = [
+    "createUow",
+    "createSimulatorFromBaseline",
+    "runSimulatorWithPlan",
+    "runSimulatorWithPlanConfig",
+]

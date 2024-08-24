@@ -1,23 +1,20 @@
-from simaple.app.wasm.base import create_uow, run_plan
+from simaple.app.wasm.base import createUow, createSimulatorFromBaseline, runSimulatorWithPlan
 
 
 def test_run_plan():
-    uow = create_uow()
-
+    uow = createUow()
+    simulator_id = createSimulatorFromBaseline({
+            "simulation_setting": {
+                "tier": "Legendary",
+                "jobtype": "archmagetc",
+                "job_category": 1,
+                "level": 280,
+                "passive_skill_level": 0,
+                "combat_orders_level": 1,
+                "artifact_level": 40
+            }
+        }, uow)
     plan = '''
-/*
-configuration_name: "baseline_configuration"
-author: "Alice"
-data:
-    simulation_setting:
-        tier: Legendary
-        jobtype: archmagetc
-        job_category: 1 # mage
-        level: 280
-        passive_skill_level: 0
-        combat_orders_level: 1
-        artifact_level: 40
-*/
 CAST "오버로드 마나"
 CAST "이프리트"
 CAST "메이플 용사"
@@ -68,5 +65,5 @@ CAST "미스트 이럽션 VI"
 CAST "플레임 헤이즈 VI"
 x4 CAST "플레임 스윕 VI"    
 '''
-    response = run_plan(plan, uow)
-    response = run_plan(plan, uow)
+    response = runSimulatorWithPlan(simulator_id, plan, uow)
+    response = runSimulatorWithPlan(simulator_id, plan, uow)
