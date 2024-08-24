@@ -6,8 +6,7 @@ from simaple.core import Stat, StatProps
 from simaple.system.base import UpgradableUserStat
 
 
-class HyperStatBasis(UpgradableUserStat):
-    ...
+class HyperStatBasis(UpgradableUserStat): ...
 
 
 class Hyperstat(BaseModel):

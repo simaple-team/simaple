@@ -314,8 +314,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @abstractmethod
-    def get_default_state(self) -> dict[str, Entity]:
-        ...
+    def get_default_state(self) -> dict[str, Entity]: ...
 
     @property
     def event_provider(self) -> EventProvider:

@@ -104,10 +104,7 @@ class TreeToOperation(Transformer):
 
     def request(
         self,
-        x: tuple[
-            Operation,
-        ]
-        | tuple[int, Operation],
+        x: tuple[Operation,] | tuple[int, Operation],
     ) -> list[Operation]:
         if len(x) == 2:
             multiplier, operation = x
@@ -117,9 +114,7 @@ class TreeToOperation(Transformer):
 
     def operation(
         self,
-        x: tuple[
-            Operation,
-        ],
+        x: tuple[Operation,],
     ) -> Operation:
         return x[0]
 
@@ -164,8 +159,7 @@ def get_parser():
     return __PARSER
 
 
-class DSLError(Exception):
-    ...
+class DSLError(Exception): ...
 
 
 def is_console_command(op_or_console: ConsoleText | Operation) -> bool:

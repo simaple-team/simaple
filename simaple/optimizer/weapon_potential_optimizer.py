@@ -65,6 +65,7 @@ _WEAPON_POTENTIALS = {
 }
 """
 
+
 # TODO: change into triple-brute-force.
 class WeaponPotentialOptimizer(BaseModel):
     default_stat: Stat

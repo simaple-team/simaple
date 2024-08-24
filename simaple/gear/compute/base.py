@@ -10,8 +10,7 @@ from simaple.gear.gear_type import GearType
 
 class GearImprovementCalculator(BaseModel, metaclass=ABCMeta):
     @abstractmethod
-    def compute(self, stat: Stat, gear: Gear):
-        ...
+    def compute(self, stat: Stat, gear: Gear): ...
 
 
 class Scroll(BaseModel):

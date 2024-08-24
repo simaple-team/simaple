@@ -52,7 +52,12 @@ def test_paramterizd_reducer():
     )
     engine_builder.add_component(component)
     engine = engine_builder.build_monotonic_engine()
-    assert engine.resolve(dict(name="some_parametrized_action", method="use",))[0][
+    assert engine.resolve(
+        dict(
+            name="some_parametrized_action",
+            method="use",
+        )
+    )[0][
         "payload"
     ] == {"value": 2}
 
