@@ -4,7 +4,7 @@ from typing import Callable, cast
 
 import pydantic
 
-from simaple.core import ActionStat, ExtendedStat, JobCategory, JobType, Stat
+from simaple.core import ExtendedStat, JobCategory, JobType
 from simaple.data.ability import get_best_ability
 from simaple.data.baseline import get_baseline_gearset
 from simaple.data.builtin_strategy import get_builtin_strategy
