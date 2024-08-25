@@ -6,7 +6,7 @@ named as camelCase and all arguments maybe pyodide objects.
 """
 
 from functools import wraps
-from typing import Any, Callable, TypeVar, cast, Generic
+from typing import Any, Callable, Generic, TypeVar, cast
 
 import pydantic
 
@@ -33,7 +33,9 @@ PyodideJS = TypeVar("PyodideJS")
 CallableArgT = TypeVar("CallableArgT", bound=list)
 
 
-def return_js_object_from_pydantic_list(f: Callable[..., list[BaseModelT]]) -> Callable[..., list[BaseModelT]]:
+def return_js_object_from_pydantic_list(
+    f: Callable[..., list[BaseModelT]]
+) -> Callable[..., list[BaseModelT]]:
     @wraps(f)
     def wrapper(*args, **kwargs):
         try:
@@ -58,9 +60,7 @@ def return_js_object_from_pydantic_object(f: Callable[..., BaseModelT]) -> Any:
             from pyodide.ffi import to_js  # type: ignore
 
             result = f(*args, **kwargs)
-            return to_js(
-                result.model_dump(), dict_converter=Object.fromEntries
-            )
+            return to_js(result.model_dump(), dict_converter=Object.fromEntries)
         except ImportError:
             return f(*args, **kwargs)
 
@@ -85,7 +85,6 @@ def createUow() -> SessionlessUnitOfWork:
         spec_repository=DirectorySpecRepository(get_kms_spec_resource_path()),
         snapshot_repository=InmemorySnapshotRepository(),
     )
-
 
 
 @return_js_object_from_pydantic_list

@@ -1,9 +1,3 @@
-from simaple.app.wasm.base import MaybePyodide, SessionlessUnitOfWork, pyodide_reveal_dict, return_js_object_from_pydantic_list, return_js_object_from_pydantic_object
-from simaple.simulate.interface.simulator_configuration import BaselineConfiguration, MinimalSimulatorConfiguration
-
-from simaple.app.application.command.simulator import (
-    create_simulator,
-)
 from simaple.app.application.command.simulator import (
     create_from_plan,
     create_simulator,
@@ -19,13 +13,26 @@ from simaple.app.application.query import (
     query_latest_operation_log,
     query_operation_log,
 )
+from simaple.app.wasm.base import (
+    MaybePyodide,
+    SessionlessUnitOfWork,
+    pyodide_reveal_dict,
+    return_js_object_from_pydantic_list,
+    return_js_object_from_pydantic_object,
+)
+from simaple.simulate.interface.simulator_configuration import (
+    BaselineConfiguration,
+    MinimalSimulatorConfiguration,
+)
 
 
 def createSimulatorFromMinimalConf(
     conf: MaybePyodide,
     uow: SessionlessUnitOfWork,
 ):
-    baseline_conf = MinimalSimulatorConfiguration.model_validate(pyodide_reveal_dict(conf))
+    baseline_conf = MinimalSimulatorConfiguration.model_validate(
+        pyodide_reveal_dict(conf)
+    )
     simulator_id = create_simulator(baseline_conf, uow)
     return simulator_id
 
@@ -41,7 +48,7 @@ def createSimulatorFromBaseline(
 
 def createSimulatorFromPlan(
     plan: str,
-    uow: SessionlessUnitOfWork, 
+    uow: SessionlessUnitOfWork,
 ) -> str:
     simulator_id = create_from_plan(plan, uow)
 
@@ -56,11 +63,20 @@ def getAllSimulator(
 
 
 @return_js_object_from_pydantic_object
-def playOperation(
-    simulator_id: str,
-    operation: str,
-    uow: SessionlessUnitOfWork
+def playOperationOnSimulator(
+    simulator_id: str, operation: str, uow: SessionlessUnitOfWork
 ) -> OperationLogResponse:
     play_operation(simulator_id, operation, uow)
 
     return query_latest_operation_log(simulator_id, uow)
+
+
+@return_js_object_from_pydantic_list
+def runPlanOnSimulator(
+    simulator_id: str,
+    plan: str,
+    uow: SessionlessUnitOfWork,
+):
+    run_plan(simulator_id, plan, uow)
+
+    return query_every_opration_log(simulator_id, uow)
