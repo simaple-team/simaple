@@ -6,7 +6,7 @@ named as camelCase and all arguments maybe pyodide objects.
 """
 
 from functools import wraps
-from typing import Any, Callable, TypeVar, cast
+from typing import Any, Callable, TypeVar, cast, Generic
 
 import pydantic
 
@@ -29,9 +29,11 @@ from simaple.simulate.interface.simulator_configuration import BaselineConfigura
 from simaple.spec.repository import DirectorySpecRepository
 
 BaseModelT = TypeVar("BaseModelT", bound=pydantic.BaseModel)
+PyodideJS = TypeVar("PyodideJS")
+CallableArgT = TypeVar("CallableArgT", bound=list)
 
 
-def return_js_object_from_pydantic_list(f: Callable[..., list[BaseModelT]]) -> Any:
+def return_js_object_from_pydantic_list(f: Callable[..., list[BaseModelT]]) -> Callable[..., list[BaseModelT]]:
     @wraps(f)
     def wrapper(*args, **kwargs):
         try:
@@ -41,6 +43,23 @@ def return_js_object_from_pydantic_list(f: Callable[..., list[BaseModelT]]) -> A
             result = f(*args, **kwargs)
             return to_js(
                 [v.model_dump() for v in result], dict_converter=Object.fromEntries
+            )
+        except ImportError:
+            return f(*args, **kwargs)
+
+    return wrapper
+
+
+def return_js_object_from_pydantic_object(f: Callable[..., BaseModelT]) -> Any:
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        try:
+            from js import Object  # type: ignore
+            from pyodide.ffi import to_js  # type: ignore
+
+            result = f(*args, **kwargs)
+            return to_js(
+                result.model_dump(), dict_converter=Object.fromEntries
             )
         except ImportError:
             return f(*args, **kwargs)
