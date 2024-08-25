@@ -68,14 +68,6 @@ def createUow() -> SessionlessUnitOfWork:
     )
 
 
-def createSimulatorFromBaseline(
-    conf: MaybePyodide,
-    uow: SessionlessUnitOfWork,
-) -> str:
-    baseline_conf = BaselineConfiguration.model_validate(pyodide_reveal_dict(conf))
-    simulator_id = create_simulator(baseline_conf, uow)
-    return simulator_id
-
 
 @return_js_object_from_pydantic_list
 def runSimulatorWithPlan(

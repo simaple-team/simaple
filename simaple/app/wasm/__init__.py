@@ -1,8 +1,11 @@
 from simaple.app.wasm.base import (
-    createSimulatorFromBaseline,
     createUow,
     runSimulatorWithPlan,
     runSimulatorWithPlanConfig,
+)
+
+from simaple.app.wasm.workspace import (
+    createSimulatorFromBaseline,
 )
 
 __all__ = [

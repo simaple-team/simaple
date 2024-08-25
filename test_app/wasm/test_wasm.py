@@ -1,4 +1,4 @@
-from simaple.app.wasm.base import createUow, createSimulatorFromBaseline, runSimulatorWithPlan
+from simaple.app.wasm import createUow, createSimulatorFromBaseline, runSimulatorWithPlan
 
 
 def test_run_plan():
