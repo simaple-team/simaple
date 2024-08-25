@@ -51,7 +51,7 @@ def return_js_object_from_pydantic_list(f: Callable[..., list[BaseModelT]]) -> A
 MaybePyodide = TypeVar("MaybePyodide", dict, Any)
 
 
-def _pyodide_reveal_dict(obj: MaybePyodide) -> dict:
+def pyodide_reveal_dict(obj: MaybePyodide) -> dict:
     if isinstance(obj, dict):
         return obj
 
@@ -72,7 +72,7 @@ def createSimulatorFromBaseline(
     conf: MaybePyodide,
     uow: SessionlessUnitOfWork,
 ) -> str:
-    baseline_conf = BaselineConfiguration.model_validate(_pyodide_reveal_dict(conf))
+    baseline_conf = BaselineConfiguration.model_validate(pyodide_reveal_dict(conf))
     simulator_id = create_simulator(baseline_conf, uow)
     return simulator_id
 
