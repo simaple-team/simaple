@@ -89,3 +89,20 @@ def getLatestLogOfSimulator(
 ) -> OperationLogResponse:
     return query_operation_log(simulator_id, -1, uow)
 
+
+@return_js_object_from_pydantic_list
+def getAllLogs(
+    simulator_id: str,
+    uow: SessionlessUnitOfWork,
+) -> list[OperationLogResponse]:
+    return query_every_opration_log(simulator_id, uow)
+
+
+def rollbackToCheckpoint(
+    simulator_id: str,
+    history_index: int,
+    uow: SessionlessUnitOfWork,
+) -> None:
+    rollback(simulator_id, history_index, uow)
+
+    return
