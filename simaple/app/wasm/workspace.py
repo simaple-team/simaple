@@ -76,7 +76,16 @@ def runPlanOnSimulator(
     simulator_id: str,
     plan: str,
     uow: SessionlessUnitOfWork,
-):
+) -> list[OperationLogResponse]:
     run_plan(simulator_id, plan, uow)
 
     return query_every_opration_log(simulator_id, uow)
+
+
+@return_js_object_from_pydantic_object
+def getLatestLogOfSimulator(
+    simulator_id: str,
+    uow: SessionlessUnitOfWork,
+) -> OperationLogResponse:
+    return query_operation_log(simulator_id, -1, uow)
+

@@ -52,7 +52,7 @@ def return_js_object_from_pydantic_list(
     return wrapper
 
 
-def return_js_object_from_pydantic_object(f: Callable[..., BaseModelT]) -> Any:
+def return_js_object_from_pydantic_object(f: Callable[..., BaseModelT]) -> Callable[..., BaseModelT]:
     @wraps(f)
     def wrapper(*args, **kwargs):
         try:
