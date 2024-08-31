@@ -7,14 +7,13 @@ from simaple.app.wasm.workspace import (
     createSimulatorFromBaseline,
     createSimulatorFromMinimalConf,
     createSimulatorFromPlan,
-    queryAllSimulator,
-    playOperationOnSimulator,
-    runPlanOnSimulator,
-    getLatestLogOfSimulator,
     getAllLogs,
+    getLatestLogOfSimulator,
+    playOperationOnSimulator,
+    queryAllSimulator,
     rollbackToCheckpoint,
+    runPlanOnSimulator,
 )
-
 
 __all__ = [
     "createUow",
