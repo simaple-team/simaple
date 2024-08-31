@@ -56,7 +56,7 @@ def createSimulatorFromPlan(
 
 
 @return_js_object_from_pydantic_list
-def getAllSimulator(
+def queryAllSimulator(
     uow: SessionlessUnitOfWork,
 ) -> list[SimulatorResponse]:
     return query_all_simulator(uow)

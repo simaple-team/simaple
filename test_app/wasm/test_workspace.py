@@ -2,7 +2,7 @@ from simaple.app.wasm.workspace import (
     createSimulatorFromBaseline,
     createSimulatorFromPlan,
     createSimulatorFromMinimalConf,
-    getAllSimulator,
+    queryAllSimulator,
     getLatestLogOfSimulator,
     runPlanOnSimulator,
     playOperationOnSimulator,
@@ -102,7 +102,7 @@ def test_get_all_simulator(wasm_uow):
             }
         }, wasm_uow)
 
-    simulators = getAllSimulator(wasm_uow)
+    simulators = queryAllSimulator(wasm_uow)
     assert len(simulators) == 1
     assert simulators[0].id == simulator_id
 
