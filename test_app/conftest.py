@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 
 from simaple.app.interface.handler import add_exception_handlers
 from simaple.app.interface.web import SimapleWeb
-
+from simaple.simulate.interface.simulator_configuration import MinimalSimulatorConfiguration
 
 @pytest.fixture
 def simulator_configuration():
