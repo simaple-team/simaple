@@ -41,6 +41,7 @@ function useWorkspaceState() {
   }
 
   async function createBaselineSimulator(configuration: BaselineConfiguration) {
+    await sdk.initializeConfiguration();
     const simulator = await sdk.createBaselineSimulator(configuration);
 
     await updateSimulatorId(simulator.id);
