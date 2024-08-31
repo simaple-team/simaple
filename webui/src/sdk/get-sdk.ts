@@ -8,8 +8,8 @@ import { BaselineConfiguration } from "./models/BaselineConfiguration";
 import { OperationLog } from "./models/OperationLog";
 import { Skill } from "./models/Skill";
 import { SnapshotResponse } from "./models/SnapshotResponse";
-
 import { loadPyodide } from 'pyodide'
+
 
 export function getSDK({
   baseUrl = "localhost:8000",
@@ -18,12 +18,18 @@ export function getSDK({
   baseUrl: string;
   fetchFn: (url: string, init?: RequestInit) => Promise<Response>;
 }) {
-
   var isloaded = false;
   var pySimapleWasm, pySimapleUow;
   var uniqueSimulatorId = 0;
+  var lock = false;
 
   async function initializeConfiguration(){
+    if (lock) {
+      while (lock) {
+        await new Promise((resolve) => setTimeout(resolve, 350));
+      }
+    }
+    lock = true;
     if (isloaded) return;
 
     // Load Pyodide
@@ -40,6 +46,7 @@ export function getSDK({
     await micropip.install('pyyaml');
     await micropip.install('pyfunctional');
     await micropip.install('simaple', false, false);
+
     pySimapleWasm = await pyodide.runPython(`
     from simaple.app import wasm
     wasm`);
@@ -58,12 +65,11 @@ export function getSDK({
   }
 
   async function getAllSimulators(): Promise<SimulatorResponse[]> {
-    console.log(uniqueSimulatorId);
-    if (uniqueSimulatorId > 0) {
-      return [{"id": uniqueSimulatorId}];
+    if (!isloaded) {
+      return [];
     }
-    return [];
-    return _request(`/workspaces`);
+    let simulators = pySimapleWasm.queryAllSimulator(pySimapleUow);
+    return simulators;
   }
 
   async function createMinimalSimulator(
@@ -83,10 +89,6 @@ export function getSDK({
       pySimapleUow
     );
     return {"id": uniqueSimulatorId};
-    return _request(`/workspaces/baseline`, {
-      method: "POST",
-      body: JSON.stringify(configuration),
-    });
   }
 
   async function getAllSnapshots(): Promise<SnapshotResponse[]> {
@@ -112,22 +114,14 @@ export function getSDK({
     return pySimapleWasm.runSimulatorWithPlan(
       id, req.plan, 
       pySimapleUow);
-
-    return _request(`/workspaces/run/${id}`, {
-      method: "POST",
-      body: JSON.stringify(req),
-    });
   }
 
   async function getLatestLog(id: string): Promise<OperationLog> {
-    return _request(`/workspaces/logs/${id}/latest`);
+    return pySimapleWasm.getLatestLog(id, pySimapleUow);
   }
 
   async function getLogs(id: string): Promise<OperationLog[]> {
-    return pySimapleWasm.runSimulatorWithPlan(
-      uniqueSimulatorId, "",
-      pySimapleUow);
-    return _request(`/workspaces/logs/${id}`);
+    return pySimapleWasm.getAllLogs(id, pySimapleUow);
   }
 
   async function getSkills(): Promise<Skill[]> {
@@ -135,6 +129,7 @@ export function getSDK({
   }
 
   return {
+    initializeConfiguration,
     getAllSimulators,
     createMinimalSimulator,
     createBaselineSimulator,
@@ -145,6 +140,5 @@ export function getSDK({
     getLatestLog,
     getLogs,
     getSkills,
-    initializeConfiguration,
   };
 }
