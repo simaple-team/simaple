@@ -124,19 +124,9 @@ def get_latest_log(
     return query_operation_log(simulator_id, -1, uow)
 
 
-@router.get("/logs/{simulator_id}/{log_index}", response_model=OperationLogResponse)
-@inject
-def get_log(
-    simulator_id: str,
-    log_index: int,
-    uow: UnitOfWork = UowProvider,
-) -> OperationLogResponse:
-    return query_operation_log(simulator_id, log_index, uow)
-
-
 @router.get("/logs/{simulator_id}", response_model=list[OperationLogResponse])
 @inject
-def get_all_log(
+def get_all_logs(
     simulator_id: str,
     uow: UnitOfWork = UowProvider,
 ) -> list[OperationLogResponse]:
