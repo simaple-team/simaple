@@ -1,8 +1,18 @@
 from simaple.app.wasm.base import (
-    createSimulatorFromBaseline,
     createUow,
     runSimulatorWithPlan,
     runSimulatorWithPlanConfig,
+)
+from simaple.app.wasm.workspace import (
+    createSimulatorFromBaseline,
+    createSimulatorFromMinimalConf,
+    createSimulatorFromPlan,
+    getAllLogs,
+    getLatestLogOfSimulator,
+    playOperationOnSimulator,
+    queryAllSimulator,
+    rollbackToCheckpoint,
+    runPlanOnSimulator,
 )
 
 __all__ = [
@@ -10,4 +20,12 @@ __all__ = [
     "createSimulatorFromBaseline",
     "runSimulatorWithPlan",
     "runSimulatorWithPlanConfig",
+    "createSimulatorFromMinimalConf",
+    "createSimulatorFromPlan",
+    "queryAllSimulator",
+    "playOperationOnSimulator",
+    "runPlanOnSimulator",
+    "getLatestLogOfSimulator",
+    "getAllLogs",
+    "rollbackToCheckpoint",
 ]

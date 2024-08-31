@@ -32,7 +32,7 @@ router = fastapi.APIRouter(prefix="/workspaces")
 
 @router.post("/", response_model=SimulatorResponse)
 @inject
-def create(
+def create_simulator_from_minimal_conf(
     conf: MinimalSimulatorConfiguration,
     uow: UnitOfWork = UowProvider,
 ) -> Any:
@@ -43,7 +43,7 @@ def create(
 
 @router.post("/baseline", response_model=SimulatorResponse)
 @inject
-def create_from_baseline(
+def create_simulator_from_baseline(
     conf: BaselineConfiguration,
     uow: UnitOfWork = UowProvider,
 ) -> Any:
@@ -58,7 +58,7 @@ class RequestCreateFromPlan(pydantic.BaseModel):
 
 @router.post("/plan", response_model=SimulatorResponse)
 @inject
-def create_from_simulator(
+def create_simulator_from_plan(
     request: RequestCreateFromPlan,
     uow: UnitOfWork = UowProvider,
 ) -> Any:
@@ -81,7 +81,7 @@ class RequestPlay(pydantic.BaseModel):
 
 @router.post("/play/{simulator_id}", response_model=OperationLogResponse)
 @inject
-def play(
+def play_operation_on_simulator(
     simulator_id: str,
     request: RequestPlay,
     uow: UnitOfWork = UowProvider,
@@ -97,7 +97,7 @@ class RequestRunPlan(pydantic.BaseModel):
 
 @router.post("/run/{simulator_id}")
 @inject
-def run(
+def run_plan_on_simulator(
     simulator_id: str,
     request: RequestRunPlan,
     uow: UnitOfWork = UowProvider,
@@ -136,7 +136,7 @@ def get_log(
 
 @router.get("/logs/{simulator_id}", response_model=list[OperationLogResponse])
 @inject
-def get_all_log(
+def get_all_logs(
     simulator_id: str,
     uow: UnitOfWork = UowProvider,
 ) -> list[OperationLogResponse]:

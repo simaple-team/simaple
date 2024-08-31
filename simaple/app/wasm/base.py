@@ -10,11 +10,7 @@ from typing import Any, Callable, TypeVar, cast
 
 import pydantic
 
-from simaple.app.application.command.simulator import (
-    create_from_plan,
-    create_simulator,
-    run_plan,
-)
+from simaple.app.application.command.simulator import create_from_plan, run_plan
 from simaple.app.application.query import OperationLogResponse, query_every_opration_log
 from simaple.app.infrastructure.component_schema_repository import (
     LoadableComponentSchemaRepository,
@@ -25,13 +21,16 @@ from simaple.app.infrastructure.inmemory import (
 )
 from simaple.app.infrastructure.repository import InmemorySimulatorRepository
 from simaple.data.skill import get_kms_spec_resource_path
-from simaple.simulate.interface.simulator_configuration import BaselineConfiguration
 from simaple.spec.repository import DirectorySpecRepository
 
 BaseModelT = TypeVar("BaseModelT", bound=pydantic.BaseModel)
+PyodideJS = TypeVar("PyodideJS")
+CallableArgT = TypeVar("CallableArgT", bound=list)
 
 
-def return_js_object_from_pydantic_list(f: Callable[..., list[BaseModelT]]) -> Any:
+def return_js_object_from_pydantic_list(
+    f: Callable[..., list[BaseModelT]]
+) -> Callable[..., list[BaseModelT]]:
     @wraps(f)
     def wrapper(*args, **kwargs):
         try:
@@ -48,10 +47,27 @@ def return_js_object_from_pydantic_list(f: Callable[..., list[BaseModelT]]) -> A
     return wrapper
 
 
+def return_js_object_from_pydantic_object(
+    f: Callable[..., BaseModelT]
+) -> Callable[..., BaseModelT]:
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        try:
+            from js import Object  # type: ignore
+            from pyodide.ffi import to_js  # type: ignore
+
+            result = f(*args, **kwargs)
+            return to_js(result.model_dump(), dict_converter=Object.fromEntries)
+        except ImportError:
+            return f(*args, **kwargs)
+
+    return wrapper
+
+
 MaybePyodide = TypeVar("MaybePyodide", dict, Any)
 
 
-def _pyodide_reveal_dict(obj: MaybePyodide) -> dict:
+def pyodide_reveal_dict(obj: MaybePyodide) -> dict:
     if isinstance(obj, dict):
         return obj
 
@@ -66,15 +82,6 @@ def createUow() -> SessionlessUnitOfWork:
         spec_repository=DirectorySpecRepository(get_kms_spec_resource_path()),
         snapshot_repository=InmemorySnapshotRepository(),
     )
-
-
-def createSimulatorFromBaseline(
-    conf: MaybePyodide,
-    uow: SessionlessUnitOfWork,
-) -> str:
-    baseline_conf = BaselineConfiguration.model_validate(_pyodide_reveal_dict(conf))
-    simulator_id = create_simulator(baseline_conf, uow)
-    return simulator_id
 
 
 @return_js_object_from_pydantic_list

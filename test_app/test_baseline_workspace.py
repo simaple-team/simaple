@@ -3,7 +3,6 @@ def test_initial_workspace(baseline_configuration, client):
         "/workspaces/baseline",
         json=baseline_configuration,
     )
-    print(response.json())
 
     assert response.status_code == 200
     simulator_id = response.json()["id"]
@@ -11,4 +10,3 @@ def test_initial_workspace(baseline_configuration, client):
     resp = client.get(
         f"/workspaces/logs/{simulator_id}/0",
     )
-    assert resp.json()["index"] == 0

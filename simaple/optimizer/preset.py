@@ -139,7 +139,7 @@ class PresetOptimizer(BaseModel):
                 + self.alternate_character_job_types,
             )
             optimizer = StepwizeOptimizer(
-                union_squad_optimization_target, self.union_block_count, 2
+                union_squad_optimization_target, self.union_block_count, 1
             )
             output = optimizer.optimize()
 
