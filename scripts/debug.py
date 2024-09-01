@@ -6,7 +6,8 @@ import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.base import PlayLog
-from simaple.simulate.policy.parser import is_console_command, parse_simaple_runtime
+from simaple.simulate.policy.base import is_console_command
+from simaple.simulate.policy.parser import parse_simaple_runtime
 from simaple.simulate.report.base import SimulationEntry
 from simaple.simulate.report.feature import (
     DamageShareFeature,

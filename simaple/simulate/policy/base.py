@@ -150,3 +150,11 @@ class SimulationHistory:
 
     def _current_ckpt(self) -> Checkpoint:
         return self._logs[-1].last().checkpoint
+
+
+class ConsoleText(BaseModel):
+    text: str
+
+
+def is_console_command(op_or_console: ConsoleText | Operation) -> bool:
+    return isinstance(op_or_console, ConsoleText)

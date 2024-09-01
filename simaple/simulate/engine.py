@@ -14,9 +14,14 @@ from simaple.simulate.base import (
     ViewSet,
     play,
 )
-from simaple.simulate.policy.base import Operation, OperationLog, SimulationHistory
+from simaple.simulate.policy.base import (
+    ConsoleText,
+    Operation,
+    OperationLog,
+    SimulationHistory,
+    is_console_command,
+)
 from simaple.simulate.policy.handlers import BehaviorGenerator
-from simaple.simulate.policy.parser import ConsoleText
 from simaple.simulate.profile import SimulationProfile
 from simaple.simulate.report.base import Report, SimulationEntry
 
@@ -140,6 +145,9 @@ class OperationEngine(SimulationEngine):
         self._history.load(saved_history)
 
     def exec(self, op: Operation, early_stop: int = -1) -> OperationLog:
+        """
+        Execute given Operation and return OperationLog.
+        """
         playlogs: list[PlayLog] = []
         store = self._history.move_store()
 
@@ -207,6 +215,6 @@ class OperationEngine(SimulationEngine):
     def rollback(self, idx: int):
         self._history.discard_after(idx)
 
-    def console(self, console_text: ConsoleText):
+    def console(self, console_text: ConsoleText) -> str:
         output = SimulationProfile(self.get_current_viewer()).inspect(console_text.text)
         return output

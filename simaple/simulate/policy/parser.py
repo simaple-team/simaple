@@ -4,12 +4,7 @@ import yaml
 from lark import Discard, Lark, Token, Transformer
 from pydantic import BaseModel
 
-from simaple.simulate.policy.base import Operation
-
-
-class ConsoleText(BaseModel):
-    text: str
-
+from simaple.simulate.policy.base import ConsoleText, Operation
 
 __PARSER = Lark(
     r"""
@@ -160,10 +155,6 @@ def get_parser():
 
 
 class DSLError(Exception): ...
-
-
-def is_console_command(op_or_console: ConsoleText | Operation) -> bool:
-    return isinstance(op_or_console, ConsoleText)
 
 
 def parse_dsl_to_operations(dsl: str) -> list[Operation]:
