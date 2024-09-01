@@ -51,20 +51,15 @@ def test_paramterizd_reducer():
         },
     )
     engine_builder.add_component(component)
-    engine = engine_builder.build_monotonic_engine()
-    assert engine.resolve(
-        dict(
-            name="some_parametrized_action",
-            method="use",
-        )
-    )[0][
-        "payload"
-    ] == {"value": 2}
+    simulation_runtime = engine_builder.build_simulation_runtime()
+    assert simulation_runtime.resolve(
+        {"name": "some_parametrized_action", "method": "use", "payload": None}
+    )[0]["payload"] == {"value": 2}
 
-    assert engine.resolve(
-        dict(
-            name="some_action",
-            method="use",
-            payload={"value": 1324},
-        )
+    assert simulation_runtime.resolve(
+        {
+            "name": "some_action",
+            "method": "use",
+            "payload": {"value": 1324},
+        }
     )[0]["payload"] == {"value": 1324}

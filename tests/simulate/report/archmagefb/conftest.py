@@ -3,12 +3,12 @@ import pytest
 import simaple.simulate.component.skill  # noqa: F401
 import simaple.simulate.component.specific  # noqa: F401
 from simaple.core import ActionStat, Stat
-from simaple.simulate.engine import MonotonicEngine
+from simaple.simulate.base import SimulationRuntime
 from simaple.simulate.kms import get_builder
 
 
 @pytest.fixture
-def archmagefb_engine() -> MonotonicEngine:
+def archmagefb_simulation_runtime() -> SimulationRuntime:
     return get_builder(
         ["archmagefb", "common", "adventurer.magician", "mob"],
         {
@@ -38,4 +38,4 @@ def archmagefb_engine() -> MonotonicEngine:
             "weapon_pure_attack_power": 0,
             "weapon_attack_power": 0,
         },
-    ).build_monotonic_engine()
+    ).build_simulation_runtime()

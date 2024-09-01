@@ -7,8 +7,9 @@ from simaple.core.base import ActionStat, Stat
 from simaple.core.jobtype import JobType
 from simaple.data.damage_logic import get_damage_logic
 from simaple.data.skill_profile import SkillProfile, get_skill_profile
+from simaple.simulate.base import SimulationRuntime
 from simaple.simulate.builder import EngineBuilder
-from simaple.simulate.engine import MonotonicEngine, OperationEngine
+from simaple.simulate.engine import OperationEngine
 from simaple.simulate.kms import BuilderRequiredExtraVariables, get_builder
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 
@@ -22,7 +23,7 @@ class SimulatorConfiguration(pydantic.BaseModel, metaclass=ABCMeta):
     def get_name(cls) -> str: ...
 
     @abstractmethod
-    def create_monotonic_engine(self) -> MonotonicEngine: ...
+    def create_simulation_runtime(self) -> SimulationRuntime: ...
 
     @abstractmethod
     def create_operation_engine(self) -> OperationEngine: ...
@@ -63,8 +64,8 @@ class MinimalSimulatorConfiguration(SimulatorConfiguration):
             self.get_injected_values(),
         )
 
-    def create_monotonic_engine(self) -> MonotonicEngine:
-        return self._get_builder().build_monotonic_engine()
+    def create_simulation_runtime(self) -> SimulationRuntime:
+        return self._get_builder().build_simulation_runtime()
 
     def create_operation_engine(self) -> OperationEngine:
         return self._get_builder().build_operation_engine()
@@ -100,8 +101,8 @@ class BaselineConfiguration(SimulatorConfiguration):
         container = SimulationContainer(self.simulation_setting)
         return container
 
-    def create_monotonic_engine(self) -> MonotonicEngine:
-        return self.get_container().monotonic_engine()
+    def create_simulation_runtime(self) -> SimulationRuntime:
+        return self.get_container().simulation_runtime()
 
     def create_operation_engine(self) -> OperationEngine:
         return self.get_container().operation_engine()

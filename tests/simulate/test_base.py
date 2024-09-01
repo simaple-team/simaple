@@ -21,30 +21,30 @@ def test_scenario():
     engine_builder = EngineBuilder(store)
 
     engine_builder.add_component(attack_skill_1).add_component(attack_skill_2)
-    engine = engine_builder.build_monotonic_engine()
+    simulation_runtime = engine_builder.build_simulation_runtime()
 
-    event = engine.resolve(
-        dict(
-            name="test-A",
-            method="use",
-            payload=None,
-        )
+    event = simulation_runtime.resolve(
+        {
+            "name": "test-A",
+            "method": "use",
+            "payload": None,
+        }
     )
 
-    event = engine.resolve(
-        dict(
-            name="test-B",
-            method="use",
-            payload=None,
-        )
+    event = simulation_runtime.resolve(
+        {
+            "name": "test-B",
+            "method": "use",
+            "payload": None,
+        }
     )
     print(event)
 
-    event = engine.resolve(
-        dict(
-            name="test-B",
-            method="elapse",
-            payload=3.0,
-        )
+    event = simulation_runtime.resolve(
+        {
+            "name": "test-B",
+            "method": "elapse",
+            "payload": 3.0,
+        }
     )
     print(event)
