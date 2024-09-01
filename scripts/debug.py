@@ -115,7 +115,7 @@ class DebugInterface:
                 )
 
             if is_console_command(op_or_console):
-                console_output = engine.console(op_or_console.text)
+                console_output = engine.console(op_or_console)
                 print(f"\033[90m[DEBUG_]{console_output}\033[0m")
             else:
                 op_log = engine.exec(op_or_console)

@@ -16,6 +16,7 @@ from simaple.simulate.base import (
 )
 from simaple.simulate.policy.base import Operation, OperationLog, SimulationHistory
 from simaple.simulate.policy.handlers import BehaviorGenerator
+from simaple.simulate.policy.parser import ConsoleText
 from simaple.simulate.profile import SimulationProfile
 from simaple.simulate.report.base import Report, SimulationEntry
 
@@ -206,6 +207,6 @@ class OperationEngine(SimulationEngine):
     def rollback(self, idx: int):
         self._history.discard_after(idx)
 
-    def console(self, console_text: str):
-        output = SimulationProfile(self.get_current_viewer()).inspect(console_text)
+    def console(self, console_text: ConsoleText):
+        output = SimulationProfile(self.get_current_viewer()).inspect(console_text.text)
         return output
