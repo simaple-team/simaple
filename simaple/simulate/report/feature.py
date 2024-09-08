@@ -1,6 +1,6 @@
 from loguru import logger
 
-from simaple.simulate.report.base import Report, SimulationEntry
+from simaple.simulate.report.base import SimulationEntry
 from simaple.simulate.report.dpm import DamageCalculator
 
 
@@ -9,10 +9,10 @@ class MaximumDealingIntervalFeature:
         self.interval = interval
 
     def find_maximum_dealing_interval(
-        self, report: Report, damage_calculator: DamageCalculator
+        self, entries: list[SimulationEntry], damage_calculator: DamageCalculator
     ) -> tuple[float, int, int]:
         damage_seq: list[tuple[float, float]] = []
-        for entry in report.entries():
+        for entry in entries:
             damage_seq.append((entry.clock, damage_calculator.calculate_damage(entry)))
 
         best_dealing, best_start, best_end = self._find_maximum_dealing_interval(

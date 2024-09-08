@@ -59,19 +59,4 @@ class SimulationEntry(pydantic.BaseModel):
             damage_logs=damage_logs,
             accepted=all([event["tag"] != Tag.REJECT for event in playlog.events]),
         )
-
-
-class Report(pydantic.BaseModel):
-    time_series: list[SimulationEntry] = []
-
-    def add(self, entry: SimulationEntry):
-        self.time_series.append(entry)
-
-    def extend(self, report: "Report"):
-        self.time_series.extend(report.time_series)
-
-    def total_time(self) -> float:
-        return self.time_series[-1].clock
-
-    def entries(self) -> Iterator[SimulationEntry]:
-        return iter(self.time_series)
+        

@@ -22,20 +22,16 @@ from simaple.simulate.policy.base import (
 )
 from simaple.simulate.policy.handlers import BehaviorGenerator
 from simaple.simulate.profile import SimulationProfile
-from simaple.simulate.report.base import Report, SimulationEntry
+from simaple.simulate.report.base import SimulationEntry
 
 
 @runtime_checkable
 class OperationEngine(Protocol):
-    def add_callback(self, callback: PostActionCallback) -> None: ...
-
     def get_current_viewer(self) -> ViewerType: ...
 
     def exec(self, op: Operation, early_stop: int = -1) -> OperationLog: ...
 
     def get_buffered_events(self) -> list[Event]: ...
-
-    def create_full_report(self) -> Report: ...
 
     def operation_logs(self) -> Generator[OperationLog, None, None]: ...
 
@@ -47,7 +43,8 @@ class OperationEngine(Protocol):
 
     def load_history(self, saved_history: dict[str, Any]) -> None: ...
 
-    
+    def simulation_entries(self) -> Generator[SimulationEntry, None, None]: ...
+
 
 class BasicOperationEngine:
     """
@@ -75,9 +72,6 @@ class BasicOperationEngine:
             (playlog, self._viewset.get_viewer_from_ckpt(playlog.checkpoint))
             for playlog in log.playlogs
         ]
-
-    def add_callback(self, callback: PostActionCallback) -> None:
-        self._callbacks.append(callback)
 
     def save_history(self) -> dict[str, Any]:
         return self._history.save()
@@ -158,14 +152,9 @@ class BasicOperationEngine:
         buff = viewer("buff")
         return SimulationEntry.build(playlog, buff)
 
-    def create_full_report(self) -> Report:
-        report = Report()
-
-        for operation_log in self._history:
-            for playlog in operation_log.playlogs:
-                report.add(self.get_simulation_entry(playlog))
-
-        return report
+    def simulation_entries(self) -> Generator[SimulationEntry, None, None]:
+        for playlog in self._history.playlogs():
+            yield self.get_simulation_entry(playlog)
 
     def rollback(self, idx: int):
         self._history.discard_after(idx)
@@ -175,4 +164,4 @@ class BasicOperationEngine:
         return output
 
 
-assert issubclass(OperationEngine, BasicOperationEngine)
+assert issubclass(BasicOperationEngine, OperationEngine)

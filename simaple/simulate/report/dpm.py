@@ -2,7 +2,7 @@ import pydantic
 
 from simaple.core.base import Stat
 from simaple.core.damage import DamageLogic
-from simaple.simulate.report.base import DamageLog, Report, SimulationEntry
+from simaple.simulate.report.base import DamageLog, SimulationEntry
 from simaple.simulate.reserved_names import Tag
 
 
@@ -64,11 +64,11 @@ class DamageCalculator(pydantic.BaseModel):
 
         return total_damage
 
-    def calculate_total_damage(self, report: Report) -> float:
-        return sum([self.calculate_damage(entry) for entry in report.entries()])
+    def calculate_total_damage(self, entries: list[SimulationEntry]) -> float:
+        return sum([self.calculate_damage(entry) for entry in entries])
 
-    def calculate_dpm(self, damage_report: Report) -> float:
+    def calculate_dpm(self, entries: list[SimulationEntry]) -> float:
         total_damage = sum(
-            [self.calculate_damage(entry) for entry in damage_report.entries()]
+            [self.calculate_damage(entry) for entry in entries]
         )
-        return total_damage / damage_report.total_time() * 60_000
+        return total_damage / entries[-1].clock * 60_000
