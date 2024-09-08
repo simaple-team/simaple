@@ -1,7 +1,7 @@
 from typing import Callable, Generator, Optional
 
 from simaple.simulate.base import Event, ViewerType
-from simaple.simulate.engine import OperationEngineProtocol
+from simaple.simulate.engine import OperationEngine
 from simaple.simulate.policy.base import Operation
 
 RuntimeContextType = tuple[ViewerType, list[Event]]
@@ -27,7 +27,7 @@ class PolicyWrapper:
 
 
 def exec_by_strategy(
-    engine: OperationEngineProtocol, policy: StrategyType, early_stop: int = -1
+    engine: OperationEngine, policy: StrategyType, early_stop: int = -1
 ) -> None:
     operations = policy((engine.get_current_viewer(), engine.get_buffered_events()))
     for op in operations:

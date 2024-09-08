@@ -276,4 +276,4 @@ class SimulationContainer:
 
     def operation_engine(self) -> OperationEngine:
         builder = self.builder()
-        return cast(OperationEngine, builder.build_operation_engine())
+        return builder.build_operation_engine()

@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import Any, Callable, Generator, Protocol
+from typing import Any, Callable, Generator, Protocol, runtime_checkable
 
 from simaple.simulate.base import (
     Action,
@@ -25,13 +25,8 @@ from simaple.simulate.profile import SimulationProfile
 from simaple.simulate.report.base import Report, SimulationEntry
 
 
-class SimulationEngine(metaclass=ABCMeta):
-    @abstractmethod
-    def add_callback(self, callback: PostActionCallback) -> None:
-        """Simulation Engine may ensure that given engine triggers registered callbacks."""
-
-
-class OperationEngineProtocol(Protocol):
+@runtime_checkable
+class OperationEngine(Protocol):
     def add_callback(self, callback: PostActionCallback) -> None: ...
 
     def get_current_viewer(self) -> ViewerType: ...
@@ -44,8 +39,17 @@ class OperationEngineProtocol(Protocol):
 
     def operation_logs(self) -> Generator[OperationLog, None, None]: ...
 
+    def history(self) -> SimulationHistory: ...
 
-class OperationEngine(SimulationEngine):
+    def get_simulation_entry(self, playlog: PlayLog) -> SimulationEntry: ...
+
+    def rollback(self, idx: int): ...
+
+    def load_history(self, saved_history: dict[str, Any]) -> None: ...
+
+    
+
+class BasicOperationEngine:
     """
     OperationEngine is a simulation engine that accepts Operation for input.
     """
@@ -169,3 +173,6 @@ class OperationEngine(SimulationEngine):
     def console(self, console_text: ConsoleText) -> str:
         output = SimulationProfile(self.get_current_viewer()).inspect(console_text.text)
         return output
+
+
+assert issubclass(OperationEngine, BasicOperationEngine)

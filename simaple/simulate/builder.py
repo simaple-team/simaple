@@ -10,7 +10,7 @@ from simaple.simulate.base import (
     ViewSet,
 )
 from simaple.simulate.component.base import Component
-from simaple.simulate.engine import OperationEngine
+from simaple.simulate.engine import BasicOperationEngine, OperationEngine
 from simaple.simulate.policy import get_operation_handlers
 from simaple.simulate.view import AggregationView
 
@@ -32,7 +32,7 @@ class EngineBuilder:
         )
 
     def build_operation_engine(self) -> OperationEngine:
-        return OperationEngine(
+        return BasicOperationEngine(
             self._router,
             self._store,
             self._viewset,
