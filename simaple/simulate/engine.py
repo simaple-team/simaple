@@ -45,6 +45,8 @@ class OperationEngine(Protocol):
 
     def simulation_entries(self) -> Generator[SimulationEntry, None, None]: ...
 
+    def console(self, console_text: ConsoleText) -> str: ...
+
 
 class BasicOperationEngine:
     """
@@ -66,12 +68,6 @@ class BasicOperationEngine:
 
         self._history = SimulationHistory(store)
         self._callbacks: list[PostActionCallback] = []
-
-    def inspect(self, log: OperationLog) -> list[tuple[PlayLog, ViewerType]]:
-        return [
-            (playlog, self._viewset.get_viewer_from_ckpt(playlog.checkpoint))
-            for playlog in log.playlogs
-        ]
 
     def save_history(self) -> dict[str, Any]:
         return self._history.save()
