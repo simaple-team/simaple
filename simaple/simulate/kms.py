@@ -81,7 +81,7 @@ def get_builder(
 
     component_sets = [
         loader.load_all(
-            query={"group": group},
+            query={"group": group, "kind": "Component"},
             patches=[
                 SkillLevelPatch(
                     combat_orders_level=injected_values["combat_orders_level"],

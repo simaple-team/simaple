@@ -108,7 +108,7 @@ def get_builtin_strategy(jobtype: JobType) -> BuiltinStrategy:
 
 
 def get_kms_spec_resource_path() -> str:
-    return str(Path(__file__).parent / "resources" / "components")
+    return str(Path(__file__).parent / "resources")
 
 
 def get_kms_skill_loader() -> SpecBasedLoader:
