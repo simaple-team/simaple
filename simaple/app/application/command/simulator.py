@@ -47,7 +47,7 @@ def run_plan(simulator_id: str, plan: str, uow: UnitOfWork) -> int:
         simulator.dispatch(dsl)
 
     uow.simulator_repository().update(simulator)
-    return simulator.engine.length()
+    return len(simulator.engine.history())
 
 
 def create_from_plan(plan: str, uow: UnitOfWork) -> str:

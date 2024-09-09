@@ -18,14 +18,14 @@ def test_scenario():
         name="test-B", damage=400, hit=6, cooldown_duration=10.0, delay=0.0, id="test"
     )
 
-    engine = (
+    runtime = (
         EngineBuilder(store)
         .add_component(attack_skill_1)
         .add_component(attack_skill_2)
-        .build_monotonic_engine()
+        .build_simulation_runtime()
     )
 
-    event = engine.resolve(
+    event = runtime.resolve(
         dict(
             name="test-B",
             method="elapse",

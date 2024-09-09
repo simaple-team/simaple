@@ -29,7 +29,7 @@ def run():
     while engine.get_current_viewer()("clock") < 180_000:
         engine.exec_policy(policy, early_stop=180_000)
 
-    report = engine.create_full_report()
+    report = list(engine.simulation_entries())
 
     print(
         f"{engine.get_current_viewer()('clock')} | {container.dpm_calculator().calculate_dpm(report):,} "

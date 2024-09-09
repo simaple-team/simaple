@@ -110,3 +110,32 @@ ELAPSE 200.0
         Operation(command="ELAPSE", name="", time=200.0, expr="ELAPSE 200.0"),
     ]
     assert context == {"simaple": "runtime", "asdf": {"p": 3}}
+
+
+def test_parse_simaple_runtime_without_configuration():
+    context, result = parse_simaple_runtime(
+        """
+
+USE "플레임 스윕" 200.0
+CAST "플레임 스윕"
+
+!debug "abcd"
+
+
+ELAPSE 200.0
+""".strip()
+    )
+    assert result == [
+        Operation(
+            command="USE",
+            name="플레임 스윕",
+            time=200.0,
+            expr='USE "플레임 스윕" 200.0',
+        ),
+        Operation(
+            command="CAST", name="플레임 스윕", time=None, expr='CAST "플레임 스윕"'
+        ),
+        ConsoleText(text="abcd"),
+        Operation(command="ELAPSE", name="", time=200.0, expr="ELAPSE 200.0"),
+    ]
+    assert context == {}

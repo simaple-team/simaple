@@ -10,7 +10,15 @@ from simaple.core.base import Stat
 from simaple.simulate.base import Action, Checkpoint, Event
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.policy.base import Operation
-from simaple.simulate.report.base import DamageLog, Report
+from simaple.simulate.report.base import DamageLog, SimulationEntry
+
+
+class _Report(pydantic.BaseModel):
+    """
+    For backward Compat. only (this is redundant)
+    """
+
+    time_series: list[SimulationEntry]
 
 
 class PlayLogResponse(pydantic.BaseModel):
@@ -18,7 +26,7 @@ class PlayLogResponse(pydantic.BaseModel):
     validity_view: dict[str, Validity]
     running_view: dict[str, Running]
     buff_view: Stat
-    report: Report
+    report: _Report
     clock: float
     delay: float
     action: Action
@@ -43,13 +51,11 @@ class OperationLogResponse(pydantic.BaseModel):
 
         playlog_responses = []
 
-        for playlog, viewer in simulator.engine.inspect(operation_log):
-            report = Report(
-                time_series=[simulator.engine.get_simulation_entry(playlog)]
-            )
-            damage_logs: list[DamageLog] = sum(
-                [entry.damage_logs for entry in report.entries()], []
-            )
+        for playlog in operation_log.playlogs:
+            viewer = simulator.engine.get_viewer(playlog)
+            entry = simulator.engine.get_simulation_entry(playlog)
+            damage_logs: list[DamageLog] = entry.damage_logs
+
             damages = [
                 (damage_log.name, damage_log.damage) for damage_log in damage_logs
             ]
@@ -61,7 +67,7 @@ class OperationLogResponse(pydantic.BaseModel):
                     running_view={v.name: v for v in viewer("running")},
                     buff_view=viewer("buff"),
                     clock=playlog.clock,
-                    report=report,
+                    report=_Report(time_series=[entry]),
                     delay=playlog.get_delay_left(),
                     action=playlog.action,
                     checkpoint=playlog.checkpoint,
@@ -112,7 +118,7 @@ def query_every_opration_log(
 
     return [
         OperationLogResponse.from_simulator(simulator, log_index)
-        for log_index in range(simulator.engine.length())
+        for log_index in range(len(simulator.engine.history()))
     ]
 
 

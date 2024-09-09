@@ -14,7 +14,8 @@ from simaple.data.passive import get_passive
 from simaple.data.skill_profile import get_skill_profile
 from simaple.gear.gearset import Gearset
 from simaple.optimizer.preset import Preset, PresetOptimizer
-from simaple.simulate.engine import MonotonicEngine, OperationEngine
+from simaple.simulate.base import SimulationRuntime
+from simaple.simulate.engine import OperationEngine
 from simaple.simulate.kms import get_builder
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 from simaple.system.ability import get_ability_stat
@@ -269,9 +270,9 @@ class SimulationContainer:
             },
         )
 
-    def monotonic_engine(self) -> MonotonicEngine:
+    def simulation_runtime(self) -> SimulationRuntime:
         builder = self.builder()
-        return cast(MonotonicEngine, builder.build_monotonic_engine())
+        return cast(SimulationRuntime, builder.build_simulation_runtime())
 
     def operation_engine(self) -> OperationEngine:
         builder = self.builder()

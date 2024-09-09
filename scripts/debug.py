@@ -6,7 +6,8 @@ import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.base import PlayLog
-from simaple.simulate.policy.parser import is_console_command, parse_simaple_runtime
+from simaple.simulate.policy.base import is_console_command
+from simaple.simulate.policy.parser import parse_simaple_runtime
 from simaple.simulate.report.base import SimulationEntry
 from simaple.simulate.report.feature import (
     DamageShareFeature,
@@ -115,7 +116,7 @@ class DebugInterface:
                 )
 
             if is_console_command(op_or_console):
-                console_output = engine.console(op_or_console.text)
+                console_output = engine.console(op_or_console)
                 print(f"\033[90m[DEBUG_]{console_output}\033[0m")
             else:
                 op_log = engine.exec(op_or_console)
@@ -132,7 +133,7 @@ class DebugInterface:
                         f"{get_status_string(_get_status(playlog, entry))}{entry.clock:6.0f}s | {show_damage_as_string(total_damage).rjust(8)} | {entry.action}|"
                     )
 
-        report = engine.create_full_report()
+        report = list(engine.simulation_entries())
 
         feature = MaximumDealingIntervalFeature(30000)
         damage_share.show()

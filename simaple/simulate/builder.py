@@ -5,11 +5,12 @@ from simaple.simulate.base import (
     ConcreteStore,
     Dispatcher,
     RouterDispatcher,
+    SimulationRuntime,
     View,
     ViewSet,
 )
 from simaple.simulate.component.base import Component
-from simaple.simulate.engine import MonotonicEngine, OperationEngine
+from simaple.simulate.engine import BasicOperationEngine, OperationEngine
 from simaple.simulate.policy import get_operation_handlers
 from simaple.simulate.view import AggregationView
 
@@ -23,15 +24,15 @@ class EngineBuilder:
         else:
             self._store = store
 
-    def build_monotonic_engine(self) -> MonotonicEngine:
-        return MonotonicEngine(
+    def build_simulation_runtime(self) -> SimulationRuntime:
+        return SimulationRuntime(
             router=self._router,
             store=self._store,
             viewset=self._viewset,
         )
 
     def build_operation_engine(self) -> OperationEngine:
-        return OperationEngine(
+        return BasicOperationEngine(
             self._router,
             self._store,
             self._viewset,
