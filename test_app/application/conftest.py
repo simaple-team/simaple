@@ -11,7 +11,7 @@ from simaple.app.infrastructure.component_schema_repository import (
 )
 from simaple.app.infrastructure.repository import InmemorySimulatorRepository
 from simaple.spec.repository import DirectorySpecRepository
-from simaple.data.skill import get_kms_spec_resource_path
+from simaple.data.jobs.builtin import get_kms_spec_resource_path
 
 
 class InmemorySnapshotRepository(SnapshotRepository):

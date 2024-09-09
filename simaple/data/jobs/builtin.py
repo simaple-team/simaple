@@ -127,3 +127,17 @@ def get_builtin_strategy(jobtype: JobType) -> BuiltinStrategy:
             query={"group": jobtype.value, "kind": "BuiltinStrategy"},
         ),
     )
+
+
+from pathlib import Path
+
+from simaple.spec.loader import SpecBasedLoader
+from simaple.spec.repository import DirectorySpecRepository
+
+
+def get_kms_spec_resource_path() -> str:
+    return str(Path(__file__).parent / "resources" / "components")
+
+
+def get_kms_skill_loader() -> SpecBasedLoader:
+    return SpecBasedLoader(DirectorySpecRepository(get_kms_spec_resource_path()))

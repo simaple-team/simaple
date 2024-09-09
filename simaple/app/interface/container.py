@@ -9,7 +9,7 @@ from simaple.app.infrastructure.component_schema_repository import (
 from simaple.app.infrastructure.orm import BaseOrm
 from simaple.app.infrastructure.repository import InmemorySimulatorRepository
 from simaple.app.infrastructure.uow import SimpleUnitOfWork
-from simaple.data.skill import get_kms_spec_resource_path
+from simaple.data.jobs.builtin import get_kms_spec_resource_path
 from simaple.spec.repository import DirectorySpecRepository
 
 

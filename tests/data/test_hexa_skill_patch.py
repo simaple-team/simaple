@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.data.skill.patch import HexaSkillImprovementPatch
+from simaple.data.jobs.patch import HexaSkillImprovementPatch
 
 
 @pytest.mark.parametrize(
