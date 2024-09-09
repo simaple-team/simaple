@@ -20,7 +20,7 @@ from simaple.app.infrastructure.inmemory import (
     SessionlessUnitOfWork,
 )
 from simaple.app.infrastructure.repository import InmemorySimulatorRepository
-from simaple.data.skill import get_kms_spec_resource_path
+from simaple.data.jobs.builtin import get_kms_spec_resource_path
 from simaple.spec.repository import DirectorySpecRepository
 
 BaseModelT = TypeVar("BaseModelT", bound=pydantic.BaseModel)

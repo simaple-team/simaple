@@ -1,14 +1,8 @@
-from pathlib import Path
-from typing import cast
-
 import pydantic
 
-from simaple.core import JobType
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
 )
-from simaple.spec.loader import SpecBasedLoader
-from simaple.spec.repository import DirectorySpecRepository
 
 
 class SkillProfile(
@@ -57,14 +51,3 @@ class SkillProfile(
 
     def get_skill_replacements(self) -> dict[str, str]:
         return self.hexa_mastery
-
-
-def get_skill_profile(jobtype: JobType) -> SkillProfile:
-    repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
-    loader = SpecBasedLoader(repository)
-    return cast(
-        SkillProfile,
-        loader.load(
-            query={"group": jobtype.value, "kind": "SkillProfile"},
-        ),
-    )

@@ -1,5 +1,5 @@
 from simaple.core import ExtendedStat, JobType
-from simaple.data.passive import get_passive
+from simaple.data.jobs.builtin import get_passive
 
 
 def test_archmagefb():

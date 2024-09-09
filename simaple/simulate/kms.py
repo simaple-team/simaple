@@ -3,13 +3,13 @@ from typing import Any, TypedDict, cast
 import simaple.simulate.component.skill  # noqa: F401
 import simaple.simulate.component.specific  # noqa: F401
 from simaple.core.base import ActionStat, Stat
-from simaple.data.passive.patch import SkillLevelPatch
-from simaple.data.skill import get_kms_skill_loader
-from simaple.data.skill.patch import (
+from simaple.data.jobs.builtin import get_kms_skill_loader
+from simaple.data.jobs.patch import (
     HexaSkillImprovementPatch,
     VSkillImprovementPatch,
     get_hyper_skill_patch,
 )
+from simaple.data.patch import SkillLevelPatch
 from simaple.simulate.base import AddressedStore, ConcreteStore
 from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.component.base import Component
@@ -81,7 +81,7 @@ def get_builder(
 
     component_sets = [
         loader.load_all(
-            query={"group": group},
+            query={"group": group, "kind": "Component"},
             patches=[
                 SkillLevelPatch(
                     combat_orders_level=injected_values["combat_orders_level"],

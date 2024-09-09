@@ -1,16 +1,10 @@
-from pathlib import Path
-from typing import cast
-
 import pydantic
 
-from simaple.core import JobType
 from simaple.simulate.strategy.base import PolicyWrapper
 from simaple.simulate.strategy.default import normal_default_ordered_policy
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
 )
-from simaple.spec.loader import SpecBasedLoader
-from simaple.spec.repository import DirectorySpecRepository
 
 
 class BuiltinStrategy(
@@ -31,14 +25,3 @@ class BuiltinStrategy(
         return PolicyWrapper(
             normal_default_ordered_policy(order=self.normal_default_order)
         )
-
-
-def get_builtin_strategy(jobtype: JobType) -> BuiltinStrategy:
-    repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
-    loader = SpecBasedLoader(repository)
-    return cast(
-        BuiltinStrategy,
-        loader.load(
-            query={"group": jobtype.value, "kind": "BuiltinStrategy"},
-        ),
-    )

@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.data.passive.patch import SkillLevelPatch
+from simaple.data.patch import SkillLevelPatch
 
 
 def get_skill_info(passive_skill_enabled: bool, combat_orders_enabled: bool):
