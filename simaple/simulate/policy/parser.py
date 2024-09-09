@@ -2,7 +2,6 @@ from typing import cast
 
 import yaml
 from lark import Discard, Lark, Token, Transformer
-from pydantic import BaseModel
 
 from simaple.simulate.policy.base import ConsoleText, Operation
 

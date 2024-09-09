@@ -112,7 +112,6 @@ ELAPSE 200.0
     assert context == {"simaple": "runtime", "asdf": {"p": 3}}
 
 
-
 def test_parse_simaple_runtime_without_configuration():
     context, result = parse_simaple_runtime(
         """

@@ -1,12 +1,9 @@
-from abc import ABCMeta, abstractmethod
 from typing import Any, Callable, Generator, Protocol, runtime_checkable
 
 from simaple.simulate.base import (
-    Action,
     AddressedStore,
     Checkpoint,
     Event,
-    EventCallback,
     PlayLog,
     PostActionCallback,
     RouterDispatcher,
@@ -47,6 +44,10 @@ class OperationEngine(Protocol):
 
     def console(self, console_text: ConsoleText) -> str: ...
 
+    def save_history(self) -> dict[str, Any]: ...
+
+    def get_viewer(self, playlog: PlayLog) -> ViewerType: ...
+
 
 class BasicOperationEngine:
     """
@@ -75,9 +76,6 @@ class BasicOperationEngine:
     def operation_logs(self) -> Generator[OperationLog, None, None]:
         for operation_log in self._history:
             yield operation_log
-
-    def length(self) -> int:
-        return len(self._history)
 
     def history(self) -> SimulationHistory:
         """This returns "Shallow Copy" of SimulationHistory.
@@ -147,6 +145,9 @@ class BasicOperationEngine:
         viewer = self._viewset.get_viewer_from_ckpt(playlog.checkpoint)
         buff = viewer("buff")
         return SimulationEntry.build(playlog, buff)
+
+    def get_viewer(self, playlog: PlayLog) -> ViewerType:
+        return self._viewset.get_viewer_from_ckpt(playlog.checkpoint)
 
     def simulation_entries(self) -> Generator[SimulationEntry, None, None]:
         for playlog in self._history.playlogs():

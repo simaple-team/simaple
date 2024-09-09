@@ -68,7 +68,5 @@ class DamageCalculator(pydantic.BaseModel):
         return sum([self.calculate_damage(entry) for entry in entries])
 
     def calculate_dpm(self, entries: list[SimulationEntry]) -> float:
-        total_damage = sum(
-            [self.calculate_damage(entry) for entry in entries]
-        )
+        total_damage = sum([self.calculate_damage(entry) for entry in entries])
         return total_damage / entries[-1].clock * 60_000

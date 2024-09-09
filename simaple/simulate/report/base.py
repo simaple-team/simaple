@@ -1,5 +1,3 @@
-from typing import Iterator
-
 import pydantic
 
 from simaple.core.base import Stat
@@ -59,4 +57,3 @@ class SimulationEntry(pydantic.BaseModel):
             damage_logs=damage_logs,
             accepted=all([event["tag"] != Tag.REJECT for event in playlog.events]),
         )
-        

@@ -17,6 +17,7 @@ class _Report(pydantic.BaseModel):
     """
     For backward Compat. only (this is redundant)
     """
+
     time_series: list[SimulationEntry]
 
 
@@ -50,7 +51,8 @@ class OperationLogResponse(pydantic.BaseModel):
 
         playlog_responses = []
 
-        for playlog, viewer in simulator.engine.inspect(operation_log):
+        for playlog in operation_log.playlogs:
+            viewer = simulator.engine.get_viewer(playlog)
             entry = simulator.engine.get_simulation_entry(playlog)
             damage_logs: list[DamageLog] = entry.damage_logs
 
@@ -116,7 +118,7 @@ def query_every_opration_log(
 
     return [
         OperationLogResponse.from_simulator(simulator, log_index)
-        for log_index in range(simulator.engine.length())
+        for log_index in range(len(simulator.engine.history()))
     ]
 
 
