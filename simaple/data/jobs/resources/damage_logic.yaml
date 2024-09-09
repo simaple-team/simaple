@@ -2,20 +2,6 @@ kind: DamageLogic
 version: simaple.io/INTBasedDamageLogic
 metadata:
   label:
-    group: archmagetc
-patch:
-  - SkillLevelPatch
-  - EvalPatch
-data:
-  attack_range_constant: 1.2
-  mastery: "{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}"
-  default_skill_level: 0
-  combat_orders_enabled: True
----
-kind: DamageLogic
-version: simaple.io/INTBasedDamageLogic
-metadata:
-  label:
     group: bishop
 patch:
   - SkillLevelPatch
