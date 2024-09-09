@@ -19,7 +19,7 @@ def test_actor(setting, jobtype, expected):
     while engine.get_current_viewer()("clock") < 50_000:
         exec_by_strategy(engine, policy, early_stop=50_000)
 
-    report = engine.create_full_report()
+    report = list(engine.simulation_entries())
 
     '''
     with open("operation.log", "w") as f:

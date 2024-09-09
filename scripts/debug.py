@@ -133,7 +133,7 @@ class DebugInterface:
                         f"{get_status_string(_get_status(playlog, entry))}{entry.clock:6.0f}s | {show_damage_as_string(total_damage).rjust(8)} | {entry.action}|"
                     )
 
-        report = engine.create_full_report()
+        report = list(engine.simulation_entries())
 
         feature = MaximumDealingIntervalFeature(30000)
         damage_share.show()
