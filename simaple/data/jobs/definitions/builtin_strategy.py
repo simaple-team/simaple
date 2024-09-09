@@ -31,14 +31,3 @@ class BuiltinStrategy(
         return PolicyWrapper(
             normal_default_ordered_policy(order=self.normal_default_order)
         )
-
-
-def get_builtin_strategy(jobtype: JobType) -> BuiltinStrategy:
-    repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
-    loader = SpecBasedLoader(repository)
-    return cast(
-        BuiltinStrategy,
-        loader.load(
-            query={"group": jobtype.value, "kind": "BuiltinStrategy"},
-        ),
-    )

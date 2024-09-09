@@ -100,3 +100,30 @@ def get_passive(
         [passive_skill.get_extended_stat() for passive_skill in passive_skills],
         ExtendedStat(),
     )
+
+
+from pathlib import Path
+from typing import cast
+
+import pydantic
+
+from simaple.core import JobType
+from simaple.data.jobs.definitions import BuiltinStrategy
+from simaple.simulate.strategy.base import PolicyWrapper
+from simaple.simulate.strategy.default import normal_default_ordered_policy
+from simaple.spec.loadable import (  # pylint:disable=unused-import
+    TaggedNamespacedABCMeta,
+)
+from simaple.spec.loader import SpecBasedLoader
+from simaple.spec.repository import DirectorySpecRepository
+
+
+def get_builtin_strategy(jobtype: JobType) -> BuiltinStrategy:
+    repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
+    loader = SpecBasedLoader(repository)
+    return cast(
+        BuiltinStrategy,
+        loader.load(
+            query={"group": jobtype.value, "kind": "BuiltinStrategy"},
+        ),
+    )
