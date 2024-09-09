@@ -2,7 +2,7 @@ import json
 
 from simaple.core import JobType, Stat
 from simaple.core.damage import INTBasedDamageLogic
-from simaple.data.passive import get_passive
+from simaple.data.jobs.builtin import get_passive
 from simaple.metric.metric import RegressionMetric
 
 

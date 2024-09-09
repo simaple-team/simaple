@@ -3,7 +3,7 @@ from typing import Any, TypedDict, cast
 import simaple.simulate.component.skill  # noqa: F401
 import simaple.simulate.component.specific  # noqa: F401
 from simaple.core.base import ActionStat, Stat
-from simaple.data.passive.patch import SkillLevelPatch
+from simaple.data.patch import SkillLevelPatch
 from simaple.data.skill import get_kms_skill_loader
 from simaple.data.skill.patch import (
     HexaSkillImprovementPatch,
