@@ -1,16 +1,9 @@
-from pathlib import Path
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
-from simaple.core import ActionStat, ExtendedStat, JobType, Stat
-from simaple.data.patch import SkillLevelPatch
+from simaple.core import ActionStat, ExtendedStat, Stat
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
 )
-from simaple.spec.loader import SpecBasedLoader
-from simaple.spec.patch import EvalPatch, Patch
-from simaple.spec.repository import DirectorySpecRepository
 
 
 class PassiveSkill(BaseModel, metaclass=TaggedNamespacedABCMeta("PassiveSkill")):

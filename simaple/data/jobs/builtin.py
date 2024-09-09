@@ -1,19 +1,13 @@
 from pathlib import Path
 from typing import Optional, cast
 
-import pydantic
-
 from simaple.core import JobType
 from simaple.core.base import ExtendedStat
 from simaple.core.damage import DamageLogic
-from simaple.core.jobtype import JobType
-from simaple.data.jobs.definitions import PassiveHyperskillInterface
+from simaple.data.jobs.definitions import BuiltinStrategy, PassiveHyperskillInterface
 from simaple.data.jobs.definitions.passive import PassiveSkill
 from simaple.data.jobs.definitions.skill_profile import SkillProfile
 from simaple.data.patch import SkillLevelPatch
-from simaple.spec.loadable import (  # pylint:disable=unused-import; noqa: F401
-    TaggedNamespacedABCMeta,
-)
 from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.patch import EvalPatch, Patch
 from simaple.spec.repository import DirectorySpecRepository
@@ -102,22 +96,6 @@ def get_passive(
     )
 
 
-from pathlib import Path
-from typing import cast
-
-import pydantic
-
-from simaple.core import JobType
-from simaple.data.jobs.definitions import BuiltinStrategy
-from simaple.simulate.strategy.base import PolicyWrapper
-from simaple.simulate.strategy.default import normal_default_ordered_policy
-from simaple.spec.loadable import (  # pylint:disable=unused-import
-    TaggedNamespacedABCMeta,
-)
-from simaple.spec.loader import SpecBasedLoader
-from simaple.spec.repository import DirectorySpecRepository
-
-
 def get_builtin_strategy(jobtype: JobType) -> BuiltinStrategy:
     repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
     loader = SpecBasedLoader(repository)
@@ -127,12 +105,6 @@ def get_builtin_strategy(jobtype: JobType) -> BuiltinStrategy:
             query={"group": jobtype.value, "kind": "BuiltinStrategy"},
         ),
     )
-
-
-from pathlib import Path
-
-from simaple.spec.loader import SpecBasedLoader
-from simaple.spec.repository import DirectorySpecRepository
 
 
 def get_kms_spec_resource_path() -> str:
