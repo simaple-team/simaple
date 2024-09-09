@@ -11,7 +11,7 @@ from simaple.data.builtin_strategy import get_builtin_strategy
 from simaple.data import get_damage_logic
 from simaple.data.doping import get_normal_doping
 from simaple.data.passive import get_passive
-from simaple.data.skill_profile import get_skill_profile
+from simaple.data.jobs import get_skill_profile
 from simaple.gear.gearset import Gearset
 from simaple.optimizer.preset import Preset, PresetOptimizer
 from simaple.simulate.base import SimulationRuntime
