@@ -4,8 +4,8 @@ from typing import Any
 import pydantic
 
 from simaple.core import Stat
-from simaple.data.passive_hyper_skill import get_every_hyper_skills
-from simaple.data.passive_hyper_skill.spec import PassiveHyperskillInterface
+from simaple.data.jobs.builtin import get_every_hyper_skills
+from simaple.data.jobs.definitions import PassiveHyperskillInterface
 from simaple.spec.patch import Patch
 
 

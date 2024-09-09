@@ -1,5 +1,5 @@
 from simaple.core import Stat
-from simaple.data.passive_hyper_skill.spec import (
+from simaple.data.jobs.definitions import (
     MultiplierPassiveHyperskill,
     StatIncreasePassiveHyperskill,
     ValueIncreasePassiveHyperskill,
