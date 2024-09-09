@@ -1,6 +1,6 @@
 from simaple.core.base import Stat
 from simaple.core.jobtype import JobType
-from simaple.data import get_damage_logic
+from simaple.data.jobs.builtin import get_damage_logic
 
 
 def test_damage_logic():
