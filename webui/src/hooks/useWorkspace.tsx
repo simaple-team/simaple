@@ -1,15 +1,16 @@
 import {
   BaselineConfiguration,
-  MinimalSimulatorConfiguration,
   PlayLog,
   SimulatorResponse,
 } from "@/sdk/models";
 import * as React from "react";
-import { sdk } from "../sdk";
+import { usePySimaple } from "./useSimaple";
 
 type WorkspaceProviderProps = { children: React.ReactNode };
 
 function useWorkspaceState() {
+  const { pySimaple, uow } = usePySimaple();
+
   const [currentSimulatorId, setCurrentSimulatorId] = React.useState<string>();
   const [simulators, setSimulators] = React.useState<SimulatorResponse[]>([]);
   const [history, setHistory] = React.useState<PlayLog[]>([]);
@@ -19,45 +20,35 @@ function useWorkspaceState() {
     getAllSimulators();
   }, []);
 
-  async function updateSimulatorId(id: string) {
+  function updateSimulatorId(id: string) {
     setCurrentSimulatorId(id);
 
-    const logs = await sdk.getLogs(id);
+    const logs = pySimaple.getAllLogs(id, uow);
     setHistory(logs.flatMap((log) => log.logs));
   }
 
-  async function getAllSimulators() {
-    await sdk.getAllSimulators().then((res) => setSimulators(res));
-    return;
+  function getAllSimulators() {
+    setSimulators(pySimaple.queryAllSimulator(uow));
   }
 
-  async function createMinimalSimulator(
-    configuration: MinimalSimulatorConfiguration,
-  ) {
-    const simulator = await sdk.createMinimalSimulator(configuration);
+  function createBaselineSimulator(configuration: BaselineConfiguration) {
+    const id = pySimaple.createSimulatorFromBaseline(configuration, uow);
 
-    await updateSimulatorId(simulator.id);
-    await getAllSimulators();
+    updateSimulatorId(id);
+    getAllSimulators();
   }
 
-  async function createBaselineSimulator(configuration: BaselineConfiguration) {
-    const simulator = await sdk.createBaselineSimulator(configuration);
-
-    await updateSimulatorId(simulator.id);
-    await getAllSimulators();
+  function loadSimulator(id: string) {
+    updateSimulatorId(id);
+    getAllSimulators();
   }
 
-  async function loadSimulator(id: string) {
-    await updateSimulatorId(id);
-    await getAllSimulators();
-  }
-
-  async function run(plan: string) {
+  function run(plan: string) {
     if (!currentSimulatorId) {
       return;
     }
 
-    const logs = await sdk.run(currentSimulatorId, { plan });
+    const logs = pySimaple.runSimulatorWithPlan(currentSimulatorId, plan, uow);
     setHistory(logs.flatMap((log) => log.logs));
   }
 
@@ -66,7 +57,6 @@ function useWorkspaceState() {
     currentSimulatorId,
     history,
     playLog,
-    createMinimalSimulator,
     createBaselineSimulator,
     loadSimulator,
     run,
@@ -95,4 +85,4 @@ function useWorkspace() {
   return context;
 }
 
-export { WorkspaceProvider, useWorkspace };
+export { useWorkspace, WorkspaceProvider };
