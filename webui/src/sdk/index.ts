@@ -49,7 +49,7 @@ export async function loadPySimaple(props: PySimapleProps): Promise<PySimaple> {
   await micropip.install("simaple", false, false);
 
   if (fileSystemHandle) {
-    await pyodide.mountNativeFS("/tmp", fileSystemHandle);
+    await pyodide.mountNativeFS("/simaple-cache", fileSystemHandle);
   }
 
   return pyodide.runPython(`

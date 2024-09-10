@@ -12,7 +12,16 @@ function usePySimapleState() {
 
   async function load() {
     try {
-      const handle = await window.showDirectoryPicker();
+      const opts: DirectoryPickerOptions = {
+        id: "simaple",
+        mode: "readwrite",
+      };
+      const handle = await window.showDirectoryPicker(opts);
+      const permissionStatus = await handle.requestPermission(opts);
+      if (permissionStatus !== "granted") {
+        throw new Error("readwrite access to directory not granted");
+      }
+
       setIsLoading(true);
 
       const pySimaple = await loadPySimaple({ fileSystemHandle: handle });
