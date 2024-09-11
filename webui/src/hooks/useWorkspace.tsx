@@ -9,7 +9,7 @@ import { usePySimaple } from "./useSimaple";
 type WorkspaceProviderProps = { children: React.ReactNode };
 
 function useWorkspaceState() {
-  const { pySimaple, uow } = usePySimaple();
+  const { pySimaple, uow, syncFs } = usePySimaple();
 
   const [currentSimulatorId, setCurrentSimulatorId] = React.useState<string>();
   const [simulators, setSimulators] = React.useState<SimulatorResponse[]>([]);
@@ -31,11 +31,12 @@ function useWorkspaceState() {
     setSimulators(pySimaple.queryAllSimulator(uow));
   }
 
-  function createBaselineSimulator(configuration: BaselineConfiguration) {
+  async function createBaselineSimulator(configuration: BaselineConfiguration) {
     const id = pySimaple.createSimulatorFromBaseline(configuration, uow);
 
     updateSimulatorId(id);
     getAllSimulators();
+    await syncFs();
   }
 
   function loadSimulator(id: string) {

@@ -21,20 +21,21 @@ export interface PySimaple {
   getAllLogs(id: string, uow: PySimapleUow): OperationLog[];
 }
 
-export interface PySimapleProps {
-  /**
-   * The file system handle to mount to the Python environment.
-   * If not provided, the Python environment will not have access to the file system.
-   */
-  fileSystemHandle?: FileSystemDirectoryHandle;
-}
-
-export async function loadPySimaple(props: PySimapleProps): Promise<PySimaple> {
-  const { fileSystemHandle } = props;
-
+export async function loadPySimaple() {
   const pyodide = await loadPyodide({
     indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.2/full/",
   });
+
+  pyodide.FS.mkdirTree("/simaple-cache");
+  await pyodide.FS.mount(pyodide.FS.filesystems.IDBFS, {}, "/simaple-cache");
+  const error = await new Promise((resolve) =>
+    pyodide.FS.syncfs(true, resolve),
+  );
+
+  if (error) {
+    throw new Error(`Failed to sync from IndexedDB: ${error}`);
+  }
+
   await pyodide.loadPackage("pydantic", { checkIntegrity: false });
   await pyodide.loadPackage("micropip", { checkIntegrity: false });
   await pyodide.loadPackage("sqlite3", { checkIntegrity: false });
@@ -48,11 +49,12 @@ export async function loadPySimaple(props: PySimapleProps): Promise<PySimaple> {
   await micropip.install("pyfunctional");
   await micropip.install("simaple", false, false);
 
-  if (fileSystemHandle) {
-    await pyodide.mountNativeFS("/simaple-cache", fileSystemHandle);
-  }
-
-  return pyodide.runPython(`
+  return {
+    pySimaple: pyodide.runPython(`
   from simaple.app import wasm
-  wasm`) as Promise<PySimaple>;
+  import os
+  print(os.listdir('/simaple-cache'))
+  wasm`),
+    fileSystem: pyodide.FS,
+  };
 }
