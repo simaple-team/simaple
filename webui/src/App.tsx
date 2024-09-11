@@ -1,19 +1,12 @@
 import "./App.css";
-import Header from "./components/Header";
-import { PreferenceProvider } from "./hooks/usePreference";
-import { WorkspaceProvider } from "./hooks/useWorkspace";
-import Editor from "./pages/Editor";
+import { PySimapleProvider } from "./hooks/useSimaple";
+import { Router } from "./Router";
 
 function App() {
   return (
-    <WorkspaceProvider>
-      <PreferenceProvider>
-        <div className="h-screen flex flex-col">
-          <Header />
-          <Editor />
-        </div>
-      </PreferenceProvider>
-    </WorkspaceProvider>
+    <PySimapleProvider>
+      <Router />
+    </PySimapleProvider>
   );
 }
 
