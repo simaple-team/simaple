@@ -7,7 +7,7 @@ metadata:
     id: 2121004-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 2121004-0
   name: 인피니티
@@ -30,7 +30,7 @@ metadata:
     id: 400021000-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400021000-0
   name: 오버로드 마나

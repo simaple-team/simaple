@@ -8,7 +8,7 @@ metadata:
     id: 400001042-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001042-0
   name: 메이플월드 여신의 축복
@@ -30,7 +30,7 @@ metadata:
     id: 400001042-1
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001042-1
   name: 메이플월드 여신의 축복

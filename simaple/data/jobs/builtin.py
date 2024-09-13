@@ -9,7 +9,7 @@ from simaple.data.jobs.definitions.passive import PassiveSkill
 from simaple.data.jobs.definitions.skill_profile import SkillProfile
 from simaple.data.patch import SkillLevelPatch
 from simaple.spec.loader import SpecBasedLoader
-from simaple.spec.patch import EvalPatch, Patch
+from simaple.spec.patch import ArithmeticPatch, Patch
 from simaple.spec.repository import DirectorySpecRepository
 
 
@@ -40,7 +40,7 @@ def get_damage_logic(jobtype: JobType, combat_orders_level: int) -> DamageLogic:
             combat_orders_level=combat_orders_level,
             passive_skill_level=0,
         ),
-        EvalPatch(injected_values={}),
+        ArithmeticPatch(injected_values={}),
     ]
     return cast(
         DamageLogic,
@@ -62,7 +62,7 @@ def _get_patches(
             combat_orders_level=combat_orders_level,
             passive_skill_level=passive_skill_level,
         ),
-        EvalPatch(
+        ArithmeticPatch(
             injected_values={
                 "character_level": character_level,
                 "weapon_pure_attack_power": weapon_pure_attack_power,

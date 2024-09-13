@@ -7,7 +7,7 @@ metadata:
     id: 2321007-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2321007-0
@@ -31,7 +31,7 @@ metadata:
     id: 2321008-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2321008-0
@@ -55,7 +55,7 @@ metadata:
     id: 2311014-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2311014-0
@@ -81,7 +81,7 @@ metadata:
     id: 2321003-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2321003-0
@@ -109,7 +109,7 @@ metadata:
     id: 2311015-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2311015-0
@@ -134,7 +134,7 @@ metadata:
     id: 2321005-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 2321005-0
   name: 어드밴스드 블레스
@@ -171,7 +171,7 @@ metadata:
     id: 2321016-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 2321016-0
   name: 홀리 블러드
@@ -191,7 +191,7 @@ metadata:
     id: 2321052-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2321052-0
@@ -211,7 +211,7 @@ metadata:
     id: 400021003-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400021003-0
   name: 프레이
@@ -231,7 +231,7 @@ metadata:
     id: 400021032-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   binds:
@@ -283,7 +283,7 @@ metadata:
     id: 400021070-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400021070-0
@@ -307,7 +307,7 @@ metadata:
     id: 400021086-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400021086-0
@@ -335,7 +335,7 @@ metadata:
     id: 2341500-0-?
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 2341500-0-?
   name: 홀리 어드밴트
@@ -376,7 +376,7 @@ metadata:
     id: 2321007-0-vi
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2321007-0-vi
@@ -405,7 +405,7 @@ metadata:
     id: 2311015-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2311015-0

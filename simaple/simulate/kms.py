@@ -23,7 +23,7 @@ from simaple.simulate.component.view import (
 )
 from simaple.simulate.global_property import GlobalProperty
 from simaple.simulate.timer import clock_view, timer_delay_dispatcher
-from simaple.spec.patch import EvalPatch
+from simaple.spec.patch import ArithmeticPatch
 
 
 def bare_store(action_stat: ActionStat) -> AddressedStore:
@@ -106,7 +106,7 @@ def get_builder(
                     passive_skill_level=injected_values["passive_skill_level"],
                     default_skill_levels=skill_levels,
                 ),
-                EvalPatch(injected_values=eval_reference_variables),
+                ArithmeticPatch(injected_values=eval_reference_variables),
                 VSkillImprovementPatch(improvements=v_improvements),
                 HexaSkillImprovementPatch(improvements=hexa_improvements),
                 get_hyper_skill_patch(group),

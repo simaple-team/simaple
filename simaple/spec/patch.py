@@ -98,7 +98,7 @@ class KeywordExtendPatch(DFSTraversePatch):
         return None
 
 
-class EvalPatch(DFSTraversePatch):
+class ArithmeticPatch(DFSTraversePatch):
     _match_string: re.Pattern = PrivateAttr(default=re.compile(r"^\s*{{(.+)}}\s*$"))
     injected_values: dict[str, Any]
 

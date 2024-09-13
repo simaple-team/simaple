@@ -8,7 +8,7 @@ metadata:
     id: 80001155-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 80001155-0
   name: 소울 컨트랙트
@@ -29,7 +29,7 @@ metadata:
     id: 1121000-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 1121000-0
   name: 메이플 용사
@@ -49,7 +49,7 @@ metadata:
     id: 1121000-1
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 1121000-1
   name: 메이플 용사
@@ -69,7 +69,7 @@ metadata:
     id: 1121000-2
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 1121000-2
   name: 메이플 용사
@@ -89,7 +89,7 @@ metadata:
     id: 1121000-3
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 1121000-3
   name: 메이플 용사

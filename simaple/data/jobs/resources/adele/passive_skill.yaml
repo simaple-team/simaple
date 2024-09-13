@@ -7,7 +7,7 @@ metadata:
     name: 매직 서킷
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 매직 서킷
   stat:
@@ -91,7 +91,7 @@ metadata:
     name: 데몰리션
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 데몰리션
   stat:
@@ -107,7 +107,7 @@ metadata:
     name: 어테인
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 어테인
   stat:

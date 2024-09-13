@@ -25,7 +25,7 @@ metadata:
     id: 400001037-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001037-0
   name: 매직 서킷 풀드라이브
@@ -50,7 +50,7 @@ metadata:
     id: 400001046-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001046-0
   name: 그란디스 여신의 축복(레프)

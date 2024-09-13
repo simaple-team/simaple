@@ -7,7 +7,7 @@ metadata:
     id: 400031023-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400031023-0
   name: 크리티컬 리인포스

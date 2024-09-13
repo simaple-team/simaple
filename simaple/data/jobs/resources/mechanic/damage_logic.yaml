@@ -5,7 +5,7 @@ metadata:
     group: mechanic
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   attack_range_constant: 1.5
   mastery: "{{ 0.85 + 0.01 * ((skill_level+1) // 2) }}"

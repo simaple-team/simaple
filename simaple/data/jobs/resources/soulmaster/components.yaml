@@ -32,7 +32,7 @@ metadata:
     id: 11120217-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -58,7 +58,7 @@ metadata:
     id: 11121052-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -87,7 +87,7 @@ metadata:
     id: 400011055-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400011055-0
   name: 엘리시온
@@ -112,7 +112,7 @@ metadata:
     id: TBD-TBD
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -165,7 +165,7 @@ metadata:
     id: TBD-TBD
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -232,7 +232,7 @@ metadata:
     id: TBD-TBD
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: TBD-TBD
   name: 코스모스
@@ -260,7 +260,7 @@ metadata:
     id: TBD-TBD
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: TBD-TBD
   name: 소울 이클립스
@@ -288,7 +288,7 @@ metadata:
     id: TBD-TBD
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: TBD-TBD
   name: 플레어 슬래시

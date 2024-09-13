@@ -10,7 +10,7 @@ metadata:
     id: 4341009-9
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -37,7 +37,7 @@ metadata:
     id: 4341011-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 4341011-0
@@ -60,7 +60,7 @@ metadata:
     id: 4341002-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 4341002-0
@@ -87,7 +87,7 @@ metadata:
     id: 4341002-1
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   listening_actions:
     "파이널 컷.use.emitted.global.delay": use
@@ -112,7 +112,7 @@ metadata:
     id: 4321002-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 4321002-0
@@ -152,7 +152,7 @@ metadata:
     id: 4341054-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 4341054-0
@@ -188,7 +188,7 @@ metadata:
     id: 4341052-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 4341052-0
@@ -220,7 +220,7 @@ metadata:
     id: 400041006-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400041006-0
   name: 블레이드 스톰
@@ -254,7 +254,7 @@ metadata:
     id: 400041021-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400041021-0
   name: 카르마 퓨리
@@ -281,7 +281,7 @@ metadata:
     id: 400041042-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400041042-0
   name: 블레이드 토네이도
@@ -312,7 +312,7 @@ metadata:
     id: 400041075-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400041075-0
   name: 헌티드 엣지 - 나찰
@@ -341,7 +341,7 @@ metadata:
     id: 400001023-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001023-0
   name: 얼티밋 다크 사이트

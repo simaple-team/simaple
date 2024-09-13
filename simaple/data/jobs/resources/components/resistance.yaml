@@ -24,7 +24,7 @@ metadata:
     id: 400001019-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001019-0
   name: 레지스탕스 라인 인팬트리
@@ -47,7 +47,7 @@ metadata:
     id: 400001042-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001042-0
   name: 메이플월드 여신의 축복

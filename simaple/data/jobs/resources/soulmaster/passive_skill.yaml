@@ -6,7 +6,7 @@ metadata:
     name: 소드 엑스퍼트
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 소드 엑스퍼트
   stat:
@@ -25,7 +25,7 @@ metadata:
     name: 소울 플레지
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 소울 플레지
   stat:
@@ -45,7 +45,7 @@ metadata:
     name: 언포시어블
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 언포시어블
   stat:

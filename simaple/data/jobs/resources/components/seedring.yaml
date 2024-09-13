@@ -8,7 +8,7 @@ metadata:
     id: 80001455-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 80001455-0
   name: 리스트레인트 링
@@ -31,7 +31,7 @@ metadata:
     id: 80001479-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 80001479-0
   name: 리스크테이커 링
@@ -54,7 +54,7 @@ metadata:
     id: 80001470-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 80001470-0
   name: 웨폰퍼프-S 링
@@ -76,7 +76,7 @@ metadata:
     id: 80001471-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 80001471-0
   name: 웨폰퍼프-D 링
@@ -98,7 +98,7 @@ metadata:
     id: 80001472-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 80001472-0
   name: 웨폰퍼프-I 링
@@ -120,7 +120,7 @@ metadata:
     id: 80001473-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 80001473-0
   name: 웨폰퍼프-L 링

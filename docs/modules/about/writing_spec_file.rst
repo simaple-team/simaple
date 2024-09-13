@@ -153,7 +153,7 @@ Patch의 용법을 Spec을 보면서 확인해봅시다. 아래는 PassiveSkill 
         group: archmagefb
     patch:
     - SkillLevelPatch
-    - EvalPatch
+    - ArithmeticPatch
     data:
       name: 아케인 에임
       passive_skill_enabled: true
@@ -162,7 +162,7 @@ Patch의 용법을 Spec을 보면서 확인해봅시다. 아래는 PassiveSkill 
         ignored_defence: "{{ 5 + math.ceil(skill_level / 2) }}"
 
 
-위 Spec에는 두 가지 Patch, SkillLevelPatch와 EvalPatch가 적용되어야 한다고 명시되어 있습니다.
+위 Spec에는 두 가지 Patch, SkillLevelPatch와 ArithmeticPatch가 적용되어야 한다고 명시되어 있습니다.
 따라서 PassiveSkill을 위 yaml로부터 생성하기 위해서는 interpret할 때 아래와 같이 patch를 넘겨주어야 합니다.
 
 .. code-block:: python
@@ -178,7 +178,7 @@ Patch의 용법을 Spec을 보면서 확인해봅시다. 아래는 PassiveSkill 
                 combat_orders_level=1,
                 passive_skill_level=0,
             ),
-            EvalPatch(
+            ArithmeticPatch(
                 injected_values={
                     "character_level": 260,
                     "weapon_pure_attack_power": 987,
@@ -212,7 +212,7 @@ Patch의 용법을 Spec을 보면서 확인해봅시다. 아래는 PassiveSkill 
         }
     }
 
-    # After SkillLevelPatch, EvalPatch
+    # After SkillLevelPatch, ArithmeticPatch
 
     {
         "name": "아케인 에임",

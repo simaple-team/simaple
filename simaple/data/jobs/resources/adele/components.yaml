@@ -8,7 +8,7 @@ metadata:
     id: 151100017-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -39,7 +39,7 @@ metadata:
     id: 151001001-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 151001001-0
@@ -64,7 +64,7 @@ metadata:
     id: 151101013-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 151101013-0
@@ -95,7 +95,7 @@ metadata:
     id: 151101004-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 151101004-0
@@ -144,7 +144,7 @@ metadata:
     id: 151101006-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 151101006-0
@@ -176,7 +176,7 @@ metadata:
     id: 151111001-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -210,7 +210,7 @@ metadata:
     id: 151111003-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 151111003-0
@@ -241,7 +241,7 @@ metadata:
     id: 151111002-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 151111002-0
@@ -291,7 +291,7 @@ metadata:
     id: 151121003-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -322,7 +322,7 @@ metadata:
     id: 151121000-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -348,7 +348,7 @@ metadata:
     id: 151121001-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 151121001-0
@@ -399,7 +399,7 @@ metadata:
     id: 151121041-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 151121041-0
@@ -426,7 +426,7 @@ metadata:
     id: 400011105-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400011105-0
@@ -459,7 +459,7 @@ metadata:
     id: 400011108-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400011108-0
@@ -488,7 +488,7 @@ metadata:
     id: 400011109-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400011109-0
@@ -517,7 +517,7 @@ metadata:
     id: 400011109-1
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   listening_actions:
     리스토어.use.emitted.global.delay: use
@@ -546,7 +546,7 @@ metadata:
     id: 400011136-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400011136-0
@@ -574,7 +574,7 @@ metadata:
     id: 151141500-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 151141500-0
   name: 마에스트로
@@ -597,7 +597,7 @@ metadata:
     id: 151121000-0vi
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -626,7 +626,7 @@ metadata:
     id: 151001001-0vi
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 151001001-0vi
@@ -649,7 +649,7 @@ metadata:
     id: 151101013-0vi
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 151101013-0vi
@@ -678,7 +678,7 @@ metadata:
     id: 151111003-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 151111003-0
