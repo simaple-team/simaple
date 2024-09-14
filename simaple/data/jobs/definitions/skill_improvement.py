@@ -3,11 +3,9 @@ from abc import abstractmethod
 
 import pydantic
 
-from simaple.core import Stat
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
 )
-from simaple.spec.patch import Patch
 
 
 class SkillImprovement(
