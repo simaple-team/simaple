@@ -226,12 +226,13 @@ patch:
   - SkillLevelPatch
   - EvalPatch
   - VSkillImprovementPatch
+  - SkillImprovementPatch
 data:
   id: 2221052-0
   name: 라이트닝 스피어
   maximum_keydown_time: 3_600
 
-  damage: "{{ 150 + (11 + __every_levels.get('블리자드 VI(패시브)', -22) // 2) }}"
+  damage: 150
   hit: 15
   delay: 210
   cooldown_duration: 60_000
@@ -239,7 +240,7 @@ data:
   keydown_prepare_delay: 780
   keydown_end_delay: 1080
 
-  finish_damage: "{{ 780 + (73 + __every_levels.get('블리자드 VI(패시브)', -36.5) * 2) }}"
+  finish_damage: 780
   finish_hit: 15
 
   v_improvement: 2
@@ -484,3 +485,22 @@ data:
   default_skill_level: 30
   disable_validity: True
   v_improvement: 2
+---
+kind: SkillImprovement
+version: simaple.io/SkillAdditiveImprovement
+metadata:
+  label:
+    group: archmagetc
+    name: 블리자드 VI(패시브)
+patch:
+  - SkillLevelPatch
+  - EvalPatch
+data:
+  name: 블리자드 VI(패시브)
+  advantages:
+    - target_name: 라이트닝 스피어
+      target_field: damage
+      value: "{{ (11 + skill_level // 2) * (skill_level > 0) }}"
+    - target_name: 라이트닝 스피어
+      target_field: finish_damage
+      value: "{{ (73 + skill_level * 2) * (skill_level > 0) }}"
