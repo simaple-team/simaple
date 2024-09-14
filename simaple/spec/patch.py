@@ -5,6 +5,7 @@ from typing import Any, Union, cast
 
 import pydantic
 from pydantic import BaseModel, PrivateAttr
+from simaple.spec._math import evaluate_expression
 
 
 class Patch(BaseModel, metaclass=ABCMeta):
@@ -131,4 +132,4 @@ class ArithmeticPatch(DFSTraversePatch):
         global_variables["math"] = math
 
         assert "import" not in value
-        return eval(value, global_variables)  # pylint: disable=W0123
+        return evaluate_expression(value, global_variables)  # pylint: disable=W0123

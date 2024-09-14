@@ -11,6 +11,8 @@ __grammar = r"""
     ?term: term "*" factor -> mul
          | term "/" factor -> div
          | term "//" factor -> int_div
+         | term ">" factor  -> gt
+         | term "<" factor -> lt
          | factor
 
     ?factor: NUMBER        -> number
@@ -73,6 +75,13 @@ class CalcTransformer(Transformer):
 
     def floor(self, items):
         return math.floor(items[0])
+
+    def gt(self, items):
+        return items[0] > items[1]
+
+    def lt(self, items):
+        return items[0] < items[1]
+
 
 __arithmetic_parser = Lark(__grammar)
 

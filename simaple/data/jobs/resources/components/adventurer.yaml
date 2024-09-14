@@ -18,8 +18,8 @@ data:
   red: true
   rem: false
   stat:
-    INT: "{{ math.floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
-    damage_multiplier: "{{ math.floor(5 + 0.5 * skill_level) }}"
+    INT: "{{ floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
+    damage_multiplier: "{{ floor(5 + 0.5 * skill_level) }}"
 ---
 kind: Component
 version: simaple.io/BuffSkillComponent
@@ -40,5 +40,5 @@ data:
   red: true
   rem: false
   stat:
-    LUK: "{{ math.floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
-    damage_multiplier: "{{ math.floor(5 + 0.5 * skill_level) }}"
+    LUK: "{{ floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
+    damage_multiplier: "{{ floor(5 + 0.5 * skill_level) }}"

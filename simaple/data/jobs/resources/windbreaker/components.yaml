@@ -76,7 +76,7 @@ data:
   lasting_duration: 900_000
   red: true
   stat:
-    DEX: '{{ math.floor((18 + 5 * character_level) * math.ceil(skill_level / 2) * 0.01) }}'
+    DEX: '{{ floor((18 + 5 * character_level) * ceil(skill_level / 2) * 0.01) }}'
   combat_orders_enabled: true
   default_skill_level: 30
 ---

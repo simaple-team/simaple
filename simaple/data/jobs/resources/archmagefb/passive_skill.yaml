@@ -97,4 +97,4 @@ data:
   passive_skill_enabled: true
   default_skill_level: 30
   stat:
-    ignored_defence: "{{ 5 + math.ceil(skill_level / 2) }}"
+    ignored_defence: "{{ 5 + ceil(skill_level / 2) }}"
