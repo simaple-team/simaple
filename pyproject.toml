@@ -32,7 +32,7 @@ skip = "third_party"
 
 [tool.pytest.ini_options]
 addopts = "-vv -x"
-testpaths = ["tests", "test_app", "test_data"]
+testpaths = ["tests", "test_app"]
 
 [tool.coverage.run]
 branch = true
@@ -40,6 +40,7 @@ branch = true
 [tool.coverage.report]
 fail_under = 85
 show_missing = true
+
 [tool.coverage.xml]
 output = "coverage-reports/coverage.xml"
 
