@@ -5,22 +5,22 @@
 ### Prerequisites
 
 - Node.js >= 18.0.0
-- pnpm
+- yarn
 
 ### Installation
 
 ```bash
-pnpm install
+yarn install
 ```
 
 ### Dev Server
 
 ```bash
-pnpm dev
+yarn dev
 ```
 
 ### Build
 
 ```bash
-pnpm build
+yarn build
 ```
