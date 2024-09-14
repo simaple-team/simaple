@@ -1,8 +1,4 @@
-import {
-  BaselineConfiguration,
-  PlayLog,
-  SimulatorResponse,
-} from "@/sdk/models";
+import { BaselineConfiguration, PlayLog } from "@/sdk/models";
 import * as React from "react";
 import { usePySimaple } from "./useSimaple";
 
@@ -12,13 +8,13 @@ function useWorkspaceState() {
   const { pySimaple, uow, syncFs } = usePySimaple();
 
   const [currentSimulatorId, setCurrentSimulatorId] = React.useState<string>();
-  const [simulators, setSimulators] = React.useState<SimulatorResponse[]>([]);
   const [history, setHistory] = React.useState<PlayLog[]>([]);
   const playLog = history[history.length - 1];
 
-  React.useLayoutEffect(() => {
-    getAllSimulators();
-  }, []);
+  const skillNames = React.useMemo(
+    () => (playLog ? Object.keys(playLog.validity_view) : []),
+    [playLog],
+  );
 
   function updateSimulatorId(id: string) {
     setCurrentSimulatorId(id);
@@ -27,21 +23,15 @@ function useWorkspaceState() {
     setHistory(logs.flatMap((log) => log.logs));
   }
 
-  function getAllSimulators() {
-    setSimulators(pySimaple.queryAllSimulator(uow));
-  }
-
   async function createBaselineSimulator(configuration: BaselineConfiguration) {
     const id = pySimaple.createSimulatorFromBaseline(configuration, uow);
 
     updateSimulatorId(id);
-    getAllSimulators();
     await syncFs();
   }
 
   function loadSimulator(id: string) {
     updateSimulatorId(id);
-    getAllSimulators();
   }
 
   function run(plan: string) {
@@ -54,10 +44,10 @@ function useWorkspaceState() {
   }
 
   return {
-    simulators,
     currentSimulatorId,
     history,
     playLog,
+    skillNames,
     createBaselineSimulator,
     loadSimulator,
     run,
