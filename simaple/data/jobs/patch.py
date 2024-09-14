@@ -6,6 +6,7 @@ import pydantic
 from simaple.core import Stat
 from simaple.data.jobs.builtin import get_every_hyper_skills
 from simaple.data.jobs.definitions import PassiveHyperskillInterface
+from simaple.data.jobs.definitions.skill_improvement import SkillImprovement
 from simaple.spec.patch import Patch
 
 
@@ -112,5 +113,17 @@ class HexaSkillImprovementPatch(Patch):
         level = self.improvements.get(_get_representative_skill_name(raw), 0)
         new_modifier = previous_modifier + self._compute_final_damage_multiplier(level)
         output["modifier"] = new_modifier.short_dict()
+
+        return output
+
+
+class SkillImprovementPatch(Patch):
+    improvements: list[SkillImprovement]
+
+    def apply(self, raw: dict) -> dict:
+        output = raw
+
+        for improvement in self.improvements:
+            output = improvement.modify(output)
 
         return output

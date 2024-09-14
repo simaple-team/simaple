@@ -6,6 +6,7 @@ from simaple.core.base import ActionStat, Stat
 from simaple.data.jobs.builtin import get_kms_skill_loader
 from simaple.data.jobs.patch import (
     HexaSkillImprovementPatch,
+    SkillImprovementPatch,
     VSkillImprovementPatch,
     get_hyper_skill_patch,
 )
@@ -77,7 +78,24 @@ def get_builder(
     loader = get_kms_skill_loader()
 
     eval_reference_variables = cast(dict[str, Any], injected_values).copy()
-    eval_reference_variables.update({"__every_levels": skill_levels})
+
+    skill_improvements = sum(
+        [
+            loader.load_all(
+                query={"group": group, "kind": "SkillImprovement"},
+                patches=[
+                    SkillLevelPatch(
+                        combat_orders_level=injected_values["combat_orders_level"],
+                        passive_skill_level=injected_values["passive_skill_level"],
+                        default_skill_levels=skill_levels,
+                    ),
+                    EvalPatch(injected_values=eval_reference_variables),
+                ],
+            )
+            for group in groups
+        ],
+        [],
+    )
 
     component_sets = [
         loader.load_all(
@@ -92,6 +110,7 @@ def get_builder(
                 VSkillImprovementPatch(improvements=v_improvements),
                 HexaSkillImprovementPatch(improvements=hexa_improvements),
                 get_hyper_skill_patch(group),
+                SkillImprovementPatch(improvements=skill_improvements),
             ],
         )
         for group in groups
