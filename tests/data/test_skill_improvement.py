@@ -4,6 +4,7 @@ from simaple.data.jobs.definitions.skill_improvement import SkillAdditiveImprove
 def test_skill_improvement():
     improvement = SkillAdditiveImprovement.model_validate(
         {
+            "name": "VV",
             "advantages": [
                 {
                     "target_name": "x",
@@ -15,7 +16,7 @@ def test_skill_improvement():
                     "target_field": "f",
                     "value": 10,
                 },
-            ]
+            ],
         }
     )
 
