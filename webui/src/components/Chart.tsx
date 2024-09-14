@@ -1,11 +1,9 @@
 import { PlayLog } from "@/sdk/models";
-import {
-  default as EChartsReact,
-  default as ReactECharts,
-} from "echarts-for-react";
-import * as React from "react";
+import { EChartsOption, default as ReactECharts } from "echarts-for-react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { ChartSetting } from "../hooks/preferences.interface";
 import { useChart } from "../hooks/useChart";
+import { useThrottledState } from "@react-hookz/web";
 
 function getTotalData(history: PlayLog[]) {
   const record = history
@@ -30,9 +28,9 @@ function getTotalData(history: PlayLog[]) {
 }
 
 const ShareChart: React.FC<{ history: PlayLog[] }> = ({ history }) => {
-  const echartsRef = React.useRef<EChartsReact>(null);
+  const echartsRef = useRef<ReactECharts>(null);
 
-  const options = {
+  const options: EChartsOption = {
     tooltip: {
       trigger: "item",
       formatter: "{a} <br/>{b} : {c} ({d}%)",
@@ -61,11 +59,7 @@ const ShareChart: React.FC<{ history: PlayLog[] }> = ({ history }) => {
   };
 
   return (
-    <ReactECharts
-      ref={echartsRef}
-      style={{ height: 200 }}
-      option={options}
-    ></ReactECharts>
+    <ReactECharts ref={echartsRef} style={{ height: 200 }} option={options} />
   );
 };
 
@@ -74,11 +68,21 @@ const Chart: React.FC<{
   setting: ChartSetting;
 }> = ({ history, setting }) => {
   const clock = history[history.length - 1].clock;
-  const echartsRef = React.useRef<EChartsReact>(null);
+  const echartsRef = useRef<ReactECharts>(null);
+
+  const [range, setRange] = useThrottledState<[number, number]>(
+    [0, clock + 10000],
+    200,
+  );
 
   const options = useChart(history, setting);
+  const historyInRange = useMemo(
+    () =>
+      history.filter((log) => log.clock >= range[0] && log.clock <= range[1]),
+    [history, range],
+  );
 
-  React.useEffect(() => {
+  useEffect(() => {
     echartsRef?.current?.getEchartsInstance().dispatchAction({
       type: "dataZoom",
       endValue: Math.min(clock + 10000, setting.maxClock),
@@ -87,8 +91,27 @@ const Chart: React.FC<{
 
   return (
     <div className="w-full h-full p-4">
-      <ReactECharts ref={echartsRef} style={{ height: 900 }} option={options} />
-      <ShareChart history={history} />
+      <ReactECharts
+        ref={echartsRef}
+        style={{ height: 900 }}
+        option={options}
+        onEvents={useMemo(
+          () => ({
+            datazoom: (_, chart) => {
+              const option = chart.getOption() as any;
+
+              if (!option) return;
+
+              setRange([
+                option.dataZoom[0].startValue,
+                option.dataZoom[0].endValue + 1,
+              ]);
+            },
+          }),
+          [],
+        )}
+      />
+      <ShareChart history={historyInRange} />
     </div>
   );
 };
