@@ -43,6 +43,25 @@ jobs:
         run: poetry install
       - name: Test
         run: poetry run poe coverage
+  test-data:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: ["3.10"]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "poetry"
+      - name: Install dependencies
+        run: poetry install
+      - name: Test
+        run: poetry run poe test_data
   lint:
     runs-on: ubuntu-latest
     strategy:
