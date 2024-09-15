@@ -1,23 +1,31 @@
 import simaple.simulate.component.skill  # noqa: F401
-from simaple.container.simulation import SimulationContainer, SimulationSetting
+from simaple.container.simulation import (
+    SimulationContainer,
+    SimulationSetting,
+    BaselineSimulationConfig,
+)
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 from simaple.simulate.strategy.base import exec_by_strategy
 
-setting = SimulationSetting(
+character_provider = BaselineSimulationConfig(
     tier="Legendary",
     jobtype=JobType.archmagefb,
     job_category=JobCategory.magician,
     level=270,
     passive_skill_level=0,
     combat_orders_level=1,
+    artifact_level=40,
+)
+
+setting = SimulationSetting(
     v_skill_level=30,
     v_improvements_level=60,
 )
 
 
 def test_actor():
-    container = SimulationContainer(setting)
+    container = SimulationContainer(setting, character_provider)
 
     engine = container.operation_engine()
 

@@ -3,7 +3,11 @@ from pathlib import Path
 import pytest
 
 import simaple.simulate.component.skill  # noqa: F401
-from simaple.container.simulation import SimulationContainer, SimulationSetting
+from simaple.container.simulation import (
+    SimulationContainer,
+    SimulationSetting,
+    BaselineSimulationConfig,
+)
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 from simaple.simulate.policy.parser import parse_dsl_to_operations
@@ -18,25 +22,29 @@ def fixture_dsl_list() -> list[str]:
 
 
 @pytest.fixture(name="dsl_test_setting")
-def fixture_dsl_test_setting():
+def fixture_dsl_test_setting() -> BaselineSimulationConfig:
     cache_dir = str(Path(__file__).parent)
 
-    return SimulationSetting(
+    return BaselineSimulationConfig(
         tier="Legendary",
         jobtype=JobType.archmagetc,
         job_category=JobCategory.magician,
         level=270,
         passive_skill_level=0,
         combat_orders_level=1,
-        v_skill_level=30,
-        v_improvements_level=60,
         cache_root_dir=cache_dir,
         artifact_level=40,
     )
 
 
-def test_dsl(dsl_list: list[str], dsl_test_setting: SimulationSetting) -> None:
-    container = SimulationContainer(dsl_test_setting)
+def test_dsl(dsl_list: list[str], dsl_test_setting: BaselineSimulationConfig) -> None:
+    container = SimulationContainer(
+        SimulationSetting(
+            v_skill_level=30,
+            v_improvements_level=60,
+        ),
+        dsl_test_setting,
+    )
 
     engine = container.operation_engine()
 

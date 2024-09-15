@@ -3,7 +3,11 @@ from enum import Enum
 import fire
 
 import simaple.simulate.component.skill  # noqa: F401
-from simaple.container.simulation import SimulationContainer, SimulationSetting
+from simaple.container.simulation import (
+    SimulationContainer,
+    SimulationSetting,
+    BaselineSimulationConfig,
+)
 from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.base import PlayLog
 from simaple.simulate.policy.base import is_console_command
@@ -70,33 +74,29 @@ class DebugInterface:
             jobtype = JobType(jobtype)
 
         self._setting = SimulationSetting(
+            v_skill_level=30,
+            v_improvements_level=60,
+            hexa_improvements_level=10,
+        )
+        self._character_provider = BaselineSimulationConfig(
             tier="Legendary",
             jobtype=jobtype,
             job_category=get_job_category(jobtype),
             level=270,
             passive_skill_level=0,
             combat_orders_level=1,
-            v_skill_level=30,
-            v_improvements_level=60,
-            hexa_improvements_level=10,
             artifact_level=40,
         )
 
     def get_engine(self):
-        container = SimulationContainer(self._setting)
+        container = SimulationContainer(self._setting, self._character_provider)
 
         engine = container.operation_engine()
 
         return engine
 
     def get_dpm_calculator(self):
-        container = SimulationContainer(self._setting)
-
-        _damage_logic = container.dpm_calculator().damage_logic
-        print(
-            "combat_power", _damage_logic.get_compat_power(container.character().stat)
-        )
-
+        container = SimulationContainer(self._setting, self._character_provider)
         return container.dpm_calculator()
 
     def run(self, plan_file: str):

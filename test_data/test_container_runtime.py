@@ -6,11 +6,15 @@ from test_data.target import get_test_settings
 from simaple.simulate.strategy.base import exec_by_strategy
 
 
-@pytest.mark.parametrize("setting, jobtype, expected", get_test_settings())
-def test_actor(setting, jobtype, expected):
-    container = SimulationContainer(setting)
+@pytest.mark.parametrize("character_provider_and_setting, jobtype, expected", get_test_settings())
+def test_actor(character_provider_and_setting, jobtype, expected):
+    character_provider, setting  = character_provider_and_setting
+    container = SimulationContainer(
+        setting,
+        character_provider
+    )
 
-    print(container.character().action_stat)
+    print(container.character_provider.character().action_stat)
 
     engine = container.operation_engine()
 

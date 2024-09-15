@@ -3,6 +3,7 @@ import os
 from typing import Callable, cast
 
 import pydantic
+from abc import ABCMeta, abstractmethod
 
 from simaple.core import ExtendedStat, JobCategory, JobType
 from simaple.data import get_best_ability
@@ -24,30 +25,54 @@ from simaple.system.ability import get_ability_stat
 from simaple.system.propensity import Propensity
 
 
-class SimulationSetting(pydantic.BaseModel):
+def add_extended_stats(*action_stats):
+    return sum(action_stats, ExtendedStat())
+
+
+class CharacterDependentSimulationConfig(pydantic.BaseModel):
+    passive_skill_level: int
+    combat_orders_level: int
+    weapon_pure_attack_power: int
+
+    jobtype: JobType
+    level: int
+
+    def damage_logic(self):
+        return get_damage_logic(self.jobtype, self.combat_orders_level)
+
+
+def _is_buff_duration_preemptive(jobtype: JobType) -> bool:
+    return jobtype in (
+        JobType.archmagefb,
+        JobType.archmagetc,
+        JobType.bishop,
+        JobType.luminous,
+    )
+
+
+class CharacterProvidingConfig(pydantic.BaseModel, metaclass=ABCMeta):
+    @abstractmethod
+    def character(self) -> ExtendedStat: ...
+
+    @abstractmethod
+    def get_character_dependent_simulation_config(
+        self,
+    ) -> CharacterDependentSimulationConfig: ...
+
+
+class BaselineSimulationConfig(CharacterProvidingConfig):
     tier: str
+    union_block_count: int = 37
+    link_count: int = 12 + 1
+    artifact_level: int
+    propensity_level: int = 100
+
     jobtype: JobType
     job_category: JobCategory
     level: int
 
-    use_doping: bool = True
     passive_skill_level: int
     combat_orders_level: int
-    union_block_count: int = 37
-    link_count: int = 12 + 1
-    artifact_level: int
-    armor: int = 300
-    mob_level: int = 265
-    force_advantage: float = 1.0
-    propensity_level: int = 100
-
-    v_skill_level: int = 30
-    hexa_skill_level: int = 1
-    hexa_mastery_level: int = 1
-    v_improvements_level: int = 60
-    hexa_improvements_level: int = 0
-
-    weapon_attack_power: int = 0
     weapon_pure_attack_power: int = 0
 
     cache_root_dir: str = ".simaple"
@@ -61,21 +86,129 @@ class SimulationSetting(pydantic.BaseModel):
         )
         return preset_hash
 
-    def is_buff_duration_preemptive(self) -> bool:
-        return self.jobtype in (
-            JobType.archmagefb,
-            JobType.archmagetc,
-            JobType.bishop,
-            JobType.luminous,
+    def ability_lines(self):
+        return get_best_ability(self.jobtype)
+
+    def ability_stat(self):
+        ability_lines = self.ability_lines()
+        return get_ability_stat(ability_lines)
+
+    def propensity(self):
+        return Propensity(
+            ambition=self.propensity_level,
+            insight=self.propensity_level,
+            empathy=self.propensity_level,
+            willpower=self.propensity_level,
+            diligence=self.propensity_level,
+            charm=self.propensity_level,
+        )
+
+    def doping(self):
+        return get_normal_doping()
+
+    def passive(self) -> ExtendedStat:
+        return get_passive(
+            self.jobtype,
+            combat_orders_level=self.combat_orders_level,
+            passive_skill_level=self.passive_skill_level,
+            character_level=self.level,
+            weapon_pure_attack_power=self.weapon_pure_attack_power,
+        )
+
+    def default_extended_stat(self):
+        passive = self.passive()
+        doping = self.doping()
+        ability_stat = self.ability_stat()
+        propensity = self.propensity()
+
+        return add_extended_stats(
+            passive,
+            doping,
+            ability_stat,
+            propensity.get_extended_stat(),
+        )
+
+    def get_character_dependent_simulation_config(
+        self,
+    ) -> CharacterDependentSimulationConfig:
+        return CharacterDependentSimulationConfig(
+            passive_skill_level=self.passive_skill_level,
+            combat_orders_level=self.combat_orders_level,
+            weapon_pure_attack_power=self.weapon_pure_attack_power,
+            jobtype=self.jobtype,
+            level=self.level,
+        )
+
+    def gearset(self):
+        return get_baseline_gearset(
+            self.tier,
+            self.job_category,
+            self.jobtype,
+        )
+
+    def damage_logic(self):
+        return self.get_character_dependent_simulation_config().damage_logic()
+
+    def preset_optimizer(self):
+        damage_logic = self.damage_logic()
+        default_extended_stat = self.default_extended_stat()
+        return PresetOptimizer(
+            union_block_count=self.union_block_count,
+            level=self.level,
+            damage_logic=damage_logic,
+            character_job_type=self.jobtype,
+            alternate_character_job_types=[],
+            link_count=self.link_count,
+            default_stat=default_extended_stat.stat,
+            buff_duration_preempted=_is_buff_duration_preemptive(self.jobtype),
+            artifact_level=self.artifact_level,
+        )
+
+    def optimial_preset(self):
+        preset_optimizer = self.preset_optimizer()
+        gearset = self.gearset()
+        return preset_optimizer.create_optimal_preset_from_gearset(
+            gearset,
+        )
+
+    def preset_cache(self):
+        preset_optimizer = self.preset_optimizer()
+        gearset = self.gearset()
+        return preset_optimize_cache_layer(
+            self,
+            preset_optimizer.create_optimal_preset_from_gearset,
+            gearset,
+        )
+
+    def character(self):
+        preset_cache = self.preset_cache()
+        default_extended_stat = self.default_extended_stat()
+        return add_extended_stats(
+            preset_cache,
+            default_extended_stat,
         )
 
 
-def add_extended_stats(*action_stats):
-    return sum(action_stats, ExtendedStat())
+class SimulationSetting(pydantic.BaseModel):
+    use_doping: bool = True
+
+    armor: int = 300
+    mob_level: int = 265
+    force_advantage: float = 1.0
+
+    v_skill_level: int = 30
+    hexa_skill_level: int = 1
+    hexa_mastery_level: int = 1
+    v_improvements_level: int = 60
+    hexa_improvements_level: int = 0
+
+    weapon_attack_power: int = 0
 
 
 def preset_optimize_cache_layer(
-    setting: SimulationSetting, provider: Callable[[Gearset], Preset], gearset: Gearset
+    setting: BaselineSimulationConfig,
+    provider: Callable[[Gearset], Preset],
+    gearset: Gearset,
 ):
     cache_location = f".stat.extended.{setting.get_preset_hash()}.json"
 
@@ -112,131 +245,40 @@ def preset_optimize_cache_layer(
 
 
 class SimulationContainer:
-    def __init__(self, setting: SimulationSetting) -> None:
+    def __init__(
+        self, setting: SimulationSetting, character_provider: CharacterProvidingConfig
+    ) -> None:
         self.setting = setting
+        self.character_provider = character_provider
 
-    def config(self) -> SimulationSetting:
-        return self.setting
-
-    def passive(self) -> ExtendedStat:
-        config = self.config()
-
-        return get_passive(
-            config.jobtype,
-            combat_orders_level=config.combat_orders_level,
-            passive_skill_level=config.passive_skill_level,
-            character_level=config.level,
-            weapon_pure_attack_power=config.weapon_pure_attack_power,
-        )
-
-    def ability_lines(self):
-        config = self.config()
-        return get_best_ability(config.jobtype)
-
-    def ability_stat(self):
-        ability_lines = self.ability_lines()
-        return get_ability_stat(ability_lines)
-
-    def propensity(self):
-        config = self.config()
-        return Propensity(
-            ambition=config.propensity_level,
-            insight=config.propensity_level,
-            empathy=config.propensity_level,
-            willpower=config.propensity_level,
-            diligence=config.propensity_level,
-            charm=config.propensity_level,
-        )
-
-    def doping(self):
-        return get_normal_doping()
-
-    def default_extended_stat(self):
-        passive = self.passive()
-        doping = self.doping()
-        ability_stat = self.ability_stat()
-        propensity = self.propensity()
-
-        return add_extended_stats(
-            passive,
-            doping,
-            ability_stat,
-            propensity.get_extended_stat(),
-        )
-
-    def gearset(self):
-        config = self.config()
-        return get_baseline_gearset(
-            config.tier,
-            config.job_category,
-            config.jobtype,
-        )
-
-    def damage_logic(self):
-        config = self.config()
-        return get_damage_logic(config.jobtype, config.combat_orders_level)
-
-    def preset_optimizer(self):
-        config = self.config()
-        damage_logic = self.damage_logic()
-        default_extended_stat = self.default_extended_stat()
-        config = self.config()
-        return PresetOptimizer(
-            union_block_count=config.union_block_count,
-            level=config.level,
-            damage_logic=damage_logic,
-            character_job_type=config.jobtype,
-            alternate_character_job_types=[],
-            link_count=config.link_count,
-            default_stat=default_extended_stat.stat,
-            buff_duration_preempted=config.is_buff_duration_preemptive(),
-            artifact_level=config.artifact_level,
-        )
-
-    def optimial_preset(self):
-        preset_optimizer = self.preset_optimizer()
-        gearset = self.gearset()
-        return preset_optimizer.create_optimal_preset_from_gearset(
-            gearset,
-        )
-
-    def preset_cache(self):
-        config = self.config()
-        preset_optimizer = self.preset_optimizer()
-        gearset = self.gearset()
-        return preset_optimize_cache_layer(
-            config,
-            preset_optimizer.create_optimal_preset_from_gearset,
-            gearset,
-        )
-
-    def character(self):
-        preset_cache = self.preset_cache()
-        default_extended_stat = self.default_extended_stat()
-        return add_extended_stats(
-            preset_cache,
-            default_extended_stat,
-        )
+    def config(self) -> CharacterProvidingConfig:
+        return self.character_provider
 
     def skill_profile(self):
         config = self.config()
-        return get_skill_profile(config.jobtype)
+        return get_skill_profile(
+            config.get_character_dependent_simulation_config().jobtype
+        )
 
     def builtin_strategy(self):
-        config = self.config()
-        return get_builtin_strategy(config.jobtype)
+        return get_builtin_strategy(
+            self.character_provider.get_character_dependent_simulation_config().jobtype
+        )
 
     def level_advantage(self):
-        config = self.config()
+        config = self.setting
         return LevelAdvantage().get_advantage(
             config.mob_level,
-            config.level,
+            self.character_provider.get_character_dependent_simulation_config().level,
         )
 
     def dpm_calculator(self) -> DamageCalculator:
-        character = self.character()
-        damage_logic = self.damage_logic()
-        config = self.config()
+        config = self.setting
+
+        character = self.character_provider.character()
+        damage_logic = (
+            self.character_provider.get_character_dependent_simulation_config().damage_logic()
+        )
         level_advantage = self.level_advantage()
 
         return DamageCalculator(
@@ -249,8 +291,12 @@ class SimulationContainer:
 
     def builder(self):
         skill_profile = self.skill_profile()
-        config = self.config()
-        character = self.character()
+        config = self.setting
+        character = self.character_provider.character()
+        character_dependent_simulation_setting = (
+            self.character_provider.get_character_dependent_simulation_config()
+        )
+
         return get_builder(
             skill_profile.get_groups(),
             skill_profile.get_skill_levels(
@@ -263,12 +309,12 @@ class SimulationContainer:
             skill_profile.get_skill_replacements(),
             {
                 "character_stat": character.stat,
-                "character_level": config.level,
+                "character_level": character_dependent_simulation_setting.level,
                 "weapon_attack_power": config.weapon_attack_power,
-                "weapon_pure_attack_power": config.weapon_pure_attack_power,
+                "weapon_pure_attack_power": character_dependent_simulation_setting.weapon_pure_attack_power,
                 "action_stat": character.action_stat,
-                "passive_skill_level": config.passive_skill_level,
-                "combat_orders_level": config.combat_orders_level,
+                "passive_skill_level": character_dependent_simulation_setting.passive_skill_level,
+                "combat_orders_level": character_dependent_simulation_setting.combat_orders_level,
             },
         )
 
