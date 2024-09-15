@@ -1,5 +1,7 @@
-from lark import Lark, Transformer
 import math
+from typing import cast
+
+from lark import Lark, Transformer
 
 __grammar = r"""
     ?start: expr
@@ -32,19 +34,22 @@ __grammar = r"""
     %ignore WS_INLINE
 """
 
+
 class CalcTransformer(Transformer):
-    def __init__(self, variables: dict[str, int|float]):
+    def __init__(self, variables: dict[str, int | float]):
         self.variables = variables
 
     def variable(self, token):
-        assert token[0].value in self.variables, f"Variable {token[0].value} is not defined"
+        assert (
+            token[0].value in self.variables
+        ), f"Variable {token[0].value} is not defined"
         return self.variables[token[0].value]
 
     def number(self, token):
         return float(token[0])
 
-    def seperated_number(self, token):  
-        return float(token[0].replace('_', ''))
+    def seperated_number(self, token):
+        return float(token[0].replace("_", ""))
 
     def add(self, items):
         return items[0] + items[1]
@@ -85,6 +90,7 @@ class CalcTransformer(Transformer):
 
 __arithmetic_parser = Lark(__grammar)
 
-def evaluate_expression(expression, variables: dict[str, int|float]) -> int|float:
-    ast =  __arithmetic_parser.parse(expression)
-    return CalcTransformer(variables).transform(ast)
+
+def evaluate_expression(expression, variables: dict[str, int | float]) -> int | float:
+    ast = __arithmetic_parser.parse(expression)
+    return cast(int | float, CalcTransformer(variables).transform(ast))

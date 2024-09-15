@@ -16,7 +16,7 @@ from simaple.spec.patch import ArithmeticPatch
     ],
 )
 def test_eval_patch(target, expected):
-    inject = {"level": 3, "string_inject": "string", "arg": 4}
+    variables = {"level": 3, "string_inject": "string", "arg": 4}
 
-    patch = ArithmeticPatch(injected_values=inject)
+    patch = ArithmeticPatch(variables=variables)
     assert patch.apply(target) == expected

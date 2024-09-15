@@ -1,10 +1,10 @@
-import math
 import re
 from abc import ABCMeta, abstractmethod
 from typing import Any, Union, cast
 
 import pydantic
 from pydantic import BaseModel, PrivateAttr
+
 from simaple.spec._math import evaluate_expression
 
 
@@ -101,7 +101,7 @@ class KeywordExtendPatch(DFSTraversePatch):
 
 class ArithmeticPatch(DFSTraversePatch):
     _match_string: re.Pattern = PrivateAttr(default=re.compile(r"^\s*{{(.+)}}\s*$"))
-    injected_values: dict[str, Any]
+    variables: dict[str, Any]
 
     def patch_value(self, value, origin: dict):
         return self.evaluate(value)
@@ -127,9 +127,4 @@ class ArithmeticPatch(DFSTraversePatch):
         return match.group(1)
 
     def _evaluate_with_math(self, value):
-        global_variables = {}
-        global_variables.update(self.injected_values)
-        global_variables["math"] = math
-
-        assert "import" not in value
-        return evaluate_expression(value, global_variables)  # pylint: disable=W0123
+        return evaluate_expression(value, self.variables)  # pylint: disable=W0123

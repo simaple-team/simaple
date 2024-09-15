@@ -40,7 +40,7 @@ def get_damage_logic(jobtype: JobType, combat_orders_level: int) -> DamageLogic:
             combat_orders_level=combat_orders_level,
             passive_skill_level=0,
         ),
-        ArithmeticPatch(injected_values={}),
+        ArithmeticPatch(variables={}),
     ]
     return cast(
         DamageLogic,
@@ -63,7 +63,7 @@ def _get_patches(
             passive_skill_level=passive_skill_level,
         ),
         ArithmeticPatch(
-            injected_values={
+            variables={
                 "character_level": character_level,
                 "weapon_pure_attack_power": weapon_pure_attack_power,
             }
