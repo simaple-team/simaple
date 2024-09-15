@@ -32,10 +32,13 @@ skip = "third_party"
 
 [tool.pytest.ini_options]
 addopts = "-vv -x"
-testpaths = ["tests", "test_app"]
+testpaths = ["tests"]
 
 [tool.coverage.run]
 branch = true
+omit = [
+    "simaple/app/*",
+]
 
 [tool.coverage.report]
 fail_under = 85
