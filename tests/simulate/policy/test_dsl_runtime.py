@@ -51,6 +51,6 @@ def test_dsl(dsl_list: list[str], dsl_test_setting: BaselineSimulationConfig) ->
         for op in operations:
             engine.exec(op)
 
-    dpm = container.dpm_calculator().calculate_dpm(list(engine.simulation_entries()))
+    dpm = container.damage_calculator().calculate_dpm(list(engine.simulation_entries()))
     print(f"{engine.get_current_viewer()('clock')} | {dpm:,} ")
     assert 12189847067621.467 == pytest.approx(dpm)

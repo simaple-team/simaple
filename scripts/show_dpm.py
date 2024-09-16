@@ -40,7 +40,7 @@ def test_actor():
         print(f"{timestamp:.3f} | {ops.expr}")
 
     print(
-        f"{engine.get_current_viewer()('clock')} | {container.dpm_calculator().calculate_dpm(list(engine.simulation_entries())):,} "
+        f"{engine.get_current_viewer()('clock')} | {container.damage_calculator().calculate_dpm(list(engine.simulation_entries())):,} "
     )
 
 

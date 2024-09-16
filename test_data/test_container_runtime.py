@@ -39,6 +39,6 @@ def test_actor(character_provider_and_setting, jobtype, expected):
                 f.write(f"{playlog.clock} | {playlog.action} | {playlog.events} \n")
     '''
 
-    dpm = container.dpm_calculator().calculate_dpm(report)
+    dpm = container.damage_calculator().calculate_dpm(report)
     print(f"{engine.get_current_viewer()('clock')} | {jobtype} | {dpm:,} ")
     assert int(dpm) == expected

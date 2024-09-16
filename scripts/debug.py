@@ -100,7 +100,7 @@ class DebugInterface:
         container = self._container_cache.get_simulation_container(
             self._setting, self._character_provider
         )
-        return container.dpm_calculator()
+        return container.damage_calculator()
 
     def run(self, plan_file: str):
         with open(plan_file, "r") as f:

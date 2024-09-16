@@ -82,7 +82,7 @@ class SimulationContainer:
             self.character_provider.get_character_dependent_simulation_config().level,
         )
 
-    def dpm_calculator(self) -> DamageCalculator:
+    def damage_calculator(self) -> DamageCalculator:
         config = self.setting
 
         character = self.character_provider.character()

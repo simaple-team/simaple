@@ -1,10 +1,11 @@
 import json
+from typing import Type
 
 from simaple.container.simulation import (
     CharacterDependentSimulationConfig,
     CharacterProvidingConfig,
 )
-from simaple.core import ExtendedStat, JobCategory, JobType
+from simaple.core import ActionStat, ExtendedStat, JobCategory, JobType, Stat
 from simaple.data import get_best_ability
 from simaple.data.baseline import get_baseline_gearset
 from simaple.data.doping import get_normal_doping
@@ -25,6 +26,34 @@ def _is_buff_duration_preemptive(jobtype: JobType) -> bool:
 
 def add_extended_stats(*action_stats):
     return sum(action_stats, ExtendedStat())
+
+
+class MinimalSimulationConfig(CharacterProvidingConfig):
+    level: int
+    action_stat: ActionStat
+    stat: Stat
+    jobtype: JobType
+    job_category: JobCategory
+
+    weapon_pure_attack_power: int = 0
+    combat_orders_level: int = 1
+
+    def get_character_dependent_simulation_config(
+        self,
+    ) -> CharacterDependentSimulationConfig:
+        return CharacterDependentSimulationConfig(
+            passive_skill_level=0,
+            combat_orders_level=self.combat_orders_level,
+            weapon_pure_attack_power=self.weapon_pure_attack_power,
+            jobtype=self.jobtype,
+            level=self.level,
+        )
+
+    def character(self) -> ExtendedStat:
+        return ExtendedStat(
+            stat=self.stat,
+            action_stat=self.action_stat,
+        )
 
 
 class BaselineSimulationConfig(CharacterProvidingConfig):
@@ -142,6 +171,16 @@ class BaselineSimulationConfig(CharacterProvidingConfig):
             extended_stat_value,
             default_extended_stat,
         )
+
+
+_character_providers: dict[str, Type[CharacterProvidingConfig]] = {
+    BaselineSimulationConfig.__name__: BaselineSimulationConfig,
+    MinimalSimulationConfig.__name__: MinimalSimulationConfig,
+}
+
+
+def get_character_provider(name: str, config: dict) -> CharacterProvidingConfig:
+    return _character_providers[name].model_validate(config)
 
 
 def serialize_character_provider(provider: CharacterProvidingConfig) -> str:
