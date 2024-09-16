@@ -22,8 +22,6 @@ def fixture_dsl_list() -> list[str]:
 
 @pytest.fixture(name="dsl_test_setting")
 def fixture_dsl_test_setting() -> BaselineSimulationConfig:
-    cache_dir = str(Path(__file__).parent)
-
     return BaselineSimulationConfig(
         tier="Legendary",
         jobtype=JobType.archmagetc,
