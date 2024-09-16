@@ -28,7 +28,7 @@ class CharacterDependentSimulationConfig(pydantic.BaseModel):
         return get_damage_logic(self.jobtype, self.combat_orders_level)
 
 
-class CharacterProvidingConfig(pydantic.BaseModel, metaclass=ABCMeta):
+class CharacterProvider(pydantic.BaseModel, metaclass=ABCMeta):
     @abstractmethod
     def character(self) -> ExtendedStat: ...
 
@@ -56,12 +56,12 @@ class SimulationSetting(pydantic.BaseModel):
 
 class SimulationContainer:
     def __init__(
-        self, setting: SimulationSetting, character_provider: CharacterProvidingConfig
+        self, setting: SimulationSetting, character_provider: CharacterProvider
     ) -> None:
         self.setting = setting
         self.character_provider = character_provider
 
-    def config(self) -> CharacterProvidingConfig:
+    def config(self) -> CharacterProvider:
         return self.character_provider
 
     def skill_profile(self):

@@ -16,7 +16,7 @@ def test_run_plan():
             },
             "simulation_setting": {},
             "author": "test",
-            "configuration_name": "BaselineSimulationConfig"
+            "configuration_name": "BaselineCharacterProvider"
         }, uow)
 
     plan = '''

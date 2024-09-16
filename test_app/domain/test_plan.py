@@ -3,7 +3,7 @@ from simaple.app.domain.services.plan import get_simulator_from_plan
 def test_run_plan():
     get_simulator_from_plan("""
 /*
-configuration_name: "BaselineSimulationConfig"
+configuration_name: "BaselineCharacterProvider"
 author: "Alice"
 data:
     tier: Legendary

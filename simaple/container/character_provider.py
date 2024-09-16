@@ -3,7 +3,7 @@ from typing import Type
 
 from simaple.container.simulation import (
     CharacterDependentSimulationConfig,
-    CharacterProvidingConfig,
+    CharacterProvider,
 )
 from simaple.core import ActionStat, ExtendedStat, JobCategory, JobType, Stat
 from simaple.data import get_best_ability
@@ -28,7 +28,7 @@ def add_extended_stats(*action_stats):
     return sum(action_stats, ExtendedStat())
 
 
-class MinimalSimulationConfig(CharacterProvidingConfig):
+class MinimalCharacterProvider(CharacterProvider):
     level: int
     action_stat: ActionStat
     stat: Stat
@@ -56,7 +56,7 @@ class MinimalSimulationConfig(CharacterProvidingConfig):
         )
 
 
-class BaselineSimulationConfig(CharacterProvidingConfig):
+class BaselineCharacterProvider(CharacterProvider):
     tier: str
     union_block_count: int = 37
     link_count: int = 12 + 1
@@ -173,17 +173,17 @@ class BaselineSimulationConfig(CharacterProvidingConfig):
         )
 
 
-_character_providers: dict[str, Type[CharacterProvidingConfig]] = {
-    BaselineSimulationConfig.__name__: BaselineSimulationConfig,
-    MinimalSimulationConfig.__name__: MinimalSimulationConfig,
+_character_providers: dict[str, Type[CharacterProvider]] = {
+    BaselineCharacterProvider.__name__: BaselineCharacterProvider,
+    MinimalCharacterProvider.__name__: MinimalCharacterProvider,
 }
 
 
-def get_character_provider(name: str, config: dict) -> CharacterProvidingConfig:
+def get_character_provider(name: str, config: dict) -> CharacterProvider:
     return _character_providers[name].model_validate(config)
 
 
-def serialize_character_provider(provider: CharacterProvidingConfig) -> str:
+def serialize_character_provider(provider: CharacterProvider) -> str:
     obj = {
         "config": provider.model_dump_json(),
         "config_name": provider.__class__.__name__,
@@ -192,12 +192,12 @@ def serialize_character_provider(provider: CharacterProvidingConfig) -> str:
     return json.dumps(obj, ensure_ascii=False, indent=2, sort_keys=True)
 
 
-def deserialize_character_provider(data: str) -> CharacterProvidingConfig:
+def deserialize_character_provider(data: str) -> CharacterProvider:
     obj = json.loads(data)
     config_name = obj["config_name"]
     config = obj["config"]
 
-    if config_name == BaselineSimulationConfig.__name__:
-        return BaselineSimulationConfig.model_validate_json(config)
+    if config_name == BaselineCharacterProvider.__name__:
+        return BaselineCharacterProvider.model_validate_json(config)
 
     raise ValueError(f"Unknown config name: {config_name}")

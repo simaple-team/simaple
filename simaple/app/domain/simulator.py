@@ -7,7 +7,7 @@ from typing import Optional
 import pydantic
 
 from simaple.container.simulation import (
-    CharacterProvidingConfig,
+    CharacterProvider,
     SimulationContainer,
     SimulationSetting,
 )
@@ -23,7 +23,7 @@ class Simulator(pydantic.BaseModel):
     engine: OperationEngine
     calculator: DamageCalculator
     simulation_setting: SimulationSetting
-    character_provider: CharacterProvidingConfig
+    character_provider: CharacterProvider
 
     model_config = pydantic.ConfigDict(arbitrary_types_allowed=True)
 
@@ -31,7 +31,7 @@ class Simulator(pydantic.BaseModel):
     def create_from_config(
         cls,
         simulation_setting: SimulationSetting,
-        character_provider: CharacterProvidingConfig,
+        character_provider: CharacterProvider,
     ) -> Simulator:
         simulator_id = str(uuid.uuid4())
         container = SimulationContainer(

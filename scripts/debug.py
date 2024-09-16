@@ -4,7 +4,7 @@ import fire
 
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.cache import PersistentStorageCache
-from simaple.container.character_provider import BaselineSimulationConfig
+from simaple.container.character_provider import BaselineCharacterProvider
 from simaple.container.simulation import SimulationSetting
 from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.base import PlayLog
@@ -76,7 +76,7 @@ class DebugInterface:
             v_improvements_level=60,
             hexa_improvements_level=10,
         )
-        self._character_provider = BaselineSimulationConfig(
+        self._character_provider = BaselineCharacterProvider(
             tier="Legendary",
             jobtype=jobtype,
             job_category=get_job_category(jobtype),

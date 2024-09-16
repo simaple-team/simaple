@@ -6,14 +6,14 @@ from abc import ABC, abstractmethod
 from simaple.container.character_provider import serialize_character_provider
 from simaple.container.simulation import (
     CharacterDependentSimulationConfig,
-    CharacterProvidingConfig,
+    CharacterProvider,
     SimulationContainer,
     SimulationSetting,
 )
 from simaple.core import ExtendedStat
 
 
-class CachedCharacterProvider(CharacterProvidingConfig):
+class CachedCharacterProvider(CharacterProvider):
     cached_character: ExtendedStat
     cached_simulation_config: CharacterDependentSimulationConfig
 
@@ -29,19 +29,19 @@ class CachedCharacterProvider(CharacterProvidingConfig):
 class CharacterProviderCache(ABC):
     @abstractmethod
     def get(
-        self, setting: SimulationSetting, character_provider: CharacterProvidingConfig
-    ) -> tuple[CharacterProvidingConfig, bool]:
+        self, setting: SimulationSetting, character_provider: CharacterProvider
+    ) -> tuple[CharacterProvider, bool]:
         pass
 
     def get_simulation_container(
-        self, setting: SimulationSetting, character_provider: CharacterProvidingConfig
+        self, setting: SimulationSetting, character_provider: CharacterProvider
     ) -> SimulationContainer:
         as_cached_character_provider, _ = self.get(setting, character_provider)
 
         return SimulationContainer(setting, as_cached_character_provider)
 
     def _compute_cache_key(
-        self, setting: SimulationSetting, character_provider: CharacterProvidingConfig
+        self, setting: SimulationSetting, character_provider: CharacterProvider
     ) -> str:
         obj = {
             "setting": setting.model_dump_json(),
@@ -72,8 +72,8 @@ class InMemoryCache(CharacterProviderCache):
         self.cache = saved_cache
 
     def get(
-        self, setting: SimulationSetting, character_provider: CharacterProvidingConfig
-    ) -> tuple[CharacterProvidingConfig, bool]:
+        self, setting: SimulationSetting, character_provider: CharacterProvider
+    ) -> tuple[CharacterProvider, bool]:
         cache_key = self._compute_cache_key(setting, character_provider)
 
         if cache_key in self.cache:
@@ -98,8 +98,8 @@ class PersistentStorageCache(CharacterProviderCache):
                 json.dump({}, f)
 
     def get(
-        self, setting: SimulationSetting, character_provider: CharacterProvidingConfig
-    ) -> tuple[CharacterProvidingConfig, bool]:
+        self, setting: SimulationSetting, character_provider: CharacterProvider
+    ) -> tuple[CharacterProvider, bool]:
         cache_key = self._compute_cache_key(setting, character_provider)
 
         with open(self.path, "r") as f:

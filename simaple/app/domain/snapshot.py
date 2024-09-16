@@ -9,7 +9,7 @@ import pydantic
 
 from simaple.app.domain.simulator import Simulator
 from simaple.container.character_provider import get_character_provider
-from simaple.container.simulation import CharacterProvidingConfig, SimulationSetting
+from simaple.container.simulation import CharacterProvider, SimulationSetting
 
 
 def get_uuid() -> str:
@@ -22,7 +22,7 @@ class PlanMetadata(pydantic.BaseModel):
     data: dict[str, Any]
     simulation_setting: SimulationSetting
 
-    def get_character_provider_config(self) -> CharacterProvidingConfig:
+    def get_character_provider_config(self) -> CharacterProvider:
         return get_character_provider(self.configuration_name, self.data)
 
     def load_simulator(self) -> Simulator:

@@ -13,7 +13,7 @@ def test_create_simulator_from_baseline(wasm_uow, simulator_configuration):
     simulator_id = createSimulatorFromBaseline({
             "simulation_setting": {},
             "author": "test",
-            "configuration_name": "MinimalSimulationConfig",
+            "configuration_name": "MinimalCharacterProvider",
             "data": simulator_configuration
         }, wasm_uow)
     assert isinstance(simulator_id, str)
@@ -22,7 +22,7 @@ def test_create_simulator_from_baseline(wasm_uow, simulator_configuration):
 def test_create_simulator_from_plan(wasm_uow):
     simulator_id = createSimulatorFromPlan("""
 /*
-configuration_name: "BaselineSimulationConfig"
+configuration_name: "BaselineCharacterProvider"
 author: "Alice"
 data:
     tier: Legendary
@@ -46,7 +46,7 @@ def test_get_all_simulator(wasm_uow, simulator_configuration):
     simulator_id = createSimulatorFromBaseline({
             "simulation_setting": {},
             "author": "test",
-            "configuration_name": "MinimalSimulationConfig",
+            "configuration_name": "MinimalCharacterProvider",
             "data": simulator_configuration
         }, wasm_uow)
 
@@ -59,7 +59,7 @@ def test_play_operation(wasm_uow, simulator_configuration):
     simulator_id = createSimulatorFromBaseline({
             "simulation_setting": {},
             "author": "test",
-            "configuration_name": "MinimalSimulationConfig",
+            "configuration_name": "MinimalCharacterProvider",
             "data": simulator_configuration
         }, wasm_uow)
 
@@ -76,7 +76,7 @@ def test_run_plan_on_simulator(wasm_uow, simulator_configuration):
     simulator_id = createSimulatorFromBaseline({
             "simulation_setting": {},
             "author": "test",
-            "configuration_name": "MinimalSimulationConfig",
+            "configuration_name": "MinimalCharacterProvider",
             "data": simulator_configuration
         }, wasm_uow)
 
@@ -95,7 +95,7 @@ def test_get_latest_log_of_simulator(wasm_uow, simulator_configuration):
     simulator_id = createSimulatorFromBaseline({
             "simulation_setting": {},
             "author": "test",
-            "configuration_name": "MinimalSimulationConfig",
+            "configuration_name": "MinimalCharacterProvider",
             "data": simulator_configuration
         }, wasm_uow)
 
@@ -107,7 +107,7 @@ def test_get_all_logs(wasm_uow, simulator_configuration):
     simulator_id = createSimulatorFromBaseline({
             "simulation_setting": {},
             "author": "test",
-            "configuration_name": "MinimalSimulationConfig",
+            "configuration_name": "MinimalCharacterProvider",
             "data": simulator_configuration
         }, wasm_uow)
 

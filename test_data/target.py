@@ -1,7 +1,7 @@
 import os
 
 from simaple.container.simulation import SimulationSetting
-from simaple.container.character_provider import BaselineSimulationConfig
+from simaple.container.character_provider import BaselineCharacterProvider
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 
@@ -14,7 +14,7 @@ def container_test_setting(
     if options is None:
         options = {}
 
-    return BaselineSimulationConfig(
+    return BaselineCharacterProvider(
         tier="Legendary",
         jobtype=jobtype,
         job_category=job_category,

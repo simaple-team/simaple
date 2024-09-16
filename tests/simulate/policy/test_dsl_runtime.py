@@ -5,7 +5,7 @@ import pytest
 
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.cache import PersistentStorageCache
-from simaple.container.character_provider import BaselineSimulationConfig
+from simaple.container.character_provider import BaselineCharacterProvider
 from simaple.container.simulation import SimulationSetting
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
@@ -21,8 +21,8 @@ def fixture_dsl_list() -> list[str]:
 
 
 @pytest.fixture(name="dsl_test_setting")
-def fixture_dsl_test_setting() -> BaselineSimulationConfig:
-    return BaselineSimulationConfig(
+def fixture_dsl_test_setting() -> BaselineCharacterProvider:
+    return BaselineCharacterProvider(
         tier="Legendary",
         jobtype=JobType.archmagetc,
         job_category=JobCategory.magician,
@@ -33,7 +33,7 @@ def fixture_dsl_test_setting() -> BaselineSimulationConfig:
     )
 
 
-def test_dsl(dsl_list: list[str], dsl_test_setting: BaselineSimulationConfig) -> None:
+def test_dsl(dsl_list: list[str], dsl_test_setting: BaselineCharacterProvider) -> None:
     container = PersistentStorageCache(
         os.path.join(os.path.dirname(__file__), ".simaple.cache.json"),
     ).get_simulation_container(

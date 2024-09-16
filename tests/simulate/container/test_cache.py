@@ -2,7 +2,7 @@ import os
 import tempfile
 
 from simaple.container.cache import InMemoryCache, PersistentStorageCache
-from simaple.container.character_provider import BaselineSimulationConfig
+from simaple.container.character_provider import BaselineCharacterProvider
 from simaple.container.simulation import SimulationSetting
 from simaple.core import JobType
 from simaple.core.job_category import JobCategory
@@ -13,7 +13,7 @@ def test_inmemory_cache():
     cache = InMemoryCache(saved_cache)
 
     setting = SimulationSetting()
-    character_provider = BaselineSimulationConfig(
+    character_provider = BaselineCharacterProvider(
         union_block_count=10,
         tier="Legendary",
         jobtype=JobType.archmagefb,
@@ -23,7 +23,7 @@ def test_inmemory_cache():
         combat_orders_level=1,
         artifact_level=40,
     )
-    second_character_provider = BaselineSimulationConfig(
+    second_character_provider = BaselineCharacterProvider(
         union_block_count=10 + 1,
         tier="Legendary",
         jobtype=JobType.archmagefb,
@@ -57,7 +57,7 @@ def test_storage_cache():
         cache = PersistentStorageCache(os.path.join(temp_dir, "cache.json"))
 
         setting = SimulationSetting()
-        character_provider = BaselineSimulationConfig(
+        character_provider = BaselineCharacterProvider(
             union_block_count=10,
             tier="Legendary",
             jobtype=JobType.archmagefb,
@@ -67,7 +67,7 @@ def test_storage_cache():
             combat_orders_level=1,
             artifact_level=40,
         )
-        second_character_provider = BaselineSimulationConfig(
+        second_character_provider = BaselineCharacterProvider(
             union_block_count=10 + 1,
             tier="Legendary",
             jobtype=JobType.archmagefb,
