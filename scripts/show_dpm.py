@@ -1,9 +1,6 @@
 import simaple.simulate.component.skill  # noqa: F401
-from simaple.container.simulation import (
-    SimulationContainer,
-    SimulationSetting,
-    BaselineSimulationConfig,
-)
+from simaple.container.character_provider import BaselineSimulationConfig
+from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 from simaple.simulate.strategy.base import exec_by_strategy

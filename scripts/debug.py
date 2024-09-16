@@ -3,11 +3,8 @@ from enum import Enum
 import fire
 
 import simaple.simulate.component.skill  # noqa: F401
-from simaple.container.simulation import (
-    SimulationContainer,
-    SimulationSetting,
-    BaselineSimulationConfig,
-)
+from simaple.container.character_provider import BaselineSimulationConfig
+from simaple.container.simulation import SimulationContainer, SimulationSetting
 from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.base import PlayLog
 from simaple.simulate.policy.base import is_console_command

@@ -1,6 +1,7 @@
 import os
 
-from simaple.container.simulation import SimulationSetting, BaselineSimulationConfig
+from simaple.container.simulation import SimulationSetting
+from simaple.container.character_provider import BaselineSimulationConfig
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 
