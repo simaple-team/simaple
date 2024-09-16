@@ -13,6 +13,7 @@ from simaple.app.application.query import (
     query_latest_operation_log,
     query_operation_log,
 )
+from simaple.app.domain.snapshot import PlanMetadata
 from simaple.app.wasm.base import (
     MaybePyodide,
     SessionlessUnitOfWork,
@@ -20,28 +21,13 @@ from simaple.app.wasm.base import (
     return_js_object_from_pydantic_list,
     return_js_object_from_pydantic_object,
 )
-from simaple.simulate.interface.simulator_configuration import (
-    BaselineConfiguration,
-    MinimalSimulatorConfiguration,
-)
-
-
-def createSimulatorFromMinimalConf(
-    conf: MaybePyodide,
-    uow: SessionlessUnitOfWork,
-):
-    baseline_conf = MinimalSimulatorConfiguration.model_validate(
-        pyodide_reveal_dict(conf)
-    )
-    simulator_id = create_simulator(baseline_conf, uow)
-    return simulator_id
 
 
 def createSimulatorFromBaseline(
-    conf: MaybePyodide,
+    simulation_plan: MaybePyodide,
     uow: SessionlessUnitOfWork,
 ) -> str:
-    baseline_conf = BaselineConfiguration.model_validate(pyodide_reveal_dict(conf))
+    baseline_conf = PlanMetadata.model_validate(pyodide_reveal_dict(simulation_plan))
     simulator_id = create_simulator(baseline_conf, uow)
     return simulator_id
 

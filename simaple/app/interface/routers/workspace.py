@@ -19,35 +19,21 @@ from simaple.app.application.query import (
     query_latest_operation_log,
     query_operation_log,
 )
+from simaple.app.domain.snapshot import PlanMetadata
 from simaple.app.domain.uow import UnitOfWork
 from simaple.app.interface.container import WebContainer
-from simaple.simulate.interface.simulator_configuration import (
-    BaselineConfiguration,
-    MinimalSimulatorConfiguration,
-)
 
 UowProvider = fastapi.Depends(Provide[WebContainer.unit_of_work])
 router = fastapi.APIRouter(prefix="/workspaces")
 
 
-@router.post("/", response_model=SimulatorResponse)
-@inject
-def create_simulator_from_minimal_conf(
-    conf: MinimalSimulatorConfiguration,
-    uow: UnitOfWork = UowProvider,
-) -> Any:
-    simulator_id = create_simulator(conf, uow)
-
-    return SimulatorResponse(id=simulator_id)
-
-
 @router.post("/baseline", response_model=SimulatorResponse)
 @inject
 def create_simulator_from_baseline(
-    conf: BaselineConfiguration,
+    plan_metadta: PlanMetadata,
     uow: UnitOfWork = UowProvider,
 ) -> Any:
-    simulator_id = create_simulator(conf, uow)
+    simulator_id = create_simulator(plan_metadta, uow)
 
     return SimulatorResponse(id=simulator_id)
 

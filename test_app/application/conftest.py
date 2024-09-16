@@ -3,8 +3,7 @@ from typing import Optional
 import pytest
 
 from simaple.app.domain.simulator import SimulatorRepository
-from simaple.simulate.interface.simulator_configuration import MinimalSimulatorConfiguration
-from simaple.app.domain.snapshot import Snapshot, SnapshotRepository
+from simaple.app.domain.snapshot import Snapshot, SnapshotRepository, PlanMetadata
 from simaple.app.domain.uow import UnitOfWork
 from simaple.app.infrastructure.component_schema_repository import (
     LoadableComponentSchemaRepository,
@@ -12,6 +11,8 @@ from simaple.app.infrastructure.component_schema_repository import (
 from simaple.app.infrastructure.repository import InmemorySimulatorRepository
 from simaple.spec.repository import DirectorySpecRepository
 from simaple.data.jobs.builtin import get_kms_spec_resource_path
+from simaple.container.character_provider import MinimalSimulationConfig
+from simaple.container.simulation import SimulationSetting
 
 
 class InmemorySnapshotRepository(SnapshotRepository):
@@ -73,4 +74,14 @@ def uow():
 
 @pytest.fixture
 def minimal_conf(simulator_configuration):
-    return MinimalSimulatorConfiguration.model_validate(simulator_configuration)
+    return MinimalSimulationConfig.model_validate(simulator_configuration)
+
+
+@pytest.fixture
+def minimal_plan(simulator_configuration) -> PlanMetadata:
+    return PlanMetadata(
+        configuration_name=MinimalSimulationConfig.__name__,
+        author="",
+        data=simulator_configuration,
+        simulation_setting=SimulationSetting(),
+    )

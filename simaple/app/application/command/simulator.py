@@ -1,12 +1,14 @@
 from simaple.app.application.exception import UnknownSimulatorException
 from simaple.app.domain.services.plan import get_simulator_from_plan
 from simaple.app.domain.simulator import Simulator
+from simaple.app.domain.snapshot import PlanMetadata
 from simaple.app.domain.uow import UnitOfWork
-from simaple.simulate.interface.simulator_configuration import SimulatorConfiguration
+from simaple.container.character_provider import get_character_provider
+from simaple.container.simulation import SimulationSetting
 
 
-def create_simulator(conf: SimulatorConfiguration, uow: UnitOfWork) -> str:
-    simulator = Simulator.create_from_config(conf)
+def create_simulator(plan_metadata: PlanMetadata, uow: UnitOfWork) -> str:
+    simulator = plan_metadata.load_simulator()
     uow.simulator_repository().add(simulator)
 
     return simulator.id

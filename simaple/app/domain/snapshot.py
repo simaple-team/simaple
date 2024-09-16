@@ -3,16 +3,33 @@ from __future__ import annotations
 import abc
 import uuid
 from datetime import datetime
-from typing import Optional
+from typing import Any, Optional
 
 import pydantic
 
 from simaple.app.domain.simulator import Simulator
-from simaple.simulate.interface.simulator_configuration import SimulatorConfiguration
+from simaple.container.character_provider import get_character_provider
+from simaple.container.simulation import CharacterProvidingConfig, SimulationSetting
 
 
 def get_uuid() -> str:
     return str(uuid.uuid4())
+
+
+class PlanMetadata(pydantic.BaseModel):
+    configuration_name: str
+    author: str = ""
+    data: dict[str, Any]
+    simulation_setting: SimulationSetting
+
+    def get_character_provider_config(self) -> CharacterProvidingConfig:
+        return get_character_provider(self.configuration_name, self.data)
+
+    def load_simulator(self) -> Simulator:
+        return Simulator.create_from_config(
+            simulation_setting=self.simulation_setting,
+            character_provider=self.get_character_provider_config(),
+        )
 
 
 class Snapshot(pydantic.BaseModel, arbitrary_types_allowed=True):
@@ -20,10 +37,10 @@ class Snapshot(pydantic.BaseModel, arbitrary_types_allowed=True):
     saved_history: dict
     updated_at: datetime
     name: str
-    configuration: SimulatorConfiguration
+    configuration: PlanMetadata
 
     def restore_simulator(self) -> Simulator:
-        simulator = Simulator.create_from_config(self.configuration)
+        simulator = self.configuration.load_simulator()
         simulator.engine.load_history(self.saved_history)
 
         return simulator
@@ -34,7 +51,12 @@ class Snapshot(pydantic.BaseModel, arbitrary_types_allowed=True):
             saved_history=simulator.engine.save_history(),
             updated_at=datetime.now(),
             name=name,
-            configuration=simulator.conf.model_copy(),
+            configuration=PlanMetadata(
+                configuration_name=simulator.character_provider.__class__.__name__,
+                author="",
+                data=simulator.character_provider.model_dump(),
+                simulation_setting=simulator.simulation_setting,
+            ),
         )
 
 

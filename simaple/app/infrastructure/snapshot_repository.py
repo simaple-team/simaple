@@ -3,8 +3,7 @@ from typing import Optional, cast
 
 from sqlalchemy import JSON, Column, DateTime, String, orm
 
-from simaple.app.domain.snapshot import Snapshot, SnapshotRepository
-from simaple.app.infrastructure.configuration_mapper import ConfigurationMapper
+from simaple.app.domain.snapshot import PlanMetadata, Snapshot, SnapshotRepository
 from simaple.app.infrastructure.orm import BaseOrm
 
 
@@ -21,7 +20,6 @@ class SnapshotOrm(BaseOrm):  # type: ignore
 class SqlSnapshotRepository(SnapshotRepository):
     def __init__(self, session: orm.Session):
         self._session = session
-        self._configuration_mapper = ConfigurationMapper()
 
     def insert(self, snapshot: Snapshot) -> None:
         snapshot_orm = self._to_orm(snapshot)
@@ -55,9 +53,7 @@ class SqlSnapshotRepository(SnapshotRepository):
             saved_history=snapshot_orm.saved_history,
             updated_at=snapshot_orm.updated_at,
             name=snapshot_orm.name,
-            configuration=self._configuration_mapper.load(
-                cast(dict, snapshot_orm.configuration)
-            ),
+            configuration=PlanMetadata.model_validate_json(snapshot_orm.configuration),
         )
 
     def _to_orm(self, entity: Snapshot) -> SnapshotOrm:
@@ -66,5 +62,5 @@ class SqlSnapshotRepository(SnapshotRepository):
             saved_history=entity.saved_history,
             updated_at=entity.updated_at,
             name=entity.name,
-            configuration=self._configuration_mapper.dump(entity.configuration),
+            configuration=entity.configuration.model_dump_json(),
         )

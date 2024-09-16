@@ -4,16 +4,21 @@ from simaple.app.wasm import createUow, createSimulatorFromBaseline, runSimulato
 def test_run_plan():
     uow = createUow()
     simulator_id = createSimulatorFromBaseline({
-            "simulation_setting": {
+            "data": {
                 "tier": "Legendary",
                 "jobtype": "archmagetc",
                 "job_category": 1,
                 "level": 280,
                 "passive_skill_level": 0,
                 "combat_orders_level": 1,
-                "artifact_level": 40
-            }
+                "artifact_level": 40,
+                "union_block_count": 10,
+            },
+            "simulation_setting": {},
+            "author": "test",
+            "configuration_name": "BaselineSimulationConfig"
         }, uow)
+
     plan = '''
 CAST "오버로드 마나"
 CAST "이프리트"

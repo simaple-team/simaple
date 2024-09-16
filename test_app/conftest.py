@@ -5,15 +5,16 @@ from fastapi.testclient import TestClient
 
 from simaple.app.interface.handler import add_exception_handlers
 from simaple.app.interface.web import SimapleWeb
-from simaple.simulate.interface.simulator_configuration import MinimalSimulatorConfiguration
+
 
 @pytest.fixture
 def simulator_configuration():
     return {
         "action_stat": {},
-        "job": "archmagefb",
-        "character_level": 260,
-        "character_stat": {
+        "jobtype": "archmagefb",
+        "job_category": 1,
+        "level": 260,
+        "stat": {
             "STR": 907.0,
             "LUK": 2224.0,
             "INT": 4932.0,

@@ -1,14 +1,14 @@
 import pytest
 
 from simaple.app.domain.simulator import Simulator
-from simaple.simulate.interface.simulator_configuration import MinimalSimulatorConfiguration
 
-
-@pytest.fixture(name="minimal_simulator_configuration")
-def fixture_minimal_simulator_configuration(simulator_configuration):
-    return MinimalSimulatorConfiguration.model_validate(simulator_configuration)
+from simaple.container.character_provider import MinimalSimulationConfig
+from simaple.container.simulation import SimulationSetting
 
 
 @pytest.fixture
-def sample_simulator(minimal_simulator_configuration):
-    return Simulator.create_from_config(minimal_simulator_configuration)
+def sample_simulator(simulator_configuration):
+    return Simulator.create_from_config(
+        simulation_setting=SimulationSetting()
+        ,character_provider=MinimalSimulationConfig.model_validate(simulator_configuration)
+    )

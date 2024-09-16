@@ -6,8 +6,12 @@ from typing import Optional
 
 import pydantic
 
+from simaple.container.simulation import (
+    CharacterProvidingConfig,
+    SimulationContainer,
+    SimulationSetting,
+)
 from simaple.simulate.engine import OperationEngine
-from simaple.simulate.interface.simulator_configuration import SimulatorConfiguration
 from simaple.simulate.policy.base import Operation
 from simaple.simulate.policy.parser import parse_dsl_to_operations
 from simaple.simulate.report.dpm import DamageCalculator
@@ -18,18 +22,28 @@ class Simulator(pydantic.BaseModel):
     id: str
     engine: OperationEngine
     calculator: DamageCalculator
-    conf: SimulatorConfiguration  # polymorphic
+    simulation_setting: SimulationSetting
+    character_provider: CharacterProvidingConfig
 
     model_config = pydantic.ConfigDict(arbitrary_types_allowed=True)
 
     @classmethod
-    def create_from_config(cls, conf: SimulatorConfiguration) -> Simulator:
+    def create_from_config(
+        cls,
+        simulation_setting: SimulationSetting,
+        character_provider: CharacterProvidingConfig,
+    ) -> Simulator:
         simulator_id = str(uuid.uuid4())
+        container = SimulationContainer(
+            setting=simulation_setting,
+            character_provider=character_provider,
+        )
         simulation = Simulator(
             id=simulator_id,
-            engine=conf.create_operation_engine(),
-            calculator=conf.create_damage_calculator(),
-            conf=conf,
+            engine=container.operation_engine(),
+            calculator=container.damage_calculator(),
+            simulation_setting=simulation_setting,
+            character_provider=character_provider,
         )
         return simulation
 
