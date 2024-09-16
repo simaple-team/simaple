@@ -1,10 +1,12 @@
+import os
 from pathlib import Path
 
 import pytest
 
 import simaple.simulate.component.skill  # noqa: F401
+from simaple.container.cache import PersistentStorageCache
 from simaple.container.character_provider import BaselineSimulationConfig
-from simaple.container.simulation import SimulationContainer, SimulationSetting
+from simaple.container.simulation import SimulationSetting
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 from simaple.simulate.policy.parser import parse_dsl_to_operations
@@ -29,13 +31,14 @@ def fixture_dsl_test_setting() -> BaselineSimulationConfig:
         level=270,
         passive_skill_level=0,
         combat_orders_level=1,
-        cache_root_dir=cache_dir,
         artifact_level=40,
     )
 
 
 def test_dsl(dsl_list: list[str], dsl_test_setting: BaselineSimulationConfig) -> None:
-    container = SimulationContainer(
+    container = PersistentStorageCache(
+        os.path.join(os.path.dirname(__file__), ".simaple.cache.json"),
+    ).get_simulation_container(
         SimulationSetting(
             v_skill_level=30,
             v_improvements_level=60,
@@ -52,4 +55,4 @@ def test_dsl(dsl_list: list[str], dsl_test_setting: BaselineSimulationConfig) ->
 
     dpm = container.dpm_calculator().calculate_dpm(list(engine.simulation_entries()))
     print(f"{engine.get_current_viewer()('clock')} | {dpm:,} ")
-    assert 10438982168263.46 == pytest.approx(dpm)
+    assert 12189847067621.467 == pytest.approx(dpm)

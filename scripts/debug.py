@@ -3,8 +3,9 @@ from enum import Enum
 import fire
 
 import simaple.simulate.component.skill  # noqa: F401
+from simaple.container.cache import PersistentStorageCache
 from simaple.container.character_provider import BaselineSimulationConfig
-from simaple.container.simulation import SimulationContainer, SimulationSetting
+from simaple.container.simulation import SimulationSetting
 from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.base import PlayLog
 from simaple.simulate.policy.base import is_console_command
@@ -84,16 +85,21 @@ class DebugInterface:
             combat_orders_level=1,
             artifact_level=40,
         )
+        self._container_cache = PersistentStorageCache()
 
     def get_engine(self):
-        container = SimulationContainer(self._setting, self._character_provider)
+        container = self._container_cache.get_simulation_container(
+            self._setting, self._character_provider
+        )
 
         engine = container.operation_engine()
 
         return engine
 
     def get_dpm_calculator(self):
-        container = SimulationContainer(self._setting, self._character_provider)
+        container = self._container_cache.get_simulation_container(
+            self._setting, self._character_provider
+        )
         return container.dpm_calculator()
 
     def run(self, plan_file: str):

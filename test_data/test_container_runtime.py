@@ -2,14 +2,17 @@ import pytest
 
 import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.container.simulation import SimulationContainer
+from simaple.container.cache import PersistentStorageCache
 from test_data.target import get_test_settings
 from simaple.simulate.strategy.base import exec_by_strategy
-
+import os
 
 @pytest.mark.parametrize("character_provider_and_setting, jobtype, expected", get_test_settings())
 def test_actor(character_provider_and_setting, jobtype, expected):
     character_provider, setting  = character_provider_and_setting
-    container = SimulationContainer(
+    container = PersistentStorageCache(
+        os.path.join(os.path.dirname(__file__), ".cache.simaple.json")
+    ).get_simulation_container(
         setting,
         character_provider
     )

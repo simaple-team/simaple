@@ -1,8 +1,7 @@
 import hashlib
 import json
-from abc import ABC, abstractmethod
 import os
-
+from abc import ABC, abstractmethod
 
 from simaple.container.character_provider import (
     deserialize_character_provider,
@@ -11,6 +10,7 @@ from simaple.container.character_provider import (
 from simaple.container.simulation import (
     CharacterDependentSimulationConfig,
     CharacterProvidingConfig,
+    SimulationContainer,
     SimulationSetting,
 )
 from simaple.core import ExtendedStat, JobType
@@ -33,8 +33,15 @@ class CharacterProviderCache(ABC):
     @abstractmethod
     def get(
         self, setting: SimulationSetting, character_provider: CharacterProvidingConfig
-    ) -> tuple[tuple[ExtendedStat, CharacterDependentSimulationConfig], bool]:
+    ) -> tuple[CharacterProvidingConfig, bool]:
         pass
+
+    def get_simulation_container(
+        self, setting: SimulationSetting, character_provider: CharacterProvidingConfig
+    ) -> SimulationContainer:
+        as_cached_character_provider, _ = self.get(setting, character_provider)
+
+        return SimulationContainer(setting, as_cached_character_provider)
 
     def _compute_cache_key(
         self, setting: SimulationSetting, character_provider: CharacterProvidingConfig
@@ -51,16 +58,12 @@ class CharacterProviderCache(ABC):
 
         return f"{character_provider.__class__.__name__}.{digest}"
 
-    def _deserialize_output(
-        self, value: str
-    ) -> CachedCharacterProvider:
+    def _deserialize_output(self, value: str) -> CachedCharacterProvider:
         cached_provider = CachedCharacterProvider.model_validate_json(value)
 
         return cached_provider
 
-    def _serialize_output(
-        self, value: CachedCharacterProvider
-    ) -> str:
+    def _serialize_output(self, value: CachedCharacterProvider) -> str:
         return value.model_dump_json(indent=2)
 
 
@@ -91,7 +94,7 @@ class InMemoryCache(CharacterProviderCache):
 
 
 class PersistentStorageCache(CharacterProviderCache):
-    def __init__(self, path: str) -> None:
+    def __init__(self, path: str = ".simaple.cache") -> None:
         self.path = path
         if not os.path.exists(self.path):
             with open(self.path, "w") as f:
@@ -115,6 +118,6 @@ class PersistentStorageCache(CharacterProviderCache):
         cache[cache_key] = self._serialize_output(output)
 
         with open(self.path, "w") as f:
-            json.dump(cache, f)
+            json.dump(cache, f, indent=2)
 
         return output, False

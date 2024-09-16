@@ -1,4 +1,6 @@
 import json
+import os
+import tempfile
 from abc import ABC, abstractmethod
 
 from simaple.container.cache import InMemoryCache, PersistentStorageCache
@@ -10,8 +12,6 @@ from simaple.container.simulation import (
 )
 from simaple.core import ExtendedStat, JobType
 from simaple.core.job_category import JobCategory
-import tempfile
-import os
 
 
 def test_inmemory_cache():

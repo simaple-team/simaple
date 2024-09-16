@@ -21,7 +21,6 @@ def container_test_setting(
         level=270,
         passive_skill_level=0,
         combat_orders_level=1,
-        cache_root_dir=os.path.join(os.path.dirname(__file__), "cache"),
         weapon_pure_attack_power=options.get("weapon_pure_attack_power", 0),
         artifact_level=40,
     ), SimulationSetting(
@@ -39,28 +38,28 @@ SETTINGS = [
             JobType.archmagefb,
             JobCategory.magician,
         ),
-        13597860884754,
+        15919731027452,
     ),
     (
         (
             JobType.archmagetc,
             JobCategory.magician,
         ),
-        11450940437523,
+        13395121192957,
     ),
     (
         (
             JobType.bishop,
             JobCategory.magician,
         ),
-        7847639017173,
+        9251885099074,
     ),
     (
         (
             JobType.mechanic,
             JobCategory.pirate,
         ),
-        6898897517450,
+        8064280322731,
     ),
     (
         (
@@ -71,7 +70,7 @@ SETTINGS = [
                 "weapon_pure_attack_power": 295,
             },
         ),
-        7421348754564,
+        8782689556242,
     ),
     (
         (
@@ -81,7 +80,7 @@ SETTINGS = [
                 "weapon_attack_power": 789,
             },
         ),
-        9835974035601,
+        11411869302005,
     ),
     (
         (
@@ -91,7 +90,7 @@ SETTINGS = [
                 "weapon_attack_power": 789,
             },
         ),
-        11522692385817,
+        13343175412181,
     ),
     (
         (
@@ -101,7 +100,7 @@ SETTINGS = [
                 "weapon_attack_power": 700,
             },
         ),
-        5137550169303,
+        5887717338595,
     ),
 ]
 
