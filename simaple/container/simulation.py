@@ -37,6 +37,10 @@ class CharacterProvider(pydantic.BaseModel, metaclass=ABCMeta):
         self,
     ) -> CharacterDependentSimulationConfig: ...
 
+    @classmethod
+    def get_name(cls):
+        return cls.__name__
+
 
 class SimulationSetting(pydantic.BaseModel):
     use_doping: bool = True

@@ -186,7 +186,7 @@ def get_character_provider(name: str, config: dict) -> CharacterProvider:
 def serialize_character_provider(provider: CharacterProvider) -> str:
     obj = {
         "config": provider.model_dump_json(),
-        "config_name": provider.__class__.__name__,
+        "config_name": provider.get_name(),
     }
 
     return json.dumps(obj, ensure_ascii=False, indent=2, sort_keys=True)

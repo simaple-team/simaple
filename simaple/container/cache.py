@@ -53,7 +53,7 @@ class CharacterProviderCache(ABC):
         hash.update(serialized_query.encode())
         digest = hash.hexdigest()
 
-        return f"{character_provider.__class__.__name__}.{digest}"
+        return f"{character_provider.get_name()}.{digest}"
 
     def _deserialize_output(self, value: str) -> CachedCharacterProvider:
         cached_provider = CachedCharacterProvider.model_validate_json(value)
