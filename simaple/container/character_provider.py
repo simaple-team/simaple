@@ -45,17 +45,6 @@ class BaselineSimulationConfig(CharacterProvidingConfig):
     combat_orders_level: int
     weapon_pure_attack_power: int = 0
 
-    cache_root_dir: str = ".simaple"
-
-    def get_preset_hash(self) -> str:
-        preset_hash = (
-            f"{self.tier}-{self.jobtype.value}"
-            f"-{self.job_category.value}-lv{self.level}"
-            f"-passive{self.passive_skill_level}-combat{self.combat_orders_level}"
-            f"-union{self.union_block_count}-link{self.link_count}"
-        )
-        return preset_hash
-
     def ability_lines(self):
         return get_best_ability(self.jobtype)
 
@@ -141,61 +130,21 @@ class BaselineSimulationConfig(CharacterProvidingConfig):
             gearset,
         )
 
-    def preset_cache(self):
+    def character(self):
         preset_optimizer = self.preset_optimizer()
         gearset = self.gearset()
-        return preset_optimize_cache_layer(
-            self,
-            preset_optimizer.create_optimal_preset_from_gearset,
-            gearset,
-        )
 
-    def character(self):
-        preset_cache = self.preset_cache()
+        preset = preset_optimizer.create_optimal_preset_from_gearset(gearset)
+
+        extended_stat_value = ExtendedStat(
+            stat=preset.get_stat(),
+            action_stat=preset.get_action_stat(),
+        )
         default_extended_stat = self.default_extended_stat()
         return add_extended_stats(
-            preset_cache,
+            extended_stat_value,
             default_extended_stat,
         )
-
-
-def preset_optimize_cache_layer(
-    setting: BaselineSimulationConfig,
-    provider: Callable[[Gearset], Preset],
-    gearset: Gearset,
-):
-    cache_location = f".stat.extended.{setting.get_preset_hash()}.json"
-
-    if setting.cache_root_dir:
-        if not os.path.exists(setting.cache_root_dir):
-            os.makedirs(setting.cache_root_dir)
-
-        cache_location = os.path.join(setting.cache_root_dir, cache_location)
-
-    if os.path.exists(cache_location):
-        with open(cache_location, encoding="utf-8") as f:
-            cache = json.load(f)
-        return ExtendedStat.model_validate(cache)
-
-    preset = provider(gearset)
-
-    extended_stat_value = ExtendedStat(
-        stat=preset.get_stat(),
-        action_stat=preset.get_action_stat(),
-    )
-
-    with open(cache_location, "w", encoding="utf-8") as f:
-        json.dump(
-            {
-                "stat": extended_stat_value.stat.short_dict(),
-                "action_stat": extended_stat_value.action_stat.dict(),
-            },
-            f,
-            ensure_ascii=False,
-            indent=2,
-        )
-
-    return extended_stat_value
 
 
 def serialize_character_provider(provider: CharacterProvidingConfig) -> str:

@@ -1,6 +1,8 @@
 import hashlib
 import json
 from abc import ABC, abstractmethod
+import os
+
 
 from simaple.container.character_provider import (
     deserialize_character_provider,
@@ -14,55 +16,25 @@ from simaple.container.simulation import (
 from simaple.core import ExtendedStat, JobType
 
 
-class LocalstorageCache:
-    def __init__(self, saved_cache: dict[str, str] | None = None) -> None:
-        if saved_cache is None:
-            saved_cache = {}
+class CachedCharacterProvider(CharacterProvidingConfig):
+    cached_character: ExtendedStat
+    cached_simulation_config: CharacterDependentSimulationConfig
 
-        self.cache = saved_cache
+    def character(self) -> ExtendedStat:
+        return self.cached_character
 
+    def get_character_dependent_simulation_config(
+        self,
+    ) -> CharacterDependentSimulationConfig:
+        return self.cached_simulation_config
+
+
+class CharacterProviderCache(ABC):
+    @abstractmethod
     def get(
         self, setting: SimulationSetting, character_provider: CharacterProvidingConfig
     ) -> tuple[tuple[ExtendedStat, CharacterDependentSimulationConfig], bool]:
-        cache_key = self._compute_cache_key(setting, character_provider)
-
-        if cache_key in self.cache:
-            return self._deserialize_output(self.cache[cache_key]), True
-
-        output = (
-            character_provider.character(),
-            character_provider.get_character_dependent_simulation_config(),
-        )
-        self.cache[cache_key] = self._serialize_output(output)
-        return output, False
-
-    def export(self) -> dict[str, str]:
-        return self.cache
-
-    def _deserialize_output(
-        self, value: str
-    ) -> tuple[ExtendedStat, CharacterDependentSimulationConfig]:
-        deserialized_value = json.loads(value)
-
-        return (
-            ExtendedStat.model_validate_json(deserialized_value["stat"]),
-            CharacterDependentSimulationConfig.model_validate_json(
-                deserialized_value["config"]
-            ),
-        )
-
-    def _serialize_output(
-        self, value: tuple[ExtendedStat, CharacterDependentSimulationConfig]
-    ) -> str:
-        return json.dumps(
-            {
-                "stat": value[0].model_dump_json(),
-                "config": value[1].model_dump_json(),
-            },
-            ensure_ascii=False,
-            indent=2,
-            sort_keys=True,
-        )
+        pass
 
     def _compute_cache_key(
         self, setting: SimulationSetting, character_provider: CharacterProvidingConfig
@@ -78,3 +50,71 @@ class LocalstorageCache:
         digest = hash.hexdigest()
 
         return f"{character_provider.__class__.__name__}.{digest}"
+
+    def _deserialize_output(
+        self, value: str
+    ) -> CachedCharacterProvider:
+        cached_provider = CachedCharacterProvider.model_validate_json(value)
+
+        return cached_provider
+
+    def _serialize_output(
+        self, value: CachedCharacterProvider
+    ) -> str:
+        return value.model_dump_json(indent=2)
+
+
+class InMemoryCache(CharacterProviderCache):
+    def __init__(self, saved_cache: dict[str, str] | None = None) -> None:
+        if saved_cache is None:
+            saved_cache = {}
+
+        self.cache = saved_cache
+
+    def get(
+        self, setting: SimulationSetting, character_provider: CharacterProvidingConfig
+    ) -> tuple[CharacterProvidingConfig, bool]:
+        cache_key = self._compute_cache_key(setting, character_provider)
+
+        if cache_key in self.cache:
+            return self._deserialize_output(self.cache[cache_key]), True
+
+        output = CachedCharacterProvider(
+            cached_character=character_provider.character(),
+            cached_simulation_config=character_provider.get_character_dependent_simulation_config(),
+        )
+        self.cache[cache_key] = self._serialize_output(output)
+        return output, False
+
+    def export(self) -> dict[str, str]:
+        return self.cache
+
+
+class PersistentStorageCache(CharacterProviderCache):
+    def __init__(self, path: str) -> None:
+        self.path = path
+        if not os.path.exists(self.path):
+            with open(self.path, "w") as f:
+                json.dump({}, f)
+
+    def get(
+        self, setting: SimulationSetting, character_provider: CharacterProvidingConfig
+    ) -> tuple[CharacterProvidingConfig, bool]:
+        cache_key = self._compute_cache_key(setting, character_provider)
+
+        with open(self.path, "r") as f:
+            cache = json.load(f)
+
+        if cache_key in cache:
+            return self._deserialize_output(cache[cache_key]), True
+
+        output = CachedCharacterProvider(
+            cached_character=character_provider.character(),
+            cached_simulation_config=character_provider.get_character_dependent_simulation_config(),
+        )
+        cache[cache_key] = self._serialize_output(output)
+
+        with open(self.path, "w") as f:
+            json.dump(cache, f)
+
+        return output, False
