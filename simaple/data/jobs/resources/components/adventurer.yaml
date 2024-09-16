@@ -8,7 +8,7 @@ metadata:
     id: 400001042-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001042-0
   name: 메이플월드 여신의 축복
@@ -18,8 +18,8 @@ data:
   red: true
   rem: false
   stat:
-    INT: "{{ math.floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
-    damage_multiplier: "{{ math.floor(5 + 0.5 * skill_level) }}"
+    INT: "{{ floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
+    damage_multiplier: "{{ floor(5 + 0.5 * skill_level) }}"
 ---
 kind: Component
 version: simaple.io/BuffSkillComponent
@@ -30,7 +30,7 @@ metadata:
     id: 400001042-1
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001042-1
   name: 메이플월드 여신의 축복
@@ -40,5 +40,5 @@ data:
   red: true
   rem: false
   stat:
-    LUK: "{{ math.floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
-    damage_multiplier: "{{ math.floor(5 + 0.5 * skill_level) }}"
+    LUK: "{{ floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
+    damage_multiplier: "{{ floor(5 + 0.5 * skill_level) }}"

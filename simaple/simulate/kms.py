@@ -1,4 +1,4 @@
-from typing import Any, TypedDict, cast
+from typing import Any, TypedDict
 
 import simaple.simulate.component.skill  # noqa: F401
 import simaple.simulate.component.specific  # noqa: F401
@@ -23,7 +23,7 @@ from simaple.simulate.component.view import (
 )
 from simaple.simulate.global_property import GlobalProperty
 from simaple.simulate.timer import clock_view, timer_delay_dispatcher
-from simaple.spec.patch import EvalPatch
+from simaple.spec.patch import ArithmeticPatch
 
 
 def bare_store(action_stat: ActionStat) -> AddressedStore:
@@ -40,6 +40,32 @@ class BuilderRequiredExtraVariables(TypedDict):
     action_stat: ActionStat
     combat_orders_level: int
     passive_skill_level: int
+
+
+def _as_reference_variables(
+    extra_variables: BuilderRequiredExtraVariables,
+) -> dict[str, Any]:
+    reference = {
+        "character_level": extra_variables["character_level"],
+        "weapon_attack_power": extra_variables["weapon_attack_power"],
+        "weapon_pure_attack_power": extra_variables["weapon_pure_attack_power"],
+        "combat_orders_level": extra_variables["combat_orders_level"],
+        "passive_skill_level": extra_variables["passive_skill_level"],
+    }
+    reference.update(
+        {
+            f"character_stat.{k}": v
+            for k, v in extra_variables["character_stat"].model_dump().items()
+        }
+    )
+    reference.update(
+        {
+            f"action_stat.{k}": v
+            for k, v in extra_variables["action_stat"].model_dump().items()
+        }
+    )
+
+    return reference
 
 
 def _exclude_hexa_skill(
@@ -77,7 +103,7 @@ def get_builder(
 ) -> EngineBuilder:
     loader = get_kms_skill_loader()
 
-    eval_reference_variables = cast(dict[str, Any], injected_values).copy()
+    reference_variables = _as_reference_variables(injected_values)
 
     skill_improvements = sum(
         [
@@ -89,7 +115,7 @@ def get_builder(
                         passive_skill_level=injected_values["passive_skill_level"],
                         default_skill_levels=skill_levels,
                     ),
-                    EvalPatch(injected_values=eval_reference_variables),
+                    ArithmeticPatch(variables=reference_variables),
                 ],
             )
             for group in groups
@@ -106,7 +132,7 @@ def get_builder(
                     passive_skill_level=injected_values["passive_skill_level"],
                     default_skill_levels=skill_levels,
                 ),
-                EvalPatch(injected_values=eval_reference_variables),
+                ArithmeticPatch(variables=reference_variables),
                 VSkillImprovementPatch(improvements=v_improvements),
                 HexaSkillImprovementPatch(improvements=hexa_improvements),
                 get_hyper_skill_patch(group),

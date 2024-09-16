@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.spec.patch import EvalPatch
+from simaple.spec.patch import ArithmeticPatch
 
 
 @pytest.mark.parametrize(
@@ -16,7 +16,7 @@ from simaple.spec.patch import EvalPatch
     ],
 )
 def test_eval_patch(target, expected):
-    inject = {"level": 3, "string_inject": "string", "arg": 4}
+    variables = {"level": 3, "string_inject": "string", "arg": 4}
 
-    patch = EvalPatch(injected_values=inject)
+    patch = ArithmeticPatch(variables=variables)
     assert patch.apply(target) == expected

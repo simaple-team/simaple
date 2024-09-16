@@ -7,7 +7,7 @@ metadata:
     id: 400001018-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001018-0
   name: 시그너스 팔랑크스
@@ -29,7 +29,7 @@ metadata:
     id: 400001044-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001044-0
   name: 초월자 시그너스의 축복

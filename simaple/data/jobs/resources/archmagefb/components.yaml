@@ -7,7 +7,7 @@ metadata:
     id: 2121006-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -51,7 +51,7 @@ metadata:
     id: 2121011-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2121011-0
@@ -80,7 +80,7 @@ metadata:
     id: 2121003-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -149,7 +149,7 @@ metadata:
     id: 2111007-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 2111007-0
   name: 텔레포트 마스터리
@@ -169,7 +169,7 @@ metadata:
     rank: 5
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400021028-0
@@ -199,7 +199,7 @@ metadata:
     id: 400021001-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400021001-0
@@ -224,7 +224,7 @@ metadata:
     id: 2121007-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2121007-0
@@ -246,7 +246,7 @@ metadata:
     id: 2121007-1
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2121007-1
@@ -279,7 +279,7 @@ metadata:
     id: 2121005-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2121005-0
@@ -309,7 +309,7 @@ metadata:
     id: 2121054-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2121054-0
@@ -335,7 +335,7 @@ metadata:
     id: 2100010-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2100010-0
@@ -387,7 +387,7 @@ metadata:
     id: 400021101-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400021101-0
@@ -413,7 +413,7 @@ metadata:
     id: 2121052-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2121052-0
@@ -437,7 +437,7 @@ metadata:
     id: 400021066-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400021066-0
@@ -461,7 +461,7 @@ metadata:
     id: 400021411-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400021411-0
   name: 인페르날 베놈
@@ -487,7 +487,7 @@ metadata:
     id: 400021410-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -521,7 +521,7 @@ metadata:
     id: 400021412-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -547,7 +547,7 @@ metadata:
     id: 2121011-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 2121011-0

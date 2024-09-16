@@ -41,7 +41,7 @@ metadata:
     name: 쏜즈 이펙트
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 쏜즈 이펙트
   stat:
@@ -56,7 +56,7 @@ metadata:
     name: 이도류 엑스퍼트
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 이도류 엑스퍼트
   stat:
@@ -72,7 +72,7 @@ metadata:
     name: 샤프니스
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 샤프니스
   stat:

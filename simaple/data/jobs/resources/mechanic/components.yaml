@@ -9,7 +9,7 @@ metadata:
     id: 400051000-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400051000-0
   name: 로디드 다이스
@@ -45,7 +45,7 @@ metadata:
     id: 35120001-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 35120001-0
   name: 로봇 마스터리
@@ -79,7 +79,7 @@ metadata:
     id: 35111008-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -126,7 +126,7 @@ metadata:
     id: 35111002-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -154,7 +154,7 @@ metadata:
     id: 35121009-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 35121009-0
@@ -181,7 +181,7 @@ metadata:
     id: 35121019-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -204,7 +204,7 @@ metadata:
     id: 35121019-1
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 35121019-1
@@ -229,7 +229,7 @@ metadata:
     id: 35101002-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 35101002-0
@@ -272,7 +272,7 @@ metadata:
     id: 35121052-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 35121052-0
@@ -298,7 +298,7 @@ metadata:
     id: 400051009-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400051009-0
@@ -326,7 +326,7 @@ metadata:
     id: 400051017-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400051017-0
@@ -345,7 +345,7 @@ metadata:
     id: 400051041-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400051041-0
@@ -373,7 +373,7 @@ metadata:
     id: 400051068-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400051068-0
@@ -400,7 +400,7 @@ metadata:
     id: 35121019-0vi
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
   - PassiveHyperskillPatch
 data:
@@ -422,7 +422,7 @@ metadata:
     id: 35121019-1vi
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 35121019-1vi
@@ -446,7 +446,7 @@ metadata:
     id: 35101002-0vi
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 35101002-0
@@ -473,7 +473,7 @@ metadata:
     id: 400021090-0-?mech
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400021090-0-?mech
   name: 그라운드 제로

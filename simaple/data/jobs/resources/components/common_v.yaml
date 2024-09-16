@@ -7,7 +7,7 @@ metadata:
     id: 400001002-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001002-0
   name: 쓸만한 샤프 아이즈
@@ -27,7 +27,7 @@ metadata:
     id: 400001003-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001003-0
   name: 쓸만한 하이퍼 바디
@@ -47,7 +47,7 @@ metadata:
     id: 400001005-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001005-0
   name: 쓸만한 어드밴스드 블레스
@@ -69,7 +69,7 @@ metadata:
     id: 400001039-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001039-0
   name: 스파이더 인 미러
@@ -94,7 +94,7 @@ metadata:
     id: 400001059-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001059-0
   name: 크레스트 오브 더 솔라

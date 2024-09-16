@@ -7,7 +7,7 @@ metadata:
     name: 매직 서킷
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 매직 서킷
   stat:
@@ -91,7 +91,7 @@ metadata:
     name: 데몰리션
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 데몰리션
   stat:
@@ -107,11 +107,11 @@ metadata:
     name: 어테인
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 어테인
   stat:
     attack_power: "{{ 10 + skill_level }}"
-    boss_damage_multiplier: "{{ math.ceil(skill_level / 2) }}"
+    boss_damage_multiplier: "{{ ceil(skill_level / 2) }}"
     critical_rate: "{{ skill_level }}"
   default_skill_level: 20

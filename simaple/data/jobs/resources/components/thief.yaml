@@ -8,7 +8,7 @@ metadata:
     id: 400041032-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400041032-0
   name: 레디 투 다이

@@ -8,7 +8,7 @@ metadata:
     id: 400051033-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400051033-0
   name: 오버 드라이브

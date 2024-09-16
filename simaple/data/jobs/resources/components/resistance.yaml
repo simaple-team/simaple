@@ -24,7 +24,7 @@ metadata:
     id: 400001019-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001019-0
   name: 레지스탕스 라인 인팬트리
@@ -47,7 +47,7 @@ metadata:
     id: 400001042-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400001042-0
   name: 메이플월드 여신의 축복
@@ -57,5 +57,5 @@ data:
   red: true
   rem: false
   stat:
-    DEX: "{{ math.floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
-    damage_multiplier: "{{ math.floor(5 + 0.5 * skill_level) }}"
+    DEX: "{{ floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
+    damage_multiplier: "{{ floor(5 + 0.5 * skill_level) }}"

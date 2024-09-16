@@ -6,7 +6,7 @@ metadata:
   name: 위스퍼 오브 더 윈드
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 위스퍼 오브 더 윈드
   stat:
@@ -20,7 +20,7 @@ metadata:
     name: 실프스 에이드
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 실프스 에이드
   stat:
@@ -35,7 +35,7 @@ metadata:
     name: 보우 액셀레이션
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 보우 액셀레이션
   stat:
@@ -49,7 +49,7 @@ metadata:
     name: 보우 마스터리
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 보우 마스터리
   stat:
@@ -63,7 +63,7 @@ metadata:
     name: 피지컬 트레이닝
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 피지컬 트레이닝
   stat:
@@ -78,7 +78,7 @@ metadata:
     name: 알바트로스
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 알바트로스
   stat:
@@ -94,7 +94,7 @@ metadata:
     name: 윈드 블레싱
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 윈드 블레싱
   combat_orders_enabled: true
@@ -113,7 +113,7 @@ metadata:
     name: 보우 엑스퍼트
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 보우 엑스퍼트
   combat_orders_enabled: true
@@ -121,7 +121,7 @@ data:
   default_skill_level: 30
   stat:
     attack_power: '{{ skill_level }}'
-    final_damage_multiplier: '{{ 20 + math.ceil(skill_level / 2) }}'
+    final_damage_multiplier: '{{ 20 + ceil(skill_level / 2) }}'
     critical_damage: '{{ 5 + (skill_level // 2) }}'
     boss_damage_multiplier: '{{ skill_level + 10 }}'
 ---
@@ -133,7 +133,7 @@ metadata:
     name: 알바트로스 맥시멈
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 알바트로스 맥시멈
   combat_orders_enabled: true

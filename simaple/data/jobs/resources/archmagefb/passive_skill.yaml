@@ -6,7 +6,7 @@ metadata:
     group: archmagefb
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 하이 위즈덤
   stat:
@@ -19,7 +19,7 @@ metadata:
     group: archmagefb
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 스펠 마스터리
   stat:
@@ -32,7 +32,7 @@ metadata:
     group: archmagefb
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 매직 크리티컬
   stat:
@@ -46,7 +46,7 @@ metadata:
     group: archmagefb
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 엘리멘트 엠플리피케이션
   stat:
@@ -59,7 +59,7 @@ metadata:
     group: archmagefb
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 엘리멘탈 리셋
   stat:
@@ -73,7 +73,7 @@ metadata:
     group: archmagefb
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 마스터 매직
   passive_skill_enabled: true
@@ -91,10 +91,10 @@ metadata:
     group: archmagefb
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 아케인 에임
   passive_skill_enabled: true
   default_skill_level: 30
   stat:
-    ignored_defence: "{{ 5 + math.ceil(skill_level / 2) }}"
+    ignored_defence: "{{ 5 + ceil(skill_level / 2) }}"

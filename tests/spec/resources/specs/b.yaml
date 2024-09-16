@@ -10,4 +10,4 @@ data:
   combat_orders_enabled: true
   default_skill_level: 10
   stat:
-    ignored_defence: 20 + math.ceil(lv / 2)
+    ignored_defence: 20 + ceil(lv / 2)

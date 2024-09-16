@@ -7,7 +7,7 @@ metadata:
     id: 13001022-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 13001022-0
   name: '엘리멘트 : 스톰'
@@ -26,7 +26,7 @@ metadata:
     id: 13110026-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 13110026-0
   name: 세컨드 윈드
@@ -42,7 +42,7 @@ metadata:
     id: 13111021-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 13111021-0
@@ -67,7 +67,7 @@ metadata:
     id: 13121000-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 13121000-0
   name: 시그너스 나이츠
@@ -76,7 +76,7 @@ data:
   lasting_duration: 900_000
   red: true
   stat:
-    DEX: '{{ math.floor((18 + 5 * character_level) * math.ceil(skill_level / 2) * 0.01) }}'
+    DEX: '{{ floor((18 + 5 * character_level) * ceil(skill_level / 2) * 0.01) }}'
   combat_orders_enabled: true
   default_skill_level: 30
 ---
@@ -89,7 +89,7 @@ metadata:
     id: 13121005-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 13121005-0
   name: 샤프 아이즈
@@ -112,7 +112,7 @@ metadata:
     id: 13121001-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 13121001-0
@@ -143,7 +143,7 @@ metadata:
     id: 13121054-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   listening_actions:
@@ -178,7 +178,7 @@ metadata:
     id: 13101022-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   listening_actions:
@@ -213,7 +213,7 @@ metadata:
     id: TBD-TBD
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: TBD-TBD
@@ -267,7 +267,7 @@ metadata:
     id: 400031003-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400031003-0
@@ -297,7 +297,7 @@ metadata:
     id: 400031022-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400031022-0
@@ -319,7 +319,7 @@ metadata:
     id: 400031030-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   listening_actions:
@@ -350,7 +350,7 @@ metadata:
     id: 400031058-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
   id: 400031058-0
@@ -374,7 +374,7 @@ metadata:
     id: 400031000-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 400031000-0
   name: 가이디드 애로우
@@ -397,7 +397,7 @@ metadata:
     id: 13121001-0vi
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   id: 13121001-0vi
@@ -427,7 +427,7 @@ metadata:
     id: 13101022-0vi
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
   - VSkillImprovementPatch
 data:
   listening_actions:
@@ -461,7 +461,7 @@ metadata:
     id: 13141500-0
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   id: 13141500-0
   name: 미스트랄 스프링

@@ -6,7 +6,7 @@ metadata:
     group: bishop
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 매직 액셀레이션
   stat:
@@ -19,7 +19,7 @@ metadata:
     group: bishop
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 하이 위즈덤
   stat:
@@ -32,7 +32,7 @@ metadata:
     group: bishop
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 스펠 마스터리
   stat:
@@ -45,7 +45,7 @@ metadata:
     group: bishop
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 매직 크리티컬
   stat:
@@ -59,7 +59,7 @@ metadata:
     group: bishop
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 홀리 포커스
   stat:
@@ -72,7 +72,7 @@ metadata:
     group: bishop
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 마스터 매직
   passive_skill_enabled: true
@@ -90,13 +90,13 @@ metadata:
     group: bishop
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 아케인 에임
   passive_skill_enabled: true
   default_skill_level: 10
   stat:
-    ignored_defence: "{{ 5 + math.ceil(skill_level / 2) }}"
+    ignored_defence: "{{ 5 + ceil(skill_level / 2) }}"
 ---
 kind: PassiveSkill
 version: simaple.io/PassiveSkill
@@ -105,7 +105,7 @@ metadata:
     group: bishop
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 벤전스 오브 엔젤(패시브)
   stat:
@@ -121,7 +121,7 @@ metadata:
     group: bishop
 patch:
   - SkillLevelPatch
-  - EvalPatch
+  - ArithmeticPatch
 data:
   name: 블레싱 하모니
   stat:
