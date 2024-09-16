@@ -1,8 +1,8 @@
 from simaple.app.wasm import createUow, createSimulatorFromBaseline, runSimulatorWithPlan
 
 
-def test_run_plan():
-    uow = createUow()
+def test_run_plan(character_provider_cache_location):
+    uow = createUow(character_provider_cache_location)
     simulator_id = createSimulatorFromBaseline({
             "data": {
                 "tier": "Legendary",

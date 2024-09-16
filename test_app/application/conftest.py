@@ -1,6 +1,7 @@
 from typing import Optional
 
 import pytest
+import os
 
 from simaple.app.domain.simulator import SimulatorRepository
 from simaple.app.domain.snapshot import Snapshot, SnapshotRepository, PlanMetadata
@@ -13,7 +14,8 @@ from simaple.spec.repository import DirectorySpecRepository
 from simaple.data.jobs.builtin import get_kms_spec_resource_path
 from simaple.container.character_provider import MinimalCharacterProvider
 from simaple.container.simulation import SimulationSetting
-
+from simaple.container.cache import PersistentStorageCache
+import tempfile
 
 class InmemorySnapshotRepository(SnapshotRepository):
     def __init__(self):
@@ -37,7 +39,7 @@ class InmemorySnapshotRepository(SnapshotRepository):
 
 
 class InmemoryUnitOfWork(UnitOfWork):
-    def __init__(self):
+    def __init__(self, cache_location: str):
         self._snapshot_repository: InmemorySnapshotRepository = (
             InmemorySnapshotRepository()
         )
@@ -49,6 +51,9 @@ class InmemoryUnitOfWork(UnitOfWork):
         )
         self._spec_repository: DirectorySpecRepository = (
             DirectorySpecRepository(get_kms_spec_resource_path())
+        )
+        self._character_provider_cache = PersistentStorageCache(
+            cache_location
         )
 
     def snapshot_repository(self) -> SnapshotRepository:
@@ -66,10 +71,15 @@ class InmemoryUnitOfWork(UnitOfWork):
     def commit(self) -> None:
         return
 
+    def character_provider_cache(self) -> PersistentStorageCache:
+        return self._character_provider_cache
 
-@pytest.fixture
-def uow():
-    return InmemoryUnitOfWork()
+
+@pytest.fixture()
+def uow(character_provider_cache_location):
+    return InmemoryUnitOfWork(
+        character_provider_cache_location
+    )
 
 
 @pytest.fixture

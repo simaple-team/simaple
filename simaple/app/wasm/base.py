@@ -75,12 +75,13 @@ def pyodide_reveal_dict(obj: MaybePyodide) -> dict:
     return cast(dict, obj.to_py())
 
 
-def createUow() -> SessionlessUnitOfWork:
+def createUow(cache_location) -> SessionlessUnitOfWork:
     return SessionlessUnitOfWork(
         simulator_repository=InmemorySimulatorRepository(),
         component_schema_repository=LoadableComponentSchemaRepository(),
         spec_repository=DirectorySpecRepository(get_kms_spec_resource_path()),
         snapshot_repository=InmemorySnapshotRepository(),
+        cache_location=cache_location,
     )
 
 

@@ -6,6 +6,13 @@ from fastapi.testclient import TestClient
 from simaple.app.interface.handler import add_exception_handlers
 from simaple.app.interface.web import SimapleWeb
 
+import tempfile
+
+@pytest.fixture(scope="package")
+def character_provider_cache_location() -> str:
+    with tempfile.TemporaryDirectory() as cache_location:
+        yield os.path.join(cache_location, "cache.json")
+
 
 @pytest.fixture
 def simulator_configuration():

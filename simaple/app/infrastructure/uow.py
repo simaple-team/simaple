@@ -8,6 +8,7 @@ from simaple.app.infrastructure.component_schema_repository import (
     LoadableComponentSchemaRepository,
 )
 from simaple.app.infrastructure.snapshot_repository import SqlSnapshotRepository
+from simaple.container.cache import InMemoryCache
 from simaple.spec.repository import SpecRepository
 
 
@@ -23,6 +24,7 @@ class SimpleUnitOfWork(UnitOfWork):
         self._simulator_repository = simulator_repository
         self._component_schema_repository = component_schema_repository
         self._spec_repository = spec_repository
+        self._character_provider_cache = InMemoryCache()
 
     def snapshot_repository(self) -> SqlSnapshotRepository:
         return SqlSnapshotRepository(self._session)
@@ -38,3 +40,6 @@ class SimpleUnitOfWork(UnitOfWork):
 
     def spec_repository(self) -> SpecRepository:
         return self._spec_repository
+
+    def character_provider_cache(self) -> InMemoryCache:
+        return self._character_provider_cache

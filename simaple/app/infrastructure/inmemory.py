@@ -6,6 +6,7 @@ from simaple.app.domain.uow import UnitOfWork
 from simaple.app.infrastructure.component_schema_repository import (
     LoadableComponentSchemaRepository,
 )
+from simaple.container.cache import CharacterProviderCache, PersistentStorageCache
 from simaple.spec.repository import SpecRepository
 
 
@@ -37,11 +38,13 @@ class SessionlessUnitOfWork(UnitOfWork):
         component_schema_repository: LoadableComponentSchemaRepository,
         spec_repository: SpecRepository,
         snapshot_repository: SnapshotRepository,
+        cache_location: str = "/tmp/.cache.json",
     ):
         self._simulator_repository = simulator_repository
         self._component_schema_repository = component_schema_repository
         self._spec_repository = spec_repository
         self._snapshot_repository = snapshot_repository
+        self._character_provider_cache = PersistentStorageCache(cache_location)
 
     def snapshot_repository(self) -> SnapshotRepository:
         return self._snapshot_repository
@@ -57,3 +60,6 @@ class SessionlessUnitOfWork(UnitOfWork):
 
     def spec_repository(self) -> SpecRepository:
         return self._spec_repository
+
+    def character_provider_cache(self) -> CharacterProviderCache:
+        return self._character_provider_cache

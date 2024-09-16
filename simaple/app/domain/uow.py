@@ -3,6 +3,7 @@ import abc
 from simaple.app.domain.component_schema import ComponentSchemaRepository
 from simaple.app.domain.simulator import SimulatorRepository
 from simaple.app.domain.snapshot import SnapshotRepository
+from simaple.container.cache import CharacterProviderCache
 from simaple.spec.repository import SpecRepository
 
 
@@ -21,3 +22,6 @@ class UnitOfWork(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def spec_repository(self) -> SpecRepository: ...
+
+    @abc.abstractmethod
+    def character_provider_cache(self) -> CharacterProviderCache: ...
