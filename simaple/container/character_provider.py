@@ -196,3 +196,23 @@ def preset_optimize_cache_layer(
         )
 
     return extended_stat_value
+
+
+def serialize_character_provider(provider: CharacterProvidingConfig) -> str:
+    obj = {
+        "config": provider.model_dump_json(),
+        "config_name": provider.__class__.__name__,
+    }
+
+    return json.dumps(obj, ensure_ascii=False, indent=2, sort_keys=True)
+
+
+def deserialize_character_provider(data: str) -> CharacterProvidingConfig:
+    obj = json.loads(data)
+    config_name = obj["config_name"]
+    config = obj["config"]
+
+    if config_name == BaselineSimulationConfig.__name__:
+        return BaselineSimulationConfig.model_validate_json(config)
+
+    raise ValueError(f"Unknown config name: {config_name}")
