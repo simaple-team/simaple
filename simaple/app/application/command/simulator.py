@@ -1,10 +1,7 @@
 from simaple.app.application.exception import UnknownSimulatorException
 from simaple.app.domain.services.plan import get_simulator_from_plan
-from simaple.app.domain.simulator import Simulator
 from simaple.app.domain.snapshot import PlanMetadata
 from simaple.app.domain.uow import UnitOfWork
-from simaple.container.character_provider import get_character_provider
-from simaple.container.simulation import SimulationSetting
 
 
 def create_simulator(plan_metadata: PlanMetadata, uow: UnitOfWork) -> str:

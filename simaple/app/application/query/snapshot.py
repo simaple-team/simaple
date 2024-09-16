@@ -22,7 +22,7 @@ class SnapshotResponse(pydantic.BaseModel):
             length=len(snapshot.saved_history),
             updated_at=snapshot.updated_at,
             name=snapshot.name,
-            configuration_name=snapshot.configuration.get_name(),
+            configuration_name=snapshot.configuration.__class__.__name__,
         )
 
 

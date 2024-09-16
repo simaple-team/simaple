@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, cast
+from typing import Optional
 
 from sqlalchemy import JSON, Column, DateTime, String, orm
 
