@@ -12,10 +12,29 @@ from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.patch import ArithmeticPatch, Patch
 from simaple.spec.repository import DirectorySpecRepository
 
+_BUILTIN_KMS_SKILL_REPOSITORY: DirectorySpecRepository | None = None
+
+
+def get_kms_spec_resource_path() -> str:
+    return str(Path(__file__).parent / "resources")
+
+
+def get_kms_jobs_repository() -> DirectorySpecRepository:
+    global _BUILTIN_KMS_SKILL_REPOSITORY
+    if _BUILTIN_KMS_SKILL_REPOSITORY is None:
+        _BUILTIN_KMS_SKILL_REPOSITORY = DirectorySpecRepository(
+            get_kms_spec_resource_path()
+        )
+
+    return _BUILTIN_KMS_SKILL_REPOSITORY
+
+
+def get_kms_skill_loader() -> SpecBasedLoader:
+    return SpecBasedLoader(get_kms_jobs_repository())
+
 
 def get_skill_profile(jobtype: JobType) -> SkillProfile:
-    repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
-    loader = SpecBasedLoader(repository)
+    loader = get_kms_skill_loader()
     return cast(
         SkillProfile,
         loader.load(
@@ -25,16 +44,14 @@ def get_skill_profile(jobtype: JobType) -> SkillProfile:
 
 
 def get_every_hyper_skills(group: str) -> list[PassiveHyperskillInterface]:
-    repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
-    loader = SpecBasedLoader(repository)
+    loader = get_kms_skill_loader()
     return loader.load_all(
         query={"group": group, "kind": "PassiveHyperskill"},
     )
 
 
 def get_damage_logic(jobtype: JobType, combat_orders_level: int) -> DamageLogic:
-    repository = DirectorySpecRepository(str(Path(__file__).parent))
-    loader = SpecBasedLoader(repository)
+    loader = get_kms_skill_loader()
     patches = [
         SkillLevelPatch(
             combat_orders_level=combat_orders_level,
@@ -78,8 +95,7 @@ def get_passive(
     character_level: int,
     weapon_pure_attack_power: Optional[int] = None,
 ) -> ExtendedStat:
-    repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
-    loader = SpecBasedLoader(repository)
+    loader = get_kms_skill_loader()
     patches = _get_patches(
         combat_orders_level,
         passive_skill_level,
@@ -97,32 +113,10 @@ def get_passive(
 
 
 def get_builtin_strategy(jobtype: JobType) -> BuiltinStrategy:
-    repository = DirectorySpecRepository(str(Path(__file__).parent / "resources"))
-    loader = SpecBasedLoader(repository)
+    loader = get_kms_skill_loader()
     return cast(
         BuiltinStrategy,
         loader.load(
             query={"group": jobtype.value, "kind": "BuiltinStrategy"},
         ),
     )
-
-
-def get_kms_spec_resource_path() -> str:
-    return str(Path(__file__).parent / "resources")
-
-
-_BUILTIN_KMS_SKILL_REPOSITORY: DirectorySpecRepository | None = None
-
-
-def get_kms_skill_repository() -> DirectorySpecRepository:
-    global _BUILTIN_KMS_SKILL_REPOSITORY
-    if _BUILTIN_KMS_SKILL_REPOSITORY is None:
-        _BUILTIN_KMS_SKILL_REPOSITORY = DirectorySpecRepository(
-            get_kms_spec_resource_path()
-        )
-
-    return _BUILTIN_KMS_SKILL_REPOSITORY
-
-
-def get_kms_skill_loader() -> SpecBasedLoader:
-    return SpecBasedLoader(get_kms_skill_repository())
