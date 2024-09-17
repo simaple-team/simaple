@@ -84,12 +84,10 @@ ELAPSE 200.0
 def test_parse_simaple_runtime():
     context, result = parse_simaple_runtime(
         """
-/*
 simaple: runtime
 asdf: 
   p: 3
-*/
-
+---
 USE "플레임 스윕" 200.0
 CAST "플레임 스윕"
 !debug "abcd"
