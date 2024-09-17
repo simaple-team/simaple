@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from simaple.app.domain.snapshot import Snapshot
 from simaple.app.domain.uow import UnitOfWork
+from simaple.container.plan_metadata import PlanMetadata
 
 
 def create_snapshot(simulator_id: str, name: str, uow: UnitOfWork) -> None:

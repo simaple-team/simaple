@@ -16,21 +16,6 @@ def get_uuid() -> str:
     return str(uuid.uuid4())
 
 
-class PlanMetadata(pydantic.BaseModel):
-    configuration_name: str
-    author: str = ""
-    data: dict[str, Any]
-    simulation_setting: SimulationSetting
-
-    def get_character_provider_config(self) -> CharacterProvider:
-        return get_character_provider(self.configuration_name, self.data)
-
-    def load_simulator(self) -> Simulator:
-        return Simulator.create_from_config(
-            simulation_setting=self.simulation_setting,
-            character_provider=self.get_character_provider_config(),
-        )
-
 
 class Snapshot(pydantic.BaseModel, arbitrary_types_allowed=True):
     id: str = pydantic.Field(default_factory=get_uuid)
