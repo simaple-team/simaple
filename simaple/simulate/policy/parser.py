@@ -7,11 +7,11 @@ from simaple.simulate.policy.base import ConsoleText, Operation
 
 __PARSER = Lark(
     r"""
-    simaple: (header WS? NEWLINE)? body
+    simaple: (header WS? NEWLINE?)? body
 
     body: (request|console) (NEWLINE (request|console))* 
 
-    header: /\/\*(\*(?!\/)|[^*])*\*\//
+    header: /(.+)(\n(.*))*\n---/
 
     request: multiplier? WS? operation
     multiplier: "x" SIGNED_NUMBER
@@ -60,9 +60,8 @@ class TreeToOperation(Transformer):
         assert len(tkns) == 1
         full_text = tkns[0]
 
-        assert full_text[:2] == "/*"
-        assert full_text[-2:] == "*/"
-        context = full_text[2:-2]
+        assert full_text[-3:] == "---"
+        context = full_text[:-3]
 
         return context
 

@@ -3,7 +3,6 @@ from simaple.wasm.workspace import getSerializedCharacterProvider, run
 
 def test_get_serialized_character_provider_then_run():
     plan = """
-/*
 configuration_name: "BaselineCharacterProvider"
 author: "Alice"
 data:
@@ -15,7 +14,7 @@ data:
     passive_skill_level: 0
     combat_orders_level: 1
 simulation_setting: {}
-*/
+---
 ELAPSE 10.0
 ELAPSE 10.0
 ELAPSE 10.0
