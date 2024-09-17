@@ -23,7 +23,6 @@ import {
 } from "./ui/select";
 
 const CreateBaselineSimulatorDialog: React.FC = () => {
-  const { createBaselineSimulator } = useWorkspace();
   const { register, getValues, control } = useForm({
     defaultValues: {
       tier: "Legendary",
@@ -54,28 +53,28 @@ const CreateBaselineSimulatorDialog: React.FC = () => {
 
     setTimeout(() => {
       const values = getValues();
-      createBaselineSimulator({
-        simulation_setting: {
-          tier: values.tier,
-          jobtype: values.jobtype as SimulationSetting["jobtype"],
-          job_category: Number(values.job_category),
-          level: values.level,
-          use_doping: values.use_doping,
-          passive_skill_level: values.passive_skill_level,
-          combat_orders_level: values.combat_orders_level,
-          union_block_count: values.union_block_count,
-          link_count: values.link_count,
-          armor: values.armor,
-          mob_level: values.mob_level,
-          force_advantage: values.force_advantage,
-          trait_level: values.trait_level,
-          artifact_level: values.artifact_level,
-          v_skill_level: values.v_skill_level,
-          v_improvements_level: values.v_improvements_level,
-          weapon_attack_power: values.weapon_attack_power,
-          weapon_pure_attack_power: values.weapon_pure_attack_power,
-        },
-      });
+      // createBaselineSimulator({
+      //   simulation_setting: {
+      //     tier: values.tier,
+      //     jobtype: values.jobtype as SimulationSetting["jobtype"],
+      //     job_category: Number(values.job_category),
+      //     level: values.level,
+      //     use_doping: values.use_doping,
+      //     passive_skill_level: values.passive_skill_level,
+      //     combat_orders_level: values.combat_orders_level,
+      //     union_block_count: values.union_block_count,
+      //     link_count: values.link_count,
+      //     armor: values.armor,
+      //     mob_level: values.mob_level,
+      //     force_advantage: values.force_advantage,
+      //     trait_level: values.trait_level,
+      //     artifact_level: values.artifact_level,
+      //     v_skill_level: values.v_skill_level,
+      //     v_improvements_level: values.v_improvements_level,
+      //     weapon_attack_power: values.weapon_attack_power,
+      //     weapon_pure_attack_power: values.weapon_pure_attack_power,
+      //   },
+      // });
       setIsLoading(false);
       setIsOpen(false);
     }, 0);

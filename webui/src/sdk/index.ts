@@ -1,40 +1,20 @@
 import { loadPyodide } from "pyodide";
-import { SimulatorResponse } from "./models";
-import { BaselineConfiguration } from "./models/BaselineConfiguration";
 import { OperationLog } from "./models/OperationLog";
 
 export interface PySimapleUow {}
 
 export interface PySimaple {
-  createUow(): PySimapleUow;
-  queryAllSimulator(uow: PySimapleUow): SimulatorResponse[];
-  createSimulatorFromBaseline(
-    configuration: BaselineConfiguration,
-    uow: PySimapleUow,
-  ): string;
-  runSimulatorWithPlan(
-    id: string,
+  run(
     plan: string,
-    uow: PySimapleUow,
+    serializedCharacterProvider: Record<string, unknown>,
   ): OperationLog[];
-  getLatestLog(id: string, uow: PySimapleUow): OperationLog;
-  getAllLogs(id: string, uow: PySimapleUow): OperationLog[];
+  getSerializedCharacterProvider(plan: string): Record<string, unknown>;
 }
 
 export async function loadPySimaple() {
   const pyodide = await loadPyodide({
     indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.2/full/",
   });
-
-  pyodide.FS.mkdirTree("/simaple-cache");
-  await pyodide.FS.mount(pyodide.FS.filesystems.IDBFS, {}, "/simaple-cache");
-  const error = await new Promise((resolve) =>
-    pyodide.FS.syncfs(true, resolve),
-  );
-
-  if (error) {
-    throw new Error(`Failed to sync from IndexedDB: ${error}`);
-  }
 
   await pyodide.loadPackage("pydantic", { checkIntegrity: false });
   await pyodide.loadPackage("micropip", { checkIntegrity: false });
@@ -47,14 +27,29 @@ export async function loadPySimaple() {
   await micropip.install("numpy");
   await micropip.install("pyyaml");
   await micropip.install("pyfunctional");
+
+  if (import.meta.env.DEV) {
+    const handle = await window.showDirectoryPicker();
+    console.log(handle);
+
+    await pyodide.mountNativeFS("/tmp", handle);
+
+    return {
+      pySimaple: pyodide.runPython(`
+    import sys
+    import os
+    sys.path.append('/tmp')
+    print(os.listdir('/tmp'))
+    import simaple.wasm as wasm
+    wasm`),
+    };
+  }
+
   await micropip.install("simaple", false, false);
 
   return {
     pySimaple: pyodide.runPython(`
-  from simaple.app import wasm
-  import os
-  print(os.listdir('/simaple-cache'))
+  import simaple.wasm as wasm
   wasm`),
-    fileSystem: pyodide.FS,
   };
 }
