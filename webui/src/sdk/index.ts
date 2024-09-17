@@ -37,7 +37,11 @@ export async function loadPySimaple() {
     };
   }
 
-  await micropip.install("simaple", false, false);
+  await micropip.install(
+    "https://simaple.pages.dev/simaple-0.4.2-py3-none-any.whl",
+    false,
+    false,
+  );
 
   return {
     pySimaple: pyodide.runPython(`
