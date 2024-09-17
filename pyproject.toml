@@ -14,7 +14,7 @@ coverage = "pytest --cov=simaple"
 coverage-report = "pytest --cov=simaple --cov-report=xml"
 
 unittest = "pytest -vv -x tests/"
-test_app = "pytest -vv -x tests/wasm"
+test_wasm = "pytest -vv -x tests/wasm"
 test_data = "pytest -vv -x test_data/"
 rsctest = "pytest -vv -x test_resource/"
 typetest = "mypy simaple tests"

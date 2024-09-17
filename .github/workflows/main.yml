@@ -62,7 +62,7 @@ jobs:
         run: poetry install
       - name: Test
         run: poetry run poe test_data
-  test-app:
+  test-wasm:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -80,7 +80,7 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Test
-        run: poetry run poe test_app
+        run: poetry run poe test_wasm
   lint:
     runs-on: ubuntu-latest
     strategy:
