@@ -82,3 +82,8 @@ class OperationLogResponse(pydantic.BaseModel):
             previous_hash=operation_log.previous_hash,
             operation=operation_log.operation,
         )
+
+
+class FullOperationLogsWithCache(pydantic.BaseModel):
+    logs: list[OperationLogResponse]
+    cache: dict[str, str]
