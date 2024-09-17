@@ -111,5 +111,18 @@ def get_kms_spec_resource_path() -> str:
     return str(Path(__file__).parent / "resources")
 
 
+_BUILTIN_KMS_SKILL_REPOSITORY: DirectorySpecRepository | None = None
+
+
+def get_kms_skill_repository() -> DirectorySpecRepository:
+    global _BUILTIN_KMS_SKILL_REPOSITORY
+    if _BUILTIN_KMS_SKILL_REPOSITORY is None:
+        _BUILTIN_KMS_SKILL_REPOSITORY = DirectorySpecRepository(
+            get_kms_spec_resource_path()
+        )
+
+    return _BUILTIN_KMS_SKILL_REPOSITORY
+
+
 def get_kms_skill_loader() -> SpecBasedLoader:
-    return SpecBasedLoader(DirectorySpecRepository(get_kms_spec_resource_path()))
+    return SpecBasedLoader(get_kms_skill_repository())
