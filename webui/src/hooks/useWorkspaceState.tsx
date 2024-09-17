@@ -31,13 +31,6 @@ function useWorkspaceState() {
     setHistory(logs.flatMap((log) => log.logs));
   }, [pySimaple, serializedCharacterProvider, plan]);
 
-  const updateSerializedCharacterProvider = React.useCallback(
-    (provider: Record<string, unknown>) => {
-      setSerializedCharacterProvider(provider);
-    },
-    [],
-  );
-
   return {
     plan,
     setPlan,
@@ -45,7 +38,6 @@ function useWorkspaceState() {
     playLog,
     skillNames,
     run,
-    updateSerializedCharacterProvider,
   };
 }
 
