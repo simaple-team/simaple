@@ -1,12 +1,9 @@
 from simaple.wasm.skill import getAllSkillSpec, getSkillSpec
-from simaple.wasm.workspace import (
-    runSimulatorWithPlanConfig,
-    runSimulatorWithPlanConfigUsingCache,
-)
+from simaple.wasm.workspace import getSerializedCharacterProvider, run
 
 __all__ = [
-    "runSimulatorWithPlanConfig",
-    "runSimulatorWithPlanConfigUsingCache",
+    "run",
+    "getSerializedCharacterProvider",
     "getAllSkillSpec",
     "getSkillSpec",
 ]
