@@ -25,7 +25,7 @@ def runSimulatorWithPlanConfig(
 
     for op_or_console in op_or_consoles:
         if is_console_command(op_or_console):
-            console_output = engine.console(cast(ConsoleText, op_or_console))
+            _ = engine.console(cast(ConsoleText, op_or_console))
             continue
 
         engine.exec(cast(Operation, op_or_console))
@@ -51,7 +51,7 @@ def runSimulatorWithPlanConfigUsingCache(
 
     for op_or_console in op_or_consoles:
         if is_console_command(op_or_console):
-            console_output = engine.console(cast(ConsoleText, op_or_console))
+            _ = engine.console(cast(ConsoleText, op_or_console))
             continue
 
         engine.exec(cast(Operation, op_or_console))
