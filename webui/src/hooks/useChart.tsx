@@ -33,7 +33,7 @@ function clockFormatter(value: number) {
 }
 
 export function useChart(history: PlayLog[], setting: ChartSetting) {
-  const clock = history[history.length - 1].clock;
+  const clock = history.length > 0 ? history[history.length - 1].clock : 0;
   const markLine = {
     silent: true,
     animation: true,
@@ -106,7 +106,8 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
   }
 
   function getUptimeSeries(history: PlayLog[]) {
-    const names = Object.keys(history[0].running_view);
+    const names =
+      history.length > 0 ? Object.keys(history[0].running_view) : [];
     const data = names.flatMap((name, i) => {
       return history
         .filter(
@@ -290,7 +291,7 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
       {
         type: "category",
         gridIndex: 1,
-        data: Object.keys(history[0].running_view),
+        data: history.length > 0 ? Object.keys(history[0].running_view) : [],
       },
       {
         type: "value",

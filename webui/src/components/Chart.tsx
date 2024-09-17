@@ -1,9 +1,9 @@
 import { PlayLog } from "@/sdk/models";
+import { useThrottledState } from "@react-hookz/web";
 import { EChartsOption, default as ReactECharts } from "echarts-for-react";
 import React, { useEffect, useMemo, useRef } from "react";
 import { ChartSetting } from "../hooks/preferences.interface";
 import { useChart } from "../hooks/useChart";
-import { useThrottledState } from "@react-hookz/web";
 
 function getTotalData(history: PlayLog[]) {
   const record = history
@@ -67,7 +67,7 @@ const Chart: React.FC<{
   history: PlayLog[];
   setting: ChartSetting;
 }> = ({ history, setting }) => {
-  const clock = history[history.length - 1].clock;
+  const clock = history.length > 0 ? history[history.length - 1].clock : 0;
   const echartsRef = useRef<ReactECharts>(null);
 
   const [range, setRange] = useThrottledState<[number, number]>(

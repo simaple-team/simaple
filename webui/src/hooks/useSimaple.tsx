@@ -6,8 +6,6 @@ type PySimapleProviderProps = { children: React.ReactNode };
 function usePySimapleState() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [pySimaple, setPySimaple] = React.useState<PySimaple>();
-  const [fileSystem, setFileSystem] = React.useState<any>();
-  const [uow, setUow] = React.useState<PySimapleUow>();
 
   const isLoaded = React.useMemo(() => !!pySimaple, [pySimaple]);
 
@@ -15,39 +13,16 @@ function usePySimapleState() {
     try {
       setIsLoading(true);
 
-      const { pySimaple, fileSystem } = await loadPySimaple();
+      const { pySimaple } = await loadPySimaple();
 
       setPySimaple(pySimaple);
-      setUow(pySimaple.createUow());
-      setFileSystem(fileSystem);
     } finally {
       setIsLoading(false);
     }
   }
 
-  /**
-   * Sync memory file system to indexedDB.
-   */
-  async function syncFs() {
-    console.log("syncFs: syncing memory file system to indexedDB");
-    console.log(fileSystem);
-    if (!fileSystem) {
-      console.warn("syncFs: FileSystem is not loaded");
-      return;
-    }
-    const error = await new Promise((resolve) =>
-      fileSystem.syncfs(false, resolve),
-    );
-
-    if (error) {
-      throw new Error(`syncFs: Failed to sync to IndexedDB: ${error}`);
-    }
-  }
-
   return {
     pySimaple,
-    uow,
-    syncFs,
     isLoading,
     isLoaded,
     load,

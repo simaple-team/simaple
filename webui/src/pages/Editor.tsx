@@ -6,6 +6,7 @@ import {
 } from "@codemirror/autocomplete";
 import CodeMirror, { EditorView } from "@uiw/react-codemirror";
 import * as React from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import Chart from "../components/Chart";
 import { usePreference } from "../hooks/usePreference";
 import { useWorkspace } from "../hooks/useWorkspace";
@@ -61,21 +62,16 @@ const myTheme = EditorView.theme({
 });
 
 const Editor: React.FC = () => {
-  const { history, playLog, skillNames, run } = useWorkspace();
+  const { plan, setPlan, history, skillNames, run } = useWorkspace();
   const { chartSetting } = usePreference();
-  const [plan, setPlan] = React.useState("");
 
   const myCompletions = React.useMemo(
     () => createCompletion(skillNames),
     [skillNames],
   );
 
-  if (!playLog) {
-    return <></>;
-  }
-
   function handleRun() {
-    run(plan);
+    run();
   }
 
   return (
@@ -90,7 +86,11 @@ const Editor: React.FC = () => {
         <Button onClick={handleRun}>Calculate</Button>
       </div>
       <div className="grow">
-        <Chart history={history} setting={chartSetting} />
+        <ErrorBoundary
+          fallbackRender={({ error }) => <div>Error: {error.message}</div>}
+        >
+          <Chart history={history} setting={chartSetting} />
+        </ErrorBoundary>
       </div>
     </div>
   );
