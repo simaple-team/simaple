@@ -22,7 +22,36 @@ import {
   SelectValue,
 } from "./ui/select";
 
+function baselineTemplate(simulationSetting: SimulationSetting) {
+  return `---
+configuration_name: "BaselineCharacterProvider"
+author: ""
+data:
+  tier: ${simulationSetting.tier}
+  jobtype: ${simulationSetting.jobtype}
+  job_category: ${simulationSetting.job_category}
+  level: ${simulationSetting.level}
+  use_doping: ${simulationSetting.use_doping}
+  passive_skill_level: ${simulationSetting.passive_skill_level}
+  combat_orders_level: ${simulationSetting.combat_orders_level}
+  union_block_count: ${simulationSetting.union_block_count}
+  link_count: ${simulationSetting.link_count}
+  armor: ${simulationSetting.armor}
+  mob_level: ${simulationSetting.mob_level}
+  force_advantage: ${simulationSetting.force_advantage}
+  trait_level: ${simulationSetting.trait_level}
+  artifact_level: ${simulationSetting.artifact_level}
+  v_skill_level: ${simulationSetting.v_skill_level}
+  v_improvements_level: ${simulationSetting.v_improvements_level}
+  weapon_attack_power: ${simulationSetting.weapon_attack_power}
+  weapon_pure_attack_power: ${simulationSetting.weapon_pure_attack_power}
+simulation_setting: {}
+---
+ELAPSE 0`;
+}
+
 const CreateBaselineSimulatorDialog: React.FC = () => {
+  const { setPlan } = useWorkspace();
   const { register, getValues, control } = useForm({
     defaultValues: {
       tier: "Legendary",
@@ -46,38 +75,31 @@ const CreateBaselineSimulatorDialog: React.FC = () => {
     },
   });
   const [isOpen, setIsOpen] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
 
   function handleSubmit() {
-    setIsLoading(true);
-
-    setTimeout(() => {
-      const values = getValues();
-      // createBaselineSimulator({
-      //   simulation_setting: {
-      //     tier: values.tier,
-      //     jobtype: values.jobtype as SimulationSetting["jobtype"],
-      //     job_category: Number(values.job_category),
-      //     level: values.level,
-      //     use_doping: values.use_doping,
-      //     passive_skill_level: values.passive_skill_level,
-      //     combat_orders_level: values.combat_orders_level,
-      //     union_block_count: values.union_block_count,
-      //     link_count: values.link_count,
-      //     armor: values.armor,
-      //     mob_level: values.mob_level,
-      //     force_advantage: values.force_advantage,
-      //     trait_level: values.trait_level,
-      //     artifact_level: values.artifact_level,
-      //     v_skill_level: values.v_skill_level,
-      //     v_improvements_level: values.v_improvements_level,
-      //     weapon_attack_power: values.weapon_attack_power,
-      //     weapon_pure_attack_power: values.weapon_pure_attack_power,
-      //   },
-      // });
-      setIsLoading(false);
-      setIsOpen(false);
-    }, 0);
+    const values = getValues();
+    const plan = baselineTemplate({
+      tier: values.tier,
+      jobtype: values.jobtype as SimulationSetting["jobtype"],
+      job_category: Number(values.job_category),
+      level: values.level,
+      use_doping: values.use_doping,
+      passive_skill_level: values.passive_skill_level,
+      combat_orders_level: values.combat_orders_level,
+      union_block_count: values.union_block_count,
+      link_count: values.link_count,
+      armor: values.armor,
+      mob_level: values.mob_level,
+      force_advantage: values.force_advantage,
+      trait_level: values.trait_level,
+      artifact_level: values.artifact_level,
+      v_skill_level: values.v_skill_level,
+      v_improvements_level: values.v_improvements_level,
+      weapon_attack_power: values.weapon_attack_power,
+      weapon_pure_attack_power: values.weapon_pure_attack_power,
+    });
+    setPlan(plan);
+    setIsOpen(false);
   }
 
   return (
@@ -162,9 +184,7 @@ const CreateBaselineSimulatorDialog: React.FC = () => {
         </div>
 
         <DialogFooter>
-          <Button disabled={isLoading} onClick={handleSubmit}>
-            {isLoading ? "Creating..." : "Create"}
-          </Button>
+          <Button onClick={handleSubmit}>Create</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
