@@ -1,0 +1,584 @@
+{
+  "$defs": {
+    "Action": {
+      "description": "Action is primitive value-object which indicated\nwhat `Component` and Which `method` will be triggerd.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "method": {
+          "title": "Method",
+          "type": "string"
+        },
+        "payload": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Payload"
+        }
+      },
+      "required": [
+        "name",
+        "method",
+        "payload"
+      ],
+      "title": "Action",
+      "type": "object"
+    },
+    "Checkpoint": {
+      "properties": {
+        "store_ckpt": {
+          "title": "Store Ckpt",
+          "type": "object"
+        }
+      },
+      "required": [
+        "store_ckpt"
+      ],
+      "title": "Checkpoint",
+      "type": "object"
+    },
+    "DamageLog": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "damage": {
+          "title": "Damage",
+          "type": "number"
+        },
+        "hit": {
+          "title": "Hit",
+          "type": "number"
+        },
+        "buff": {
+          "$ref": "#/$defs/Stat"
+        },
+        "tag": {
+          "title": "Tag",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "damage",
+        "hit",
+        "buff",
+        "tag"
+      ],
+      "title": "DamageLog",
+      "type": "object"
+    },
+    "Event": {
+      "description": "Event is primitive value-object, which indicated\n\"something happened\" via action-handlers.\n\nEvent may verbose; Any applications will watch event stream to\ntake some activities. Actions are only for internal state-change;\nonly events are externally shown.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "payload": {
+          "title": "Payload",
+          "type": "object"
+        },
+        "method": {
+          "title": "Method",
+          "type": "string"
+        },
+        "tag": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Tag"
+        },
+        "handler": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Handler"
+        }
+      },
+      "required": [
+        "name",
+        "payload",
+        "method",
+        "tag",
+        "handler"
+      ],
+      "title": "Event",
+      "type": "object"
+    },
+    "Operation": {
+      "description": "Operand is an aggregation of meaningful actions.\nAn operand can contain one or more actions; This meant\nonly operand-to-action translation is possible.",
+      "properties": {
+        "command": {
+          "title": "Command",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "time": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Time"
+        },
+        "expr": {
+          "default": "",
+          "title": "Expr",
+          "type": "string"
+        }
+      },
+      "required": [
+        "command",
+        "name"
+      ],
+      "title": "Operation",
+      "type": "object"
+    },
+    "OperationLogResponse": {
+      "properties": {
+        "logs": {
+          "items": {
+            "$ref": "#/$defs/PlayLogResponse"
+          },
+          "title": "Logs",
+          "type": "array"
+        },
+        "hash": {
+          "title": "Hash",
+          "type": "string"
+        },
+        "previous_hash": {
+          "title": "Previous Hash",
+          "type": "string"
+        },
+        "operation": {
+          "$ref": "#/$defs/Operation"
+        },
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "logs",
+        "hash",
+        "previous_hash",
+        "operation",
+        "index"
+      ],
+      "title": "OperationLogResponse",
+      "type": "object"
+    },
+    "PlayLogResponse": {
+      "properties": {
+        "events": {
+          "items": {
+            "$ref": "#/$defs/Event"
+          },
+          "title": "Events",
+          "type": "array"
+        },
+        "validity_view": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Validity"
+          },
+          "title": "Validity View",
+          "type": "object"
+        },
+        "running_view": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Running"
+          },
+          "title": "Running View",
+          "type": "object"
+        },
+        "buff_view": {
+          "$ref": "#/$defs/Stat"
+        },
+        "report": {
+          "$ref": "#/$defs/_Report"
+        },
+        "clock": {
+          "title": "Clock",
+          "type": "number"
+        },
+        "delay": {
+          "title": "Delay",
+          "type": "number"
+        },
+        "action": {
+          "$ref": "#/$defs/Action"
+        },
+        "checkpoint": {
+          "$ref": "#/$defs/Checkpoint"
+        },
+        "damage": {
+          "title": "Damage",
+          "type": "number"
+        },
+        "damages": {
+          "items": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array"
+          },
+          "title": "Damages",
+          "type": "array"
+        }
+      },
+      "required": [
+        "events",
+        "validity_view",
+        "running_view",
+        "buff_view",
+        "report",
+        "clock",
+        "delay",
+        "action",
+        "checkpoint",
+        "damage",
+        "damages"
+      ],
+      "title": "PlayLogResponse",
+      "type": "object"
+    },
+    "Running": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "time_left": {
+          "title": "Time Left",
+          "type": "number"
+        },
+        "lasting_duration": {
+          "title": "Lasting Duration",
+          "type": "number"
+        },
+        "stack": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stack"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "time_left",
+        "lasting_duration"
+      ],
+      "title": "Running",
+      "type": "object"
+    },
+    "SimulationEntry": {
+      "properties": {
+        "action": {
+          "$ref": "#/$defs/Action"
+        },
+        "clock": {
+          "title": "Clock",
+          "type": "number"
+        },
+        "damage_logs": {
+          "items": {
+            "$ref": "#/$defs/DamageLog"
+          },
+          "title": "Damage Logs",
+          "type": "array"
+        },
+        "accepted": {
+          "title": "Accepted",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "action",
+        "clock",
+        "damage_logs",
+        "accepted"
+      ],
+      "title": "SimulationEntry",
+      "type": "object"
+    },
+    "Stat": {
+      "properties": {
+        "STR": {
+          "default": 0.0,
+          "title": "Str",
+          "type": "number"
+        },
+        "LUK": {
+          "default": 0.0,
+          "title": "Luk",
+          "type": "number"
+        },
+        "INT": {
+          "default": 0.0,
+          "title": "Int",
+          "type": "number"
+        },
+        "DEX": {
+          "default": 0.0,
+          "title": "Dex",
+          "type": "number"
+        },
+        "STR_multiplier": {
+          "default": 0.0,
+          "title": "Str Multiplier",
+          "type": "number"
+        },
+        "LUK_multiplier": {
+          "default": 0.0,
+          "title": "Luk Multiplier",
+          "type": "number"
+        },
+        "INT_multiplier": {
+          "default": 0.0,
+          "title": "Int Multiplier",
+          "type": "number"
+        },
+        "DEX_multiplier": {
+          "default": 0.0,
+          "title": "Dex Multiplier",
+          "type": "number"
+        },
+        "STR_static": {
+          "default": 0.0,
+          "title": "Str Static",
+          "type": "number"
+        },
+        "LUK_static": {
+          "default": 0.0,
+          "title": "Luk Static",
+          "type": "number"
+        },
+        "INT_static": {
+          "default": 0.0,
+          "title": "Int Static",
+          "type": "number"
+        },
+        "DEX_static": {
+          "default": 0.0,
+          "title": "Dex Static",
+          "type": "number"
+        },
+        "attack_power": {
+          "default": 0.0,
+          "title": "Attack Power",
+          "type": "number"
+        },
+        "magic_attack": {
+          "default": 0.0,
+          "title": "Magic Attack",
+          "type": "number"
+        },
+        "attack_power_multiplier": {
+          "default": 0.0,
+          "title": "Attack Power Multiplier",
+          "type": "number"
+        },
+        "magic_attack_multiplier": {
+          "default": 0.0,
+          "title": "Magic Attack Multiplier",
+          "type": "number"
+        },
+        "critical_rate": {
+          "default": 0.0,
+          "title": "Critical Rate",
+          "type": "number"
+        },
+        "critical_damage": {
+          "default": 0.0,
+          "title": "Critical Damage",
+          "type": "number"
+        },
+        "boss_damage_multiplier": {
+          "default": 0.0,
+          "title": "Boss Damage Multiplier",
+          "type": "number"
+        },
+        "damage_multiplier": {
+          "default": 0.0,
+          "title": "Damage Multiplier",
+          "type": "number"
+        },
+        "final_damage_multiplier": {
+          "default": 0.0,
+          "title": "Final Damage Multiplier",
+          "type": "number"
+        },
+        "ignored_defence": {
+          "default": 0.0,
+          "title": "Ignored Defence",
+          "type": "number"
+        },
+        "MHP": {
+          "default": 0.0,
+          "title": "Mhp",
+          "type": "number"
+        },
+        "MMP": {
+          "default": 0.0,
+          "title": "Mmp",
+          "type": "number"
+        },
+        "MHP_multiplier": {
+          "default": 0.0,
+          "title": "Mhp Multiplier",
+          "type": "number"
+        },
+        "MMP_multiplier": {
+          "default": 0.0,
+          "title": "Mmp Multiplier",
+          "type": "number"
+        },
+        "elemental_resistance": {
+          "default": 0.0,
+          "title": "Elemental Resistance",
+          "type": "number"
+        }
+      },
+      "title": "Stat",
+      "type": "object"
+    },
+    "Validity": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "time_left": {
+          "title": "Time Left",
+          "type": "number"
+        },
+        "valid": {
+          "title": "Valid",
+          "type": "boolean"
+        },
+        "cooldown_duration": {
+          "title": "Cooldown Duration",
+          "type": "number"
+        },
+        "stack": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stack"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "time_left",
+        "valid",
+        "cooldown_duration"
+      ],
+      "title": "Validity",
+      "type": "object"
+    },
+    "_Report": {
+      "description": "For backward Compat. only (this is redundant)",
+      "properties": {
+        "time_series": {
+          "items": {
+            "$ref": "#/$defs/SimulationEntry"
+          },
+          "title": "Time Series",
+          "type": "array"
+        }
+      },
+      "required": [
+        "time_series"
+      ],
+      "title": "_Report",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "logs": {
+      "items": {
+        "$ref": "#/$defs/OperationLogResponse"
+      },
+      "title": "Logs",
+      "type": "array"
+    },
+    "cache": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Cache",
+      "type": "object"
+    }
+  },
+  "required": [
+    "logs",
+    "cache"
+  ],
+  "title": "FullOperationLogsWithCache",
+  "type": "object"
+}

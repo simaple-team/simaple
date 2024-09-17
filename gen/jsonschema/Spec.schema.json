@@ -1,0 +1,63 @@
+{
+  "$defs": {
+    "SpecMetadata": {
+      "properties": {
+        "label": {
+          "title": "Label",
+          "type": "object"
+        },
+        "annotation": {
+          "title": "Annotation",
+          "type": "object"
+        }
+      },
+      "title": "SpecMetadata",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "kind": {
+      "title": "Kind",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/SpecMetadata"
+    },
+    "data": {
+      "title": "Data",
+      "type": "object"
+    },
+    "patch": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Patch"
+    },
+    "ignore_overflowing_patch": {
+      "default": true,
+      "title": "Ignore Overflowing Patch",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "kind",
+    "version",
+    "metadata",
+    "data"
+  ],
+  "title": "Spec",
+  "type": "object"
+}
