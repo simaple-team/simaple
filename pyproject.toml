@@ -14,13 +14,12 @@ coverage = "pytest --cov=simaple"
 coverage-report = "pytest --cov=simaple --cov-report=xml"
 
 unittest = "pytest -vv -x tests/"
-test_app = "pytest -vv -x test_app/"
+test_wasm = "pytest -vv -x tests/wasm"
 test_data = "pytest -vv -x test_data/"
 rsctest = "pytest -vv -x test_resource/"
 typetest = "mypy simaple tests"
 simulatetest = "pytest -vv -x tests/simulate"
 clean = "rm -rf **/__pycache__ .coverage .mypy_cache .pytest_cache"
-web = "python launcher.py web"
 test = ["coverage", "typetest", "lint", "formatting-check"]
 
 [tool.black]
@@ -59,8 +58,6 @@ module = [
     "sklearn.linear_model",
     "sklearn.pipeline",
     "sklearn.preprocessing",
-    "sqlalchemy",
-    "sqlalchemy.orm",
     "functional",
 ]
 
@@ -82,10 +79,7 @@ numpy = "^1.22.3"
 scikit-learn = "^1.0.2"
 aiohttp = "^3.10.1"
 requests = "^2.26.0"
-fastapi = "^0.110.1"
 fire = "^0.4.0"
-uvicorn = "^0.20.0"
-dependency-injector = "^4.40.0"
 SQLAlchemy = "^1.4.45"
 scipy = "^1.11.2"
 pydantic-settings = "^2.0.3"

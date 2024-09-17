@@ -3,7 +3,9 @@ from enum import Enum
 import fire
 
 import simaple.simulate.component.skill  # noqa: F401
-from simaple.container.simulation import SimulationContainer, SimulationSetting
+from simaple.container.cache import PersistentStorageCache
+from simaple.container.character_provider import BaselineCharacterProvider
+from simaple.container.simulation import SimulationSetting
 from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.base import PlayLog
 from simaple.simulate.policy.base import is_console_command
@@ -70,34 +72,35 @@ class DebugInterface:
             jobtype = JobType(jobtype)
 
         self._setting = SimulationSetting(
+            v_skill_level=30,
+            v_improvements_level=60,
+            hexa_improvements_level=10,
+        )
+        self._character_provider = BaselineCharacterProvider(
             tier="Legendary",
             jobtype=jobtype,
             job_category=get_job_category(jobtype),
             level=270,
             passive_skill_level=0,
             combat_orders_level=1,
-            v_skill_level=30,
-            v_improvements_level=60,
-            hexa_improvements_level=10,
             artifact_level=40,
         )
+        self._container_cache = PersistentStorageCache()
 
     def get_engine(self):
-        container = SimulationContainer(self._setting)
+        container = self._container_cache.get_simulation_container(
+            self._setting, self._character_provider
+        )
 
         engine = container.operation_engine()
 
         return engine
 
     def get_dpm_calculator(self):
-        container = SimulationContainer(self._setting)
-
-        _damage_logic = container.dpm_calculator().damage_logic
-        print(
-            "combat_power", _damage_logic.get_compat_power(container.character().stat)
+        container = self._container_cache.get_simulation_container(
+            self._setting, self._character_provider
         )
-
-        return container.dpm_calculator()
+        return container.damage_calculator()
 
     def run(self, plan_file: str):
         with open(plan_file, "r") as f:

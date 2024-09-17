@@ -1,6 +1,7 @@
 import os
 
 from simaple.container.simulation import SimulationSetting
+from simaple.container.character_provider import BaselineCharacterProvider
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 
@@ -13,21 +14,21 @@ def container_test_setting(
     if options is None:
         options = {}
 
-    return SimulationSetting(
+    return BaselineCharacterProvider(
         tier="Legendary",
         jobtype=jobtype,
         job_category=job_category,
         level=270,
         passive_skill_level=0,
         combat_orders_level=1,
+        weapon_pure_attack_power=options.get("weapon_pure_attack_power", 0),
+        artifact_level=40,
+    ), SimulationSetting(
         hexa_mastery_level=1,
         v_skill_level=30,
         v_improvements_level=60,
         hexa_improvements_level=10,
-        cache_root_dir=os.path.join(os.path.dirname(__file__), "cache"),
         weapon_attack_power=options.get("weapon_attack_power", 0),
-        weapon_pure_attack_power=options.get("weapon_pure_attack_power", 0),
-        artifact_level=40,
     )
 
 
@@ -37,28 +38,28 @@ SETTINGS = [
             JobType.archmagefb,
             JobCategory.magician,
         ),
-        13597860884754,
+        15919731027452,
     ),
     (
         (
             JobType.archmagetc,
             JobCategory.magician,
         ),
-        11450940437523,
+        13395121192957,
     ),
     (
         (
             JobType.bishop,
             JobCategory.magician,
         ),
-        7847639017173,
+        9251885099074,
     ),
     (
         (
             JobType.mechanic,
             JobCategory.pirate,
         ),
-        6898897517450,
+        8064280322731,
     ),
     (
         (
@@ -69,7 +70,7 @@ SETTINGS = [
                 "weapon_pure_attack_power": 295,
             },
         ),
-        7421348754564,
+        8782689556242,
     ),
     (
         (
@@ -79,7 +80,7 @@ SETTINGS = [
                 "weapon_attack_power": 789,
             },
         ),
-        9835974035601,
+        11411869302005,
     ),
     (
         (
@@ -89,7 +90,7 @@ SETTINGS = [
                 "weapon_attack_power": 789,
             },
         ),
-        11522692385817,
+        13343175412181,
     ),
     (
         (
@@ -99,7 +100,7 @@ SETTINGS = [
                 "weapon_attack_power": 700,
             },
         ),
-        5137550169303,
+        5887717338595,
     ),
 ]
 

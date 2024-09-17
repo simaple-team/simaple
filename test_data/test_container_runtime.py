@@ -2,15 +2,22 @@ import pytest
 
 import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.container.simulation import SimulationContainer
+from simaple.container.cache import PersistentStorageCache
 from test_data.target import get_test_settings
 from simaple.simulate.strategy.base import exec_by_strategy
+import os
 
+@pytest.mark.parametrize("character_provider_and_setting, jobtype, expected", get_test_settings())
+def test_actor(character_provider_and_setting, jobtype, expected):
+    character_provider, setting  = character_provider_and_setting
+    container = PersistentStorageCache(
+        os.path.join(os.path.dirname(__file__), ".cache.simaple.json")
+    ).get_simulation_container(
+        setting,
+        character_provider
+    )
 
-@pytest.mark.parametrize("setting, jobtype, expected", get_test_settings())
-def test_actor(setting, jobtype, expected):
-    container = SimulationContainer(setting)
-
-    print(container.character().action_stat)
+    print(container.character_provider.character().action_stat)
 
     engine = container.operation_engine()
 
@@ -32,6 +39,6 @@ def test_actor(setting, jobtype, expected):
                 f.write(f"{playlog.clock} | {playlog.action} | {playlog.events} \n")
     '''
 
-    dpm = container.dpm_calculator().calculate_dpm(report)
+    dpm = container.damage_calculator().calculate_dpm(report)
     print(f"{engine.get_current_viewer()('clock')} | {jobtype} | {dpm:,} ")
     assert int(dpm) == expected
