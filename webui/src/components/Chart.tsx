@@ -97,7 +97,7 @@ const Chart: React.FC<{
         option={options}
         onEvents={useMemo(
           () => ({
-            datazoom: (_, chart) => {
+            datazoom: (_: unknown, chart: any) => {
               const option = chart.getOption() as any;
 
               if (!option) return;
