@@ -1,7 +1,9 @@
-from simaple.app.domain.services.plan import get_simulator_from_plan
+from simaple.wasm.workspace import runSimulatorWithPlanConfig
 
-def test_run_plan():
-    get_simulator_from_plan("""
+
+def test_create_simulator_from_plan():
+    simulation_response = runSimulatorWithPlanConfig(
+        """
 /*
 configuration_name: "BaselineCharacterProvider"
 author: "Alice"
@@ -19,4 +21,6 @@ ELAPSE 10.0
 ELAPSE 10.0
 ELAPSE 10.0
 ELAPSE 10.0  
-    """)
+"""
+    )
+    assert isinstance(simulation_response, list)

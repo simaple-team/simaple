@@ -2,9 +2,7 @@ from typing import Any
 
 import pydantic
 
-from simaple.app.domain.simulator import Simulator
 from simaple.container.character_provider import get_character_provider
-from simaple.container.simulation import CharacterProvider, SimulationSetting
 from simaple.container.simulation import (
     CharacterProvider,
     SimulationContainer,
@@ -21,7 +19,7 @@ class PlanMetadata(pydantic.BaseModel):
     def get_character_provider_config(self) -> CharacterProvider:
         return get_character_provider(self.configuration_name, self.data)
 
-    def load_simulator(self) -> SimulationContainer:
+    def load_container(self) -> SimulationContainer:
         container = SimulationContainer(
             setting=self.simulation_setting,
             character_provider=self.get_character_provider_config(),
