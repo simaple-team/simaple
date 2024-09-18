@@ -4,9 +4,9 @@ from pathlib import Path
 import pytest
 
 import simaple.simulate.component.skill  # noqa: F401
-from simaple.container.cache import PersistentStorageCache
-from simaple.container.character_provider import BaselineCharacterProvider
-from simaple.container.simulation import SimulationSetting
+from simaple.container.environment_provider import BaselineEnvironmentProvider
+from simaple.container.memoizer import PersistentStorageMemoizer
+from simaple.container.simulation import SimulationContainer
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 from simaple.simulate.policy.parser import parse_dsl_to_operations
@@ -21,8 +21,8 @@ def fixture_dsl_list() -> list[str]:
 
 
 @pytest.fixture(name="dsl_test_setting")
-def fixture_dsl_test_setting() -> BaselineCharacterProvider:
-    return BaselineCharacterProvider(
+def fixture_dsl_test_setting() -> BaselineEnvironmentProvider:
+    return BaselineEnvironmentProvider(
         tier="Legendary",
         jobtype=JobType.archmagetc,
         job_category=JobCategory.magician,
@@ -33,17 +33,15 @@ def fixture_dsl_test_setting() -> BaselineCharacterProvider:
     )
 
 
-def test_dsl(dsl_list: list[str], dsl_test_setting: BaselineCharacterProvider) -> None:
-    container = PersistentStorageCache(
-        os.path.join(os.path.dirname(__file__), ".simaple.cache.json"),
-    ).get_simulation_container(
-        SimulationSetting(
-            v_skill_level=30,
-            v_improvements_level=60,
-        ),
+def test_dsl(
+    dsl_list: list[str], dsl_test_setting: BaselineEnvironmentProvider
+) -> None:
+    environment = PersistentStorageMemoizer(
+        os.path.join(os.path.dirname(__file__), ".simaple.memo.json"),
+    ).compute_environment(
         dsl_test_setting,
     )
-
+    container = SimulationContainer(environment)
     engine = container.operation_engine()
 
     for dsl in dsl_list:

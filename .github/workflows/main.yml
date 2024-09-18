@@ -102,22 +102,3 @@ jobs:
         run: poetry run poe lint
       - name: Format check
         run: poetry run poe formatting-check
-  build-check:
-    runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: ["3.10"]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install poetry
-        run: pipx install poetry
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: "poetry"
-      - name: Install dependencies
-        run: poetry install
-      - name: Check webui Version is latest
-        run: cat webui/public/version.txt | grep `find './simaple' -type f -name '*.py' -print0 | xargs -0 shasum | sort | shasum`

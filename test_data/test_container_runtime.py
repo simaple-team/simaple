@@ -2,23 +2,19 @@ import pytest
 
 import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.container.simulation import SimulationContainer
-from simaple.container.cache import PersistentStorageCache
+from simaple.container.memoizer import PersistentStorageMemoizer
 from test_data.target import get_test_settings
 from simaple.simulate.strategy.base import exec_by_strategy
 import os
 
-@pytest.mark.parametrize("character_provider_and_setting, jobtype, expected", get_test_settings())
-def test_actor(character_provider_and_setting, jobtype, expected):
-    character_provider, setting  = character_provider_and_setting
-    container = PersistentStorageCache(
-        os.path.join(os.path.dirname(__file__), ".cache.simaple.json")
-    ).get_simulation_container(
-        setting,
-        character_provider
+@pytest.mark.parametrize("environment_provider, jobtype, expected", get_test_settings())
+def test_actor(environment_provider, jobtype, expected):
+    environment = PersistentStorageMemoizer(
+        os.path.join(os.path.dirname(__file__), ".memo.simaple.json")
+    ).compute_environment(
+        environment_provider
     )
-
-    print(container.character_provider.character().action_stat)
-
+    container = SimulationContainer(environment)
     engine = container.operation_engine()
 
     policy = container.builtin_strategy().get_priority_based_policy()

@@ -1,4 +1,3 @@
-from abc import ABCMeta, abstractmethod
 from typing import cast
 
 import pydantic
@@ -16,33 +15,12 @@ def add_extended_stats(*action_stats):
     return sum(action_stats, ExtendedStat())
 
 
-class CharacterDependentSimulationConfig(pydantic.BaseModel):
-    passive_skill_level: int
-    combat_orders_level: int
-    weapon_pure_attack_power: int
+class SimulationEnvironment(pydantic.BaseModel):
+    """
+    SimulationSetting defines complete set of configuration
+    to configure Simulation Engine.
+    """
 
-    jobtype: JobType
-    level: int
-
-    def damage_logic(self):
-        return get_damage_logic(self.jobtype, self.combat_orders_level)
-
-
-class CharacterProvider(pydantic.BaseModel, metaclass=ABCMeta):
-    @abstractmethod
-    def character(self) -> ExtendedStat: ...
-
-    @abstractmethod
-    def get_character_dependent_simulation_config(
-        self,
-    ) -> CharacterDependentSimulationConfig: ...
-
-    @classmethod
-    def get_name(cls):
-        return cls.__name__
-
-
-class SimulationSetting(pydantic.BaseModel):
     use_doping: bool = True
 
     armor: int = 300
@@ -57,78 +35,76 @@ class SimulationSetting(pydantic.BaseModel):
 
     weapon_attack_power: int = 0
 
+    passive_skill_level: int
+    combat_orders_level: int
+    weapon_pure_attack_power: int
+
+    jobtype: JobType
+    level: int
+    character: ExtendedStat
+
 
 class SimulationContainer:
     def __init__(
-        self, setting: SimulationSetting, character_provider: CharacterProvider
+        self,
+        environment: SimulationEnvironment,
     ) -> None:
-        self.setting = setting
-        self.character_provider = character_provider
+        self.environment = environment
 
-    def config(self) -> CharacterProvider:
-        return self.character_provider
+    def damage_logic(self):
+        return get_damage_logic(
+            self.environment.jobtype, self.environment.combat_orders_level
+        )
 
     def skill_profile(self):
-        config = self.config()
-        return get_skill_profile(
-            config.get_character_dependent_simulation_config().jobtype
-        )
+        return get_skill_profile(self.environment.jobtype)
 
     def builtin_strategy(self):
-        return get_builtin_strategy(
-            self.character_provider.get_character_dependent_simulation_config().jobtype
-        )
+        return get_builtin_strategy(self.environment.jobtype)
 
     def level_advantage(self):
-        config = self.setting
         return LevelAdvantage().get_advantage(
-            config.mob_level,
-            self.character_provider.get_character_dependent_simulation_config().level,
+            self.environment.mob_level,
+            self.environment.level,
         )
 
     def damage_calculator(self) -> DamageCalculator:
-        config = self.setting
-
-        character = self.character_provider.character()
-        damage_logic = (
-            self.character_provider.get_character_dependent_simulation_config().damage_logic()
-        )
+        damage_logic = self.damage_logic()
         level_advantage = self.level_advantage()
 
         return DamageCalculator(
-            character_spec=character.stat,
+            character_spec=self.environment.character.stat,
             damage_logic=damage_logic,
-            armor=config.armor,
+            armor=self.environment.armor,
             level_advantage=level_advantage,
-            force_advantage=config.force_advantage,
+            force_advantage=self.environment.force_advantage,
         )
 
     def builder(self):
         skill_profile = self.skill_profile()
-        config = self.setting
-        character = self.character_provider.character()
-        character_dependent_simulation_setting = (
-            self.character_provider.get_character_dependent_simulation_config()
-        )
 
         return get_builder(
             skill_profile.get_groups(),
             skill_profile.get_skill_levels(
-                config.v_skill_level,
-                config.hexa_skill_level,
-                config.hexa_mastery_level,
+                self.environment.v_skill_level,
+                self.environment.hexa_skill_level,
+                self.environment.hexa_mastery_level,
             ),
-            skill_profile.get_filled_v_improvements(config.v_improvements_level),
-            skill_profile.get_filled_hexa_improvements(config.hexa_improvements_level),
+            skill_profile.get_filled_v_improvements(
+                self.environment.v_improvements_level
+            ),
+            skill_profile.get_filled_hexa_improvements(
+                self.environment.hexa_improvements_level
+            ),
             skill_profile.get_skill_replacements(),
             {
-                "character_stat": character.stat,
-                "character_level": character_dependent_simulation_setting.level,
-                "weapon_attack_power": config.weapon_attack_power,
-                "weapon_pure_attack_power": character_dependent_simulation_setting.weapon_pure_attack_power,
-                "action_stat": character.action_stat,
-                "passive_skill_level": character_dependent_simulation_setting.passive_skill_level,
-                "combat_orders_level": character_dependent_simulation_setting.combat_orders_level,
+                "character_stat": self.environment.character.stat,
+                "character_level": self.environment.level,
+                "weapon_attack_power": self.environment.weapon_attack_power,
+                "weapon_pure_attack_power": self.environment.weapon_pure_attack_power,
+                "action_stat": self.environment.character.action_stat,
+                "passive_skill_level": self.environment.passive_skill_level,
+                "combat_orders_level": self.environment.combat_orders_level,
             },
         )
 

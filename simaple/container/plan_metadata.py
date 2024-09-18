@@ -2,26 +2,38 @@ from typing import Any
 
 import pydantic
 
-from simaple.container.character_provider import get_character_provider
-from simaple.container.simulation import (
-    CharacterProvider,
-    SimulationContainer,
-    SimulationSetting,
+from simaple.container.environment_provider import (
+    EnvironmentProvider,
+    get_environment_provider,
 )
+from simaple.container.simulation import SimulationContainer, SimulationEnvironment
+
+
+class _ProviderMetadata(pydantic.BaseModel):
+    name: str
+    data: dict[str, Any]
+
+    def get_environment_provider(self) -> EnvironmentProvider:
+        return get_environment_provider(self.name, self.data)
+
+    def get_simulation_environment(self) -> SimulationEnvironment:
+        return self.get_environment_provider().get_simulation_environment()
 
 
 class PlanMetadata(pydantic.BaseModel):
-    configuration_name: str
     author: str = ""
-    data: dict[str, Any]
-    simulation_setting: SimulationSetting
+    provider: _ProviderMetadata | None = None
+    environment: SimulationEnvironment | None = None
 
-    def get_character_provider_config(self) -> CharacterProvider:
-        return get_character_provider(self.configuration_name, self.data)
+    def get_environment_provider_config(self) -> EnvironmentProvider:
+        assert self.provider is not None
+        return self.provider.get_environment_provider()
 
     def load_container(self) -> SimulationContainer:
-        container = SimulationContainer(
-            setting=self.simulation_setting,
-            character_provider=self.get_character_provider_config(),
-        )
-        return container
+        if self.environment is None:
+            assert self.provider is not None
+            environment = self.provider.get_simulation_environment()
+        else:
+            environment = self.environment
+
+        return SimulationContainer(environment)

@@ -4,11 +4,9 @@ import { OperationLog } from "./models/OperationLog";
 export interface PySimapleUow {}
 
 export interface PySimaple {
-  run(
-    plan: string,
-    serializedCharacterProvider: Record<string, unknown>,
-  ): OperationLog[];
-  getSerializedCharacterProvider(plan: string): Record<string, unknown>;
+  runPlan(plan: string): OperationLog[];
+  hasEnvironment(plan: string): boolean;
+  provideEnvironmentAugmentedPlan(plan: string): string;
 }
 
 export async function loadPySimaple() {

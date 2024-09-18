@@ -1,9 +1,11 @@
-from simaple.wasm.skill import getAllSkillSpec, getSkillSpec
-from simaple.wasm.workspace import getSerializedCharacterProvider, run
+from simaple.wasm.workspace import (
+    hasEnvironment,
+    provideEnvironmentAugmentedPlan,
+    runPlan,
+)
 
 __all__ = [
-    "run",
-    "getSerializedCharacterProvider",
-    "getAllSkillSpec",
-    "getSkillSpec",
+    "provideEnvironmentAugmentedPlan",
+    "hasEnvironment",
+    "runPlan",
 ]
