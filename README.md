@@ -17,10 +17,13 @@ poetry install
 ## Run Simulation
 
 ```
-poetry run python scripts/debug.py --jobtype $JOBTYPE run $PLAN_FILEPATH
+poetry run python scripts/simulate.py $PLAN_FILEPATH
+# or
+simaple-simulate $PLAN_FILEPATH
 
 ## example
-poetry run python scripts/debug.py --jobtype bishop run plans/30s/bishop.simaple
+poetry run python scripts/simulate.py plans/30s/bishop.simaple
+simaple-simulate plans/30s/bishop.simaple
 ```
 
 
