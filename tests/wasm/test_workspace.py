@@ -3,15 +3,13 @@ import yaml
 
 from simaple.container.simulation import SimulationEnvironment
 from simaple.wasm.workspace import (
-    computeSimulationEnvironmentFromProvider,
+    hasEnvironment,
     provideEnvironmentAugmentedPlan,
-    run,
     runPlan,
-    runWithGivenEnvironment,
 )
 
 
-def test_get_simulation_environment_then_run():
+def test_has_environment_returns_false_without_environment():
     plan = """
 author: "Alice"
 provider:
@@ -28,41 +26,13 @@ provider:
 ELAPSE 10.0
 ELAPSE 10.0
 ELAPSE 10.0
-ELAPSE 10.0  
-"""
-    simulation_environment = computeSimulationEnvironmentFromProvider(plan)
-    assert isinstance(simulation_environment, SimulationEnvironment)
-
-    result_from_given_environment = runWithGivenEnvironment(
-        plan, simulation_environment.model_dump()
-    )
-
-    assert result_from_given_environment == run(plan)
-
-
-def test_run():
-    plan = """
-author: "Alice"
-provider:
-    name: "BaselineEnvironmentProvider"
-    data:
-        tier: Legendary
-        jobtype: archmagetc
-        job_category: 1 # mage
-        level: 270
-        artifact_level: 40
-        passive_skill_level: 0
-        combat_orders_level: 1
----
 ELAPSE 10.0
-ELAPSE 10.0
-ELAPSE 10.0
-ELAPSE 10.0  
-"""
-    run(plan)
+    """
+
+    assert not hasEnvironment(plan)
 
 
-def test_run_with_explicit_environment():
+def test_has_environment_returns_true_with_environment():
     plan = """
 author: "Alice"
 provider:
@@ -129,15 +99,10 @@ environment:
 ELAPSE 10.0
 ELAPSE 10.0
 ELAPSE 10.0
-ELAPSE 10.0  
-CAST "체인 라이트닝 VI"
-"""
-    simulation_environment = computeSimulationEnvironmentFromProvider(plan)
-    result_from_given_environment = runWithGivenEnvironment(
-        plan, simulation_environment.model_dump()
-    )
+ELAPSE 10.0
+    """
 
-    assert result_from_given_environment != run(plan)
+    assert hasEnvironment(plan)
 
 
 def test_provide_environment_augmented_plan():
