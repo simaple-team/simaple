@@ -3,16 +3,16 @@ import {LRParser} from "@lezer/lr"
 import {simapleHighlighting} from "./highlight"
 export const parser = LRParser.deserialize({
   version: 14,
-  states: "!vQVQPOOObQPO'#C`OgQPO'#C_OlQPO'#C_OqQPO'#CcOOQO'#C^'#C^OOQO'#Cd'#CdQVQPOOOOQO,58z,58zOOQO,58y,58yOvQPO,58yOOQO,58},58}OOQO-E6b-E6bOOQO1G.e1G.e",
-  stateData: "{~OZOS~O[PO]QO^SO~OTWO~OUXO~O]YO~OTZO~OU]O~O",
-  goto: "lXPPY^bPP^fTUOVTTOVTROVQVOR[V",
-  nodeNames: "⚠ Program Statement CastStatement Repetition Number Quotedstring ElapseStatement",
-  maxTerm: 14,
+  states: "#lQYQPOOOkQPO'#CaOpQPO'#C`OuQPO'#C`O}QPO'#CdO!SQPO'#CeO!XQPO'#CfOOQO'#C_'#C_OOQO'#Cg'#CgQYQPOOOOQO,58{,58{OOQO,58z,58zO!^QPO,58zO!cQPO,59POOQO,59O,59OOOQO,59P,59POOQO,59Q,59QOOQO-E6e-E6eOOQO1G.f1G.fOOQO1G.k1G.k",
+  stateData: "!h~O^OSPOS~O_PO`QOaSObTOcUO~OUYO~OVZO~O`[Ob]O~OU^O~OV_O~OV`O~OVbO~OVcO~O",
+  goto: "o[PPP]aePPaaaiTWOXTVOXTROXQXORaX",
+  nodeNames: "⚠ Comment Program Statement CastStatement Repetition Number QuotedString ElapseStatement ResolveStatement KeydownStopStatement",
+  maxTerm: 19,
   propSources: [simapleHighlighting],
-  skippedNodes: [0],
+  skippedNodes: [0,1],
   repeatNodeCount: 1,
-  tokenData: "${~RZXYtYZt]^tpqtrsy}!O!n!Q!R!w!R![#_!e!f#j!g!h$R#l#m$v~yOZ~~|VOYyZryrs!cs#Oy#P;'Sy;'S;=`!h<%lOy~!hOU~~!kP;=`<%ly~!qQ!Q!R!w!R![#_~!|PT~!O!P#P~#SP!Q![#V~#[PT~!Q![#V~#dQT~!O!P#P!Q![#_~#mP!c!d#p~#sP!u!v#v~#yP!v!w#|~$RO]~~$UP!n!o$X~$[P!c!d$_~$bP!r!s$e~$hP!u!v$k~$nP!g!h$q~$vO^~~${O[~",
+  tokenData: "'{~R^XY}YZ}]^}pq}rs!Sst!w}!O#`!Q!R#i!R![$P!e!f$[!g!h$s!m!n%h!t!u&{#l#m'v~!SO^~~!VVOY!SZr!Srs!ls#O!S#P;'S!S;'S;=`!q<%lO!S~!qOV~~!tP;=`<%l!S~!|SP~OY!wZ;'S!w;'S;=`#Y<%lO!w~#]P;=`<%l!w~#cQ!Q!R#i!R![$P~#nPU~!O!P#q~#tP!Q![#w~#|PU~!Q![#w~$UQU~!O!P#q!Q![$P~$_P!c!d$b~$eP!u!v$h~$kP!v!w$n~$sO`~~$vP!n!o$y~$|P!c!d%P~%SP!r!s%V~%YP!u!v%]~%`P!g!h%c~%hOa~~%kP!g!h%n~%qP!{!|%t~%wP!f!g%z~%}P!q!r&Q~&TP!y!z&W~&ZP!p!q&^~&aP!u!v&d~&gP!v!w&j~&mP!q!r&p~&sP!r!s&v~&{Oc~~'OP!g!h'R~'UP!u!v'X~'[P!q!r'_~'bP!n!o'e~'hP!x!y'k~'nP!g!h'q~'vOb~~'{O_~",
   tokenizers: [0],
-  topRules: {"Program":[0,1]},
+  topRules: {"Program":[0,2]},
   tokenPrec: 0
 })
