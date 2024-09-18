@@ -1,4 +1,7 @@
+import json
 from typing import cast
+
+import yaml
 
 from simaple.container.plan_metadata import PlanMetadata
 from simaple.container.simulation import (
@@ -120,6 +123,34 @@ def run(
     )
 
 
+@return_js_object_from_pydantic_list
+def runPlan(
+    plan: str,
+) -> list[OperationLogResponse]:
+    """
+    plan을 받아서 environment 필드를 참조해 계산을 수행합니다. environment 필드가 비어있다면, 오류를 발생시킵니다.
+    """
+    plan_metadata_dict, op_or_consoles = parse_simaple_runtime(plan.strip())
+
+    plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
+    if plan_metadata.environment is None or plan_metadata.environment == {}:
+        raise ValueError("Environment field is not provided")
+
+    simulation_container = plan_metadata.load_container()
+    engine = simulation_container.operation_engine()
+
+    for op_or_console in op_or_consoles:
+        if is_console_command(op_or_console):
+            _ = engine.console(cast(ConsoleText, op_or_console))
+            continue
+
+        engine.exec(cast(Operation, op_or_console))
+
+    return _extract_engine_history_as_response(
+        engine, simulation_container.damage_calculator()
+    )
+
+
 @return_js_object_from_pydantic_object
 def computeSimulationEnvironmentFromProvider(
     plan: str,
@@ -133,3 +164,23 @@ def computeSimulationEnvironmentFromProvider(
     simulation_environment = metadata.provider.get_simulation_environment()
 
     return simulation_environment
+
+
+def provideEnvironmentAugmentedPlan(plan: str) -> str:
+    """plan을 받아서 environment 필드를 새로 쓴 plan을 반환합니다."""
+    metadata_dict, _ = parse_simaple_runtime(plan.strip())
+    metadata = PlanMetadata.model_validate(metadata_dict)
+
+    if metadata.provider is None:
+        raise ValueError("Character provider is not provided")
+
+    simulation_environment = metadata.provider.get_simulation_environment()
+    metadata.environment = simulation_environment
+    _, original_operations = plan.split("\n---")[0], "\n---".join(
+        plan.split("\n---")[1:]
+    )
+
+    augmented_metadata = yaml.safe_dump(
+        json.loads(metadata.model_dump_json()), indent=2
+    )
+    return f"{augmented_metadata}\n---\n{original_operations}"
