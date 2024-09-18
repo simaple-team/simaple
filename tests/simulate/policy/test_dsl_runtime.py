@@ -4,10 +4,7 @@ from pathlib import Path
 import pytest
 
 import simaple.simulate.component.skill  # noqa: F401
-from simaple.container.environment_provider import (
-    BaselineEnvironmentProvider,
-    MemoizationIndependentEnvironment,
-)
+from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.simulation import SimulationContainer
 from simaple.core.job_category import JobCategory
@@ -33,7 +30,6 @@ def fixture_dsl_test_setting() -> BaselineEnvironmentProvider:
         passive_skill_level=0,
         combat_orders_level=1,
         artifact_level=40,
-        independent_environment=MemoizationIndependentEnvironment(),
     )
 
 

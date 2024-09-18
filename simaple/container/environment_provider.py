@@ -1,5 +1,6 @@
+import json
 from abc import ABCMeta, abstractmethod
-from typing import Type
+from typing import Any, Type
 
 import pydantic
 
@@ -27,22 +28,6 @@ def add_extended_stats(*action_stats):
     return sum(action_stats, ExtendedStat())
 
 
-class MemoizationIndependentEnvironment(pydantic.BaseModel):
-    use_doping: bool = True
-
-    armor: int = 300
-    mob_level: int = 265
-    force_advantage: float = 1.0
-
-    v_skill_level: int = 30
-    hexa_skill_level: int = 1
-    hexa_mastery_level: int = 1
-    v_improvements_level: int = 60
-    hexa_improvements_level: int = 0
-
-    weapon_attack_power: int = 0
-
-
 class MemoizableEnvironment(pydantic.BaseModel):
     passive_skill_level: int
     combat_orders_level: int
@@ -55,6 +40,11 @@ class MemoizableEnvironment(pydantic.BaseModel):
 
 
 class EnvironmentProvider(pydantic.BaseModel, metaclass=ABCMeta):
+    """
+    EnvironmentProvider provides a SimulationEnvironment from some
+    `abstract` configuration, which is better readable and sustainable.
+    """
+
     @abstractmethod
     def get_simulation_environment(self) -> SimulationEnvironment: ...
 
@@ -64,18 +54,29 @@ class EnvironmentProvider(pydantic.BaseModel, metaclass=ABCMeta):
 
 
 class MemoizableEnvironmentProvider(EnvironmentProvider):
-    independent_environment: MemoizationIndependentEnvironment
+    """
+    MemoizableEnvironmentProvider provides `memoization` interface
+    for computation-extensive environment providers.
+    """
 
     @abstractmethod
     def get_memoizable_environment(
         self,
-    ) -> MemoizableEnvironment: ...
+    ) -> dict[str, Any]: ...
+
+    @abstractmethod
+    def get_memoization_independent_environment(
+        self,
+    ) -> dict[str, Any]: ...
+
+    @abstractmethod
+    def get_memoization_key(self) -> str: ...
 
     def get_simulation_environment(
         self,
     ) -> SimulationEnvironment:
-        environment_dict = self.independent_environment.model_dump()
-        environment_dict.update(self.get_memoizable_environment().model_dump())
+        environment_dict = self.get_memoization_independent_environment()
+        environment_dict.update(self.get_memoizable_environment())
 
         environment = SimulationEnvironment.model_validate(environment_dict)
         return environment
@@ -91,15 +92,48 @@ class MinimalEnvironmentProvider(MemoizableEnvironmentProvider):
     weapon_pure_attack_power: int = 0
     combat_orders_level: int = 1
 
+    # Below are memoization-independent environment
+    use_doping: bool = True
+
+    armor: int = 300
+    mob_level: int = 265
+    force_advantage: float = 1.0
+
+    v_skill_level: int = 30
+    hexa_skill_level: int = 1
+    hexa_mastery_level: int = 1
+    v_improvements_level: int = 60
+    hexa_improvements_level: int = 0
+
+    weapon_attack_power: int = 0
+
     def character(self) -> ExtendedStat:
         return ExtendedStat(
             stat=self.stat,
             action_stat=self.action_stat,
         )
 
+    def get_memoization_independent_environment(
+        self,
+    ) -> dict[str, Any]:
+        return self.model_dump(
+            include={
+                "use_doping",
+                "armor",
+                "mob_level",
+                "force_advantage",
+                "v_skill_level",
+                "hexa_skill_level",
+                "hexa_mastery_level",
+                "v_improvements_level",
+                "hexa_improvements_level",
+                "weapon_attack_power",
+            }
+        )
+
     def get_memoizable_environment(
         self,
-    ) -> MemoizableEnvironment:
+    ) -> dict[str, Any]:
         return MemoizableEnvironment(
             passive_skill_level=0,
             combat_orders_level=self.combat_orders_level,
@@ -107,6 +141,29 @@ class MinimalEnvironmentProvider(MemoizableEnvironmentProvider):
             jobtype=self.jobtype,
             level=self.level,
             character=self.character(),
+        ).model_dump()
+
+    def get_memoization_key(self) -> str:
+        return json.dumps(
+            json.loads(
+                self.model_dump_json(
+                    exclude={
+                        "use_doping",
+                        "armor",
+                        "mob_level",
+                        "force_advantage",
+                        "v_skill_level",
+                        "hexa_skill_level",
+                        "hexa_mastery_level",
+                        "v_improvements_level",
+                        "hexa_improvements_level",
+                        "weapon_attack_power",
+                    },
+                )
+            ),
+            ensure_ascii=False,
+            indent=2,
+            sort_keys=True,
         )
 
 
@@ -124,6 +181,74 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
     passive_skill_level: int
     combat_orders_level: int
     weapon_pure_attack_power: int = 0
+
+    # Below are memoization-independent environment
+    use_doping: bool = True
+
+    armor: int = 300
+    mob_level: int = 265
+    force_advantage: float = 1.0
+
+    v_skill_level: int = 30
+    hexa_skill_level: int = 1
+    hexa_mastery_level: int = 1
+    v_improvements_level: int = 60
+    hexa_improvements_level: int = 0
+
+    weapon_attack_power: int = 0
+
+    def get_memoization_independent_environment(
+        self,
+    ) -> dict[str, Any]:
+        return self.model_dump(
+            include={
+                "use_doping",
+                "armor",
+                "mob_level",
+                "force_advantage",
+                "v_skill_level",
+                "hexa_skill_level",
+                "hexa_mastery_level",
+                "v_improvements_level",
+                "hexa_improvements_level",
+                "weapon_attack_power",
+            }
+        )
+
+    def get_memoization_key(self) -> str:
+        return json.dumps(
+            json.loads(
+                self.model_dump_json(
+                    exclude={
+                        "use_doping",
+                        "armor",
+                        "mob_level",
+                        "force_advantage",
+                        "v_skill_level",
+                        "hexa_skill_level",
+                        "hexa_mastery_level",
+                        "v_improvements_level",
+                        "hexa_improvements_level",
+                        "weapon_attack_power",
+                    },
+                )
+            ),
+            ensure_ascii=False,
+            indent=2,
+            sort_keys=True,
+        )
+
+    def get_memoizable_environment(
+        self,
+    ) -> dict[str, Any]:
+        return MemoizableEnvironment(
+            passive_skill_level=self.passive_skill_level,
+            combat_orders_level=self.combat_orders_level,
+            weapon_pure_attack_power=self.weapon_pure_attack_power,
+            jobtype=self.jobtype,
+            level=self.level,
+            character=self.character(),
+        ).model_dump()
 
     def ability_lines(self):
         return get_best_ability(self.jobtype)
@@ -210,18 +335,6 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
         return add_extended_stats(
             extended_stat_value,
             default_extended_stat,
-        )
-
-    def get_memoizable_environment(
-        self,
-    ) -> MemoizableEnvironment:
-        return MemoizableEnvironment(
-            passive_skill_level=self.passive_skill_level,
-            combat_orders_level=self.combat_orders_level,
-            weapon_pure_attack_power=self.weapon_pure_attack_power,
-            jobtype=self.jobtype,
-            level=self.level,
-            character=self.character(),
         )
 
 

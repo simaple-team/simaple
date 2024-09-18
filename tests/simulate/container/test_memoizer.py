@@ -1,10 +1,7 @@
 import os
 import tempfile
 
-from simaple.container.environment_provider import (
-    BaselineEnvironmentProvider,
-    MemoizationIndependentEnvironment,
-)
+from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import InMemoryMemoizer, PersistentStorageMemoizer
 from simaple.core import JobType
 from simaple.core.job_category import JobCategory
@@ -23,7 +20,6 @@ def test_inmemory_memoizer():
         passive_skill_level=0,
         combat_orders_level=1,
         artifact_level=40,
-        independent_environment=MemoizationIndependentEnvironment(),
     )
     second_environment_provider = BaselineEnvironmentProvider(
         union_block_count=10 + 1,
@@ -34,7 +30,6 @@ def test_inmemory_memoizer():
         passive_skill_level=0,
         combat_orders_level=1,
         artifact_level=40,
-        independent_environment=MemoizationIndependentEnvironment(),
     )
 
     _, hit = memoizer.memoize(environment_provider)
@@ -68,7 +63,6 @@ def test_storage_memoizer():
             passive_skill_level=0,
             combat_orders_level=1,
             artifact_level=40,
-            independent_environment=MemoizationIndependentEnvironment(),
         )
         second_environment_provider = BaselineEnvironmentProvider(
             union_block_count=10 + 1,
@@ -79,7 +73,6 @@ def test_storage_memoizer():
             passive_skill_level=0,
             combat_orders_level=1,
             artifact_level=40,
-            independent_environment=MemoizationIndependentEnvironment(),
         )
 
         _, hit = memoizer.memoize(environment_provider)

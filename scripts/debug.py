@@ -3,10 +3,7 @@ from enum import Enum
 import fire
 
 import simaple.simulate.component.skill  # noqa: F401
-from simaple.container.environment_provider import (
-    BaselineEnvironmentProvider,
-    MemoizationIndependentEnvironment,
-)
+from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.simulation import SimulationContainer
 from simaple.core.jobtype import JobType, get_job_category
@@ -82,11 +79,9 @@ class DebugInterface:
             passive_skill_level=0,
             combat_orders_level=1,
             artifact_level=40,
-            independent_environment=MemoizationIndependentEnvironment(
-                v_skill_level=30,
-                v_improvements_level=60,
-                hexa_improvements_level=10,
-            ),
+            v_skill_level=30,
+            v_improvements_level=60,
+            hexa_improvements_level=10,
         )
         self._simulation_environment_memoizer = PersistentStorageMemoizer()
 

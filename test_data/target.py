@@ -1,6 +1,6 @@
 import os
 
-from simaple.container.environment_provider import BaselineEnvironmentProvider, MemoizationIndependentEnvironment
+from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 
@@ -22,13 +22,11 @@ def container_test_setting(
         combat_orders_level=1,
         weapon_pure_attack_power=options.get("weapon_pure_attack_power", 0),
         artifact_level=40,
-        independent_environment=MemoizationIndependentEnvironment(
-            hexa_mastery_level=1,
-            v_skill_level=30,
-            v_improvements_level=60,
-            hexa_improvements_level=10,
-            weapon_attack_power=options.get("weapon_attack_power", 0),
-        )
+        hexa_mastery_level=1,
+        v_skill_level=30,
+        v_improvements_level=60,
+        hexa_improvements_level=10,
+        weapon_attack_power=options.get("weapon_attack_power", 0),
     ) 
 
 

@@ -2,30 +2,35 @@ import hashlib
 import json
 import os
 from abc import ABC, abstractmethod
+from typing import Any
 
 from simaple.container.environment_provider import (
-    MemoizableEnvironment,
+    EnvironmentProvider,
     MemoizableEnvironmentProvider,
 )
 from simaple.container.simulation import SimulationEnvironment
 
 
-def _serialize_environment_provider(provider: MemoizableEnvironmentProvider) -> str:
-    obj = {
-        "config": provider.model_dump_json(),
-        "config_name": provider.get_name(),
-    }
-
-    return json.dumps(obj, ensure_ascii=False, indent=2, sort_keys=True)
-
-
-class CharacterProviderMemo(MemoizableEnvironmentProvider):
-    provider_dependency: MemoizableEnvironment
+class CharacterProviderMemo(EnvironmentProvider):
+    memoizable_environment: dict[str, Any]
+    independent_environment: dict[str, Any]
 
     def get_memoizable_environment(
         self,
-    ) -> MemoizableEnvironment:
-        return self.provider_dependency
+    ) -> dict[str, Any]:
+        return self.memoizable_environment
+
+    def get_memoization_independent_environment(
+        self,
+    ) -> dict[str, Any]:
+        return self.independent_environment
+
+    def get_simulation_environment(self) -> SimulationEnvironment:
+        environment_dict = self.get_memoization_independent_environment()
+        environment_dict.update(self.get_memoizable_environment())
+
+        environment = SimulationEnvironment.model_validate(environment_dict)
+        return environment
 
 
 class CharacterProviderMemoizer(ABC):
@@ -53,10 +58,8 @@ class CharacterProviderMemoizer(ABC):
         memoizable_environment_provider: MemoizableEnvironmentProvider,
     ) -> str:
         obj = {
-            "setting": memoizable_environment_provider.independent_environment.model_dump_json(),
-            "provider": _serialize_environment_provider(
-                memoizable_environment_provider
-            ),
+            "setting": memoizable_environment_provider.get_memoization_key(),
+            "name": memoizable_environment_provider.get_name(),
         }
         serialized_query = json.dumps(obj, ensure_ascii=False, indent=2, sort_keys=True)
 
@@ -85,15 +88,24 @@ class InMemoryMemoizer(CharacterProviderMemoizer):
     def memoize(
         self,
         memoizable_environment_provider: MemoizableEnvironmentProvider,
-    ) -> tuple[MemoizableEnvironmentProvider, bool]:
+    ) -> tuple[EnvironmentProvider, bool]:
         memo_key = self._compute_memo_key(memoizable_environment_provider)
 
         if memo_key in self.memos:
-            return self._deserialize_output(self.memos[memo_key]), True
+            memoized_environment_provider = self._deserialize_output(
+                self.memos[memo_key]
+            )
+            return (
+                CharacterProviderMemo(
+                    memoizable_environment=memoized_environment_provider.memoizable_environment,  # memoized
+                    independent_environment=memoizable_environment_provider.get_memoization_independent_environment(),  # not memoized
+                ),
+                True,
+            )
 
         output = CharacterProviderMemo(
-            provider_dependency=memoizable_environment_provider.get_memoizable_environment(),
-            independent_environment=memoizable_environment_provider.independent_environment,
+            memoizable_environment=memoizable_environment_provider.get_memoizable_environment(),
+            independent_environment=memoizable_environment_provider.get_memoization_independent_environment(),
         )
         self.memos[memo_key] = self._serialize_output(output)
         return output, False
@@ -112,18 +124,25 @@ class PersistentStorageMemoizer(CharacterProviderMemoizer):
     def memoize(
         self,
         memoizable_environment_provider: MemoizableEnvironmentProvider,
-    ) -> tuple[MemoizableEnvironmentProvider, bool]:
+    ) -> tuple[EnvironmentProvider, bool]:
         memo_key = self._compute_memo_key(memoizable_environment_provider)
 
         with open(self.path, "r") as f:
             memos = json.load(f)
 
         if memo_key in memos:
-            return self._deserialize_output(memos[memo_key]), True
+            memoized_environment_provider = self._deserialize_output(memos[memo_key])
+            return (
+                CharacterProviderMemo(
+                    memoizable_environment=memoized_environment_provider.memoizable_environment,  # memoized
+                    independent_environment=memoizable_environment_provider.get_memoization_independent_environment(),  # not memoized
+                ),
+                True,
+            )
 
         output = CharacterProviderMemo(
-            provider_dependency=memoizable_environment_provider.get_memoizable_environment(),
-            independent_environment=memoizable_environment_provider.independent_environment,
+            memoizable_environment=memoizable_environment_provider.get_memoizable_environment(),
+            independent_environment=memoizable_environment_provider.get_memoization_independent_environment(),
         )
         memos[memo_key] = self._serialize_output(output)
 
