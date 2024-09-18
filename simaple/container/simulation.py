@@ -59,6 +59,10 @@ class SimulationEnvironment(pydantic.BaseModel):
 
 
 class SimulationSetting(pydantic.BaseModel):
+    """
+    SimulationSetting defines complete set of configuration
+    to configure Simulation Engine.
+    """
     environment: SimulationEnvironment
     character: ExtendedStat
     character_dependent_environment: CharacterDependentEnvironment
