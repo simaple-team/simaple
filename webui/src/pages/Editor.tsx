@@ -50,7 +50,7 @@ function createCompletion(skillNames: string[]) {
         context.pos,
         -1,
       );
-      if (nodeBefore?.type.name === "Quotedstring") {
+      if (nodeBefore?.type.name === "QuotedString") {
         return null;
       }
 

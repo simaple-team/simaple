@@ -4,10 +4,20 @@
 Statement {
   CastStatement
   | ElapseStatement
+  | ResolveStatement
+  | KeydownStopStatement
+}
+
+ResolveStatement {
+  Repetition? "RESOLVE" QuotedString
+}
+
+KeydownStopStatement {
+  "KEYDOWNSTOP" QuotedString
 }
 
 CastStatement {
-  Repetition? "CAST" Quotedstring
+  Repetition? "CAST" QuotedString
 }
 
 ElapseStatement {
@@ -23,12 +33,16 @@ Repetition {
   int  { '0' | $[1-9] @digit* }
   frac { '.' @digit+ }
 
-  Quotedstring { '"' stringContentDouble* '"' }
+  QuotedString { '"' stringContentDouble* '"' }
   stringContentDouble { ![\\\n"]+ }
+
+  Comment {
+    "#" ![\n]*
+  }
 
   whitespace { $[ \n\r\t] }
 }
 
-@skip { whitespace }
+@skip { whitespace | Comment }
 
 @external propSource simapleHighlighting from "./highlight"

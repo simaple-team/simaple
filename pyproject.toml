@@ -3,6 +3,13 @@ _black-check = "black --check simaple tests"
 _isort-check = "isort --check-only simaple tests"
 formatting-check = ["_black-check", "_isort-check"]
 
+
+_build = "python -m build --outdir webui/public"
+_set_build_version = """
+python -c "import os; os.system('find \\'./simaple\\' -type f -name \\'*.py\\' -print0 | xargs -0 shasum | sort | shasum > webui/public/version.txt')"
+"""
+export-whl = ["_build", "_set_build_version"]
+
 _black = "black simaple tests scripts"
 _isort = "isort simaple tests scripts"
 format = ["_black", "_isort"]
