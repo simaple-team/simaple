@@ -4,7 +4,7 @@ import pydantic
 
 from simaple.container.character_provider import (
     CharacterProvider,
-    SimulationEnvironmentForCharacterProvider,
+    ProviderConfinedSimulationEnvironment,
     get_character_provider,
 )
 from simaple.container.simulation import SimulationContainer, SimulationEnvironment
@@ -13,7 +13,7 @@ from simaple.container.simulation import SimulationContainer, SimulationEnvironm
 class _ProviderMetadata(pydantic.BaseModel):
     name: str
     data: dict[str, Any]
-    environment: SimulationEnvironmentForCharacterProvider
+    environment: ProviderConfinedSimulationEnvironment
 
     def get_character_provider_config(self) -> CharacterProvider:
         return get_character_provider(self.name, self.data)

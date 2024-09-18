@@ -1,20 +1,20 @@
 import os
 import tempfile
 
-from simaple.container.cache import InMemoryCache, PersistentStorageCache
 from simaple.container.character_provider import (
     BaselineCharacterProvider,
-    SimulationEnvironmentForCharacterProvider,
+    ProviderConfinedSimulationEnvironment,
 )
+from simaple.container.memoizer import InMemoryMemoizer, PersistentStorageMemoizer
 from simaple.core import JobType
 from simaple.core.job_category import JobCategory
 
 
-def test_inmemory_cache():
-    saved_cache = {}
-    cache = InMemoryCache(saved_cache)
+def test_inmemory_memoizer():
+    saved_memos = {}
+    memoizer = InMemoryMemoizer(saved_memos)
 
-    setting = SimulationEnvironmentForCharacterProvider()
+    confined_environment = ProviderConfinedSimulationEnvironment()
     character_provider = BaselineCharacterProvider(
         union_block_count=10,
         tier="Legendary",
@@ -36,29 +36,29 @@ def test_inmemory_cache():
         artifact_level=40,
     )
 
-    (extend_stat, config), hit = cache.get(setting, character_provider)
+    _, hit = memoizer.get_memo(confined_environment, character_provider)
     assert not hit
 
-    (extend_stat, config), hit = cache.get(setting, character_provider)
+    _, hit = memoizer.get_memo(confined_environment, character_provider)
     assert hit
 
-    (extend_stat, config), hit = cache.get(setting, second_character_provider)
+    _, hit = memoizer.get_memo(confined_environment, second_character_provider)
     assert not hit
 
-    exported_cache = cache.export()
-    new_cache = InMemoryCache(exported_cache)
-    (extend_stat, config), hit = new_cache.get(setting, character_provider)
+    exported_memos = memoizer.export()
+    new_memoizer = InMemoryMemoizer(exported_memos)
+    _, hit = new_memoizer.get_memo(confined_environment, character_provider)
     assert hit
 
-    (extend_stat, config), hit = new_cache.get(setting, second_character_provider)
+    _, hit = new_memoizer.get_memo(confined_environment, second_character_provider)
     assert hit
 
 
-def test_storage_cache():
+def test_storage_memoizer():
     with tempfile.TemporaryDirectory() as temp_dir:
-        cache = PersistentStorageCache(os.path.join(temp_dir, "cache.json"))
+        memoizer = PersistentStorageMemoizer(os.path.join(temp_dir, "memo.json"))
 
-        setting = SimulationEnvironmentForCharacterProvider()
+        setting = ProviderConfinedSimulationEnvironment()
         character_provider = BaselineCharacterProvider(
             union_block_count=10,
             tier="Legendary",
@@ -80,17 +80,17 @@ def test_storage_cache():
             artifact_level=40,
         )
 
-        (extend_stat, config), hit = cache.get(setting, character_provider)
+        _, hit = memoizer.get_memo(setting, character_provider)
         assert not hit
 
-        (extend_stat, config), hit = cache.get(setting, character_provider)
+        _, hit = memoizer.get_memo(setting, character_provider)
         assert hit
 
-        (extend_stat, config), hit = cache.get(setting, second_character_provider)
+        _, hit = memoizer.get_memo(setting, second_character_provider)
         assert not hit
 
-        (extend_stat, config), hit = cache.get(setting, character_provider)
+        _, hit = memoizer.get_memo(setting, character_provider)
         assert hit
 
-        (extend_stat, config), hit = cache.get(setting, second_character_provider)
+        _, hit = memoizer.get_memo(setting, second_character_provider)
         assert hit

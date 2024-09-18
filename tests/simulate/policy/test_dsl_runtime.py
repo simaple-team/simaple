@@ -4,11 +4,11 @@ from pathlib import Path
 import pytest
 
 import simaple.simulate.component.skill  # noqa: F401
-from simaple.container.cache import PersistentStorageCache
 from simaple.container.character_provider import (
     BaselineCharacterProvider,
-    SimulationEnvironmentForCharacterProvider,
+    ProviderConfinedSimulationEnvironment,
 )
+from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.simulation import SimulationContainer
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
@@ -37,10 +37,10 @@ def fixture_dsl_test_setting() -> BaselineCharacterProvider:
 
 
 def test_dsl(dsl_list: list[str], dsl_test_setting: BaselineCharacterProvider) -> None:
-    environment = PersistentStorageCache(
-        os.path.join(os.path.dirname(__file__), ".simaple.cache.json"),
-    ).get_simulation_environment(
-        SimulationEnvironmentForCharacterProvider(
+    environment = PersistentStorageMemoizer(
+        os.path.join(os.path.dirname(__file__), ".simaple.memo.json"),
+    ).compute_environment(
+        ProviderConfinedSimulationEnvironment(
             v_skill_level=30,
             v_improvements_level=60,
         ),

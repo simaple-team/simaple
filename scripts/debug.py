@@ -3,11 +3,11 @@ from enum import Enum
 import fire
 
 import simaple.simulate.component.skill  # noqa: F401
-from simaple.container.cache import PersistentStorageCache
 from simaple.container.character_provider import (
     BaselineCharacterProvider,
-    SimulationEnvironmentForCharacterProvider,
+    ProviderConfinedSimulationEnvironment,
 )
+from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.base import PlayLog
 from simaple.simulate.policy.base import is_console_command
@@ -73,7 +73,7 @@ class DebugInterface:
         if isinstance(jobtype, str):
             jobtype = JobType(jobtype)
 
-        self.environment = SimulationEnvironmentForCharacterProvider(
+        self.confined_environment = ProviderConfinedSimulationEnvironment(
             v_skill_level=30,
             v_improvements_level=60,
             hexa_improvements_level=10,
@@ -87,11 +87,11 @@ class DebugInterface:
             combat_orders_level=1,
             artifact_level=40,
         )
-        self._container_cache = PersistentStorageCache()
+        self._simulation_environment_memoizer = PersistentStorageMemoizer()
 
     def get_engine(self):
-        container = self._container_cache.get_simulation_container(
-            self.environment, self._character_provider
+        container = self._simulation_environment_memoizer.get_simulation_container(
+            self.confined_environment, self._character_provider
         )
 
         engine = container.operation_engine()
@@ -99,8 +99,8 @@ class DebugInterface:
         return engine
 
     def get_dpm_calculator(self):
-        container = self._container_cache.get_simulation_container(
-            self.environment, self._character_provider
+        container = self._simulation_environment_memoizer.get_simulation_container(
+            self.confined_environment, self._character_provider
         )
         return container.damage_calculator()
 
@@ -147,7 +147,7 @@ class DebugInterface:
         )
 
         print(
-            f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {self.environment.jobtype}"
+            f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {self.confined_environment.jobtype}"
         )
 
         plan_writer.dump(plan_file.replace(".simaple", ".result.simaple"))

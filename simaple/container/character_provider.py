@@ -4,7 +4,7 @@ from typing import Type
 
 import pydantic
 
-from simaple.container.simulation import SimulationContainer, SimulationEnvironment
+from simaple.container.simulation import SimulationEnvironment
 from simaple.core import ActionStat, ExtendedStat, JobCategory, JobType, Stat
 from simaple.data import get_best_ability
 from simaple.data.baseline import get_baseline_gearset
@@ -28,7 +28,7 @@ def add_extended_stats(*action_stats):
     return sum(action_stats, ExtendedStat())
 
 
-class SimulationEnvironmentForCharacterProvider(pydantic.BaseModel):
+class ProviderConfinedSimulationEnvironment(pydantic.BaseModel):
     use_doping: bool = True
 
     armor: int = 300
@@ -44,7 +44,7 @@ class SimulationEnvironmentForCharacterProvider(pydantic.BaseModel):
     weapon_attack_power: int = 0
 
 
-class CharacterDependentEnvironmentForCharacterProvider(pydantic.BaseModel):
+class ProviderDependency(pydantic.BaseModel):
     passive_skill_level: int
     combat_orders_level: int
     weapon_pure_attack_power: int
@@ -61,21 +61,19 @@ class CharacterProvider(pydantic.BaseModel, metaclass=ABCMeta):
     def character(self) -> ExtendedStat: ...
 
     @abstractmethod
-    def get_character_dependent_simulation_config(
+    def get_provider_dependency(
         self,
-    ) -> CharacterDependentEnvironmentForCharacterProvider: ...
+    ) -> ProviderDependency: ...
 
     @classmethod
     def get_name(cls):
         return cls.__name__
 
     def get_simulation_environment(
-        self, confined_environment: SimulationEnvironmentForCharacterProvider
+        self, confined_environment: ProviderConfinedSimulationEnvironment
     ) -> SimulationEnvironment:
         environment = confined_environment.model_dump()
-        environment.update(
-            self.get_character_dependent_simulation_config().model_dump()
-        )
+        environment.update(self.get_provider_dependency().model_dump())
         environment["character"] = self.character().model_dump()
 
         environment = SimulationEnvironment.model_validate(environment)
@@ -92,10 +90,10 @@ class MinimalCharacterProvider(CharacterProvider):
     weapon_pure_attack_power: int = 0
     combat_orders_level: int = 1
 
-    def get_character_dependent_simulation_config(
+    def get_provider_dependency(
         self,
-    ) -> CharacterDependentEnvironmentForCharacterProvider:
-        return CharacterDependentEnvironmentForCharacterProvider(
+    ) -> ProviderDependency:
+        return ProviderDependency(
             passive_skill_level=0,
             combat_orders_level=self.combat_orders_level,
             weapon_pure_attack_power=self.weapon_pure_attack_power,
@@ -167,10 +165,10 @@ class BaselineCharacterProvider(CharacterProvider):
             propensity.get_extended_stat(),
         )
 
-    def get_character_dependent_simulation_config(
+    def get_provider_dependency(
         self,
-    ) -> CharacterDependentEnvironmentForCharacterProvider:
-        return CharacterDependentEnvironmentForCharacterProvider(
+    ) -> ProviderDependency:
+        return ProviderDependency(
             passive_skill_level=self.passive_skill_level,
             combat_orders_level=self.combat_orders_level,
             weapon_pure_attack_power=self.weapon_pure_attack_power,
@@ -186,7 +184,7 @@ class BaselineCharacterProvider(CharacterProvider):
         )
 
     def damage_logic(self):
-        return self.get_character_dependent_simulation_config().damage_logic()
+        return self.get_provider_dependency().damage_logic()
 
     def preset_optimizer(self):
         damage_logic = self.damage_logic()
