@@ -19,7 +19,8 @@ provider:
         artifact_level: 40
         passive_skill_level: 0
         combat_orders_level: 1
-    environment: {}
+
+        independent_environment: {}
 ---
 ELAPSE 10.0
 ELAPSE 10.0
@@ -49,7 +50,8 @@ provider:
         artifact_level: 40
         passive_skill_level: 0
         combat_orders_level: 1
-    environment: {}
+
+        independent_environment: {}
 ---
 ELAPSE 10.0
 ELAPSE 10.0
@@ -72,7 +74,8 @@ provider:
         artifact_level: 40
         passive_skill_level: 0
         combat_orders_level: 1
-    environment: {}
+
+        independent_environment: {}
 environment:
     use_doping: true
     armor: 300

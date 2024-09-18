@@ -5,9 +5,10 @@ import fire
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.environment_provider import (
     BaselineEnvironmentProvider,
-    ProviderConfinedSimulationEnvironment,
+    MemoizationIndependentEnvironment,
 )
 from simaple.container.memoizer import PersistentStorageMemoizer
+from simaple.container.simulation import SimulationContainer
 from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.base import PlayLog
 from simaple.simulate.policy.base import is_console_command
@@ -73,11 +74,6 @@ class DebugInterface:
         if isinstance(jobtype, str):
             jobtype = JobType(jobtype)
 
-        self.confined_environment = ProviderConfinedSimulationEnvironment(
-            v_skill_level=30,
-            v_improvements_level=60,
-            hexa_improvements_level=10,
-        )
         self._environment_provider = BaselineEnvironmentProvider(
             tier="Legendary",
             jobtype=jobtype,
@@ -86,12 +82,19 @@ class DebugInterface:
             passive_skill_level=0,
             combat_orders_level=1,
             artifact_level=40,
+            independent_environment=MemoizationIndependentEnvironment(
+                v_skill_level=30,
+                v_improvements_level=60,
+                hexa_improvements_level=10,
+            ),
         )
         self._simulation_environment_memoizer = PersistentStorageMemoizer()
 
     def get_engine(self):
-        container = self._simulation_environment_memoizer.get_simulation_container(
-            self.confined_environment, self._environment_provider
+        container = SimulationContainer(
+            self._simulation_environment_memoizer.compute_environment(
+                self._environment_provider
+            )
         )
 
         engine = container.operation_engine()
@@ -99,8 +102,10 @@ class DebugInterface:
         return engine
 
     def get_dpm_calculator(self):
-        container = self._simulation_environment_memoizer.get_simulation_container(
-            self.confined_environment, self._environment_provider
+        container = SimulationContainer(
+            self._simulation_environment_memoizer.compute_environment(
+                self._environment_provider
+            )
         )
         return container.damage_calculator()
 

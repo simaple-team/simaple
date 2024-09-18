@@ -7,13 +7,11 @@ from test_data.target import get_test_settings
 from simaple.simulate.strategy.base import exec_by_strategy
 import os
 
-@pytest.mark.parametrize("environment_provider_and_partial_environment, jobtype, expected", get_test_settings())
-def test_actor(environment_provider_and_partial_environment, jobtype, expected):
-    environment_provider, partial_environment  = environment_provider_and_partial_environment
+@pytest.mark.parametrize("environment_provider, jobtype, expected", get_test_settings())
+def test_actor(environment_provider, jobtype, expected):
     environment = PersistentStorageMemoizer(
         os.path.join(os.path.dirname(__file__), ".memo.simaple.json")
     ).compute_environment(
-        partial_environment,
         environment_provider
     )
     container = SimulationContainer(environment)

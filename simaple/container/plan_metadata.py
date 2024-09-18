@@ -4,7 +4,6 @@ import pydantic
 
 from simaple.container.environment_provider import (
     EnvironmentProvider,
-    ProviderConfinedSimulationEnvironment,
     get_environment_provider,
 )
 from simaple.container.simulation import SimulationContainer, SimulationEnvironment
@@ -13,15 +12,12 @@ from simaple.container.simulation import SimulationContainer, SimulationEnvironm
 class _ProviderMetadata(pydantic.BaseModel):
     name: str
     data: dict[str, Any]
-    environment: ProviderConfinedSimulationEnvironment
 
     def get_environment_provider(self) -> EnvironmentProvider:
         return get_environment_provider(self.name, self.data)
 
     def get_simulation_environment(self) -> SimulationEnvironment:
-        return self.get_environment_provider().get_simulation_environment(
-            self.environment,
-        )
+        return self.get_environment_provider().get_simulation_environment()
 
 
 class PlanMetadata(pydantic.BaseModel):

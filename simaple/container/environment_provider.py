@@ -1,4 +1,3 @@
-import json
 from abc import ABCMeta, abstractmethod
 from typing import Type
 
@@ -28,7 +27,7 @@ def add_extended_stats(*action_stats):
     return sum(action_stats, ExtendedStat())
 
 
-class ProviderConfinedSimulationEnvironment(pydantic.BaseModel):
+class MemoizationIndependentEnvironment(pydantic.BaseModel):
     use_doping: bool = True
 
     armor: int = 300
@@ -44,7 +43,7 @@ class ProviderConfinedSimulationEnvironment(pydantic.BaseModel):
     weapon_attack_power: int = 0
 
 
-class ProviderDependency(pydantic.BaseModel):
+class MemoizableEnvironment(pydantic.BaseModel):
     passive_skill_level: int
     combat_orders_level: int
     weapon_pure_attack_power: int
@@ -52,35 +51,37 @@ class ProviderDependency(pydantic.BaseModel):
     jobtype: JobType
     level: int
 
-    def damage_logic(self):
-        return get_damage_logic(self.jobtype, self.combat_orders_level)
+    character: ExtendedStat
 
 
 class EnvironmentProvider(pydantic.BaseModel, metaclass=ABCMeta):
     @abstractmethod
-    def character(self) -> ExtendedStat: ...
-
-    @abstractmethod
-    def get_provider_dependency(
-        self,
-    ) -> ProviderDependency: ...
+    def get_simulation_environment(self) -> SimulationEnvironment: ...
 
     @classmethod
     def get_name(cls):
         return cls.__name__
 
+
+class MemoizableEnvironmentProvider(EnvironmentProvider):
+    independent_environment: MemoizationIndependentEnvironment
+
+    @abstractmethod
+    def get_memoizable_environment(
+        self,
+    ) -> MemoizableEnvironment: ...
+
     def get_simulation_environment(
-        self, confined_environment: ProviderConfinedSimulationEnvironment
+        self,
     ) -> SimulationEnvironment:
-        environment_dict = confined_environment.model_dump()
-        environment_dict.update(self.get_provider_dependency().model_dump())
-        environment_dict["character"] = self.character().model_dump()
+        environment_dict = self.independent_environment.model_dump()
+        environment_dict.update(self.get_memoizable_environment().model_dump())
 
         environment = SimulationEnvironment.model_validate(environment_dict)
         return environment
 
 
-class MinimalEnvironmentProvider(EnvironmentProvider):
+class MinimalEnvironmentProvider(MemoizableEnvironmentProvider):
     level: int
     action_stat: ActionStat
     stat: Stat
@@ -90,25 +91,26 @@ class MinimalEnvironmentProvider(EnvironmentProvider):
     weapon_pure_attack_power: int = 0
     combat_orders_level: int = 1
 
-    def get_provider_dependency(
-        self,
-    ) -> ProviderDependency:
-        return ProviderDependency(
-            passive_skill_level=0,
-            combat_orders_level=self.combat_orders_level,
-            weapon_pure_attack_power=self.weapon_pure_attack_power,
-            jobtype=self.jobtype,
-            level=self.level,
-        )
-
     def character(self) -> ExtendedStat:
         return ExtendedStat(
             stat=self.stat,
             action_stat=self.action_stat,
         )
 
+    def get_memoizable_environment(
+        self,
+    ) -> MemoizableEnvironment:
+        return MemoizableEnvironment(
+            passive_skill_level=0,
+            combat_orders_level=self.combat_orders_level,
+            weapon_pure_attack_power=self.weapon_pure_attack_power,
+            jobtype=self.jobtype,
+            level=self.level,
+            character=self.character(),
+        )
 
-class BaselineEnvironmentProvider(EnvironmentProvider):
+
+class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
     tier: str
     union_block_count: int = 37
     link_count: int = 12 + 1
@@ -165,17 +167,6 @@ class BaselineEnvironmentProvider(EnvironmentProvider):
             propensity.get_extended_stat(),
         )
 
-    def get_provider_dependency(
-        self,
-    ) -> ProviderDependency:
-        return ProviderDependency(
-            passive_skill_level=self.passive_skill_level,
-            combat_orders_level=self.combat_orders_level,
-            weapon_pure_attack_power=self.weapon_pure_attack_power,
-            jobtype=self.jobtype,
-            level=self.level,
-        )
-
     def gearset(self):
         return get_baseline_gearset(
             self.tier,
@@ -183,11 +174,8 @@ class BaselineEnvironmentProvider(EnvironmentProvider):
             self.jobtype,
         )
 
-    def damage_logic(self):
-        return self.get_provider_dependency().damage_logic()
-
     def preset_optimizer(self):
-        damage_logic = self.damage_logic()
+        damage_logic = get_damage_logic(self.jobtype, self.combat_orders_level)
         default_extended_stat = self.default_extended_stat()
         return PresetOptimizer(
             union_block_count=self.union_block_count,
@@ -224,6 +212,18 @@ class BaselineEnvironmentProvider(EnvironmentProvider):
             default_extended_stat,
         )
 
+    def get_memoizable_environment(
+        self,
+    ) -> MemoizableEnvironment:
+        return MemoizableEnvironment(
+            passive_skill_level=self.passive_skill_level,
+            combat_orders_level=self.combat_orders_level,
+            weapon_pure_attack_power=self.weapon_pure_attack_power,
+            jobtype=self.jobtype,
+            level=self.level,
+            character=self.character(),
+        )
+
 
 _environment_providers: dict[str, Type[EnvironmentProvider]] = {
     BaselineEnvironmentProvider.__name__: BaselineEnvironmentProvider,
@@ -233,23 +233,3 @@ _environment_providers: dict[str, Type[EnvironmentProvider]] = {
 
 def get_environment_provider(name: str, config: dict) -> EnvironmentProvider:
     return _environment_providers[name].model_validate(config)
-
-
-def serialize_environment_provider(provider: EnvironmentProvider) -> str:
-    obj = {
-        "config": provider.model_dump_json(),
-        "config_name": provider.get_name(),
-    }
-
-    return json.dumps(obj, ensure_ascii=False, indent=2, sort_keys=True)
-
-
-def deserialize_environment_provider(data: str) -> EnvironmentProvider:
-    obj = json.loads(data)
-    config_name = obj["config_name"]
-    config = obj["config"]
-
-    if config_name == BaselineEnvironmentProvider.__name__:
-        return BaselineEnvironmentProvider.model_validate_json(config)
-
-    raise ValueError(f"Unknown config name: {config_name}")
