@@ -15,7 +15,12 @@ def add_extended_stats(*action_stats):
     return sum(action_stats, ExtendedStat())
 
 
-class SimulationEnvironment(pydantic.BaseModel):
+class SimulationSetting(pydantic.BaseModel):
+    """
+    SimulationSetting defines complete set of configuration
+    to configure Simulation Engine.
+    """
+
     use_doping: bool = True
 
     armor: int = 300
@@ -36,19 +41,10 @@ class SimulationEnvironment(pydantic.BaseModel):
 
     jobtype: JobType
     level: int
+    character: ExtendedStat
 
     def damage_logic(self):
         return get_damage_logic(self.jobtype, self.combat_orders_level)
-
-
-class SimulationSetting(pydantic.BaseModel):
-    """
-    SimulationSetting defines complete set of configuration
-    to configure Simulation Engine.
-    """
-
-    environment: SimulationEnvironment
-    character: ExtendedStat
 
 
 class SimulationContainer:
@@ -59,61 +55,54 @@ class SimulationContainer:
         self.setting = setting
 
     def skill_profile(self):
-        return get_skill_profile(self.setting.environment.jobtype)
+        return get_skill_profile(self.setting.jobtype)
 
     def builtin_strategy(self):
-        return get_builtin_strategy(self.setting.environment.jobtype)
+        return get_builtin_strategy(self.setting.jobtype)
 
     def level_advantage(self):
-        config = self.setting
         return LevelAdvantage().get_advantage(
-            config.environment.mob_level,
-            self.setting.environment.level,
+            self.setting.mob_level,
+            self.setting.level,
         )
 
     def damage_calculator(self) -> DamageCalculator:
-        config = self.setting
-
         character = self.setting.character
-        damage_logic = self.setting.environment.damage_logic()
+        damage_logic = self.setting.damage_logic()
         level_advantage = self.level_advantage()
 
         return DamageCalculator(
             character_spec=character.stat,
             damage_logic=damage_logic,
-            armor=config.environment.armor,
+            armor=self.setting.armor,
             level_advantage=level_advantage,
-            force_advantage=config.environment.force_advantage,
+            force_advantage=self.setting.force_advantage,
         )
 
     def builder(self):
         skill_profile = self.skill_profile()
-        config = self.setting
         character = self.setting.character
-        character_dependent_simulation_setting = self.setting.environment
 
         return get_builder(
             skill_profile.get_groups(),
             skill_profile.get_skill_levels(
-                config.environment.v_skill_level,
-                config.environment.hexa_skill_level,
-                config.environment.hexa_mastery_level,
+                self.setting.v_skill_level,
+                self.setting.hexa_skill_level,
+                self.setting.hexa_mastery_level,
             ),
-            skill_profile.get_filled_v_improvements(
-                config.environment.v_improvements_level
-            ),
+            skill_profile.get_filled_v_improvements(self.setting.v_improvements_level),
             skill_profile.get_filled_hexa_improvements(
-                config.environment.hexa_improvements_level
+                self.setting.hexa_improvements_level
             ),
             skill_profile.get_skill_replacements(),
             {
                 "character_stat": character.stat,
-                "character_level": character_dependent_simulation_setting.level,
-                "weapon_attack_power": config.environment.weapon_attack_power,
-                "weapon_pure_attack_power": character_dependent_simulation_setting.weapon_pure_attack_power,
+                "character_level": self.setting.level,
+                "weapon_attack_power": self.setting.weapon_attack_power,
+                "weapon_pure_attack_power": self.setting.weapon_pure_attack_power,
                 "action_stat": character.action_stat,
-                "passive_skill_level": character_dependent_simulation_setting.passive_skill_level,
-                "combat_orders_level": character_dependent_simulation_setting.combat_orders_level,
+                "passive_skill_level": self.setting.passive_skill_level,
+                "combat_orders_level": self.setting.combat_orders_level,
             },
         )
 
