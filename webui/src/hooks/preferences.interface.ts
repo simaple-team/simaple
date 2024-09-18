@@ -1,13 +1,18 @@
 export interface ChartSetting {
   maxClock: number;
-  showStackChart: boolean;
-  stackAxis1: {
-    max: number;
+  runningView: {
     skillNames: string[];
   };
-  stackAxis2: {
-    max: number;
-    skillNames: string[];
+  stackView: {
+    show: boolean;
+    axis1: {
+      max: number;
+      skillNames: string[];
+    };
+    axis2: {
+      max: number;
+      skillNames: string[];
+    };
   };
 }
 

@@ -27,13 +27,12 @@ const ChartSettingDialog: React.FC = () => {
   const runningView = history[0]?.running_view;
 
   const skillNames = React.useMemo(
-    () =>
-      runningView
-        ? Object.keys(runningView).filter(
-            (name) => runningView[name].stack != null,
-          )
-        : [],
+    () => (runningView ? Object.keys(runningView) : []),
     [runningView],
+  );
+  const stackSkillNames = React.useMemo(
+    () => skillNames.filter((name) => runningView[name].stack != null),
+    [runningView, skillNames],
   );
 
   async function handleSubmit() {
@@ -51,33 +50,17 @@ const ChartSettingDialog: React.FC = () => {
           <DialogTitle>차트 설정</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-2">
-          <div className="flex gap-2">
-            <Label htmlFor="showStackChart">스택 차트 표시</Label>
-            <Controller
-              name="showStackChart"
-              control={control}
-              render={({ field: { value, onChange } }) => (
-                <Checkbox
-                  id="showStackChart"
-                  checked={value}
-                  onCheckedChange={onChange}
-                />
-              )}
-            />
-          </div>
           <div className="flex flex-col gap-2">
-            <span className="text-sm">스택 그룹 1</span>
-            <Label htmlFor="stackAxis1.max">Max</Label>
-            <Input id="stackAxis1.max" {...register("stackAxis1.max")} />
+            <span className="text-sm">지속시간 표시</span>
             <Controller
-              name={`stackAxis1.skillNames`}
+              name={`runningView.skillNames`}
               control={control}
               render={({ field: { value, onChange } }) => (
-                <div className="flex gap-1">
+                <div className="grid grid-cols-2 gap-1">
                   {skillNames.map((skillName, i) => (
                     <div className="flex gap-1 items-center">
                       <Checkbox
-                        id={`stackAxis1.skillNames.${i}`}
+                        id={`runningView.skillNames.${i}`}
                         key={skillName}
                         checked={value.includes(skillName)}
                         onCheckedChange={
@@ -89,7 +72,57 @@ const ChartSettingDialog: React.FC = () => {
                             : () => onChange([...value, skillName])
                         }
                       />
-                      <Label htmlFor={`stackAxis1.skillNames.${i}`}>
+                      <Label htmlFor={`runningView.skillNames.${i}`}>
+                        {skillName}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              )}
+            />
+          </div>
+          <div className="flex gap-2">
+            <Label htmlFor="stackView.show">스택 차트 표시</Label>
+            <Controller
+              name="stackView.show"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <Checkbox
+                  id="stackView.show"
+                  checked={value}
+                  onCheckedChange={onChange}
+                />
+              )}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <span className="text-sm">스택 그룹 1</span>
+            <Label htmlFor="stackView.axis1.max">Max</Label>
+            <Input
+              id="stackView.axis1.max"
+              {...register("stackView.axis1.max")}
+            />
+            <Controller
+              name={`stackView.axis1.skillNames`}
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <div className="flex gap-1">
+                  {stackSkillNames.map((skillName, i) => (
+                    <div className="flex gap-1 items-center">
+                      <Checkbox
+                        id={`stackView.axis1.skillNames.${i}`}
+                        key={skillName}
+                        checked={value.includes(skillName)}
+                        onCheckedChange={
+                          value.includes(skillName)
+                            ? () =>
+                                onChange(
+                                  value.filter((name) => name !== skillName),
+                                )
+                            : () => onChange([...value, skillName])
+                        }
+                      />
+                      <Label htmlFor={`stackView.axis1.skillNames.${i}`}>
                         {skillName}
                       </Label>
                     </div>
@@ -100,17 +133,20 @@ const ChartSettingDialog: React.FC = () => {
           </div>
           <div className="flex flex-col gap-2">
             <span className="text-sm">스택 그룹 2</span>
-            <Label htmlFor="stackAxis2.max">Max</Label>
-            <Input id="stackAxis2.max" {...register("stackAxis2.max")} />
+            <Label htmlFor="stackView.axis2.max">Max</Label>
+            <Input
+              id="stackView.axis2.max"
+              {...register("stackView.axis2.max")}
+            />
             <Controller
-              name="stackAxis2.skillNames"
+              name="stackView.axis2.skillNames"
               control={control}
               render={({ field: { value, onChange } }) => (
                 <div className="flex gap-1">
-                  {skillNames.map((skillName, i) => (
+                  {stackSkillNames.map((skillName, i) => (
                     <div className="flex gap-1 items-center">
                       <Checkbox
-                        id={`stackAxis2.skillNames.${i}`}
+                        id={`stackView.axis2.skillNames.${i}`}
                         key={skillName}
                         checked={value.includes(skillName)}
                         onCheckedChange={
@@ -122,7 +158,7 @@ const ChartSettingDialog: React.FC = () => {
                             : () => onChange([...value, skillName])
                         }
                       />
-                      <Label htmlFor={`stackAxis2.skillNames.${i}`}>
+                      <Label htmlFor={`stackView.axis2.skillNames.${i}`}>
                         {skillName}
                       </Label>
                     </div>

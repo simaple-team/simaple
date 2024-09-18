@@ -56,7 +56,7 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
     ],
   };
 
-  const grid = setting.showStackChart
+  const grid = setting.stackView.show
     ? [{ bottom: "70%" }, { top: "35%", bottom: "35%" }, { top: "70%" }]
     : [{ bottom: "70%" }, { top: "35%" }];
   const xAxis = [
@@ -78,7 +78,7 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
         formatter: clockFormatter,
       },
     },
-    ...(setting.showStackChart
+    ...(setting.stackView.show
       ? [
           {
             type: "value",
@@ -110,21 +110,21 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
     {
       type: "category",
       gridIndex: 1,
-      data: history.length > 0 ? Object.keys(history[0].running_view) : [],
+      data: setting.runningView.skillNames,
     },
-    ...(setting.showStackChart
+    ...(setting.stackView.show
       ? [
           {
             type: "value",
             gridIndex: 2,
             min: 0,
-            max: setting.stackAxis1.max,
+            max: setting.stackView.axis1.max,
           },
           {
             type: "value",
             gridIndex: 2,
             min: 0,
-            max: setting.stackAxis2.max,
+            max: setting.stackView.axis2.max,
           },
         ]
       : []),
@@ -184,8 +184,7 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
   }
 
   function getUptimeSeries(history: PlayLog[]) {
-    const names =
-      history.length > 0 ? Object.keys(history[0].running_view) : [];
+    const names = setting.runningView.skillNames;
     const data = names.flatMap((name, i) => {
       return history
         .filter(
@@ -226,11 +225,8 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
     };
   }
 
-  function getStackSeries(
-    history: PlayLog[],
-    { stackAxis1, stackAxis2, showStackChart }: ChartSetting,
-  ) {
-    if (!showStackChart) return [];
+  function getStackSeries(history: PlayLog[], { stackView }: ChartSetting) {
+    if (!stackView.show) return [];
 
     const getSeries = (names: string[], yAxisIndex: number) =>
       names.map((name) => {
@@ -250,8 +246,8 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
       });
 
     return [
-      ...getSeries(stackAxis1.skillNames, 3),
-      ...getSeries(stackAxis2.skillNames, 4),
+      ...getSeries(stackView.axis1.skillNames, 3),
+      ...getSeries(stackView.axis2.skillNames, 4),
     ];
   }
 
@@ -314,13 +310,13 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
       {
         show: true,
         realtime: true,
-        xAxisIndex: setting.showStackChart ? [0, 1, 2] : [0, 1],
+        xAxisIndex: setting.stackView.show ? [0, 1, 2] : [0, 1],
         filterMode: "weakFilter",
       },
       {
         type: "inside",
         realtime: true,
-        xAxisIndex: setting.showStackChart ? [0, 1, 2] : [0, 1],
+        xAxisIndex: setting.stackView.show ? [0, 1, 2] : [0, 1],
         filterMode: "weakFilter",
       },
     ],
