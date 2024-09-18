@@ -17,8 +17,6 @@ def test_actor(character_provider_and_setting, jobtype, expected):
         character_provider
     )
 
-    print(container.character_provider.character().action_stat)
-
     engine = container.operation_engine()
 
     policy = container.builtin_strategy().get_priority_based_policy()

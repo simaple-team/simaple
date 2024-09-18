@@ -2,7 +2,7 @@ import json
 from typing import Type
 
 from simaple.container.simulation import (
-    CharacterDependentSimulationConfig,
+    CharacterDependentEnvironment,
     CharacterProvider,
 )
 from simaple.core import ActionStat, ExtendedStat, JobCategory, JobType, Stat
@@ -40,8 +40,8 @@ class MinimalCharacterProvider(CharacterProvider):
 
     def get_character_dependent_simulation_config(
         self,
-    ) -> CharacterDependentSimulationConfig:
-        return CharacterDependentSimulationConfig(
+    ) -> CharacterDependentEnvironment:
+        return CharacterDependentEnvironment(
             passive_skill_level=0,
             combat_orders_level=self.combat_orders_level,
             weapon_pure_attack_power=self.weapon_pure_attack_power,
@@ -115,8 +115,8 @@ class BaselineCharacterProvider(CharacterProvider):
 
     def get_character_dependent_simulation_config(
         self,
-    ) -> CharacterDependentSimulationConfig:
-        return CharacterDependentSimulationConfig(
+    ) -> CharacterDependentEnvironment:
+        return CharacterDependentEnvironment(
             passive_skill_level=self.passive_skill_level,
             combat_orders_level=self.combat_orders_level,
             weapon_pure_attack_power=self.weapon_pure_attack_power,

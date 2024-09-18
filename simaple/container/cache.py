@@ -5,9 +5,10 @@ from abc import ABC, abstractmethod
 
 from simaple.container.character_provider import serialize_character_provider
 from simaple.container.simulation import (
-    CharacterDependentSimulationConfig,
+    CharacterDependentEnvironment,
     CharacterProvider,
     SimulationContainer,
+    SimulationEnvironment,
     SimulationSetting,
 )
 from simaple.core import ExtendedStat
@@ -15,36 +16,38 @@ from simaple.core import ExtendedStat
 
 class CachedCharacterProvider(CharacterProvider):
     cached_character: ExtendedStat
-    cached_simulation_config: CharacterDependentSimulationConfig
+    cached_simulation_config: CharacterDependentEnvironment
 
     def character(self) -> ExtendedStat:
         return self.cached_character
 
     def get_character_dependent_simulation_config(
         self,
-    ) -> CharacterDependentSimulationConfig:
+    ) -> CharacterDependentEnvironment:
         return self.cached_simulation_config
 
 
 class CharacterProviderCache(ABC):
     @abstractmethod
     def get(
-        self, setting: SimulationSetting, character_provider: CharacterProvider
+        self, environment: SimulationEnvironment, character_provider: CharacterProvider
     ) -> tuple[CharacterProvider, bool]:
         pass
 
     def get_simulation_container(
-        self, setting: SimulationSetting, character_provider: CharacterProvider
+        self, environment: SimulationEnvironment, character_provider: CharacterProvider
     ) -> SimulationContainer:
-        as_cached_character_provider, _ = self.get(setting, character_provider)
+        as_cached_character_provider, _ = self.get(environment, character_provider)
 
-        return SimulationContainer(setting, as_cached_character_provider)
+        return SimulationContainer.from_character_provider(
+            environment, as_cached_character_provider
+        )
 
     def _compute_cache_key(
-        self, setting: SimulationSetting, character_provider: CharacterProvider
+        self, environment: SimulationEnvironment, character_provider: CharacterProvider
     ) -> str:
         obj = {
-            "setting": setting.model_dump_json(),
+            "setting": environment.model_dump_json(),
             "provider": serialize_character_provider(character_provider),
         }
         serialized_query = json.dumps(obj, ensure_ascii=False, indent=2, sort_keys=True)
@@ -72,9 +75,9 @@ class InMemoryCache(CharacterProviderCache):
         self.cache = saved_cache
 
     def get(
-        self, setting: SimulationSetting, character_provider: CharacterProvider
+        self, environment: SimulationEnvironment, character_provider: CharacterProvider
     ) -> tuple[CharacterProvider, bool]:
-        cache_key = self._compute_cache_key(setting, character_provider)
+        cache_key = self._compute_cache_key(environment, character_provider)
 
         if cache_key in self.cache:
             return self._deserialize_output(self.cache[cache_key]), True
@@ -98,9 +101,9 @@ class PersistentStorageCache(CharacterProviderCache):
                 json.dump({}, f)
 
     def get(
-        self, setting: SimulationSetting, character_provider: CharacterProvider
+        self, environment: SimulationEnvironment, character_provider: CharacterProvider
     ) -> tuple[CharacterProvider, bool]:
-        cache_key = self._compute_cache_key(setting, character_provider)
+        cache_key = self._compute_cache_key(environment, character_provider)
 
         with open(self.path, "r") as f:
             cache = json.load(f)

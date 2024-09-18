@@ -25,8 +25,8 @@ def run(
     character_provider = CachedCharacterProvider.model_validate(
         serialized_character_provider
     )
-    simulation_container = SimulationContainer(
-        metadata.simulation_setting, character_provider
+    simulation_container = SimulationContainer.from_character_provider(
+        metadata.simulation_environment, character_provider
     )
     engine = simulation_container.operation_engine()
 
