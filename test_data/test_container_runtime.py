@@ -10,13 +10,13 @@ import os
 @pytest.mark.parametrize("character_provider_and_setting, jobtype, expected", get_test_settings())
 def test_actor(character_provider_and_setting, jobtype, expected):
     character_provider, setting  = character_provider_and_setting
-    container = PersistentStorageCache(
+    environment = PersistentStorageCache(
         os.path.join(os.path.dirname(__file__), ".cache.simaple.json")
-    ).get_simulation_container(
+    ).get_simulation_environment(
         setting,
         character_provider
     )
-
+    container = SimulationContainer(environment)
     engine = container.operation_engine()
 
     policy = container.builtin_strategy().get_priority_based_policy()

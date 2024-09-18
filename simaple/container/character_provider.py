@@ -69,9 +69,9 @@ class CharacterProvider(pydantic.BaseModel, metaclass=ABCMeta):
     def get_name(cls):
         return cls.__name__
 
-    def get_simulation_container(
+    def get_simulation_environment(
         self, confined_environment: SimulationEnvironmentForCharacterProvider
-    ):
+    ) -> SimulationEnvironment:
         environment = confined_environment.model_dump()
         environment.update(
             self.get_character_dependent_simulation_config().model_dump()
@@ -79,7 +79,7 @@ class CharacterProvider(pydantic.BaseModel, metaclass=ABCMeta):
         environment["character"] = self.character().model_dump()
 
         environment = SimulationEnvironment.model_validate(environment)
-        return SimulationContainer(environment)
+        return environment
 
 
 class MinimalCharacterProvider(CharacterProvider):

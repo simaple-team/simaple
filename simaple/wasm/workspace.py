@@ -2,10 +2,16 @@ from typing import Any, Dict, cast
 
 from simaple.container.cache import CachedCharacterProvider
 from simaple.container.plan_metadata import PlanMetadata
+from simaple.container.simulation import SimulationContainer, SimulationEnvironment
 from simaple.simulate.policy.base import ConsoleText, Operation, is_console_command
 from simaple.simulate.policy.parser import parse_simaple_runtime
 from simaple.simulate.report.base import DamageLog
-from simaple.wasm.base import return_js_object_from_pydantic_list
+from simaple.wasm.base import (
+    MaybePyodide,
+    pyodide_reveal_dict,
+    return_js_object_from_pydantic_list,
+    return_js_object_from_pydantic_object,
+)
 from simaple.wasm.models.simulation import (
     OperationLogResponse,
     PlayLogResponse,
@@ -16,17 +22,14 @@ from simaple.wasm.models.simulation import (
 @return_js_object_from_pydantic_list
 def run(
     plan: str,
-    serialized_character_provider: dict[str, str],
+    serialized_character_provider: MaybePyodide,
 ) -> list[OperationLogResponse]:
-    metadata_dict, op_or_consoles = parse_simaple_runtime(plan.strip())
-    metadata = PlanMetadata.model_validate(metadata_dict)
+    _, op_or_consoles = parse_simaple_runtime(plan.strip())
 
-    character_provider = CachedCharacterProvider.model_validate(
-        serialized_character_provider
+    simulation_environment = SimulationEnvironment.model_validate(
+        pyodide_reveal_dict(serialized_character_provider)
     )
-    simulation_container = character_provider.get_simulation_container(
-        metadata.simulation_environment,
-    )
+    simulation_container = SimulationContainer(simulation_environment)
     engine = simulation_container.operation_engine()
 
     for op_or_console in op_or_consoles:
@@ -83,17 +86,16 @@ def run(
     return responses
 
 
+@return_js_object_from_pydantic_object
 def getSerializedCharacterProvider(
     plan: str,
-) -> Dict[str, Any]:
+) -> SimulationEnvironment:
     metadata_dict, _ = parse_simaple_runtime(plan.strip())
     metadata = PlanMetadata.model_validate(metadata_dict)
 
-    character_provider = metadata.get_character_provider_config()
+    if metadata.provider is None:
+        raise ValueError("Character provider is not provided")
 
-    prebuilt_character_provider = CachedCharacterProvider(
-        cached_character=character_provider.character(),
-        cached_simulation_config=character_provider.get_character_dependent_simulation_config(),
-    )
+    simulation_environment = metadata.provider.get_simulation_environment()
 
-    return prebuilt_character_provider.model_dump()
+    return simulation_environment

@@ -9,7 +9,7 @@ from simaple.container.character_provider import (
     SimulationEnvironmentForCharacterProvider,
     serialize_character_provider,
 )
-from simaple.container.simulation import SimulationContainer
+from simaple.container.simulation import SimulationEnvironment
 from simaple.core import ExtendedStat
 
 
@@ -35,14 +35,14 @@ class CharacterProviderCache(ABC):
     ) -> tuple[CharacterProvider, bool]:
         pass
 
-    def get_simulation_container(
+    def get_simulation_environment(
         self,
         environment: SimulationEnvironmentForCharacterProvider,
         character_provider: CharacterProvider,
-    ) -> SimulationContainer:
+    ) -> SimulationEnvironment:
         as_cached_character_provider, _ = self.get(environment, character_provider)
 
-        return as_cached_character_provider.get_simulation_container(
+        return as_cached_character_provider.get_simulation_environment(
             environment,
         )
 
