@@ -12,5 +12,4 @@ export interface ChartSetting {
 
 export interface Preferences {
   chart: ChartSetting;
-  autoElapse: boolean;
 }

@@ -16,7 +16,6 @@ function usePreferenceState() {
         skillNames: [],
       },
     },
-    autoElapse: true,
   });
 
   function setChartSetting(chart: ChartSetting) {
@@ -26,20 +25,11 @@ function usePreferenceState() {
     });
   }
 
-  function setAutoElapse(autoElapse: boolean) {
-    setPreferences({
-      ...preferences,
-      autoElapse,
-    });
-  }
-
-  const { chart: chartSetting, autoElapse } = preferences;
+  const { chart: chartSetting } = preferences;
 
   return {
     chartSetting,
-    autoElapse,
     setChartSetting,
-    setAutoElapse,
   };
 }
 
