@@ -7,14 +7,19 @@ function usePreferenceState() {
   const [preferences, setPreferences] = React.useState<Preferences>({
     chart: {
       maxClock: 180 * 1000,
-      showStackChart: false,
-      stackAxis1: {
-        max: 10,
+      runningView: {
         skillNames: [],
       },
-      stackAxis2: {
-        max: 10,
-        skillNames: [],
+      stackView: {
+        show: false,
+        axis1: {
+          max: 10,
+          skillNames: [],
+        },
+        axis2: {
+          max: 10,
+          skillNames: [],
+        },
       },
     },
   });
