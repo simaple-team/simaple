@@ -26,7 +26,7 @@ from simaple.wasm.models.simulation import (
 def _extract_engine_history_as_response(
     engine: OperationEngine,
     damage_calculator: DamageCalculator,
-):
+) -> list[OperationLogResponse]:
     responses: list[OperationLogResponse] = []
     history = engine.history()
 
