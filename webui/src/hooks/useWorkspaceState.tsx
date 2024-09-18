@@ -31,6 +31,15 @@ function useWorkspaceState() {
     setHistory(logs.flatMap((log) => log.logs));
   }, [pySimaple, serializedCharacterProvider, plan]);
 
+  const runAsync = React.useCallback(() => {
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        run();
+        resolve();
+      }, 0);
+    });
+  }, [run]);
+
   return {
     plan,
     setPlan,
@@ -38,6 +47,7 @@ function useWorkspaceState() {
     playLog,
     skillNames,
     run,
+    runAsync,
   };
 }
 
