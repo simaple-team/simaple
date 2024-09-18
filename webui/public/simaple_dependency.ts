@@ -1,0 +1,1 @@
+export const SIMAPLE_FILE_NAME = "simaple-0.0.0.d66b7fec-py3-none-any.whl"
