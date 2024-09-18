@@ -3,23 +3,26 @@ import { usePySimapleBeforeLoad } from "@/hooks/useSimaple";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+const LOADING_MESSAGES = [
+  "펭귄에게 먹이를 주는 중...",
+  "데이터를 불러오는 중...",
+  "하인즈의 턱수염을 빗는 중...",
+  "유니온 테트리스를 하는 중...",
+  "로딩 중...",
+];
 
 function LoadingText() {
-  const messages = [
-    "펭귄에게 먹이를 주는 중...",
-    "데이터를 불러오는 중...",
-    "하인즈의 턱수염을 빗는 중...",
-    "유니온 테트리스를 하는 중...",
-    "로딩 중...",
-  ];
-
   const [message, setMessage] = useState(
-    messages[Math.floor(Math.random() * messages.length)],
+    LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)],
   );
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setMessage(messages[Math.floor(Math.random() * messages.length)]);
+      setMessage(
+        LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)],
+      );
     }, 2000);
 
     return () => clearInterval(interval);
@@ -29,7 +32,14 @@ function LoadingText() {
 }
 
 export function PrepareSimaple() {
-  const { load, isLoading } = usePySimapleBeforeLoad();
+  const navigate = useNavigate();
+  const { load, isLoading, isLoaded } = usePySimapleBeforeLoad();
+
+  useEffect(() => {
+    if (isLoaded) {
+      navigate("/editor/chart");
+    }
+  }, [isLoaded, navigate]);
 
   return (
     <div className="h-screen flex flex-col justify-center items-center">
