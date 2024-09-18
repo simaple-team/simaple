@@ -1,5 +1,19 @@
-# 메카닉
-
+---
+author: meson3241
+provider: 
+  name: BaselineEnvironmentProvider
+  data:
+    tier: "Legendary"
+    jobtype: mechanic
+    job_category: 4
+    level: 270
+    passive_skill_level: 0
+    combat_orders_level: 1
+    artifact_level: 40
+    v_skill_level: 30
+    v_improvements_level: 60
+    hexa_improvements_level: 10
+---
 ELAPSE 70000
 
 CAST "로디드 다이스"

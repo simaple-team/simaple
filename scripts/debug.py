@@ -3,10 +3,9 @@ from enum import Enum
 import fire
 
 import simaple.simulate.component.skill  # noqa: F401
-from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
+from simaple.container.plan_metadata import PlanMetadata
 from simaple.container.simulation import SimulationContainer
-from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.base import PlayLog
 from simaple.simulate.policy.base import is_console_command
 from simaple.simulate.policy.parser import parse_simaple_runtime
@@ -45,18 +44,6 @@ def show_damage_as_string(damage: float):
         return f"{damage/1000000000:03.2f}B"
 
 
-class _TimestampedPlanWriter:
-    def __init__(self) -> None:
-        self._commands = []
-
-    def write(self, command: str, timestamp: float):
-        self._commands.append(f"{command: <25} # {int(timestamp):,}ms")
-
-    def dump(self, file_name: str):
-        with open(file_name, "w") as f:
-            f.write("\n".join(self._commands))
-
-
 def _get_status(playlog: PlayLog, entry: SimulationEntry) -> PlayStatus:
     if len(playlog.events) == 0:
         return PlayStatus.PASSED
@@ -67,59 +54,23 @@ def _get_status(playlog: PlayLog, entry: SimulationEntry) -> PlayStatus:
 
 
 class DebugInterface:
-    def __init__(self, jobtype: JobType | str) -> None:
-        if isinstance(jobtype, str):
-            jobtype = JobType(jobtype)
-
-        self._environment_provider = BaselineEnvironmentProvider(
-            tier="Legendary",
-            jobtype=jobtype,
-            job_category=get_job_category(jobtype),
-            level=270,
-            passive_skill_level=0,
-            combat_orders_level=1,
-            artifact_level=40,
-            v_skill_level=30,
-            v_improvements_level=60,
-            hexa_improvements_level=10,
-        )
-        self._simulation_environment_memoizer = PersistentStorageMemoizer()
-
-    def get_engine(self):
-        container = SimulationContainer(
-            self._simulation_environment_memoizer.compute_environment(
-                self._environment_provider
-            )
-        )
-
-        engine = container.operation_engine()
-
-        return engine
-
-    def get_dpm_calculator(self):
-        container = SimulationContainer(
-            self._simulation_environment_memoizer.compute_environment(
-                self._environment_provider
-            )
-        )
-        return container.damage_calculator()
-
     def run(self, plan_file: str):
         with open(plan_file, "r") as f:
-            configuration, operation_or_consoles = parse_simaple_runtime(f.read())
+            plan_metadata_dict, operation_or_consoles = parse_simaple_runtime(f.read())
 
-        engine = self.get_engine()
-        damage_calculator = self.get_dpm_calculator()
-        plan_writer = _TimestampedPlanWriter()
+        _simulation_environment_memoizer = PersistentStorageMemoizer()
 
-        damage_share = DamageShareFeature(self.get_dpm_calculator())
+        plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
+        environment = _simulation_environment_memoizer.compute_environment(
+            plan_metadata.get_environment_provider_config()  # type: ignore
+        )
+        simulation_container = SimulationContainer(environment)
+
+        engine = simulation_container.operation_engine()
+        damage_calculator = simulation_container.damage_calculator()
+        damage_share = DamageShareFeature(damage_calculator)
 
         for op_or_console in operation_or_consoles:
-            if not is_console_command(op_or_console):
-                plan_writer.write(
-                    op_or_console.expr, engine.get_current_viewer()("clock")
-                )
-
             if is_console_command(op_or_console):
                 console_output = engine.console(op_or_console)
                 print(f"\033[90m[DEBUG_]{console_output}\033[0m")
@@ -147,10 +98,8 @@ class DebugInterface:
         )
 
         print(
-            f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {self.confined_environment.jobtype}"
+            f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {simulation_container.environment.jobtype}"
         )
-
-        plan_writer.dump(plan_file.replace(".simaple", ".result.simaple"))
 
 
 if __name__ == "__main__":

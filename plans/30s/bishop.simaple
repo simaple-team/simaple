@@ -1,5 +1,19 @@
-# 비숍
-
+---
+author: meson3241
+provider: 
+  name: BaselineEnvironmentProvider
+  data:
+    tier: "Legendary"
+    jobtype: bishop
+    job_category: 1
+    level: 270
+    passive_skill_level: 0
+    combat_orders_level: 1
+    artifact_level: 40
+    v_skill_level: 30
+    v_improvements_level: 60
+    hexa_improvements_level: 10
+---
 CAST "오버로드 마나"
 CAST "바하뮤트"
 CAST "메이플 용사"
