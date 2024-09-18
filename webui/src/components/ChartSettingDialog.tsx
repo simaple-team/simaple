@@ -48,6 +48,20 @@ const ChartSettingDialog: React.FC = () => {
       <DialogContent>
         <DialogHeader>Chart Settings</DialogHeader>
         <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
+            <Label htmlFor="showStackChart">Show Stack Chart</Label>
+            <Controller
+              name="showStackChart"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <Checkbox
+                  id="showStackChart"
+                  checked={value}
+                  onCheckedChange={onChange}
+                />
+              )}
+            />
+          </div>
           <div className="flex flex-col gap-2">
             <span className="text-sm">Stack Group 1</span>
             <Label htmlFor="stackAxis1.max">Max</Label>

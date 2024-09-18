@@ -149,7 +149,11 @@ const Editor: React.FC = () => {
         <ErrorBoundary
           fallbackRender={({ error }) => <div>Error: {error.message}</div>}
         >
-          <Chart history={history} setting={chartSetting} />
+          <Chart
+            key={JSON.stringify(chartSetting)}
+            history={history}
+            setting={chartSetting}
+          />
         </ErrorBoundary>
       </div>
     </div>
