@@ -38,7 +38,7 @@ class CharacterProviderMemoizer(ABC):
     def memoize(
         self,
         memoizable_environment_provider: MemoizableEnvironmentProvider,
-    ) -> tuple[MemoizableEnvironmentProvider, bool]:
+    ) -> tuple[EnvironmentProvider, bool]:
         """
         Memoize the environment provider and return the memoized environment provider if it exists.
         If not memoized, memoize into storage and return the memoized environment provider.
