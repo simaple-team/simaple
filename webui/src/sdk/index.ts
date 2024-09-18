@@ -21,20 +21,6 @@ export async function loadPySimaple() {
   const micropip = pyodide.pyimport("micropip");
   await micropip.install(["loguru", "lark", "numpy", "pyyaml", "pyfunctional"]);
 
-  if (import.meta.env.DEV) {
-    await micropip.install(
-      "http://localhost:8000/simaple-0.4.2-py3-none-any.whl",
-      false,
-      false,
-    );
-
-    return {
-      pySimaple: pyodide.runPython(`
-    import simaple.wasm as wasm
-    wasm`),
-    };
-  }
-
   await micropip.install(
     `${window.location.origin}/simaple-0.4.2-py3-none-any.whl`,
     false,
