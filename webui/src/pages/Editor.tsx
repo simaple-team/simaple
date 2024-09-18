@@ -10,6 +10,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import Chart from "../components/Chart";
 import { usePreference } from "../hooks/usePreference";
 import { useWorkspace } from "../hooks/useWorkspace";
+import { Loader2 } from "lucide-react";
 
 function ensureAnchor(expr: RegExp, start: boolean) {
   const { source } = expr;
@@ -62,7 +63,8 @@ const myTheme = EditorView.theme({
 });
 
 const Editor: React.FC = () => {
-  const { plan, setPlan, history, skillNames, run } = useWorkspace();
+  const [isRunning, setIsRunning] = React.useState(false);
+  const { plan, setPlan, history, skillNames, runAsync } = useWorkspace();
   const { chartSetting } = usePreference();
 
   const myCompletions = React.useMemo(
@@ -70,8 +72,10 @@ const Editor: React.FC = () => {
     [skillNames],
   );
 
-  function handleRun() {
-    run();
+  async function handleRun() {
+    setIsRunning(true);
+    await runAsync();
+    setIsRunning(false);
   }
 
   return (
@@ -83,7 +87,19 @@ const Editor: React.FC = () => {
           value={plan}
           onChange={(value) => setPlan(value)}
         />
-        <Button onClick={handleRun}>Calculate</Button>
+        <Button
+          disabled={isRunning || plan.trim().length === 0}
+          onClick={handleRun}
+        >
+          {isRunning ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              계산 중...
+            </>
+          ) : (
+            "계산"
+          )}
+        </Button>
       </div>
       <div className="grow">
         <ErrorBoundary
