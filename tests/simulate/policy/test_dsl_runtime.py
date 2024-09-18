@@ -4,8 +4,8 @@ from pathlib import Path
 import pytest
 
 import simaple.simulate.component.skill  # noqa: F401
-from simaple.container.character_provider import (
-    BaselineCharacterProvider,
+from simaple.container.environment_provider import (
+    BaselineEnvironmentProvider,
     ProviderConfinedSimulationEnvironment,
 )
 from simaple.container.memoizer import PersistentStorageMemoizer
@@ -24,8 +24,8 @@ def fixture_dsl_list() -> list[str]:
 
 
 @pytest.fixture(name="dsl_test_setting")
-def fixture_dsl_test_setting() -> BaselineCharacterProvider:
-    return BaselineCharacterProvider(
+def fixture_dsl_test_setting() -> BaselineEnvironmentProvider:
+    return BaselineEnvironmentProvider(
         tier="Legendary",
         jobtype=JobType.archmagetc,
         job_category=JobCategory.magician,
@@ -36,7 +36,9 @@ def fixture_dsl_test_setting() -> BaselineCharacterProvider:
     )
 
 
-def test_dsl(dsl_list: list[str], dsl_test_setting: BaselineCharacterProvider) -> None:
+def test_dsl(
+    dsl_list: list[str], dsl_test_setting: BaselineEnvironmentProvider
+) -> None:
     environment = PersistentStorageMemoizer(
         os.path.join(os.path.dirname(__file__), ".simaple.memo.json"),
     ).compute_environment(

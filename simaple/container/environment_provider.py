@@ -56,7 +56,7 @@ class ProviderDependency(pydantic.BaseModel):
         return get_damage_logic(self.jobtype, self.combat_orders_level)
 
 
-class CharacterProvider(pydantic.BaseModel, metaclass=ABCMeta):
+class EnvironmentProvider(pydantic.BaseModel, metaclass=ABCMeta):
     @abstractmethod
     def character(self) -> ExtendedStat: ...
 
@@ -80,7 +80,7 @@ class CharacterProvider(pydantic.BaseModel, metaclass=ABCMeta):
         return environment
 
 
-class MinimalCharacterProvider(CharacterProvider):
+class MinimalEnvironmentProvider(EnvironmentProvider):
     level: int
     action_stat: ActionStat
     stat: Stat
@@ -108,7 +108,7 @@ class MinimalCharacterProvider(CharacterProvider):
         )
 
 
-class BaselineCharacterProvider(CharacterProvider):
+class BaselineEnvironmentProvider(EnvironmentProvider):
     tier: str
     union_block_count: int = 37
     link_count: int = 12 + 1
@@ -225,17 +225,17 @@ class BaselineCharacterProvider(CharacterProvider):
         )
 
 
-_character_providers: dict[str, Type[CharacterProvider]] = {
-    BaselineCharacterProvider.__name__: BaselineCharacterProvider,
-    MinimalCharacterProvider.__name__: MinimalCharacterProvider,
+_environment_providers: dict[str, Type[EnvironmentProvider]] = {
+    BaselineEnvironmentProvider.__name__: BaselineEnvironmentProvider,
+    MinimalEnvironmentProvider.__name__: MinimalEnvironmentProvider,
 }
 
 
-def get_character_provider(name: str, config: dict) -> CharacterProvider:
-    return _character_providers[name].model_validate(config)
+def get_environment_provider(name: str, config: dict) -> EnvironmentProvider:
+    return _environment_providers[name].model_validate(config)
 
 
-def serialize_character_provider(provider: CharacterProvider) -> str:
+def serialize_environment_provider(provider: EnvironmentProvider) -> str:
     obj = {
         "config": provider.model_dump_json(),
         "config_name": provider.get_name(),
@@ -244,12 +244,12 @@ def serialize_character_provider(provider: CharacterProvider) -> str:
     return json.dumps(obj, ensure_ascii=False, indent=2, sort_keys=True)
 
 
-def deserialize_character_provider(data: str) -> CharacterProvider:
+def deserialize_environment_provider(data: str) -> EnvironmentProvider:
     obj = json.loads(data)
     config_name = obj["config_name"]
     config = obj["config"]
 
-    if config_name == BaselineCharacterProvider.__name__:
-        return BaselineCharacterProvider.model_validate_json(config)
+    if config_name == BaselineEnvironmentProvider.__name__:
+        return BaselineEnvironmentProvider.model_validate_json(config)
 
     raise ValueError(f"Unknown config name: {config_name}")

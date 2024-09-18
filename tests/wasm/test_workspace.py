@@ -10,7 +10,7 @@ def test_get_simulation_environment_then_run():
     plan = """
 author: "Alice"
 provider:
-    name: "BaselineCharacterProvider"
+    name: "BaselineEnvironmentProvider"
     data:
         tier: Legendary
         jobtype: archmagetc
@@ -40,7 +40,7 @@ def test_run():
     plan = """
 author: "Alice"
 provider:
-    name: "BaselineCharacterProvider"
+    name: "BaselineEnvironmentProvider"
     data:
         tier: Legendary
         jobtype: archmagetc
@@ -63,7 +63,7 @@ def test_run_with_explicit_environment():
     plan = """
 author: "Alice"
 provider:
-    name: "BaselineCharacterProvider"
+    name: "BaselineEnvironmentProvider"
     data:
         tier: Legendary
         jobtype: archmagetc

@@ -1,8 +1,8 @@
 import os
 import tempfile
 
-from simaple.container.character_provider import (
-    BaselineCharacterProvider,
+from simaple.container.environment_provider import (
+    BaselineEnvironmentProvider,
     ProviderConfinedSimulationEnvironment,
 )
 from simaple.container.memoizer import InMemoryMemoizer, PersistentStorageMemoizer
@@ -15,7 +15,7 @@ def test_inmemory_memoizer():
     memoizer = InMemoryMemoizer(saved_memos)
 
     confined_environment = ProviderConfinedSimulationEnvironment()
-    character_provider = BaselineCharacterProvider(
+    environment_provider = BaselineEnvironmentProvider(
         union_block_count=10,
         tier="Legendary",
         jobtype=JobType.archmagefb,
@@ -25,7 +25,7 @@ def test_inmemory_memoizer():
         combat_orders_level=1,
         artifact_level=40,
     )
-    second_character_provider = BaselineCharacterProvider(
+    second_environment_provider = BaselineEnvironmentProvider(
         union_block_count=10 + 1,
         tier="Legendary",
         jobtype=JobType.archmagefb,
@@ -36,21 +36,21 @@ def test_inmemory_memoizer():
         artifact_level=40,
     )
 
-    _, hit = memoizer.get_memo(confined_environment, character_provider)
+    _, hit = memoizer.get_memo(confined_environment, environment_provider)
     assert not hit
 
-    _, hit = memoizer.get_memo(confined_environment, character_provider)
+    _, hit = memoizer.get_memo(confined_environment, environment_provider)
     assert hit
 
-    _, hit = memoizer.get_memo(confined_environment, second_character_provider)
+    _, hit = memoizer.get_memo(confined_environment, second_environment_provider)
     assert not hit
 
     exported_memos = memoizer.export()
     new_memoizer = InMemoryMemoizer(exported_memos)
-    _, hit = new_memoizer.get_memo(confined_environment, character_provider)
+    _, hit = new_memoizer.get_memo(confined_environment, environment_provider)
     assert hit
 
-    _, hit = new_memoizer.get_memo(confined_environment, second_character_provider)
+    _, hit = new_memoizer.get_memo(confined_environment, second_environment_provider)
     assert hit
 
 
@@ -59,7 +59,7 @@ def test_storage_memoizer():
         memoizer = PersistentStorageMemoizer(os.path.join(temp_dir, "memo.json"))
 
         setting = ProviderConfinedSimulationEnvironment()
-        character_provider = BaselineCharacterProvider(
+        environment_provider = BaselineEnvironmentProvider(
             union_block_count=10,
             tier="Legendary",
             jobtype=JobType.archmagefb,
@@ -69,7 +69,7 @@ def test_storage_memoizer():
             combat_orders_level=1,
             artifact_level=40,
         )
-        second_character_provider = BaselineCharacterProvider(
+        second_environment_provider = BaselineEnvironmentProvider(
             union_block_count=10 + 1,
             tier="Legendary",
             jobtype=JobType.archmagefb,
@@ -80,17 +80,17 @@ def test_storage_memoizer():
             artifact_level=40,
         )
 
-        _, hit = memoizer.get_memo(setting, character_provider)
+        _, hit = memoizer.get_memo(setting, environment_provider)
         assert not hit
 
-        _, hit = memoizer.get_memo(setting, character_provider)
+        _, hit = memoizer.get_memo(setting, environment_provider)
         assert hit
 
-        _, hit = memoizer.get_memo(setting, second_character_provider)
+        _, hit = memoizer.get_memo(setting, second_environment_provider)
         assert not hit
 
-        _, hit = memoizer.get_memo(setting, character_provider)
+        _, hit = memoizer.get_memo(setting, environment_provider)
         assert hit
 
-        _, hit = memoizer.get_memo(setting, second_character_provider)
+        _, hit = memoizer.get_memo(setting, second_environment_provider)
         assert hit

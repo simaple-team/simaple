@@ -2,10 +2,10 @@ from typing import Any
 
 import pydantic
 
-from simaple.container.character_provider import (
-    CharacterProvider,
+from simaple.container.environment_provider import (
+    EnvironmentProvider,
     ProviderConfinedSimulationEnvironment,
-    get_character_provider,
+    get_environment_provider,
 )
 from simaple.container.simulation import SimulationContainer, SimulationEnvironment
 
@@ -15,11 +15,11 @@ class _ProviderMetadata(pydantic.BaseModel):
     data: dict[str, Any]
     environment: ProviderConfinedSimulationEnvironment
 
-    def get_character_provider_config(self) -> CharacterProvider:
-        return get_character_provider(self.name, self.data)
+    def get_environment_provider(self) -> EnvironmentProvider:
+        return get_environment_provider(self.name, self.data)
 
     def get_simulation_environment(self) -> SimulationEnvironment:
-        return self.get_character_provider_config().get_simulation_environment(
+        return self.get_environment_provider().get_simulation_environment(
             self.environment,
         )
 
@@ -29,9 +29,9 @@ class PlanMetadata(pydantic.BaseModel):
     provider: _ProviderMetadata | None = None
     environment: SimulationEnvironment | None = None
 
-    def get_character_provider_config(self) -> CharacterProvider:
+    def get_environment_provider_config(self) -> EnvironmentProvider:
         assert self.provider is not None
-        return self.provider.get_character_provider_config()
+        return self.provider.get_environment_provider()
 
     def load_container(self) -> SimulationContainer:
         if self.environment is None:

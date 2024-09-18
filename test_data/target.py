@@ -1,6 +1,6 @@
 import os
 
-from simaple.container.character_provider import BaselineCharacterProvider, ProviderConfinedSimulationEnvironment
+from simaple.container.environment_provider import BaselineEnvironmentProvider, ProviderConfinedSimulationEnvironment
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 
@@ -13,7 +13,7 @@ def container_test_setting(
     if options is None:
         options = {}
 
-    return BaselineCharacterProvider(
+    return BaselineEnvironmentProvider(
         tier="Legendary",
         jobtype=jobtype,
         job_category=job_category,

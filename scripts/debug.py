@@ -3,8 +3,8 @@ from enum import Enum
 import fire
 
 import simaple.simulate.component.skill  # noqa: F401
-from simaple.container.character_provider import (
-    BaselineCharacterProvider,
+from simaple.container.environment_provider import (
+    BaselineEnvironmentProvider,
     ProviderConfinedSimulationEnvironment,
 )
 from simaple.container.memoizer import PersistentStorageMemoizer
@@ -78,7 +78,7 @@ class DebugInterface:
             v_improvements_level=60,
             hexa_improvements_level=10,
         )
-        self._character_provider = BaselineCharacterProvider(
+        self._environment_provider = BaselineEnvironmentProvider(
             tier="Legendary",
             jobtype=jobtype,
             job_category=get_job_category(jobtype),
@@ -91,7 +91,7 @@ class DebugInterface:
 
     def get_engine(self):
         container = self._simulation_environment_memoizer.get_simulation_container(
-            self.confined_environment, self._character_provider
+            self.confined_environment, self._environment_provider
         )
 
         engine = container.operation_engine()
@@ -100,7 +100,7 @@ class DebugInterface:
 
     def get_dpm_calculator(self):
         container = self._simulation_environment_memoizer.get_simulation_container(
-            self.confined_environment, self._character_provider
+            self.confined_environment, self._environment_provider
         )
         return container.damage_calculator()
 
