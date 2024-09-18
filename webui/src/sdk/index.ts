@@ -4,11 +4,9 @@ import { OperationLog } from "./models/OperationLog";
 export interface PySimapleUow {}
 
 export interface PySimaple {
-  runWithGivenEnvironment(
-    plan: string,
-    simulationEnvironment: Record<string, unknown>,
-  ): OperationLog[];
-  computeSimulationEnvironmentFromProvider(plan: string): Record<string, unknown>;
+  runPlan(plan: string): OperationLog[];
+  hasEnvironment(plan: string): boolean;
+  provideEnvironmentAugmentedPlan(plan: string): string;
 }
 
 export async function loadPySimaple() {

@@ -24,28 +24,28 @@ import {
 
 function baselineTemplate(simulationSetting: SimulationSetting) {
   return `---
-configuration_name: "BaselineEnvironmentProvider"
 author: ""
-data:
-  tier: ${simulationSetting.tier}
-  jobtype: ${simulationSetting.jobtype}
-  job_category: ${simulationSetting.job_category}
-  level: ${simulationSetting.level}
-  use_doping: ${simulationSetting.use_doping}
-  passive_skill_level: ${simulationSetting.passive_skill_level}
-  combat_orders_level: ${simulationSetting.combat_orders_level}
-  union_block_count: ${simulationSetting.union_block_count}
-  link_count: ${simulationSetting.link_count}
-  armor: ${simulationSetting.armor}
-  mob_level: ${simulationSetting.mob_level}
-  force_advantage: ${simulationSetting.force_advantage}
-  trait_level: ${simulationSetting.trait_level}
-  artifact_level: ${simulationSetting.artifact_level}
-  v_skill_level: ${simulationSetting.v_skill_level}
-  v_improvements_level: ${simulationSetting.v_improvements_level}
-  weapon_attack_power: ${simulationSetting.weapon_attack_power}
-  weapon_pure_attack_power: ${simulationSetting.weapon_pure_attack_power}
-simulation_setting: {}
+provider: 
+  name: "BaselineEnvironmentProvider"
+  data:
+    tier: ${simulationSetting.tier}
+    jobtype: ${simulationSetting.jobtype}
+    job_category: ${simulationSetting.job_category}
+    level: ${simulationSetting.level}
+    use_doping: ${simulationSetting.use_doping}
+    passive_skill_level: ${simulationSetting.passive_skill_level}
+    combat_orders_level: ${simulationSetting.combat_orders_level}
+    union_block_count: ${simulationSetting.union_block_count}
+    link_count: ${simulationSetting.link_count}
+    armor: ${simulationSetting.armor}
+    mob_level: ${simulationSetting.mob_level}
+    force_advantage: ${simulationSetting.force_advantage}
+    trait_level: ${simulationSetting.trait_level}
+    artifact_level: ${simulationSetting.artifact_level}
+    v_skill_level: ${simulationSetting.v_skill_level}
+    v_improvements_level: ${simulationSetting.v_improvements_level}
+    weapon_attack_power: ${simulationSetting.weapon_attack_power}
+    weapon_pure_attack_power: ${simulationSetting.weapon_pure_attack_power}
 ---
 ELAPSE 0`;
 }
