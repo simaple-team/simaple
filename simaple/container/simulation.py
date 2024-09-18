@@ -15,7 +15,7 @@ def add_extended_stats(*action_stats):
     return sum(action_stats, ExtendedStat())
 
 
-class SimulationSetting(pydantic.BaseModel):
+class SimulationEnvironment(pydantic.BaseModel):
     """
     SimulationSetting defines complete set of configuration
     to configure Simulation Engine.
@@ -47,23 +47,25 @@ class SimulationSetting(pydantic.BaseModel):
 class SimulationContainer:
     def __init__(
         self,
-        setting: SimulationSetting,
+        environment: SimulationEnvironment,
     ) -> None:
-        self.setting = setting
+        self.environment = environment
 
     def damage_logic(self):
-        return get_damage_logic(self.setting.jobtype, self.setting.combat_orders_level)
+        return get_damage_logic(
+            self.environment.jobtype, self.environment.combat_orders_level
+        )
 
     def skill_profile(self):
-        return get_skill_profile(self.setting.jobtype)
+        return get_skill_profile(self.environment.jobtype)
 
     def builtin_strategy(self):
-        return get_builtin_strategy(self.setting.jobtype)
+        return get_builtin_strategy(self.environment.jobtype)
 
     def level_advantage(self):
         return LevelAdvantage().get_advantage(
-            self.setting.mob_level,
-            self.setting.level,
+            self.environment.mob_level,
+            self.environment.level,
         )
 
     def damage_calculator(self) -> DamageCalculator:
@@ -71,11 +73,11 @@ class SimulationContainer:
         level_advantage = self.level_advantage()
 
         return DamageCalculator(
-            character_spec=self.setting.character.stat,
+            character_spec=self.environment.character.stat,
             damage_logic=damage_logic,
-            armor=self.setting.armor,
+            armor=self.environment.armor,
             level_advantage=level_advantage,
-            force_advantage=self.setting.force_advantage,
+            force_advantage=self.environment.force_advantage,
         )
 
     def builder(self):
@@ -84,23 +86,25 @@ class SimulationContainer:
         return get_builder(
             skill_profile.get_groups(),
             skill_profile.get_skill_levels(
-                self.setting.v_skill_level,
-                self.setting.hexa_skill_level,
-                self.setting.hexa_mastery_level,
+                self.environment.v_skill_level,
+                self.environment.hexa_skill_level,
+                self.environment.hexa_mastery_level,
             ),
-            skill_profile.get_filled_v_improvements(self.setting.v_improvements_level),
+            skill_profile.get_filled_v_improvements(
+                self.environment.v_improvements_level
+            ),
             skill_profile.get_filled_hexa_improvements(
-                self.setting.hexa_improvements_level
+                self.environment.hexa_improvements_level
             ),
             skill_profile.get_skill_replacements(),
             {
-                "character_stat": self.setting.character.stat,
-                "character_level": self.setting.level,
-                "weapon_attack_power": self.setting.weapon_attack_power,
-                "weapon_pure_attack_power": self.setting.weapon_pure_attack_power,
-                "action_stat": self.setting.character.action_stat,
-                "passive_skill_level": self.setting.passive_skill_level,
-                "combat_orders_level": self.setting.combat_orders_level,
+                "character_stat": self.environment.character.stat,
+                "character_level": self.environment.level,
+                "weapon_attack_power": self.environment.weapon_attack_power,
+                "weapon_pure_attack_power": self.environment.weapon_pure_attack_power,
+                "action_stat": self.environment.character.action_stat,
+                "passive_skill_level": self.environment.passive_skill_level,
+                "combat_orders_level": self.environment.combat_orders_level,
             },
         )
 

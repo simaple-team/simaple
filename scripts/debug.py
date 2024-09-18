@@ -4,8 +4,10 @@ import fire
 
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.cache import PersistentStorageCache
-from simaple.container.character_provider import BaselineCharacterProvider
-from simaple.container.simulation import SimulationSetting
+from simaple.container.character_provider import (
+    BaselineCharacterProvider,
+    SimulationEnvironmentForCharacterProvider,
+)
 from simaple.core.jobtype import JobType, get_job_category
 from simaple.simulate.base import PlayLog
 from simaple.simulate.policy.base import is_console_command
@@ -71,7 +73,7 @@ class DebugInterface:
         if isinstance(jobtype, str):
             jobtype = JobType(jobtype)
 
-        self._setting = SimulationSetting(
+        self.environment = SimulationEnvironmentForCharacterProvider(
             v_skill_level=30,
             v_improvements_level=60,
             hexa_improvements_level=10,
@@ -89,7 +91,7 @@ class DebugInterface:
 
     def get_engine(self):
         container = self._container_cache.get_simulation_container(
-            self._setting, self._character_provider
+            self.environment, self._character_provider
         )
 
         engine = container.operation_engine()
@@ -98,7 +100,7 @@ class DebugInterface:
 
     def get_dpm_calculator(self):
         container = self._container_cache.get_simulation_container(
-            self._setting, self._character_provider
+            self.environment, self._character_provider
         )
         return container.damage_calculator()
 
@@ -145,7 +147,7 @@ class DebugInterface:
         )
 
         print(
-            f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {self._setting.jobtype}"
+            f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {self.environment.jobtype}"
         )
 
         plan_writer.dump(plan_file.replace(".simaple", ".result.simaple"))

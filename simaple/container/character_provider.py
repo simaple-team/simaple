@@ -4,7 +4,7 @@ from typing import Type
 
 import pydantic
 
-from simaple.container.simulation import SimulationContainer, SimulationSetting
+from simaple.container.simulation import SimulationContainer, SimulationEnvironment
 from simaple.core import ActionStat, ExtendedStat, JobCategory, JobType, Stat
 from simaple.data import get_best_ability
 from simaple.data.baseline import get_baseline_gearset
@@ -78,8 +78,8 @@ class CharacterProvider(pydantic.BaseModel, metaclass=ABCMeta):
         )
         environment["character"] = self.character().model_dump()
 
-        setting = SimulationSetting.model_validate(environment)
-        return SimulationContainer(setting)
+        environment = SimulationEnvironment.model_validate(environment)
+        return SimulationContainer(environment)
 
 
 class MinimalCharacterProvider(CharacterProvider):
