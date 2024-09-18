@@ -1,10 +1,15 @@
 from typing import cast
 
 from simaple.container.plan_metadata import PlanMetadata
-from simaple.container.simulation import SimulationContainer, SimulationEnvironment
+from simaple.container.simulation import (
+    OperationEngine,
+    SimulationContainer,
+    SimulationEnvironment,
+)
 from simaple.simulate.policy.base import ConsoleText, Operation, is_console_command
 from simaple.simulate.policy.parser import parse_simaple_runtime
 from simaple.simulate.report.base import DamageLog
+from simaple.simulate.report.dpm import DamageCalculator
 from simaple.wasm.base import (
     MaybePyodide,
     pyodide_reveal_dict,
@@ -18,29 +23,12 @@ from simaple.wasm.models.simulation import (
 )
 
 
-@return_js_object_from_pydantic_list
-def runWithGivenEnvironment(
-    plan: str,
-    serialized_character_provider: MaybePyodide,
-) -> list[OperationLogResponse]:
-    _, op_or_consoles = parse_simaple_runtime(plan.strip())
-
-    simulation_environment = SimulationEnvironment.model_validate(
-        pyodide_reveal_dict(serialized_character_provider)
-    )
-    simulation_container = SimulationContainer(simulation_environment)
-    engine = simulation_container.operation_engine()
-
-    for op_or_console in op_or_consoles:
-        if is_console_command(op_or_console):
-            _ = engine.console(cast(ConsoleText, op_or_console))
-            continue
-
-        engine.exec(cast(Operation, op_or_console))
-
+def _extract_engine_history_as_response(
+    engine: OperationEngine,
+    damage_calculator: DamageCalculator,
+):
     responses: list[OperationLogResponse] = []
     history = engine.history()
-    damage_calculator = simulation_container.damage_calculator()
 
     for idx, operation_log in enumerate(history):
         playlog_responses = []
@@ -83,6 +71,53 @@ def runWithGivenEnvironment(
         )
 
     return responses
+
+
+@return_js_object_from_pydantic_list
+def runWithGivenEnvironment(
+    plan: str,
+    serialized_character_provider: MaybePyodide,
+) -> list[OperationLogResponse]:
+    _, op_or_consoles = parse_simaple_runtime(plan.strip())
+
+    simulation_environment = SimulationEnvironment.model_validate(
+        pyodide_reveal_dict(serialized_character_provider)
+    )
+    simulation_container = SimulationContainer(simulation_environment)
+    engine = simulation_container.operation_engine()
+
+    for op_or_console in op_or_consoles:
+        if is_console_command(op_or_console):
+            _ = engine.console(cast(ConsoleText, op_or_console))
+            continue
+
+        engine.exec(cast(Operation, op_or_console))
+
+    return _extract_engine_history_as_response(
+        engine, simulation_container.damage_calculator()
+    )
+
+
+@return_js_object_from_pydantic_list
+def run(
+    plan: str,
+) -> list[OperationLogResponse]:
+    plan_metadata_dict, op_or_consoles = parse_simaple_runtime(plan.strip())
+    plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
+
+    simulation_container = plan_metadata.load_container()
+    engine = simulation_container.operation_engine()
+
+    for op_or_console in op_or_consoles:
+        if is_console_command(op_or_console):
+            _ = engine.console(cast(ConsoleText, op_or_console))
+            continue
+
+        engine.exec(cast(Operation, op_or_console))
+
+    return _extract_engine_history_as_response(
+        engine, simulation_container.damage_calculator()
+    )
 
 
 @return_js_object_from_pydantic_object
