@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
@@ -43,13 +44,15 @@ const ChartSettingDialog: React.FC = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>Chart Settings</Button>
+        <Button>차트 설정</Button>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader>Chart Settings</DialogHeader>
+        <DialogHeader>
+          <DialogTitle>차트 설정</DialogTitle>
+        </DialogHeader>
         <div className="flex flex-col gap-2">
           <div className="flex gap-2">
-            <Label htmlFor="showStackChart">Show Stack Chart</Label>
+            <Label htmlFor="showStackChart">스택 차트 표시</Label>
             <Controller
               name="showStackChart"
               control={control}
@@ -63,7 +66,7 @@ const ChartSettingDialog: React.FC = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <span className="text-sm">Stack Group 1</span>
+            <span className="text-sm">스택 그룹 1</span>
             <Label htmlFor="stackAxis1.max">Max</Label>
             <Input id="stackAxis1.max" {...register("stackAxis1.max")} />
             <Controller
@@ -96,7 +99,7 @@ const ChartSettingDialog: React.FC = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <span className="text-sm">Stack Group 2</span>
+            <span className="text-sm">스택 그룹 2</span>
             <Label htmlFor="stackAxis2.max">Max</Label>
             <Input id="stackAxis2.max" {...register("stackAxis2.max")} />
             <Controller
@@ -131,7 +134,7 @@ const ChartSettingDialog: React.FC = () => {
         </div>
 
         <DialogFooter>
-          <Button onClick={handleSubmit}>Save</Button>
+          <Button onClick={handleSubmit}>저장</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
