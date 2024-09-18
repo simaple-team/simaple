@@ -2,7 +2,6 @@ from typing import Any, Dict, cast
 
 from simaple.container.cache import CachedCharacterProvider
 from simaple.container.plan_metadata import PlanMetadata
-from simaple.container.simulation import SimulationContainer
 from simaple.simulate.policy.base import ConsoleText, Operation, is_console_command
 from simaple.simulate.policy.parser import parse_simaple_runtime
 from simaple.simulate.report.base import DamageLog

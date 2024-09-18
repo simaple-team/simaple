@@ -13,11 +13,7 @@ from simaple.core import ActionStat, ExtendedStat, JobCategory, JobType, Stat
 from simaple.data import get_best_ability
 from simaple.data.baseline import get_baseline_gearset
 from simaple.data.doping import get_normal_doping
-from simaple.data.jobs.builtin import (
-    get_builtin_strategy,
-    get_damage_logic,
-    get_passive,
-)
+from simaple.data.jobs.builtin import get_damage_logic, get_passive
 from simaple.optimizer.preset import PresetOptimizer
 from simaple.system.ability import get_ability_stat
 from simaple.system.propensity import Propensity

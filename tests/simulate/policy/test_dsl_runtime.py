@@ -5,8 +5,10 @@ import pytest
 
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.cache import PersistentStorageCache
-from simaple.container.character_provider import BaselineCharacterProvider, SimulationEnvironmentForCharacterProvider
-from simaple.container.simulation import SimulationEnvironment
+from simaple.container.character_provider import (
+    BaselineCharacterProvider,
+    SimulationEnvironmentForCharacterProvider,
+)
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 from simaple.simulate.policy.parser import parse_dsl_to_operations

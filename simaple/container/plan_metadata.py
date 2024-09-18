@@ -7,7 +7,7 @@ from simaple.container.character_provider import (
     SimulationEnvironmentForCharacterProvider,
     get_character_provider,
 )
-from simaple.container.simulation import SimulationContainer, SimulationEnvironment
+from simaple.container.simulation import SimulationContainer
 
 
 class PlanMetadata(pydantic.BaseModel):
