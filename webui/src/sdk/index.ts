@@ -6,9 +6,9 @@ export interface PySimapleUow {}
 export interface PySimaple {
   run(
     plan: string,
-    serializedCharacterProvider: Record<string, unknown>,
+    simulationEnvironment: Record<string, unknown>,
   ): OperationLog[];
-  getSerializedCharacterProvider(plan: string): Record<string, unknown>;
+  computeSimulationEnvironmentFromProvider(plan: string): Record<string, unknown>;
 }
 
 export async function loadPySimaple() {

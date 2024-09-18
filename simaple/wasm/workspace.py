@@ -86,7 +86,7 @@ def run(
 
 
 @return_js_object_from_pydantic_object
-def getSerializedCharacterProvider(
+def computeSimulationEnvironmentFromProvider(
     plan: str,
 ) -> SimulationEnvironment:
     metadata_dict, _ = parse_simaple_runtime(plan.strip())

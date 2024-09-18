@@ -8,7 +8,7 @@ function useWorkspaceState() {
   const { pySimaple } = usePySimaple();
 
   const [plan, setPlan] = React.useState<string>("");
-  const [serializedCharacterProvider, setSerializedCharacterProvider] =
+  const [simulationEnvironment, setSimulationEnvironment] =
     React.useState<Record<string, unknown>>();
   const [history, setHistory] = React.useState<PlayLog[]>([]);
   const playLog = history[history.length - 1];
@@ -20,16 +20,16 @@ function useWorkspaceState() {
 
   const run = React.useCallback(() => {
     const provider =
-      serializedCharacterProvider ??
-      pySimaple.getSerializedCharacterProvider(plan);
+    simulationEnvironment ??
+      pySimaple.computeSimulationEnvironmentFromProvider(plan);
 
-    if (!serializedCharacterProvider) {
-      setSerializedCharacterProvider(provider);
+    if (!simulationEnvironment) {
+      setSimulationEnvironment(provider);
     }
 
     const logs = pySimaple.run(plan, provider);
     setHistory(logs.flatMap((log) => log.logs));
-  }, [pySimaple, serializedCharacterProvider, plan]);
+  }, [pySimaple, simulationEnvironment, plan]);
 
   const runAsync = React.useCallback(() => {
     return new Promise<void>((resolve) => {
