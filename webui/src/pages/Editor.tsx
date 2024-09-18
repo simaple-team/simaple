@@ -8,7 +8,7 @@ import {
 import { yamlFrontmatter } from "@codemirror/lang-yaml";
 import { LanguageSupport, LRLanguage, syntaxTree } from "@codemirror/language";
 import { styleTags } from "@lezer/highlight";
-import CodeMirror, { EditorView } from "@uiw/react-codemirror";
+import CodeMirror, { EditorView, keymap } from "@uiw/react-codemirror";
 import { Loader2 } from "lucide-react";
 import * as React from "react";
 import { ErrorBoundary } from "react-error-boundary";
@@ -97,9 +97,18 @@ const Editor: React.FC = () => {
   );
 
   async function handleRun() {
+    if (isRunning) {
+      return;
+    }
+
     setIsRunning(true);
     await runAsync();
     setIsRunning(false);
+  }
+
+  function handleHotkeyRun(): boolean {
+    handleRun();
+    return true;
   }
 
   return (
@@ -110,6 +119,12 @@ const Editor: React.FC = () => {
           basicSetup={{ closeBrackets: false }}
           extensions={[
             myTheme,
+            keymap.of([
+              {
+                key: "Shift-Enter",
+                run: handleHotkeyRun,
+              },
+            ]),
             languageSupport(),
             autocompletion({ override: [myCompletions] }),
           ]}
