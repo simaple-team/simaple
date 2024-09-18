@@ -43,9 +43,6 @@ class SimulationSetting(pydantic.BaseModel):
     level: int
     character: ExtendedStat
 
-    def damage_logic(self):
-        return get_damage_logic(self.jobtype, self.combat_orders_level)
-
 
 class SimulationContainer:
     def __init__(
@@ -53,6 +50,9 @@ class SimulationContainer:
         setting: SimulationSetting,
     ) -> None:
         self.setting = setting
+
+    def damage_logic(self):
+        return get_damage_logic(self.setting.jobtype, self.setting.combat_orders_level)
 
     def skill_profile(self):
         return get_skill_profile(self.setting.jobtype)
@@ -67,12 +67,11 @@ class SimulationContainer:
         )
 
     def damage_calculator(self) -> DamageCalculator:
-        character = self.setting.character
-        damage_logic = self.setting.damage_logic()
+        damage_logic = self.damage_logic()
         level_advantage = self.level_advantage()
 
         return DamageCalculator(
-            character_spec=character.stat,
+            character_spec=self.setting.character.stat,
             damage_logic=damage_logic,
             armor=self.setting.armor,
             level_advantage=level_advantage,
@@ -81,7 +80,6 @@ class SimulationContainer:
 
     def builder(self):
         skill_profile = self.skill_profile()
-        character = self.setting.character
 
         return get_builder(
             skill_profile.get_groups(),
@@ -96,11 +94,11 @@ class SimulationContainer:
             ),
             skill_profile.get_skill_replacements(),
             {
-                "character_stat": character.stat,
+                "character_stat": self.setting.character.stat,
                 "character_level": self.setting.level,
                 "weapon_attack_power": self.setting.weapon_attack_power,
                 "weapon_pure_attack_power": self.setting.weapon_pure_attack_power,
-                "action_stat": character.action_stat,
+                "action_stat": self.setting.character.action_stat,
                 "passive_skill_level": self.setting.passive_skill_level,
                 "combat_orders_level": self.setting.combat_orders_level,
             },
