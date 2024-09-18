@@ -53,6 +53,10 @@ show_missing = true
 [tool.coverage.xml]
 output = "coverage-reports/coverage.xml"
 
+
+[tool.poetry.scripts]
+simaple-simulate = 'scripts.simulate:run_from_cli'
+
 [tool.mypy]
 warn_return_any = true
 warn_unused_configs = true

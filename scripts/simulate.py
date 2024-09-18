@@ -53,54 +53,57 @@ def _get_status(playlog: PlayLog, entry: SimulationEntry) -> PlayStatus:
         return PlayStatus.REJECT
 
 
-class DebugInterface:
-    def run(self, plan_file: str):
-        with open(plan_file, "r") as f:
-            plan_metadata_dict, operation_or_consoles = parse_simaple_runtime(f.read())
+def run(plan_file: str):
+    with open(plan_file, "r") as f:
+        plan_metadata_dict, operation_or_consoles = parse_simaple_runtime(f.read())
 
-        _simulation_environment_memoizer = PersistentStorageMemoizer()
+    _simulation_environment_memoizer = PersistentStorageMemoizer()
 
-        plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
-        environment = _simulation_environment_memoizer.compute_environment(
-            plan_metadata.get_environment_provider_config()  # type: ignore
-        )
-        simulation_container = SimulationContainer(environment)
+    plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
+    environment = _simulation_environment_memoizer.compute_environment(
+        plan_metadata.get_environment_provider_config()  # type: ignore
+    )
+    simulation_container = SimulationContainer(environment)
 
-        engine = simulation_container.operation_engine()
-        damage_calculator = simulation_container.damage_calculator()
-        damage_share = DamageShareFeature(damage_calculator)
+    engine = simulation_container.operation_engine()
+    damage_calculator = simulation_container.damage_calculator()
+    damage_share = DamageShareFeature(damage_calculator)
 
-        for op_or_console in operation_or_consoles:
-            if is_console_command(op_or_console):
-                console_output = engine.console(op_or_console)
-                print(f"\033[90m[DEBUG_]{console_output}\033[0m")
-            else:
-                op_log = engine.exec(op_or_console)
-                for playlog in op_log.playlogs:
-                    entry = engine.get_simulation_entry(playlog)
-                    damage_share.update(entry)
-                    total_damage = sum(
-                        [
-                            damage_calculator.get_damage(damage_log)
-                            for damage_log in entry.damage_logs
-                        ]
-                    )
-                    print(
-                        f"{get_status_string(_get_status(playlog, entry))}{entry.clock:6.0f}s | {show_damage_as_string(total_damage).rjust(8)} | {entry.action}|"
-                    )
+    for op_or_console in operation_or_consoles:
+        if is_console_command(op_or_console):
+            console_output = engine.console(op_or_console)
+            print(f"\033[90m[DEBUG_]{console_output}\033[0m")
+        else:
+            op_log = engine.exec(op_or_console)
+            for playlog in op_log.playlogs:
+                entry = engine.get_simulation_entry(playlog)
+                damage_share.update(entry)
+                total_damage = sum(
+                    [
+                        damage_calculator.get_damage(damage_log)
+                        for damage_log in entry.damage_logs
+                    ]
+                )
+                print(
+                    f"{get_status_string(_get_status(playlog, entry))}{entry.clock:6.0f}s | {show_damage_as_string(total_damage).rjust(8)} | {entry.action}|"
+                )
 
-        report = list(engine.simulation_entries())
+    report = list(engine.simulation_entries())
 
-        feature = MaximumDealingIntervalFeature(30000)
-        damage_share.show()
-        damage, _start, _end = feature.find_maximum_dealing_interval(
-            report, damage_calculator
-        )
+    feature = MaximumDealingIntervalFeature(30000)
+    damage_share.show()
+    damage, _start, _end = feature.find_maximum_dealing_interval(
+        report, damage_calculator
+    )
 
-        print(
-            f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {simulation_container.environment.jobtype}"
-        )
+    print(
+        f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {simulation_container.environment.jobtype}"
+    )
+
+
+def run_from_cli():
+    fire.Fire(run)
 
 
 if __name__ == "__main__":
-    fire.Fire(DebugInterface)
+    fire.Fire(run)
