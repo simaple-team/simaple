@@ -7,7 +7,6 @@ import { Keydown } from "./Keydown";
 
 export interface PlayLog {
   events: Event[];
-  index: number;
   validity_view: Record<string, Validity>;
   running_view: Record<string, Running>;
   keydown_view: Record<string, Keydown>;

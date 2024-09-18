@@ -1,9 +1,10 @@
 import "./App.css";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { PrepareSimaple } from "./pages/PrepareSimaple";
-import { EditorLayout } from "./pages/EditorLayout";
 import ChartPage from "./pages/ChartPage";
+import { EditorLayout } from "./pages/EditorLayout";
+import LogPage from "./pages/LogPage";
+import { PrepareSimaple } from "./pages/PrepareSimaple";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: "chart",
         element: <ChartPage />,
+      },
+      {
+        path: "log",
+        element: <LogPage />,
       },
     ],
   },
