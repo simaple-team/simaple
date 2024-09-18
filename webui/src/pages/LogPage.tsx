@@ -52,7 +52,7 @@ const LogDetail = (props: LogDetailProps) => {
   const { playLog } = props;
 
   return (
-    <Tabs className="p-4 h-full">
+    <Tabs defaultValue="cooldown" className="p-4 h-full">
       <TabsList>
         <TabsTrigger value="cooldown">쿨타임</TabsTrigger>
         <TabsTrigger value="running">지속시간</TabsTrigger>
@@ -76,10 +76,7 @@ const LogDetail = (props: LogDetailProps) => {
               </TableBody>
             </Table>
           </TabsContent>
-          <TabsContent
-            value="running"
-            className="flex flex-col h-[calc(100%-3rem)]"
-          >
+          <TabsContent value="running">
             <Table>
               <TableHeader>
                 <TableHead>스킬명</TableHead>
@@ -97,10 +94,7 @@ const LogDetail = (props: LogDetailProps) => {
               </TableBody>
             </Table>
           </TabsContent>
-          <TabsContent
-            value="buff"
-            className="flex flex-col h-[calc(100%-3rem)]"
-          >
+          <TabsContent value="buff">
             <Table>
               <TableHeader>
                 <TableHead>스탯</TableHead>
@@ -137,7 +131,11 @@ const LogPage: React.FC = () => {
       >
         {selectedLog ? <LogDetail playLog={selectedLog} /> : <div />}
         <Table>
-          <TableHeader></TableHeader>
+          <TableHeader>
+            <TableHead>시간</TableHead>
+            <TableHead>행동</TableHead>
+            <TableHead>데미지</TableHead>
+          </TableHeader>
           <TableBody>
             {reversedHistory.map((playLog) => (
               <LogRow
