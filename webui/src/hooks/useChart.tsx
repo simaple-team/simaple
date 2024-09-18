@@ -56,6 +56,80 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
     ],
   };
 
+  const grid = setting.showStackChart
+    ? [{ bottom: "70%" }, { top: "35%", bottom: "35%" }, { top: "70%" }]
+    : [{ bottom: "70%" }, { top: "35%" }];
+  const xAxis = [
+    {
+      type: "value",
+      gridIndex: 0,
+      min: 0,
+      max: setting.maxClock,
+      axisLabel: {
+        formatter: clockFormatter,
+      },
+    },
+    {
+      type: "value",
+      gridIndex: 1,
+      min: 0,
+      max: setting.maxClock,
+      axisLabel: {
+        formatter: clockFormatter,
+      },
+    },
+    ...(setting.showStackChart
+      ? [
+          {
+            type: "value",
+            gridIndex: 2,
+            min: 0,
+            max: setting.maxClock,
+            axisLabel: {
+              formatter: clockFormatter,
+            },
+          },
+        ]
+      : []),
+  ];
+  const yAxis = [
+    {
+      type: "value",
+      gridIndex: 0,
+      axisLabel: {
+        formatter: damageFormatter,
+      },
+    },
+    {
+      type: "value",
+      gridIndex: 0,
+      axisLabel: {
+        formatter: damageFormatter,
+      },
+    },
+    {
+      type: "category",
+      gridIndex: 1,
+      data: history.length > 0 ? Object.keys(history[0].running_view) : [],
+    },
+    ...(setting.showStackChart
+      ? [
+          {
+            type: "value",
+            gridIndex: 2,
+            min: 0,
+            max: setting.stackAxis1.max,
+          },
+          {
+            type: "value",
+            gridIndex: 2,
+            min: 0,
+            max: setting.stackAxis2.max,
+          },
+        ]
+      : []),
+  ];
+
   function getCumsumSeries(history: PlayLog[]) {
     const data = history.map((log, index) => {
       return {
@@ -154,8 +228,10 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
 
   function getStackSeries(
     history: PlayLog[],
-    { stackAxis1, stackAxis2 }: ChartSetting,
+    { stackAxis1, stackAxis2, showStackChart }: ChartSetting,
   ) {
+    if (!showStackChart) return [];
+
     const getSeries = (names: string[], yAxisIndex: number) =>
       names.map((name) => {
         const stacks = history
@@ -211,7 +287,7 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
   }
 
   return {
-    grid: [{ bottom: "70%" }, { top: "35%", bottom: "35%" }, { top: "70%" }],
+    grid,
     axisPointer: {
       link: [
         {
@@ -238,78 +314,18 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
       {
         show: true,
         realtime: true,
-        xAxisIndex: [0, 1, 2],
+        xAxisIndex: setting.showStackChart ? [0, 1, 2] : [0, 1],
         filterMode: "weakFilter",
       },
       {
         type: "inside",
         realtime: true,
-        xAxisIndex: [0, 1, 2],
+        xAxisIndex: setting.showStackChart ? [0, 1, 2] : [0, 1],
         filterMode: "weakFilter",
       },
     ],
-    xAxis: [
-      {
-        type: "value",
-        gridIndex: 0,
-        min: 0,
-        max: setting.maxClock,
-        axisLabel: {
-          formatter: clockFormatter,
-        },
-      },
-      {
-        type: "value",
-        gridIndex: 1,
-        min: 0,
-        max: setting.maxClock,
-        axisLabel: {
-          formatter: clockFormatter,
-        },
-      },
-      {
-        type: "value",
-        gridIndex: 2,
-        min: 0,
-        max: setting.maxClock,
-        axisLabel: {
-          formatter: clockFormatter,
-        },
-      },
-    ],
-    yAxis: [
-      {
-        type: "value",
-        gridIndex: 0,
-        axisLabel: {
-          formatter: damageFormatter,
-        },
-      },
-      {
-        type: "value",
-        gridIndex: 0,
-        axisLabel: {
-          formatter: damageFormatter,
-        },
-      },
-      {
-        type: "category",
-        gridIndex: 1,
-        data: history.length > 0 ? Object.keys(history[0].running_view) : [],
-      },
-      {
-        type: "value",
-        gridIndex: 2,
-        min: 0,
-        max: setting.stackAxis1.max,
-      },
-      {
-        type: "value",
-        gridIndex: 2,
-        min: 0,
-        max: setting.stackAxis2.max,
-      },
-    ],
+    xAxis,
+    yAxis,
     series: [
       getCumsumSeries(history),
       getHistogramSeries(history),
