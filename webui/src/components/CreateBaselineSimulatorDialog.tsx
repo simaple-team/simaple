@@ -105,11 +105,11 @@ const CreateBaselineSimulatorDialog: React.FC = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>New</Button>
+        <Button>새 파일</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create Simulator</DialogTitle>
+          <DialogTitle>새 파일</DialogTitle>
         </DialogHeader>
         <DialogClose />
         <div className="flex flex-col gap-2">
