@@ -76,12 +76,12 @@ def _extract_engine_history_as_response(
 @return_js_object_from_pydantic_list
 def runWithGivenEnvironment(
     plan: str,
-    serialized_character_provider: MaybePyodide,
+    simulation_environment_dict: MaybePyodide,
 ) -> list[OperationLogResponse]:
     _, op_or_consoles = parse_simaple_runtime(plan.strip())
 
     simulation_environment = SimulationEnvironment.model_validate(
-        pyodide_reveal_dict(serialized_character_provider)
+        pyodide_reveal_dict(simulation_environment_dict)
     )
     simulation_container = SimulationContainer(simulation_environment)
     engine = simulation_container.operation_engine()
