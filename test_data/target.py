@@ -1,7 +1,7 @@
 import os
 
 from simaple.container.simulation import SimulationSetting, SimulationEnvironment
-from simaple.container.character_provider import BaselineCharacterProvider
+from simaple.container.character_provider import BaselineCharacterProvider, SimulationEnvironmentForCharacterProvider
 from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 
@@ -23,7 +23,7 @@ def container_test_setting(
         combat_orders_level=1,
         weapon_pure_attack_power=options.get("weapon_pure_attack_power", 0),
         artifact_level=40,
-    ), SimulationEnvironment(
+    ), SimulationEnvironmentForCharacterProvider(
         hexa_mastery_level=1,
         v_skill_level=30,
         v_improvements_level=60,

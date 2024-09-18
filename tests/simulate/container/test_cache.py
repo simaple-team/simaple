@@ -2,7 +2,7 @@ import os
 import tempfile
 
 from simaple.container.cache import InMemoryCache, PersistentStorageCache
-from simaple.container.character_provider import BaselineCharacterProvider
+from simaple.container.character_provider import BaselineCharacterProvider, SimulationEnvironmentForCharacterProvider
 from simaple.container.simulation import SimulationSetting
 from simaple.core import JobType
 from simaple.core.job_category import JobCategory
@@ -12,7 +12,7 @@ def test_inmemory_cache():
     saved_cache = {}
     cache = InMemoryCache(saved_cache)
 
-    setting = SimulationSetting()
+    setting = SimulationEnvironmentForCharacterProvider()
     character_provider = BaselineCharacterProvider(
         union_block_count=10,
         tier="Legendary",
@@ -56,7 +56,7 @@ def test_storage_cache():
     with tempfile.TemporaryDirectory() as temp_dir:
         cache = PersistentStorageCache(os.path.join(temp_dir, "cache.json"))
 
-        setting = SimulationSetting()
+        setting = SimulationEnvironmentForCharacterProvider()
         character_provider = BaselineCharacterProvider(
             union_block_count=10,
             tier="Legendary",

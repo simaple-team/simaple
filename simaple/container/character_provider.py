@@ -1,15 +1,23 @@
 import json
+from abc import ABCMeta, abstractmethod
 from typing import Type
 
+import pydantic
+
 from simaple.container.simulation import (
-    CharacterDependentEnvironment,
-    CharacterProvider,
+    SimulationContainer,
+    SimulationEnvironment,
+    SimulationSetting,
 )
 from simaple.core import ActionStat, ExtendedStat, JobCategory, JobType, Stat
 from simaple.data import get_best_ability
 from simaple.data.baseline import get_baseline_gearset
 from simaple.data.doping import get_normal_doping
-from simaple.data.jobs.builtin import get_passive
+from simaple.data.jobs.builtin import (
+    get_builtin_strategy,
+    get_damage_logic,
+    get_passive,
+)
 from simaple.optimizer.preset import PresetOptimizer
 from simaple.system.ability import get_ability_stat
 from simaple.system.propensity import Propensity
@@ -28,6 +36,62 @@ def add_extended_stats(*action_stats):
     return sum(action_stats, ExtendedStat())
 
 
+class SimulationEnvironmentForCharacterProvider(pydantic.BaseModel):
+    use_doping: bool = True
+
+    armor: int = 300
+    mob_level: int = 265
+    force_advantage: float = 1.0
+
+    v_skill_level: int = 30
+    hexa_skill_level: int = 1
+    hexa_mastery_level: int = 1
+    v_improvements_level: int = 60
+    hexa_improvements_level: int = 0
+
+    weapon_attack_power: int = 0
+
+
+class CharacterDependentEnvironmentForCharacterProvider(pydantic.BaseModel):
+    passive_skill_level: int
+    combat_orders_level: int
+    weapon_pure_attack_power: int
+
+    jobtype: JobType
+    level: int
+
+    def damage_logic(self):
+        return get_damage_logic(self.jobtype, self.combat_orders_level)
+
+
+class CharacterProvider(pydantic.BaseModel, metaclass=ABCMeta):
+    @abstractmethod
+    def character(self) -> ExtendedStat: ...
+
+    @abstractmethod
+    def get_character_dependent_simulation_config(
+        self,
+    ) -> CharacterDependentEnvironmentForCharacterProvider: ...
+
+    @classmethod
+    def get_name(cls):
+        return cls.__name__
+
+    def get_simulation_container(
+        self, confined_environment: SimulationEnvironmentForCharacterProvider
+    ):
+        environment = confined_environment.model_dump()
+        environment.update(
+            self.get_character_dependent_simulation_config().model_dump()
+        )
+
+        setting = SimulationSetting(
+            environment=SimulationEnvironment.model_validate(environment),
+            character=self.character(),
+        )
+        return SimulationContainer(setting)
+
+
 class MinimalCharacterProvider(CharacterProvider):
     level: int
     action_stat: ActionStat
@@ -40,8 +104,8 @@ class MinimalCharacterProvider(CharacterProvider):
 
     def get_character_dependent_simulation_config(
         self,
-    ) -> CharacterDependentEnvironment:
-        return CharacterDependentEnvironment(
+    ) -> CharacterDependentEnvironmentForCharacterProvider:
+        return CharacterDependentEnvironmentForCharacterProvider(
             passive_skill_level=0,
             combat_orders_level=self.combat_orders_level,
             weapon_pure_attack_power=self.weapon_pure_attack_power,
@@ -115,8 +179,8 @@ class BaselineCharacterProvider(CharacterProvider):
 
     def get_character_dependent_simulation_config(
         self,
-    ) -> CharacterDependentEnvironment:
-        return CharacterDependentEnvironment(
+    ) -> CharacterDependentEnvironmentForCharacterProvider:
+        return CharacterDependentEnvironmentForCharacterProvider(
             passive_skill_level=self.passive_skill_level,
             combat_orders_level=self.combat_orders_level,
             weapon_pure_attack_power=self.weapon_pure_attack_power,

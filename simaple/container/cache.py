@@ -3,10 +3,13 @@ import json
 import os
 from abc import ABC, abstractmethod
 
-from simaple.container.character_provider import serialize_character_provider
-from simaple.container.simulation import (
-    CharacterDependentEnvironment,
+from simaple.container.character_provider import (
+    CharacterDependentEnvironmentForCharacterProvider,
     CharacterProvider,
+    SimulationEnvironmentForCharacterProvider,
+    serialize_character_provider,
+)
+from simaple.container.simulation import (
     SimulationContainer,
     SimulationEnvironment,
     SimulationSetting,
@@ -16,35 +19,41 @@ from simaple.core import ExtendedStat
 
 class CachedCharacterProvider(CharacterProvider):
     cached_character: ExtendedStat
-    cached_simulation_config: CharacterDependentEnvironment
+    cached_simulation_config: CharacterDependentEnvironmentForCharacterProvider
 
     def character(self) -> ExtendedStat:
         return self.cached_character
 
     def get_character_dependent_simulation_config(
         self,
-    ) -> CharacterDependentEnvironment:
+    ) -> CharacterDependentEnvironmentForCharacterProvider:
         return self.cached_simulation_config
 
 
 class CharacterProviderCache(ABC):
     @abstractmethod
     def get(
-        self, environment: SimulationEnvironment, character_provider: CharacterProvider
+        self,
+        environment: SimulationEnvironmentForCharacterProvider,
+        character_provider: CharacterProvider,
     ) -> tuple[CharacterProvider, bool]:
         pass
 
     def get_simulation_container(
-        self, environment: SimulationEnvironment, character_provider: CharacterProvider
+        self,
+        environment: SimulationEnvironmentForCharacterProvider,
+        character_provider: CharacterProvider,
     ) -> SimulationContainer:
         as_cached_character_provider, _ = self.get(environment, character_provider)
 
-        return SimulationContainer.from_character_provider(
-            environment, as_cached_character_provider
+        return as_cached_character_provider.get_simulation_container(
+            environment,
         )
 
     def _compute_cache_key(
-        self, environment: SimulationEnvironment, character_provider: CharacterProvider
+        self,
+        environment: SimulationEnvironmentForCharacterProvider,
+        character_provider: CharacterProvider,
     ) -> str:
         obj = {
             "setting": environment.model_dump_json(),
@@ -75,7 +84,9 @@ class InMemoryCache(CharacterProviderCache):
         self.cache = saved_cache
 
     def get(
-        self, environment: SimulationEnvironment, character_provider: CharacterProvider
+        self,
+        environment: SimulationEnvironmentForCharacterProvider,
+        character_provider: CharacterProvider,
     ) -> tuple[CharacterProvider, bool]:
         cache_key = self._compute_cache_key(environment, character_provider)
 
@@ -101,7 +112,9 @@ class PersistentStorageCache(CharacterProviderCache):
                 json.dump({}, f)
 
     def get(
-        self, environment: SimulationEnvironment, character_provider: CharacterProvider
+        self,
+        environment: SimulationEnvironmentForCharacterProvider,
+        character_provider: CharacterProvider,
     ) -> tuple[CharacterProvider, bool]:
         cache_key = self._compute_cache_key(environment, character_provider)
 

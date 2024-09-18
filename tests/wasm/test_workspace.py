@@ -13,7 +13,7 @@ data:
     artifact_level: 40
     passive_skill_level: 0
     combat_orders_level: 1
-simulation_setting: {}
+simulation_environment: {}
 ---
 ELAPSE 10.0
 ELAPSE 10.0
