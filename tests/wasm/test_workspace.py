@@ -1,5 +1,5 @@
 from simaple.container.simulation import SimulationEnvironment
-from simaple.wasm.workspace import computeSimulationEnvironmentFromProvider, run
+from simaple.wasm.workspace import computeSimulationEnvironmentFromProvider, runWithGivenEnvironment
 
 
 def test_get_serialized_character_provider_then_run():
@@ -25,7 +25,7 @@ ELAPSE 10.0
     serialized_character_provider = computeSimulationEnvironmentFromProvider(plan)
     assert isinstance(serialized_character_provider, SimulationEnvironment)
 
-    first = run(plan, serialized_character_provider.model_dump())
-    second = run(plan, serialized_character_provider.model_dump())
+    first = runWithGivenEnvironment(plan, serialized_character_provider.model_dump())
+    second = runWithGivenEnvironment(plan, serialized_character_provider.model_dump())
 
     assert first == second

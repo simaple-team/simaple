@@ -1,8 +1,8 @@
 from simaple.wasm.skill import getAllSkillSpec, getSkillSpec
-from simaple.wasm.workspace import computeSimulationEnvironmentFromProvider, run
+from simaple.wasm.workspace import computeSimulationEnvironmentFromProvider, runWithGivenEnvironment
 
 __all__ = [
-    "run",
+    "runWithGivenEnvironment",
     "computeSimulationEnvironmentFromProvider",
     "getAllSkillSpec",
     "getSkillSpec",

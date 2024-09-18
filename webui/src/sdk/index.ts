@@ -4,7 +4,7 @@ import { OperationLog } from "./models/OperationLog";
 export interface PySimapleUow {}
 
 export interface PySimaple {
-  run(
+  runWithGivenEnvironment(
     plan: string,
     simulationEnvironment: Record<string, unknown>,
   ): OperationLog[];

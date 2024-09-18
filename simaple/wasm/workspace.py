@@ -19,7 +19,7 @@ from simaple.wasm.models.simulation import (
 
 
 @return_js_object_from_pydantic_list
-def run(
+def runWithGivenEnvironment(
     plan: str,
     serialized_character_provider: MaybePyodide,
 ) -> list[OperationLogResponse]:

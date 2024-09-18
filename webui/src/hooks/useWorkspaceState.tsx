@@ -27,7 +27,7 @@ function useWorkspaceState() {
       setSimulationEnvironment(provider);
     }
 
-    const logs = pySimaple.run(plan, provider);
+    const logs = pySimaple.runWithGivenEnvironment(plan, provider);
     setHistory(logs.flatMap((log) => log.logs));
   }, [pySimaple, simulationEnvironment, plan]);
 
