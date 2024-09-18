@@ -1,0 +1,34 @@
+@top Program { Statement* }
+
+
+Statement {
+  CastStatement
+  | ElapseStatement
+}
+
+CastStatement {
+  Repetition? "CAST" Quotedstring
+}
+
+ElapseStatement {
+  "ELAPSE" Number
+}
+
+Repetition {
+  "x" Number
+}
+
+@tokens {
+  Number { '-'? int frac? }
+  int  { '0' | $[1-9] @digit* }
+  frac { '.' @digit+ }
+
+  Quotedstring { '"' stringContentDouble* '"' }
+  stringContentDouble { ![\\\n"]+ }
+
+  whitespace { $[ \n\r\t] }
+}
+
+@skip { whitespace }
+
+@external propSource simapleHighlighting from "./highlight"

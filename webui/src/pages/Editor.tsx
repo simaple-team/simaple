@@ -1,55 +1,79 @@
 import { Button } from "@/components/ui/button";
 import {
   autocompletion,
+  Completion,
   CompletionContext,
   CompletionResult,
 } from "@codemirror/autocomplete";
+import { yamlFrontmatter } from "@codemirror/lang-yaml";
+import { LanguageSupport, LRLanguage, syntaxTree } from "@codemirror/language";
+import { styleTags } from "@lezer/highlight";
 import CodeMirror, { EditorView } from "@uiw/react-codemirror";
+import { Loader2 } from "lucide-react";
 import * as React from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import Chart from "../components/Chart";
 import { usePreference } from "../hooks/usePreference";
 import { useWorkspace } from "../hooks/useWorkspace";
-import { Loader2 } from "lucide-react";
+import { parser } from "../parser";
 
-function ensureAnchor(expr: RegExp, start: boolean) {
-  const { source } = expr;
-  const addStart = start && source[0] != "^";
-  const addEnd = source[source.length - 1] != "$";
-  if (!addStart && !addEnd) return expr;
-  return new RegExp(
-    `${addStart ? "^" : ""}(?:${source})${addEnd ? "$" : ""}`,
-    expr.flags ?? (expr.ignoreCase ? "i" : ""),
-  );
-}
+const parserWithMetadata = parser.configure({
+  props: [styleTags({})],
+});
 
-function matchBefore(context: CompletionContext, expr: RegExp) {
-  const line = context.state.doc.lineAt(context.pos);
-  const start = Math.max(line.from, context.pos - 250);
-  const str = line.text.slice(start - line.from, context.pos - line.from + 1);
-  const found = str.search(ensureAnchor(expr, false));
+const simapleLanguage = LRLanguage.define({
+  parser: parserWithMetadata,
+});
 
-  return found < 0
-    ? null
-    : { from: start + found, to: context.pos, text: str.slice(found) };
+function languageSupport() {
+  return yamlFrontmatter({
+    content: new LanguageSupport(simapleLanguage),
+  });
 }
 
 function createCompletion(skillNames: string[]) {
-  const completions = skillNames.map((name) => ({
+  const completions: Completion[] = skillNames.map((name) => ({
     label: name,
     type: "constant",
   }));
 
   function myCompletions(context: CompletionContext): CompletionResult | null {
-    const before = matchBefore(context, /([가-힣]+|\w+)/);
+    const before = context.matchBefore(/([가-힣]+|\w+)/);
+    const quotedBefore = context.matchBefore(/"([가-힣]*|\w*)/);
 
     // If completion wasn't explicitly started and there
     // is no word before the cursor, don't open completions.
-    if (!context.explicit && !before) return null;
+    if (!context.explicit && !before && !quotedBefore) return null;
+
+    if (quotedBefore) {
+      const nodeBefore = syntaxTree(context.state).resolveInner(
+        context.pos,
+        -1,
+      );
+      if (nodeBefore?.type.name === "Quotedstring") {
+        return null;
+      }
+
+      return {
+        from: quotedBefore ? quotedBefore.from + 1 : context.pos,
+        options: completions.map((completion) => ({
+          ...completion,
+          apply: `${completion.label}"`,
+        })),
+        validFor: /^([가-힣]*|\w*)$/,
+      };
+    }
+
     return {
       from: before ? before.from : context.pos,
-      to: before ? before.to : undefined,
-      options: completions,
+      options: [
+        ...completions.map((completion) => ({
+          ...completion,
+          apply: `"${completion.label}"`,
+        })),
+        { label: "CAST", type: "keyword" },
+        { label: "ELAPSE", type: "keyword" },
+      ],
       validFor: /^([가-힣]*|\w*)$/,
     };
   }
@@ -83,7 +107,12 @@ const Editor: React.FC = () => {
       <div className="flex h-full flex-col shrink-0 w-[520px] p-4 gap-2 border">
         <CodeMirror
           className="h-[calc(100%-3rem)]"
-          extensions={[myTheme, autocompletion({ override: [myCompletions] })]}
+          basicSetup={{ closeBrackets: false }}
+          extensions={[
+            myTheme,
+            languageSupport(),
+            autocompletion({ override: [myCompletions] }),
+          ]}
           value={plan}
           onChange={(value) => setPlan(value)}
         />
