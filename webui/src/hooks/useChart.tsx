@@ -18,6 +18,10 @@ const colorlist = [
   "#b15928",
 ];
 
+function getColorFromIndex(index: number) {
+  return colorlist[index % colorlist.length];
+}
+
 function damageFormatter(value: number) {
   if (value < 10000) return value.toFixed(0);
 
@@ -128,7 +132,7 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
           ],
           itemStyle: {
             normal: {
-              color: colorlist[i],
+              color: getColorFromIndex(i),
             },
           },
         }));
