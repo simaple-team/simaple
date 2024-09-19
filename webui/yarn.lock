@@ -2964,15 +2964,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json2ts@npm:^0.0.7":
-  version: 0.0.7
-  resolution: "json2ts@npm:0.0.7"
-  dependencies:
-    underscore: "npm:^1.8.3"
-  checksum: 10c0/b79a4b134ec5dee28435189549b8fecb67396ae88b4392878599cb9f6c0006c610b599bcf110f609247a0ae81110e65bed8f87fc63c7da06b14ae777e431725c
-  languageName: node
-  linkType: hard
-
 "keyv@npm:^4.5.3":
   version: 4.5.4
   resolution: "keyv@npm:4.5.4"
@@ -4237,13 +4228,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"underscore@npm:^1.8.3":
-  version: 1.13.7
-  resolution: "underscore@npm:1.13.7"
-  checksum: 10c0/fad2b4aac48847674aaf3c30558f383399d4fdafad6dd02dd60e4e1b8103b52c5a9e5937e0cc05dacfd26d6a0132ed0410ab4258241240757e4a4424507471cd
-  languageName: node
-  linkType: hard
-
 "undici-types@npm:~6.19.2":
   version: 6.19.8
   resolution: "undici-types@npm:6.19.8"
@@ -4414,7 +4398,6 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^4.6.0"
     eslint-plugin-react-refresh: "npm:^0.4.6"
     json-schema-to-typescript: "npm:^15.0.2"
-    json2ts: "npm:^0.0.7"
     lucide-react: "npm:^0.390.0"
     postcss: "npm:^8.4.38"
     prettier: "npm:^3.3.1"
