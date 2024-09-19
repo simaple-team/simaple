@@ -68,12 +68,14 @@ export type TimeSeries = SimulationEntry[];
 export type Clock1 = number;
 export type Delay = number;
 export type Damage1 = number;
-export type Damages = [unknown, unknown][];
+export type Name5 = string;
+export type Damage2 = number;
+export type Damages = DamageTuple[];
 export type Logs = PlayLogResponse[];
 export type Hash = string;
 export type PreviousHash = string;
 export type Command = string;
-export type Name5 = string;
+export type Name6 = string;
 export type Time = number | null;
 export type Expr = string;
 export type Index = number;
@@ -211,6 +213,11 @@ export interface Checkpoint {
 export interface StoreCkpt {
   [k: string]: unknown;
 }
+export interface DamageTuple {
+  name: Name5;
+  damage: Damage2;
+  [k: string]: unknown;
+}
 /**
  * Operand is an aggregation of meaningful actions.
  * An operand can contain one or more actions; This meant
@@ -218,7 +225,7 @@ export interface StoreCkpt {
  */
 export interface Operation {
   command: Command;
-  name: Name5;
+  name: Name6;
   time?: Time;
   expr?: Expr;
   [k: string]: unknown;

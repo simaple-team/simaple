@@ -85,6 +85,24 @@
       "title": "DamageLog",
       "type": "object"
     },
+    "DamageTuple": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "damage": {
+          "title": "Damage",
+          "type": "number"
+        }
+      },
+      "required": [
+        "name",
+        "damage"
+      ],
+      "title": "DamageTuple",
+      "type": "object"
+    },
     "Event": {
       "description": "Event is primitive value-object, which indicated\n\"something happened\" via action-handlers.\n\nEvent may verbose; Any applications will watch event stream to\ntake some activities. Actions are only for internal state-change;\nonly events are externally shown.",
       "properties": {
@@ -218,17 +236,7 @@
         },
         "damages": {
           "items": {
-            "maxItems": 2,
-            "minItems": 2,
-            "prefixItems": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "number"
-              }
-            ],
-            "type": "array"
+            "$ref": "#/$defs/DamageTuple"
           },
           "title": "Damages",
           "type": "array"

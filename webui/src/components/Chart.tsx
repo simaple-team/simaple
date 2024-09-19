@@ -9,7 +9,7 @@ function getTotalData(history: PlayLogResponse[]) {
   const record = history
     .flatMap((history) => history.damages)
     .reduce(
-      (obj, [name, damage]) => {
+      (obj, {name, damage}) => {
         if (!obj[name]) {
           obj[name] = 0;
         }
