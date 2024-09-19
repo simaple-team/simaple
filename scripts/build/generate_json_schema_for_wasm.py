@@ -1,9 +1,8 @@
 import simaple.wasm as wasm_api
-
 from simaple.wasm.exporter.generate import (
+    export_json_schemas,
     get_every_methods_in_module,
     get_pydantic_annotations,
-    export_json_schemas,
 )
 
 

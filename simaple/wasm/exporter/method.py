@@ -1,8 +1,6 @@
-import simaple.wasm as wasm_api
-
 import inspect
 
-
+import simaple.wasm as wasm_api
 
 method = wasm_api.runSimulatorWithPlanConfig
 
@@ -23,13 +21,17 @@ for method in methods:
     annots.append(inspect.signature(method).return_annotation)
 
 
-
-pydantic_types_only = list(set([
-    annot for annot in _unpack_annot(annots)
-    if type(annot) != type
-]))
+pydantic_types_only = list(
+    set([annot for annot in _unpack_annot(annots) if type(annot) != type])
+)
 for pydantic_type in pydantic_types_only:
     json_schema = pydantic_type.model_json_schema()
     import json
-    with open("/Users/meson324/program/simaple/gen/jsonschema/" + str(pydantic_type.__name__)+".schema.json", "w") as f:
+
+    with open(
+        "/Users/meson324/program/simaple/gen/jsonschema/"
+        + str(pydantic_type.__name__)
+        + ".schema.json",
+        "w",
+    ) as f:
         json.dump(json_schema, f, indent=2)
