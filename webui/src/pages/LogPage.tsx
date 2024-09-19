@@ -104,7 +104,7 @@ const LogDetail = (props: LogDetailProps) => {
                 {Object.entries(playLog.buff_view).map(([key, value]) => (
                   <TableRow key={key}>
                     <TableCell>{key}</TableCell>
-                    <TableCell>{value}</TableCell>
+                    <TableCell>{String(value)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
