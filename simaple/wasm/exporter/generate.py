@@ -19,7 +19,7 @@ def _unpack_annot(annotations: list):
     unpacked_annotations: list = []
 
     for annotation in annotations:
-        if isinstance(annotation, type):
+        if type(annotation) == type:
             unpacked_annotations += [annotation]
 
         elif isinstance(annotation, types.GenericAlias):
