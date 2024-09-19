@@ -9,7 +9,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "prepare": "lezer-generator src/parser/simaple.grammar -o src/parser/index.js",
     "preview": "vite preview",
-    "importJsonSchema": "json2ts -i '../gen/jsonschema/*.json' -o src/sdk/models/",
+    "importJsonSchema": "json2ts -i '../gen/jsonschema/*.json' -o src/sdk/models/"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.18.0",
