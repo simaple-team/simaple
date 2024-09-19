@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "prepare": "lezer-generator src/parser/simaple.grammar -o src/parser/index.js",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "importJsonSchema": "json2ts -i '../gen/jsonschema/*.json' -o src/sdk/models/",
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.18.0",
@@ -51,6 +52,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "json-schema-to-typescript": "^15.0.2",
     "postcss": "^8.4.38",
     "prettier": "^3.3.1",
     "tailwindcss": "^3.4.4",
