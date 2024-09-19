@@ -11,6 +11,7 @@ from simaple.simulate.report.base import DamageLog
 from simaple.simulate.report.dpm import DamageCalculator
 from simaple.wasm.base import return_js_object_from_pydantic_list
 from simaple.wasm.models.simulation import (
+    DamageTuple,
     OperationLogResponse,
     PlayLogResponse,
     _Report,
@@ -33,7 +34,10 @@ def _extract_engine_history_as_response(
             damage_logs: list[DamageLog] = entry.damage_logs
 
             damages = [
-                (damage_log.name, damage_calculator.get_damage(damage_log))
+                DamageTuple(
+                    name=damage_log.name,
+                    damage=damage_calculator.get_damage(damage_log),
+                )
                 for damage_log in damage_logs
             ]
             damage = damage_calculator.calculate_damage(entry)

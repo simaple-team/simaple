@@ -17,6 +17,11 @@ class _Report(pydantic.BaseModel):
     time_series: list[SimulationEntry]
 
 
+class DamageTuple(pydantic.BaseModel):
+    name: str
+    damage: float
+
+
 class PlayLogResponse(pydantic.BaseModel):
     events: list[Event]
     validity_view: dict[str, Validity]
@@ -28,7 +33,7 @@ class PlayLogResponse(pydantic.BaseModel):
     action: Action
     checkpoint: Checkpoint
     damage: float
-    damages: list[tuple[str, float]]
+    damages: list[DamageTuple]
 
 
 class OperationLogResponse(pydantic.BaseModel):
