@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import cast
 
 from simaple.core import JobCategory, JobType
+from simaple.core.jobtype import get_job_category
 from simaple.data.baseline.patch import (
     DoubleBonusRefinePatch,
     GearIdPatch,
@@ -44,7 +45,9 @@ __JOB_STAT_PRIORITY = {
 DEX_PIRATE = [JobType.mechanic]
 
 
-def jobtype_patches(job_category: JobCategory, job_type: JobType) -> list[Patch]:
+def jobtype_patches(job_type: JobType) -> list[Patch]:
+    job_category = get_job_category(job_type)
+
     if job_category == JobCategory.pirate and job_type in DEX_PIRATE:
         config = __JOB_STAT_PRIORITY[JobCategory.archer]
     else:
@@ -67,13 +70,8 @@ def jobtype_patches(job_category: JobCategory, job_type: JobType) -> list[Patch]
     ]
 
 
-def get_baseline_gearset(
-    name: str, job_category: JobCategory, job_type: JobType
-) -> Gearset:
-    patches = jobtype_patches(
-        job_category=job_category,
-        job_type=job_type,
-    )
+def get_baseline_gearset(name: str, job_type: JobType) -> Gearset:
+    patches = jobtype_patches(job_type)
 
     repository = DirectorySpecRepository(str(Path(__file__).parent / "spec"))
     loader = SpecBasedLoader(repository)

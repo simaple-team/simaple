@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.core import JobCategory, JobType, Stat
+from simaple.core import JobType, Stat
 from simaple.core.damage import STRBasedDamageLogic
 from simaple.data.baseline import get_baseline_gearset
 from simaple.optimizer.preset import PresetOptimizer
@@ -10,7 +10,6 @@ from simaple.optimizer.preset import PresetOptimizer
 def get_test_gearset():
     gearset = get_baseline_gearset(
         "Legendary",
-        JobCategory.warrior,
         JobType.adele,
     )
 

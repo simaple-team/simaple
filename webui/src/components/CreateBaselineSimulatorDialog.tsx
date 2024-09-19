@@ -30,7 +30,6 @@ provider:
   data:
     tier: ${simulationSetting.tier}
     jobtype: ${simulationSetting.jobtype}
-    job_category: ${simulationSetting.job_category}
     level: ${simulationSetting.level}
     use_doping: ${simulationSetting.use_doping}
     passive_skill_level: ${simulationSetting.passive_skill_level}
@@ -56,7 +55,6 @@ const CreateBaselineSimulatorDialog: React.FC = () => {
     defaultValues: {
       tier: "Legendary",
       jobtype: "archmagefb",
-      job_category: "1",
       level: 265,
       use_doping: true,
       passive_skill_level: 0,
@@ -81,7 +79,6 @@ const CreateBaselineSimulatorDialog: React.FC = () => {
     const plan = baselineTemplate({
       tier: values.tier,
       jobtype: values.jobtype as SimulationSetting["jobtype"],
-      job_category: Number(values.job_category),
       level: values.level,
       use_doping: values.use_doping,
       passive_skill_level: values.passive_skill_level,
@@ -134,29 +131,6 @@ const CreateBaselineSimulatorDialog: React.FC = () => {
                   <SelectItem value="adele">아델</SelectItem>
                   <SelectItem value="dualblade">듀블</SelectItem>
                   <SelectItem value="soulmaster">소마</SelectItem>
-                </SelectContent>
-              </Select>
-            )}
-          />
-          <Controller
-            control={control}
-            name="job_category"
-            render={({ field: { name, value, onChange, disabled } }) => (
-              <Select
-                name={name}
-                value={value}
-                onValueChange={onChange}
-                disabled={disabled}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="직업군" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="0">전사</SelectItem>
-                  <SelectItem value="1">마법사</SelectItem>
-                  <SelectItem value="2">궁수</SelectItem>
-                  <SelectItem value="3">도적</SelectItem>
-                  <SelectItem value="4">해적</SelectItem>
                 </SelectContent>
               </Select>
             )}

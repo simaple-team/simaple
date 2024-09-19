@@ -1,10 +1,8 @@
-import { JobCategory } from "./JobCategory";
 import { JobType } from "./JobType";
 
 export interface SimulationSetting {
   tier: string;
   jobtype: JobType;
-  job_category: JobCategory;
   level: number;
 
   use_doping: boolean;

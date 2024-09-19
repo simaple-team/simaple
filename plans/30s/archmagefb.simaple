@@ -5,7 +5,6 @@ provider:
   data:
     tier: "Legendary"
     jobtype: archmagefb
-    job_category: 1
     level: 270
     passive_skill_level: 0
     combat_orders_level: 1
