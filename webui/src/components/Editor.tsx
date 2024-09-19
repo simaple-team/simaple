@@ -11,9 +11,6 @@ import { styleTags } from "@lezer/highlight";
 import CodeMirror, { EditorView, keymap } from "@uiw/react-codemirror";
 import { Loader2 } from "lucide-react";
 import * as React from "react";
-import { ErrorBoundary } from "react-error-boundary";
-import Chart from "../components/Chart";
-import { usePreference } from "../hooks/usePreference";
 import { useWorkspace } from "../hooks/useWorkspace";
 import { parser } from "../parser";
 
@@ -86,10 +83,9 @@ const myTheme = EditorView.theme({
   ".cm-scroller": { overflow: "auto" },
 });
 
-const Editor: React.FC = () => {
+export function Editor() {
   const [isRunning, setIsRunning] = React.useState(false);
-  const { plan, setPlan, history, skillNames, runAsync } = useWorkspace();
-  const { chartSetting } = usePreference();
+  const { plan, setPlan, skillNames, runAsync } = useWorkspace();
 
   const myCompletions = React.useMemo(
     () => createCompletion(skillNames),
@@ -112,52 +108,37 @@ const Editor: React.FC = () => {
   }
 
   return (
-    <div className="flex h-[calc(100vh-4rem)]">
-      <div className="flex h-full flex-col shrink-0 w-[520px] p-4 gap-2 border">
-        <CodeMirror
-          className="h-[calc(100%-3rem)]"
-          basicSetup={{ closeBrackets: false }}
-          extensions={[
-            myTheme,
-            keymap.of([
-              {
-                key: "Shift-Enter",
-                run: handleHotkeyRun,
-              },
-            ]),
-            languageSupport(),
-            autocompletion({ override: [myCompletions] }),
-          ]}
-          value={plan}
-          onChange={(value) => setPlan(value)}
-        />
-        <Button
-          disabled={isRunning || plan.trim().length === 0}
-          onClick={handleRun}
-        >
-          {isRunning ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              계산 중...
-            </>
-          ) : (
-            "계산"
-          )}
-        </Button>
-      </div>
-      <div className="grow">
-        <ErrorBoundary
-          fallbackRender={({ error }) => <div>Error: {error.message}</div>}
-        >
-          <Chart
-            key={JSON.stringify(chartSetting)}
-            history={history}
-            setting={chartSetting}
-          />
-        </ErrorBoundary>
-      </div>
+    <div className="flex h-full flex-col shrink-0 w-[520px] p-4 gap-2 border">
+      <CodeMirror
+        className="h-[calc(100%-3rem)]"
+        basicSetup={{ closeBrackets: false }}
+        extensions={[
+          myTheme,
+          keymap.of([
+            {
+              key: "Shift-Enter",
+              run: handleHotkeyRun,
+            },
+          ]),
+          languageSupport(),
+          autocompletion({ override: [myCompletions] }),
+        ]}
+        value={plan}
+        onChange={(value) => setPlan(value)}
+      />
+      <Button
+        disabled={isRunning || plan.trim().length === 0}
+        onClick={handleRun}
+      >
+        {isRunning ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            계산 중...
+          </>
+        ) : (
+          "계산"
+        )}
+      </Button>
     </div>
   );
-};
-
-export default Editor;
+}
