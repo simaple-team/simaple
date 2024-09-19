@@ -19,10 +19,10 @@ def _unpack_annot(annotations: list):
     unpacked_annotations: list = []
 
     for annotation in annotations:
-        if type(annotation) == type:
+        if isinstance(annotation, type):
             unpacked_annotations += [annotation]
 
-        elif type(annotation) == types.GenericAlias:
+        elif isinstance(annotation, types.GenericAlias):
             unpacked_annotations += _unpack_annot(
                 [
                     generic_types
