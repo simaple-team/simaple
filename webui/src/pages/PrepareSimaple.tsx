@@ -37,7 +37,7 @@ export function PrepareSimaple() {
 
   useEffect(() => {
     if (isLoaded) {
-      navigate("/editor/chart");
+      navigate("/editor/summary");
     }
   }, [isLoaded, navigate]);
 

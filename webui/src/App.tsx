@@ -5,6 +5,7 @@ import ChartPage from "./pages/ChartPage";
 import { EditorLayout } from "./pages/EditorLayout";
 import LogPage from "./pages/LogPage";
 import { PrepareSimaple } from "./pages/PrepareSimaple";
+import { SummaryPage } from "./pages/SummaryPage";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "log",
         element: <LogPage />,
+      },
+      {
+        path: "summary",
+        element: <SummaryPage />,
       },
     ],
   },

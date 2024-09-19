@@ -16,7 +16,9 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-const ChartSettingDialog: React.FC = () => {
+const ChartSettingDialog: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const { chartSetting, setChartSetting } = usePreference();
   const { history } = useWorkspace();
   const { register, control, getValues } = useForm<ChartSetting>({
@@ -42,9 +44,7 @@ const ChartSettingDialog: React.FC = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button>차트 설정</Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>차트 설정</DialogTitle>
