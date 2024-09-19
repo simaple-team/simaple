@@ -1,11 +1,11 @@
-import { PlayLog } from "@/sdk/models";
+import { PlayLogResponse } from "@/sdk/models";
 import { useThrottledState } from "@react-hookz/web";
 import { EChartsOption, default as ReactECharts } from "echarts-for-react";
 import React, { useEffect, useMemo, useRef } from "react";
 import { ChartSetting } from "../hooks/preferences.interface";
 import { useChart } from "../hooks/useChart";
 
-function getTotalData(history: PlayLog[]) {
+function getTotalData(history: PlayLogResponse[]) {
   const record = history
     .flatMap((history) => history.damages)
     .reduce(
@@ -27,7 +27,7 @@ function getTotalData(history: PlayLog[]) {
     .sort((a, b) => b.value - a.value);
 }
 
-const ShareChart: React.FC<{ history: PlayLog[] }> = ({ history }) => {
+const ShareChart: React.FC<{ history: PlayLogResponse[] }> = ({ history }) => {
   const echartsRef = useRef<ReactECharts>(null);
 
   const options: EChartsOption = {
@@ -64,7 +64,7 @@ const ShareChart: React.FC<{ history: PlayLog[] }> = ({ history }) => {
 };
 
 const Chart: React.FC<{
-  history: PlayLog[];
+  history: PlayLogResponse[];
   setting: ChartSetting;
 }> = ({ history, setting }) => {
   const clock = history.length > 0 ? history[history.length - 1].clock : 0;

@@ -9,17 +9,17 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useWorkspace } from "@/hooks/useWorkspace";
-import { PlayLog } from "@/sdk/models";
+import { PlayLogResponse } from "@/sdk/models";
 import * as React from "react";
 import { useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 interface LogRowProps {
-  playLog: PlayLog;
+  playLog: PlayLogResponse;
 
   isSelected?: boolean;
 
-  onSelect?: (playLog: PlayLog) => void;
+  onSelect?: (playLog: PlayLogResponse) => void;
 }
 
 const LogRow = (props: LogRowProps) => {
@@ -45,7 +45,7 @@ const LogRow = (props: LogRowProps) => {
 };
 
 interface LogDetailProps {
-  playLog: PlayLog;
+  playLog: PlayLogResponse;
 }
 
 const LogDetail = (props: LogDetailProps) => {
@@ -118,7 +118,7 @@ const LogDetail = (props: LogDetailProps) => {
 
 const LogPage: React.FC = () => {
   const { history } = useWorkspace();
-  const [selectedLog, setSelectedLog] = useState<PlayLog | null>(null);
+  const [selectedLog, setSelectedLog] = useState<PlayLogResponse | null>(null);
 
   const reversedHistory = useMemo(() => {
     return history.slice().reverse();

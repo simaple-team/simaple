@@ -1,4 +1,4 @@
-import { PlayLog } from "@/sdk/models";
+import { PlayLogResponse } from "@/sdk/models";
 import * as React from "react";
 import { usePySimaple } from "./useSimaple";
 
@@ -8,7 +8,7 @@ function useWorkspaceState() {
   const { pySimaple } = usePySimaple();
 
   const [plan, setPlan] = React.useState<string>("");
-  const [history, setHistory] = React.useState<PlayLog[]>([]);
+  const [history, setHistory] = React.useState<PlayLogResponse[]>([]);
   const playLog = history[history.length - 1];
 
   const skillNames = React.useMemo(

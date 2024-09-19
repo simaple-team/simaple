@@ -1,5 +1,5 @@
 import type { ActionStat } from "./ActionStat";
-import type { Stat } from "./Stat";
+import type { Stat } from "./OperationLogResponse.schema";
 
 export interface MinimalSimulatorConfiguration {
   action_stat: Partial<ActionStat>;
