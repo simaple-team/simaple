@@ -1,13 +1,9 @@
-import os
-
 from simaple.container.environment_provider import BaselineEnvironmentProvider
-from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 
 
 def container_test_setting(
     jobtype,
-    job_category,
     options: dict = None,
 ):
     if options is None:
@@ -16,7 +12,6 @@ def container_test_setting(
     return BaselineEnvironmentProvider(
         tier="Legendary",
         jobtype=jobtype,
-        job_category=job_category,
         level=270,
         passive_skill_level=0,
         combat_orders_level=1,
@@ -27,42 +22,29 @@ def container_test_setting(
         v_improvements_level=60,
         hexa_improvements_level=10,
         weapon_attack_power=options.get("weapon_attack_power", 0),
-    ) 
+    )
 
 
 SETTINGS = [
     (
-        (
-            JobType.archmagefb,
-            JobCategory.magician,
-        ),
+        (JobType.archmagefb,),
         15919731027452,
     ),
     (
-        (
-            JobType.archmagetc,
-            JobCategory.magician,
-        ),
+        (JobType.archmagetc,),
         13395121192957,
     ),
     (
-        (
-            JobType.bishop,
-            JobCategory.magician,
-        ),
+        (JobType.bishop,),
         9251885099074,
     ),
     (
-        (
-            JobType.mechanic,
-            JobCategory.pirate,
-        ),
+        (JobType.mechanic,),
         8064280322731,
     ),
     (
         (
             JobType.adele,
-            JobCategory.warrior,
             {
                 "weapon_attack_power": 700,
                 "weapon_pure_attack_power": 295,
@@ -73,7 +55,6 @@ SETTINGS = [
     (
         (
             JobType.windbreaker,
-            JobCategory.archer,
             {
                 "weapon_attack_power": 789,
             },
@@ -83,7 +64,6 @@ SETTINGS = [
     (
         (
             JobType.soulmaster,
-            JobCategory.warrior,
             {
                 "weapon_attack_power": 789,
             },
@@ -93,7 +73,6 @@ SETTINGS = [
     (
         (
             JobType.dualblade,
-            JobCategory.thief,
             {
                 "weapon_attack_power": 700,
             },

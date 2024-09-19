@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.core import BaseStatType, JobCategory, JobType
+from simaple.core import BaseStatType, JobType
 from simaple.data.baseline import get_baseline_gearset
 from simaple.gear.gearset import Gearset
 
@@ -19,7 +19,6 @@ from simaple.gear.gearset import Gearset
 def test_interpreter_get_gearset(baseline_name: str) -> None:
     gearset: Gearset = get_baseline_gearset(
         baseline_name,
-        JobCategory.warrior,
         JobType.adele,
     )
     assert gearset.get_total_extended_stat()
@@ -28,7 +27,6 @@ def test_interpreter_get_gearset(baseline_name: str) -> None:
 def test_gearset_ok() -> None:
     gearset: Gearset = get_baseline_gearset(
         "Legendary",
-        JobCategory.warrior,
         JobType.adele,
     )
 

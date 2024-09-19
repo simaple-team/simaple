@@ -7,7 +7,6 @@ import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.simulation import SimulationContainer
-from simaple.core.job_category import JobCategory
 from simaple.core.jobtype import JobType
 from simaple.simulate.policy.parser import parse_dsl_to_operations
 
@@ -25,7 +24,6 @@ def fixture_dsl_test_setting() -> BaselineEnvironmentProvider:
     return BaselineEnvironmentProvider(
         tier="Legendary",
         jobtype=JobType.archmagetc,
-        job_category=JobCategory.magician,
         level=270,
         passive_skill_level=0,
         combat_orders_level=1,

@@ -5,7 +5,7 @@ from typing import Any, Type
 import pydantic
 
 from simaple.container.simulation import SimulationEnvironment
-from simaple.core import ActionStat, ExtendedStat, JobCategory, JobType, Stat
+from simaple.core import ActionStat, ExtendedStat, JobType, Stat
 from simaple.data import get_best_ability
 from simaple.data.baseline import get_baseline_gearset
 from simaple.data.doping import get_normal_doping
@@ -87,7 +87,6 @@ class MinimalEnvironmentProvider(MemoizableEnvironmentProvider):
     action_stat: ActionStat
     stat: Stat
     jobtype: JobType
-    job_category: JobCategory
 
     weapon_pure_attack_power: int = 0
     combat_orders_level: int = 1
@@ -175,7 +174,6 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
     propensity_level: int = 100
 
     jobtype: JobType
-    job_category: JobCategory
     level: int
 
     passive_skill_level: int
@@ -295,7 +293,6 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
     def gearset(self):
         return get_baseline_gearset(
             self.tier,
-            self.job_category,
             self.jobtype,
         )
 

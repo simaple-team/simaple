@@ -5,7 +5,6 @@ provider:
   data:
     tier: "Legendary"
     jobtype: mechanic
-    job_category: 4
     level: 270
     passive_skill_level: 0
     combat_orders_level: 1

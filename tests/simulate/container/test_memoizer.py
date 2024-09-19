@@ -4,7 +4,6 @@ import tempfile
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import InMemoryMemoizer, PersistentStorageMemoizer
 from simaple.core import JobType
-from simaple.core.job_category import JobCategory
 
 
 def test_inmemory_memoizer():
@@ -15,7 +14,6 @@ def test_inmemory_memoizer():
         union_block_count=10,
         tier="Legendary",
         jobtype=JobType.archmagefb,
-        job_category=JobCategory.magician,
         level=270,
         passive_skill_level=0,
         combat_orders_level=1,
@@ -25,7 +23,6 @@ def test_inmemory_memoizer():
         union_block_count=10 + 1,
         tier="Legendary",
         jobtype=JobType.archmagefb,
-        job_category=JobCategory.magician,
         level=270,
         passive_skill_level=0,
         combat_orders_level=1,
@@ -58,7 +55,6 @@ def test_storage_memoizer():
             union_block_count=10,
             tier="Legendary",
             jobtype=JobType.archmagefb,
-            job_category=JobCategory.magician,
             level=270,
             passive_skill_level=0,
             combat_orders_level=1,
@@ -68,7 +64,6 @@ def test_storage_memoizer():
             union_block_count=10 + 1,
             tier="Legendary",
             jobtype=JobType.archmagefb,
-            job_category=JobCategory.magician,
             level=270,
             passive_skill_level=0,
             combat_orders_level=1,

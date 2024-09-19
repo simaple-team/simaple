@@ -17,7 +17,6 @@ provider:
     data:
         tier: Legendary
         jobtype: archmagetc
-        job_category: 1 # mage
         level: 270
         artifact_level: 40
         passive_skill_level: 0
@@ -40,7 +39,6 @@ provider:
     data:
         tier: Legendary
         jobtype: archmagetc
-        job_category: 1 # mage
         level: 270
         artifact_level: 40
         passive_skill_level: 0
@@ -113,7 +111,6 @@ provider:
     data:
         tier: Legendary
         jobtype: archmagetc
-        job_category: 1 # mage
         level: 270
         artifact_level: 40
         passive_skill_level: 0
@@ -137,7 +134,6 @@ provider:
     data:
         tier: Legendary
         jobtype: archmagetc
-        job_category: 1 # mage
         level: 270
         artifact_level: 40
         passive_skill_level: 0
@@ -160,7 +156,6 @@ provider:
     data:
         tier: Legendary
         jobtype: archmagetc
-        job_category: 1 # mage
         level: 270
         artifact_level: 40
         passive_skill_level: 0
