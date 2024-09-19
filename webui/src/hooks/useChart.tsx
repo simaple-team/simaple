@@ -1,4 +1,4 @@
-import { PlayLog } from "@/sdk/models";
+import { PlayLogResponse } from "@/sdk/models";
 import { ChartSetting } from "./preferences.interface.ts";
 
 import * as echarts from "echarts";
@@ -36,7 +36,7 @@ function clockFormatter(value: number) {
   return value + "ms";
 }
 
-export function useChart(history: PlayLog[], setting: ChartSetting) {
+export function useChart(history: PlayLogResponse[], setting: ChartSetting) {
   const clock = history.length > 0 ? history[history.length - 1].clock : 0;
   const markLine = {
     silent: true,
@@ -130,7 +130,7 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
       : []),
   ];
 
-  function getCumsumSeries(history: PlayLog[]) {
+  function getCumsumSeries(history: PlayLogResponse[]) {
     const data = history.map((log, index) => {
       return {
         name: log.action.name,
@@ -151,8 +151,8 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
     };
   }
 
-  function getHistogramSeries(history: PlayLog[]) {
-    const chunks: PlayLog[][] = [];
+  function getHistogramSeries(history: PlayLogResponse[]) {
+    const chunks: PlayLogResponse[][] = [];
 
     const timeSlice = 5000;
     for (const playLog of history) {
@@ -183,7 +183,7 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
     };
   }
 
-  function getUptimeSeries(history: PlayLog[]) {
+  function getUptimeSeries(history: PlayLogResponse[]) {
     const names = setting.runningView.skillNames;
     const data = names.flatMap((name, i) => {
       return history
@@ -225,7 +225,7 @@ export function useChart(history: PlayLog[], setting: ChartSetting) {
     };
   }
 
-  function getStackSeries(history: PlayLog[], { stackView }: ChartSetting) {
+  function getStackSeries(history: PlayLogResponse[], { stackView }: ChartSetting) {
     if (!stackView.show) return [];
 
     const getSeries = (names: string[], yAxisIndex: number) =>

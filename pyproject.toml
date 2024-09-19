@@ -9,6 +9,7 @@ _set_build_version = """
 python -c "import os; os.system('find \\'./simaple\\' -type f -name \\'*.py\\' -print0 | xargs -0 shasum | sort | shasum > webui/public/version.txt')"
 """
 export-whl = ["_build", "_set_build_version"]
+gen-schema = "python scripts/build/generate_json_schema_for_wasm.py"
 
 _black = "black simaple tests scripts"
 _isort = "isort simaple tests scripts"

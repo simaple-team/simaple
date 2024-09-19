@@ -1,10 +1,10 @@
 import { loadPyodide } from "pyodide";
-import { OperationLog } from "./models/OperationLog";
+import { OperationLogResponse } from "./models/OperationLogResponse.schema";
 
 export interface PySimapleUow {}
 
 export interface PySimaple {
-  runPlan(plan: string): OperationLog[];
+  runPlan(plan: string): OperationLogResponse[];
   hasEnvironment(plan: string): boolean;
   provideEnvironmentAugmentedPlan(plan: string): string;
 }
