@@ -139,7 +139,6 @@ const LogPage: React.FC = () => {
           <TableBody>
             {reversedHistory.map((playLog) => (
               <LogRow
-                key={playLog.hash}
                 playLog={playLog}
                 onSelect={setSelectedLog}
                 isSelected={selectedLog === playLog}
