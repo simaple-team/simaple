@@ -3,15 +3,16 @@ import yaml
 
 from simaple.container.simulation import SimulationEnvironment
 from simaple.wasm.workspace import (
+    computeMaximumDealingInterval,
     hasEnvironment,
     provideEnvironmentAugmentedPlan,
     runPlan,
-    computeMaximumDealingInterval,
 )
+
 
 @pytest.fixture
 def fixture_environment_given_plan() -> str:
-    return  """
+    return """
 author: "Alice"
 provider:
     name: "BaselineEnvironmentProvider"
@@ -81,7 +82,6 @@ ELAPSE 10.0
 CAST "체인 라이트닝 VI"
 ELAPSE 30000.0  
 """
-
 
 
 def test_has_environment_returns_false_without_environment():

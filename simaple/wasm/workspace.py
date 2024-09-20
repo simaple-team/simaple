@@ -1,6 +1,7 @@
 import json
 from typing import cast
 
+import pydantic
 import yaml
 
 from simaple.container.plan_metadata import PlanMetadata
@@ -9,15 +10,17 @@ from simaple.simulate.policy.base import ConsoleText, Operation, is_console_comm
 from simaple.simulate.policy.parser import parse_simaple_runtime
 from simaple.simulate.report.base import DamageLog
 from simaple.simulate.report.dpm import DamageCalculator
-from simaple.wasm.base import return_js_object_from_pydantic_list, return_js_object_from_pydantic_object
+from simaple.simulate.report.feature import MaximumDealingIntervalFeature
+from simaple.wasm.base import (
+    return_js_object_from_pydantic_list,
+    return_js_object_from_pydantic_object,
+)
 from simaple.wasm.models.simulation import (
     DamageTuple,
     OperationLogResponse,
     PlayLogResponse,
     _Report,
 )
-from simaple.simulate.report.feature import MaximumDealingIntervalFeature
-import pydantic
 
 
 def _extract_engine_history_as_response(
@@ -129,7 +132,6 @@ def provideEnvironmentAugmentedPlan(plan: str) -> str:
     return f"---\n{augmented_metadata}\n---\n{original_operations}"
 
 
-
 class MaximumDealingIntervalResult(pydantic.BaseModel):
     model_config = pydantic.ConfigDict(extra="forbid")
 
@@ -140,12 +142,12 @@ class MaximumDealingIntervalResult(pydantic.BaseModel):
 
 @return_js_object_from_pydantic_object
 def computeMaximumDealingInterval(
-        plan: str,
-        interval: int,
-    ) -> MaximumDealingIntervalResult:
-    '''
+    plan: str,
+    interval: int,
+) -> MaximumDealingIntervalResult:
+    """
     interval as ms.
-    '''
+    """
     plan_metadata_dict, op_or_consoles = parse_simaple_runtime(plan.strip())
 
     plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
@@ -164,7 +166,7 @@ def computeMaximumDealingInterval(
 
     report = list(engine.simulation_entries())
 
-    damage, _start, _end = MaximumDealingIntervalFeature(interval=interval).find_maximum_dealing_interval(
-        report, simulation_container.damage_calculator()
-    )
+    damage, _start, _end = MaximumDealingIntervalFeature(
+        interval=interval
+    ).find_maximum_dealing_interval(report, simulation_container.damage_calculator())
     return MaximumDealingIntervalResult(damage=damage, start=_start, end=_end)

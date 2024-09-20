@@ -1,7 +1,7 @@
 from simaple.wasm.workspace import (
+    computeMaximumDealingInterval,
     hasEnvironment,
     provideEnvironmentAugmentedPlan,
-    computeMaximumDealingInterval,
     runPlan,
 )
 
