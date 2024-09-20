@@ -1,7 +1,3 @@
-from enum import Enum
-
-import fire
-
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer

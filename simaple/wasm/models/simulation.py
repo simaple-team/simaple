@@ -5,7 +5,7 @@ import pydantic
 from simaple.core.base import Stat
 from simaple.simulate.base import Action, Checkpoint, Event
 from simaple.simulate.component.view import Running, Validity
-from simaple.simulate.policy.base import Operation
+from simaple.simulate.policy.base import Command
 from simaple.simulate.report.base import SimulationEntry
 
 
@@ -48,5 +48,5 @@ class OperationLogResponse(pydantic.BaseModel):
     logs: list[PlayLogResponse]
     hash: str
     previous_hash: str
-    operation: Operation
+    command: Command
     index: int

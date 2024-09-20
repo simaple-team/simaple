@@ -1,5 +1,4 @@
 import json
-from typing import cast
 
 import pydantic
 import yaml
@@ -68,7 +67,7 @@ def _extract_engine_history_as_response(
                 logs=playlog_responses,
                 hash=operation_log.hash,
                 previous_hash=operation_log.previous_hash,
-                operation=operation_log.operation,
+                command=operation_log.command,
             )
         )
 

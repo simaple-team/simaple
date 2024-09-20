@@ -1,7 +1,7 @@
 import hashlib
-from typing import Any, Generator, Optional
+from typing import Any, Generator, Literal, Optional
 
-from pydantic import BaseModel, ConfigDict, PrivateAttr
+from pydantic import BaseModel, ConfigDict, Field, PrivateAttr
 
 from simaple.simulate.base import AddressedStore, Checkpoint, PlayLog
 
@@ -20,15 +20,22 @@ class Operation(BaseModel):
     time: Optional[float] = None
     expr: str = ""
 
+    command_type: Literal["operation"] = "operation"
+
 
 class ConsoleText(BaseModel):
     text: str
+
+    command_type: Literal["console"] = "console"
+
+
+Command = Operation | ConsoleText
 
 
 class OperationLog(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    operation: Operation | ConsoleText
+    command: Command = Field(..., discriminator="command_type")
     playlogs: list[PlayLog]
     description: str | None = None
 
@@ -44,7 +51,7 @@ class OperationLog(BaseModel):
         return self._calculated_hash
 
     def _fast_dumped_string(self) -> str:
-        return self.operation.model_dump_json() + "|".join(
+        return self.command.model_dump_json() + "|".join(
             playlog.model_dump_json(exclude=set(["checkpoint"]))
             for playlog in self.playlogs
         )
@@ -63,7 +70,7 @@ class SimulationHistory:
         if initial_store:
             self._logs: list[OperationLog] = [
                 OperationLog(
-                    operation=Operation(command="init", name="init"),
+                    command=Operation(command="init", name="init"),
                     playlogs=[
                         PlayLog(
                             clock=0,
@@ -108,7 +115,7 @@ class SimulationHistory:
             previous_hash = self._logs[-1].hash
 
         operation_log = OperationLog(
-            operation=operation,
+            command=operation,
             playlogs=playlogs,
             previous_hash=previous_hash,
             description=description,
