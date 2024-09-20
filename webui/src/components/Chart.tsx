@@ -7,7 +7,7 @@ import { useChart } from "../hooks/useChart";
 
 function getTotalData(history: PlayLogResponse[]) {
   const record = history
-    .flatMap((history) => history.damages)
+    .flatMap((history) => history.damage_records)
     .reduce(
       (obj, {name, damage}) => {
         if (!obj[name]) {

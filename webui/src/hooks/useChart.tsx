@@ -122,7 +122,7 @@ export function useChart(history: PlayLogResponse[], setting: ChartSetting) {
         name: log.action.name,
         value: [
           log.clock,
-          history.slice(0, index + 1).reduce((sum, log) => sum + log.damage, 0),
+          history.slice(0, index + 1).reduce((sum, log) => sum + log.total_damage, 0),
         ],
       };
     });
@@ -153,7 +153,7 @@ export function useChart(history: PlayLogResponse[], setting: ChartSetting) {
         name: `${index * timeSlice}-${(index + 1) * timeSlice}`,
         value: [
           (index + 0.5) * timeSlice,
-          chunk.reduce((sum, x) => sum + x.damage, 0),
+          chunk.reduce((sum, x) => sum + x.total_damage, 0),
         ],
       };
     });
