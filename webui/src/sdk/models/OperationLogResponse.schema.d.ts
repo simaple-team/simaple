@@ -86,7 +86,6 @@ export interface OperationLogResponse {
   previous_hash: PreviousHash;
   operation: Operation;
   index: Index;
-  [k: string]: unknown;
 }
 export interface PlayLogResponse {
   events: Events;
@@ -100,7 +99,6 @@ export interface PlayLogResponse {
   checkpoint: Checkpoint;
   damage: Damage1;
   damages: Damages;
-  [k: string]: unknown;
 }
 /**
  * Event is primitive value-object, which indicated
@@ -116,7 +114,6 @@ export interface Event {
   method: Method;
   tag: Tag;
   handler: Handler;
-  [k: string]: unknown;
 }
 export interface Payload {
   [k: string]: unknown;
@@ -131,7 +128,6 @@ export interface Validity {
   valid: Valid;
   cooldown_duration: CooldownDuration;
   stack?: Stack;
-  [k: string]: unknown;
 }
 export interface RunningView {
   [k: string]: Running;
@@ -142,7 +138,6 @@ export interface Running {
   time_left: TimeLeft1;
   lasting_duration: LastingDuration;
   stack?: Stack1;
-  [k: string]: unknown;
 }
 export interface Stat {
   STR?: Str;
@@ -172,21 +167,18 @@ export interface Stat {
   MHP_multiplier?: MhpMultiplier;
   MMP_multiplier?: MmpMultiplier;
   elemental_resistance?: ElementalResistance;
-  [k: string]: unknown;
 }
 /**
  * For backward Compat. only (this is redundant)
  */
 export interface _Report {
   time_series: TimeSeries;
-  [k: string]: unknown;
 }
 export interface SimulationEntry {
   action: Action;
   clock: Clock;
   damage_logs: DamageLogs;
   accepted: Accepted;
-  [k: string]: unknown;
 }
 /**
  * Action is primitive value-object which indicated
@@ -196,7 +188,6 @@ export interface Action {
   name: Name3;
   method: Method1;
   payload: Payload1;
-  [k: string]: unknown;
 }
 export interface DamageLog {
   name: Name4;
@@ -204,11 +195,9 @@ export interface DamageLog {
   hit: Hit;
   buff: Stat;
   tag: Tag1;
-  [k: string]: unknown;
 }
 export interface Checkpoint {
   store_ckpt: StoreCkpt;
-  [k: string]: unknown;
 }
 export interface StoreCkpt {
   [k: string]: unknown;
@@ -216,7 +205,6 @@ export interface StoreCkpt {
 export interface DamageTuple {
   name: Name5;
   damage: Damage2;
-  [k: string]: unknown;
 }
 /**
  * Operand is an aggregation of meaningful actions.
@@ -228,5 +216,4 @@ export interface Operation {
   name: Name6;
   time?: Time;
   expr?: Expr;
-  [k: string]: unknown;
 }

@@ -12,7 +12,7 @@ def fixture_history_use_playlog():
             {"name": "A", "payload": {}, "method": "use", "tag": None, "handler": None}
         ],
         clock=3000.0,
-        checkpoint=Checkpoint(store_ckpt={}, callbacks=[]),
+        checkpoint=Checkpoint(store_ckpt={}),
     )
 
 
@@ -30,7 +30,7 @@ def fixture_history_elapse_playlog():
             }
         ],
         clock=3000.0,
-        checkpoint=Checkpoint(store_ckpt={}, callbacks=[]),
+        checkpoint=Checkpoint(store_ckpt={}),
     )
 
 

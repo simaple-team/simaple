@@ -12,6 +12,8 @@ class ComponentInformation(TypedDict):
 
 
 class Validity(pydantic.BaseModel):
+    model_config = pydantic.ConfigDict(extra="forbid")
+
     id: str
     name: str
     time_left: float
@@ -21,6 +23,8 @@ class Validity(pydantic.BaseModel):
 
 
 class Running(pydantic.BaseModel):
+    model_config = pydantic.ConfigDict(extra="forbid")
+
     id: str
     name: str
     time_left: float
@@ -29,6 +33,8 @@ class Running(pydantic.BaseModel):
 
 
 class KeydownView(pydantic.BaseModel):
+    model_config = pydantic.ConfigDict(extra="forbid")
+
     name: str
     time_left: float
     running: bool

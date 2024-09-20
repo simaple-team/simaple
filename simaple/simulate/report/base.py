@@ -6,6 +6,8 @@ from simaple.simulate.reserved_names import Tag
 
 
 class DamageLog(pydantic.BaseModel):
+    model_config = pydantic.ConfigDict(extra="forbid")
+
     name: str
     damage: float
     hit: float
@@ -37,6 +39,8 @@ def _create_damage_log(event: Event, buff: Stat) -> DamageLog | None:
 
 
 class SimulationEntry(pydantic.BaseModel):
+    model_config = pydantic.ConfigDict(extra="forbid")
+
     action: Action
     clock: float
     damage_logs: list[DamageLog]

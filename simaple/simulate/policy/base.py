@@ -1,7 +1,7 @@
 import hashlib
 from typing import Any, Generator, Optional
 
-from pydantic import BaseModel, PrivateAttr
+from pydantic import BaseModel, ConfigDict, PrivateAttr
 
 from simaple.simulate.base import AddressedStore, Checkpoint, PlayLog
 
@@ -13,6 +13,8 @@ class Operation(BaseModel):
     only operand-to-action translation is possible.
     """
 
+    model_config = ConfigDict(extra="forbid")
+
     command: str
     name: str
     time: Optional[float] = None
@@ -20,6 +22,8 @@ class Operation(BaseModel):
 
 
 class OperationLog(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     operation: Operation
     playlogs: list[PlayLog]
     previous_hash: str
