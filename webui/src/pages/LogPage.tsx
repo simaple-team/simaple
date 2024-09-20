@@ -209,7 +209,7 @@ const LogPage: React.FC = () => {
             }`}
             onClick={() => setCurrentView("running")}
           >
-            실행
+            지속
           </button>
           <button
             className={`flex justify-center items-center px-4 h-20 ${

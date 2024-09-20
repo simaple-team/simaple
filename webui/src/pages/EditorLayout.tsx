@@ -20,7 +20,7 @@ export function EditorLayout() {
           <div className="flex h-[calc(100vh-4rem)]">
             <Editor />
             <div className="flex grow flex-col">
-              <div className="h-12 border-b border-border/40 bg-background">
+              <div className="h-12 border-b border-border/40 bg-background shrink-0">
                 <div className="flex h-full gap-4 px-4">
                   <NavLink
                     to="/editor/summary"

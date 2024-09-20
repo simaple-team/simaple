@@ -22,22 +22,24 @@ import { ErrorBoundary } from "react-error-boundary";
 export function SummaryPage() {
   const { history } = useWorkspace();
   const [sortBy, setSortBy] = useState("totalDamage");
+  const [order, setOrder] = useState("desc");
 
   const battleStats = useMemo(() => getBattleStatistics(history), [history]);
   const sortedBattleStats = useMemo(
     () =>
       battleStats.slice().sort((a, b) => {
         if (sortBy === "totalDamage") {
-          return b.totalDamage - a.totalDamage;
+          return order === "asc"
+            ? a.totalDamage - b.totalDamage
+            : b.totalDamage - a.totalDamage;
+        } else if (sortBy === "useCount") {
+          return order === "asc"
+            ? a.useCount - b.useCount
+            : b.useCount - a.useCount;
         }
-
-        if (sortBy === "useCount") {
-          return b.useCount - a.useCount;
-        }
-
         return 0;
       }),
-    [battleStats, sortBy],
+    [battleStats, sortBy, order],
   );
 
   return (
@@ -53,6 +55,15 @@ export function SummaryPage() {
             <SelectContent>
               <SelectItem value="totalDamage">누적 데미지 정렬</SelectItem>
               <SelectItem value="useCount">사용횟수 정렬</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={order} onValueChange={setOrder}>
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="순서" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="desc">내림차순</SelectItem>
+              <SelectItem value="asc">오름차순</SelectItem>
             </SelectContent>
           </Select>
         </div>
