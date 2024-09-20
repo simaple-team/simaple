@@ -16,8 +16,6 @@ def test_damage_calculator():
         ),
     )
 
-    log = DamageLog(
-        clock=0.0, name="test", damage=300, hit=3, buff=Stat(), tag=Tag.DAMAGE
-    )
+    log = DamageLog(name="test", damage=300, hit=3, buff=Stat(), tag=Tag.DAMAGE)
 
     assert damage_calc.get_damage(log) == 120 * 3 * 0.5

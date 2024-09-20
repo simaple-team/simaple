@@ -64,6 +64,8 @@ class StatProps(enum.Enum):
 
 
 class Stat(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     STR: float = 0.0
     LUK: float = 0.0
     INT: float = 0.0

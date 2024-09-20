@@ -1,6 +1,7 @@
 {
   "$defs": {
     "Action": {
+      "additionalProperties": false,
       "description": "Action is primitive value-object which indicated\nwhat `Component` and Which `method` will be triggerd.",
       "properties": {
         "name": {
@@ -41,6 +42,7 @@
       "type": "object"
     },
     "Checkpoint": {
+      "additionalProperties": false,
       "properties": {
         "store_ckpt": {
           "title": "Store Ckpt",
@@ -54,6 +56,7 @@
       "type": "object"
     },
     "DamageLog": {
+      "additionalProperties": false,
       "properties": {
         "name": {
           "title": "Name",
@@ -86,6 +89,7 @@
       "type": "object"
     },
     "DamageTuple": {
+      "additionalProperties": false,
       "properties": {
         "name": {
           "title": "Name",
@@ -104,6 +108,7 @@
       "type": "object"
     },
     "Event": {
+      "additionalProperties": false,
       "description": "Event is primitive value-object, which indicated\n\"something happened\" via action-handlers.\n\nEvent may verbose; Any applications will watch event stream to\ntake some activities. Actions are only for internal state-change;\nonly events are externally shown.",
       "properties": {
         "name": {
@@ -152,6 +157,7 @@
       "type": "object"
     },
     "Operation": {
+      "additionalProperties": false,
       "description": "Operand is an aggregation of meaningful actions.\nAn operand can contain one or more actions; This meant\nonly operand-to-action translation is possible.",
       "properties": {
         "command": {
@@ -188,6 +194,7 @@
       "type": "object"
     },
     "PlayLogResponse": {
+      "additionalProperties": false,
       "properties": {
         "events": {
           "items": {
@@ -259,6 +266,7 @@
       "type": "object"
     },
     "Running": {
+      "additionalProperties": false,
       "properties": {
         "id": {
           "title": "Id",
@@ -299,6 +307,7 @@
       "type": "object"
     },
     "SimulationEntry": {
+      "additionalProperties": false,
       "properties": {
         "action": {
           "$ref": "#/$defs/Action"
@@ -329,6 +338,7 @@
       "type": "object"
     },
     "Stat": {
+      "additionalProperties": false,
       "properties": {
         "STR": {
           "default": 0.0,
@@ -470,6 +480,7 @@
       "type": "object"
     },
     "Validity": {
+      "additionalProperties": false,
       "properties": {
         "id": {
           "title": "Id",
@@ -515,6 +526,7 @@
       "type": "object"
     },
     "_Report": {
+      "additionalProperties": false,
       "description": "For backward Compat. only (this is redundant)",
       "properties": {
         "time_series": {
@@ -532,6 +544,7 @@
       "type": "object"
     }
   },
+  "additionalProperties": false,
   "properties": {
     "logs": {
       "items": {

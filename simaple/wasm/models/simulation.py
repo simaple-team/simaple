@@ -14,15 +14,21 @@ class _Report(pydantic.BaseModel):
     For backward Compat. only (this is redundant)
     """
 
+    model_config = pydantic.ConfigDict(extra="forbid")
+
     time_series: list[SimulationEntry]
 
 
 class DamageTuple(pydantic.BaseModel):
+    model_config = pydantic.ConfigDict(extra="forbid")
+
     name: str
     damage: float
 
 
 class PlayLogResponse(pydantic.BaseModel):
+    model_config = pydantic.ConfigDict(extra="forbid")
+
     events: list[Event]
     validity_view: dict[str, Validity]
     running_view: dict[str, Running]
@@ -37,6 +43,8 @@ class PlayLogResponse(pydantic.BaseModel):
 
 
 class OperationLogResponse(pydantic.BaseModel):
+    model_config = pydantic.ConfigDict(extra="forbid")
+
     logs: list[PlayLogResponse]
     hash: str
     previous_hash: str

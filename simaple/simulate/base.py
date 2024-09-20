@@ -5,7 +5,7 @@ from abc import ABCMeta, abstractmethod
 from collections import defaultdict
 from typing import Any, Callable, Optional, TypeVar, Union, cast
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing_extensions import TypedDict
 
 from simaple.simulate.reserved_names import Tag
@@ -29,6 +29,9 @@ class Action(TypedDict):
     payload: Union[int, str, float, dict, None]
 
 
+setattr(Action, "__pydantic_config__", ConfigDict(extra="forbid"))
+
+
 class Event(TypedDict):
     """
     Event is primitive value-object, which indicated
@@ -44,6 +47,9 @@ class Event(TypedDict):
     method: str
     tag: Optional[str]
     handler: Optional[str]
+
+
+setattr(Event, "__pydantic_config__", ConfigDict(extra="forbid"))
 
 
 def message_signature(message: Union[Action, Event]) -> str:
@@ -234,6 +240,8 @@ def _get_event_callbacks(event: Event) -> EventCallback:
 
 
 class Checkpoint(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     store_ckpt: dict[str, Any]
 
     @classmethod

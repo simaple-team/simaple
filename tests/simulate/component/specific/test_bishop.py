@@ -88,7 +88,7 @@ def divine_minion_component():
         periodic_hit=100,
         lasting_duration=10000,
         mark_advantage={
-            "damage": 10,
+            "damage_multiplier": 10,
         },
     )
     return component
