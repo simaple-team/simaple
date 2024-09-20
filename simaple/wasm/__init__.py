@@ -1,4 +1,5 @@
 from simaple.wasm.workspace import (
+    computeMaximumDealingInterval,
     hasEnvironment,
     provideEnvironmentAugmentedPlan,
     runPlan,
@@ -7,5 +8,6 @@ from simaple.wasm.workspace import (
 __all__ = [
     "provideEnvironmentAugmentedPlan",
     "hasEnvironment",
+    "computeMaximumDealingInterval",
     "runPlan",
 ]
