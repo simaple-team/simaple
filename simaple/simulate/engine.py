@@ -26,7 +26,7 @@ from simaple.simulate.report.base import SimulationEntry
 class OperationEngine(Protocol):
     def get_current_viewer(self) -> ViewerType: ...
 
-    def exec(self, op: Operation, early_stop: int = -1) -> OperationLog: ...
+    def exec_operation(self, op: Operation, early_stop: int = -1) -> OperationLog: ...
 
     def get_buffered_events(self) -> list[Event]: ...
 
@@ -47,6 +47,8 @@ class OperationEngine(Protocol):
     def save_history(self) -> dict[str, Any]: ...
 
     def get_viewer(self, playlog: PlayLog) -> ViewerType: ...
+
+    def exec(self, op_or_console: Operation | ConsoleText) -> OperationLog: ...
 
 
 class BasicOperationEngine:
@@ -87,7 +89,7 @@ class BasicOperationEngine:
     def load_history(self, saved_history: dict[str, Any]) -> None:
         self._history.load(saved_history)
 
-    def exec(self, op: Operation, early_stop: int = -1) -> OperationLog:
+    def exec_operation(self, op: Operation, early_stop: int = -1) -> OperationLog:
         """
         Execute given Operation and return OperationLog.
         """
@@ -124,6 +126,7 @@ class BasicOperationEngine:
         return self._history.commit(
             op,
             playlogs,
+            description=None,
             moved_store=store,
         )
 
@@ -156,9 +159,20 @@ class BasicOperationEngine:
     def rollback(self, idx: int):
         self._history.discard_after(idx)
 
-    def console(self, console_text: ConsoleText) -> str:
+    def console(self, console_text: ConsoleText) -> OperationLog:
         output = SimulationProfile(self.get_current_viewer()).inspect(console_text.text)
-        return output
+        return self._history.commit(
+            console_text,
+            [],
+            description=output,
+        )
+
+    def exec(self, op_or_console: Operation | ConsoleText) -> OperationLog:
+        match op_or_console:
+            case Operation():
+                return self.exec_operation(op_or_console)
+            case ConsoleText():
+                return self.console(op_or_console)
 
 
 assert issubclass(BasicOperationEngine, OperationEngine)

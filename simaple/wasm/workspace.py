@@ -6,7 +6,6 @@ import yaml
 
 from simaple.container.plan_metadata import PlanMetadata
 from simaple.container.simulation import OperationEngine
-from simaple.simulate.policy.base import ConsoleText, Operation, is_console_command
 from simaple.simulate.policy.parser import parse_simaple_runtime
 from simaple.simulate.report.base import DamageLog
 from simaple.simulate.report.dpm import DamageCalculator
@@ -93,11 +92,7 @@ def runPlan(
     engine = simulation_container.operation_engine()
 
     for op_or_console in op_or_consoles:
-        if is_console_command(op_or_console):
-            _ = engine.console(cast(ConsoleText, op_or_console))
-            continue
-
-        engine.exec(cast(Operation, op_or_console))
+        engine.exec(op_or_console)
 
     return _extract_engine_history_as_response(
         engine, simulation_container.damage_calculator()
@@ -158,11 +153,7 @@ def computeMaximumDealingInterval(
     engine = simulation_container.operation_engine()
 
     for op_or_console in op_or_consoles:
-        if is_console_command(op_or_console):
-            _ = engine.console(cast(ConsoleText, op_or_console))
-            continue
-
-        engine.exec(cast(Operation, op_or_console))
+        engine.exec(op_or_console)
 
     report = list(engine.simulation_entries())
 

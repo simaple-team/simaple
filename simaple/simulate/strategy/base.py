@@ -31,4 +31,4 @@ def exec_by_strategy(
 ) -> None:
     operations = policy((engine.get_current_viewer(), engine.get_buffered_events()))
     for op in operations:
-        engine.exec(op, early_stop=early_stop)
+        engine.exec_operation(op, early_stop=early_stop)

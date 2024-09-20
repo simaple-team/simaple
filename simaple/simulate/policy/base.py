@@ -21,11 +21,17 @@ class Operation(BaseModel):
     expr: str = ""
 
 
+class ConsoleText(BaseModel):
+    text: str
+
+
 class OperationLog(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    operation: Operation
+    operation: Operation | ConsoleText
     playlogs: list[PlayLog]
+    description: str | None = None
+
     previous_hash: str
     _calculated_hash: Optional[str] = PrivateAttr(default=None)
 
@@ -91,8 +97,9 @@ class SimulationHistory:
 
     def commit(
         self,
-        operation: Operation,
+        operation: Operation | ConsoleText,
         playlogs: list[PlayLog],
+        description: Optional[str] = None,
         moved_store: Optional[AddressedStore] = None,
     ) -> OperationLog:
         if len(self._logs) == 0:
@@ -104,9 +111,11 @@ class SimulationHistory:
             operation=operation,
             playlogs=playlogs,
             previous_hash=previous_hash,
+            description=description,
         )
         self._logs.append(operation_log)
-        self._cached_store = moved_store
+        if moved_store:
+            self._cached_store = moved_store
 
         return operation_log  # return ptr; maybe dangerous
 
@@ -139,9 +148,6 @@ class SimulationHistory:
     def shallow_copy(self) -> "SimulationHistory":
         return SimulationHistory(logs=list(self._logs))
 
-    def show_ops(self) -> list[Operation]:
-        return [playlog.operation for playlog in self]
-
     def get_hash_index(self, log_hash: str) -> int:
         for idx, log in enumerate(self._logs):
             if log.previous_hash == log_hash:
@@ -154,11 +160,3 @@ class SimulationHistory:
 
     def _current_ckpt(self) -> Checkpoint:
         return self._logs[-1].last().checkpoint
-
-
-class ConsoleText(BaseModel):
-    text: str
-
-
-def is_console_command(op_or_console: ConsoleText | Operation) -> bool:
-    return isinstance(op_or_console, ConsoleText)

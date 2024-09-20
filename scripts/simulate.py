@@ -7,7 +7,6 @@ from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.plan_metadata import PlanMetadata
 from simaple.container.simulation import SimulationContainer
 from simaple.simulate.base import PlayLog
-from simaple.simulate.policy.base import is_console_command
 from simaple.simulate.policy.parser import parse_simaple_runtime
 from simaple.simulate.report.base import SimulationEntry
 from simaple.simulate.report.feature import (
@@ -70,23 +69,22 @@ def run(plan_file: str):
     damage_share = DamageShareFeature(damage_calculator)
 
     for op_or_console in operation_or_consoles:
-        if is_console_command(op_or_console):
-            console_output = engine.console(op_or_console)
-            print(f"\033[90m[DEBUG_]{console_output}\033[0m")
-        else:
-            op_log = engine.exec(op_or_console)
-            for playlog in op_log.playlogs:
-                entry = engine.get_simulation_entry(playlog)
-                damage_share.update(entry)
-                total_damage = sum(
-                    [
-                        damage_calculator.get_damage(damage_log)
-                        for damage_log in entry.damage_logs
-                    ]
-                )
-                print(
-                    f"{get_status_string(_get_status(playlog, entry))}{entry.clock:6.0f}s | {show_damage_as_string(total_damage).rjust(8)} | {entry.action}|"
-                )
+        operation_log = engine.exec(op_or_console)
+        if operation_log.description:
+            print(f"\033[90m[DEBUG_]{operation_log.description}\033[0m")
+
+        for playlog in operation_log.playlogs:
+            entry = engine.get_simulation_entry(playlog)
+            damage_share.update(entry)
+            total_damage = sum(
+                [
+                    damage_calculator.get_damage(damage_log)
+                    for damage_log in entry.damage_logs
+                ]
+            )
+            print(
+                f"{get_status_string(_get_status(playlog, entry))}{entry.clock:6.0f}s | {show_damage_as_string(total_damage).rjust(8)} | {entry.action}|"
+            )
 
     report = list(engine.simulation_entries())
 

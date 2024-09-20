@@ -1,0 +1,99 @@
+from enum import Enum
+
+import fire
+
+import simaple.simulate.component.skill  # noqa: F401
+from simaple.container.environment_provider import BaselineEnvironmentProvider
+from simaple.container.memoizer import PersistentStorageMemoizer
+from simaple.container.simulation import SimulationContainer
+from simaple.core.jobtype import JobType
+from simaple.simulate.policy.parser import parse_simaple_runtime
+
+
+def test_run_engine():
+    _environment_provider = BaselineEnvironmentProvider(
+        tier="Legendary",
+        jobtype=JobType.archmagefb,
+        level=270,
+        passive_skill_level=0,
+        combat_orders_level=1,
+        artifact_level=40,
+        v_skill_level=30,
+        v_improvements_level=60,
+        hexa_improvements_level=10,
+    )
+    _simulation_environment_memoizer = PersistentStorageMemoizer()
+    container = SimulationContainer(
+        _simulation_environment_memoizer.compute_environment(_environment_provider)
+    )
+    engine = container.operation_engine()
+    _, operation_or_consoles = parse_simaple_runtime(
+        """
+author: "Alice"
+provider:
+    name: "BaselineEnvironmentProvider"
+    data:
+        tier: Legendary
+        jobtype: archmagetc
+        job_category: 1 # mage
+        level: 270
+        artifact_level: 40
+        passive_skill_level: 0
+        combat_orders_level: 1
+---
+CAST "오버로드 마나"
+CAST "이프리트"
+CAST "메이플 용사"
+CAST "메디테이션"
+CAST "파이어 오라"
+CAST "인피니티"
+ELAPSE 78000
+
+CAST "메이플월드 여신의 축복"
+
+CAST "포이즌 리전" 
+CAST "플레임 헤이즈 VI"
+
+CAST "에픽 어드벤쳐"
+CAST "소울 컨트랙트"
+CAST "리스트레인트 링"
+CAST "메기도 플레임"
+CAST "인페르날 베놈"
+CAST "퓨리 오브 이프리트"
+CAST "포이즌 노바"
+CAST "도트 퍼니셔"
+CAST "포이즌 체인"
+CAST "미스트 이럽션 VI"
+CAST "플레임 헤이즈 VI"
+CAST "크레스트 오브 더 솔라" 
+CAST "플레임 스윕 VI"
+CAST "플레임 스윕 VI"
+!debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"
+
+CAST "메테오"
+
+CAST "미스트 이럽션 VI"
+CAST "플레임 헤이즈 VI"
+x4 CAST "플레임 스윕 VI"
+
+CAST "미스트 이럽션 VI"
+CAST "플레임 헤이즈 VI"
+x4 CAST "플레임 스윕 VI"
+
+CAST "미스트 이럽션 VI"
+CAST "플레임 헤이즈 VI"
+x4 CAST "플레임 스윕 VI"
+
+!debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"
+"""
+    )
+
+    for op_or_console in operation_or_consoles:
+        engine.exec(op_or_console)
+
+    text_outputs = []
+    for operation_log in engine.history():
+        if operation_log.description is not None:
+            text_outputs.append(operation_log.description)
+
+    assert len(text_outputs) == 2
