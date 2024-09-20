@@ -1,7 +1,7 @@
+import { clockFormatter, damageFormatter } from "@/lib/formatters.ts";
 import { PlayLogResponse } from "@/sdk/models";
-import { ChartSetting } from "./preferences.interface.ts";
-
 import * as echarts from "echarts";
+import { ChartSetting } from "./preferences.interface.ts";
 
 const colorlist = [
   "#a6cee3",
@@ -20,20 +20,6 @@ const colorlist = [
 
 function getColorFromIndex(index: number) {
   return colorlist[index % colorlist.length];
-}
-
-function damageFormatter(value: number) {
-  if (value < 10000) return value.toFixed(0);
-
-  if (value < 100000000) return (value / 10000).toFixed(2) + "만";
-
-  if (value < 1000000000000) return (value / 100000000).toFixed(2) + "억";
-
-  return (value / 1000000000000).toFixed(2) + "조";
-}
-
-function clockFormatter(value: number) {
-  return value + "ms";
 }
 
 export function useChart(history: PlayLogResponse[], setting: ChartSetting) {
@@ -225,7 +211,10 @@ export function useChart(history: PlayLogResponse[], setting: ChartSetting) {
     };
   }
 
-  function getStackSeries(history: PlayLogResponse[], { stackView }: ChartSetting) {
+  function getStackSeries(
+    history: PlayLogResponse[],
+    { stackView }: ChartSetting,
+  ) {
     if (!stackView.show) return [];
 
     const getSeries = (names: string[], yAxisIndex: number) =>

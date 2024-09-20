@@ -13,6 +13,7 @@ import { Loader2 } from "lucide-react";
 import * as React from "react";
 import { useWorkspace } from "../hooks/useWorkspace";
 import { parser } from "../parser";
+import CreateBaselineSimulatorDialog from "./CreateBaselineSimulatorDialog";
 
 const parserWithMetadata = parser.configure({
   props: [styleTags({})],
@@ -108,9 +109,9 @@ export function Editor() {
   }
 
   return (
-    <div className="flex h-full flex-col shrink-0 w-[520px] p-4 gap-2 border">
+    <div className="flex h-full flex-col shrink-0 w-[520px] gap-2 border-r border-border/40">
       <CodeMirror
-        className="h-[calc(100%-3rem)]"
+        className="h-[calc(100%-4rem)]"
         basicSetup={{ closeBrackets: false }}
         extensions={[
           myTheme,
@@ -126,19 +127,25 @@ export function Editor() {
         value={plan}
         onChange={(value) => setPlan(value)}
       />
-      <Button
-        disabled={isRunning || plan.trim().length === 0}
-        onClick={handleRun}
-      >
-        {isRunning ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            계산 중...
-          </>
-        ) : (
-          "계산"
-        )}
-      </Button>
+      <div className="flex gap-2 p-2">
+        <CreateBaselineSimulatorDialog>
+          <Button variant="outline">새 파일</Button>
+        </CreateBaselineSimulatorDialog>
+        <Button
+          disabled={isRunning || plan.trim().length === 0}
+          onClick={handleRun}
+          className="grow"
+        >
+          {isRunning ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              계산 중...
+            </>
+          ) : (
+            "계산"
+          )}
+        </Button>
+      </div>
     </div>
   );
 }

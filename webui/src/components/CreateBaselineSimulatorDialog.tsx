@@ -49,7 +49,9 @@ provider:
 ELAPSE 0`;
 }
 
-const CreateBaselineSimulatorDialog: React.FC = () => {
+const CreateBaselineSimulatorDialog: React.FC<{
+  children: React.ReactNode;
+}> = ({ children }) => {
   const { setPlan } = useWorkspace();
   const { register, getValues, control } = useForm({
     defaultValues: {
@@ -101,9 +103,7 @@ const CreateBaselineSimulatorDialog: React.FC = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button>새 파일</Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>새 파일</DialogTitle>
