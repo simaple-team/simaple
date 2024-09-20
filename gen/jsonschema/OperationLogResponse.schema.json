@@ -88,7 +88,7 @@
       "title": "DamageLog",
       "type": "object"
     },
-    "DamageTuple": {
+    "DamageRecord": {
       "additionalProperties": false,
       "properties": {
         "name": {
@@ -109,7 +109,7 @@
         "damage",
         "hit"
       ],
-      "title": "DamageTuple",
+      "title": "DamageRecord",
       "type": "object"
     },
     "Event": {
@@ -242,15 +242,15 @@
         "checkpoint": {
           "$ref": "#/$defs/Checkpoint"
         },
-        "damage": {
-          "title": "Damage",
+        "total_damage": {
+          "title": "Total Damage",
           "type": "number"
         },
-        "damages": {
+        "damage_records": {
           "items": {
-            "$ref": "#/$defs/DamageTuple"
+            "$ref": "#/$defs/DamageRecord"
           },
-          "title": "Damages",
+          "title": "Damage Records",
           "type": "array"
         }
       },
@@ -264,8 +264,8 @@
         "delay",
         "action",
         "checkpoint",
-        "damage",
-        "damages"
+        "total_damage",
+        "damage_records"
       ],
       "title": "PlayLogResponse",
       "type": "object"

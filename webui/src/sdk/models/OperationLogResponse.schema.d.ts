@@ -67,11 +67,11 @@ export type Accepted = boolean;
 export type TimeSeries = SimulationEntry[];
 export type Clock1 = number;
 export type Delay = number;
-export type Damage1 = number;
+export type TotalDamage = number;
 export type Name5 = string;
-export type Damage2 = number;
+export type Damage1 = number;
 export type Hit1 = number;
-export type Damages = DamageTuple[];
+export type DamageRecords = DamageRecord[];
 export type Logs = PlayLogResponse[];
 export type Hash = string;
 export type PreviousHash = string;
@@ -98,8 +98,8 @@ export interface PlayLogResponse {
   delay: Delay;
   action: Action;
   checkpoint: Checkpoint;
-  damage: Damage1;
-  damages: Damages;
+  total_damage: TotalDamage;
+  damage_records: DamageRecords;
 }
 /**
  * Event is primitive value-object, which indicated
@@ -203,9 +203,9 @@ export interface Checkpoint {
 export interface StoreCkpt {
   [k: string]: unknown;
 }
-export interface DamageTuple {
+export interface DamageRecord {
   name: Name5;
-  damage: Damage2;
+  damage: Damage1;
   hit: Hit1;
 }
 /**
