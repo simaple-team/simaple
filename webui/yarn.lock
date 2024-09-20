@@ -4178,6 +4178,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ts-pattern@npm:^5.3.1":
+  version: 5.3.1
+  resolution: "ts-pattern@npm:5.3.1"
+  checksum: 10c0/4d5082edb2d0a198a4f46abc834317fa2be616277be7721df71a93ea33180b85443ae2e92ff28a0cda51f038b5e347b35ad79936a55ed468e23268fbc48503a1
+  languageName: node
+  linkType: hard
+
 "tslib@npm:2.3.0":
   version: 2.3.0
   resolution: "tslib@npm:2.3.0"
@@ -4410,6 +4417,7 @@ __metadata:
     tailwind-merge: "npm:^2.3.0"
     tailwindcss: "npm:^3.4.4"
     tailwindcss-animate: "npm:^1.0.7"
+    ts-pattern: "npm:^5.3.1"
     typescript: "npm:^5.2.2"
     vite: "npm:^5.2.0"
   languageName: unknown

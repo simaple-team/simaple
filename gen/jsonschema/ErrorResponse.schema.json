@@ -1,0 +1,23 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "success": {
+      "const": false,
+      "default": false,
+      "enum": [
+        false
+      ],
+      "title": "Success",
+      "type": "boolean"
+    },
+    "message": {
+      "title": "Message",
+      "type": "string"
+    }
+  },
+  "required": [
+    "message"
+  ],
+  "title": "ErrorResponse",
+  "type": "object"
+}

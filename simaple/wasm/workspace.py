@@ -12,6 +12,7 @@ from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 from simaple.wasm.base import (
     return_js_object_from_pydantic_list,
     return_js_object_from_pydantic_object,
+    wrap_response_by_handling_exception,
 )
 from simaple.wasm.models.simulation import (
     DamageTuple,
@@ -74,6 +75,7 @@ def _extract_engine_history_as_response(
     return responses
 
 
+@wrap_response_by_handling_exception
 @return_js_object_from_pydantic_list
 def runPlan(
     plan: str,

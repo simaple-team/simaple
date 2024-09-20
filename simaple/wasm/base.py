@@ -6,7 +6,7 @@ named as camelCase and all arguments maybe pyodide objects.
 """
 
 from functools import wraps
-from typing import Any, Callable, TypeVar, cast
+from typing import Any, Callable, Generic, Literal, TypeVar, cast
 
 import pydantic
 
@@ -47,6 +47,36 @@ def return_js_object_from_pydantic_object(
             return to_js(result.model_dump(), dict_converter=Object.fromEntries)
         except ImportError:
             return f(*args, **kwargs)
+
+    return wrapper
+
+
+T = TypeVar("T")
+
+
+class SuccessResponse(pydantic.BaseModel, Generic[T]):
+    model_config = pydantic.ConfigDict(extra="forbid")
+
+    success: Literal[True] = True
+    data: T
+
+
+class ErrorResponse(pydantic.BaseModel):
+    model_config = pydantic.ConfigDict(extra="forbid")
+
+    success: Literal[False] = False
+    message: str
+
+
+def wrap_response_by_handling_exception(
+    f: Callable[..., T]
+) -> Callable[..., SuccessResponse[T] | ErrorResponse]:
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        try:
+            return SuccessResponse(success=True, data=f(*args, **kwargs))
+        except Exception as e:
+            return ErrorResponse(success=False, message=str(e))
 
     return wrapper
 

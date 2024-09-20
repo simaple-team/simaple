@@ -1,6 +1,7 @@
 import { PlayLogResponse } from "@/sdk/models";
 import * as React from "react";
 import { usePySimaple } from "./useSimaple";
+import { match } from 'ts-pattern';
 
 type WorkspaceProviderProps = { children: React.ReactNode };
 
@@ -25,8 +26,12 @@ function useWorkspaceState() {
     if (!isEnvironmentProvided) {
       setPlan(planToRun);
     }
+    
+    const logs = match(pySimaple.runPlan(planToRun))
+      .with({ success: true}, (res) => {return res.data} )
+      .with({ success: false}, (res) => {throw new Error(res.message)} )
+      .otherwise(() => {throw new Error("Unexpected response")})
 
-    const logs = pySimaple.runPlan(planToRun);
     setHistory(logs.flatMap((log) => log.logs));
   }, [pySimaple, plan]);
 

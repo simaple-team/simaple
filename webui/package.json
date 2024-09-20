@@ -37,7 +37,8 @@
     "react-hook-form": "^7.51.5",
     "react-router-dom": "^6.26.2",
     "tailwind-merge": "^2.3.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "ts-pattern": "^5.3.1"
   },
   "devDependencies": {
     "@lezer/generator": "^1.7.1",
