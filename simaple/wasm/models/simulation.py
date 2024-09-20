@@ -24,6 +24,7 @@ class DamageTuple(pydantic.BaseModel):
 
     name: str
     damage: float
+    hit: float
 
 
 class PlayLogResponse(pydantic.BaseModel):

@@ -37,6 +37,7 @@ def _extract_engine_history_as_response(
                 DamageTuple(
                     name=damage_log.name,
                     damage=damage_calculator.get_damage(damage_log),
+                    hit=damage_log.hit,
                 )
                 for damage_log in damage_logs
             ]

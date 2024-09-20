@@ -98,11 +98,16 @@
         "damage": {
           "title": "Damage",
           "type": "number"
+        },
+        "hit": {
+          "title": "Hit",
+          "type": "number"
         }
       },
       "required": [
         "name",
-        "damage"
+        "damage",
+        "hit"
       ],
       "title": "DamageTuple",
       "type": "object"

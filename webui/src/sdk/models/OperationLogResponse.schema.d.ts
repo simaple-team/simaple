@@ -70,6 +70,7 @@ export type Delay = number;
 export type Damage1 = number;
 export type Name5 = string;
 export type Damage2 = number;
+export type Hit1 = number;
 export type Damages = DamageTuple[];
 export type Logs = PlayLogResponse[];
 export type Hash = string;
@@ -205,6 +206,7 @@ export interface StoreCkpt {
 export interface DamageTuple {
   name: Name5;
   damage: Damage2;
+  hit: Hit1;
 }
 /**
  * Operand is an aggregation of meaningful actions.
