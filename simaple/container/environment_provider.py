@@ -4,7 +4,7 @@ from typing import Any, Type
 
 import pydantic
 
-from simaple.container.simulation import SimulationEnvironment
+from simaple.container.simulation import FinalCharacterStat, SimulationEnvironment
 from simaple.core import ActionStat, ExtendedStat, JobType, Stat
 from simaple.data import get_best_ability
 from simaple.data.baseline import get_baseline_gearset
@@ -36,7 +36,7 @@ class MemoizableEnvironment(pydantic.BaseModel):
     jobtype: JobType
     level: int
 
-    character: ExtendedStat
+    character: FinalCharacterStat
 
 
 class EnvironmentProvider(pydantic.BaseModel, metaclass=ABCMeta):
@@ -106,8 +106,8 @@ class MinimalEnvironmentProvider(MemoizableEnvironmentProvider):
 
     weapon_attack_power: int = 0
 
-    def character(self) -> ExtendedStat:
-        return ExtendedStat(
+    def character(self) -> FinalCharacterStat:
+        return FinalCharacterStat(
             stat=self.stat,
             action_stat=self.action_stat,
         )
@@ -318,7 +318,7 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
             gearset,
         )
 
-    def character(self):
+    def character(self) -> FinalCharacterStat:
         preset_optimizer = self.preset_optimizer()
         gearset = self.gearset()
 
@@ -329,9 +329,11 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
             action_stat=preset.get_action_stat(),
         )
         default_extended_stat = self.default_extended_stat()
-        return add_extended_stats(
-            extended_stat_value,
-            default_extended_stat,
+
+        total_extend_stat = extended_stat_value + default_extended_stat
+        return FinalCharacterStat(
+            stat=total_extend_stat.compute_by_level(self.level),
+            action_stat=total_extend_stat.action_stat,
         )
 
 
