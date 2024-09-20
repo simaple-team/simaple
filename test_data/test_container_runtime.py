@@ -20,7 +20,7 @@ def test_actor(environment_provider, jobtype, expected):
     policy = container.builtin_strategy().get_priority_based_policy()
 
     while engine.get_current_viewer()("clock") < 50_000:
-        exec_by_strategy(engine, policy, early_stop=50_000)
+        exec_by_strategy(engine, policy)
 
     report = list(engine.simulation_entries())
 

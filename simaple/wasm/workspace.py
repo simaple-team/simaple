@@ -81,7 +81,7 @@ def runPlan(
     """
     plan을 받아서 environment 필드를 참조해 계산을 수행합니다. environment 필드가 비어있다면, 오류를 발생시킵니다.
     """
-    plan_metadata_dict, op_or_consoles = parse_simaple_runtime(plan.strip())
+    plan_metadata_dict, commands = parse_simaple_runtime(plan.strip())
 
     plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
     if plan_metadata.environment is None or plan_metadata.environment == {}:
@@ -90,8 +90,8 @@ def runPlan(
     simulation_container = plan_metadata.load_container()
     engine = simulation_container.operation_engine()
 
-    for op_or_console in op_or_consoles:
-        engine.exec(op_or_console)
+    for command in commands:
+        engine.exec(command)
 
     return _extract_engine_history_as_response(
         engine, simulation_container.damage_calculator()
@@ -142,7 +142,7 @@ def computeMaximumDealingInterval(
     """
     interval as ms.
     """
-    plan_metadata_dict, op_or_consoles = parse_simaple_runtime(plan.strip())
+    plan_metadata_dict, commands = parse_simaple_runtime(plan.strip())
 
     plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
     if plan_metadata.environment is None or plan_metadata.environment == {}:
@@ -151,8 +151,8 @@ def computeMaximumDealingInterval(
     simulation_container = plan_metadata.load_container()
     engine = simulation_container.operation_engine()
 
-    for op_or_console in op_or_consoles:
-        engine.exec(op_or_console)
+    for command in commands:
+        engine.exec(command)
 
     report = list(engine.simulation_entries())
 

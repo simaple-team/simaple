@@ -27,8 +27,9 @@ class PolicyWrapper:
 
 
 def exec_by_strategy(
-    engine: OperationEngine, policy: StrategyType, early_stop: int = -1
+    engine: OperationEngine,
+    policy: StrategyType,
 ) -> None:
     operations = policy((engine.get_current_viewer(), engine.get_buffered_events()))
     for op in operations:
-        engine.exec_operation(op, early_stop=early_stop)
+        engine.exec(op)

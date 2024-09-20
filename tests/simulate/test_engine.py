@@ -23,7 +23,7 @@ def test_run_engine():
         _simulation_environment_memoizer.compute_environment(_environment_provider)
     )
     engine = container.operation_engine()
-    _, operation_or_consoles = parse_simaple_runtime(
+    _, commands = parse_simaple_runtime(
         """
 author: "Alice"
 provider:
@@ -84,8 +84,8 @@ x4 CAST "플레임 스윕 VI"
 """
     )
 
-    for op_or_console in operation_or_consoles:
-        engine.exec(op_or_console)
+    for command in commands:
+        engine.exec(command)
 
     text_outputs = []
     for operation_log in engine.history():

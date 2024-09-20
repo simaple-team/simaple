@@ -45,7 +45,7 @@ def test_dsl(
     for dsl in dsl_list:
         operations = parse_dsl_to_operations(dsl)
         for op in operations:
-            engine.exec_operation(op)
+            engine.exec(op)
 
     dpm = container.damage_calculator().calculate_dpm(list(engine.simulation_entries()))
     print(f"{engine.get_current_viewer()('clock')} | {dpm:,} ")

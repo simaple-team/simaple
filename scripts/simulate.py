@@ -54,7 +54,7 @@ def _get_status(playlog: PlayLog, entry: SimulationEntry) -> PlayStatus:
 
 def run(plan_file: str):
     with open(plan_file, "r") as f:
-        plan_metadata_dict, operation_or_consoles = parse_simaple_runtime(f.read())
+        plan_metadata_dict, commands = parse_simaple_runtime(f.read())
 
     _simulation_environment_memoizer = PersistentStorageMemoizer()
 
@@ -68,8 +68,8 @@ def run(plan_file: str):
     damage_calculator = simulation_container.damage_calculator()
     damage_share = DamageShareFeature(damage_calculator)
 
-    for op_or_console in operation_or_consoles:
-        operation_log = engine.exec(op_or_console)
+    for command in commands:
+        operation_log = engine.exec(command)
         if operation_log.description:
             print(f"\033[90m[DEBUG_]{operation_log.description}\033[0m")
 
