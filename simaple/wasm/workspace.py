@@ -12,6 +12,7 @@ from simaple.simulate.report.dpm import DamageCalculator
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 from simaple.wasm.base import (
     pyodide_reveal_base_model,
+    pyodide_reveal_base_model_list,
     return_js_object_from_pydantic_list,
     return_js_object_from_pydantic_object,
     wrap_response_by_handling_exception,
@@ -203,6 +204,9 @@ def getInitialPlanFromBaseline(
 def runPlanWithHint(
     previous_plan: str, previous_history: list[OperationLogResponse], plan: str
 ) -> list[OperationLogResponse]:
+    previous_history = pyodide_reveal_base_model_list(
+        previous_history, OperationLogResponse
+    )
     previous_plan_metadata_dict, previous_commands = parse_simaple_runtime(
         previous_plan.strip()
     )
@@ -217,10 +221,13 @@ def runPlanWithHint(
     cache_count: int = 0
 
     for idx, command in enumerate(commands):
+        if len(previous_commands) <= idx:
+            break
+
         previous_command = previous_commands[idx]
         previous_operation_log = history_for_matching[idx]
         if previous_command != previous_operation_log.command:
-            raise ValueError("Operation is not matched. Request rejected")
+            break
 
         if command == previous_command:
             cache_count += 1

@@ -199,21 +199,44 @@ def test_get_initial_plan_from_baseline():
     assert not hasEnvironment(output)
 
 
-def test_run_with_hint(fixture_environment_given_plan):
+@pytest.mark.parametrize(
+    "given, change",
+    [
+        (
+            """CAST "체인 라이트닝 VI"
+ELAPSE 10000
+ELAPSE 10000
+""",
+            """ELAPSE 12345
+CAST "체인 라이트닝 VI"
+CAST "체인 라이트닝 VI"
+ELAPSE 10000
+ELAPSE 10000
+ELAPSE 10000
+""",
+        ),
+        (
+            """CAST "체인 라이트닝 VI"
+ELAPSE 10000
+ELAPSE 10000
+""",
+            """CAST "체인 라이트닝 VI"
+ELAPSE 10000
+ELAPSE 10000
+ELAPSE 10000
+ELAPSE 10000
+ELAPSE 10000
+""",
+        ),
+    ],
+)
+def test_run_with_hint(fixture_environment_given_plan, given, change):
     previous_plan = f"""
 {fixture_environment_given_plan}
-CAST "체인 라이트닝 VI"
-ELAPSE 10000
-ELAPSE 10000
-"""
+{given}"""
     new_plan = f"""
 {fixture_environment_given_plan}
-ELAPSE 12345
-CAST "체인 라이트닝 VI"
-CAST "체인 라이트닝 VI"
-ELAPSE 10000
-ELAPSE 10000
-ELAPSE 10000
+{change}
 """
 
     first_result = runPlan(previous_plan)
