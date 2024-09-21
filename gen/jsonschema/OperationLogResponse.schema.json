@@ -606,6 +606,17 @@
     "index": {
       "title": "Index",
       "type": "integer"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Description"
     }
   },
   "required": [
@@ -613,7 +624,8 @@
     "hash",
     "previous_hash",
     "command",
-    "index"
+    "index",
+    "description"
   ],
   "title": "OperationLogResponse",
   "type": "object"

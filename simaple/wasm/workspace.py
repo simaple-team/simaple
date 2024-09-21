@@ -69,6 +69,7 @@ def _extract_engine_history_as_response(
                 hash=operation_log.hash,
                 previous_hash=operation_log.previous_hash,
                 command=operation_log.command,
+                description=operation_log.description,
             )
         )
 

@@ -83,6 +83,7 @@ export type CommandType = "operation";
 export type Text = string;
 export type CommandType1 = "console";
 export type Index = number;
+export type Description = string | null;
 
 export interface OperationLogResponse {
   logs: Logs;
@@ -90,6 +91,7 @@ export interface OperationLogResponse {
   previous_hash: PreviousHash;
   command: Command;
   index: Index;
+  description: Description;
 }
 export interface PlayLogResponse {
   events: Events;

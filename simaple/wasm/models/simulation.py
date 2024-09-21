@@ -50,3 +50,4 @@ class OperationLogResponse(pydantic.BaseModel):
     previous_hash: str
     command: Command
     index: int
+    description: str | None
