@@ -6,7 +6,7 @@ named as camelCase and all arguments maybe pyodide objects.
 """
 
 from functools import wraps
-from typing import Any, Callable, Type, TypeVar, cast
+from typing import Callable, Type, TypeVar, cast
 
 import pydantic
 
@@ -59,5 +59,5 @@ def pyodide_reveal_base_model(obj: MaybePyodide, model: Type[BaseModelT]) -> Bas
         return obj
 
     # assume given object is pyodide object
-    dict_obj = cast(dict, obj.to_py())
+    dict_obj = cast(dict, obj.to_py())  # type: ignore
     return model.model_validate(dict_obj)
