@@ -30,9 +30,8 @@ def _extract_engine_history_as_response(
     damage_calculator: DamageCalculator,
 ) -> list[OperationLogResponse]:
     responses: list[OperationLogResponse] = []
-    history = engine.history()
 
-    for idx, operation_log in enumerate(history):
+    for idx, operation_log in enumerate(engine.operation_logs()):
         playlog_responses = []
 
         for playlog in operation_log.playlogs:

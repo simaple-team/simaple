@@ -31,8 +31,6 @@ class OperationEngine(Protocol):
 
     def operation_logs(self) -> Generator[OperationLog, None, None]: ...
 
-    def history(self) -> SimulationHistory: ...
-
     def get_simulation_entry(self, playlog: PlayLog) -> SimulationEntry: ...
 
     def rollback(self, idx: int): ...
@@ -68,16 +66,6 @@ class BasicOperationEngine:
     def operation_logs(self) -> Generator[OperationLog, None, None]:
         for operation_log in self._history:
             yield operation_log
-
-    def history(self) -> SimulationHistory:
-        """This returns "Shallow Copy" of SimulationHistory.
-        Be cautious not to modify the returned SimulationHistory.
-        Use this only for read.
-        """
-        return self._history.shallow_copy()
-
-    def load_history(self, saved_history: dict[str, Any]) -> None:
-        self._history.load(saved_history)
 
     def exec(self, command: Command) -> OperationLog:
         match command:
