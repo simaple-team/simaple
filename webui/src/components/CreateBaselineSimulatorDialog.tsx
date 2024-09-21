@@ -25,7 +25,7 @@ import {
 function baselineTemplate(simulationSetting: SimulationSetting) {
   return `---
 author: ""
-provider: 
+provider:
   name: "BaselineEnvironmentProvider"
   data:
     tier: ${simulationSetting.tier}

@@ -1,20 +1,32 @@
 import { PlayLogResponse } from "@/sdk/models";
 import * as React from "react";
 import { usePySimaple } from "./useSimaple";
+import { useLocalStorageValue } from "@react-hookz/web";
 
 type WorkspaceProviderProps = { children: React.ReactNode };
 
 function useWorkspaceState() {
   const { pySimaple } = usePySimaple();
 
-  const [plan, setPlan] = React.useState<string>("");
-  const [history, setHistory] = React.useState<PlayLogResponse[]>([]);
-  const playLog = history[history.length - 1];
+  const { value: storedWorkspace, set: setWorkspace } = useLocalStorageValue<{
+    plan: string;
+    history: PlayLogResponse[];
+  }>("workspace");
 
+  const [plan, setPlan] = React.useState<string>(storedWorkspace?.plan ?? "");
+  const [history, setHistory] = React.useState<PlayLogResponse[]>(
+    storedWorkspace?.history ?? [],
+  );
+
+  const playLog = history[history.length - 1];
   const skillNames = React.useMemo(
     () => (playLog ? Object.keys(playLog.validity_view) : []),
     [playLog],
   );
+
+  React.useEffect(() => {
+    setWorkspace({ plan, history });
+  }, [plan, history, setWorkspace]);
 
   const run = React.useCallback(() => {
     const isEnvironmentProvided = pySimaple.hasEnvironment(plan);
@@ -43,7 +55,6 @@ function useWorkspaceState() {
     plan,
     setPlan,
     history,
-    playLog,
     skillNames,
     run,
     runAsync,

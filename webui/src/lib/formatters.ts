@@ -8,10 +8,6 @@ export function damageFormatter(value: number) {
   return (value / 1000000000000).toFixed(2) + "조";
 }
 
-export function clockFormatter(value: number) {
-  return value + "ms";
-}
-
 export function percentageFormatter(value: number) {
   return (value * 100).toFixed(2) + "%";
 }
