@@ -12,6 +12,7 @@ from simaple.simulate.base import (
     play,
 )
 from simaple.simulate.policy.base import (
+    Command,
     ConsoleText,
     Operation,
     OperationLog,
@@ -25,8 +26,6 @@ from simaple.simulate.report.base import SimulationEntry
 @runtime_checkable
 class OperationEngine(Protocol):
     def get_current_viewer(self) -> ViewerType: ...
-
-    def exec(self, op: Operation, early_stop: int = -1) -> OperationLog: ...
 
     def get_buffered_events(self) -> list[Event]: ...
 
@@ -42,11 +41,11 @@ class OperationEngine(Protocol):
 
     def simulation_entries(self) -> Generator[SimulationEntry, None, None]: ...
 
-    def console(self, console_text: ConsoleText) -> str: ...
-
     def save_history(self) -> dict[str, Any]: ...
 
     def get_viewer(self, playlog: PlayLog) -> ViewerType: ...
+
+    def exec(self, command: Command) -> OperationLog: ...
 
 
 class BasicOperationEngine:
@@ -87,7 +86,51 @@ class BasicOperationEngine:
     def load_history(self, saved_history: dict[str, Any]) -> None:
         self._history.load(saved_history)
 
-    def exec(self, op: Operation, early_stop: int = -1) -> OperationLog:
+    def exec(self, command: Command) -> OperationLog:
+        match command:
+            case Operation(command_type="operation") as op:
+                return self._exec_operation(op)
+            case ConsoleText(command_type="console") as console:
+                return self._console(console)
+
+    def _get_behavior_gen(self, op: Operation) -> BehaviorGenerator:
+        return self._handlers[op.command](op)
+
+    def get_buffered_events(self) -> list[Event]:
+        """
+        Returns buffered event stored in engine.
+        This return value is read-only; thus wrap internal variable with list().
+        """
+        return list(self._buffered_events)
+
+    def get_current_viewer(self) -> ViewerType:
+        store = self._history.current_store()
+        return self._viewset.get_viewer(store)
+
+    def get_simulation_entry(self, playlog: PlayLog) -> SimulationEntry:
+        viewer = self._viewset.get_viewer_from_ckpt(playlog.checkpoint)
+        buff = viewer("buff")
+        return SimulationEntry.build(playlog, buff)
+
+    def get_viewer(self, playlog: PlayLog) -> ViewerType:
+        return self._viewset.get_viewer_from_ckpt(playlog.checkpoint)
+
+    def simulation_entries(self) -> Generator[SimulationEntry, None, None]:
+        for playlog in self._history.playlogs():
+            yield self.get_simulation_entry(playlog)
+
+    def rollback(self, idx: int):
+        self._history.discard_after(idx)
+
+    def _console(self, console_text: ConsoleText) -> OperationLog:
+        output = SimulationProfile(self.get_current_viewer()).inspect(console_text.text)
+        return self._history.commit(
+            console_text,
+            [],
+            description=output,
+        )
+
+    def _exec_operation(self, op: Operation, early_stop: int = -1) -> OperationLog:
         """
         Execute given Operation and return OperationLog.
         """
@@ -124,41 +167,9 @@ class BasicOperationEngine:
         return self._history.commit(
             op,
             playlogs,
+            description=None,
             moved_store=store,
         )
-
-    def _get_behavior_gen(self, op: Operation) -> BehaviorGenerator:
-        return self._handlers[op.command](op)
-
-    def get_buffered_events(self) -> list[Event]:
-        """
-        Returns buffered event stored in engine.
-        This return value is read-only; thus wrap internal variable with list().
-        """
-        return list(self._buffered_events)
-
-    def get_current_viewer(self) -> ViewerType:
-        store = self._history.current_store()
-        return self._viewset.get_viewer(store)
-
-    def get_simulation_entry(self, playlog: PlayLog) -> SimulationEntry:
-        viewer = self._viewset.get_viewer_from_ckpt(playlog.checkpoint)
-        buff = viewer("buff")
-        return SimulationEntry.build(playlog, buff)
-
-    def get_viewer(self, playlog: PlayLog) -> ViewerType:
-        return self._viewset.get_viewer_from_ckpt(playlog.checkpoint)
-
-    def simulation_entries(self) -> Generator[SimulationEntry, None, None]:
-        for playlog in self._history.playlogs():
-            yield self.get_simulation_entry(playlog)
-
-    def rollback(self, idx: int):
-        self._history.discard_after(idx)
-
-    def console(self, console_text: ConsoleText) -> str:
-        output = SimulationProfile(self.get_current_viewer()).inspect(console_text.text)
-        return output
 
 
 assert issubclass(BasicOperationEngine, OperationEngine)

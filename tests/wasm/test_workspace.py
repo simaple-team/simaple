@@ -4,6 +4,7 @@ import yaml
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.simulation import SimulationEnvironment
 from simaple.core import JobType
+from simaple.wasm.base import ErrorResponse, SuccessResponse
 from simaple.wasm.workspace import (
     computeMaximumDealingInterval,
     getInitialPlanFromBaseline,
@@ -83,7 +84,8 @@ ELAPSE 10.0
 ELAPSE 10.0
 ELAPSE 10.0
 CAST "체인 라이트닝 VI"
-ELAPSE 30000.0
+!debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"
+ELAPSE 30000.0  
 """
 
 
@@ -154,13 +156,26 @@ ELAPSE 10.0
 ELAPSE 10.0
 ELAPSE 10.0
 """
-    with pytest.raises(ValueError):
-        runPlan(plan)
+    result = runPlan(plan)
+    match result:
+        case SuccessResponse(success=True, data=_):
+            raise AssertionError("Expected error message")
+        case ErrorResponse(success=False, message=message):
+            assert message == "Environment field is not provided"
+        case _:
+            raise AssertionError("Unexpected return value")
 
 
 def test_run_plan_runs_with_environment(fixture_environment_given_plan):
     result = runPlan(fixture_environment_given_plan)
-    assert len(result) > 0
+
+    match result:
+        case SuccessResponse(success=True, data=data):
+            assert len(data) > 0
+        case ErrorResponse(success=False, message=message):
+            raise AssertionError(f"Error message: {message}")
+        case _:
+            raise AssertionError("Unexpected return value")
 
 
 def test_compute_maximum_dealing_interval(fixture_environment_given_plan):

@@ -1,11 +1,15 @@
 import { loadPyodide } from "pyodide";
 import { OperationLogResponse } from "./models/OperationLogResponse.schema";
+import { SuccessResponse } from "./models/SuccessResponse.schema.manual";
+import { ErrorResponse } from "./models/ErrorResponse.schema";
+
 import { SIMAPLE_FILE_NAME } from "./dependency";
 import { BaselineEnvironmentProvider, SkillComponent } from "./models";
-export interface PySimapleUow {}
 
 export interface PySimaple {
-  runPlan(plan: string): OperationLogResponse[];
+  runPlan(
+    plan: string,
+  ): SuccessResponse<OperationLogResponse[]> | ErrorResponse;
   getInitialPlanFromBaseline(
     baselineEnvironmentProvider: BaselineEnvironmentProvider,
   ): string;

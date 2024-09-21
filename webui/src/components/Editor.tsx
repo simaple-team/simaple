@@ -14,6 +14,7 @@ import * as React from "react";
 import { useWorkspace } from "../hooks/useWorkspace";
 import { parser } from "../parser";
 import CreateBaselineFileDialog from "./CreateBaselineFileDialog";
+import ErrorDialog from "./ErrorDialog";
 
 const parserWithMetadata = parser.configure({
   props: [styleTags({})],
@@ -86,7 +87,14 @@ const myTheme = EditorView.theme({
 
 export function Editor() {
   const [isRunning, setIsRunning] = React.useState(false);
-  const { plan, setPlan, skillNames, runAsync } = useWorkspace();
+  const {
+    plan,
+    setPlan,
+    skillNames,
+    runAsync,
+    errorMessage,
+    clearErrorMessage,
+  } = useWorkspace();
 
   const myCompletions = React.useMemo(
     () => createCompletion(skillNames),
@@ -145,6 +153,12 @@ export function Editor() {
             "계산 (Shift + Enter)"
           )}
         </Button>
+        <ErrorDialog
+          open={!!errorMessage}
+          onOpenChange={(open) => (open ? null : clearErrorMessage())}
+        >
+          {errorMessage}
+        </ErrorDialog>
       </div>
     </div>
   );

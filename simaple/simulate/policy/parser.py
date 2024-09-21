@@ -3,7 +3,7 @@ from typing import cast
 import yaml
 from lark import Discard, Lark, Token, Transformer
 
-from simaple.simulate.policy.base import ConsoleText, Operation
+from simaple.simulate.policy.base import Command, ConsoleText, Operation
 
 __PARSER = Lark(
     r"""
@@ -164,10 +164,10 @@ def parse_dsl_to_operations(dsl: str) -> list[Operation]:
         raise DSLError(str(e) + f" was {dsl}") from e
 
 
-def parse_dsl_to_operations_or_console(dsl: str) -> list[ConsoleText | Operation]:
+def parse_dsl_to_command(dsl: str) -> list[Command]:
     try:
         return cast(
-            list[ConsoleText | Operation],
+            list[Command],
             __OperationTreeTransformer.transform(__PARSER.parse(dsl, start="body")),
         )
     except Exception as e:
@@ -176,8 +176,8 @@ def parse_dsl_to_operations_or_console(dsl: str) -> list[ConsoleText | Operation
 
 def parse_simaple_runtime(
     runtime_text: str,
-) -> tuple[dict, list[Operation | ConsoleText]]:
-    operations = __OperationTreeTransformer.transform(
+) -> tuple[dict, list[Command]]:
+    commands = __OperationTreeTransformer.transform(
         __PARSER.parse(runtime_text.strip(), start="simaple")
     )
-    return cast(tuple[dict, list[Operation | ConsoleText]], operations)
+    return cast(tuple[dict, list[Operation | ConsoleText]], commands)

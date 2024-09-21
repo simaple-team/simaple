@@ -21,6 +21,7 @@ function useWorkspaceState() {
   const [skillComponents, setSkillComponents] = React.useState<
     SkillComponent[]
   >([]);
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const playLog = history[history.length - 1];
   const skillNames = React.useMemo(
@@ -59,18 +60,31 @@ function useWorkspaceState() {
       setPlan(planToRun);
     }
 
-    const logs = pySimaple.runPlan(planToRun);
-    setHistory(logs.flatMap((log) => log.logs));
+    const result = pySimaple.runPlan(planToRun);
+
+    if (!result.success) {
+      setErrorMessage(result.message);
+      return;
+    }
+    setHistory(result.data.flatMap((log) => log.logs));
   }, [pySimaple, plan]);
 
   const runAsync = React.useCallback(() => {
-    return new Promise<void>((resolve) => {
+    return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        run();
-        resolve();
+        try {
+          run();
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
       }, 0);
     });
   }, [run]);
+
+  const clearErrorMessage = React.useCallback(() => {
+    setErrorMessage("");
+  }, []);
 
   const getIconPath = React.useCallback(
     (skillName: string) => {
@@ -92,6 +106,8 @@ function useWorkspaceState() {
     setPlan,
     history,
     skillNames,
+    errorMessage,
+    clearErrorMessage,
     run,
     runAsync,
     getIconPath,

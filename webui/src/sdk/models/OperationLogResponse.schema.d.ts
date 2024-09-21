@@ -75,18 +75,24 @@ export type DamageRecords = DamageRecord[];
 export type Logs = PlayLogResponse[];
 export type Hash = string;
 export type PreviousHash = string;
-export type Command = string;
+export type Command = Operation | ConsoleText;
+export type Command1 = string;
 export type Name6 = string;
 export type Time = number | null;
 export type Expr = string;
+export type CommandType = "operation";
+export type Text = string;
+export type CommandType1 = "console";
 export type Index = number;
+export type Description = string | null;
 
 export interface OperationLogResponse {
   logs: Logs;
   hash: Hash;
   previous_hash: PreviousHash;
-  operation: Operation;
+  command: Command;
   index: Index;
+  description: Description;
 }
 export interface PlayLogResponse {
   events: Events;
@@ -214,8 +220,14 @@ export interface DamageRecord {
  * only operand-to-action translation is possible.
  */
 export interface Operation {
-  command: Command;
+  command: Command1;
   name: Name6;
   time?: Time;
   expr?: Expr;
+  command_type?: CommandType;
+}
+export interface ConsoleText {
+  text: Text;
+  command_type?: CommandType1;
+  [k: string]: unknown;
 }

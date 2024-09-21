@@ -55,6 +55,28 @@
       "title": "Checkpoint",
       "type": "object"
     },
+    "ConsoleText": {
+      "properties": {
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "command_type": {
+          "const": "console",
+          "default": "console",
+          "enum": [
+            "console"
+          ],
+          "title": "Command Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "title": "ConsoleText",
+      "type": "object"
+    },
     "DamageLog": {
       "additionalProperties": false,
       "properties": {
@@ -188,6 +210,15 @@
         "expr": {
           "default": "",
           "title": "Expr",
+          "type": "string"
+        },
+        "command_type": {
+          "const": "operation",
+          "default": "operation",
+          "enum": [
+            "operation"
+          ],
+          "title": "Command Type",
           "type": "string"
         }
       },
@@ -566,20 +597,40 @@
       "title": "Previous Hash",
       "type": "string"
     },
-    "operation": {
-      "$ref": "#/$defs/Operation"
+    "command": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Operation"
+        },
+        {
+          "$ref": "#/$defs/ConsoleText"
+        }
+      ],
+      "title": "Command"
     },
     "index": {
       "title": "Index",
       "type": "integer"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Description"
     }
   },
   "required": [
     "logs",
     "hash",
     "previous_hash",
-    "operation",
-    "index"
+    "command",
+    "index",
+    "description"
   ],
   "title": "OperationLogResponse",
   "type": "object"

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { loadPySimaple, PySimaple, PySimapleUow } from "../sdk";
+import { loadPySimaple, PySimaple } from "../sdk";
 
 type PySimapleProviderProps = { children: React.ReactNode };
 
@@ -61,7 +61,6 @@ function usePySimaple() {
   }
   return context as ReturnType<typeof usePySimapleState> & {
     pySimaple: PySimaple;
-    uow: PySimapleUow;
   };
 }
 

@@ -44,7 +44,7 @@ def test_yes_delay(history_elapse_playlog: PlayLog):
 
 def test_playlog(history_use_playlog, history_elapse_playlog):
     OperationLog(
-        operation=Operation(command="cast", name="test"),
+        command=Operation(command="cast", name="test"),
         playlogs=[
             history_use_playlog,
             history_elapse_playlog,
