@@ -1,4 +1,8 @@
-import { PlayLogResponse, SkillComponent } from "@/sdk/models";
+import {
+  BaselineEnvironmentProvider,
+  PlayLogResponse,
+  SkillComponent,
+} from "@/sdk/models";
 import * as React from "react";
 import { usePySimaple } from "./useSimaple";
 import { useLocalStorageValue } from "@react-hookz/web";
@@ -76,6 +80,13 @@ function useWorkspaceState() {
     [skillComponentMap],
   );
 
+  const getInitialPlanFromBaselineEnvironment = React.useCallback(
+    (baseline: BaselineEnvironmentProvider) => {
+      return pySimaple.getInitialPlanFromBaselineEnvironment(baseline);
+    },
+    [pySimaple],
+  );
+
   return {
     plan,
     setPlan,
@@ -84,6 +95,7 @@ function useWorkspaceState() {
     run,
     runAsync,
     getIconPath,
+    getInitialPlanFromBaselineEnvironment,
   };
 }
 
