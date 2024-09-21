@@ -7,7 +7,7 @@ named as camelCase and all arguments maybe pyodide objects.
 
 import traceback
 from functools import wraps
-from typing import Callable, Generic, Literal, Type, TypeVar, cast
+from typing import Callable, Generic, Literal, Sequence, Type, TypeVar, cast
 
 import pydantic
 
@@ -84,7 +84,6 @@ def wrap_response_by_handling_exception(
 
 
 MaybePyodide = TypeVar("MaybePyodide", pydantic.BaseModel, dict)
-MaybePyodideList = TypeVar("MaybePyodideList", list[pydantic.BaseModel], list[dict])
 
 
 def pyodide_reveal_base_model(obj: MaybePyodide, model: Type[BaseModelT]) -> BaseModelT:
@@ -97,10 +96,10 @@ def pyodide_reveal_base_model(obj: MaybePyodide, model: Type[BaseModelT]) -> Bas
 
 
 def pyodide_reveal_base_model_list(
-    obj_list: MaybePyodideList, model: Type[BaseModelT]
+    obj_list: Sequence[MaybePyodide], model: Type[BaseModelT]
 ) -> list[BaseModelT]:
     if isinstance(obj_list[0], model):
         return obj_list  # type: ignore
 
     # assume given object is pyodide object
-    return [model.model_validate(cast(dict, obj.to_py())) for obj in obj_list]
+    return [model.model_validate(cast(dict, obj.to_py())) for obj in obj_list]  # type: ignore

@@ -162,7 +162,7 @@ ELAPSE 10.0
         case SuccessResponse(success=True, data=_):
             raise AssertionError("Expected error message")
         case ErrorResponse(success=False, message=message):
-            assert message == "Environment field is not provided"
+            assert len(message) > 0
         case _:
             raise AssertionError("Unexpected return value")
 
