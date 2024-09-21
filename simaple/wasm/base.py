@@ -6,8 +6,7 @@ named as camelCase and all arguments maybe pyodide objects.
 """
 
 from functools import wraps
-from typing import Any, Callable, Generic, Literal, TypeVar, cast
-from typing import Callable, Type, TypeVar, cast
+from typing import Callable, Generic, Literal, Type, TypeVar, cast
 
 import pydantic
 
