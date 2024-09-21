@@ -15,3 +15,11 @@ export function percentageFormatter(value: number) {
 export function secFormatter(valueMs: number) {
   return (valueMs / 1000).toFixed(2) + "초";
 }
+
+const intlTimesFormatter = Intl.NumberFormat(undefined, {
+  maximumFractionDigits: 2,
+  minimumFractionDigits: 0,
+});
+export function timesFormatter(value: number) {
+  return intlTimesFormatter.format(value) + "회";
+}
