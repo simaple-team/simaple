@@ -1,1 +1,1 @@
-export const SIMAPLE_FILE_NAME = "simaple-0.0.0dev+local54941b39-py3-none-any.whl"
+export const SIMAPLE_FILE_NAME = "simaple-0.0.0dev+locala97f1aea-py3-none-any.whl"
