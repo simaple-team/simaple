@@ -6,7 +6,7 @@ export interface PySimapleUow {}
 
 export interface PySimaple {
   runPlan(plan: string): OperationLogResponse[];
-  getInitialPlanFromBaselineEnvironment(
+  getInitialPlanFromBaseline(
     baselineEnvironmentProvider: BaselineEnvironmentProvider,
   ): string;
   hasEnvironment(plan: string): boolean;
@@ -39,8 +39,7 @@ export async function loadPySimaple(): Promise<{ pySimaple: PySimaple }> {
   return {
     pySimaple: {
       runPlan: pySimaple.runPlan,
-      getInitialPlanFromBaselineEnvironment:
-        pySimaple.getInitialPlanFromBaselineEnvironment,
+      getInitialPlanFromBaseline: pySimaple.getInitialPlanFromBaseline,
       hasEnvironment: pySimaple.hasEnvironment,
       provideEnvironmentAugmentedPlan:
         pySimaple.provideEnvironmentAugmentedPlan,

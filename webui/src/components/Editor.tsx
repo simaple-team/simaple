@@ -13,7 +13,7 @@ import { Loader2 } from "lucide-react";
 import * as React from "react";
 import { useWorkspace } from "../hooks/useWorkspace";
 import { parser } from "../parser";
-import CreateBaselineSimulatorDialog from "./CreateBaselineSimulatorDialog";
+import CreateBaselineFileDialog from "./CreateBaselineFileDialog";
 
 const parserWithMetadata = parser.configure({
   props: [styleTags({})],
@@ -128,9 +128,9 @@ export function Editor() {
         onChange={(value) => setPlan(value)}
       />
       <div className="flex gap-2 p-2">
-        <CreateBaselineSimulatorDialog>
+        <CreateBaselineFileDialog>
           <Button variant="outline">새 파일</Button>
-        </CreateBaselineSimulatorDialog>
+        </CreateBaselineFileDialog>
         <Button
           disabled={isRunning || plan.trim().length === 0}
           onClick={handleRun}

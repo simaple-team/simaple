@@ -22,10 +22,10 @@ import {
   SelectValue,
 } from "./ui/select";
 
-const CreateBaselineSimulatorDialog: React.FC<{
+const CreateBaselineFileDialog: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const { setPlan, getInitialPlanFromBaselineEnvironment } = useWorkspace();
+  const { setPlan, getInitialPlanFromBaseline } = useWorkspace();
   const { register, getValues, control } = useForm({
     defaultValues: {
       tier: "Legendary",
@@ -51,7 +51,7 @@ const CreateBaselineSimulatorDialog: React.FC<{
 
   function handleSubmit() {
     const values = getValues();
-    const plan = getInitialPlanFromBaselineEnvironment({
+    const plan = getInitialPlanFromBaseline({
       tier: values.tier,
       jobtype: values.jobtype as SimulationSetting["jobtype"],
       level: values.level,
@@ -138,4 +138,4 @@ const CreateBaselineSimulatorDialog: React.FC<{
   );
 };
 
-export default CreateBaselineSimulatorDialog;
+export default CreateBaselineFileDialog;

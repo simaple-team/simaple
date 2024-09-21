@@ -6,7 +6,7 @@ from simaple.container.simulation import SimulationEnvironment
 from simaple.core import JobType
 from simaple.wasm.workspace import (
     computeMaximumDealingInterval,
-    getInitialPlanFromBaselineEnvironment,
+    getInitialPlanFromBaseline,
     hasEnvironment,
     provideEnvironmentAugmentedPlan,
     runPlan,
@@ -77,13 +77,13 @@ environment:
             buff_duration: 195
             cooltime_reduce_rate: 0
 ---
-ELAPSE 30000.0  
+ELAPSE 30000.0
 ELAPSE 10.0
 ELAPSE 10.0
 ELAPSE 10.0
-ELAPSE 10.0  
+ELAPSE 10.0
 CAST "체인 라이트닝 VI"
-ELAPSE 30000.0  
+ELAPSE 30000.0
 """
 
 
@@ -152,7 +152,7 @@ provider:
 ELAPSE 10.0
 ELAPSE 10.0
 ELAPSE 10.0
-ELAPSE 10.0  
+ELAPSE 10.0
 """
     with pytest.raises(ValueError):
         runPlan(plan)
@@ -168,7 +168,7 @@ def test_compute_maximum_dealing_interval(fixture_environment_given_plan):
     assert result.damage > 0
 
 
-def test_get_initial_plan_from_baseline_environment():
+def test_get_initial_plan_from_baseline():
     given_environment = BaselineEnvironmentProvider(
         tier="Legendary",
         jobtype=JobType("archmagetc"),
@@ -178,5 +178,6 @@ def test_get_initial_plan_from_baseline_environment():
         combat_orders_level=1,
     )
 
-    output = getInitialPlanFromBaselineEnvironment(given_environment)
-    assert hasEnvironment(output)
+    output = getInitialPlanFromBaseline(given_environment)
+    assert output.find("CAST")
+    assert not hasEnvironment(output)

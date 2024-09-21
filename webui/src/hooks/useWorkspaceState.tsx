@@ -80,9 +80,9 @@ function useWorkspaceState() {
     [skillComponentMap],
   );
 
-  const getInitialPlanFromBaselineEnvironment = React.useCallback(
+  const getInitialPlanFromBaseline = React.useCallback(
     (baseline: BaselineEnvironmentProvider) => {
-      return pySimaple.getInitialPlanFromBaselineEnvironment(baseline);
+      return pySimaple.getInitialPlanFromBaseline(baseline);
     },
     [pySimaple],
   );
@@ -95,7 +95,7 @@ function useWorkspaceState() {
     run,
     runAsync,
     getIconPath,
-    getInitialPlanFromBaselineEnvironment,
+    getInitialPlanFromBaseline,
   };
 }
 

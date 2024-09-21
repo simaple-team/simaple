@@ -126,8 +126,9 @@ def provideEnvironmentAugmentedPlan(plan: str) -> str:
 
     simulation_environment = metadata.provider.get_simulation_environment()
     metadata.environment = simulation_environment
-    _, original_operations = plan.split("\n---")[0], "\n---".join(
-        plan.split("\n---")[1:]
+    _, original_operations = (
+        plan.split("\n---")[0],
+        "\n---".join(plan.split("\n---")[1:]),
     )
 
     augmented_metadata = yaml.safe_dump(
@@ -176,11 +177,11 @@ def computeMaximumDealingInterval(
     return MaximumDealingIntervalResult(damage=damage, start=_start, end=_end)
 
 
-def getInitialPlanFromBaselineEnvironment(
+def getInitialPlanFromBaseline(
     environment_provider: BaselineEnvironmentProvider,
 ) -> str:
     """
-    baseline environment을 받아서 plan을 생성합니다.
+    baseline environment provider를 받아서 example plan을 생성합니다.
     """
     environment_provider = pyodide_reveal_base_model(
         environment_provider, BaselineEnvironmentProvider
@@ -194,11 +195,9 @@ def getInitialPlanFromBaselineEnvironment(
     }
     metadata = PlanMetadata.model_validate(metadata_dict)
 
-    simulation_environment = environment_provider.get_simulation_environment()
-    metadata.environment = simulation_environment
-
-    _, original_operations = base_plan.split("\n---")[0], "\n---".join(
-        base_plan.split("\n---")[1:]
+    _, original_operations = (
+        base_plan.split("\n---")[0],
+        "\n---".join(base_plan.split("\n---")[1:]),
     )
 
     augmented_metadata = yaml.safe_dump(
