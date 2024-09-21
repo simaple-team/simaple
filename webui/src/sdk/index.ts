@@ -3,15 +3,13 @@ import { OperationLogResponse } from "./models/OperationLogResponse.schema";
 import { SuccessResponse } from "./models/SuccessResponse.schema.manual";
 import { ErrorResponse } from "./models/ErrorResponse.schema";
 
-
-export interface PySimapleUow {}
-
 import { SIMAPLE_FILE_NAME } from "./dependency";
 import { BaselineEnvironmentProvider, SkillComponent } from "./models";
-export interface PySimapleUow {}
 
 export interface PySimaple {
-  runPlan(plan: string): SuccessResponse<OperationLogResponse[]> | ErrorResponse;
+  runPlan(
+    plan: string,
+  ): SuccessResponse<OperationLogResponse[]> | ErrorResponse;
   getInitialPlanFromBaseline(
     baselineEnvironmentProvider: BaselineEnvironmentProvider,
   ): string;

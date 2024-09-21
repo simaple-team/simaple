@@ -3,7 +3,6 @@
   "properties": {
     "success": {
       "const": false,
-      "default": false,
       "enum": [
         false
       ],
@@ -16,6 +15,7 @@
     }
   },
   "required": [
+    "success",
     "message"
   ],
   "title": "ErrorResponse",

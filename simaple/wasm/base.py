@@ -1,7 +1,7 @@
 """
 Collection of functions that are used in the WASM interface.
 
-These functions are for Javascript-call only; all methods may 
+These functions are for Javascript-call only; all methods may
 named as camelCase and all arguments maybe pyodide objects.
 """
 
@@ -16,7 +16,7 @@ CallableArgT = TypeVar("CallableArgT", bound=list)
 
 
 def return_js_object_from_pydantic_list(
-    f: Callable[..., list[BaseModelT]]
+    f: Callable[..., list[BaseModelT]],
 ) -> Callable[..., list[BaseModelT]]:
     @wraps(f)
     def wrapper(*args, **kwargs):
@@ -35,7 +35,7 @@ def return_js_object_from_pydantic_list(
 
 
 def return_js_object_from_pydantic_object(
-    f: Callable[..., BaseModelT]
+    f: Callable[..., BaseModelT],
 ) -> Callable[..., BaseModelT]:
     @wraps(f)
     def wrapper(*args, **kwargs):
@@ -57,19 +57,19 @@ T = TypeVar("T")
 class SuccessResponse(pydantic.BaseModel, Generic[T]):
     model_config = pydantic.ConfigDict(extra="forbid")
 
-    success: Literal[True] = True
+    success: Literal[True]
     data: T
 
 
 class ErrorResponse(pydantic.BaseModel):
     model_config = pydantic.ConfigDict(extra="forbid")
 
-    success: Literal[False] = False
+    success: Literal[False]
     message: str
 
 
 def wrap_response_by_handling_exception(
-    f: Callable[..., T]
+    f: Callable[..., T],
 ) -> Callable[..., SuccessResponse[T] | ErrorResponse]:
     @wraps(f)
     def wrapper(*args, **kwargs):

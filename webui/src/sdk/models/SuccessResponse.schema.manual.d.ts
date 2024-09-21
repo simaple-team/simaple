@@ -7,6 +7,6 @@
 export type Success = true;
 
 export interface SuccessResponse<Type> {
-  success?: Success;
+  success: Success;
   data: Type;
 }

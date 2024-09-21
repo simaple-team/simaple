@@ -9,6 +9,6 @@ export type Success = false;
 export type Message = string;
 
 export interface ErrorResponse {
-  success?: Success;
+  success: Success;
   message: Message;
 }
