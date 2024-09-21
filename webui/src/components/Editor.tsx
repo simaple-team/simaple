@@ -142,7 +142,7 @@ export function Editor() {
               계산 중...
             </>
           ) : (
-            "계산"
+            "계산 (Shift + Enter)"
           )}
         </Button>
       </div>
