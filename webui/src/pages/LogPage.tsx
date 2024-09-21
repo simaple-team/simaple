@@ -168,8 +168,9 @@ const LogPage: React.FC = () => {
               <TableHead>데미지</TableHead>
             </TableHeader>
             <TableBody>
-              {reversedHistory.map((playLog) => (
+              {reversedHistory.map((playLog, i) => (
                 <LogRow
+                  key={i}
                   playLog={playLog}
                   onSelect={setSelectedLog}
                   isSelected={selectedLog === playLog}

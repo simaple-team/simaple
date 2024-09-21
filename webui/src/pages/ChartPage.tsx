@@ -1,28 +1,31 @@
-import ChartSettingDialog from "@/components/ChartSettingDialog";
-import { Button } from "@/components/ui/button";
-import { usePreference } from "@/hooks/usePreference";
+import { CumulativeDamageChart } from "@/components/CumulativeDamageChart";
+import { IntervalDamageChart } from "@/components/IntervalDamageChart";
+import { StackChart } from "@/components/StackChart";
+import UptimeChart from "@/components/UptimeChart";
 import { useWorkspace } from "@/hooks/useWorkspace";
 import * as React from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import Chart from "../components/Chart";
 
 const ChartPage: React.FC = () => {
   const { history } = useWorkspace();
-  const { chartSetting } = usePreference();
+
+  if (history.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        데이터가 없습니다.
+      </div>
+    );
+  }
 
   return (
-    <div className="grow">
+    <div className="grid grid-cols-1 gap-4 p-4 grow overflow-y-scroll">
       <ErrorBoundary
         fallbackRender={({ error }) => <div>Error: {error.message}</div>}
       >
-        <ChartSettingDialog>
-          <Button>차트 설정</Button>
-        </ChartSettingDialog>
-        <Chart
-          key={JSON.stringify(chartSetting)}
-          history={history}
-          setting={chartSetting}
-        />
+        <CumulativeDamageChart logs={history} />
+        <IntervalDamageChart logs={history} />
+        <UptimeChart logs={history} />
+        <StackChart logs={history} />
       </ErrorBoundary>
     </div>
   );

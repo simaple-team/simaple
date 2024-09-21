@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/table";
 import { useWorkspace } from "@/hooks/useWorkspace";
 import { damageFormatter, percentageFormatter } from "@/lib/formatters";
-import { getBattleStatistics } from "@/statistics";
+import { getBattleStatistics } from "@/lib/statistics";
 import { useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
