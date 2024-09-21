@@ -178,5 +178,5 @@ def test_get_initial_plan_from_baseline_environment():
         combat_orders_level=1,
     )
 
-    output = getInitialPlanFromBaselineEnvironment(given_environment.model_dump())
+    output = getInitialPlanFromBaselineEnvironment(given_environment)
     assert hasEnvironment(output)

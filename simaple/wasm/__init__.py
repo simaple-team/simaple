@@ -1,5 +1,6 @@
 from simaple.wasm.workspace import (
     computeMaximumDealingInterval,
+    getInitialPlanFromBaselineEnvironment,
     hasEnvironment,
     provideEnvironmentAugmentedPlan,
     runPlan,
@@ -10,4 +11,5 @@ __all__ = [
     "hasEnvironment",
     "computeMaximumDealingInterval",
     "runPlan",
+    "getInitialPlanFromBaselineEnvironment",
 ]

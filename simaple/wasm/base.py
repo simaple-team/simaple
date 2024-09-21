@@ -6,7 +6,7 @@ named as camelCase and all arguments maybe pyodide objects.
 """
 
 from functools import wraps
-from typing import Any, Callable, TypeVar, cast
+from typing import Any, Callable, Type, TypeVar, cast
 
 import pydantic
 
@@ -51,12 +51,13 @@ def return_js_object_from_pydantic_object(
     return wrapper
 
 
-MaybePyodide = TypeVar("MaybePyodide", dict, Any)
+MaybePyodide = TypeVar("MaybePyodide", pydantic.BaseModel, dict)
 
 
-def pyodide_reveal_dict(obj: MaybePyodide) -> dict:
-    if isinstance(obj, dict):
+def pyodide_reveal_base_model(obj: MaybePyodide, model: Type[BaseModelT]) -> BaseModelT:
+    if isinstance(obj, model):
         return obj
 
     # assume given object is pyodide object
-    return cast(dict, obj.to_py())
+    dict_obj = cast(dict, obj.to_py())
+    return model.model_validate(dict_obj)

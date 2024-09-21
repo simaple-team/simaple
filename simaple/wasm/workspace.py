@@ -13,7 +13,7 @@ from simaple.simulate.report.base import DamageLog
 from simaple.simulate.report.dpm import DamageCalculator
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 from simaple.wasm.base import (
-    pyodide_reveal_dict,
+    pyodide_reveal_base_model,
     return_js_object_from_pydantic_list,
     return_js_object_from_pydantic_object,
 )
@@ -177,13 +177,13 @@ def computeMaximumDealingInterval(
 
 
 def getInitialPlanFromBaselineEnvironment(
-    environment_provider_dict: dict,
+    environment_provider: BaselineEnvironmentProvider,
 ) -> str:
     """
     baseline environment을 받아서 plan을 생성합니다.
     """
-    environment_provider = BaselineEnvironmentProvider.model_validate(
-        pyodide_reveal_dict(environment_provider_dict)
+    environment_provider = pyodide_reveal_base_model(
+        environment_provider, BaselineEnvironmentProvider
     )
     base_plan = get_example_plan(environment_provider.jobtype)
     metadata_dict, _ = parse_simaple_runtime(base_plan.strip())
