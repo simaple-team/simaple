@@ -1,4 +1,4 @@
-import { SimulationSetting } from "@/sdk/models";
+import { JobType } from "@/sdk/models";
 import { Label } from "@radix-ui/react-label";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -53,7 +53,7 @@ const CreateBaselineFileDialog: React.FC<{
     const values = getValues();
     const plan = getInitialPlanFromBaseline({
       tier: values.tier,
-      jobtype: values.jobtype as SimulationSetting["jobtype"],
+      jobtype: values.jobtype as JobType,
       level: values.level,
       use_doping: values.use_doping,
       passive_skill_level: values.passive_skill_level,
