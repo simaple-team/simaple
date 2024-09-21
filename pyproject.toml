@@ -13,7 +13,7 @@ with open(os.path.join("dist", builtin_whl_fname), 'rb', buffering=0) as f:
         h.update(mv[:n])
     digest = h.hexdigest()[:8]
 
-output_whl_file_name = f"simaple-0.0.0dev{digest}-py3-none-any.whl"
+output_whl_file_name = f"simaple-0.0.0dev+local{digest}-py3-none-any.whl"
 
 shutil.copy(os.path.join("dist", builtin_whl_fname), os.path.join("webui/public", output_whl_file_name))
 with open("webui/public/simaple_dependency.ts", 'w') as f:
