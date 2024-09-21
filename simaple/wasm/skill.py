@@ -1,22 +1,8 @@
 from simaple.data.jobs.builtin import get_kms_jobs_repository
-from simaple.spec.spec import Spec
-from simaple.wasm.base import (
-    return_js_object_from_pydantic_list,
-    return_js_object_from_pydantic_object,
-)
+from simaple.simulate.component.base import Component
 
 
-@return_js_object_from_pydantic_list
-def getAllSkillSpec() -> list[Spec]:
-    skill_specs = get_kms_jobs_repository().get_all()
+def getAllComponent() -> list[Component]:
+    skill_specs = get_kms_jobs_repository().get_all(kind="Component")
 
-    return skill_specs
-
-
-@return_js_object_from_pydantic_object
-def getSkillSpec(skill_id: str) -> Spec:
-    skill_spec = get_kms_jobs_repository().get(id=skill_id)
-    if skill_spec is None:
-        raise ValueError(f"Skill {skill_id} not found")
-
-    return skill_spec
+    return [skill_spec.data for skill_spec in skill_specs]

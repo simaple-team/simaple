@@ -1,3 +1,4 @@
+from simaple.wasm.skill import getAllComponent
 from simaple.wasm.workspace import (
     computeMaximumDealingInterval,
     getInitialPlanFromBaselineEnvironment,
@@ -12,4 +13,5 @@ __all__ = [
     "computeMaximumDealingInterval",
     "runPlan",
     "getInitialPlanFromBaselineEnvironment",
+    "getAllComponent",
 ]

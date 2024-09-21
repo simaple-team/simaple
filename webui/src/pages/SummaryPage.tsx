@@ -23,7 +23,7 @@ import { getBattleStatistics } from "@/lib/statistics";
 import { useMemo, useState } from "react";
 
 export function SummaryPage() {
-  const { history } = useWorkspace();
+  const { history, getIconPath } = useWorkspace();
   const [sortBy, setSortBy] = useState("totalDamage");
   const [order, setOrder] = useState("desc");
 
@@ -50,7 +50,7 @@ export function SummaryPage() {
   );
 
   return (
-    <div className="flex flex-col grow p-4 overflow-y-scroll">
+    <div className="flex flex-col grow gap-2 p-4 overflow-y-scroll">
       <div className="flex items-center gap-2">
         <Select value={sortBy} onValueChange={setSortBy}>
           <SelectTrigger className="w-60">
@@ -91,7 +91,9 @@ export function SummaryPage() {
               key={stats.name}
               className={index % 2 === 0 ? "bg-gray-100" : ""}
             >
-              <TableCell>{stats.name}</TableCell>
+              <TableCell>
+                <img src={getIconPath(stats.name)} /> {stats.name}
+              </TableCell>
               <TableCell>{damageFormatter(stats.totalDamage)}</TableCell>
               <TableCell>{percentageFormatter(stats.damageShare)}</TableCell>
               <TableCell>{damageFormatter(stats.damagePerSecond)}</TableCell>
