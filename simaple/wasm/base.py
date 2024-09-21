@@ -5,6 +5,7 @@ These functions are for Javascript-call only; all methods may
 named as camelCase and all arguments maybe pyodide objects.
 """
 
+import traceback
 from functools import wraps
 from typing import Callable, Generic, Literal, Type, TypeVar, cast
 
@@ -76,12 +77,14 @@ def wrap_response_by_handling_exception(
         try:
             return SuccessResponse(success=True, data=f(*args, **kwargs))
         except Exception as e:
-            return ErrorResponse(success=False, message=str(e))
+            e.__traceback__
+            return ErrorResponse(success=False, message=str(traceback.format_exc()))
 
     return wrapper
 
 
 MaybePyodide = TypeVar("MaybePyodide", pydantic.BaseModel, dict)
+MaybePyodideList = TypeVar("MaybePyodideList", list[pydantic.BaseModel], list[dict])
 
 
 def pyodide_reveal_base_model(obj: MaybePyodide, model: Type[BaseModelT]) -> BaseModelT:
@@ -91,3 +94,13 @@ def pyodide_reveal_base_model(obj: MaybePyodide, model: Type[BaseModelT]) -> Bas
     # assume given object is pyodide object
     dict_obj = cast(dict, obj.to_py())  # type: ignore
     return model.model_validate(dict_obj)
+
+
+def pyodide_reveal_base_model_list(
+    obj_list: MaybePyodideList, model: Type[BaseModelT]
+) -> list[BaseModelT]:
+    if isinstance(obj_list[0], model):
+        return obj_list  # type: ignore
+
+    # assume given object is pyodide object
+    return [model.model_validate(cast(dict, obj.to_py())) for obj in obj_list]
