@@ -1,9 +1,12 @@
 import pytest
 import yaml
 
+from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.simulation import SimulationEnvironment
+from simaple.core import JobType
 from simaple.wasm.workspace import (
     computeMaximumDealingInterval,
+    getInitialPlanFromBaselineEnvironment,
     hasEnvironment,
     provideEnvironmentAugmentedPlan,
     runPlan,
@@ -163,3 +166,17 @@ def test_run_plan_runs_with_environment(fixture_environment_given_plan):
 def test_compute_maximum_dealing_interval(fixture_environment_given_plan):
     result = computeMaximumDealingInterval(fixture_environment_given_plan, 30000)
     assert result.damage > 0
+
+
+def test_get_initial_plan_from_baseline_environment():
+    given_environment = BaselineEnvironmentProvider(
+        tier="Legendary",
+        jobtype=JobType("archmagetc"),
+        level=270,
+        artifact_level=0,
+        passive_skill_level=0,
+        combat_orders_level=1,
+    )
+
+    output = getInitialPlanFromBaselineEnvironment(given_environment.model_dump())
+    assert hasEnvironment(output)
