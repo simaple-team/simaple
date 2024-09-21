@@ -196,3 +196,54 @@ def getInitialPlanFromBaseline(
         json.loads(metadata.model_dump_json()), indent=2
     )
     return f"---\n{augmented_metadata}\n---\n{original_operations}"
+
+
+@wrap_response_by_handling_exception
+@return_js_object_from_pydantic_list
+def runPlanWithHint(
+    previous_plan: str, previous_history: list[OperationLogResponse], plan: str
+) -> list[OperationLogResponse]:
+    previous_plan_metadata_dict, previous_commands = parse_simaple_runtime(
+        previous_plan.strip()
+    )
+    plan_metadata_dict, commands = parse_simaple_runtime(plan.strip())
+
+    if plan_metadata_dict != previous_plan_metadata_dict:
+        raise ValueError("Plan metadata is not matched. Request rejected")
+
+    # Since first operation in history is always "init", we skip this for retrieval;
+    history_for_matching = previous_history[1:]
+
+    cache_count: int = 0
+
+    for idx, command in enumerate(commands):
+        previous_command = previous_commands[idx]
+        previous_operation_log = history_for_matching[idx]
+        if previous_command != previous_operation_log.command:
+            raise ValueError("Operation is not matched. Request rejected")
+
+        if command == previous_command:
+            cache_count += 1
+            continue
+        break
+
+    plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
+
+    simulation_container = plan_metadata.load_container()
+
+    engine = simulation_container.operation_engine()
+    engine.reload(
+        [
+            operation_log_response.restore_operation_log()
+            for operation_log_response in previous_history[: cache_count + 1]
+        ]
+    )
+
+    for command in commands[cache_count:]:
+        engine.exec(command)
+
+    new_operation_logs = _extract_engine_history_as_response(
+        engine, simulation_container.damage_calculator()
+    )
+
+    return new_operation_logs

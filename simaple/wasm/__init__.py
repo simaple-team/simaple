@@ -5,6 +5,7 @@ from simaple.wasm.workspace import (
     hasEnvironment,
     provideEnvironmentAugmentedPlan,
     runPlan,
+    runPlanWithHint,
 )
 
 __all__ = [
@@ -14,4 +15,5 @@ __all__ = [
     "runPlan",
     "getInitialPlanFromBaseline",
     "getAllComponent",
+    "runPlanWithHint",
 ]

@@ -1,4 +1,4 @@
-from typing import Any, Callable, Generator, Protocol, runtime_checkable
+from typing import Callable, Generator, Protocol, runtime_checkable
 
 from simaple.simulate.base import (
     AddressedStore,
@@ -41,6 +41,8 @@ class OperationEngine(Protocol):
 
     def exec(self, command: Command) -> OperationLog: ...
 
+    def reload(self, previous_operation_logs: list[OperationLog]) -> None: ...
+
 
 class BasicOperationEngine:
     """
@@ -66,6 +68,9 @@ class BasicOperationEngine:
     def operation_logs(self) -> Generator[OperationLog, None, None]:
         for operation_log in self._history:
             yield operation_log
+
+    def reload(self, previous_operation_logs: list[OperationLog]) -> None:
+        self._history = SimulationHistory(logs=previous_operation_logs)
 
     def exec(self, command: Command) -> OperationLog:
         match command:
