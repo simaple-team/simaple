@@ -1,0 +1,162 @@
+{
+  "$defs": {
+    "JobType": {
+      "enum": [
+        "hero",
+        "darkknight",
+        "paladin",
+        "bishop",
+        "archmagefb",
+        "archmagetc",
+        "nightlord",
+        "shadower",
+        "dualblade",
+        "bowmaster",
+        "sniper",
+        "pathfinder",
+        "corsair",
+        "buccaneer",
+        "cannoneer",
+        "soulmaster",
+        "flamewizard",
+        "windbreaker",
+        "nightwalker",
+        "striker",
+        "mihile",
+        "demonavenger",
+        "demonslayer",
+        "battlemage",
+        "wildhunter",
+        "mechanic",
+        "zenon",
+        "blaster",
+        "evan",
+        "luminous",
+        "mercedes",
+        "phantom",
+        "eunwol",
+        "aran",
+        "kaiser",
+        "kain",
+        "cadena",
+        "angelicbuster",
+        "adele",
+        "illium",
+        "ark",
+        "lara",
+        "hoyoung",
+        "khali",
+        "zero",
+        "kinesis",
+        "virtual_maplestory_m"
+      ],
+      "title": "JobType",
+      "type": "string"
+    }
+  },
+  "properties": {
+    "tier": {
+      "title": "Tier",
+      "type": "string"
+    },
+    "union_block_count": {
+      "default": 37,
+      "title": "Union Block Count",
+      "type": "integer"
+    },
+    "link_count": {
+      "default": 13,
+      "title": "Link Count",
+      "type": "integer"
+    },
+    "artifact_level": {
+      "title": "Artifact Level",
+      "type": "integer"
+    },
+    "propensity_level": {
+      "default": 100,
+      "title": "Propensity Level",
+      "type": "integer"
+    },
+    "jobtype": {
+      "$ref": "#/$defs/JobType"
+    },
+    "level": {
+      "title": "Level",
+      "type": "integer"
+    },
+    "passive_skill_level": {
+      "title": "Passive Skill Level",
+      "type": "integer"
+    },
+    "combat_orders_level": {
+      "title": "Combat Orders Level",
+      "type": "integer"
+    },
+    "weapon_pure_attack_power": {
+      "default": 0,
+      "title": "Weapon Pure Attack Power",
+      "type": "integer"
+    },
+    "use_doping": {
+      "default": true,
+      "title": "Use Doping",
+      "type": "boolean"
+    },
+    "armor": {
+      "default": 300,
+      "title": "Armor",
+      "type": "integer"
+    },
+    "mob_level": {
+      "default": 265,
+      "title": "Mob Level",
+      "type": "integer"
+    },
+    "force_advantage": {
+      "default": 1.0,
+      "title": "Force Advantage",
+      "type": "number"
+    },
+    "v_skill_level": {
+      "default": 30,
+      "title": "V Skill Level",
+      "type": "integer"
+    },
+    "hexa_skill_level": {
+      "default": 1,
+      "title": "Hexa Skill Level",
+      "type": "integer"
+    },
+    "hexa_mastery_level": {
+      "default": 1,
+      "title": "Hexa Mastery Level",
+      "type": "integer"
+    },
+    "v_improvements_level": {
+      "default": 60,
+      "title": "V Improvements Level",
+      "type": "integer"
+    },
+    "hexa_improvements_level": {
+      "default": 0,
+      "title": "Hexa Improvements Level",
+      "type": "integer"
+    },
+    "weapon_attack_power": {
+      "default": 0,
+      "title": "Weapon Attack Power",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "tier",
+    "artifact_level",
+    "jobtype",
+    "level",
+    "passive_skill_level",
+    "combat_orders_level"
+  ],
+  "title": "BaselineEnvironmentProvider",
+  "type": "object"
+}
