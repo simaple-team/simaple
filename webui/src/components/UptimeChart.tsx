@@ -137,19 +137,13 @@ export function useChart(
       right: 32,
     },
     tooltip: {
-      trigger: "axis",
-      formatter: (params: any) => {
-        return params
-          .map(
-            (x: {
-              color: string;
-              name: string;
-              value: [number, number, number];
-            }) => {
-              return `<span style="display:inline-block;margin-right:4px;border-radius:2px;width:10px;height:10px;background-color:${x.color};"></span><span class="font-mono font-medium tabular-nums text-xs text-foreground">${x.name}: ${secFormatter(x.value[1])} ~ ${secFormatter(x.value[2])}</span>`;
-            },
-          )
-          .join("<br>");
+      trigger: "item",
+      formatter: (params) => {
+        if (Array.isArray(params)) {
+          throw new Error("Expected single value");
+        }
+        const values = params.value as [number, number, number];
+        return `<span style="display:inline-block;margin-right:4px;border-radius:2px;width:10px;height:10px;background-color:${params.color};"></span><span class="font-mono font-medium tabular-nums text-xs text-foreground">${params.name}: ${secFormatter(values[1])} ~ ${secFormatter(values[2])}</span>`;
       },
       axisPointer: {
         type: "cross",

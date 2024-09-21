@@ -71,7 +71,10 @@ export function CumulativeDamageChart({ logs }: CumulativeDamageChartProps) {
                       </div>
                     </div>
                   )}
-                  hideLabel
+                  labelFormatter={(_, items) =>
+                    items[0]?.payload.clock &&
+                    secFormatter(items[0].payload.clock)
+                  }
                 />
               }
             />
