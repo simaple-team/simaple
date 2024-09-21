@@ -4,10 +4,17 @@ shell = """
 import hashlib, os, shutil
 
 builtin_whl_fname = [ fname for fname in os.listdir("dist") if fname.endswith(".whl") ][-1]
+h  = hashlib.sha256()
+b  = bytearray(128*1024)
+mv = memoryview(b)
+
 with open(os.path.join("dist", builtin_whl_fname), 'rb', buffering=0) as f:
-    digest = hashlib.file_digest(f, 'sha256').hexdigest()[:8]
+    while n := f.readinto(mv):
+        h.update(mv[:n])
+    digest = h.hexdigest()[:8]
 
 output_whl_file_name = f"simaple-0.0.0.{digest}-py3-none-any.whl"
+
 shutil.copy(os.path.join("dist", builtin_whl_fname), os.path.join("webui/public", output_whl_file_name))
 with open("webui/public/simaple_dependency.ts", 'w') as f:
     f.write(f'export const SIMAPLE_FILE_NAME = "{output_whl_file_name}"')
@@ -21,10 +28,9 @@ formatting-check = ["_black-check", "_isort-check"]
 
 _build = "pyproject-build"
 
-_set_build_version = """
-python -c "import os; os.system('find \\'./simaple\\' -type f -name \\'*.py\\' -print0 | xargs -0 shasum | sort | shasum > webui/public/version.txt')"
-"""
-export-whl = ["_build", "setup-webui-whl"]
+
+_clean_dist_build = "rm -rf dist/ webui/public/*.whl"
+export-whl = ["_clean_dist_build", "_build", "setup-webui-whl"]
 gen-schema = "python scripts/build/generate_json_schema_for_wasm.py"
 
 _black = "black simaple tests scripts"

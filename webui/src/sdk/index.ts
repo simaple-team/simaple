@@ -1,6 +1,6 @@
 import { loadPyodide } from "pyodide";
 import { OperationLogResponse } from "./models/OperationLogResponse.schema";
-
+import { SIMAPLE_FILE_NAME } from "../../public/simaple_dependency";
 export interface PySimapleUow {}
 
 export interface PySimaple {
@@ -22,7 +22,7 @@ export async function loadPySimaple() {
   await micropip.install(["loguru", "lark", "numpy", "pyyaml", "pyfunctional"]);
 
   await micropip.install(
-    `${window.location.origin}/simaple-0.4.2-py3-none-any.whl`,
+    `${window.location.origin}/${SIMAPLE_FILE_NAME}`,
     false,
     false,
   );
