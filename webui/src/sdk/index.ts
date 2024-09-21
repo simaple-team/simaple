@@ -1,6 +1,6 @@
 import { loadPyodide } from "pyodide";
 import { OperationLogResponse } from "./models/OperationLogResponse.schema";
-import { SIMAPLE_FILE_NAME } from "../../public/simaple_dependency";
+import { SIMAPLE_FILE_NAME } from "./dependency";
 export interface PySimapleUow {}
 
 export interface PySimaple {
