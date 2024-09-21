@@ -10,13 +10,10 @@ function useWorkspaceState() {
 
   const { value: storedWorkspace, set: setWorkspace } = useLocalStorageValue<{
     plan: string;
-    history: PlayLogResponse[];
   }>("workspace");
 
   const [plan, setPlan] = React.useState<string>(storedWorkspace?.plan ?? "");
-  const [history, setHistory] = React.useState<PlayLogResponse[]>(
-    storedWorkspace?.history ?? [],
-  );
+  const [history, setHistory] = React.useState<PlayLogResponse[]>([]);
 
   const playLog = history[history.length - 1];
   const skillNames = React.useMemo(
@@ -25,8 +22,8 @@ function useWorkspaceState() {
   );
 
   React.useEffect(() => {
-    setWorkspace({ plan, history });
-  }, [plan, history, setWorkspace]);
+    setWorkspace({ plan });
+  }, [plan, setWorkspace]);
 
   const run = React.useCallback(() => {
     const isEnvironmentProvided = pySimaple.hasEnvironment(plan);
