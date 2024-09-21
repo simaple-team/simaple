@@ -3,9 +3,9 @@ from __future__ import annotations
 import pydantic
 
 from simaple.core.base import Stat
-from simaple.simulate.base import Action, Checkpoint, Event
+from simaple.simulate.base import Action, Checkpoint, Event, PlayLog
 from simaple.simulate.component.view import Running, Validity
-from simaple.simulate.policy.base import Command
+from simaple.simulate.policy.base import Command, OperationLog
 from simaple.simulate.report.base import SimulationEntry
 
 
@@ -42,6 +42,14 @@ class PlayLogResponse(pydantic.BaseModel):
     total_damage: float
     damage_records: list[DamageRecord]
 
+    def restore_playlog(self) -> PlayLog:
+        return PlayLog(
+            events=self.events,
+            clock=self.clock,
+            action=self.action,
+            checkpoint=self.checkpoint,
+        )
+
 
 class OperationLogResponse(pydantic.BaseModel):
     model_config = pydantic.ConfigDict(extra="forbid")
@@ -52,3 +60,11 @@ class OperationLogResponse(pydantic.BaseModel):
     command: Command
     index: int
     description: str | None
+
+    def restore_operation_log(self) -> OperationLog:
+        return OperationLog(
+            command=self.command,
+            playlogs=[log.restore_playlog() for log in self.logs],
+            previous_hash=self.previous_hash,
+            description=self.description,
+        )

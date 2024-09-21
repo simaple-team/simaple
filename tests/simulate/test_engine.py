@@ -88,7 +88,7 @@ x4 CAST "플레임 스윕 VI"
         engine.exec(command)
 
     text_outputs = []
-    for operation_log in engine.history():
+    for operation_log in engine.operation_logs():
         if operation_log.description is not None:
             text_outputs.append(operation_log.description)
 
