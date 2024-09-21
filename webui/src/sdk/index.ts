@@ -1,15 +1,17 @@
 import { loadPyodide } from "pyodide";
 import { OperationLogResponse } from "./models/OperationLogResponse.schema";
 import { SIMAPLE_FILE_NAME } from "./dependency";
+import { SkillComponent } from "./models";
 export interface PySimapleUow {}
 
 export interface PySimaple {
   runPlan(plan: string): OperationLogResponse[];
   hasEnvironment(plan: string): boolean;
   provideEnvironmentAugmentedPlan(plan: string): string;
+  getAllComponent(): SkillComponent[];
 }
 
-export async function loadPySimaple() {
+export async function loadPySimaple(): Promise<{ pySimaple: PySimaple }> {
   const pyodide = await loadPyodide({
     indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.2/full/",
   });
@@ -27,9 +29,20 @@ export async function loadPySimaple() {
     false,
   );
 
+  const pySimaple = await pyodide.runPythonAsync(`
+    import simaple.wasm as wasm
+    wasm`);
+
   return {
-    pySimaple: pyodide.runPython(`
-  import simaple.wasm as wasm
-  wasm`),
+    pySimaple: {
+      runPlan: pySimaple.runPlan,
+      hasEnvironment: pySimaple.hasEnvironment,
+      provideEnvironmentAugmentedPlan:
+        pySimaple.provideEnvironmentAugmentedPlan,
+      getAllComponent: () =>
+        pySimaple.getAllComponent().toJs({
+          dict_converter: Object.fromEntries,
+        }),
+    },
   };
 }

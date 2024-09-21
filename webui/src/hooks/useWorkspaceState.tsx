@@ -1,4 +1,4 @@
-import { PlayLogResponse } from "@/sdk/models";
+import { PlayLogResponse, SkillComponent } from "@/sdk/models";
 import * as React from "react";
 import { usePySimaple } from "./useSimaple";
 import { useLocalStorageValue } from "@react-hookz/web";
@@ -14,6 +14,9 @@ function useWorkspaceState() {
 
   const [plan, setPlan] = React.useState<string>(storedWorkspace?.plan ?? "");
   const [history, setHistory] = React.useState<PlayLogResponse[]>([]);
+  const [skillComponents, setSkillComponents] = React.useState<
+    SkillComponent[]
+  >([]);
 
   const playLog = history[history.length - 1];
   const skillNames = React.useMemo(
@@ -21,9 +24,26 @@ function useWorkspaceState() {
     [playLog],
   );
 
+  const skillComponentMap = React.useMemo(
+    () =>
+      skillComponents.reduce(
+        (acc, component) => {
+          acc[component.name] = component;
+          return acc;
+        },
+        {} as Record<string, SkillComponent>,
+      ),
+    [skillComponents],
+  );
+
   React.useEffect(() => {
     setWorkspace({ plan });
   }, [plan, setWorkspace]);
+
+  React.useEffect(() => {
+    const components = pySimaple.getAllComponent();
+    setSkillComponents(components);
+  }, [pySimaple]);
 
   const run = React.useCallback(() => {
     const isEnvironmentProvided = pySimaple.hasEnvironment(plan);
@@ -48,6 +68,14 @@ function useWorkspaceState() {
     });
   }, [run]);
 
+  const getIconPath = React.useCallback(
+    (skillName: string) => {
+      const component = skillComponentMap[skillName];
+      return `/icons/${component?.id.split("-")[0]}.png`;
+    },
+    [skillComponentMap],
+  );
+
   return {
     plan,
     setPlan,
@@ -55,6 +83,7 @@ function useWorkspaceState() {
     skillNames,
     run,
     runAsync,
+    getIconPath,
   };
 }
 

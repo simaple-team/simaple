@@ -1,17 +1,11 @@
-import pytest
-
-from simaple.wasm.skill import getAllSkillSpec, getSkillSpec
+from simaple.wasm.skill import getAllComponent
 
 
-def test_get_all_skill_spec():
-    skill_specs = getAllSkillSpec()
-    assert len(skill_specs) > 1
+def test_get_all_component():
+    components = getAllComponent()
+    assert len(components) > 1
 
-
-def test_get_skill_spec():
-    skill_spec = getSkillSpec("2121006-0")
-    assert skill_spec
-
-    with pytest.raises(ValueError):
-        skill_spec = getSkillSpec("1")
-        assert skill_spec
+    # every component should have a name and id
+    for component in components:
+        assert "name" in component
+        assert "id" in component
