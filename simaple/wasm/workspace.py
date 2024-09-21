@@ -211,9 +211,19 @@ def runPlanWithHint(
         previous_plan.strip()
     )
     plan_metadata_dict, commands = parse_simaple_runtime(plan.strip())
+    plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
+
+    simulation_container = plan_metadata.load_container()
+
+    engine = simulation_container.operation_engine()
 
     if plan_metadata_dict != previous_plan_metadata_dict:
-        raise ValueError("Plan metadata is not matched. Request rejected")
+        for command in commands:
+            engine.exec(command)
+
+        return _extract_engine_history_as_response(
+            engine, simulation_container.damage_calculator()
+        )
 
     # Since first operation in history is always "init", we skip this for retrieval;
     history_for_matching = previous_history[1:]
@@ -221,7 +231,7 @@ def runPlanWithHint(
     cache_count: int = 0
 
     for idx, command in enumerate(commands):
-        if len(previous_commands) <= idx:
+        if len(previous_commands) <= idx or len(history_for_matching) <= idx:
             break
 
         previous_command = previous_commands[idx]
@@ -234,11 +244,6 @@ def runPlanWithHint(
             continue
         break
 
-    plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
-
-    simulation_container = plan_metadata.load_container()
-
-    engine = simulation_container.operation_engine()
     engine.reload(
         [
             operation_log_response.restore_operation_log()
