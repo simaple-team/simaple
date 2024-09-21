@@ -1,11 +1,14 @@
 import { loadPyodide } from "pyodide";
 import { OperationLogResponse } from "./models/OperationLogResponse.schema";
 import { SIMAPLE_FILE_NAME } from "./dependency";
-import { SkillComponent } from "./models";
+import { BaselineEnvironmentProvider, SkillComponent } from "./models";
 export interface PySimapleUow {}
 
 export interface PySimaple {
   runPlan(plan: string): OperationLogResponse[];
+  getInitialPlanFromBaseline(
+    baselineEnvironmentProvider: BaselineEnvironmentProvider,
+  ): string;
   hasEnvironment(plan: string): boolean;
   provideEnvironmentAugmentedPlan(plan: string): string;
   getAllComponent(): SkillComponent[];
@@ -36,6 +39,7 @@ export async function loadPySimaple(): Promise<{ pySimaple: PySimaple }> {
   return {
     pySimaple: {
       runPlan: pySimaple.runPlan,
+      getInitialPlanFromBaseline: pySimaple.getInitialPlanFromBaseline,
       hasEnvironment: pySimaple.hasEnvironment,
       provideEnvironmentAugmentedPlan:
         pySimaple.provideEnvironmentAugmentedPlan,

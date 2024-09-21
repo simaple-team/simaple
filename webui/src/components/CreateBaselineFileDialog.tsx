@@ -1,4 +1,4 @@
-import { SimulationSetting } from "@/sdk/models";
+import { JobType } from "@/sdk/models";
 import { Label } from "@radix-ui/react-label";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -22,37 +22,10 @@ import {
   SelectValue,
 } from "./ui/select";
 
-function baselineTemplate(simulationSetting: SimulationSetting) {
-  return `---
-author: ""
-provider:
-  name: "BaselineEnvironmentProvider"
-  data:
-    tier: ${simulationSetting.tier}
-    jobtype: ${simulationSetting.jobtype}
-    level: ${simulationSetting.level}
-    use_doping: ${simulationSetting.use_doping}
-    passive_skill_level: ${simulationSetting.passive_skill_level}
-    combat_orders_level: ${simulationSetting.combat_orders_level}
-    union_block_count: ${simulationSetting.union_block_count}
-    link_count: ${simulationSetting.link_count}
-    armor: ${simulationSetting.armor}
-    mob_level: ${simulationSetting.mob_level}
-    force_advantage: ${simulationSetting.force_advantage}
-    trait_level: ${simulationSetting.trait_level}
-    artifact_level: ${simulationSetting.artifact_level}
-    v_skill_level: ${simulationSetting.v_skill_level}
-    v_improvements_level: ${simulationSetting.v_improvements_level}
-    weapon_attack_power: ${simulationSetting.weapon_attack_power}
-    weapon_pure_attack_power: ${simulationSetting.weapon_pure_attack_power}
----
-ELAPSE 0`;
-}
-
-const CreateBaselineSimulatorDialog: React.FC<{
+const CreateBaselineFileDialog: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const { setPlan } = useWorkspace();
+  const { setPlan, getInitialPlanFromBaseline } = useWorkspace();
   const { register, getValues, control } = useForm({
     defaultValues: {
       tier: "Legendary",
@@ -78,9 +51,9 @@ const CreateBaselineSimulatorDialog: React.FC<{
 
   function handleSubmit() {
     const values = getValues();
-    const plan = baselineTemplate({
+    const plan = getInitialPlanFromBaseline({
       tier: values.tier,
-      jobtype: values.jobtype as SimulationSetting["jobtype"],
+      jobtype: values.jobtype as JobType,
       level: values.level,
       use_doping: values.use_doping,
       passive_skill_level: values.passive_skill_level,
@@ -165,4 +138,4 @@ const CreateBaselineSimulatorDialog: React.FC<{
   );
 };
 
-export default CreateBaselineSimulatorDialog;
+export default CreateBaselineFileDialog;

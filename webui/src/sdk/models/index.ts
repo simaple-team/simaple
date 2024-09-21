@@ -1,4 +1,3 @@
-export type { SimulationSetting } from "./SiumulationSetting";
 export type {
   PlayLogResponse,
   OperationLogResponse,
@@ -6,3 +5,7 @@ export type {
 } from "./OperationLogResponse.schema";
 export type { MaximumDealingIntervalResult } from "./MaximumDealingIntervalResult.schema";
 export type { Component as SkillComponent } from "./Component.schema";
+export type {
+  JobType,
+  BaselineEnvironmentProvider,
+} from "./BaselineEnvironmentProvider.schema";

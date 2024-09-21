@@ -4,6 +4,7 @@ from typing import cast
 import pydantic
 import yaml
 
+from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.plan_metadata import PlanMetadata
 from simaple.container.simulation import OperationEngine
 from simaple.simulate.policy.base import ConsoleText, Operation, is_console_command
@@ -12,9 +13,11 @@ from simaple.simulate.report.base import DamageLog
 from simaple.simulate.report.dpm import DamageCalculator
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 from simaple.wasm.base import (
+    pyodide_reveal_base_model,
     return_js_object_from_pydantic_list,
     return_js_object_from_pydantic_object,
 )
+from simaple.wasm.examples import get_example_plan
 from simaple.wasm.models.simulation import (
     DamageRecord,
     OperationLogResponse,
@@ -123,8 +126,9 @@ def provideEnvironmentAugmentedPlan(plan: str) -> str:
 
     simulation_environment = metadata.provider.get_simulation_environment()
     metadata.environment = simulation_environment
-    _, original_operations = plan.split("\n---")[0], "\n---".join(
-        plan.split("\n---")[1:]
+    _, original_operations = (
+        plan.split("\n---")[0],
+        "\n---".join(plan.split("\n---")[1:]),
     )
 
     augmented_metadata = yaml.safe_dump(
@@ -171,3 +175,32 @@ def computeMaximumDealingInterval(
         interval=interval
     ).find_maximum_dealing_interval(report, simulation_container.damage_calculator())
     return MaximumDealingIntervalResult(damage=damage, start=_start, end=_end)
+
+
+def getInitialPlanFromBaseline(
+    environment_provider: BaselineEnvironmentProvider,
+) -> str:
+    """
+    baseline environment provider를 받아서 example plan을 생성합니다.
+    """
+    environment_provider = pyodide_reveal_base_model(
+        environment_provider, BaselineEnvironmentProvider
+    )
+    base_plan = get_example_plan(environment_provider.jobtype)
+    metadata_dict, _ = parse_simaple_runtime(base_plan.strip())
+
+    metadata_dict["provider"] = {
+        "name": environment_provider.get_name(),
+        "data": environment_provider.model_dump(),
+    }
+    metadata = PlanMetadata.model_validate(metadata_dict)
+
+    _, original_operations = (
+        base_plan.split("\n---")[0],
+        "\n---".join(base_plan.split("\n---")[1:]),
+    )
+
+    augmented_metadata = yaml.safe_dump(
+        json.loads(metadata.model_dump_json()), indent=2
+    )
+    return f"---\n{augmented_metadata}\n---\n{original_operations}"
