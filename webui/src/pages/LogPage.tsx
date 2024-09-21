@@ -46,7 +46,7 @@ const LogRow = (props: LogRowProps) => {
         {playLog.action.method} {playLog.action.name}{" "}
         {playLog.action.payload ? JSON.stringify(playLog.action.payload) : ""}
       </TableCell>
-      <TableCell>{damageFormatter(playLog.damage)}</TableCell>
+      <TableCell>{damageFormatter(playLog.total_damage)}</TableCell>
     </TableRow>
   );
 };
@@ -168,8 +168,9 @@ const LogPage: React.FC = () => {
               <TableHead>데미지</TableHead>
             </TableHeader>
             <TableBody>
-              {reversedHistory.map((playLog) => (
+              {reversedHistory.map((playLog, i) => (
                 <LogRow
+                  key={i}
                   playLog={playLog}
                   onSelect={setSelectedLog}
                   isSelected={selectedLog === playLog}

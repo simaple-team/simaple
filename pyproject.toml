@@ -1,14 +1,36 @@
+
+[tool.poe.tasks.setup-webui-whl]
+shell = """
+import hashlib, os, shutil
+
+builtin_whl_fname = [ fname for fname in os.listdir("dist") if fname.endswith(".whl") ][-1]
+h  = hashlib.sha256()
+b  = bytearray(128*1024)
+mv = memoryview(b)
+
+with open(os.path.join("dist", builtin_whl_fname), 'rb', buffering=0) as f:
+    while n := f.readinto(mv):
+        h.update(mv[:n])
+    digest = h.hexdigest()[:8]
+
+output_whl_file_name = f"simaple-0.0.0dev+local{digest}-py3-none-any.whl"
+
+shutil.copy(os.path.join("dist", builtin_whl_fname), os.path.join("webui/public", output_whl_file_name))
+with open("webui/src/sdk/dependency.ts", 'w') as f:
+    f.write(f'export const SIMAPLE_FILE_NAME = "{output_whl_file_name}"')
+"""
+interpreter = "python"
+
 [tool.poe.tasks]
 _black-check = "black --check simaple tests"
 _isort-check = "isort --check-only simaple tests"
 formatting-check = ["_black-check", "_isort-check"]
 
+_build = "pyproject-build"
 
-_build = "python -m build --outdir webui/public"
-_set_build_version = """
-python -c "import os; os.system('find \\'./simaple\\' -type f -name \\'*.py\\' -print0 | xargs -0 shasum | sort | shasum > webui/public/version.txt')"
-"""
-export-whl = ["_build", "_set_build_version"]
+
+_clean_dist_build = "rm -rf dist/ webui/public/*.whl"
+export-whl = ["_clean_dist_build", "_build", "setup-webui-whl"]
 gen-schema = "python scripts/build/generate_json_schema_for_wasm.py"
 
 _black = "black simaple tests scripts"
@@ -43,9 +65,7 @@ testpaths = ["tests"]
 
 [tool.coverage.run]
 branch = true
-omit = [
-    "simaple/app/*",
-]
+omit = ["simaple/app/*"]
 
 [tool.coverage.report]
 fail_under = 85
@@ -99,7 +119,7 @@ lark = "^1.1.7"
 pyfunctional = "^1.5.0"
 
 [tool.poetry.group.dev.dependencies]
-poethepoet = "^0.10.0"
+poethepoet = "^0.28.0"
 jupyter = "^1.0.0"
 pycln = "^2.1.2"
 yappi = "^1.4.0"

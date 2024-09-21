@@ -6,13 +6,21 @@ import { ErrorResponse } from "./models/ErrorResponse.schema";
 
 export interface PySimapleUow {}
 
+import { SIMAPLE_FILE_NAME } from "./dependency";
+import { BaselineEnvironmentProvider, SkillComponent } from "./models";
+export interface PySimapleUow {}
+
 export interface PySimaple {
   runPlan(plan: string): SuccessResponse<OperationLogResponse[]> | ErrorResponse;
+  getInitialPlanFromBaseline(
+    baselineEnvironmentProvider: BaselineEnvironmentProvider,
+  ): string;
   hasEnvironment(plan: string): boolean;
   provideEnvironmentAugmentedPlan(plan: string): string;
+  getAllComponent(): SkillComponent[];
 }
 
-export async function loadPySimaple() {
+export async function loadPySimaple(): Promise<{ pySimaple: PySimaple }> {
   const pyodide = await loadPyodide({
     indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.2/full/",
   });
@@ -25,14 +33,26 @@ export async function loadPySimaple() {
   await micropip.install(["loguru", "lark", "numpy", "pyyaml", "pyfunctional"]);
 
   await micropip.install(
-    `${window.location.origin}/simaple-0.4.2-py3-none-any.whl`,
+    `${window.location.origin}/${SIMAPLE_FILE_NAME}`,
     false,
     false,
   );
 
+  const pySimaple = await pyodide.runPythonAsync(`
+    import simaple.wasm as wasm
+    wasm`);
+
   return {
-    pySimaple: pyodide.runPython(`
-  import simaple.wasm as wasm
-  wasm`),
+    pySimaple: {
+      runPlan: pySimaple.runPlan,
+      getInitialPlanFromBaseline: pySimaple.getInitialPlanFromBaseline,
+      hasEnvironment: pySimaple.hasEnvironment,
+      provideEnvironmentAugmentedPlan:
+        pySimaple.provideEnvironmentAugmentedPlan,
+      getAllComponent: () =>
+        pySimaple.getAllComponent().toJs({
+          dict_converter: Object.fromEntries,
+        }),
+    },
   };
 }

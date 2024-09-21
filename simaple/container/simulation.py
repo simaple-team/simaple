@@ -2,7 +2,7 @@ from typing import cast
 
 import pydantic
 
-from simaple.core import ExtendedStat, JobType
+from simaple.core import ActionStat, ExtendedStat, JobType, Stat
 from simaple.data.jobs import get_skill_profile
 from simaple.data.jobs.builtin import get_builtin_strategy, get_damage_logic
 from simaple.simulate.base import SimulationRuntime
@@ -13,6 +13,13 @@ from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 
 def add_extended_stats(*action_stats):
     return sum(action_stats, ExtendedStat())
+
+
+class FinalCharacterStat(pydantic.BaseModel):
+    model_config = pydantic.ConfigDict(extra="forbid")
+
+    stat: Stat
+    action_stat: ActionStat
 
 
 class SimulationEnvironment(pydantic.BaseModel):
@@ -41,7 +48,7 @@ class SimulationEnvironment(pydantic.BaseModel):
 
     jobtype: JobType
     level: int
-    character: ExtendedStat
+    character: FinalCharacterStat
 
 
 class SimulationContainer:
