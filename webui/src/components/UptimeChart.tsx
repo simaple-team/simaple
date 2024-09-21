@@ -169,8 +169,9 @@ export function useChart(
 }
 
 const UptimeChart: React.FC<{
+  unfilteredLogs: PlayLogResponse[];
   logs: PlayLogResponse[];
-}> = ({ logs }) => {
+}> = ({ unfilteredLogs, logs }) => {
   const runningView = logs[0]?.running_view;
   const skillNames = useMemo(
     () => (runningView ? Object.keys(runningView) : []),
@@ -179,19 +180,19 @@ const UptimeChart: React.FC<{
   const usedSkillNames = useMemo(
     () =>
       skillNames.filter((name) =>
-        logs.some((log) =>
+        unfilteredLogs.some((log) =>
           log.events.find(
             (event) => event.name === name && event.method === "use",
           ),
         ),
       ),
-    [runningView, logs],
+    [runningView, unfilteredLogs],
   );
   const [selectedSkillNames, setSelectedSkillNames] = React.useState<string[]>(
     [],
   );
 
-  const options = useChart(logs, selectedSkillNames);
+  const options = useChart(unfilteredLogs, selectedSkillNames);
 
   return (
     <Card>

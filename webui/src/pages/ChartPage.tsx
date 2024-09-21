@@ -7,7 +7,7 @@ import * as React from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 const ChartPage: React.FC = () => {
-  const { history } = useWorkspace();
+  const { history, unfilteredHistory } = useWorkspace();
 
   if (history.length === 0) {
     return (
@@ -24,7 +24,7 @@ const ChartPage: React.FC = () => {
       >
         <CumulativeDamageChart logs={history} />
         <IntervalDamageChart logs={history} />
-        <UptimeChart logs={history} />
+        <UptimeChart logs={history} unfilteredLogs={unfilteredHistory} />
         <StackChart logs={history} />
       </ErrorBoundary>
     </div>

@@ -1,41 +1,17 @@
 import * as React from "react";
-import { ChartSetting, Preferences } from "./preferences.interface";
+import { Preferences } from "./preferences.interface";
 
 type PreferenceProviderProps = { children: React.ReactNode };
 
 function usePreferenceState() {
   const [preferences, setPreferences] = React.useState<Preferences>({
-    chart: {
-      maxClock: 180 * 1000,
-      runningView: {
-        skillNames: [],
-      },
-      stackView: {
-        show: false,
-        axis1: {
-          max: 10,
-          skillNames: [],
-        },
-        axis2: {
-          max: 10,
-          skillNames: [],
-        },
-      },
-    },
+    startClock: 0,
+    duration: null,
   });
 
-  function setChartSetting(chart: ChartSetting) {
-    setPreferences({
-      ...preferences,
-      chart,
-    });
-  }
-
-  const { chart: chartSetting } = preferences;
-
   return {
-    chartSetting,
-    setChartSetting,
+    preferences,
+    setPreferences,
   };
 }
 

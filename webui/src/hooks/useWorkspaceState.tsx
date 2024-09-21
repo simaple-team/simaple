@@ -1,32 +1,56 @@
 import {
   BaselineEnvironmentProvider,
-  PlayLogResponse,
+  OperationLogResponse,
   SkillComponent,
 } from "@/sdk/models";
+import { useLocalStorageValue } from "@react-hookz/web";
 import * as React from "react";
 import { usePySimaple } from "./useSimaple";
-import { useLocalStorageValue } from "@react-hookz/web";
+import { usePreference } from "./usePreference";
 
 type WorkspaceProviderProps = { children: React.ReactNode };
 
 function useWorkspaceState() {
   const { pySimaple } = usePySimaple();
+  const { preferences } = usePreference();
 
   const { value: storedWorkspace, set: setWorkspace } = useLocalStorageValue<{
     plan: string;
   }>("workspace");
 
   const [plan, setPlan] = React.useState<string>(storedWorkspace?.plan ?? "");
-  const [history, setHistory] = React.useState<PlayLogResponse[]>([]);
+  const [operationLogs, setOperationLogs] = React.useState<
+    OperationLogResponse[]
+  >([]);
   const [skillComponents, setSkillComponents] = React.useState<
     SkillComponent[]
   >([]);
   const [errorMessage, setErrorMessage] = React.useState("");
 
-  const playLog = history[history.length - 1];
+  const playLog = operationLogs[operationLogs.length - 1]?.logs[0];
   const skillNames = React.useMemo(
     () => (playLog ? Object.keys(playLog.validity_view) : []),
     [playLog],
+  );
+
+  const unfilteredHistory = React.useMemo(
+    () =>
+      operationLogs
+        .flatMap((x) => x.logs)
+        .map((x) => ({
+          ...x,
+          clock: x.clock - preferences.startClock,
+        })),
+    [operationLogs],
+  );
+  const history = React.useMemo(
+    () =>
+      unfilteredHistory.filter(
+        (x) =>
+          x.clock >= 0 &&
+          (preferences.duration === null || x.clock <= preferences.duration),
+      ),
+    [unfilteredHistory, preferences],
   );
 
   const skillComponentMap = React.useMemo(
@@ -66,7 +90,7 @@ function useWorkspaceState() {
       setErrorMessage(result.message);
       return;
     }
-    setHistory(result.data.flatMap((log) => log.logs));
+    setOperationLogs(result.data);
   }, [pySimaple, plan]);
 
   const runAsync = React.useCallback(() => {
@@ -104,6 +128,7 @@ function useWorkspaceState() {
   return {
     plan,
     setPlan,
+    unfilteredHistory,
     history,
     skillNames,
     errorMessage,
