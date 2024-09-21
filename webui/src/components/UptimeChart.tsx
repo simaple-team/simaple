@@ -1,6 +1,20 @@
+import { getColorFromIndex } from "@/lib/chart";
+import { secFormatter } from "@/lib/formatters.ts";
 import { PlayLogResponse } from "@/sdk/models";
-import { default as ReactECharts } from "echarts-for-react";
+import ReactEChartsCore from "echarts-for-react/lib/core";
+import { CustomChart, CustomSeriesOption } from "echarts/charts";
+import {
+  GridComponent,
+  GridComponentOption,
+  MarkLineComponent,
+  MarkLineComponentOption,
+  TooltipComponent,
+  TooltipComponentOption,
+} from "echarts/components";
+import * as echarts from "echarts/core";
+import { SVGRenderer } from "echarts/renderers";
 import React, { useMemo } from "react";
+import { Button } from "./ui/button";
 import {
   Card,
   CardContent,
@@ -11,17 +25,27 @@ import {
 import { Checkbox } from "./ui/checkbox";
 import { Label } from "./ui/label";
 
-import { getColorFromIndex } from "@/lib/chart";
-import { secFormatter } from "@/lib/formatters.ts";
-import * as echarts from "echarts";
-import { Button } from "./ui/button";
+echarts.use([
+  TooltipComponent,
+  GridComponent,
+  MarkLineComponent,
+  CustomChart,
+  SVGRenderer,
+]);
+
+type ECOption = echarts.ComposeOption<
+  | CustomSeriesOption
+  | TooltipComponentOption
+  | GridComponentOption
+  | MarkLineComponentOption
+>;
 
 const MAX_CLOCK = 180 * 1000;
 
 export function useChart(
   history: PlayLogResponse[],
   skillNames: string[],
-): echarts.EChartsOption {
+): ECOption {
   const clock = history.length > 0 ? history[history.length - 1].clock : 0;
 
   function getUptimeSeries(history: PlayLogResponse[]) {
@@ -74,7 +98,7 @@ export function useChart(
           },
         ],
       },
-    } satisfies echarts.CustomSeriesOption;
+    } satisfies CustomSeriesOption;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -118,11 +142,12 @@ export function useChart(
         return params
           .map(
             (x: {
-              marker: string;
+              color: string;
               name: string;
               value: [number, number, number];
-            }) =>
-              `${x.marker}${x.name}: ${secFormatter(x.value[1])} ~ ${secFormatter(x.value[2])}`,
+            }) => {
+              return `<span style="display:inline-block;margin-right:4px;border-radius:2px;width:10px;height:10px;background-color:${x.color};"></span><span class="font-mono font-medium tabular-nums text-xs text-foreground">${x.name}: ${secFormatter(x.value[1])} ~ ${secFormatter(x.value[2])}</span>`;
+            },
           )
           .join("<br>");
       },
@@ -180,7 +205,11 @@ const UptimeChart: React.FC<{
         <CardTitle>지속시간</CardTitle>
       </CardHeader>
       <CardContent>
-        <ReactECharts style={{ height: 500 }} option={options} />
+        <ReactEChartsCore
+          echarts={echarts}
+          style={{ height: 500 }}
+          option={options}
+        />
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <Label>스킬</Label>
