@@ -46,7 +46,7 @@ const LogRow = (props: LogRowProps) => {
         {playLog.action.method} {playLog.action.name}{" "}
         {playLog.action.payload ? JSON.stringify(playLog.action.payload) : ""}
       </TableCell>
-      <TableCell>{damageFormatter(playLog.damage)}</TableCell>
+      <TableCell>{damageFormatter(playLog.total_damage)}</TableCell>
     </TableRow>
   );
 };

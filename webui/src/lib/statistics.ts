@@ -7,46 +7,55 @@ export interface SkillStatistics {
   damagePerSecond: number;
   useCount: number;
   damagePerUse: number;
-  // TODO: add hitcount and averageDamagePerHit
+  hitCount: number;
+  averageDamagePerHit: number;
 }
 
 export type BattleStatistics = SkillStatistics[];
 
 export function getBattleStatistics(logs: PlayLogResponse[]): BattleStatistics {
-  const record: Record<string, SkillStatistics> = {};
+  const result: Record<string, SkillStatistics> = {};
 
-  const damages = logs.flatMap((log) => log.damages);
-  const totalDamage = damages.reduce((acc, damage) => acc + damage.damage, 0);
+  const damageRecords = logs.flatMap((log) => log.damage_records);
+  const totalDamage = damageRecords.reduce(
+    (acc, record) => acc + record.damage,
+    0,
+  );
 
-  for (const damage of damages) {
-    const skillName = damage.name;
+  for (const record of damageRecords) {
+    const skillName = record.name;
 
-    if (!record[skillName]) {
-      record[skillName] = {
+    if (!result[skillName]) {
+      result[skillName] = {
         name: skillName,
         damageShare: 0,
         totalDamage: 0,
         damagePerSecond: 0,
         useCount: 0,
         damagePerUse: 0,
+        hitCount: 0,
+        averageDamagePerHit: 0,
       };
     }
 
-    const statistics = record[skillName];
+    const statistics = result[skillName];
 
-    statistics.totalDamage += damage.damage;
+    statistics.totalDamage += record.damage;
     statistics.useCount += 1;
+    statistics.hitCount += record.hit;
   }
 
-  for (const skillName in record) {
-    const statistics = record[skillName];
+  for (const skillName in result) {
+    const statistics = result[skillName];
     statistics.damageShare = statistics.totalDamage / totalDamage;
     statistics.damagePerSecond =
       statistics.totalDamage / logs[logs.length - 1].clock;
     statistics.damagePerUse = statistics.totalDamage / statistics.useCount;
+    statistics.averageDamagePerHit =
+      statistics.totalDamage / statistics.hitCount;
   }
 
-  return Object.values(record);
+  return Object.values(result);
 }
 
 export function getCumulativeDamage(
@@ -57,7 +66,7 @@ export function getCumulativeDamage(
       clock: log.clock,
       damage: logs
         .slice(0, index + 1)
-        .reduce((sum, log) => sum + log.damage, 0),
+        .reduce((sum, log) => sum + log.total_damage, 0),
     };
   });
 }
@@ -80,11 +89,11 @@ export function getIntervalDamage(
     const record: Record<string, number> = {};
 
     for (const playLog of chunk) {
-      for (const damage of playLog.damages) {
-        if (!record[damage.name]) {
-          record[damage.name] = 0;
+      for (const damageRecord of playLog.damage_records) {
+        if (!record[damageRecord.name]) {
+          record[damageRecord.name] = 0;
         }
-        record[damage.name] += damage.damage;
+        record[damageRecord.name] += damageRecord.damage;
       }
     }
 
@@ -95,17 +104,17 @@ export function getIntervalDamage(
 }
 
 export function getSkillNamesDamageDesc(logs: PlayLogResponse[]) {
-  const damages = logs.flatMap((log) => log.damages);
+  const damageRecords = logs.flatMap((log) => log.damage_records);
   const record: Record<string, number> = {};
 
-  for (const damage of damages) {
-    const skillName = damage.name;
+  for (const damageRecord of damageRecords) {
+    const skillName = damageRecord.name;
 
     if (!record[skillName]) {
       record[skillName] = 0;
     }
 
-    record[skillName] += damage.damage;
+    record[skillName] += damageRecord.damage;
   }
 
   return Object.entries(record)

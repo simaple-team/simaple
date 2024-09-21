@@ -19,11 +19,12 @@ class _Report(pydantic.BaseModel):
     time_series: list[SimulationEntry]
 
 
-class DamageTuple(pydantic.BaseModel):
+class DamageRecord(pydantic.BaseModel):
     model_config = pydantic.ConfigDict(extra="forbid")
 
     name: str
     damage: float
+    hit: float
 
 
 class PlayLogResponse(pydantic.BaseModel):
@@ -38,8 +39,8 @@ class PlayLogResponse(pydantic.BaseModel):
     delay: float
     action: Action
     checkpoint: Checkpoint
-    damage: float
-    damages: list[DamageTuple]
+    total_damage: float
+    damage_records: list[DamageRecord]
 
 
 class OperationLogResponse(pydantic.BaseModel):

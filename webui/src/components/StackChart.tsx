@@ -53,7 +53,7 @@ export function StackChart({ logs }: StackChartProps) {
     stackSkillNames[0] ?? "",
   );
   const data = useMemo(
-    () => getStack(logs, selectedSkillName),
+    () => (selectedSkillName ? getStack(logs, selectedSkillName) : []),
     [logs, selectedSkillName],
   );
 
