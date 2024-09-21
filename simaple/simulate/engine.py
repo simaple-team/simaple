@@ -37,11 +37,7 @@ class OperationEngine(Protocol):
 
     def rollback(self, idx: int): ...
 
-    def load_history(self, saved_history: dict[str, Any]) -> None: ...
-
     def simulation_entries(self) -> Generator[SimulationEntry, None, None]: ...
-
-    def save_history(self) -> dict[str, Any]: ...
 
     def get_viewer(self, playlog: PlayLog) -> ViewerType: ...
 
@@ -68,9 +64,6 @@ class BasicOperationEngine:
 
         self._history = SimulationHistory(store)
         self._callbacks: list[PostActionCallback] = []
-
-    def save_history(self) -> dict[str, Any]:
-        return self._history.save()
 
     def operation_logs(self) -> Generator[OperationLog, None, None]:
         for operation_log in self._history:
