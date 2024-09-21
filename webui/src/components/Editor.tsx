@@ -109,7 +109,7 @@ export function Editor() {
   }
 
   return (
-    <div className="flex h-full flex-col shrink-0 w-[520px] gap-2 border-r border-border/40">
+    <div className="flex h-full flex-col shrink-0 w-[480px] gap-2 border-r border-border/40">
       <CodeMirror
         className="h-[calc(100%-4rem)]"
         basicSetup={{ closeBrackets: false }}
