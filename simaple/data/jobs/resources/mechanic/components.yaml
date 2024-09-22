@@ -244,6 +244,8 @@ data:
   periodic_hit: 9
   lasting_duration: 999_999_999
 
+  final_damage_multiplier_during_barrage: 0
+
   default_skill_level: 30
   v_improvement: 2
 ---
@@ -332,7 +334,7 @@ data:
   id: 400051017-0
   name: 마이크로 미사일 컨테이너
   delay: 540
-  damage: "{{ 375 + 17 * skill_level }}"
+  damage: "{{ 425 + 17 * skill_level }}"
   hit: "{{ (30 + skill_level // 3) * 5}}"
   cooldown_duration: 25_000
 ---
@@ -350,19 +352,34 @@ patch:
 data:
   id: 400051041-0
   name: 메탈아머 전탄발사
-  maximum_keydown_time: 11_800
+  maximum_keydown_time: 8_000
 
   damage: "{{ 400 + 16 * skill_level }}"
-  hit: 11
-  delay: 200
+  hit: 12
+  delay: 150
   cooldown_duration: 200_000
 
-  keydown_prepare_delay: 1330 # TODO: 1350으로 올림되는지 확인 필요
+  keydown_prepare_delay: 1000 # TODO: 타수는 일치하나, 정확한 수치 확인 필요
   keydown_end_delay: 1800
 
   homing_penalty_duration: 2000
-  final_damage_multiplier_during_keydown: 65
-
+  homing_final_damage_multiplier: 67
+---
+kind: SkillImprovement
+version: simaple.io/SkillAdditiveImprovement
+metadata:
+  label:
+    group: mechanic
+    name: 메탈아머 전탄발사
+data:
+  name: 메탈아머 전탄발사
+  advantages:
+    - target_name: 호밍 미사일
+      target_field: final_damage_multiplier_during_barrage
+      value: 67
+    - target_name: 호밍 미사일 VI
+      target_field: final_damage_multiplier_during_barrage
+      value: 67
 ---
 kind: Component
 version: simaple.io/MecaCarrier
@@ -462,6 +479,8 @@ data:
   periodic_hit: 12
   lasting_duration: 999_999_999
 
+  final_damage_multiplier_during_barrage: 0
+
   v_improvement: 2
 ---
 kind: Component
@@ -478,10 +497,10 @@ data:
   id: 400021090-0-?mech
   name: 그라운드 제로
   damage_and_hits:
-  - damage: "{{ 1020 + skill_level * 34 }}"
-    hit: "{{8 * 10 }}"
-  - damage: "{{ 1000 + skill_level * 33 }}"
-    hit: "{{ 15 * 32 }}"
+    - damage: "{{ 1020 + skill_level * 34 }}"
+      hit: "{{8 * 10 }}"
+    - damage: "{{ 1000 + skill_level * 33 }}"
+      hit: "{{ 15 * 32 }}"
 
   delay: 4_860
   cooldown_duration: 360_000

@@ -211,6 +211,8 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
     periodic_hit: float
     lasting_duration: float
 
+    final_damage_multiplier_during_barrage: float
+
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
@@ -234,7 +236,15 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
 
         return state, [self.event_provider.elapsed(time)] + [
             self.event_provider.dealt(
-                self.periodic_damage, self.get_homming_missile_hit(state)
+                self.periodic_damage,
+                self.get_homming_missile_hit(state),
+                (
+                    Stat(
+                        final_damage_multiplier=self.final_damage_multiplier_during_barrage
+                    )
+                    if state.full_barrage_keydown.running
+                    else None
+                ),
             )
             for _ in range(lapse_count)
         ]
@@ -295,7 +305,7 @@ class FullMetalBarrageComponent(
     keydown_end_delay: float
 
     homing_penalty_duration: float
-    final_damage_multiplier_during_keydown: float
+    homing_final_damage_multiplier: float
 
     def get_default_state(self):
         return {
@@ -330,15 +340,6 @@ class FullMetalBarrageComponent(
             state.penalty_lasting.set_time_left(self.homing_penalty_duration)
 
         return state, event
-
-    @view_method
-    def buff(self, state: FullMetalBarrageState):
-        if state.keydown.running:
-            return Stat(
-                final_damage_multiplier=self.final_damage_multiplier_during_keydown
-            )
-
-        return None
 
     @view_method
     def validity(self, state: FullMetalBarrageState):
