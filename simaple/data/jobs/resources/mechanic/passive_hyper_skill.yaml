@@ -55,4 +55,4 @@ data:
   target: "서포트 웨이버: H-EX"
   key: stat
   increment:
-    final_damage_multiplier: 4
+    final_damage_multiplier: 2
