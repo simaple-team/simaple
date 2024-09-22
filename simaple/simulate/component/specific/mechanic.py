@@ -238,11 +238,13 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
             self.event_provider.dealt(
                 self.periodic_damage,
                 self.get_homming_missile_hit(state),
-                Stat(
-                    final_damage_multiplier=self.final_damage_multiplier_during_barrage
-                )
-                if state.full_barrage_keydown.running
-                else None,
+                (
+                    Stat(
+                        final_damage_multiplier=self.final_damage_multiplier_during_barrage
+                    )
+                    if state.full_barrage_keydown.running
+                    else None
+                ),
             )
             for _ in range(lapse_count)
         ]
