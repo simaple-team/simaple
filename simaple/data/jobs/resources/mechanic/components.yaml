@@ -244,6 +244,8 @@ data:
   periodic_hit: 9
   lasting_duration: 999_999_999
 
+  final_damage_multiplier_during_barrage: 0
+
   default_skill_level: 30
   v_improvement: 2
 ---
@@ -362,7 +364,22 @@ data:
 
   homing_penalty_duration: 2000
   homing_final_damage_multiplier: 67
-
+---
+kind: SkillImprovement
+version: simaple.io/SkillAdditiveImprovement
+metadata:
+  label:
+    group: mechanic
+    name: 메탈아머 전탄발사
+data:
+  name: 메탈아머 전탄발사
+  advantages:
+    - target_name: 호밍 미사일
+      target_field: final_damage_multiplier_during_barrage
+      value: 67
+    - target_name: 호밍 미사일 VI
+      target_field: final_damage_multiplier_during_barrage
+      value: 67
 ---
 kind: Component
 version: simaple.io/MecaCarrier
@@ -462,6 +479,8 @@ data:
   periodic_hit: 12
   lasting_duration: 999_999_999
 
+  final_damage_multiplier_during_barrage: 0
+
   v_improvement: 2
 ---
 kind: Component
@@ -478,10 +497,10 @@ data:
   id: 400021090-0-?mech
   name: 그라운드 제로
   damage_and_hits:
-  - damage: "{{ 1020 + skill_level * 34 }}"
-    hit: "{{8 * 10 }}"
-  - damage: "{{ 1000 + skill_level * 33 }}"
-    hit: "{{ 15 * 32 }}"
+    - damage: "{{ 1020 + skill_level * 34 }}"
+      hit: "{{8 * 10 }}"
+    - damage: "{{ 1000 + skill_level * 33 }}"
+      hit: "{{ 15 * 32 }}"
 
   delay: 4_860
   cooldown_duration: 360_000

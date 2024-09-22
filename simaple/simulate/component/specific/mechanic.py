@@ -187,19 +187,9 @@ class RobotSummonSkill(
         return self.periodic_damage, self.periodic_hit
 
 
-class FullMetalBarrageKeydown(Keydown):
-    homing_final_damage_multiplier: float
-
-    def get_homming_buff(self) -> Stat | None:
-        if self.running:
-            return Stat(final_damage_multiplier=self.homing_final_damage_multiplier)
-        else:
-            return None
-
-
 class HommingMissileState(ReducerState):
     bomber_time: Lasting
-    full_barrage_keydown: FullMetalBarrageKeydown
+    full_barrage_keydown: Keydown
     full_barrage_penalty_lasting: Lasting
     cooldown: Cooldown
     periodic: Periodic
@@ -220,6 +210,8 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
     periodic_damage: float
     periodic_hit: float
     lasting_duration: float
+
+    final_damage_multiplier_during_barrage: float
 
     def get_default_state(self):
         return {
@@ -246,7 +238,11 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
             self.event_provider.dealt(
                 self.periodic_damage,
                 self.get_homming_missile_hit(state),
-                state.full_barrage_keydown.get_homming_buff(),
+                Stat(
+                    final_damage_multiplier=self.final_damage_multiplier_during_barrage
+                )
+                if state.full_barrage_keydown.running
+                else None,
             )
             for _ in range(lapse_count)
         ]
@@ -288,7 +284,7 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
 
 class FullMetalBarrageState(ReducerState):
     cooldown: Cooldown
-    keydown: FullMetalBarrageKeydown
+    keydown: Keydown
     penalty_lasting: Lasting
     dynamics: Dynamics
 
@@ -312,11 +308,7 @@ class FullMetalBarrageComponent(
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "keydown": FullMetalBarrageKeydown(
-                interval=self.delay,
-                homing_final_damage_multiplier=self.homing_final_damage_multiplier,
-                running=False,
-            ),
+            "keydown": Keydown(interval=self.delay, running=False),
             "penalty_lasting": Lasting(time_left=0),
         }
 
