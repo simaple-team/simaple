@@ -350,18 +350,18 @@ patch:
 data:
   id: 400051041-0
   name: 메탈아머 전탄발사
-  maximum_keydown_time: 11_800
+  maximum_keydown_time: 8_000
 
   damage: "{{ 400 + 16 * skill_level }}"
-  hit: 11
-  delay: 200
+  hit: 12
+  delay: 150
   cooldown_duration: 200_000
 
-  keydown_prepare_delay: 1330 # TODO: 1350으로 올림되는지 확인 필요
+  keydown_prepare_delay: 1000 # TODO: 타수는 일치하나, 정확한 수치 확인 필요
   keydown_end_delay: 1800
 
   homing_penalty_duration: 2000
-  final_damage_multiplier_during_keydown: 65
+  homing_final_damage_multiplier: 67
 
 ---
 kind: Component

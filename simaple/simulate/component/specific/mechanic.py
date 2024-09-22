@@ -187,9 +187,19 @@ class RobotSummonSkill(
         return self.periodic_damage, self.periodic_hit
 
 
+class FullMetalBarrageKeydown(Keydown):
+    homing_final_damage_multiplier: float
+
+    def get_homming_buff(self) -> Stat | None:
+        if self.running:
+            return Stat(final_damage_multiplier=self.homing_final_damage_multiplier)
+        else:
+            return None
+
+
 class HommingMissileState(ReducerState):
     bomber_time: Lasting
-    full_barrage_keydown: Keydown
+    full_barrage_keydown: FullMetalBarrageKeydown
     full_barrage_penalty_lasting: Lasting
     cooldown: Cooldown
     periodic: Periodic
@@ -234,7 +244,9 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
 
         return state, [self.event_provider.elapsed(time)] + [
             self.event_provider.dealt(
-                self.periodic_damage, self.get_homming_missile_hit(state)
+                self.periodic_damage,
+                self.get_homming_missile_hit(state),
+                state.full_barrage_keydown.get_homming_buff(),
             )
             for _ in range(lapse_count)
         ]
@@ -276,7 +288,7 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
 
 class FullMetalBarrageState(ReducerState):
     cooldown: Cooldown
-    keydown: Keydown
+    keydown: FullMetalBarrageKeydown
     penalty_lasting: Lasting
     dynamics: Dynamics
 
@@ -295,12 +307,16 @@ class FullMetalBarrageComponent(
     keydown_end_delay: float
 
     homing_penalty_duration: float
-    final_damage_multiplier_during_keydown: float
+    homing_final_damage_multiplier: float
 
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "keydown": Keydown(interval=self.delay, running=False),
+            "keydown": FullMetalBarrageKeydown(
+                interval=self.delay,
+                homing_final_damage_multiplier=self.homing_final_damage_multiplier,
+                running=False,
+            ),
             "penalty_lasting": Lasting(time_left=0),
         }
 
@@ -330,15 +346,6 @@ class FullMetalBarrageComponent(
             state.penalty_lasting.set_time_left(self.homing_penalty_duration)
 
         return state, event
-
-    @view_method
-    def buff(self, state: FullMetalBarrageState):
-        if state.keydown.running:
-            return Stat(
-                final_damage_multiplier=self.final_damage_multiplier_during_keydown
-            )
-
-        return None
 
     @view_method
     def validity(self, state: FullMetalBarrageState):
