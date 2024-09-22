@@ -332,7 +332,7 @@ data:
   id: 400051017-0
   name: 마이크로 미사일 컨테이너
   delay: 540
-  damage: "{{ 375 + 17 * skill_level }}"
+  damage: "{{ 425 + 17 * skill_level }}"
   hit: "{{ (30 + skill_level // 3) * 5}}"
   cooldown_duration: 25_000
 ---
