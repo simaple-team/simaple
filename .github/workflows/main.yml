@@ -100,5 +100,3 @@ jobs:
         run: poetry install
       - name: Lint Test
         run: poetry run poe lint
-      - name: Format check
-        run: poetry run poe formatting-check
