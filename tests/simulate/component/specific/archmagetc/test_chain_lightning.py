@@ -30,9 +30,7 @@ def test_current_field_entity_elapse():
     assert start_current_field.stack_rng(0.5)
     start_current_field.elapse(1000)
 
-    assert start_current_field.field_periodics == [
-        Periodic(interval=1000, time_left=3000, count=2, interval_counter=1000)
-    ]
+    assert start_current_field.field_periodics == [Periodic(interval=1000, time_left=3000, count=2, interval_counter=1000)]
 
     assert not start_current_field.stack_rng(0.5)
     assert start_current_field.stack_rng(0.5)

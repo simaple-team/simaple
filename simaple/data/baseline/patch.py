@@ -75,15 +75,11 @@ class DoubleBonusRefinePatch(DFSTraversePatch):
 
 
 def all_stat_patch():
-    return KeywordExtendPatch(
-        target_keyword="all_stat", extends=["STR", "DEX", "INT", "LUK"]
-    )
+    return KeywordExtendPatch(target_keyword="all_stat", extends=["STR", "DEX", "INT", "LUK"])
 
 
 def all_att_patch():
-    return KeywordExtendPatch(
-        target_keyword="all_att", extends=["attack_power", "magic_attack"]
-    )
+    return KeywordExtendPatch(target_keyword="all_att", extends=["attack_power", "magic_attack"])
 
 
 def stat_patch(stat_priority: tuple[str, str, str, str]):

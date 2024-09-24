@@ -10,20 +10,11 @@ def test_scenario():
     global_property = GlobalProperty(ActionStat())
     global_property.install_global_properties(store)
 
-    attack_skill_1 = AttackSkillComponent(
-        name="test-A", damage=300, hit=4, cooldown_duration=14.0, delay=0.0, id="test"
-    )
+    attack_skill_1 = AttackSkillComponent(name="test-A", damage=300, hit=4, cooldown_duration=14.0, delay=0.0, id="test")
 
-    attack_skill_2 = AttackSkillComponent(
-        name="test-B", damage=400, hit=6, cooldown_duration=10.0, delay=0.0, id="test"
-    )
+    attack_skill_2 = AttackSkillComponent(name="test-B", damage=400, hit=6, cooldown_duration=10.0, delay=0.0, id="test")
 
-    runtime = (
-        EngineBuilder(store)
-        .add_component(attack_skill_1)
-        .add_component(attack_skill_2)
-        .build_simulation_runtime()
-    )
+    runtime = EngineBuilder(store).add_component(attack_skill_1).add_component(attack_skill_2).build_simulation_runtime()
 
     event = runtime.resolve(
         dict(

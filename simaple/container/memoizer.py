@@ -92,9 +92,7 @@ class InMemoryMemoizer(CharacterProviderMemoizer):
         memo_key = self._compute_memo_key(memoizable_environment_provider)
 
         if memo_key in self.memos:
-            memoized_environment_provider = self._deserialize_output(
-                self.memos[memo_key]
-            )
+            memoized_environment_provider = self._deserialize_output(self.memos[memo_key])
             return (
                 CharacterProviderMemo(
                     memoizable_environment=memoized_environment_provider.memoizable_environment,  # memoized

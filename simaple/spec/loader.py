@@ -6,7 +6,8 @@ from simaple.spec.repository import SpecRepository
 from simaple.spec.spec import Spec
 
 
-class SpecNotFoundError(Exception): ...
+class SpecNotFoundError(Exception):
+    ...
 
 
 class SpecBasedLoader:
@@ -43,10 +44,7 @@ class SpecBasedLoader:
 
         specifications = self._spec_repository.get_all(**query)
 
-        return [
-            self.compile_object(specification, injects, patches)
-            for specification in specifications
-        ]
+        return [self.compile_object(specification, injects, patches) for specification in specifications]
 
     def compile_object(
         self,
@@ -63,9 +61,7 @@ class SpecBasedLoader:
             args.update(specification.interpret(patches))
             return component_class(**args)
         except Exception as e:
-            raise Exception(
-                f"{class_name} <kind: {specification.kind}> parse failed.\nGiven args: {specification}\nError: {e}"
-            ) from e
+            raise Exception(f"{class_name} <kind: {specification.kind}> parse failed.\nGiven args: {specification}\nError: {e}") from e
 
     def _get_component_class(self, clsname: str, kind: str) -> Type[Any]:
         return get_class(clsname, kind=kind)

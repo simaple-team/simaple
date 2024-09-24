@@ -5,9 +5,7 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 )
 
 
-class SkillProfile(
-    pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="SkillProfile")
-):
+class SkillProfile(pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="SkillProfile")):
     """
     SkillProfile
     A pre-assigned information to create specific job's components easier
@@ -23,15 +21,11 @@ class SkillProfile(
     def get_filled_v_skill(self, level: int = 30) -> dict[str, int]:
         return {k: level for k in self.v_skill_names}
 
-    def get_skill_levels(
-        self, v_level: int, hexa_level: int, hexa_mastery_level: int
-    ) -> dict[str, int]:
+    def get_skill_levels(self, v_level: int, hexa_level: int, hexa_mastery_level: int) -> dict[str, int]:
         skill_levels = {}
         skill_levels.update(self.get_filled_v_skill(v_level))
         skill_levels.update(self.get_filled_hexa_skill(hexa_level))
-        skill_levels.update(
-            {skill: hexa_mastery_level for skill in self.hexa_mastery.values()}
-        )
+        skill_levels.update({skill: hexa_mastery_level for skill in self.hexa_mastery.values()})
         return skill_levels
 
     def get_filled_hexa_skill(self, level: int) -> dict[str, int]:

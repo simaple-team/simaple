@@ -34,9 +34,7 @@ def _get_stat(item_option: CharacterItemElementOption) -> Stat:
     ) + Stat.all_stat(item_option.get("all_stat", 0))
 
 
-def _get_gear(
-    item_element: CharacterItemElement, gear_repository: GearRepository
-) -> Gear:
+def _get_gear(item_element: CharacterItemElement, gear_repository: GearRepository) -> Gear:
     base_gear = gear_repository.get_by_name(item_element["item_name"])
     assert base_gear.meta.base_stat == _get_stat(item_element["item_base_option"])
 
@@ -52,9 +50,7 @@ def _get_gear(
     base_gear = base_gear.add_stat(_get_stat(item_element["item_starforce_option"]))
 
     if base_gear.stat != _get_stat(item_element["item_total_option"]):
-        logger.warning(
-            f"Item {base_gear.meta.name} stat not matched. Maybe special item?"
-        )
+        logger.warning(f"Item {base_gear.meta.name} stat not matched. Maybe special item?")
         base_gear = Gear(
             meta=base_gear.meta,
             stat=_get_stat(item_element["item_total_option"]),
@@ -92,13 +88,8 @@ def _get_gear(
     return base_gear
 
 
-def get_gears(
-    item_equipment: CharacterItemEquipment, gear_repository: GearRepository
-) -> list[Gear]:
-    gears = [
-        _get_gear(item_element, gear_repository)
-        for item_element in item_equipment["item_equipment"]
-    ]
+def get_gears(item_equipment: CharacterItemEquipment, gear_repository: GearRepository) -> list[Gear]:
+    gears = [_get_gear(item_element, gear_repository) for item_element in item_equipment["item_equipment"]]
     return gears
 
 
@@ -116,6 +107,4 @@ def _get_symbol(symbol_element: CharacterSymbolElement) -> SymbolGear:
 
 
 def get_symbols(symbol_equipment: CharacterSymbolEquipment) -> list[SymbolGear]:
-    return [
-        _get_symbol(symbol_element) for symbol_element in symbol_equipment["symbol"]
-    ]
+    return [_get_symbol(symbol_element) for symbol_element in symbol_equipment["symbol"]]

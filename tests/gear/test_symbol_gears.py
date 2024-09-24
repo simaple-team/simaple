@@ -18,16 +18,12 @@ def test_arcane_symbol_force():
 
 
 def test_authentic_symbol_stat():
-    symbol = AuthenticSymbolTemplate(
-        level=3, stat_type=SymbolIndicator.STR
-    ).get_symbol()
+    symbol = AuthenticSymbolTemplate(level=3, stat_type=SymbolIndicator.STR).get_symbol()
 
     assert symbol.get_stat().STR_static == 900
 
 
 def test_authentic_symbol_force():
-    symbol = AuthenticSymbolTemplate(
-        level=3, stat_type=SymbolIndicator.STR
-    ).get_symbol()
+    symbol = AuthenticSymbolTemplate(level=3, stat_type=SymbolIndicator.STR).get_symbol()
 
     assert symbol.get_force() == 30

@@ -35,9 +35,7 @@ class DivineAttackSkillState(ReducerState):
     dynamics: Dynamics
 
 
-class DivineAttackSkillComponent(
-    SkillComponent, CooldownValidityTrait, UseSimpleAttackTrait
-):
+class DivineAttackSkillComponent(SkillComponent, CooldownValidityTrait, UseSimpleAttackTrait):
     binds: dict[str, str] = {
         "divine_mark": ".바하뮤트.divine_mark",
     }
@@ -60,9 +58,7 @@ class DivineAttackSkillComponent(
         if not state.cooldown.available:
             return state, self.event_provider.rejected()
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self.cooldown_duration))
 
         modifier = state.divine_mark.consume_mark()
 
@@ -94,9 +90,7 @@ class DivineMinionState(ReducerState):
     dynamics: Dynamics
 
 
-class DivineMinion(
-    SkillComponent, PeriodicWithSimpleDamageTrait, InvalidatableCooldownTrait
-):
+class DivineMinion(SkillComponent, PeriodicWithSimpleDamageTrait, InvalidatableCooldownTrait):
     name: str
     damage: float
     hit: float
@@ -183,9 +177,7 @@ class HexaAngelRayState(ReducerState):
     punishing_stack: Stack
 
 
-class HexaAngelRayComponent(
-    SkillComponent, CooldownValidityTrait, UseSimpleAttackTrait
-):
+class HexaAngelRayComponent(SkillComponent, CooldownValidityTrait, UseSimpleAttackTrait):
     binds: dict[str, str] = {
         "divine_mark": ".바하뮤트.divine_mark",
     }
@@ -203,9 +195,7 @@ class HexaAngelRayComponent(
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "punishing_stack": Stack(
-                maximum_stack=self.stack_resolve_amount * 2 - 1
-            ),  # one-buffer
+            "punishing_stack": Stack(maximum_stack=self.stack_resolve_amount * 2 - 1),  # one-buffer
         }
 
     @reducer_method
@@ -215,9 +205,7 @@ class HexaAngelRayComponent(
         if not state.cooldown.available:
             return state, self.event_provider.rejected()
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self.cooldown_duration))
         state, stack_events = self._stack(state)
 
         modifier = state.divine_mark.consume_mark()
@@ -247,9 +235,7 @@ class HexaAngelRayComponent(
         if state.punishing_stack.get_stack() >= self.stack_resolve_amount:
             state.punishing_stack.decrease(self.stack_resolve_amount)
 
-            return state, [
-                self.event_provider.dealt(self.punishing_damage, self.punishing_hit)
-            ]
+            return state, [self.event_provider.dealt(self.punishing_damage, self.punishing_hit)]
 
         return state, []
 

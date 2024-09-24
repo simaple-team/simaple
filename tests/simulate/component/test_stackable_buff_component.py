@@ -24,14 +24,10 @@ def buff_component():
 
 @pytest.fixture
 def buff_state(buff_component: StackableBuffSkillComponent, dynamics: Dynamics):
-    return StackableBuffSkillState.model_validate(
-        {**buff_component.get_default_state(), "dynamics": dynamics}
-    )
+    return StackableBuffSkillState.model_validate({**buff_component.get_default_state(), "dynamics": dynamics})
 
 
-def test_use_buff_component(
-    buff_component: StackableBuffSkillComponent, buff_state: StackableBuffSkillState
-):
+def test_use_buff_component(buff_component: StackableBuffSkillComponent, buff_state: StackableBuffSkillState):
     # when
     state, _ = buff_component.use(None, buff_state)
 
@@ -39,9 +35,7 @@ def test_use_buff_component(
     assert buff_component.buff(state) == Stat(attack_power=30)
 
 
-def test_use_buff_component_twice(
-    buff_component: StackableBuffSkillComponent, buff_state: StackableBuffSkillState
-):
+def test_use_buff_component_twice(buff_component: StackableBuffSkillComponent, buff_state: StackableBuffSkillState):
     # when
     state, _ = buff_component.use(None, buff_state)
     state, _ = buff_component.use(None, state)
@@ -50,9 +44,7 @@ def test_use_buff_component_twice(
     assert buff_component.buff(state) == Stat(attack_power=60)
 
 
-def test_use_buff_component_remains(
-    buff_component: StackableBuffSkillComponent, buff_state: StackableBuffSkillState
-):
+def test_use_buff_component_remains(buff_component: StackableBuffSkillComponent, buff_state: StackableBuffSkillState):
     # when
     state, _ = buff_component.use(None, buff_state)
     state, _ = buff_component.elapse(10_000, state)
@@ -61,9 +53,7 @@ def test_use_buff_component_remains(
     assert buff_component.buff(state) == Stat(attack_power=30)
 
 
-def test_use_buff_component_turns_off(
-    buff_component: StackableBuffSkillComponent, buff_state: StackableBuffSkillState
-):
+def test_use_buff_component_turns_off(buff_component: StackableBuffSkillComponent, buff_state: StackableBuffSkillState):
     # when
     state, _ = buff_component.use(None, buff_state)
     state, _ = buff_component.elapse(20_000, state)
@@ -72,9 +62,7 @@ def test_use_buff_component_turns_off(
     assert buff_component.buff(state) is None
 
 
-def test_buff_skill_use_forbidden(
-    buff_component: StackableBuffSkillComponent, buff_state: StackableBuffSkillState
-):
+def test_buff_skill_use_forbidden(buff_component: StackableBuffSkillComponent, buff_state: StackableBuffSkillState):
     # when
     state, _ = buff_component.use(None, buff_state)
     state, _ = buff_component.elapse(20_000, state)

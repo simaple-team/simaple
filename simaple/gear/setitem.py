@@ -11,9 +11,7 @@ from simaple.core import Stat
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository
 
-SET_ITEM_RESOURCE_PATH = os.path.join(
-    os.path.dirname(__file__), "resources", "set_item.json"
-)
+SET_ITEM_RESOURCE_PATH = os.path.join(os.path.dirname(__file__), "resources", "set_item.json")
 
 
 class SetItem(BaseModel):
@@ -24,9 +22,7 @@ class SetItem(BaseModel):
     effects: list[Stat] = []
 
     def get_effect(self, count) -> Stat:
-        return sum(
-            [self.effects[i] for i in range(min(len(self.effects), count + 1))], Stat()
-        )
+        return sum([self.effects[i] for i in range(min(len(self.effects), count + 1))], Stat())
 
     def gear_ids(self) -> List[int]:
         return [v.meta.id for v in self.gears]
@@ -40,24 +36,14 @@ class SetItem(BaseModel):
                 count += 1
                 applied_types.append(gear.meta.type)
 
-        if (
-            joker_gear is not None
-            and joker_gear.meta.type not in applied_types
-            and joker_gear.meta.type in existing_types
-            and count >= 3
-        ):
+        if joker_gear is not None and joker_gear.meta.type not in applied_types and joker_gear.meta.type in existing_types and count >= 3:
             count += 1
 
         return count
 
     def measure(self, other_set_items: List[SetItem], gears: List[Gear]) -> int:
         def _get_set_item_basis(_set_items, _gears, _joker_gear=None) -> int:
-            return sum(
-                [
-                    set_item.count(_gears, joker_gear=_joker_gear)
-                    for set_item in _set_items
-                ]
-            )
+            return sum([set_item.count(_gears, joker_gear=_joker_gear) for set_item in _set_items])
 
         joker_gears = [gear for gear in gears if gear.meta.joker_to_set_item]
         joker_gears.sort(key=lambda x: x.meta.id)
@@ -65,9 +51,7 @@ class SetItem(BaseModel):
         if len(joker_gears) > 0:
             set_item_count_basis = _get_set_item_basis(other_set_items, gears)
             for joker_gear in joker_gears:
-                current_count_basis = _get_set_item_basis(
-                    other_set_items, gears, _joker_gear=joker_gear
-                )
+                current_count_basis = _get_set_item_basis(other_set_items, gears, _joker_gear=joker_gear)
                 if current_count_basis > set_item_count_basis:
                     return self.count(gears, joker_gear=joker_gear)
 
@@ -76,10 +60,12 @@ class SetItem(BaseModel):
 
 class SetItemRepository(metaclass=ABCMeta):
     @abstractmethod
-    def get(self, set_item_id) -> SetItem: ...
+    def get(self, set_item_id) -> SetItem:
+        ...
 
     @abstractmethod
-    def get_all(self, gears: Iterable[Gear]) -> list[SetItem]: ...
+    def get_all(self, gears: Iterable[Gear]) -> list[SetItem]:
+        ...
 
 
 class WzresourceStatRepresentation(TypedDict, total=False):
@@ -138,9 +124,7 @@ class KMSSetItemRepository(SetItemRepository):
         )
         return stat
 
-    def _parse_from_raw(
-        self, set_item_id: int, raw_set_item: WzresourceSetItemEntity
-    ) -> SetItem:
+    def _parse_from_raw(self, set_item_id: int, raw_set_item: WzresourceSetItemEntity) -> SetItem:
         maximum_effects = max(map(int, raw_set_item["effect"].keys()))
         effects = [Stat() for i in range(maximum_effects + 1)]
 
@@ -150,9 +134,7 @@ class KMSSetItemRepository(SetItemRepository):
         return SetItem(
             effects=effects,
             gears=[
-                self._gear_repository.get_by_id(int(gear_id))
-                for gear_id in raw_set_item["items"]
-                if self._gear_repository.exists(gear_id)
+                self._gear_repository.get_by_id(int(gear_id)) for gear_id in raw_set_item["items"] if self._gear_repository.exists(gear_id)
             ],
             name=raw_set_item["name"],
             id=set_item_id,
@@ -186,7 +168,4 @@ class KMSSetItemRepository(SetItemRepository):
 
         existing_set_items = [self.get(set_item_id) for set_item_id in set_item_ids]
 
-        return [
-            (set_item, set_item.measure(existing_set_items, gears))
-            for set_item in existing_set_items
-        ]
+        return [(set_item, set_item.measure(existing_set_items, gears)) for set_item in existing_set_items]

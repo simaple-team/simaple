@@ -23,8 +23,6 @@ def get_doping_loader() -> SpecBasedLoader:
 def get_normal_doping() -> ExtendedStat:
     loader = get_doping_loader()
 
-    dopings: list[NamedStat] = loader.load_all(
-        query={"kind": "NamedStat", "level": "normal"}
-    )
+    dopings: list[NamedStat] = loader.load_all(query={"kind": "NamedStat", "level": "normal"})
 
     return sum((doping.get_extended_stat() for doping in dopings), ExtendedStat())

@@ -67,9 +67,7 @@ class AdeleEtherComponent(Component):
                 creation_step=self.creation_step,
                 order_consume=self.order_consume,
             ),
-            "periodic": Periodic(
-                interval=self.periodic_interval, time_left=999_999_999
-            ),
+            "periodic": Periodic(interval=self.periodic_interval, time_left=999_999_999),
         }
 
     @reducer_method
@@ -93,9 +91,7 @@ class AdeleEtherComponent(Component):
     ):
         state = state.deepcopy()
 
-        state.ether_gauge.increase(
-            int(self.stack_per_trigger * state.restore_lasting.get_gain_rate())
-        )
+        state.ether_gauge.increase(int(self.stack_per_trigger * state.restore_lasting.get_gain_rate()))
 
         return state, []
 
@@ -143,9 +139,7 @@ class CreationState(ReducerState):
     dynamics: Dynamics
 
 
-class AdeleCreationComponent(
-    SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait
-):
+class AdeleCreationComponent(SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait):
     name: str
     damage: float
     hit_per_sword: float
@@ -190,9 +184,7 @@ class OrderSword(Entity):
     def enabled(self):
         return len(self.running_swords) > 0
 
-    def add_running(
-        self, initial_counter: float, time_left: float, max_sword_count: int
-    ):
+    def add_running(self, initial_counter: float, time_left: float, max_sword_count: int):
         result = self.running_swords + [(initial_counter, time_left)]
         self._set_running_swords(result, max_sword_count)
 
@@ -216,9 +208,7 @@ class OrderSword(Entity):
 
         self._set_running_swords(result, max_sword_count)
 
-    def _set_running_swords(
-        self, swords: list[tuple[float, float]], max_sword_count: int
-    ):
+    def _set_running_swords(self, swords: list[tuple[float, float]], max_sword_count: int):
         self.running_swords = swords
         while self.get_sword_count() > max_sword_count:
             self.running_swords = self.running_swords[1:]
@@ -268,9 +258,7 @@ class AdeleOrderComponent(SkillComponent):
         dealing_events = []
 
         for _ in state.order_sword.resolving(time, self._max_sword_count(state)):
-            dealing_events.append(
-                self.event_provider.dealt(self.periodic_damage, self.periodic_hit)
-            )
+            dealing_events.append(self.event_provider.dealt(self.periodic_damage, self.periodic_hit))
 
         return state, [self.event_provider.elapsed(time)] + dealing_events
 
@@ -288,13 +276,9 @@ class AdeleOrderComponent(SkillComponent):
         damage, hit = self.periodic_damage, self.periodic_hit
         delay = self._get_delay()
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration()))
 
-        state.order_sword.add_running(
-            0, self.lasting_duration, self._max_sword_count(state)
-        )
+        state.order_sword.add_running(0, self.lasting_duration, self._max_sword_count(state))
 
         return state, [
             self.event_provider.dealt(damage, hit),
@@ -394,9 +378,7 @@ class AdeleBlossomComponent(SkillComponent, UseSimpleAttackTrait):
         if not self._is_valid(state):
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration()))
 
         damage, hit = self._get_simple_damage_hit()
         delay = self._get_delay()
@@ -484,16 +466,8 @@ class AdeleRuinComponent(
         lapse_count_second = state.interval_state_second.elapse(time)
 
         return state, [self.event_provider.elapsed(time)] + [
-            self.event_provider.dealt(
-                self.periodic_damage_first, self.periodic_hit_first
-            )
-            for _ in range(lapse_count_first)
-        ] + [
-            self.event_provider.dealt(
-                self.periodic_damage_second, self.periodic_hit_second
-            )
-            for _ in range(lapse_count_second)
-        ]
+            self.event_provider.dealt(self.periodic_damage_first, self.periodic_hit_first) for _ in range(lapse_count_first)
+        ] + [self.event_provider.dealt(self.periodic_damage_second, self.periodic_hit_second) for _ in range(lapse_count_second)]
 
     @reducer_method
     def use(
@@ -508,9 +482,7 @@ class AdeleRuinComponent(
 
         delay = self._get_delay()
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration()))
         state.interval_state_first.set_time_left(time=self.lasting_duration_first)
         state.interval_state_second.set_time_left(
             time=self.lasting_duration_first + self.lasting_duration_second,
@@ -552,18 +524,12 @@ class AdeleRestoreBuffComponent(SkillComponent):
     stat: Stat
 
     def get_default_state(self):
-        return {
-            "lasting": RestoreLasting(
-                time_left=0, ether_multiplier=self.ether_multiplier
-            )
-        }
+        return {"lasting": RestoreLasting(time_left=0, ether_multiplier=self.ether_multiplier)}
 
     @reducer_method
     def use(self, _: None, state: AdeleRestoreState):
         state = state.deepcopy()
-        state.lasting.set_time_left(
-            state.dynamics.stat.calculate_buff_duration(self.lasting_duration)
-        )
+        state.lasting.set_time_left(state.dynamics.stat.calculate_buff_duration(self.lasting_duration))
         return state, [self.event_provider.delayed(self.delay)]
 
     @reducer_method
@@ -597,9 +563,7 @@ class AdeleStormState(ReducerState):
     order_sword: OrderSword
 
 
-class AdeleStormComponent(
-    SkillComponent, PeriodicWithSimpleDamageTrait, CooldownValidityTrait
-):
+class AdeleStormComponent(SkillComponent, PeriodicWithSimpleDamageTrait, CooldownValidityTrait):
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float

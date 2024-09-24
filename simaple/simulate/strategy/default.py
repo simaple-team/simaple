@@ -58,9 +58,7 @@ def cast_by_priority(order: list[str]) -> DSLGeneratorProto:
     return _gen
 
 
-def keydown_until_interrupt(
-    keydown_skill_name: str, order: list[str]
-) -> DSLGeneratorProto:
+def keydown_until_interrupt(keydown_skill_name: str, order: list[str]) -> DSLGeneratorProto:
     def _gen(ctx: RuntimeContextType):
         stopby = []
         for name in order:

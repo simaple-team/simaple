@@ -47,45 +47,33 @@ def test_attack_skill_include_reforgedskill(
     (
         attack_skill_include_reforgedskill_state,
         events,
-    ) = attack_skill_include_reforgedskill.use(
-        None, attack_skill_include_reforgedskill_state
-    )
+    ) = attack_skill_include_reforgedskill.use(None, attack_skill_include_reforgedskill_state)
     assert compute_total_damage_coefficient(events) == 6000
 
     (
         attack_skill_include_reforgedskill_state,
         events,
-    ) = attack_skill_include_reforgedskill.use(
-        None, attack_skill_include_reforgedskill_state
-    )
+    ) = attack_skill_include_reforgedskill.use(None, attack_skill_include_reforgedskill_state)
     assert compute_total_damage_coefficient(events) == 600
 
     (
         attack_skill_include_reforgedskill_state,
         events,
-    ) = attack_skill_include_reforgedskill.elapse(
-        5_000, attack_skill_include_reforgedskill_state
-    )
+    ) = attack_skill_include_reforgedskill.elapse(5_000, attack_skill_include_reforgedskill_state)
 
     (
         attack_skill_include_reforgedskill_state,
         events,
-    ) = attack_skill_include_reforgedskill.use(
-        None, attack_skill_include_reforgedskill_state
-    )
+    ) = attack_skill_include_reforgedskill.use(None, attack_skill_include_reforgedskill_state)
     assert compute_total_damage_coefficient(events) == 600
 
     (
         attack_skill_include_reforgedskill_state,
         events,
-    ) = attack_skill_include_reforgedskill.elapse(
-        2_000, attack_skill_include_reforgedskill_state
-    )
+    ) = attack_skill_include_reforgedskill.elapse(2_000, attack_skill_include_reforgedskill_state)
 
     (
         attack_skill_include_reforgedskill_state,
         events,
-    ) = attack_skill_include_reforgedskill.use(
-        None, attack_skill_include_reforgedskill_state
-    )
+    ) = attack_skill_include_reforgedskill.use(None, attack_skill_include_reforgedskill_state)
     assert compute_total_damage_coefficient(events) == 6000

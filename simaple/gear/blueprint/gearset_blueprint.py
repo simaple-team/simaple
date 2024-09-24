@@ -16,7 +16,8 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 
 class GearsetBlueprint(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="blueprint")):
     @abstractmethod
-    def build(self, set_item_repository: SetItemRepository) -> Gearset: ...
+    def build(self, set_item_repository: SetItemRepository) -> Gearset:
+        ...
 
 
 # TODO: weapon potential optimizer (stand-alone)
@@ -43,12 +44,7 @@ class UserGearsetBlueprint(GearsetBlueprint):
 
         gearset.set_title_stat(self.title)
         gearset.annotate_weapon_potential_tiers(self.weapon_potential_tiers)
-        gearset.set_symbols(
-            [
-                symbol_template.get_symbol()
-                for symbol_template in self.arcane_symbols + self.authentic_symbols
-            ]
-        )
+        gearset.set_symbols([symbol_template.get_symbol() for symbol_template in self.arcane_symbols + self.authentic_symbols])
 
         gearset.set_pet_equip_stat(self.pet_equip)
         gearset.set_pet_set_option(self.pet_set)

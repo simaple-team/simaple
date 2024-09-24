@@ -15,7 +15,8 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 )
 
 
-class Entity(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="Entity")): ...
+class Entity(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="Entity")):
+    ...
 
 
 class Action(TypedDict):
@@ -67,19 +68,24 @@ class Store(metaclass=ABCMeta):
         return self.read_entity(name, default=default), entity_setter
 
     @abstractmethod
-    def read_entity(self, name: str, default: Optional[Entity]): ...
+    def read_entity(self, name: str, default: Optional[Entity]):
+        ...
 
     @abstractmethod
-    def set_entity(self, name: str, entity: Entity): ...
+    def set_entity(self, name: str, entity: Entity):
+        ...
 
     @abstractmethod
-    def local(self, address: str) -> Store: ...
+    def local(self, address: str) -> Store:
+        ...
 
     @abstractmethod
-    def save(self) -> Any: ...
+    def save(self) -> Any:
+        ...
 
     @abstractmethod
-    def load(self, saved_store) -> None: ...
+    def load(self, saved_store) -> None:
+        ...
 
 
 class ConcreteStore(Store):
@@ -96,7 +102,8 @@ class ConcreteStore(Store):
             value = self._entities.setdefault(name, default)
         if value is None:
             raise ValueError(
-                f"No entity exists: {name}. None-default only enabled for external-property binding. Maybe missing global proeperty installation?"
+                f"No entity exists: {name}. None-default only enabled \
+for external-property binding. Maybe missing global proeperty installation?"
             )
         return value
 
@@ -135,9 +142,7 @@ class AddressedStore(Store):
         return self._concrete_store.read_entity(address, default)
 
     def local(self, address: str):
-        return AddressedStore(
-            self._concrete_store, f"{self._current_address}.{address}"
-        )
+        return AddressedStore(self._concrete_store, f"{self._current_address}.{address}")
 
     def _resolve_address(self, name: str):
         """descriminate local-variable (no period) and global-variable (with period)"""
@@ -155,13 +160,16 @@ class AddressedStore(Store):
 
 class Dispatcher(metaclass=ABCMeta):
     @abstractmethod
-    def __call__(self, action: Action, store: Store) -> list[Event]: ...
+    def __call__(self, action: Action, store: Store) -> list[Event]:
+        ...
 
     @abstractmethod
-    def includes(self, signature: str) -> bool: ...
+    def includes(self, signature: str) -> bool:
+        ...
 
     @abstractmethod
-    def init_store(self, store: Store) -> None: ...
+    def init_store(self, store: Store) -> None:
+        ...
 
 
 def named_dispatcher(direction: str):
@@ -273,9 +281,7 @@ class ViewSet:
 
     def get_views(self, view_name_pattern: str) -> list[View]:
         regex = re.compile(view_name_pattern)
-        return [
-            view for view_name, view in self._views.items() if regex.match(view_name)
-        ]
+        return [view for view_name, view in self._views.items() if regex.match(view_name)]
 
     def get_viewer_from_ckpt(self, ckpt: Checkpoint) -> ViewerType:
         return self.get_viewer(ckpt.restore())
@@ -293,9 +299,8 @@ class PostActionCallback:
     PostActionCallback receives viewer; this ensure callback can read every state, but cannot modify.
     """
 
-    def __call__(
-        self, event: Event, viewer: ViewerType, all_events: list[Event]
-    ) -> None: ...
+    def __call__(self, event: Event, viewer: ViewerType, all_events: list[Event]) -> None:
+        ...
 
 
 class PreviousCallback(Entity):
@@ -309,9 +314,7 @@ def play(store: S, action: Action, router: RouterDispatcher) -> tuple[S, list[Ev
     events: list[Event] = []
     action_queue = [action]
 
-    previous_callbacks = store.read_entity(
-        "previous_callbacks", default=PreviousCallback(events=[])
-    )
+    previous_callbacks = store.read_entity("previous_callbacks", default=PreviousCallback(events=[]))
 
     # Join proposed action with previous event's callback
     for emitted_callback, done_callback in previous_callbacks.events:
@@ -352,9 +355,7 @@ class SimulationRuntime:
     Runtime is a simple environment that handles action.
     """
 
-    def __init__(
-        self, store: AddressedStore, router: RouterDispatcher, viewset: ViewSet
-    ):
+    def __init__(self, store: AddressedStore, router: RouterDispatcher, viewset: ViewSet):
         self._router: RouterDispatcher = router
         self._store = store
         self._viewset = viewset

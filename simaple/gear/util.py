@@ -1,13 +1,4 @@
-embed_string = (
-    "KQQQQQQQQQ"
-    + "FEHGBAQQQQ"
-    + "PONMLKJIHG"
-    + "CDABGHEFKL"
-    + "LKJIPONMDC"
-    + "HGFEDCBAPO"
-    + "OPMNKLIJGH"
-    + "BADCFEHGJI"
-)
+embed_string = "KQQQQQQQQQ" + "FEHGBAQQQQ" + "PONMLKJIHG" + "CDABGHEFKL" + "LKJIPONMDC" + "HGFEDCBAPO" + "OPMNKLIJGH" + "BADCFEHGJI"
 
 
 class GearIDCodec:

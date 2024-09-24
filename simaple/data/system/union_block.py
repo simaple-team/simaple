@@ -15,12 +15,7 @@ def get_all_blocks() -> list[UnionBlock]:
     )
 
 
-def create_with_some_large_blocks(
-    large_block_jobs: list[JobType], default_size: int = 4, large_size: int = 5
-) -> UnionSquad:
+def create_with_some_large_blocks(large_block_jobs: list[JobType], default_size: int = 4, large_size: int = 5) -> UnionSquad:
     blocks = get_all_blocks()
-    size = [
-        (large_size if block.job in large_block_jobs else default_size)
-        for block in blocks
-    ]
+    size = [(large_size if block.job in large_block_jobs else default_size) for block in blocks]
     return UnionSquad(blocks=blocks, block_size=size)

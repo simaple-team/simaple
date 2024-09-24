@@ -48,9 +48,7 @@ def test_keydown_complex_count(
 ):
     # given
     keydown = Keydown(interval=interval)
-    keydown.start(
-        maximum_keydown_time=maximum_keydown_time, prepare_delay=prepare_delay
-    )
+    keydown.start(maximum_keydown_time=maximum_keydown_time, prepare_delay=prepare_delay)
 
     # when
     resolved_count = len(list(keydown.resolving(elapse_time)))
@@ -77,9 +75,7 @@ def test_keydown_multiple_elapse(
 ):
     # given
     keydown = Keydown(interval=interval)
-    keydown.start(
-        maximum_keydown_time=maximum_keydown_time, prepare_delay=prepare_delay
-    )
+    keydown.start(maximum_keydown_time=maximum_keydown_time, prepare_delay=prepare_delay)
 
     # when
     resolved_count = 0

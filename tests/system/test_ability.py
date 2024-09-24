@@ -41,6 +41,4 @@ def test_ability_stat():
     ]
 
     result = get_ability_stat(lines)
-    assert result == ExtendedStat(
-        action_stat=ActionStat(buff_duration=37), stat=Stat(boss_damage_multiplier=28)
-    )
+    assert result == ExtendedStat(action_stat=ActionStat(buff_duration=37), stat=Stat(boss_damage_multiplier=28))

@@ -19,9 +19,7 @@ def test_run_engine():
         hexa_improvements_level=10,
     )
     _simulation_environment_memoizer = PersistentStorageMemoizer()
-    container = SimulationContainer(
-        _simulation_environment_memoizer.compute_environment(_environment_provider)
-    )
+    container = SimulationContainer(_simulation_environment_memoizer.compute_environment(_environment_provider))
     engine = container.operation_engine()
     _, commands = parse_simaple_runtime(
         """

@@ -27,9 +27,7 @@ def test_view():
     global_property.install_global_properties(store)
     viewset = ViewSet()
 
-    component = ViewTestComponent(
-        name="test_component", delay=0, cooldown_duration=0, id="test"
-    )
+    component = ViewTestComponent(name="test_component", delay=0, cooldown_duration=0, id="test")
 
     for view_name, view in component.get_views().items():
         viewset.add_view(f"{component.name}.{view_name}", view)

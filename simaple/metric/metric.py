@@ -12,7 +12,8 @@ from simaple.core.damage import DamageLogic
 
 class Metric(metaclass=ABCMeta):
     @abstractmethod
-    def evaluate(self, stat: Stat) -> float: ...
+    def evaluate(self, stat: Stat) -> float:
+        ...
 
 
 class RegressionMetric(Metric):
@@ -42,10 +43,7 @@ class RegressionMetric(Metric):
         return self.damage_logic.get_major_stat(stat + self._item_independent_stat)
 
     def _get_scale(self, stat: Stat) -> float:
-        return (
-            self.damage_logic.get_damage_factor(stat + self._item_independent_stat)
-            / 1e9
-        )
+        return self.damage_logic.get_damage_factor(stat + self._item_independent_stat) / 1e9
 
     def evaluate(self, stat: Stat) -> float:
         scales = [self._get_scale(ref_stat) for ref_stat in self._references]

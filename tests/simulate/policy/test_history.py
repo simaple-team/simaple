@@ -8,9 +8,7 @@ from simaple.simulate.policy.base import Operation, OperationLog, SimulationHist
 def fixture_history_use_playlog():
     return PlayLog(
         action={"name": "A", "method": "use", "payload": None},
-        events=[
-            {"name": "A", "payload": {}, "method": "use", "tag": None, "handler": None}
-        ],
+        events=[{"name": "A", "payload": {}, "method": "use", "tag": None, "handler": None}],
         clock=3000.0,
         checkpoint=Checkpoint(store_ckpt={}),
     )

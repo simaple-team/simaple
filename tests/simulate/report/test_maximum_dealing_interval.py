@@ -15,9 +15,7 @@ def test_maximum_interval():
         (7, 100),
     ]
 
-    assert (300.0 * 3, 3, 6) == feature._find_maximum_dealing_interval(
-        sample_damage_seq
-    )
+    assert (300.0 * 3, 3, 6) == feature._find_maximum_dealing_interval(sample_damage_seq)
 
 
 def test_duplicated_maximum_interval():
@@ -36,9 +34,7 @@ def test_duplicated_maximum_interval():
         (7, 100),
     ]
 
-    assert (500.0 * 3, 3, 8) == feature._find_maximum_dealing_interval(
-        sample_damage_seq
-    )
+    assert (500.0 * 3, 3, 8) == feature._find_maximum_dealing_interval(sample_damage_seq)
 
 
 def test_multiple_zone():
@@ -59,9 +55,7 @@ def test_multiple_zone():
         (11, 0),
     ]
 
-    assert (1300.0 * 3, 8, 11) == feature._find_maximum_dealing_interval(
-        sample_damage_seq
-    )
+    assert (1300.0 * 3, 8, 11) == feature._find_maximum_dealing_interval(sample_damage_seq)
 
 
 def test_dynamic_time():

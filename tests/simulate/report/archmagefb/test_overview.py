@@ -7,13 +7,9 @@ from simaple.simulate.reserved_names import Tag
 def test_buff_view(archmagefb_simulation_runtime: SimulationRuntime):
     current_buff_stat = archmagefb_simulation_runtime.get_viewer()("buff")
 
-    archmagefb_simulation_runtime.play(
-        dict(name="에픽 어드벤쳐", method="use", payload=None)
-    )
+    archmagefb_simulation_runtime.play(dict(name="에픽 어드벤쳐", method="use", payload=None))
 
-    assert archmagefb_simulation_runtime.get_viewer()(
-        "buff"
-    ) == current_buff_stat + Stat(damage_multiplier=10)
+    assert archmagefb_simulation_runtime.get_viewer()("buff") == current_buff_stat + Stat(damage_multiplier=10)
 
 
 def test_poison_nova(archmagefb_simulation_runtime: SimulationRuntime):
@@ -48,7 +44,4 @@ def test_poison_chain(archmagefb_simulation_runtime: SimulationRuntime):
     assert len(damage_events) == 9 + 1
 
     for idx in range(1, 5):
-        assert (
-            damage_events[idx + 1]["payload"]["damage"]
-            > damage_events[idx]["payload"]["damage"]
-        )
+        assert damage_events[idx + 1]["payload"]["damage"] > damage_events[idx]["payload"]["damage"]

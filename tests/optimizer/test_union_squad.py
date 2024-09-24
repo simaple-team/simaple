@@ -92,10 +92,6 @@ def test_optimizer(maximum_cost, expected_stat):
     elapsed = time.time() - start
 
     assert sum(output.state) == maximum_cost
-    logger.info(
-        f"Optimization output {str(output.state)}; size {sum(output.state)}; spent: {elapsed:.02f}s"
-    )
+    logger.info(f"Optimization output {str(output.state)}; size {sum(output.state)}; spent: {elapsed:.02f}s")
 
-    assert (
-        initial_squad.get_masked(output.state).get_stat().short_dict() == expected_stat
-    )
+    assert initial_squad.get_masked(output.state).get_stat().short_dict() == expected_stat

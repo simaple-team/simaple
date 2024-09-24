@@ -48,12 +48,8 @@ class SimulationEntry(pydantic.BaseModel):
 
     @classmethod
     def build(cls, playlog: PlayLog, buff: Stat) -> "SimulationEntry":
-        maybe_damage_logs = [
-            _create_damage_log(event, buff) for event in playlog.events
-        ]
-        damage_logs: list[DamageLog] = [
-            damage_logs for damage_logs in maybe_damage_logs if damage_logs is not None
-        ]
+        maybe_damage_logs = [_create_damage_log(event, buff) for event in playlog.events]
+        damage_logs: list[DamageLog] = [damage_logs for damage_logs in maybe_damage_logs if damage_logs is not None]
 
         return SimulationEntry(
             action=playlog.action,

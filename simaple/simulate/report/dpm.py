@@ -10,15 +10,52 @@ class LevelAdvantage:
     def __init__(self) -> None:
         self._advantage_table: list[float] = [
             # fmt: off
-            1.2, 1.18, 1.16, 1.14, 1.12, 1.1,
-            1.0584, 1.0070, 0.9672, 0.9180, 0.88,
-            .85, .83, .80, .78, .75,
-            .73, .70, .68, .65, .63,
-            .60, .58, .55, .53, .50,
-            .48, .45, .43, .40, .38,
-            .35, .33, .30, .28, .25,
-            .23, .20, .18, .15, .13,
-            .10, .08, .05, .02, .00
+            1.2,
+            1.18,
+            1.16,
+            1.14,
+            1.12,
+            1.1,
+            1.0584,
+            1.0070,
+            0.9672,
+            0.9180,
+            0.88,
+            0.85,
+            0.83,
+            0.80,
+            0.78,
+            0.75,
+            0.73,
+            0.70,
+            0.68,
+            0.65,
+            0.63,
+            0.60,
+            0.58,
+            0.55,
+            0.53,
+            0.50,
+            0.48,
+            0.45,
+            0.43,
+            0.40,
+            0.38,
+            0.35,
+            0.33,
+            0.30,
+            0.28,
+            0.25,
+            0.23,
+            0.20,
+            0.18,
+            0.15,
+            0.13,
+            0.10,
+            0.08,
+            0.05,
+            0.02,
+            0.00,
         ]
         # fmt: on
         self._bias = 5
@@ -49,13 +86,7 @@ class DamageCalculator(pydantic.BaseModel):
         else:
             raise ValueError
 
-        return (
-            (log.damage * 0.01)
-            * log.hit
-            * damage_factor
-            * self.level_advantage
-            * self.force_advantage
-        )
+        return (log.damage * 0.01) * log.hit * damage_factor * self.level_advantage * self.force_advantage
 
     def calculate_damage(self, entry: SimulationEntry) -> float:
         total_damage = 0

@@ -44,10 +44,7 @@ class UltimateDarkSightComponent(SkillComponent, BuffTrait, CooldownValidityTrai
     @view_method
     def buff(self, state: UltimateDarkSightState) -> Optional[Stat]:
         if state.lasting.enabled():
-            return Stat(
-                final_damage_multiplier=self.final_damage_multiplier
-                + self.advanced_dark_sight_final_damage_multiplier
-            )
+            return Stat(final_damage_multiplier=self.final_damage_multiplier + self.advanced_dark_sight_final_damage_multiplier)
 
         return None
 

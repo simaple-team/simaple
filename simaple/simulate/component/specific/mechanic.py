@@ -116,9 +116,7 @@ class RobotSummonState(ReducerState):
     dynamics: Dynamics
 
 
-class RobotSummonSkill(
-    SkillComponent, PeriodicWithSimpleDamageTrait, CooldownValidityTrait
-):
+class RobotSummonSkill(SkillComponent, PeriodicWithSimpleDamageTrait, CooldownValidityTrait):
     binds: dict[str, str] = {"robot_mastery": ".로봇 마스터리.robot_mastery"}
     name: str
     damage: float
@@ -238,13 +236,7 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
             self.event_provider.dealt(
                 self.periodic_damage,
                 self.get_homming_missile_hit(state),
-                (
-                    Stat(
-                        final_damage_multiplier=self.final_damage_multiplier_during_barrage
-                    )
-                    if state.full_barrage_keydown.running
-                    else None
-                ),
+                (Stat(final_damage_multiplier=self.final_damage_multiplier_during_barrage) if state.full_barrage_keydown.running else None),
             )
             for _ in range(lapse_count)
         ]
@@ -278,9 +270,7 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
     def _get_lasting_duration(self, state: HommingMissileState) -> float:
         return self.lasting_duration
 
-    def _get_periodic_damage_hit(
-        self, state: HommingMissileState
-    ) -> tuple[float, float]:
+    def _get_periodic_damage_hit(self, state: HommingMissileState) -> tuple[float, float]:
         return self.periodic_damage, self.periodic_hit
 
 
@@ -291,9 +281,7 @@ class FullMetalBarrageState(ReducerState):
     dynamics: Dynamics
 
 
-class FullMetalBarrageComponent(
-    SkillComponent, KeydownSkillTrait, CooldownValidityTrait
-):
+class FullMetalBarrageComponent(SkillComponent, KeydownSkillTrait, CooldownValidityTrait):
     maximum_keydown_time: float
 
     damage: float
@@ -429,9 +417,7 @@ class MultipleOptionComponent(SkillComponent, CooldownValidityTrait):
         if not state.cooldown.available:
             return state, self.event_provider.rejected()
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self.cooldown_duration))
         state.periodic.set_time_left(self.lasting_duration)
         state.cycle.clear()
 
@@ -487,9 +473,7 @@ class DynamicIntervalPeriodic(Entity):
         elapse_count = 0
 
         while self.interval_counter <= 0 and elapse_count < maximum_elapsed:
-            self.interval_counter += (
-                self.interval + self.count * self.count_interval_penalty
-            )
+            self.interval_counter += self.interval + self.count * self.count_interval_penalty
             elapse_count += 1
             yield self.count
             self.count += 1
@@ -563,9 +547,7 @@ class MecaCarrier(SkillComponent, CooldownValidityTrait):
         if not state.cooldown.available:
             return state, self.event_provider.rejected()
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self.cooldown_duration))
 
         state.periodic.set_time_left(self.lasting_duration, self.start_intercepter)
 

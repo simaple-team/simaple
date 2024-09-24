@@ -9,17 +9,18 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 )
 
 
-class PassiveHyperskillInterface(
-    pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="PassiveHyperskill")
-):
+class PassiveHyperskillInterface(pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="PassiveHyperskill")):
     @abstractmethod
-    def get_target_name(self) -> str: ...
+    def get_target_name(self) -> str:
+        ...
 
     @abstractmethod
-    def modify(self, origin: dict) -> dict: ...
+    def modify(self, origin: dict) -> dict:
+        ...
 
     @abstractmethod
-    def get_name(self) -> str: ...
+    def get_name(self) -> str:
+        ...
 
 
 class PassiveHyperskill(PassiveHyperskillInterface):

@@ -50,8 +50,7 @@ from simaple.gear.improvements import bonus
         ),
         (
             "앱솔랩스 스펠링스태프",
-            Stat(damage_multiplier=4, boss_damage_multiplier=10)
-            + Stat.all_stat_multiplier(5),
+            Stat(damage_multiplier=4, boss_damage_multiplier=10) + Stat.all_stat_multiplier(5),
             [
                 bonus.BossDamageMultiplierBonus(grade=5),
                 bonus.DamageMultiplierBonus(grade=4),
@@ -60,9 +59,7 @@ from simaple.gear.improvements import bonus
         ),
         (
             "앱솔랩스 스펠링스태프",
-            Stat(
-                damage_multiplier=4, boss_damage_multiplier=10, MHP=480 * 5, MMP=480 * 5
-            ),
+            Stat(damage_multiplier=4, boss_damage_multiplier=10, MHP=480 * 5, MMP=480 * 5),
             [
                 bonus.ResourcePointBonus(stat_type="MHP", grade=5),
                 bonus.ResourcePointBonus(stat_type="MMP", grade=5),

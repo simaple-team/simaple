@@ -22,13 +22,7 @@ class GearMeta(BaseModel, frozen=True):
     exceptional_enhancement: bool = False
 
     def show(self) -> str:
-        job_string = (
-            "["
-            + ("] [").join(
-                [(" V " if self.req_job & (1 << i) != 0 else "   ") for i in range(5)]
-            )
-            + "]"
-        )
+        job_string = "[" + ("] [").join([(" V " if self.req_job & (1 << i) != 0 else "   ") for i in range(5)]) + "]"
 
         return f"""
         ===================================
@@ -79,10 +73,7 @@ class Gear(BaseModel):
         return self.sum_extended_stat().stat
 
     def sum_extended_stat(self) -> ExtendedStat:
-        potential_extended_stats = (
-            self.potential.get_extended_stat()
-            + self.additional_potential.get_extended_stat()
-        )
+        potential_extended_stats = self.potential.get_extended_stat() + self.additional_potential.get_extended_stat()
         return ExtendedStat(stat=self.stat) + potential_extended_stats
 
     def show(self) -> str:

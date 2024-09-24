@@ -74,12 +74,8 @@ class TestMultipleOption:
         # then
         dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
 
-        assert (
-            sum([e["payload"]["damage"] == missile_damage for e in dealing_event]) == 3
-        )
-        assert (
-            sum([e["payload"]["damage"] == gatling_damage for e in dealing_event]) == 5
-        )
+        assert sum([e["payload"]["damage"] == missile_damage for e in dealing_event]) == 3
+        assert sum([e["payload"]["damage"] == gatling_damage for e in dealing_event]) == 5
 
     def test_multiple_option_discontinuous_use(
         self,
@@ -100,12 +96,8 @@ class TestMultipleOption:
         # then
         dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
 
-        assert (
-            sum([e["payload"]["damage"] == missile_damage for e in dealing_event]) == 3
-        )
-        assert (
-            sum([e["payload"]["damage"] == gatling_damage for e in dealing_event]) == 5
-        )
+        assert sum([e["payload"]["damage"] == missile_damage for e in dealing_event]) == 3
+        assert sum([e["payload"]["damage"] == gatling_damage for e in dealing_event]) == 5
 
     def test_multiple_option_larger_than_period(
         self,
@@ -121,11 +113,5 @@ class TestMultipleOption:
         # then
         dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
 
-        assert (
-            sum([e["payload"]["damage"] == missile_damage for e in dealing_event])
-            == 3 + 3
-        )
-        assert (
-            sum([e["payload"]["damage"] == gatling_damage for e in dealing_event])
-            == 5 + 3
-        )
+        assert sum([e["payload"]["damage"] == missile_damage for e in dealing_event]) == 3 + 3
+        assert sum([e["payload"]["damage"] == gatling_damage for e in dealing_event]) == 5 + 3

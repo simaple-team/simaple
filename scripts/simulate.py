@@ -76,12 +76,7 @@ def run(plan_file: str):
         for playlog in operation_log.playlogs:
             entry = engine.get_simulation_entry(playlog)
             damage_share.update(entry)
-            total_damage = sum(
-                [
-                    damage_calculator.get_damage(damage_log)
-                    for damage_log in entry.damage_logs
-                ]
-            )
+            total_damage = sum([damage_calculator.get_damage(damage_log) for damage_log in entry.damage_logs])
             print(
                 f"{get_status_string(_get_status(playlog, entry))}{entry.clock:6.0f}s | {show_damage_as_string(total_damage).rjust(8)} | {entry.action}|"
             )
@@ -90,9 +85,7 @@ def run(plan_file: str):
 
     feature = MaximumDealingIntervalFeature(30000)
     damage_share.show()
-    damage, _start, _end = feature.find_maximum_dealing_interval(
-        report, damage_calculator
-    )
+    damage, _start, _end = feature.find_maximum_dealing_interval(report, damage_calculator)
 
     print(
         f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {simulation_container.environment.jobtype}"

@@ -59,63 +59,43 @@ class DynamicsProtocol(DeepcopyProtocol, Protocol):
 DynamicsGeneric = TypeVar("DynamicsGeneric", bound=DynamicsProtocol)
 
 
-class ConsumableDynamicsLastingProtocol(
-    ConsumableProtocol, DynamicsProtocol, LastingProtocol, Protocol
-):
+class ConsumableDynamicsLastingProtocol(ConsumableProtocol, DynamicsProtocol, LastingProtocol, Protocol):
     pass
 
 
-ConsumableDynamicsLastingGeneric = TypeVar(
-    "ConsumableDynamicsLastingGeneric", bound=ConsumableDynamicsLastingProtocol
-)
+ConsumableDynamicsLastingGeneric = TypeVar("ConsumableDynamicsLastingGeneric", bound=ConsumableDynamicsLastingProtocol)
 
 
-class CooldownDynamicsLastingProtocol(
-    CooldownProtocol, DynamicsProtocol, LastingProtocol, Protocol
-):
+class CooldownDynamicsLastingProtocol(CooldownProtocol, DynamicsProtocol, LastingProtocol, Protocol):
     pass
 
 
-CooldownDynamicsLastingGeneric = TypeVar(
-    "CooldownDynamicsLastingGeneric", bound=CooldownDynamicsLastingProtocol
-)
+CooldownDynamicsLastingGeneric = TypeVar("CooldownDynamicsLastingGeneric", bound=CooldownDynamicsLastingProtocol)
 
 
 class CooldownDynamicsProtocol(DynamicsProtocol, CooldownProtocol, Protocol):
     pass
 
 
-CooldownDynamicsGeneric = TypeVar(
-    "CooldownDynamicsGeneric", bound=CooldownDynamicsProtocol
-)
+CooldownDynamicsGeneric = TypeVar("CooldownDynamicsGeneric", bound=CooldownDynamicsProtocol)
 
 
 class CooldownPeriodicProtocol(CooldownProtocol, PeriodicProtocol, Protocol):
     pass
 
 
-CooldownPeriodicGeneric = TypeVar(
-    "CooldownPeriodicGeneric", bound=CooldownPeriodicProtocol
-)
+CooldownPeriodicGeneric = TypeVar("CooldownPeriodicGeneric", bound=CooldownPeriodicProtocol)
 
 
-class CooldownDynamicsPeriodicProtocol(
-    CooldownProtocol, PeriodicProtocol, DynamicsProtocol, Protocol
-):
+class CooldownDynamicsPeriodicProtocol(CooldownProtocol, PeriodicProtocol, DynamicsProtocol, Protocol):
     pass
 
 
-CooldownDynamicsPeriodicGeneric = TypeVar(
-    "CooldownDynamicsPeriodicGeneric", bound=CooldownDynamicsPeriodicProtocol
-)
+CooldownDynamicsPeriodicGeneric = TypeVar("CooldownDynamicsPeriodicGeneric", bound=CooldownDynamicsPeriodicProtocol)
 
 
-class CooldownDynamicsKeydownProtocol(
-    CooldownProtocol, KeydownProtocol, DynamicsProtocol, Protocol
-):
+class CooldownDynamicsKeydownProtocol(CooldownProtocol, KeydownProtocol, DynamicsProtocol, Protocol):
     pass
 
 
-CooldownDynamicsKeydownGeneric = TypeVar(
-    "CooldownDynamicsKeydownGeneric", bound=CooldownDynamicsKeydownProtocol
-)
+CooldownDynamicsKeydownGeneric = TypeVar("CooldownDynamicsKeydownGeneric", bound=CooldownDynamicsKeydownProtocol)

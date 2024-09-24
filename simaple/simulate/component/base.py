@@ -37,23 +37,17 @@ class ReducerState(BaseModel):
 
 
 class ComponentMethodWrapper:
-    def __init__(
-        self, func: ReducerType, skip_count=1, static_payload: Optional[dict] = None
-    ):
+    def __init__(self, func: ReducerType, skip_count=1, static_payload: Optional[dict] = None):
         self._func = func
         self._has_payload = skip_count == 1
         self._static_payload = static_payload
 
         self._payload_type: Optional[Type[BaseModel]] = None
         if len(inspect.signature(func).parameters.values()) > 0:
-            self._payload_type = list(inspect.signature(func).parameters.values())[
-                0
-            ].annotation
+            self._payload_type = list(inspect.signature(func).parameters.values())[0].annotation
 
         try:
-            self._state_type = list(inspect.signature(func).parameters.values())[
-                skip_count
-            ].annotation
+            self._state_type = list(inspect.signature(func).parameters.values())[skip_count].annotation
         except IndexError as e:
             logger.info(f"Wrapped method doesn't have state parameter: {func}.")
             raise e
@@ -104,8 +98,7 @@ class StoreAdapter:
 
     def get_state(self, store: Store, state_type):
         entities = {
-            name: store.read_entity(address, default=self._default_state.get(name))
-            for name, address in self._get_bound_names().items()
+            name: store.read_entity(address, default=self._default_state.get(name)) for name, address in self._get_bound_names().items()
         }
 
         return state_type(**entities)
@@ -161,12 +154,8 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
         if reducer is None or method_name is None:
             return []
 
-        input_state = self._store_adapter.get_state(
-            local_store, reducer.get_state_type()
-        )
-        output_state, maybe_events = reducer(
-            reducer.translate_payload(action.get("payload")), input_state
-        )
+        input_state = self._store_adapter.get_state(local_store, reducer.get_state_type())
+        output_state, maybe_events = reducer(reducer.translate_payload(action.get("payload")), input_state)
 
         self._store_adapter.set_state(
             local_store,
@@ -177,9 +166,7 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
 
         return self.tag_events_by_method_name(method_name, events)
 
-    def regularize_returned_event(
-        self, maybe_events: Optional[Union[Event, list[Event]]]
-    ) -> list[Event]:
+    def regularize_returned_event(self, maybe_events: Optional[Union[Event, list[Event]]]) -> list[Event]:
         if maybe_events is None:
             return []
 
@@ -188,9 +175,7 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
 
         return maybe_events
 
-    def tag_events_by_method_name(
-        self, method_name: str, events: list[Event]
-    ) -> list[Event]:
+    def tag_events_by_method_name(self, method_name: str, events: list[Event]) -> list[Event]:
         tagged_events: list[Event] = []
         for event in events:
             tagged_event: Event = {
@@ -242,9 +227,7 @@ class WrappedView:
     def __call__(self, store: Store):
         local_store = store.local(self._name)
         try:
-            input_state = self._store_adapter.get_state(
-                local_store, self._wrapped_view_method.get_state_type()
-            )
+            input_state = self._store_adapter.get_state(local_store, self._wrapped_view_method.get_state_type())
             view = self._wrapped_view_method(input_state)
 
             return view
@@ -260,11 +243,7 @@ class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
         for base in bases:
             previous_reducers.update(getattr(base, "__reducers__", {}))
 
-        reducers = {
-            name
-            for name, value in namespace.items()
-            if getattr(value, "__isreducer__", False)
-        }
+        reducers = {name for name, value in namespace.items() if getattr(value, "__isreducer__", False)}
         reducers.update(previous_reducers)
         cls.__reducers__ = frozenset(reducers)
 
@@ -272,11 +251,7 @@ class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
         for base in bases:
             previous_views.update(getattr(base, "__views__", {}))
 
-        views = {
-            name
-            for name, value in namespace.items()
-            if getattr(value, "__isview__", False)
-        }
+        views = {name for name, value in namespace.items() if getattr(value, "__isview__", False)}
         views.update(previous_views)
         cls.__views__ = frozenset(views)
 
@@ -306,15 +281,14 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
 
     id: str
     name: str
-    listening_actions: dict[str, Union[str, StaticPayloadReducerInfo]] = Field(
-        default_factory=dict
-    )
+    listening_actions: dict[str, Union[str, StaticPayloadReducerInfo]] = Field(default_factory=dict)
     binds: dict[str, str] = Field(default_factory=dict)
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @abstractmethod
-    def get_default_state(self) -> dict[str, Entity]: ...
+    def get_default_state(self) -> dict[str, Entity]:
+        ...
 
     @property
     def event_provider(self) -> EventProvider:
@@ -325,12 +299,8 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     ) -> tuple[dict[str, str], dict[str, ComponentMethodWrapper]]:
         reducer_methods = self.get_every_reducer_methods()
 
-        wild_card_mappings = {
-            f"{WILD_CARD}.{method}": method for method in reducer_methods.keys()
-        }
-        default_mappings = {
-            f"{self.name}.{method}": method for method in reducer_methods.keys()
-        }
+        wild_card_mappings = {f"{WILD_CARD}.{method}": method for method in reducer_methods.keys()}
+        default_mappings = {f"{self.name}.{method}": method for method in reducer_methods.keys()}
         reducer_mappings, method_mappings = {}, {}
         method_mappings.update(default_mappings)
         method_mappings.update(wild_card_mappings)
@@ -340,9 +310,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
             if isinstance(reducer_info, str):
                 method_mappings[listening_signature] = reducer_info
 
-        reducer_mappings.update(
-            {k: reducer_methods[v] for k, v in method_mappings.items()}
-        )
+        reducer_mappings.update({k: reducer_methods[v] for k, v in method_mappings.items()})
 
         # StaticPayloadReducerInfo-type reducers
         for listening_signature, reducer_info in self.listening_actions.items():
@@ -366,15 +334,10 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         )
 
     def get_every_reducer_methods(self):
-        return {
-            method_name: self._get_reducer_method(method_name)
-            for method_name in getattr(self, "__reducers__")
-        }
+        return {method_name: self._get_reducer_method(method_name) for method_name in getattr(self, "__reducers__")}
 
     def _get_reducer_method(self, reducer_name, static_payload: Optional[dict] = None):
-        return ComponentMethodWrapper(
-            getattr(self, reducer_name), static_payload=static_payload
-        )
+        return ComponentMethodWrapper(getattr(self, reducer_name), static_payload=static_payload)
 
     def get_views(self):
         return {

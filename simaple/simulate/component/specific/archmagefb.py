@@ -105,9 +105,7 @@ class PoisonNovaComponent(SkillComponent, AddDOTDamageTrait):
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "poison_nova": PoisonNovaEntity(
-                time_left=0, maximum_time_left=100 * 1000.0
-            ),
+            "poison_nova": PoisonNovaEntity(time_left=0, maximum_time_left=100 * 1000.0),
         }
 
     @reducer_method
@@ -124,9 +122,7 @@ class PoisonNovaComponent(SkillComponent, AddDOTDamageTrait):
         if not state.cooldown.available:
             return state, self.event_provider.rejected()
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self.cooldown_duration))
         state.poison_nova.create_nova(self.nova_remaining_time)
 
         return state, [
@@ -142,9 +138,7 @@ class PoisonNovaComponent(SkillComponent, AddDOTDamageTrait):
         triggered = state.poison_nova.try_trigger_nova()
         if triggered:
             return state, [
-                self.event_provider.dealt(
-                    self.nova_damage, self.nova_single_hit * min(self.nova_hit_count, 3)
-                ),
+                self.event_provider.dealt(self.nova_damage, self.nova_single_hit * min(self.nova_hit_count, 3)),
                 self.event_provider.dealt(
                     self.nova_damage * 0.5,
                     self.nova_single_hit * max(self.nova_hit_count - 3, 0),
@@ -174,9 +168,7 @@ class PoisonChainState(ReducerState):
     dynamics: Dynamics
 
 
-class PoisonChainComponent(
-    SkillComponent, PeriodicWithSimpleDamageTrait, CooldownValidityTrait
-):
+class PoisonChainComponent(SkillComponent, PeriodicWithSimpleDamageTrait, CooldownValidityTrait):
     name: str
     damage: float
     hit: float
@@ -198,10 +190,7 @@ class PoisonChainComponent(
         }
 
     def get_periodic_damage(self, state: PoisonChainState):
-        return (
-            self.periodic_damage
-            + self.periodic_damage_increment * state.stack.get_stack()
-        )
+        return self.periodic_damage + self.periodic_damage_increment * state.stack.get_stack()
 
     @reducer_method
     def elapse(self, time: float, state: PoisonChainState):
@@ -212,11 +201,7 @@ class PoisonChainComponent(
         dealing_events = []
 
         for _ in state.periodic.resolving(time):
-            dealing_events.append(
-                self.event_provider.dealt(
-                    self.get_periodic_damage(state), self.periodic_hit
-                )
-            )
+            dealing_events.append(self.event_provider.dealt(self.get_periodic_damage(state), self.periodic_hit))
             state.stack.increase(1)
 
         return state, [self.event_provider.elapsed(time)] + dealing_events
@@ -283,14 +268,12 @@ class DotPunisherComponent(SkillComponent, CooldownValidityTrait, AddDOTDamageTr
         if not state.cooldown.available:
             return state, self.event_provider.rejected()
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self.cooldown_duration))
 
-        return state, [
-            self.event_provider.dealt(self.damage, self.hit)
-            for _ in range(self.multiple)
-        ] + [self.event_provider.delayed(self.delay), self.get_dot_add_event()]
+        return state, [self.event_provider.dealt(self.damage, self.hit) for _ in range(self.multiple)] + [
+            self.event_provider.delayed(self.delay),
+            self.get_dot_add_event(),
+        ]
 
     @reducer_method
     def elapse(self, time: float, state: DotPunisherState):
@@ -416,9 +399,7 @@ class InfernalVenom(
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self.cooldown_duration))
 
         state.drain_stack.set_max_count(10)
         state.drain_stack.set_count(10)
@@ -431,9 +412,7 @@ class InfernalVenom(
         ]
 
     @reducer_method
-    def elapse(
-        self, time: float, state: InfernalVenomState
-    ) -> tuple[InfernalVenomState, list[Event]]:
+    def elapse(self, time: float, state: InfernalVenomState) -> tuple[InfernalVenomState, list[Event]]:
         state = state.deepcopy()
 
         was_enabled = state.lasting.enabled()
@@ -470,9 +449,7 @@ class FlameSwipVIState(ReducerState):
     stack: Stack
 
 
-class FlameSwipVI(
-    SkillComponent, UseSimpleAttackTrait, AddDOTDamageTrait, CooldownValidityTrait
-):
+class FlameSwipVI(SkillComponent, UseSimpleAttackTrait, AddDOTDamageTrait, CooldownValidityTrait):
     delay: float
     damage: float
     hit: int

@@ -35,9 +35,7 @@ class Iterator:
             yield (i, i, j, j)
 
         for i in range(length):
-            for j, k in itertools.combinations(
-                [idx for idx in range(length) if idx != i], 2
-            ):
+            for j, k in itertools.combinations([idx for idx in range(length) if idx != i], 2):
                 yield (i, i, j, k)
 
         for v in itertools.combinations(range(length), 4):

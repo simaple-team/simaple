@@ -7,9 +7,7 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 )
 
 
-class BuiltinStrategy(
-    pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="BuiltinStrategy")
-):
+class BuiltinStrategy(pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="BuiltinStrategy")):
     """
     BuiltinStrategy
     Pre-defined Operation generation strategy for
@@ -22,6 +20,4 @@ class BuiltinStrategy(
     normal_default_order: list[str] = pydantic.Field(default_factory=list)
 
     def get_priority_based_policy(self) -> PolicyWrapper:
-        return PolicyWrapper(
-            normal_default_ordered_policy(order=self.normal_default_order)
-        )
+        return PolicyWrapper(normal_default_ordered_policy(order=self.normal_default_order))

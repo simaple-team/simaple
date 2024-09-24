@@ -18,16 +18,20 @@ class DiscreteTarget(metaclass=ABCMeta):
         self.state: List[int] = [0 for i in range(state_length)]
 
     @abstractmethod
-    def get_result(self) -> Any: ...
+    def get_result(self) -> Any:
+        ...
 
     @abstractmethod
-    def get_value(self) -> float: ...
+    def get_value(self) -> float:
+        ...
 
     @abstractmethod
-    def get_cost(self) -> float: ...
+    def get_cost(self) -> float:
+        ...
 
     @abstractmethod
-    def clone(self) -> DiscreteTarget: ...
+    def clone(self) -> DiscreteTarget:
+        ...
 
     def set_state(self, state: List[int]):
         self.state = state
@@ -53,7 +57,8 @@ class StepwizeOptimizer:
     COST_EXCEED = -999
     INITIAL_REWARD = -1
 
-    class MaximumOptimizationStepExceed(Exception): ...
+    class MaximumOptimizationStepExceed(Exception):
+        ...
 
     def __init__(
         self,
@@ -69,9 +74,7 @@ class StepwizeOptimizer:
         self._maximum_iteration_count = maximum_iteration_count
 
     def get_increment_iterator(self) -> Iterable[Any]:
-        return Iterator().cumulated_iterator(
-            self.target_prototype.state_length, self.step_size
-        )
+        return Iterator().cumulated_iterator(self.target_prototype.state_length, self.step_size)
 
     def get_reward(
         self,

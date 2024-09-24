@@ -21,9 +21,7 @@ class BehaviorStrategy:
 
     """
 
-    def __init__(
-        self, gen_method: Callable[[Operation, list[Event]], ActionGeneratorType]
-    ):
+    def __init__(self, gen_method: Callable[[Operation, list[Event]], ActionGeneratorType]):
         self._gen_method = gen_method
         self._gen: Optional[ActionGeneratorType] = None
         self._end: bool = False
@@ -48,9 +46,7 @@ class BehaviorStrategy:
             return cast(Optional[Action], e.value)
 
     @classmethod
-    def operation_handler(
-        cls, gen_method: Callable[[Operation, list[Event]], ActionGeneratorType]
-    ):
+    def operation_handler(cls, gen_method: Callable[[Operation, list[Event]], ActionGeneratorType]):
         """Wraps Exec Op Runtime, and provides a generator interface to handle events.
         use case:
         >>> @BehaviorGenerator.operation_handler
@@ -112,10 +108,12 @@ def exec_keydownstop(op: Operation, events: list[Event]) -> ActionGeneratorType:
     _ = yield dict(name=op.name, method="stop", payload=None)
 
 
-def get_operation_handlers() -> dict[
-    str,
-    Callable[[Operation], BehaviorGenerator],
-]:
+def get_operation_handlers() -> (
+    dict[
+        str,
+        Callable[[Operation], BehaviorGenerator],
+    ]
+):
     return {
         "CAST": exec_cast,
         "USE": exec_use,

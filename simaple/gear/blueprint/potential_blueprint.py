@@ -71,9 +71,7 @@ class PotentialQuery(TypedDict):
 
 
 class PotentialTierTable:
-    def __init__(
-        self, db: dict[PotentialType, dict[PotentialTier, list[_PotentialSet]]]
-    ) -> None:
+    def __init__(self, db: dict[PotentialType, dict[PotentialTier, list[_PotentialSet]]]) -> None:
         self._db = db
 
     def empty(self) -> bool:
@@ -111,10 +109,7 @@ def _global_load_kms_potential_table() -> PotentialTierTable:
         for type_key, raw_type_db in untyped_db.items():
             tier_mapping = {}
             for tier_key, raw_tier_db in raw_type_db.items():
-                potential_sets = [
-                    {PotentialFieldName(k): v for k, v in name_stat_map.items()}
-                    for name_stat_map in raw_tier_db
-                ]
+                potential_sets = [{PotentialFieldName(k): v for k, v in name_stat_map.items()} for name_stat_map in raw_tier_db]
                 tier_mapping[PotentialTier(tier_key)] = potential_sets
 
             db[PotentialType(type_key)] = tier_mapping
@@ -162,9 +157,4 @@ def template_to_potential(
     level: int,
     potential_type: PotentialType,
 ) -> Potential:
-    return Potential(
-        options=[
-            field_to_value(field, table, level, potential_type)
-            for field in spec.options
-        ]
-    )
+    return Potential(options=[field_to_value(field, table, level, potential_type) for field in spec.options])

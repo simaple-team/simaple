@@ -51,10 +51,7 @@ class OperationLog(BaseModel):
         return self._calculated_hash
 
     def _fast_dumped_string(self) -> str:
-        return self.command.model_dump_json() + "|".join(
-            playlog.model_dump_json(exclude=set(["checkpoint"]))
-            for playlog in self.playlogs
-        )
+        return self.command.model_dump_json() + "|".join(playlog.model_dump_json(exclude=set(["checkpoint"])) for playlog in self.playlogs)
 
     def last(self) -> PlayLog:
         return self.playlogs[-1]

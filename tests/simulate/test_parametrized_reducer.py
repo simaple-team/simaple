@@ -27,9 +27,7 @@ class ViewTestComponent(Component):
 
     @reducer_method
     def some_reducer(self, payload: ViewTestPayload, state: SomeTestState):
-        return payload, [
-            {"name": self.name, "payload": payload.model_dump(), "tag": None}
-        ]
+        return payload, [{"name": self.name, "payload": payload.model_dump(), "tag": None}]
 
 
 def test_paramterizd_reducer():
@@ -52,9 +50,7 @@ def test_paramterizd_reducer():
     )
     engine_builder.add_component(component)
     simulation_runtime = engine_builder.build_simulation_runtime()
-    assert simulation_runtime.resolve(
-        {"name": "some_parametrized_action", "method": "use", "payload": None}
-    )[0]["payload"] == {"value": 2}
+    assert simulation_runtime.resolve({"name": "some_parametrized_action", "method": "use", "payload": None})[0]["payload"] == {"value": 2}
 
     assert simulation_runtime.resolve(
         {

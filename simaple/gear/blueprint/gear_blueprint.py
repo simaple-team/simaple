@@ -20,7 +20,8 @@ from simaple.gear.improvements.starforce import Starforce
 
 class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):
     @abstractmethod
-    def build(self) -> Gear: ...
+    def build(self) -> Gear:
+        ...
 
 
 class BonusSpec(BaseModel):
@@ -79,10 +80,7 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
 
         # Apply spell trace and scroll, starforce
         spell_trace_and_scoll_stat = sum(
-            [
-                spell_trace.calculate_improvement(self.meta)
-                for spell_trace in self.spell_traces
-            ],
+            [spell_trace.calculate_improvement(self.meta) for spell_trace in self.spell_traces],
             Stat(),
         ) + sum(
             [scroll.calculate_improvement(self.meta) for scroll in self.scrolls],
@@ -115,17 +113,13 @@ class GeneralizedGearBlueprint(AbstractGearBlueprint):
                 self.potential,
                 potential_table,
                 self.meta.req_level,
-                PotentialType.get_type(
-                    is_additional=False, is_weapon=self.meta.type.is_weaponry()
-                ),
+                PotentialType.get_type(is_additional=False, is_weapon=self.meta.type.is_weaponry()),
             ),
             additional_potential=template_to_potential(
                 self.additional_potential,
                 potential_table,
                 self.meta.req_level,
-                PotentialType.get_type(
-                    is_additional=True, is_weapon=self.meta.type.is_weaponry()
-                ),
+                PotentialType.get_type(is_additional=True, is_weapon=self.meta.type.is_weaponry()),
             ),
         )
 
@@ -146,14 +140,11 @@ class PracticalGearBlueprint(AbstractGearBlueprint):
     def translate_into_generalized_gear_blueprint(
         self,
     ) -> GeneralizedGearBlueprint:
-
         spell_traces = []
         scrolls = []
 
         if self.spell_trace is not None:
-            spell_traces = [
-                self.spell_trace for i in range(self.meta.max_scroll_chance)
-            ]
+            spell_traces = [self.spell_trace for i in range(self.meta.max_scroll_chance)]
         elif self.scroll is not None:
             scrolls = [self.scroll for i in range(self.meta.max_scroll_chance)]
 

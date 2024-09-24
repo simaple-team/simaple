@@ -31,9 +31,7 @@ def fixture_dsl_test_setting() -> BaselineEnvironmentProvider:
     )
 
 
-def test_dsl(
-    dsl_list: list[str], dsl_test_setting: BaselineEnvironmentProvider
-) -> None:
+def test_dsl(dsl_list: list[str], dsl_test_setting: BaselineEnvironmentProvider) -> None:
     environment = PersistentStorageMemoizer(
         os.path.join(os.path.dirname(__file__), ".simaple.memo.json"),
     ).compute_environment(

@@ -36,9 +36,5 @@ def test_store_save_load():
     new_store.load(saved_store)
 
     assert store.read_entity("dur", None) == new_store.read_entity("dur", None)
-    assert store.read_entity("x.cooldown", None) == new_store.read_entity(
-        "x.cooldown", None
-    )
-    assert store.read_entity("y.interval", None) == new_store.read_entity(
-        "y.interval", None
-    )
+    assert store.read_entity("x.cooldown", None) == new_store.read_entity("x.cooldown", None)
+    assert store.read_entity("y.interval", None) == new_store.read_entity("y.interval", None)

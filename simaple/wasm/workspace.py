@@ -100,9 +100,7 @@ def runPlan(
     for command in commands:
         engine.exec(command)
 
-    return _extract_engine_history_as_response(
-        engine, simulation_container.damage_calculator()
-    )
+    return _extract_engine_history_as_response(engine, simulation_container.damage_calculator())
 
 
 def hasEnvironment(plan: str) -> bool:
@@ -128,9 +126,7 @@ def provideEnvironmentAugmentedPlan(plan: str) -> str:
         "\n---".join(plan.split("\n---")[1:]),
     )
 
-    augmented_metadata = yaml.safe_dump(
-        json.loads(metadata.model_dump_json()), indent=2
-    )
+    augmented_metadata = yaml.safe_dump(json.loads(metadata.model_dump_json()), indent=2)
     return f"---\n{augmented_metadata}\n---\n{original_operations}"
 
 
@@ -164,9 +160,9 @@ def computeMaximumDealingInterval(
 
     report = list(engine.simulation_entries())
 
-    damage, _start, _end = MaximumDealingIntervalFeature(
-        interval=interval
-    ).find_maximum_dealing_interval(report, simulation_container.damage_calculator())
+    damage, _start, _end = MaximumDealingIntervalFeature(interval=interval).find_maximum_dealing_interval(
+        report, simulation_container.damage_calculator()
+    )
     return MaximumDealingIntervalResult(damage=damage, start=_start, end=_end)
 
 
@@ -176,9 +172,7 @@ def getInitialPlanFromBaseline(
     """
     baseline environment provider를 받아서 example plan을 생성합니다.
     """
-    environment_provider = pyodide_reveal_base_model(
-        environment_provider, BaselineEnvironmentProvider
-    )
+    environment_provider = pyodide_reveal_base_model(environment_provider, BaselineEnvironmentProvider)
     base_plan = get_example_plan(environment_provider.jobtype)
     metadata_dict, _ = parse_simaple_runtime(base_plan.strip())
 
@@ -193,23 +187,15 @@ def getInitialPlanFromBaseline(
         "\n---".join(base_plan.split("\n---")[1:]),
     )
 
-    augmented_metadata = yaml.safe_dump(
-        json.loads(metadata.model_dump_json()), indent=2
-    )
+    augmented_metadata = yaml.safe_dump(json.loads(metadata.model_dump_json()), indent=2)
     return f"---\n{augmented_metadata}\n---\n{original_operations}"
 
 
 @wrap_response_by_handling_exception
 @return_js_object_from_pydantic_list
-def runPlanWithHint(
-    previous_plan: str, previous_history: list[OperationLogResponse], plan: str
-) -> list[OperationLogResponse]:
-    previous_history = pyodide_reveal_base_model_list(
-        previous_history, OperationLogResponse
-    )
-    previous_plan_metadata_dict, previous_commands = parse_simaple_runtime(
-        previous_plan.strip()
-    )
+def runPlanWithHint(previous_plan: str, previous_history: list[OperationLogResponse], plan: str) -> list[OperationLogResponse]:
+    previous_history = pyodide_reveal_base_model_list(previous_history, OperationLogResponse)
+    previous_plan_metadata_dict, previous_commands = parse_simaple_runtime(previous_plan.strip())
     plan_metadata_dict, commands = parse_simaple_runtime(plan.strip())
     plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
 
@@ -221,9 +207,7 @@ def runPlanWithHint(
         for command in commands:
             engine.exec(command)
 
-        return _extract_engine_history_as_response(
-            engine, simulation_container.damage_calculator()
-        )
+        return _extract_engine_history_as_response(engine, simulation_container.damage_calculator())
 
     # Since first operation in history is always "init", we skip this for retrieval;
     history_for_matching = previous_history[1:]
@@ -244,18 +228,11 @@ def runPlanWithHint(
             continue
         break
 
-    engine.reload(
-        [
-            operation_log_response.restore_operation_log()
-            for operation_log_response in previous_history[: cache_count + 1]
-        ]
-    )
+    engine.reload([operation_log_response.restore_operation_log() for operation_log_response in previous_history[: cache_count + 1]])
 
     for command in commands[cache_count:]:
         engine.exec(command)
 
-    new_operation_logs = _extract_engine_history_as_response(
-        engine, simulation_container.damage_calculator()
-    )
+    new_operation_logs = _extract_engine_history_as_response(engine, simulation_container.damage_calculator())
 
     return new_operation_logs

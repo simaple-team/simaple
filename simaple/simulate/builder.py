@@ -59,9 +59,7 @@ class EngineBuilder:
 
         return self
 
-    def add_aggregation_view(
-        self, aggregation_view: Type[AggregationView], name: str
-    ) -> "EngineBuilder":
+    def add_aggregation_view(self, aggregation_view: Type[AggregationView], name: str) -> "EngineBuilder":
         view = aggregation_view.build(self._viewset)  # TODO: remove this (too slow)
         self._viewset.add_view(name, view)
 

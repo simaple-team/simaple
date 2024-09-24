@@ -22,23 +22,18 @@ with open("webui/src/sdk/dependency.ts", 'w') as f:
 interpreter = "python"
 
 [tool.poe.tasks]
-_black-check = "black --check simaple tests"
-_isort-check = "isort --check-only simaple tests"
-formatting-check = ["_black-check", "_isort-check"]
+_ruff_lint_check = "ruff simaple tests scripts"
+lint = ["_ruff_lint_check"]
 
 _build = "pyproject-build"
-
 
 _clean_dist_build = "rm -rf dist/ webui/public/*.whl"
 export-whl = ["_clean_dist_build", "_build", "setup-webui-whl"]
 gen-schema = "python scripts/build/generate_json_schema_for_wasm.py"
 
-_black = "black simaple tests scripts"
-_isort = "isort simaple tests scripts"
-format = ["_black", "_isort"]
-
-_ruff = "ruff simaple tests scripts"
-lint = ["_ruff"]
+_ruff_lint_fix = "ruff --fix tests/ simaple/"
+_ruff_format = "ruff format"
+format = ["_ruff_lint_fix", "_ruff_format"]
 
 coverage = "pytest --cov=simaple"
 coverage-report = "pytest --cov=simaple --cov-report=xml"
@@ -50,7 +45,7 @@ rsctest = "pytest -vv -x test_resource/"
 typetest = "mypy simaple tests"
 simulatetest = "pytest -vv -x tests/simulate"
 clean = "rm -rf **/__pycache__ .coverage .mypy_cache .pytest_cache"
-test = ["coverage", "typetest", "lint", "formatting-check"]
+test = ["coverage", "typetest", "lint"]
 
 [tool.black]
 
@@ -58,6 +53,12 @@ test = ["coverage", "typetest", "lint", "formatting-check"]
 profile = "black"
 multi_line_output = 3
 skip = "third_party"
+
+[tool.ruff]
+line-length=140
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
 
 [tool.pytest.ini_options]
 addopts = "-vv -x"

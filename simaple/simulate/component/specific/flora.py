@@ -20,9 +20,7 @@ class MagicCurcuitFullDriveState(ReducerState):
 
 # TODO: vary damage multiplier from MP rate
 # TODO: trigger on attack skills, not tick
-class MagicCurcuitFullDriveComponent(
-    SkillComponent, CooldownValidityTrait, PeriodicWithSimpleDamageTrait
-):
+class MagicCurcuitFullDriveComponent(SkillComponent, CooldownValidityTrait, PeriodicWithSimpleDamageTrait):
     delay: float
     cooldown_duration: float
     lasting_duration: float

@@ -64,27 +64,21 @@ def test_multiple_dot(elapse_time, count_0, count_1):
     }
 
 
-@pytest.mark.parametrize(
-    "time, expected_event_count", [(500, 0), (1000, 1), (1001, 1), (3000, 1)]
-)
+@pytest.mark.parametrize("time, expected_event_count", [(500, 0), (1000, 1), (1001, 1), (3000, 1)])
 def test_add_dot(
     mob_component: MobComponent,
     mob_state: MobState,
     time: float,
     expected_event_count: int,
 ):
-    mob_state, _ = mob_component.add_dot(
-        DOTRequestPayload(name="A", damage=100, lasting_time=10_000), mob_state
-    )
+    mob_state, _ = mob_component.add_dot(DOTRequestPayload(name="A", damage=100, lasting_time=10_000), mob_state)
     mob_state, events = mob_component.elapse(time, mob_state)
 
     assert count_dot_skill(events) == expected_event_count
 
 
 def test_dot_count(mob_component: MobComponent, mob_state: MobState):
-    mob_state, _ = mob_component.add_dot(
-        DOTRequestPayload(name="A", damage=100, lasting_time=10_000), mob_state
-    )
+    mob_state, _ = mob_component.add_dot(DOTRequestPayload(name="A", damage=100, lasting_time=10_000), mob_state)
     events = []
     for _ in range(45):
         mob_state, new_events = mob_component.elapse(100, mob_state)
@@ -94,12 +88,8 @@ def test_dot_count(mob_component: MobComponent, mob_state: MobState):
 
 
 def test_complex_dot_scenario(mob_component: MobComponent, mob_state: MobState):
-    mob_state, _ = mob_component.add_dot(
-        DOTRequestPayload(name="A", damage=100, lasting_time=10_000), mob_state
-    )
-    mob_state, _ = mob_component.add_dot(
-        DOTRequestPayload(name="B", damage=100, lasting_time=7_000), mob_state
-    )
+    mob_state, _ = mob_component.add_dot(DOTRequestPayload(name="A", damage=100, lasting_time=10_000), mob_state)
+    mob_state, _ = mob_component.add_dot(DOTRequestPayload(name="B", damage=100, lasting_time=7_000), mob_state)
     mob_state, events = mob_component.elapse(5000, mob_state)
     assert count_dot_skill(events) == 2
 
@@ -111,17 +101,13 @@ def test_complex_dot_scenario(mob_component: MobComponent, mob_state: MobState):
 
 
 def test_dot_override(mob_component: MobComponent, mob_state: MobState):
-    mob_state, _ = mob_component.add_dot(
-        DOTRequestPayload(name="A", damage=100, lasting_time=10_000), mob_state
-    )
+    mob_state, _ = mob_component.add_dot(DOTRequestPayload(name="A", damage=100, lasting_time=10_000), mob_state)
 
     mob_state, events = mob_component.elapse(5000, mob_state)
     assert count_dot_skill(events) == 1
     assert events[0]["payload"]["hit"] == 5
 
-    mob_state, _ = mob_component.add_dot(
-        DOTRequestPayload(name="A", damage=100, lasting_time=10_000), mob_state
-    )
+    mob_state, _ = mob_component.add_dot(DOTRequestPayload(name="A", damage=100, lasting_time=10_000), mob_state)
 
     mob_state, events = mob_component.elapse(7000, mob_state)
     assert count_dot_skill(events) == 1

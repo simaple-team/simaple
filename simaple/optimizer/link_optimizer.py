@@ -31,9 +31,7 @@ class LinkSkillTarget(DiscreteTarget):
             self.state[self._link_skillset.get_index(job)] = 1
 
     def get_value(self) -> float:
-        resulted_stat = (
-            self.default_stat + self._link_skillset.get_masked(self.state).get_stat()
-        )
+        resulted_stat = self.default_stat + self._link_skillset.get_masked(self.state).get_stat()
         return self.damage_logic.get_damage_factor(resulted_stat, armor=self.armor)
 
     def get_cost(self) -> float:

@@ -46,31 +46,21 @@ def test_hexa_angle_ray(
     hexa_angle_ray_component: HexaAngelRayComponent,
     hexa_angle_ray_state: HexaAngelRayState,
 ):
-    hexa_angle_ray_state, events = hexa_angle_ray_component.use(
-        None, hexa_angle_ray_state
-    )
+    hexa_angle_ray_state, events = hexa_angle_ray_component.use(None, hexa_angle_ray_state)
     assert count_damage_skill(events) == 1
 
     for _ in range(10):
-        hexa_angle_ray_state, events = hexa_angle_ray_component.stack(
-            None, hexa_angle_ray_state
-        )
+        hexa_angle_ray_state, events = hexa_angle_ray_component.stack(None, hexa_angle_ray_state)
         assert count_damage_skill(events) == 0
 
-    hexa_angle_ray_state, events = hexa_angle_ray_component.stack(
-        None, hexa_angle_ray_state
-    )
+    hexa_angle_ray_state, events = hexa_angle_ray_component.stack(None, hexa_angle_ray_state)
     assert count_damage_skill(events) == 1
 
-    hexa_angle_ray_state, events = hexa_angle_ray_component.stack(
-        None, hexa_angle_ray_state
-    )
+    hexa_angle_ray_state, events = hexa_angle_ray_component.stack(None, hexa_angle_ray_state)
     assert count_damage_skill(events) == 0
 
     for _ in range(7):
-        hexa_angle_ray_state, events = hexa_angle_ray_component.stack(
-            None, hexa_angle_ray_state
-        )
+        hexa_angle_ray_state, events = hexa_angle_ray_component.stack(None, hexa_angle_ray_state)
         assert count_damage_skill(events) == 0
 
 
@@ -113,6 +103,4 @@ def test_divine_mark(
     divine_minion_state: DivineMinionState,
 ):
     divine_minion_state, events = divine_minion_component.use(None, divine_minion_state)
-    divine_minion_state, events = divine_minion_component.elapse(
-        300, divine_minion_state
-    )
+    divine_minion_state, events = divine_minion_component.elapse(300, divine_minion_state)

@@ -34,9 +34,7 @@ class ArcaneSymbolTemplate(BaseModel):
             return Stat()
 
         if self.stat_type.value in ["INT", "LUK", "DEX", "STR"]:
-            return Stat.model_validate(
-                {self.stat_type.value + "_static": (self.level + 2) * 100}
-            )
+            return Stat.model_validate({self.stat_type.value + "_static": (self.level + 2) * 100})
 
         raise ValueError
 
@@ -53,9 +51,7 @@ class AuthenticSymbolTemplate(BaseModel):
             return Stat()
 
         if self.stat_type.value in ["INT", "LUK", "DEX", "STR"]:
-            return Stat.model_validate(
-                {self.stat_type.value + "_static": (self.level * 2 + 3) * 100}
-            )
+            return Stat.model_validate({self.stat_type.value + "_static": (self.level * 2 + 3) * 100})
 
         raise ValueError
 

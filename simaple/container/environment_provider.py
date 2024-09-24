@@ -46,7 +46,8 @@ class EnvironmentProvider(pydantic.BaseModel, metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def get_simulation_environment(self) -> SimulationEnvironment: ...
+    def get_simulation_environment(self) -> SimulationEnvironment:
+        ...
 
     @classmethod
     def get_name(cls):
@@ -62,15 +63,18 @@ class MemoizableEnvironmentProvider(EnvironmentProvider):
     @abstractmethod
     def get_memoizable_environment(
         self,
-    ) -> dict[str, Any]: ...
+    ) -> dict[str, Any]:
+        ...
 
     @abstractmethod
     def get_memoization_independent_environment(
         self,
-    ) -> dict[str, Any]: ...
+    ) -> dict[str, Any]:
+        ...
 
     @abstractmethod
-    def get_memoization_key(self) -> str: ...
+    def get_memoization_key(self) -> str:
+        ...
 
     def get_simulation_environment(
         self,

@@ -40,9 +40,7 @@ class CooldownValidityTrait(CooldownTrait, NamedTrait):
 
 
 class InvalidatableCooldownTrait(CooldownTrait, InvalidatableTrait, NamedTrait):
-    def validity_in_invalidatable_cooldown_trait(
-        self, state: CooldownProtocol
-    ) -> Validity:
+    def validity_in_invalidatable_cooldown_trait(self, state: CooldownProtocol) -> Validity:
         return self.invalidate_if_disabled(
             Validity(
                 id=self._get_id(),
@@ -66,20 +64,14 @@ class ConsumableValidityTrait(CooldownTrait, NamedTrait):
         )
 
 
-class UseSimpleAttackTrait(
-    CooldownTrait, SimpleDamageTrait, EventProviderTrait, DelayTrait
-):
-    def use_simple_attack(
-        self, state: CooldownDynamicsGeneric
-    ) -> tuple[CooldownDynamicsGeneric, list[Event]]:
+class UseSimpleAttackTrait(CooldownTrait, SimpleDamageTrait, EventProviderTrait, DelayTrait):
+    def use_simple_attack(self, state: CooldownDynamicsGeneric) -> tuple[CooldownDynamicsGeneric, list[Event]]:
         state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration()))
 
         damage, hit = self._get_simple_damage_hit()
         delay = self._get_delay()
@@ -89,36 +81,26 @@ class UseSimpleAttackTrait(
             self.event_provider.delayed(delay),
         ]
 
-    def elapse_simple_attack(
-        self, time: float, state: CooldownGeneric
-    ) -> tuple[CooldownGeneric, list[Event]]:
+    def elapse_simple_attack(self, time: float, state: CooldownGeneric) -> tuple[CooldownGeneric, list[Event]]:
         state = state.deepcopy()
         state.cooldown.elapse(time)
         return state, [self.event_provider.elapsed(time)]
 
-    def use_multiple_damage(
-        self, state: CooldownDynamicsGeneric, multiple: int
-    ) -> tuple[CooldownDynamicsGeneric, list[Event]]:
+    def use_multiple_damage(self, state: CooldownDynamicsGeneric, multiple: int) -> tuple[CooldownDynamicsGeneric, list[Event]]:
         state = state.deepcopy()
 
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration()))
 
         damage, hit = self._get_simple_damage_hit()
         delay = self._get_delay()
 
-        return state, [
-            self.event_provider.dealt(damage, hit) for _ in range(multiple)
-        ] + [self.event_provider.delayed(delay)]
+        return state, [self.event_provider.dealt(damage, hit) for _ in range(multiple)] + [self.event_provider.delayed(delay)]
 
 
-class BuffTrait(
-    CooldownTrait, LastingTrait, EventProviderTrait, DelayTrait, NamedTrait
-):
+class BuffTrait(CooldownTrait, LastingTrait, EventProviderTrait, DelayTrait, NamedTrait):
     def use_buff_trait(
         self,
         state: CooldownDynamicsLastingGeneric,
@@ -128,15 +110,9 @@ class BuffTrait(
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration()))
 
-        state.lasting.set_time_left(
-            state.dynamics.stat.calculate_buff_duration(
-                self._get_lasting_duration(state)
-            )
-        )
+        state.lasting.set_time_left(state.dynamics.stat.calculate_buff_duration(self._get_lasting_duration(state)))
 
         return state, [self.event_provider.delayed(self._get_delay())]
 
@@ -164,9 +140,7 @@ class BuffTrait(
 
 
 class ConsumableBuffTrait(LastingTrait, EventProviderTrait, DelayTrait):
-    def use_consumable_buff_trait(
-        self, state: ConsumableDynamicsLastingGeneric
-    ) -> tuple[ConsumableDynamicsLastingGeneric, list[Event]]:
+    def use_consumable_buff_trait(self, state: ConsumableDynamicsLastingGeneric) -> tuple[ConsumableDynamicsLastingGeneric, list[Event]]:
         state = state.deepcopy()
 
         if not state.consumable.available:
@@ -174,11 +148,7 @@ class ConsumableBuffTrait(LastingTrait, EventProviderTrait, DelayTrait):
 
         state.consumable.consume()
 
-        state.lasting.set_time_left(
-            state.dynamics.stat.calculate_buff_duration(
-                self._get_lasting_duration(state)
-            )
-        )
+        state.lasting.set_time_left(state.dynamics.stat.calculate_buff_duration(self._get_lasting_duration(state)))
 
         return state, [self.event_provider.delayed(self._get_delay())]
 
@@ -215,8 +185,7 @@ class PeriodicElapseTrait(
         periodic_damage, periodic_hit = self._get_periodic_damage_hit(state)
 
         return state, [self.event_provider.elapsed(time)] + [
-            self.event_provider.dealt(periodic_damage, periodic_hit)
-            for _ in range(lapse_count)
+            self.event_provider.dealt(periodic_damage, periodic_hit) for _ in range(lapse_count)
         ]
 
 
@@ -247,9 +216,7 @@ class PeriodicWithSimpleDamageTrait(
         damage, hit = self._get_simple_damage_hit()
         delay = self._get_delay()
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration()))
         state.periodic.set_time_left(self._get_lasting_duration(state))
 
         return state, [
@@ -281,9 +248,7 @@ class UsePeriodicDamageTrait(
 
         delay = self._get_delay()
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration()))
         state.periodic.set_time_left(self._get_lasting_duration(state))
 
         return state, [
@@ -310,9 +275,7 @@ class KeydownSkillTrait(
         if not state.cooldown.available or state.keydown.running:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration()))
         state.keydown.start(maximum_keydown_time, keydown_prepare_delay)
 
         return state, [self.event_provider.delayed(keydown_prepare_delay)]
@@ -350,9 +313,7 @@ class KeydownSkillTrait(
             + ([self.event_provider.keydown_end()] if keydown_end else []),
         )
 
-    def stop_keydown_trait(
-        self, state: CooldownDynamicsKeydownGeneric
-    ) -> tuple[CooldownDynamicsKeydownGeneric, list[Event]]:
+    def stop_keydown_trait(self, state: CooldownDynamicsKeydownGeneric) -> tuple[CooldownDynamicsKeydownGeneric, list[Event]]:
         state = state.deepcopy()
         (
             finish_damage,

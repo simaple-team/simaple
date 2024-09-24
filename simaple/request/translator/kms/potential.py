@@ -58,15 +58,11 @@ def kms_potential_provider_patterns() -> list[tuple[re.Pattern, AbstractStatProv
             StatProvider(target=StatProps.magic_attack_multiplier),
         ),
         (
-            re.compile(
-                r"^모든 스킬의 재사용 대기시간 : -([0-9]+)초\(10초 이하는 10%감소, 5초 미만으로 감소 불가\)$"
-            ),
+            re.compile(r"^모든 스킬의 재사용 대기시간 : -([0-9]+)초\(10초 이하는 10%감소, 5초 미만으로 감소 불가\)$"),
             ActionStatProvider(target="cooltime_reduce"),
         ),
         (
-            re.compile(
-                r"^모든 스킬의 재사용 대기시간 : -([0-9]+)초\(10초 이하는 5%감소, 5초 미만으로 감소 불가\)$"
-            ),
+            re.compile(r"^모든 스킬의 재사용 대기시간 : -([0-9]+)초\(10초 이하는 5%감소, 5초 미만으로 감소 불가\)$"),
             ActionStatProvider(target="cooltime_reduce"),
         ),
         (
@@ -180,9 +176,7 @@ def kms_potential_provider_patterns() -> list[tuple[re.Pattern, AbstractStatProv
         (re.compile(r"^메소 획득량 : \+([0-9]+)%$"), NullStatProvider()),
         (re.compile(r"^모든 속성 내성 : \+([0-9]+)%$"), NullStatProvider()),
         (
-            re.compile(
-                r"^모든 스킬레벨 : \+([0-9]+)\(5차 및 일부 스킬 제외,\\n스킬의 마스터 레벨까지만 증가\)$"
-            ),
+            re.compile(r"^모든 스킬레벨 : \+([0-9]+)\(5차 및 일부 스킬 제외,\\n스킬의 마스터 레벨까지만 증가\)$"),
             NullStatProvider(),
         ),
         (re.compile(r"^모든 스킬의 MP 소모 : -([0-9]+)%$"), NullStatProvider()),

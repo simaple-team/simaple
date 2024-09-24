@@ -37,9 +37,7 @@ def test_get_single_starforce_improvement(gear_id, current_star, target):
     gear = repository.get_by_id(gear_id)
     starforce = Starforce(star=25)  # For single-starforce test, set as maximum
 
-    starforce_stat = starforce.get_single_starforce_improvement(
-        gear.meta, gear.stat, current_star, Stat()
-    )
+    starforce_stat = starforce.get_single_starforce_improvement(gear.meta, gear.stat, current_star, Stat())
     logger.info(starforce_stat)
 
     assert starforce_stat == target

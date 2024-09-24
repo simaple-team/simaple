@@ -86,9 +86,7 @@ class BladeStormComponent(SkillComponent, KeydownSkillTrait, CooldownValidityTra
         state, events = self.use_keydown_trait(state)
 
         if not is_rejected(events):
-            events.append(
-                self.event_provider.dealt(self.prepare_damage, self.prepare_hit)
-            )
+            events.append(self.event_provider.dealt(self.prepare_damage, self.prepare_hit))
 
         return state, events
 

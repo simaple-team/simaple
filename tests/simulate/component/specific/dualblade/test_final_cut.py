@@ -22,9 +22,7 @@ def fixture_final_cut():
 
 @pytest.fixture(name="final_cut_state")
 def fixture_final_cut_state(final_cut: FinalCutComponent, dynamics: Dynamics):
-    return FinalCutState.model_validate(
-        {**final_cut.get_default_state(), "dynamics": dynamics}
-    )
+    return FinalCutState.model_validate({**final_cut.get_default_state(), "dynamics": dynamics})
 
 
 def test_cooltime_reduce(final_cut: FinalCutComponent, final_cut_state: FinalCutState):
@@ -38,9 +36,7 @@ def test_cooltime_reduce(final_cut: FinalCutComponent, final_cut_state: FinalCut
     assert final_cut.validity(state).time_left == 72000
 
 
-def test_cooltime_reduce_after_elapse(
-    final_cut: FinalCutComponent, final_cut_state: FinalCutState
-):
+def test_cooltime_reduce_after_elapse(final_cut: FinalCutComponent, final_cut_state: FinalCutState):
     # given
     state, _ = final_cut.use(None, final_cut_state)
 

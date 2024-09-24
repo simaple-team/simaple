@@ -95,9 +95,7 @@ class Elysion(SkillComponent, BuffTrait, CooldownValidityTrait):
         return {
             "cooldown": Cooldown(time_left=0),
             "lasting": Lasting(time_left=0),
-            "stack": LastingStack(
-                maximum_stack=self.maximum_crack_count, duration=self.crack_duration
-            ),
+            "stack": LastingStack(maximum_stack=self.maximum_crack_count, duration=self.crack_duration),
             "crack_cooldown": Cooldown(time_left=0),
         }
 
@@ -212,18 +210,11 @@ class CosmicBurst(SkillComponent):
         state = state.deepcopy()
         orbs = state.orb.stack
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
-            - orbs * self.cooltime_reduce_per_orb
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self.cooldown_duration) - orbs * self.cooltime_reduce_per_orb)
         state.orb.reset()
 
         damages = [self.event_provider.dealt(self.damage, self.hit)]
-        damages.append(
-            self.event_provider.dealt(
-                self.damage * self.damage_decrement_after_2nd_hit, self.hit * (orbs - 1)
-            )
-        )
+        damages.append(self.event_provider.dealt(self.damage * self.damage_decrement_after_2nd_hit, self.hit * (orbs - 1)))
 
         return state, damages
 
@@ -267,12 +258,8 @@ class CosmicShower(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
         orbs = state.orb.stack
         delay = self._get_delay()
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
-        state.periodic.set_time_left(
-            self._get_lasting_duration(state) + orbs * self.duration_increase_per_orb
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration()))
+        state.periodic.set_time_left(self._get_lasting_duration(state) + orbs * self.duration_increase_per_orb)
         state.orb.reset()
 
         return state, [self.event_provider.delayed(delay)]
@@ -342,12 +329,8 @@ class Cosmos(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
         orbs = state.orb.stack
         delay = self._get_delay()
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
-        state.periodic.interval = (
-            self.periodic_interval - orbs * self.periodic_interval_decrement_per_orb
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration()))
+        state.periodic.interval = self.periodic_interval - orbs * self.periodic_interval_decrement_per_orb
         state.periodic.set_time_left(self._get_lasting_duration(state))
         state.orb.reset()
 

@@ -16,13 +16,12 @@ from simaple.request.schema.item import (
 
 
 def _translate_into_item_element_option(
-    raw: dict[str, Any]
+    raw: dict[str, Any],
 ) -> CharacterItemElementOption:
     return cast(CharacterItemElementOption, {k: int(v) for k, v in raw.items()})
 
 
 def get_character_item_equipment_element(resp: dict[str, Any]) -> CharacterItemElement:
-
     # fmt: off
     return {
         "item_equipment_part": resp["item_equipment_part"],
@@ -70,9 +69,7 @@ def get_character_item_equipment_element(resp: dict[str, Any]) -> CharacterItemE
     # fmt: on
 
 
-async def get_character_item_equipment(
-    token: Token, character_id: CharacterID
-) -> CharacterItemEquipment:
+async def get_character_item_equipment(token: Token, character_id: CharacterID) -> CharacterItemEquipment:
     uri = f"{HOST}/maplestory/v1/character/item-equipment"
 
     resp = await token.request(uri, get_character_id_param(character_id))
@@ -81,19 +78,10 @@ async def get_character_item_equipment(
         "date": resp["date"],
         "character_gender": resp["character_gender"],
         "character_class": resp["character_class"],
-        "item_equipment": [
-            get_character_item_equipment_element(item)
-            for item in resp["item_equipment"]
-        ],
+        "item_equipment": [get_character_item_equipment_element(item) for item in resp["item_equipment"]],
         "title": resp["title"],
-        "dragon_equipment": [
-            get_character_item_equipment_element(item)
-            for item in resp["dragon_equipment"]
-        ],
-        "mechanic_equipment": [
-            get_character_item_equipment_element(item)
-            for item in resp["mechanic_equipment"]
-        ],
+        "dragon_equipment": [get_character_item_equipment_element(item) for item in resp["dragon_equipment"]],
+        "mechanic_equipment": [get_character_item_equipment_element(item) for item in resp["mechanic_equipment"]],
     }
 
 
@@ -114,9 +102,7 @@ def _get_symbol_element(raw: dict[str, Any]) -> CharacterSymbolElement:
     }
 
 
-async def get_character_symbol_equipment(
-    token: Token, character_id: CharacterID
-) -> CharacterSymbolEquipment:
+async def get_character_symbol_equipment(token: Token, character_id: CharacterID) -> CharacterSymbolEquipment:
     uri = f"{HOST}/maplestory/v1/character/symbol-equipment"
 
     resp = await token.request(uri, get_character_id_param(character_id))
@@ -127,9 +113,7 @@ async def get_character_symbol_equipment(
     }
 
 
-async def get_character_set_effect(
-    token: Token, character_id: CharacterID
-) -> CharacterItemElement:
+async def get_character_set_effect(token: Token, character_id: CharacterID) -> CharacterItemElement:
     uri = f"{HOST}/maplestory/v1/character/set-effect"
 
     resp = await token.request(uri, get_character_id_param(character_id))

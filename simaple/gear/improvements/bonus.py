@@ -47,9 +47,7 @@ class DualStatBonus(Bonus):
         basis = self.calculate_basis(meta.req_level)
         increment = basis * self.grade
 
-        return Stat.model_validate(
-            {first_type.value: increment, second_type.value: increment}
-        )
+        return Stat.model_validate({first_type.value: increment, second_type.value: increment})
 
 
 class AllstatBonus(Bonus):
@@ -75,9 +73,7 @@ class ResourcePointBonus(Bonus):
 
     def calculate_improvement(self, meta: GearMeta, _: Optional[Stat] = None) -> Stat:
         self.validate_grade(meta)
-        return Stat.model_validate(
-            {self.stat_type: meta.req_level // 10 * 30 * self.grade}
-        )
+        return Stat.model_validate({self.stat_type: meta.req_level // 10 * 30 * self.grade})
 
 
 class AttackTypeBonus(Bonus):
@@ -87,16 +83,10 @@ class AttackTypeBonus(Bonus):
         self.validate_grade(meta)
 
         if meta.type.is_weapon():
-            grade_multiplier = (
-                [0, 0, 1, 1.4666, 2.0166, 2.663, 3.4166]
-                if meta.boss_reward
-                else [1, 2.222, 3.63, 5.325, 7.32, 8.777, 10.25]
-            )
+            grade_multiplier = [0, 0, 1, 1.4666, 2.0166, 2.663, 3.4166] if meta.boss_reward else [1, 2.222, 3.63, 5.325, 7.32, 8.777, 10.25]
 
             basis = (
-                meta.base_stat.attack_power
-                if meta.base_stat.attack_power > meta.base_stat.magic_attack
-                else meta.base_stat.magic_attack
+                meta.base_stat.attack_power if meta.base_stat.attack_power > meta.base_stat.magic_attack else meta.base_stat.magic_attack
             )
 
             if meta.type in (GearType.sword_zb, GearType.sword_zl):
@@ -123,32 +113,14 @@ class AttackTypeBonus(Bonus):
                         basis = 342
                     else:
                         print("Not implemented weapon:\n" + str(meta))
-                level_multiplier = (
-                    6
-                    if meta.req_level > 180
-                    else (
-                        5
-                        if meta.req_level > 160
-                        else (4 if meta.req_level > 110 else 3)
-                    )
-                )
+                level_multiplier = 6 if meta.req_level > 180 else (5 if meta.req_level > 160 else (4 if meta.req_level > 110 else 3))
             else:
                 if meta.boss_reward:
-                    level_multiplier = (
-                        18
-                        if meta.req_level > 160
-                        else (
-                            15
-                            if meta.req_level > 150
-                            else (12 if meta.req_level > 110 else 9)
-                        )
-                    )
+                    level_multiplier = 18 if meta.req_level > 160 else (15 if meta.req_level > 150 else (12 if meta.req_level > 110 else 9))
                 else:
                     level_multiplier = 4 if meta.req_level > 110 else 3
 
-            value = math.ceil(
-                basis * grade_multiplier[self.grade - 1] * level_multiplier / 100
-            )
+            value = math.ceil(basis * grade_multiplier[self.grade - 1] * level_multiplier / 100)
         else:
             value = self.grade
 
@@ -168,15 +140,7 @@ def bonus_key_func(bonus: Bonus):
     if isinstance(bonus, SingleStatBonus):
         return stat_index[bonus.stat_type] * 100 + bonus.grade
     if isinstance(bonus, DualStatBonus):
-        return (
-            (10**3)
-            + (
-                stat_index[bonus.stat_type_pair[0]]
-                + stat_index[bonus.stat_type_pair[1]]
-            )
-            * 100
-            + bonus.grade
-        )
+        return (10**3) + (stat_index[bonus.stat_type_pair[0]] + stat_index[bonus.stat_type_pair[1]]) * 100 + bonus.grade
     if isinstance(bonus, ResourcePointBonus):
         return (10**4) + resource_point_index[bonus.stat_type] * 100 + bonus.grade
     if isinstance(bonus, AttackTypeBonus):

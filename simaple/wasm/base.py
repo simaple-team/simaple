@@ -26,9 +26,7 @@ def return_js_object_from_pydantic_list(
             from pyodide.ffi import to_js  # type: ignore
 
             result = f(*args, **kwargs)
-            return to_js(
-                [v.model_dump() for v in result], dict_converter=Object.fromEntries
-            )
+            return to_js([v.model_dump() for v in result], dict_converter=Object.fromEntries)
         except ImportError:
             return f(*args, **kwargs)
 
@@ -95,9 +93,7 @@ def pyodide_reveal_base_model(obj: MaybePyodide, model: Type[BaseModelT]) -> Bas
     return model.model_validate(dict_obj)
 
 
-def pyodide_reveal_base_model_list(
-    obj_list: Sequence[MaybePyodide], model: Type[BaseModelT]
-) -> list[BaseModelT]:
+def pyodide_reveal_base_model_list(obj_list: Sequence[MaybePyodide], model: Type[BaseModelT]) -> list[BaseModelT]:
     if isinstance(obj_list[0], model):
         return obj_list  # type: ignore
 

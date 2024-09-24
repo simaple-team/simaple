@@ -40,9 +40,7 @@ class CalcTransformer(Transformer):
         self.variables = variables
 
     def variable(self, token):
-        assert (
-            token[0].value in self.variables
-        ), f"Variable {token[0].value} is not defined"
+        assert token[0].value in self.variables, f"Variable {token[0].value} is not defined"
         return self.variables[token[0].value]
 
     def number(self, token):

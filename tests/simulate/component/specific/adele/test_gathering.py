@@ -44,25 +44,19 @@ def gathering_state_3pair(
     return AdeleOrderUsingState.model_validate(
         {
             **gathering.get_default_state(),
-            "order_sword": OrderSword(
-                interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]
-            ),
+            "order_sword": OrderSword(interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]),
             "dynamics": dynamics,
         }
     )
 
 
-def test_gathering_order_1pair(
-    gathering: AdeleGatheringComponent, gathering_state_1pair: AdeleOrderUsingState
-):
+def test_gathering_order_1pair(gathering: AdeleGatheringComponent, gathering_state_1pair: AdeleOrderUsingState):
     _, events = gathering.use(None, gathering_state_1pair)
 
     assert count_damage_skill(events) == 2
 
 
-def test_gathering_order_3pair(
-    gathering: AdeleGatheringComponent, gathering_state_3pair: AdeleOrderUsingState
-):
+def test_gathering_order_3pair(gathering: AdeleGatheringComponent, gathering_state_3pair: AdeleOrderUsingState):
     _, events = gathering.use(None, gathering_state_3pair)
 
     assert count_damage_skill(events) == 6

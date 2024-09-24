@@ -16,9 +16,7 @@ from simaple.request.schema.character import (
 )
 
 
-async def get_character_hyper_stat(
-    token: Token, character_id: CharacterID
-) -> CharacterHyperStat:
+async def get_character_hyper_stat(token: Token, character_id: CharacterID) -> CharacterHyperStat:
     uri = f"{HOST}/maplestory/v1/character/hyper-stat"
     resp = await token.request(uri, get_character_id_param(character_id))
 
@@ -36,9 +34,7 @@ async def get_character_hyper_stat(
     }
 
 
-async def get_character_popularity(
-    token: Token, character_id: CharacterID
-) -> CharacterPopularity:
+async def get_character_popularity(token: Token, character_id: CharacterID) -> CharacterPopularity:
     uri = f"{HOST}/maplestory/v1/character/popularity"
     resp = await token.request(uri, get_character_id_param(character_id))
 
@@ -48,18 +44,14 @@ async def get_character_popularity(
     }
 
 
-async def get_character_propensity(
-    token: Token, character_id: CharacterID
-) -> CharacterPropensity:
+async def get_character_propensity(token: Token, character_id: CharacterID) -> CharacterPropensity:
     uri = f"{HOST}/maplestory/v1/character/propensity"
     resp = await token.request(uri, get_character_id_param(character_id))
 
     return cast(CharacterPropensity, resp)
 
 
-async def get_character_union(
-    token: Token, character_id: CharacterID
-) -> CharacterUnion:
+async def get_character_union(token: Token, character_id: CharacterID) -> CharacterUnion:
     uri = f"{HOST}/maplestory/v1/user/union"
     resp = await token.request(uri, get_character_id_param(character_id))
 
@@ -76,9 +68,7 @@ def _get_union_block(raw: dict[str, Any]) -> CharacterUnionRaiderBlock:
     }
 
 
-async def get_character_union_raiders(
-    token: Token, character_id: CharacterID
-) -> CharacterUnionRaider:
+async def get_character_union_raiders(token: Token, character_id: CharacterID) -> CharacterUnionRaider:
     uri = f"{HOST}/maplestory/v1/user/union-raider"
     resp = await token.request(uri, get_character_id_param(character_id))
 

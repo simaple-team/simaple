@@ -58,9 +58,7 @@ class ProgrammedPeriodicComponent(SkillComponent, InvalidatableCooldownTrait):
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "programmed_periodic": ProgrammedPeriodic(
-                intervals=self.periodic_intervals, time_left=0
-            ),
+            "programmed_periodic": ProgrammedPeriodic(intervals=self.periodic_intervals, time_left=0),
         }
 
     @reducer_method
@@ -73,8 +71,7 @@ class ProgrammedPeriodicComponent(SkillComponent, InvalidatableCooldownTrait):
             lapse_count += 1
 
         return state, [self.event_provider.elapsed(time)] + [
-            self.event_provider.dealt(self.periodic_damage, self.periodic_hit)
-            for _ in range(lapse_count)
+            self.event_provider.dealt(self.periodic_damage, self.periodic_hit) for _ in range(lapse_count)
         ]
 
     @reducer_method
@@ -84,9 +81,7 @@ class ProgrammedPeriodicComponent(SkillComponent, InvalidatableCooldownTrait):
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration()))
         state.programmed_periodic.set_time_left(self.lasting_duration)
 
         return state, [

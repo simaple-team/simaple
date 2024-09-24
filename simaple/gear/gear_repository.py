@@ -5,9 +5,7 @@ from simaple.core import Stat
 from simaple.gear.gear import Gear, GearMeta
 from simaple.gear.gear_type import GearType
 
-GEAR_RESOURCE_PATH = os.path.join(
-    os.path.dirname(__file__), "resources", "gear_data.json"
-)
+GEAR_RESOURCE_PATH = os.path.join(os.path.dirname(__file__), "resources", "gear_data.json")
 GEAR_VARIABLE_NAMES = [
     ("boss_damage_multiplier", "boss_damage_multiplier"),
     ("ignored_defence", "ignored_defence"),
@@ -97,9 +95,7 @@ class GearRepository:
         gear = self._get_gear(gear_id)
         return gear
 
-    def get_by_name(
-        self, gear_name: str, create_empty_item_if_not_exist: bool = False
-    ) -> Gear:
+    def get_by_name(self, gear_name: str, create_empty_item_if_not_exist: bool = False) -> Gear:
         if self._indexed_by_name is None:
             self._indexed_by_name = {}
             for item_id, item_value in self._bare_gears.items():

@@ -90,9 +90,7 @@ class TreeToOperation(Transformer):
     def NEWLINE(self, new_line: Token):
         return Discard
 
-    def body(
-        self, x: list[list[Operation] | list[ConsoleText]]
-    ) -> list[Operation | ConsoleText]:
+    def body(self, x: list[list[Operation] | list[ConsoleText]]) -> list[Operation | ConsoleText]:
         return cast(list[Operation | ConsoleText], sum(x, []))
 
     def request(
@@ -152,7 +150,8 @@ def get_parser():
     return __PARSER
 
 
-class DSLError(Exception): ...
+class DSLError(Exception):
+    ...
 
 
 def parse_dsl_to_operations(dsl: str) -> list[Operation]:
@@ -177,7 +176,5 @@ def parse_dsl_to_command(dsl: str) -> list[Command]:
 def parse_simaple_runtime(
     runtime_text: str,
 ) -> tuple[dict, list[Command]]:
-    commands = __OperationTreeTransformer.transform(
-        __PARSER.parse(runtime_text.strip(), start="simaple")
-    )
+    commands = __OperationTreeTransformer.transform(__PARSER.parse(runtime_text.strip(), start="simaple"))
     return cast(tuple[dict, list[Operation | ConsoleText]], commands)

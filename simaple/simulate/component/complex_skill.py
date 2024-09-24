@@ -37,12 +37,8 @@ class SynergySkillComponent(SkillComponent, BuffTrait, InvalidatableCooldownTrai
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
-        )
-        state.lasting.set_time_left(
-            self.lasting_duration
-        )  # note that synergy do not works with dynamic duration.
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self.cooldown_duration))
+        state.lasting.set_time_left(self.lasting_duration)  # note that synergy do not works with dynamic duration.
 
         return state, [
             self.event_provider.dealt(self.damage, self.hit),
@@ -111,20 +107,13 @@ class AttackSkillIncludeReforged(
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self.cooldown_duration))
 
         damage_events = [self.event_provider.dealt(self.damage, self.hit)]
 
         if state.reforged_cooldown.available:
-            damage_events = [
-                self.event_provider.dealt(self.reforged_damage, self.reforged_hit)
-                for _ in range(self.reforged_multiple)
-            ]
-            state.reforged_cooldown.set_time_left(
-                state.dynamics.stat.calculate_cooldown(self.reforge_cooldown_duration)
-            )
+            damage_events = [self.event_provider.dealt(self.reforged_damage, self.reforged_hit) for _ in range(self.reforged_multiple)]
+            state.reforged_cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self.reforge_cooldown_duration))
 
         return state, damage_events + [
             self.event_provider.delayed(self.delay),

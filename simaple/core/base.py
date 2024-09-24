@@ -109,9 +109,7 @@ class Stat(BaseModel):
 
     @classmethod
     def all_stat_multiplier(cls, v) -> Stat:
-        return Stat(
-            STR_multiplier=v, LUK_multiplier=v, INT_multiplier=v, DEX_multiplier=v
-        )
+        return Stat(STR_multiplier=v, LUK_multiplier=v, INT_multiplier=v, DEX_multiplier=v)
 
     def __add__(self, arg: Stat) -> Stat:
         return Stat(
@@ -129,14 +127,11 @@ class Stat(BaseModel):
             DEX_static=self.DEX_static + arg.DEX_static,
             attack_power=self.attack_power + arg.attack_power,
             magic_attack=self.magic_attack + arg.magic_attack,
-            attack_power_multiplier=self.attack_power_multiplier
-            + arg.attack_power_multiplier,
-            magic_attack_multiplier=self.magic_attack_multiplier
-            + arg.magic_attack_multiplier,
+            attack_power_multiplier=self.attack_power_multiplier + arg.attack_power_multiplier,
+            magic_attack_multiplier=self.magic_attack_multiplier + arg.magic_attack_multiplier,
             critical_rate=self.critical_rate + arg.critical_rate,
             critical_damage=self.critical_damage + arg.critical_damage,
-            boss_damage_multiplier=self.boss_damage_multiplier
-            + arg.boss_damage_multiplier,
+            boss_damage_multiplier=self.boss_damage_multiplier + arg.boss_damage_multiplier,
             damage_multiplier=self.damage_multiplier + arg.damage_multiplier,
             MHP=self.MHP + arg.MHP,
             MMP=self.MMP + arg.MMP,
@@ -145,8 +140,7 @@ class Stat(BaseModel):
             final_damage_multiplier=self.final_damage_multiplier
             + arg.final_damage_multiplier
             + 0.01 * self.final_damage_multiplier * arg.final_damage_multiplier,
-            ignored_defence=100
-            - 0.01 * ((100 - self.ignored_defence) * (100 - arg.ignored_defence)),
+            ignored_defence=100 - 0.01 * ((100 - self.ignored_defence) * (100 - arg.ignored_defence)),
             elemental_resistance=self.elemental_resistance + arg.elemental_resistance,
         )
 
@@ -184,13 +178,8 @@ class Stat(BaseModel):
         self.MHP_multiplier += arg.MHP_multiplier
         self.MMP_multiplier += arg.MMP_multiplier
 
-        self.final_damage_multiplier += (
-            arg.final_damage_multiplier
-            + 0.01 * self.final_damage_multiplier * arg.final_damage_multiplier
-        )
-        self.ignored_defence = 100 - 0.01 * (
-            (100 - self.ignored_defence) * (100 - arg.ignored_defence)
-        )
+        self.final_damage_multiplier += arg.final_damage_multiplier + 0.01 * self.final_damage_multiplier * arg.final_damage_multiplier
+        self.ignored_defence = 100 - 0.01 * ((100 - self.ignored_defence) * (100 - arg.ignored_defence))
         self.elemental_resistance += arg.elemental_resistance
 
         return self
@@ -279,7 +268,7 @@ class Stat(BaseModel):
 
         ignored_defence        : {self.ignored_defence:7.2f}
         elemental_resistance   : { self.elemental_resistance:7.2f}
-        """
+        """  # noqa
         return output
 
     def short_dict(self) -> dict[str, float]:
@@ -288,12 +277,9 @@ class Stat(BaseModel):
 
     @classmethod
     def sum(cls, stats: list[Stat]) -> Stat:
-
         final_damage_multiplier: float = 1
         for stat in stats:
-            final_damage_multiplier += (
-                stat.final_damage_multiplier * final_damage_multiplier * 0.01
-            )
+            final_damage_multiplier += stat.final_damage_multiplier * final_damage_multiplier * 0.01
 
         final_damage_multiplier -= 1
         final_damage_multiplier *= 100
@@ -358,10 +344,7 @@ class ActionStat(BaseModel):
 
     def calculate_cooldown(self, original_cooldown):
         # TODO - need to apply correct logic
-        return (
-            original_cooldown * (1 - self.cooltime_reduce_rate * 0.01)
-            - self.cooltime_reduce
-        )
+        return original_cooldown * (1 - self.cooltime_reduce_rate * 0.01) - self.cooltime_reduce
 
     def calculate_buff_duration(self, original_duration):
         return original_duration * (1 + 0.01 * self.buff_duration)

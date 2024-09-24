@@ -79,9 +79,7 @@ class RunningParentView(AggregationView):
 
 class BuffParentView(AggregationView):
     def aggregate(self, representations: list[Optional[Stat]]):
-        total_buff = Stat.sum(
-            list(stat for stat in representations if stat is not None)
-        )
+        total_buff = Stat.sum(list(stat for stat in representations if stat is not None))
 
         return total_buff
 

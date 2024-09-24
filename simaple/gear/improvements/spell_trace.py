@@ -57,26 +57,20 @@ class SpellTrace(GearImprovement):
         return 2 if meta.req_level > 110 else (1 if meta.req_level > 70 else 0)
 
     def get_weapon_improvement(self, meta: GearMeta) -> Tuple[int, int, int]:
-        attack_basis, stat_basis = _WEAPON_IMPROVEMENTS_ATT_STAT[self.probability][
-            self.get_spell_trace_rank(meta)
-        ]
+        attack_basis, stat_basis = _WEAPON_IMPROVEMENTS_ATT_STAT[self.probability][self.get_spell_trace_rank(meta)]
         if self.stat_prop_type is StatProps.MHP:
             stat_basis = stat_basis * 50
 
         return attack_basis, stat_basis, 0
 
     def get_glove_improvement(self, meta: GearMeta) -> Tuple[int, int, int]:
-        attack_basis = _GLOBE_IMPROVEMENTS_ATT[self.probability][
-            self.get_spell_trace_rank(meta)
-        ]
+        attack_basis = _GLOBE_IMPROVEMENTS_ATT[self.probability][self.get_spell_trace_rank(meta)]
         stat_basis = 1 if attack_basis == 0 else 0
 
         return attack_basis, stat_basis, 0
 
     def get_armor_improvement(self, meta: GearMeta) -> Tuple[int, int, int]:
-        stat_basis, additional_mhp, _ = _ARMOR_IMPROVEMENTS_STAT_MHP_PDD[
-            self.probability
-        ][
+        stat_basis, additional_mhp, _ = _ARMOR_IMPROVEMENTS_STAT_MHP_PDD[self.probability][
             self.get_spell_trace_rank(meta)
         ]  # third value is PDD
         if self.stat_prop_type is StatProps.MHP:
@@ -85,18 +79,14 @@ class SpellTrace(GearImprovement):
         return 0, stat_basis, additional_mhp
 
     def get_accesory_improvement(self, meta: GearMeta) -> Tuple[int, int, int]:
-        stat_basis = _ACCESORY_IMPROVEMENTS_STAT[self.probability][
-            self.get_spell_trace_rank(meta)
-        ]
+        stat_basis = _ACCESORY_IMPROVEMENTS_STAT[self.probability][self.get_spell_trace_rank(meta)]
         if self.stat_prop_type is StatProps.MHP:
             stat_basis = stat_basis * 50
 
         return 0, stat_basis, 0
 
     def get_machine_heart_improvement(self, meta: GearMeta) -> Tuple[int, int, int]:
-        attack_basis = _MACHINE_HEART_IMPROVEMENTS_STAT[self.probability][
-            self.get_spell_trace_rank(meta)
-        ]
+        attack_basis = _MACHINE_HEART_IMPROVEMENTS_STAT[self.probability][self.get_spell_trace_rank(meta)]
         return attack_basis, 0, 0
 
     def calculate_improvement(self, meta: GearMeta, _: Optional[Stat] = None) -> Stat:
@@ -107,11 +97,7 @@ class SpellTrace(GearImprovement):
         if self.stat_prop_type not in STAT_PROP_TYPES:
             raise TypeError(f"Invalid prop_type: {self.stat_prop_type.value}")
 
-        attack_type = (
-            StatProps.magic_attack
-            if self.stat_prop_type == StatProps.INT
-            else StatProps.attack_power
-        )
+        attack_type = StatProps.magic_attack if self.stat_prop_type == StatProps.INT else StatProps.attack_power
 
         if meta.type.is_improved_as_weapon():
             attack_basis, stat_basis, additional_mhp = self.get_weapon_improvement(meta)
@@ -120,9 +106,7 @@ class SpellTrace(GearImprovement):
         elif meta.type.is_armor() or meta.type == GearType.shoulder_pad:
             attack_basis, stat_basis, additional_mhp = self.get_armor_improvement(meta)
         elif meta.type.is_accessory():
-            attack_basis, stat_basis, additional_mhp = self.get_accesory_improvement(
-                meta
-            )
+            attack_basis, stat_basis, additional_mhp = self.get_accesory_improvement(meta)
         elif meta.type == GearType.machine_heart:
             (
                 attack_basis,
@@ -130,20 +114,14 @@ class SpellTrace(GearImprovement):
                 additional_mhp,
             ) = self.get_machine_heart_improvement(meta)
 
-        improvement += Stat.model_validate(
-            {attack_type.value: attack_basis, self.stat_prop_type.value: stat_basis}
-        )
+        improvement += Stat.model_validate({attack_type.value: attack_basis, self.stat_prop_type.value: stat_basis})
 
         improvement += Stat(MHP=additional_mhp)
 
         if (meta.type.is_armor()) and self.order == 4 and meta.type != GearType.glove:
             improvement += Stat(
-                magic_attack=int(
-                    meta.req_job == 0 or math.floor(meta.req_job / 2) % 2 == 1
-                ),
-                attack_power=int(
-                    meta.req_job == 0 or math.floor(meta.req_job / 2) % 2 == 0
-                ),
+                magic_attack=int(meta.req_job == 0 or math.floor(meta.req_job / 2) % 2 == 1),
+                attack_power=int(meta.req_job == 0 or math.floor(meta.req_job / 2) % 2 == 0),
             )
 
         return improvement

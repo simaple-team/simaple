@@ -6,9 +6,7 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 )
 
 
-class NamedStat(
-    pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="NamedStat")
-):
+class NamedStat(pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="NamedStat")):
     name: str
     stat: Stat = pydantic.Field(default_factory=Stat)
     action_stat: ActionStat = pydantic.Field(default_factory=ActionStat)
@@ -23,7 +21,9 @@ class NamedStat(
         return self.name
 
 
-class Doping(NamedStat): ...
+class Doping(NamedStat):
+    ...
 
 
-class MonsterlifeMob(NamedStat): ...
+class MonsterlifeMob(NamedStat):
+    ...

@@ -19,13 +19,9 @@ def test_ability(stat_name, value, level, expected):
 def test_sum():
     level_stat_a = LevelStat(STR=1, LUK=1, INT=1, DEX=1, attack_power=2, magic_attack=2)
 
-    level_stat_b = LevelStat(
-        STR=11, LUK=11, INT=11, DEX=11, attack_power=22, magic_attack=22
-    )
+    level_stat_b = LevelStat(STR=11, LUK=11, INT=11, DEX=11, attack_power=22, magic_attack=22)
 
-    assert level_stat_a + level_stat_b == LevelStat(
-        STR=12, LUK=12, INT=12, DEX=12, attack_power=24, magic_attack=24
-    )
+    assert level_stat_a + level_stat_b == LevelStat(STR=12, LUK=12, INT=12, DEX=12, attack_power=24, magic_attack=24)
 
 
 def test_complex_get_stat():

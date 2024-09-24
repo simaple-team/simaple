@@ -66,15 +66,11 @@ class VSkillImprovementPatch(Patch):
         try:
             improvement_scale = output.pop("v_improvement")
         except KeyError as e:
-            raise KeyError(
-                "VSkillImprovementPatch assigned but no `v_improvement`."
-            ) from e
+            raise KeyError("VSkillImprovementPatch assigned but no `v_improvement`.") from e
 
         previous_modifier = Stat.model_validate(output.get("modifier", {}))
         level = self.improvements.get(_get_representative_skill_name(raw), 0)
-        new_modifier = previous_modifier + Stat(
-            final_damage_multiplier=improvement_scale * level
-        )
+        new_modifier = previous_modifier + Stat(final_damage_multiplier=improvement_scale * level)
         if level > 40:
             new_modifier += Stat(ignored_defence=20)
 

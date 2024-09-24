@@ -23,14 +23,10 @@ def fixture_infinity_component():
 
 @pytest.fixture(name="infinity_state")
 def fixture_infinity_state(infinity_component: Infinity, dynamics: Dynamics):
-    return InfinityState.model_validate(
-        {**infinity_component.get_default_state(), "dynamics": dynamics}
-    )
+    return InfinityState.model_validate({**infinity_component.get_default_state(), "dynamics": dynamics})
 
 
-def test_infinity_increment(
-    infinity_component: Infinity, infinity_state: InfinityState
-):
+def test_infinity_increment(infinity_component: Infinity, infinity_state: InfinityState):
     # when
     state, _ = infinity_component.use(None, infinity_state)
 
@@ -38,9 +34,7 @@ def test_infinity_increment(
     assert infinity_component.buff(state) == Stat(final_damage_multiplier=70)
 
 
-def test_infinity_increment_during_increase(
-    infinity_component: Infinity, infinity_state: InfinityState
-):
+def test_infinity_increment_during_increase(infinity_component: Infinity, infinity_state: InfinityState):
     # when
     state, _ = infinity_component.use(None, infinity_state)
     state, _ = infinity_component.elapse(18_000, state)
@@ -49,9 +43,7 @@ def test_infinity_increment_during_increase(
     assert infinity_component.buff(state) == Stat(final_damage_multiplier=70 + 6 * 3)
 
 
-def test_maximum_infinity_increment(
-    infinity_component: Infinity, infinity_state: InfinityState
-):
+def test_maximum_infinity_increment(infinity_component: Infinity, infinity_state: InfinityState):
     state, _ = infinity_component.use(None, infinity_state)
     state, _ = infinity_component.elapse(100_000, state)
 

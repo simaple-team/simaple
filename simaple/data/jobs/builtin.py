@@ -22,9 +22,7 @@ def get_kms_spec_resource_path() -> str:
 def get_kms_jobs_repository() -> DirectorySpecRepository:
     global _BUILTIN_KMS_SKILL_REPOSITORY
     if _BUILTIN_KMS_SKILL_REPOSITORY is None:
-        _BUILTIN_KMS_SKILL_REPOSITORY = DirectorySpecRepository(
-            get_kms_spec_resource_path()
-        )
+        _BUILTIN_KMS_SKILL_REPOSITORY = DirectorySpecRepository(get_kms_spec_resource_path())
 
     return _BUILTIN_KMS_SKILL_REPOSITORY
 
@@ -102,9 +100,7 @@ def get_passive(
         character_level,
         weapon_pure_attack_power=weapon_pure_attack_power,
     )
-    passive_skills: list[PassiveSkill] = loader.load_all(
-        query={"group": jobtype.value, "kind": "PassiveSkill"}, patches=patches
-    )
+    passive_skills: list[PassiveSkill] = loader.load_all(query={"group": jobtype.value, "kind": "PassiveSkill"}, patches=patches)
 
     return sum(
         [passive_skill.get_extended_stat() for passive_skill in passive_skills],

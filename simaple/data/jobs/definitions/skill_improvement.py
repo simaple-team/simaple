@@ -8,14 +8,14 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 )
 
 
-class SkillImprovement(
-    pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="SkillImprovement")
-):
+class SkillImprovement(pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="SkillImprovement")):
     @abstractmethod
-    def get_target_names(self) -> list[str]: ...
+    def get_target_names(self) -> list[str]:
+        ...
 
     @abstractmethod
-    def modify(self, origin: dict) -> dict: ...
+    def modify(self, origin: dict) -> dict:
+        ...
 
 
 class _Advantage(pydantic.BaseModel):
@@ -42,9 +42,7 @@ class SkillAdditiveImprovement(SkillImprovement):
         modified = copy.deepcopy(origin)
 
         for advantage in advantages:
-            assert (
-                advantage.target_field in origin
-            ), "Fields may defined in target, but missing"
+            assert advantage.target_field in origin, "Fields may defined in target, but missing"
             modified[advantage.target_field] += advantage.value
 
         return modified

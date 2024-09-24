@@ -53,9 +53,7 @@ def test_cosmic_burst_cooldown(
     assert cosmic_burst_state.cooldown.time_left == cooldown_expected
 
 
-def test_cosmic_burst_prevent_multiple_trigger(
-    cosmic_burst: CosmicBurst, cosmic_burst_state: CosmicBurstState
-):
+def test_cosmic_burst_prevent_multiple_trigger(cosmic_burst: CosmicBurst, cosmic_burst_state: CosmicBurstState):
     cosmic_burst_state.orb.stack = 5
     cosmic_burst_state, _ = cosmic_burst.trigger(None, cosmic_burst_state)
     cosmic_burst_state, events = cosmic_burst.trigger(None, cosmic_burst_state)

@@ -26,13 +26,9 @@ def _load_optimal_artifact_from_yaml(path: str) -> list[_OptimalChoice]:
 
 class OptimalArtifactGenerator:
     def __init__(self, optimal_choices: list[_OptimalChoice]):
-        self.optimal_choices = list(
-            sorted(optimal_choices, key=lambda x: x.artifact_level)
-        )
+        self.optimal_choices = list(sorted(optimal_choices, key=lambda x: x.artifact_level))
 
-    def _choice_to_artifact_card(
-        self, choice: _ArtifactCardChoice, card_priorities: list[str]
-    ) -> ArtifactCard:
+    def _choice_to_artifact_card(self, choice: _ArtifactCardChoice, card_priorities: list[str]) -> ArtifactCard:
         return ArtifactCard(
             effects=cast(
                 tuple[str, str, str],
@@ -44,9 +40,7 @@ class OptimalArtifactGenerator:
             level=choice.level,
         )
 
-    def get_optimal_artifact(
-        self, artifact_level: int, card_priorities: list[str]
-    ) -> list[ArtifactCard]:
+    def get_optimal_artifact(self, artifact_level: int, card_priorities: list[str]) -> list[ArtifactCard]:
         if self.optimal_choices[0].artifact_level > artifact_level:
             return []
 
@@ -56,17 +50,12 @@ class OptimalArtifactGenerator:
             else:
                 break
 
-        return [
-            self._choice_to_artifact_card(choice, card_priorities)
-            for choice in target_choice.distribution
-        ]
+        return [self._choice_to_artifact_card(choice, card_priorities) for choice in target_choice.distribution]
 
 
 # Static file replaces complex algorithm
 _FILE_NAME = "artifact_distribution.yaml"
-_optimal_artifact_generator: OptimalArtifactGenerator = OptimalArtifactGenerator(
-    _load_optimal_artifact_from_yaml(_FILE_NAME)
-)
+_optimal_artifact_generator: OptimalArtifactGenerator = OptimalArtifactGenerator(_load_optimal_artifact_from_yaml(_FILE_NAME))
 
 
 def get_optimal_artifact_generator() -> OptimalArtifactGenerator:

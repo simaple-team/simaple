@@ -20,14 +20,10 @@ def buff_component():
 
 @pytest.fixture
 def buff_state(buff_component: BuffSkillComponent, dynamics: Dynamics):
-    return BuffSkillState.model_validate(
-        {**buff_component.get_default_state(), "dynamics": dynamics}
-    )
+    return BuffSkillState.model_validate({**buff_component.get_default_state(), "dynamics": dynamics})
 
 
-def test_use_buff_component(
-    buff_component: BuffSkillComponent, buff_state: BuffSkillState
-):
+def test_use_buff_component(buff_component: BuffSkillComponent, buff_state: BuffSkillState):
     # when
     state, _ = buff_component.use(None, buff_state)
 
@@ -35,9 +31,7 @@ def test_use_buff_component(
     assert buff_component.buff(state) == Stat(attack_power=30)
 
 
-def test_use_buff_component_remains(
-    buff_component: BuffSkillComponent, buff_state: BuffSkillState
-):
+def test_use_buff_component_remains(buff_component: BuffSkillComponent, buff_state: BuffSkillState):
     # when
     state, _ = buff_component.use(None, buff_state)
     state, _ = buff_component.elapse(10_000, state)
@@ -46,9 +40,7 @@ def test_use_buff_component_remains(
     assert buff_component.buff(state) == Stat(attack_power=30)
 
 
-def test_use_buff_component_turns_off(
-    buff_component: BuffSkillComponent, buff_state: BuffSkillState
-):
+def test_use_buff_component_turns_off(buff_component: BuffSkillComponent, buff_state: BuffSkillState):
     # when
     state, _ = buff_component.use(None, buff_state)
     state, _ = buff_component.elapse(20_000, state)
@@ -57,9 +49,7 @@ def test_use_buff_component_turns_off(
     assert buff_component.buff(state) is None
 
 
-def test_buff_skill_use_forbidden(
-    buff_component: BuffSkillComponent, buff_state: BuffSkillState
-):
+def test_buff_skill_use_forbidden(buff_component: BuffSkillComponent, buff_state: BuffSkillState):
     # when
     state, _ = buff_component.use(None, buff_state)
     state, _ = buff_component.elapse(20_000, state)

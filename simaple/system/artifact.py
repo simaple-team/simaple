@@ -8,9 +8,7 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 )
 
 
-class ArtifactEffect(
-    BaseModel, metaclass=TaggedNamespacedABCMeta(kind="ArtifactEffect")
-):
+class ArtifactEffect(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="ArtifactEffect")):
     name: str
     effects: list[ExtendedStat]
 

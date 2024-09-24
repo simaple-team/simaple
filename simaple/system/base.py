@@ -6,9 +6,7 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 )
 
 
-class UpgradableUserStat(
-    BaseModel, metaclass=TaggedNamespacedABCMeta(kind="UpgradableUserStat")
-):
+class UpgradableUserStat(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="UpgradableUserStat")):
     name: str
     values: list[ExtendedStat]
 

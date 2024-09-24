@@ -47,9 +47,7 @@ def test_blossom_order_3pair(blossom: AdeleBlossomComponent, dynamics: Dynamics)
         AdeleOrderUsingState(
             cooldown=Cooldown(time_left=0),
             dynamics=dynamics,
-            order_sword=OrderSword(
-                interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]
-            ),
+            order_sword=OrderSword(interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]),
         ),
     )
 

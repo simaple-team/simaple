@@ -13,9 +13,7 @@ class PotentialTranslator(pydantic.BaseModel):
     model_config = pydantic.ConfigDict(arbitrary_types_allowed=True)
 
     def translate(self, expressions: list[str]) -> Potential:
-        return Potential(
-            options=[self.translate_expression(expr) for expr in expressions]
-        )
+        return Potential(options=[self.translate_expression(expr) for expr in expressions])
 
     def translate_expression(self, expression: str) -> ExtendedStat:
         for pattern, provider in self.patterns:

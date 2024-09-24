@@ -18,9 +18,7 @@ class TranscendentCygnusBlessingState(ReducerState):
     consumable: Consumable
 
 
-class TranscendentCygnusBlessing(
-    SkillComponent, ConsumableBuffTrait, ConsumableValidityTrait
-):
+class TranscendentCygnusBlessing(SkillComponent, ConsumableBuffTrait, ConsumableValidityTrait):
     cooldown_duration: float
     delay: float
     lasting_duration: float

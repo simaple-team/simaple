@@ -43,12 +43,11 @@ def get_type(key_string: str) -> PotentialType:
     raise ValueError
 
 
-
 naming_map = {
-    'STR : +#incSTR': "STR",
-    'LUK : +#incLUK': "LUK",
-    'INT : +#incINT': "INT",
-    'DEX : +#incDEX': "DEX",
+    "STR : +#incSTR": "STR",
+    "LUK : +#incLUK": "LUK",
+    "INT : +#incINT": "INT",
+    "DEX : +#incDEX": "DEX",
     "최대 HP : +#incMHP": "MHP",
     "최대 HP : +#incMMP": "MMP",
     "데미지 : +#incDAMr%": "damage_multiplier",
@@ -86,49 +85,50 @@ translation_map = {
     "incINT": "INT",
     "incMHP": "MHP",
     "incMMP": "MMP",
-    "incRewardProp": None, # 아이템 드랍률
+    "incRewardProp": None,  # 아이템 드랍률
     "incCr": "critical_rate",
-    "incPDDr": None, # 방어력%
-    "incPDD": None, # 방어력
+    "incPDDr": None,  # 방어력%
+    "incPDD": None,  # 방어력
     "incCriticaldamage": "critical_damage",
     "incDAMr": "damage_multiplier",
-    "RecoveryHP": None, # 4초당 HP 회복
-    "RecoveryMP": None, # 4초당 Mp 회복
-    "incTerR": None, # 속성 내성
-    "boss": "boss_damage_multiplier", # special indicator; boss 필드가 있으면 damage_multiplier를 바꿈
+    "RecoveryHP": None,  # 4초당 HP 회복
+    "RecoveryMP": None,  # 4초당 Mp 회복
+    "incTerR": None,  # 속성 내성
+    "boss": "boss_damage_multiplier",  # special indicator; boss 필드가 있으면 damage_multiplier를 바꿈
     "mpconReduce": None,  # 모든 스킬의 MP 소모 -
-    "incSpeed": None, # 이동 속도
+    "incSpeed": None,  # 이동 속도
     "incPAD": "attack_power",
     "incMAD": "magic_attack",
     "ignoreTargetDEF": "ignored_defence",
-    "incEXPr": None, # 경험치 획득 %
-    "DAMreflect": None, #'#prop% 확률로 받은 피해의 #DAMreflect%를 반사'
-    "RecoveryUP": None, #HP 회복 아이템 및 회복 스킬 효율 : +#RecoveryUP
-    "time": None, #'피격 후 무적시간 : +#time초'
-    "face": None, # 표정
+    "incEXPr": None,  # 경험치 획득 %
+    "DAMreflect": None,  #'#prop% 확률로 받은 피해의 #DAMreflect%를 반사'
+    "RecoveryUP": None,  # HP 회복 아이템 및 회복 스킬 효율 : +#RecoveryUP
+    "time": None,  #'피격 후 무적시간 : +#time초'
+    "face": None,  # 표정
     "incMMPr": "MMP_multiplier",
     "incMHPr": "MHP_multiplier",
-    "ignoreDAM": None, #'피격 시 #prop% 확률로 데미지 무시'
-    "ignoreDAMr": None, #'피격 시 #prop% 확률로 데미지의 #ignoreDAMr% 무시'
-    "reduceCooltime": None, #'모든 스킬의 재사용 대기시간 : -#reduceCooltime초
-    "MP": None, #'공격 시 #prop% 확률로 #MP의 MP 회복'
-    "HP": None, #'공격 시 #prop% 확률로 #HP의 HP 회복'
-    "incDEXlv": None, #'10레벨당 DEX'
-    "incINTlv": None, #'10레벨당 INT'
-    "incSTRlv": None, #'10레벨당 STR'
-    "incLUKlv": None, #'10레벨당 LUK'
-    "incMADlv": None, # 10레벨당 마력
-    "incPADlv": None, # 10레벨당 마력
-    "prop": None, # 공격 시 #prop% 확률로 #MP의 MP 회복
+    "ignoreDAM": None,  #'피격 시 #prop% 확률로 데미지 무시'
+    "ignoreDAMr": None,  #'피격 시 #prop% 확률로 데미지의 #ignoreDAMr% 무시'
+    "reduceCooltime": None,  #'모든 스킬의 재사용 대기시간 : -#reduceCooltime초
+    "MP": None,  #'공격 시 #prop% 확률로 #MP의 MP 회복'
+    "HP": None,  #'공격 시 #prop% 확률로 #HP의 HP 회복'
+    "incDEXlv": None,  #'10레벨당 DEX'
+    "incINTlv": None,  #'10레벨당 INT'
+    "incSTRlv": None,  #'10레벨당 STR'
+    "incLUKlv": None,  #'10레벨당 LUK'
+    "incMADlv": None,  # 10레벨당 마력
+    "incPADlv": None,  # 10레벨당 마력
+    "prop": None,  # 공격 시 #prop% 확률로 #MP의 MP 회복
     "incMADr": "magic_attack_multiplier",
-    "incJump": None, # 점프력
-    "level": None, # 쓸스킬
-    "incMesoProp": None, # 메획
-    "incAllskill": None, # 모든 스킬 레벨
-    "incAsrR": None, # 상태이상 내성
+    "incJump": None,  # 점프력
+    "level": None,  # 쓸스킬
+    "incMesoProp": None,  # 메획
+    "incAllskill": None,  # 모든 스킬 레벨
+    "incAsrR": None,  # 상태이상 내성
     "incPADr": "attack_power_multiplier",
-    "attackType": None, # 공격시 효과 적용
+    "attackType": None,  # 공격시 효과 적용
 }
+
 
 def translate_key_as_simaple_entity(k: str) -> Optional[str]:
     return translation_map.get(k, k)
@@ -140,7 +140,7 @@ def translate_description(description) -> dict[str, int]:
         translated_key = translate_key_as_simaple_entity(desc_key)
         if translated_key is None:
             return None
-        
+
         output[translated_key] = desc_value
 
     if "boss_damage_multiplier" in output:
@@ -181,18 +181,20 @@ for k, v in raw.items():
         db[tier.value] = []
 
     potential_type = get_type(k).value
-    weapon_flag = (v.get("optionType") == 10)
+    weapon_flag = v.get("optionType") == 10
 
-    db[tier.value].append({
-        "name": field_description,
-        "effect": listed_effects,
-        "key": int(k),
-        "desc": v["string"],
-        "type": potential_type + (f"_weapon" if weapon_flag else ""),
-    })
+    db[tier.value].append(
+        {
+            "name": field_description,
+            "effect": listed_effects,
+            "key": int(k),
+            "desc": v["string"],
+            "type": potential_type + (f"_weapon" if weapon_flag else ""),
+        }
+    )
 
 ## Rearrange db table into query-value map
-    # dict[type][tier][level]
+# dict[type][tier][level]
 rearranged_db = {}
 
 for tier, rows in db.items():
@@ -207,5 +209,5 @@ for tier, rows in db.items():
 with open("db.yaml", "w") as f:
     yaml.safe_dump(rearranged_db, f, allow_unicode=True)
 
-#with open("dump.yaml", "w") as f:
+# with open("dump.yaml", "w") as f:
 #    yaml.safe_dump(db, f, allow_unicode=True)

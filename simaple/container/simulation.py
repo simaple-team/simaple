@@ -59,9 +59,7 @@ class SimulationContainer:
         self.environment = environment
 
     def damage_logic(self):
-        return get_damage_logic(
-            self.environment.jobtype, self.environment.combat_orders_level
-        )
+        return get_damage_logic(self.environment.jobtype, self.environment.combat_orders_level)
 
     def skill_profile(self):
         return get_skill_profile(self.environment.jobtype)
@@ -97,12 +95,8 @@ class SimulationContainer:
                 self.environment.hexa_skill_level,
                 self.environment.hexa_mastery_level,
             ),
-            skill_profile.get_filled_v_improvements(
-                self.environment.v_improvements_level
-            ),
-            skill_profile.get_filled_hexa_improvements(
-                self.environment.hexa_improvements_level
-            ),
+            skill_profile.get_filled_v_improvements(self.environment.v_improvements_level),
+            skill_profile.get_filled_hexa_improvements(self.environment.hexa_improvements_level),
             skill_profile.get_skill_replacements(),
             {
                 "character_stat": self.environment.character.stat,

@@ -99,9 +99,7 @@ class Periodic(Entity):
 
     def set_time_left(self, time: float, initial_counter: Optional[float] = None):
         self.time_left = time
-        self.interval_counter = (
-            initial_counter if initial_counter is not None else self.interval
-        )
+        self.interval_counter = initial_counter if initial_counter is not None else self.interval
         self.count = 0
 
     def enabled(self):
@@ -111,9 +109,7 @@ class Periodic(Entity):
         if self.time_left <= 0:
             return 0
 
-        maximum_elapsed = max(
-            0, int((self.time_left - self.interval_counter) // self.interval) + 1
-        )
+        maximum_elapsed = max(0, int((self.time_left - self.interval_counter) // self.interval) + 1)
         self.time_left -= time
         self.interval_counter -= time
 
@@ -130,9 +126,7 @@ class Periodic(Entity):
         if self.time_left <= 0:
             return 0
 
-        maximum_elapsed = max(
-            0, int((self.time_left - self.interval_counter) // self.interval) + 1
-        )
+        maximum_elapsed = max(0, int((self.time_left - self.interval_counter) // self.interval) + 1)
 
         self.time_left -= time
         self.interval_counter -= time

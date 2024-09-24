@@ -38,16 +38,10 @@ class GearSlot(BaseModel):
 def get_default_empty_slots():
     return [
         GearSlot(name=SlotName.cap, enabled_gear_types=[GearType.cap]),
-        GearSlot(
-            name=SlotName.face_accessory, enabled_gear_types=[GearType.face_accessory]
-        ),
-        GearSlot(
-            name=SlotName.eye_accessory, enabled_gear_types=[GearType.eye_accessory]
-        ),
+        GearSlot(name=SlotName.face_accessory, enabled_gear_types=[GearType.face_accessory]),
+        GearSlot(name=SlotName.eye_accessory, enabled_gear_types=[GearType.eye_accessory]),
         GearSlot(name=SlotName.earrings, enabled_gear_types=[GearType.earrings]),
-        GearSlot(
-            name=SlotName.coat, enabled_gear_types=[GearType.coat, GearType.longcoat]
-        ),
+        GearSlot(name=SlotName.coat, enabled_gear_types=[GearType.coat, GearType.longcoat]),
         GearSlot(name=SlotName.pants, enabled_gear_types=[GearType.pants]),
         GearSlot(name=SlotName.shoes, enabled_gear_types=[GearType.shoes]),
         GearSlot(name=SlotName.glove, enabled_gear_types=[GearType.glove]),
@@ -60,27 +54,19 @@ def get_default_empty_slots():
         GearSlot(name=SlotName.pendant2, enabled_gear_types=[GearType.pendant]),
         GearSlot(name=SlotName.belt, enabled_gear_types=[GearType.belt]),
         GearSlot(name=SlotName.medal, enabled_gear_types=[GearType.medal]),
-        GearSlot(
-            name=SlotName.shoulder_pad, enabled_gear_types=[GearType.shoulder_pad]
-        ),
+        GearSlot(name=SlotName.shoulder_pad, enabled_gear_types=[GearType.shoulder_pad]),
         GearSlot(name=SlotName.pocket, enabled_gear_types=[GearType.pocket]),
         GearSlot(name=SlotName.badge, enabled_gear_types=[GearType.badge]),
         GearSlot(name=SlotName.android, enabled_gear_types=[GearType.android]),
-        GearSlot(
-            name=SlotName.machine_heart, enabled_gear_types=[GearType.machine_heart]
-        ),
+        GearSlot(name=SlotName.machine_heart, enabled_gear_types=[GearType.machine_heart]),
         GearSlot(
             name=SlotName.subweapon,
-            enabled_gear_types=[
-                gear_type for gear_type in GearType if gear_type.is_sub_weapon()
-            ],
+            enabled_gear_types=[gear_type for gear_type in GearType if gear_type.is_sub_weapon()],
         ),
         GearSlot(name=SlotName.emblem, enabled_gear_types=[GearType.emblem]),
         GearSlot(
             name=SlotName.weapon,
-            enabled_gear_types=[
-                gear_type for gear_type in GearType if gear_type.is_weapon()
-            ],
+            enabled_gear_types=[gear_type for gear_type in GearType if gear_type.is_weapon()],
         ),
     ]
 
@@ -161,9 +147,7 @@ class Gearset(BaseModel):
         gears = self.get_gears()
 
         for set_item in self.set_items:
-            effect = set_item.get_effect(
-                set_item.measure([st for st in self.set_items if st != set_item], gears)
-            )
+            effect = set_item.get_effect(set_item.measure([st for st in self.set_items if st != set_item], gears))
             stat += effect
 
         return stat
@@ -188,11 +172,7 @@ class Gearset(BaseModel):
         return True
 
     def _get_eqiuppable_slots(self, gear) -> list[GearSlot]:
-        return [
-            slot
-            for slot in self.gear_slots
-            if gear.meta.type in slot.enabled_gear_types
-        ]
+        return [slot for slot in self.gear_slots if gear.meta.type in slot.enabled_gear_types]
 
     def get_slot(self, slot_name: SlotName) -> GearSlot:
         for slot in self.gear_slots:
@@ -236,12 +216,8 @@ class Gearset(BaseModel):
         )
 
     def set_empty_potential(self) -> None:
-        self.change_weaponry_potentials(
-            (Potential(options=[]), Potential(options=[]), Potential(options=[]))
-        )
+        self.change_weaponry_potentials((Potential(options=[]), Potential(options=[]), Potential(options=[])))
 
-    def change_weaponry_potentials(
-        self, weaponry_potentials: Tuple[Potential, Potential, Potential]
-    ) -> None:
+    def change_weaponry_potentials(self, weaponry_potentials: Tuple[Potential, Potential, Potential]) -> None:
         for slot, potential in zip(self.get_weaponry_slots(), weaponry_potentials):
             slot.equip(slot.get_gear().set_potential(potential))

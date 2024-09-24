@@ -58,12 +58,8 @@ class HowlingGaleComponent(
         dealing_events = []
         consumed = state.consumed.get_value()
         for _ in state.periodic.resolving(time):
-            for periodic_damage, periodic_hit in zip(
-                self.periodic_damage[consumed - 1], self.periodic_hit[consumed - 1]
-            ):
-                dealing_events.append(
-                    self.event_provider.dealt(periodic_damage, periodic_hit)
-                )
+            for periodic_damage, periodic_hit in zip(self.periodic_damage[consumed - 1], self.periodic_hit[consumed - 1]):
+                dealing_events.append(self.event_provider.dealt(periodic_damage, periodic_hit))
 
         return state, [self.event_provider.elapsed(time)] + dealing_events
 

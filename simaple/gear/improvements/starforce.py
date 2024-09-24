@@ -53,20 +53,13 @@ class Enhancement(GearImprovement):
 class Starforce(Enhancement):
     enhancement_type: Literal["Starforce"] = "Starforce"
 
-    def calculate_improvement(
-        self, meta: GearMeta, ref_stat: Optional[Stat] = None
-    ) -> Stat:
+    def calculate_improvement(self, meta: GearMeta, ref_stat: Optional[Stat] = None) -> Stat:
         if ref_stat is None:
             raise ValueError("Starforce may require referenced stat")
 
         current_improvement = Stat()
         for i in range(1, self.star + 1):
-            current_improvement = (
-                current_improvement
-                + self.get_single_starforce_improvement(
-                    meta, ref_stat, i, current_improvement
-                )
-            )
+            current_improvement = current_improvement + self.get_single_starforce_improvement(meta, ref_stat, i, current_improvement)
 
         return current_improvement
 
@@ -81,16 +74,12 @@ class Starforce(Enhancement):
         current_improvement: Stat,
     ) -> Stat:
         if target_star > self.max_star(meta):
-            raise TypeError(
-                f"Starforce improvement cannot exceed item constraint. Given {target_star} but maximum {self.max_star(meta)}"
-            )
+            raise TypeError(f"Starforce improvement cannot exceed item constraint. Given {target_star} but maximum {self.max_star(meta)}")
 
         current_gear_stat = current_improvement + ref_stat
 
         if meta.superior_eqp:
-            return SuperiorIncrementProvider().get_increment(
-                meta, target_star, current_gear_stat
-            )
+            return SuperiorIncrementProvider().get_increment(meta, target_star, current_gear_stat)
 
         improvement_stat = Stat()
         increment_providers: list[StarforceIncrementProvider] = [
@@ -101,9 +90,7 @@ class Starforce(Enhancement):
         ]
 
         for increment_provider in increment_providers:
-            improvement_stat += increment_provider.get_increment(
-                meta, target_star, current_gear_stat
-            )
+            improvement_stat += increment_provider.get_increment(meta, target_star, current_gear_stat)
 
         return improvement_stat
 
@@ -112,65 +99,44 @@ class AmazingEnhancement(Enhancement):
     enhancement_type: Literal["Amazing"] = "Amazing"
     bonus: bool = False
 
-    def calculate_improvement(
-        self, meta: GearMeta, ref_stat: Optional[Stat] = None
-    ) -> Stat:
+    def calculate_improvement(self, meta: GearMeta, ref_stat: Optional[Stat] = None) -> Stat:
         current_improvement = Stat()
         if ref_stat is None:
             raise ValueError("Starforce may require referenced stat")
 
         for i in range(1, self.star + 1):
-            current_improvement = (
-                current_improvement
-                + self.get_single_amazing_enhancement(meta, ref_stat, i)
-            )
+            current_improvement = current_improvement + self.get_single_amazing_enhancement(meta, ref_stat, i)
 
         return current_improvement
 
-    def get_single_amazing_enhancement(
-        self, meta: GearMeta, ref_stat: Stat, target_star: int
-    ) -> Stat:
+    def get_single_amazing_enhancement(self, meta: GearMeta, ref_stat: Stat, target_star: int) -> Stat:
         if target_star >= self.max_star(meta):
             raise TypeError("Starforce improvement cannot exceed item constraint")
 
         improvement_stat = Stat()
 
-        stat_enhancement_increment = get_starforce_increment(
-            meta, target_star, amazing_scroll=True, att=False
-        ) + self.stat_bonus(meta, target_star)
+        stat_enhancement_increment = get_starforce_increment(meta, target_star, amazing_scroll=True, att=False) + self.stat_bonus(
+            meta, target_star
+        )
 
         for prop_type in (StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK):
             if ref_stat.get(prop_type) > 0:
-                improvement_stat += Stat.model_validate(
-                    {prop_type.value: stat_enhancement_increment}
-                )
+                improvement_stat += Stat.model_validate({prop_type.value: stat_enhancement_increment})
 
-        att_enhancement_increment = get_starforce_increment(
-            meta, target_star, amazing_scroll=True, att=True
-        ) + self.att_bonus(meta, target_star)
+        att_enhancement_increment = get_starforce_increment(meta, target_star, amazing_scroll=True, att=True) + self.att_bonus(
+            meta, target_star
+        )
 
         for att_type in (StatProps.attack_power, StatProps.magic_attack):
             if ref_stat.get(att_type) > 0:
-                improvement_stat += Stat.model_validate(
-                    {att_type.value: att_enhancement_increment}
-                )
+                improvement_stat += Stat.model_validate({att_type.value: att_enhancement_increment})
                 if meta.type.is_improved_as_weapon():
-                    improvement_stat += Stat.model_validate(
-                        {att_type.value: ref_stat.get(att_type) // 50 + 1}
-                    )
+                    improvement_stat += Stat.model_validate({att_type.value: ref_stat.get(att_type) // 50 + 1})
 
         return improvement_stat
 
     def stat_bonus(self, meta: GearMeta, target_star: int):
-        return (
-            (2 if target_star > 5 else 1)
-            if self.bonus and meta.type.is_accessory()
-            else 0
-        )
+        return (2 if target_star > 5 else 1) if self.bonus and meta.type.is_accessory() else 0
 
     def att_bonus(self, meta: GearMeta, target_star: int):
-        return (
-            1
-            if self.bonus and (meta.type.is_weapon() or meta.type == GearType.shield)
-            else 0
-        )
+        return 1 if self.bonus and (meta.type.is_weapon() or meta.type == GearType.shield) else 0

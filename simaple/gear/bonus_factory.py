@@ -61,35 +61,19 @@ class BonusFactory:
             BonusType.LUK: SingleStatBonus(stat_type=BaseStatType.LUK, grade=1),
             BonusType.DEX: SingleStatBonus(stat_type=BaseStatType.DEX, grade=1),
             BonusType.INT: SingleStatBonus(stat_type=BaseStatType.INT, grade=1),
-            BonusType.STR_DEX: DualStatBonus(
-                stat_type_pair=[BaseStatType.STR, BaseStatType.DEX], grade=1
-            ),
-            BonusType.STR_INT: DualStatBonus(
-                stat_type_pair=[BaseStatType.STR, BaseStatType.INT], grade=1
-            ),
-            BonusType.STR_LUK: DualStatBonus(
-                stat_type_pair=[BaseStatType.STR, BaseStatType.LUK], grade=1
-            ),
-            BonusType.DEX_INT: DualStatBonus(
-                stat_type_pair=[BaseStatType.DEX, BaseStatType.INT], grade=1
-            ),
-            BonusType.DEX_LUK: DualStatBonus(
-                stat_type_pair=[BaseStatType.DEX, BaseStatType.LUK], grade=1
-            ),
-            BonusType.INT_LUK: DualStatBonus(
-                stat_type_pair=[BaseStatType.INT, BaseStatType.LUK], grade=1
-            ),
+            BonusType.STR_DEX: DualStatBonus(stat_type_pair=[BaseStatType.STR, BaseStatType.DEX], grade=1),
+            BonusType.STR_INT: DualStatBonus(stat_type_pair=[BaseStatType.STR, BaseStatType.INT], grade=1),
+            BonusType.STR_LUK: DualStatBonus(stat_type_pair=[BaseStatType.STR, BaseStatType.LUK], grade=1),
+            BonusType.DEX_INT: DualStatBonus(stat_type_pair=[BaseStatType.DEX, BaseStatType.INT], grade=1),
+            BonusType.DEX_LUK: DualStatBonus(stat_type_pair=[BaseStatType.DEX, BaseStatType.LUK], grade=1),
+            BonusType.INT_LUK: DualStatBonus(stat_type_pair=[BaseStatType.INT, BaseStatType.LUK], grade=1),
             BonusType.all_stat_multiplier: AllstatBonus(grade=1),
             BonusType.boss_damage_multiplier: BossDamageMultiplierBonus(grade=1),
             BonusType.damage_multiplier: DamageMultiplierBonus(grade=1),
             BonusType.MHP: ResourcePointBonus(stat_type="MHP", grade=1),
             BonusType.MMP: ResourcePointBonus(stat_type="MMP", grade=1),
-            BonusType.attack_power: AttackTypeBonus(
-                attack_type=AttackType.attack_power, grade=1
-            ),
-            BonusType.magic_attack: AttackTypeBonus(
-                attack_type=AttackType.magic_attack, grade=1
-            ),
+            BonusType.attack_power: AttackTypeBonus(attack_type=AttackType.attack_power, grade=1),
+            BonusType.magic_attack: AttackTypeBonus(attack_type=AttackType.magic_attack, grade=1),
         }
 
     def create(self, bonus_type: BonusType, grade: int) -> Bonus:

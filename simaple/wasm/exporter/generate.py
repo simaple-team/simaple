@@ -23,13 +23,7 @@ def _unpack_annot(annotations: list):
             unpacked_annotations += [annotation]
 
         elif isinstance(annotation, types.GenericAlias):
-            unpacked_annotations += _unpack_annot(
-                [
-                    generic_types
-                    for generic_types in annotation.__args__
-                    if generic_types is not None
-                ]
-            )
+            unpacked_annotations += _unpack_annot([generic_types for generic_types in annotation.__args__ if generic_types is not None])
         else:
             unpacked_annotations.append(annotation)
 
@@ -44,15 +38,7 @@ def get_pydantic_annotations(methods: list) -> list[Type[pydantic.BaseModel]]:
 
         annots.append(inspect.signature(method).return_annotation)
 
-    pydantic_types_only = list(
-        set(
-            [
-                annot
-                for annot in _unpack_annot(annots)
-                if type(annot) != type and annot is not None
-            ]
-        )
-    )
+    pydantic_types_only = list(set([annot for annot in _unpack_annot(annots) if type(annot) != type and annot is not None]))
 
     return pydantic_types_only
 
@@ -60,7 +46,5 @@ def get_pydantic_annotations(methods: list) -> list[Type[pydantic.BaseModel]]:
 def export_json_schemas(pydantic_types: list[Type[pydantic.BaseModel]], dirname: str):
     for pydantic_type in pydantic_types:
         json_schema = pydantic_type.model_json_schema()
-        with open(
-            os.path.join(dirname, str(pydantic_type.__name__) + ".schema.json"), "w"
-        ) as f:
+        with open(os.path.join(dirname, str(pydantic_type.__name__) + ".schema.json"), "w") as f:
             json.dump(json_schema, f, indent=2)

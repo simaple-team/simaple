@@ -25,20 +25,14 @@ def fixture_howling_gale():
 
 @pytest.fixture(name="howling_gale_state")
 def fixture_blade_storm_state(howling_gale: HowlingGaleComponent, dynamics: Dynamics):
-    return HowlingGaleState.model_validate(
-        {**howling_gale.get_default_state(), "dynamics": dynamics}
-    )
+    return HowlingGaleState.model_validate({**howling_gale.get_default_state(), "dynamics": dynamics})
 
 
-def test_default_stack(
-    howling_gale: HowlingGaleComponent, howling_gale_state: HowlingGaleState
-):
+def test_default_stack(howling_gale: HowlingGaleComponent, howling_gale_state: HowlingGaleState):
     assert howling_gale_state.consumable.get_stack() == 3
 
 
-def test_refill_stack(
-    howling_gale: HowlingGaleComponent, howling_gale_state: HowlingGaleState
-):
+def test_refill_stack(howling_gale: HowlingGaleComponent, howling_gale_state: HowlingGaleState):
     used_state, _ = howling_gale.use(None, howling_gale_state)
     assert used_state.consumable.get_stack() == 0
 
@@ -52,9 +46,7 @@ def test_refill_stack(
     assert state.consumable.get_stack() == 3
 
 
-def test_initial_hit_delay(
-    howling_gale: HowlingGaleComponent, howling_gale_state: HowlingGaleState
-):
+def test_initial_hit_delay(howling_gale: HowlingGaleComponent, howling_gale_state: HowlingGaleState):
     howling_gale_state.consumable.stack = 1
     state, events = howling_gale.use(None, howling_gale_state)
     assert count_damage_skill(events) == 0

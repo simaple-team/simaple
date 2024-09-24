@@ -130,11 +130,7 @@ class GearType(IntEnum):
         return self.is_left_weapon() or self.is_double_hand_weapon()
 
     def is_left_weapon(self) -> bool:
-        return (
-            121 <= self.value <= 139
-            and self != GearType.katara
-            or self.value // 10 == 121
-        )
+        return 121 <= self.value <= 139 and self != GearType.katara or self.value // 10 == 121
 
     def is_sub_weapon(self) -> bool:
         if self in (GearType.shield, GearType.demon_shield, GearType.soul_shield):

@@ -52,18 +52,8 @@ def _as_reference_variables(
         "combat_orders_level": extra_variables["combat_orders_level"],
         "passive_skill_level": extra_variables["passive_skill_level"],
     }
-    reference.update(
-        {
-            f"character_stat.{k}": v
-            for k, v in extra_variables["character_stat"].model_dump().items()
-        }
-    )
-    reference.update(
-        {
-            f"action_stat.{k}": v
-            for k, v in extra_variables["action_stat"].model_dump().items()
-        }
-    )
+    reference.update({f"character_stat.{k}": v for k, v in extra_variables["character_stat"].model_dump().items()})
+    reference.update({f"action_stat.{k}": v for k, v in extra_variables["action_stat"].model_dump().items()})
 
     return reference
 
@@ -78,18 +68,12 @@ def _exclude_hexa_skill(
 
     for low_tier, high_tier in hexa_replacements.items():
         assert low_tier in _component_names, f"{low_tier} is not in {_component_names}"
-        assert (
-            high_tier in _component_names
-        ), f"{high_tier} is not in {_component_names}"
+        assert high_tier in _component_names, f"{high_tier} is not in {_component_names}"
 
         if skill_levels.get(high_tier, 0) > 0:
             components_to_exclude.append(low_tier)
 
-    components = [
-        component
-        for component in components
-        if component.name not in components_to_exclude
-    ]
+    components = [component for component in components if component.name not in components_to_exclude]
     return components
 
 

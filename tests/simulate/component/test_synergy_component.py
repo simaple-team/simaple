@@ -28,9 +28,7 @@ def synergy_component(synergy: Stat):
 
 @pytest.fixture
 def synergy_state(synergy_component: SynergySkillComponent, dynamics: Dynamics):
-    return SynergyState.model_validate(
-        {**synergy_component.get_default_state(), "dynamics": dynamics}
-    )
+    return SynergyState.model_validate({**synergy_component.get_default_state(), "dynamics": dynamics})
 
 
 def test_using_frozen_synerge_component_provide_buff_and_damage(

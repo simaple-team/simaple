@@ -13,7 +13,8 @@ class SpecMetadata(pydantic.BaseModel):
         return all(self.label.get(k) == v for k, v in labels.items())
 
 
-class PatchSpecificationMatchFailError(Exception): ...
+class PatchSpecificationMatchFailError(Exception):
+    ...
 
 
 class Spec(pydantic.BaseModel):
@@ -37,14 +38,9 @@ class Spec(pydantic.BaseModel):
         if len(patches) != len(self.patch):
             return False
 
-        return all(
-            given.__class__.__name__ == expected
-            for given, expected in zip(patches, self.patch)
-        )
+        return all(given.__class__.__name__ == expected for given, expected in zip(patches, self.patch))
 
-    def is_patch_fits_with_overflow(
-        self, patches: Optional[Sequence[Patch]] = None
-    ) -> tuple[bool, list[Patch]]:
+    def is_patch_fits_with_overflow(self, patches: Optional[Sequence[Patch]] = None) -> tuple[bool, list[Patch]]:
         if self.patch is None:
             return True, []
 

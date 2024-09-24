@@ -29,10 +29,6 @@ def test_view():
     global_property = GlobalProperty(ActionStat())
     global_property.install_global_properties(store)
 
-    runtime = (
-        EngineBuilder(store=store)
-        .add_component(ViewTestComponent(id="dummy", name="test_component"))
-        .build_simulation_runtime()
-    )
+    runtime = EngineBuilder(store=store).add_component(ViewTestComponent(id="dummy", name="test_component")).build_simulation_runtime()
 
     assert runtime.get_viewer()("test_component.naming") == str(3 + 5)

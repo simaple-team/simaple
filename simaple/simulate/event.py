@@ -8,21 +8,24 @@ from simaple.simulate.reserved_names import Tag
 
 class EventProvider(metaclass=ABCMeta):
     @abstractmethod
-    def elapsed(self, time: float) -> Event: ...
+    def elapsed(self, time: float) -> Event:
+        ...
 
     @abstractmethod
-    def rejected(self) -> Event: ...
+    def rejected(self) -> Event:
+        ...
 
     @abstractmethod
-    def delayed(self, time: float) -> Event: ...
+    def delayed(self, time: float) -> Event:
+        ...
 
     @abstractmethod
-    def dealt(
-        self, damage: float, hit: float, modifier: Optional[Stat] = None
-    ) -> Event: ...
+    def dealt(self, damage: float, hit: float, modifier: Optional[Stat] = None) -> Event:
+        ...
 
     @abstractmethod
-    def keydown_end(self) -> Event: ...
+    def keydown_end(self) -> Event:
+        ...
 
 
 class NamedEventProvider(EventProvider):
@@ -57,9 +60,7 @@ class NamedEventProvider(EventProvider):
             "handler": None,
         }
 
-    def dealt(
-        self, damage: float, hit: float, modifier: Optional[Stat] = None
-    ) -> Event:
+    def dealt(self, damage: float, hit: float, modifier: Optional[Stat] = None) -> Event:
         if self._default_modifier is None and modifier is None:
             total_modifier = None
         else:

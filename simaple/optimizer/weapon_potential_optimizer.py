@@ -78,9 +78,7 @@ class WeaponPotentialOptimizer(BaseModel):
         candidates = [
             stat
             for stat in _WEAPON_POTENTIALS[tier]
-            if self.damage_logic.get_damage_factor(
-                stat + self.default_stat + PROTECTION_STAT
-            )
+            if self.damage_logic.get_damage_factor(stat + self.default_stat + PROTECTION_STAT)
             - self.damage_logic.get_damage_factor(self.default_stat + PROTECTION_STAT)
             > 0
         ]
@@ -130,29 +128,24 @@ class WeaponPotentialOptimizer(BaseModel):
         iter_count = 0
 
         weapon_potential_candidates = list(self.get_potential_candidates(self.tiers))
-        sub_weapon_potential_candidates = list(
-            self.get_potential_candidates(self.tiers)
-        )
-        emblem_potential_candidates = list(
-            self.get_potential_candidates(self.tiers, emblem=True)
-        )
+        sub_weapon_potential_candidates = list(self.get_potential_candidates(self.tiers))
+        emblem_potential_candidates = list(self.get_potential_candidates(self.tiers, emblem=True))
 
         for weapon_potential in weapon_potential_candidates:
             layer1_cached_stat = weapon_potential.get_stat()
             for sub_weapon_potential in sub_weapon_potential_candidates:
-                layer2_cached_stat = (
-                    layer1_cached_stat + sub_weapon_potential.get_stat()
-                )
+                layer2_cached_stat = layer1_cached_stat + sub_weapon_potential.get_stat()
                 for emblem_potential in emblem_potential_candidates:
-                    reward = self.get_reward(
-                        layer2_cached_stat + emblem_potential.get_stat()
-                    )
+                    reward = self.get_reward(layer2_cached_stat + emblem_potential.get_stat())
                     iter_count += 1
                     if reward > maximum_reward:
-                        maximum_reward, optimal_potential = reward, (
-                            weapon_potential,
-                            sub_weapon_potential,
-                            emblem_potential,
+                        maximum_reward, optimal_potential = (
+                            reward,
+                            (
+                                weapon_potential,
+                                sub_weapon_potential,
+                                emblem_potential,
+                            ),
                         )
 
         return optimal_potential

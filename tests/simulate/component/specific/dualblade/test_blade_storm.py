@@ -27,14 +27,10 @@ def fixture_blade_storm():
 
 @pytest.fixture(name="blade_storm_state")
 def fixture_blade_storm_state(blade_storm: BladeStormComponent, dynamics: Dynamics):
-    return BladeStormState.model_validate(
-        {**blade_storm.get_default_state(), "dynamics": dynamics}
-    )
+    return BladeStormState.model_validate({**blade_storm.get_default_state(), "dynamics": dynamics})
 
 
-def test_prepare_damage(
-    blade_storm: BladeStormComponent, blade_storm_state: BladeStormState
-):
+def test_prepare_damage(blade_storm: BladeStormComponent, blade_storm_state: BladeStormState):
     # when
     state, events = blade_storm.use(None, blade_storm_state)
 

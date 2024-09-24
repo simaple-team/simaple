@@ -6,9 +6,7 @@ from simaple.simulate.reserved_names import Tag
 
 
 class DOT(Entity):
-    current: dict[str, tuple[float, float]] = pydantic.Field(
-        default_factory=dict
-    )  # name, damage, lasting_time
+    current: dict[str, tuple[float, float]] = pydantic.Field(default_factory=dict)  # name, damage, lasting_time
     period_time_left: float = 1_000.0
     period: float = 1_000.0
 
@@ -73,9 +71,6 @@ class MobComponent(Component):
         state = state.deepcopy()
         emits = state.dot.elapse(time)
 
-        events = [
-            {"name": name, "tag": Tag.DOT, "payload": {"damage": damage, "hit": hit}}
-            for ((name, damage), hit) in emits.items()
-        ]
+        events = [{"name": name, "tag": Tag.DOT, "payload": {"damage": damage, "hit": hit}} for ((name, damage), hit) in emits.items()]
 
         return state, events

@@ -28,9 +28,7 @@ def fixture_meca_carrier():
 
 
 @pytest.fixture(name="meca_carrier_state")
-def meca_carrier_state(
-    meca_carrier: MecaCarrier, dynamics: Dynamics, robot_mastery: RobotMastery
-):
+def meca_carrier_state(meca_carrier: MecaCarrier, dynamics: Dynamics, robot_mastery: RobotMastery):
     return MecaCarrierState.model_validate(
         {
             **meca_carrier.get_default_state(),
@@ -40,9 +38,7 @@ def meca_carrier_state(
     )
 
 
-def test_meca_carrier_usage_increase_count(
-    meca_carrier: MecaCarrier, meca_carrier_state: MecaCarrierState
-):
+def test_meca_carrier_usage_increase_count(meca_carrier: MecaCarrier, meca_carrier_state: MecaCarrierState):
     # when
     state, _ = meca_carrier.use(None, meca_carrier_state)
     state, events = meca_carrier.elapse(30_000, state)
@@ -51,15 +47,10 @@ def test_meca_carrier_usage_increase_count(
     dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
 
     for idx in range(len(dealing_event) - 1):
-        assert (
-            dealing_event[idx]["payload"]["hit"]
-            == dealing_event[idx + 1]["payload"]["hit"] - 4
-        )
+        assert dealing_event[idx]["payload"]["hit"] == dealing_event[idx + 1]["payload"]["hit"] - 4
 
 
-def test_meca_carrier_usage_delays_more(
-    meca_carrier: MecaCarrier, meca_carrier_state: MecaCarrierState
-):
+def test_meca_carrier_usage_delays_more(meca_carrier: MecaCarrier, meca_carrier_state: MecaCarrierState):
     # when
     state, _ = meca_carrier.use(None, meca_carrier_state)
     state, events = meca_carrier.elapse(3000 * 3 + 120 * (8 + 9), state)
@@ -70,9 +61,7 @@ def test_meca_carrier_usage_delays_more(
     assert len(dealing_event) == 3
 
 
-def test_meca_carrier_usage_bounds_count(
-    meca_carrier: MecaCarrier, meca_carrier_state: MecaCarrierState
-):
+def test_meca_carrier_usage_bounds_count(meca_carrier: MecaCarrier, meca_carrier_state: MecaCarrierState):
     # when
     state, _ = meca_carrier.use(None, meca_carrier_state)
     state, events = meca_carrier.elapse(120_000, state)
@@ -82,12 +71,6 @@ def test_meca_carrier_usage_bounds_count(
 
     for idx in range(len(dealing_event) - 1):
         if dealing_event[idx]["payload"]["hit"] != 64:
-            assert (
-                dealing_event[idx]["payload"]["hit"]
-                == dealing_event[idx + 1]["payload"]["hit"] - 4
-            )
+            assert dealing_event[idx]["payload"]["hit"] == dealing_event[idx + 1]["payload"]["hit"] - 4
         else:
-            assert (
-                dealing_event[idx]["payload"]["hit"]
-                == dealing_event[idx + 1]["payload"]["hit"]
-            )
+            assert dealing_event[idx]["payload"]["hit"] == dealing_event[idx + 1]["payload"]["hit"]

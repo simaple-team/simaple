@@ -58,9 +58,7 @@ class FrostEffect(Component):
 
     @view_method
     def buff(self, state: FrostEffectState):
-        return Stat(
-            critical_damage=self.critical_damage_per_stack * state.frost_stack.stack
-        )
+        return Stat(critical_damage=self.critical_damage_per_stack * state.frost_stack.stack)
 
     @view_method
     def running(self, state: FrostEffectState):
@@ -159,9 +157,7 @@ class ThunderAttackSkillState(ReducerState):
     dynamics: Dynamics
 
 
-class ThunderAttackSkillComponent(
-    SkillComponent, UseSimpleAttackTrait, CooldownValidityTrait
-):
+class ThunderAttackSkillComponent(SkillComponent, UseSimpleAttackTrait, CooldownValidityTrait):
     binds: dict[str, str] = {
         "frost_stack": ".프로스트 이펙트.frost_stack",
         "jupyter_thunder_shock": ".주피터 썬더.periodic",
@@ -188,9 +184,7 @@ class ThunderAttackSkillComponent(
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self.cooldown_duration))
 
         frost_stack, modifier = use_frost_stack(state.frost_stack)
         state.frost_stack = frost_stack
@@ -276,9 +270,7 @@ class ChainLightningVISkillState(ReducerState):
     current_fields: CurrentField
 
 
-class ChainLightningVIComponent(
-    SkillComponent, UseSimpleAttackTrait, CooldownValidityTrait
-):
+class ChainLightningVIComponent(SkillComponent, UseSimpleAttackTrait, CooldownValidityTrait):
     binds: dict[str, str] = {
         "frost_stack": ".프로스트 이펙트.frost_stack",
         "jupyter_thunder_shock": ".주피터 썬더.periodic",
@@ -320,9 +312,7 @@ class ChainLightningVIComponent(
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self.cooldown_duration))
 
         frost_stack, modifier = use_frost_stack(state.frost_stack)
         state.frost_stack = frost_stack

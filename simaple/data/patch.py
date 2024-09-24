@@ -16,15 +16,11 @@ class SkillLevelPatch(DFSTraversePatch):
     def patch_dict(self, k, v, origin: dict):
         return {self.translate(k, origin): self.translate(v, origin)}
 
-    def translate(
-        self, maybe_representation: Union[int, str, float], origin: dict
-    ) -> Union[int, str, float]:
+    def translate(self, maybe_representation: Union[int, str, float], origin: dict) -> Union[int, str, float]:
         if not isinstance(maybe_representation, str):
             return maybe_representation
 
-        output = maybe_representation.replace(
-            self.skill_level_representation, str(self.get_skill_level(origin))
-        )
+        output = maybe_representation.replace(self.skill_level_representation, str(self.get_skill_level(origin)))
 
         return output
 

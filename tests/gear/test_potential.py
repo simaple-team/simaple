@@ -15,6 +15,4 @@ def test_potential():
 
     assert potential.get_stat() == Stat(attack_power=7)
     assert potential.get_action_stat() == ActionStat(cooltime_reduce=3)
-    assert potential.get_extended_stat() == ExtendedStat(
-        stat=Stat(attack_power=7), action_stat=ActionStat(cooltime_reduce=3)
-    )
+    assert potential.get_extended_stat() == ExtendedStat(stat=Stat(attack_power=7), action_stat=ActionStat(cooltime_reduce=3))

@@ -50,7 +50,6 @@ def parse_block(block: CharacterUnionRaiderBlock) -> tuple[JobType, int]:
 
 
 def get_union_squad(raider_response: CharacterUnionRaider):
-
     block_candidates = {block.job: block for block in get_all_blocks()}
 
     blocks, block_sizes = [], []

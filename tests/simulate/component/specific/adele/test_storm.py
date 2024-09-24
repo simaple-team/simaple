@@ -47,17 +47,13 @@ def storm_state_3pair(
     return AdeleStormState.model_validate(
         {
             **storm.get_default_state(),
-            "order_sword": OrderSword(
-                interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]
-            ),
+            "order_sword": OrderSword(interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]),
             "dynamics": dynamics,
         }
     )
 
 
-def test_storm_order_1pair(
-    storm: AdeleStormComponent, storm_state_1pair: AdeleStormState
-):
+def test_storm_order_1pair(storm: AdeleStormComponent, storm_state_1pair: AdeleStormState):
     state, _ = storm.use(None, storm_state_1pair)
     _, events = storm.elapse(500, state)
     dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
@@ -65,9 +61,7 @@ def test_storm_order_1pair(
     assert dealing_event[0]["payload"]["hit"] == 2
 
 
-def test_storm_order_3pair(
-    storm: AdeleStormComponent, storm_state_3pair: AdeleStormState
-):
+def test_storm_order_3pair(storm: AdeleStormComponent, storm_state_3pair: AdeleStormState):
     state, _ = storm.use(None, storm_state_3pair)
     _, events = storm.elapse(500, state)
     dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]

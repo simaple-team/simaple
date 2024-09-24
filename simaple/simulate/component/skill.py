@@ -72,9 +72,7 @@ class AttackSkillState(ReducerState):
     dynamics: Dynamics
 
 
-class AttackSkillComponent(
-    SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait
-):
+class AttackSkillComponent(SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait):
     name: str
     damage: float
     hit: float
@@ -122,9 +120,7 @@ class MultipleAttackSkillState(ReducerState):
     dynamics: Dynamics
 
 
-class MultipleAttackSkillComponent(
-    SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait
-):
+class MultipleAttackSkillComponent(SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait):
     name: str
     damage: float
     hit: float
@@ -165,9 +161,7 @@ class DOTEmittingState(ReducerState):
     dynamics: Dynamics
 
 
-class DOTEmittingAttackSkillComponent(
-    SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait, AddDOTDamageTrait
-):
+class DOTEmittingAttackSkillComponent(SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait, AddDOTDamageTrait):
     name: str
     damage: float
     hit: float
@@ -255,7 +249,8 @@ class BuffSkillComponent(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
         return self.lasting_duration
 
 
-class NoState(ReducerState): ...
+class NoState(ReducerState):
+    ...
 
 
 class AlwaysEnabledComponent(Component):
@@ -286,9 +281,7 @@ class StackableBuffSkillState(ReducerState):
     dynamics: Dynamics
 
 
-class StackableBuffSkillComponent(
-    SkillComponent, BuffTrait, InvalidatableCooldownTrait
-):
+class StackableBuffSkillComponent(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
     stat: Stat
     cooldown_duration: float
     delay: float
@@ -355,9 +348,7 @@ class ConsumableBuffSkillState(ReducerState):
     dynamics: Dynamics
 
 
-class ConsumableBuffSkillComponent(
-    SkillComponent, ConsumableBuffTrait, ConsumableValidityTrait
-):
+class ConsumableBuffSkillComponent(SkillComponent, ConsumableBuffTrait, ConsumableValidityTrait):
     stat: Stat
     cooldown_duration: float
     delay: float
@@ -414,9 +405,7 @@ class PeriodicDamageState(ReducerState):
     dynamics: Dynamics
 
 
-class PeriodicDamageConfiguratedAttackSkillComponent(
-    SkillComponent, PeriodicWithSimpleDamageTrait, InvalidatableCooldownTrait
-):
+class PeriodicDamageConfiguratedAttackSkillComponent(SkillComponent, PeriodicWithSimpleDamageTrait, InvalidatableCooldownTrait):
     name: str
     damage: float
     hit: float
@@ -463,9 +452,7 @@ class PeriodicDamageConfiguratedAttackSkillComponent(
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit
 
-    def _get_periodic_damage_hit(
-        self, state: PeriodicDamageState
-    ) -> tuple[float, float]:
+    def _get_periodic_damage_hit(self, state: PeriodicDamageState) -> tuple[float, float]:
         return self.periodic_damage, self.periodic_hit
 
 
@@ -475,9 +462,7 @@ class HitLimitedPeriodicDamageState(ReducerState):
     dynamics: Dynamics
 
 
-class HitLimitedPeriodicDamageComponent(
-    SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait
-):
+class HitLimitedPeriodicDamageComponent(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait):
     name: str
     cooldown_duration: float
     delay: float

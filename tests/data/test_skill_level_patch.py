@@ -23,9 +23,7 @@ def get_skill_info(passive_skill_enabled: bool, combat_orders_enabled: bool):
         (True, True, 13),
     ],
 )
-def test_passive_skill_description_interpret(
-    passive_skill_enabled, combat_orders_enabled, expected
-):
+def test_passive_skill_description_interpret(passive_skill_enabled, combat_orders_enabled, expected):
     combat_orders_level = 2
     passive_skill_level = 1
 
@@ -34,7 +32,5 @@ def test_passive_skill_description_interpret(
         passive_skill_level=passive_skill_level,
     )
 
-    parsed_value = patch.apply(
-        get_skill_info(passive_skill_enabled, combat_orders_enabled)
-    )["stat"]["attack_power"]
+    parsed_value = patch.apply(get_skill_info(passive_skill_enabled, combat_orders_enabled))["stat"]["attack_power"]
     assert parsed_value == str(expected)

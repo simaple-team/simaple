@@ -39,9 +39,7 @@ class MetaTestcase:
     ],
 )
 class TestGoodCases(MetaTestcase):
-    def test_gear_slot_is_equippable_method(
-        self, slot_name, enabled_gear_types, test_gear_type
-    ):
+    def test_gear_slot_is_equippable_method(self, slot_name, enabled_gear_types, test_gear_type):
         slot = self.get_slot(slot_name, enabled_gear_types)
         gear = self.get_test_gear(test_gear_type)
 
@@ -63,9 +61,7 @@ class TestGoodCases(MetaTestcase):
     ],
 )
 class TestBadCases(MetaTestcase):
-    def test_gear_slot_is_equippable_method(
-        self, slot_name, enabled_gear_types, test_gear_type
-    ):
+    def test_gear_slot_is_equippable_method(self, slot_name, enabled_gear_types, test_gear_type):
         slot = self.get_slot(slot_name, enabled_gear_types)
         gear = self.get_test_gear(test_gear_type)
 

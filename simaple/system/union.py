@@ -59,9 +59,7 @@ class UnionSquad(BaseModel):
 
     def get_masked(self, mask: List[int]) -> UnionSquad:
         return UnionSquad(
-            block_size=[
-                size for enabled, size in zip(mask, self.block_size) if enabled
-            ],
+            block_size=[size for enabled, size in zip(mask, self.block_size) if enabled],
             blocks=[block for enabled, block in zip(mask, self.blocks) if enabled],
         )
 
@@ -102,12 +100,8 @@ def get_buff_duration_preempted_union_occupation_state():
 
 
 class UnionOccupation(BaseModel):
-    occupation_state: List[int] = Field(
-        default_factory=get_empty_union_occupation_state
-    )
-    occupation_value: List[List[Tuple[Stat, ActionStat]]] = Field(
-        default_factory=get_union_occupation_values
-    )
+    occupation_state: List[int] = Field(default_factory=get_empty_union_occupation_state)
+    occupation_value: List[List[Tuple[Stat, ActionStat]]] = Field(default_factory=get_union_occupation_values)
 
     def get_occupation_rearranged(self, state: List[int]) -> UnionOccupation:
         assert len(state) == self.length()
@@ -122,22 +116,12 @@ class UnionOccupation(BaseModel):
 
     def get_stat(self) -> Stat:
         return sum(
-            [
-                value[occupation][0]
-                for value, occupation in zip(
-                    self.occupation_value, self.occupation_state
-                )
-            ],
+            [value[occupation][0] for value, occupation in zip(self.occupation_value, self.occupation_state)],
             Stat(),
         )
 
     def get_action_stat(self) -> ActionStat:
         return sum(
-            [
-                value[occupation][1]
-                for value, occupation in zip(
-                    self.occupation_value, self.occupation_state
-                )
-            ],
+            [value[occupation][1] for value, occupation in zip(self.occupation_value, self.occupation_state)],
             ActionStat(),
         )

@@ -85,29 +85,20 @@ _mhp_starforce_bonus = [0, 5, 5, 5, 10, 10, 15, 15, 20, 20, 25, 25, 25, 25, 25, 
 
 class StarforceIncrementProvider(metaclass=ABCMeta):
     @abstractmethod
-    def get_increment(
-        self, meta: GearMeta, target_star: int, current_gear_stat: Stat
-    ) -> Stat: ...
+    def get_increment(self, meta: GearMeta, target_star: int, current_gear_stat: Stat) -> Stat:
+        ...
 
 
 class StarforceStatIncrementProvider(StarforceIncrementProvider):
-    def get_increment(
-        self, meta: GearMeta, target_star: int, current_gear_stat: Stat
-    ) -> Stat:
+    def get_increment(self, meta: GearMeta, target_star: int, current_gear_stat: Stat) -> Stat:
         # Add Basis stats (STR, DEX, INT, LUK)
         increment = Stat()
         target_stats = self._get_target_stats(meta)
-        stat_starforce_increment = get_starforce_increment(
-            meta, target_star, amazing_scroll=False, att=False
-        )
+        stat_starforce_increment = get_starforce_increment(meta, target_star, amazing_scroll=False, att=False)
 
         for prop_type in (StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK):
-            if prop_type in target_stats or (
-                target_star > 15 and current_gear_stat.get(prop_type) > 0
-            ):
-                increment += Stat.model_validate(
-                    {prop_type.value: stat_starforce_increment}
-                )
+            if prop_type in target_stats or (target_star > 15 and current_gear_stat.get(prop_type) > 0):
+                increment += Stat.model_validate({prop_type.value: stat_starforce_increment})
 
         return increment
 
@@ -133,49 +124,31 @@ class StarforceStatIncrementProvider(StarforceIncrementProvider):
 
 
 class StarforceAttackIncrementProvider(StarforceIncrementProvider):
-    def get_increment(
-        self, meta: GearMeta, target_star: int, current_gear_stat: Stat
-    ) -> Stat:
+    def get_increment(self, meta: GearMeta, target_star: int, current_gear_stat: Stat) -> Stat:
         # Add attack props (attack_power, magic_attack)
         if meta.type.is_improved_as_weapon():
-            return self._get_weapon_starforce_increment(
-                meta, target_star, current_gear_stat
-            )
+            return self._get_weapon_starforce_increment(meta, target_star, current_gear_stat)
 
-        att_starforce_increment = get_starforce_increment(
-            meta, target_star, amazing_scroll=False, att=True
-        )
+        att_starforce_increment = get_starforce_increment(meta, target_star, amazing_scroll=False, att=True)
 
         return Stat(
             attack_power=att_starforce_increment,
             magic_attack=att_starforce_increment,
         )
 
-    def _get_weapon_starforce_increment(
-        self, meta: GearMeta, target_star: int, current_gear_stat: Stat
-    ) -> Stat:
+    def _get_weapon_starforce_increment(self, meta: GearMeta, target_star: int, current_gear_stat: Stat) -> Stat:
         improvement_stat = Stat()
-        att_starforce_increment = get_starforce_increment(
-            meta, target_star, amazing_scroll=False, att=True
-        )
+        att_starforce_increment = get_starforce_increment(meta, target_star, amazing_scroll=False, att=True)
 
-        use_mad = (
-            meta.req_job == 0
-            or meta.req_job // 2 % 2 == 1
-            or current_gear_stat.magic_attack > 0
-        )
+        use_mad = meta.req_job == 0 or meta.req_job // 2 % 2 == 1 or current_gear_stat.magic_attack > 0
         if target_star > 15:
             improvement_stat += Stat(attack_power=att_starforce_increment)
             if use_mad:
                 improvement_stat += Stat(magic_attack=att_starforce_increment)
         else:
-            improvement_stat += Stat(
-                attack_power=current_gear_stat.attack_power // 50 + 1
-            )
+            improvement_stat += Stat(attack_power=current_gear_stat.attack_power // 50 + 1)
             if use_mad:
-                improvement_stat += Stat(
-                    magic_attack=current_gear_stat.magic_attack // 50 + 1
-                )
+                improvement_stat += Stat(magic_attack=current_gear_stat.magic_attack // 50 + 1)
 
         return improvement_stat
 
@@ -230,12 +203,8 @@ class HpMpIncrementProvider(StarforceIncrementProvider):
 
 class SuperiorIncrementProvider(StarforceIncrementProvider):
     def get_increment(self, meta: GearMeta, target_star: int, _: Stat) -> Stat:
-        stat_starforce_increment = get_starforce_increment(
-            meta, target_star, amazing_scroll=True, att=False
-        )
-        att_starforce_increment = get_starforce_increment(
-            meta, target_star, amazing_scroll=True, att=True
-        )
+        stat_starforce_increment = get_starforce_increment(meta, target_star, amazing_scroll=True, att=False)
+        att_starforce_increment = get_starforce_increment(meta, target_star, amazing_scroll=True, att=True)
 
         return Stat(
             attack_power=att_starforce_increment,
@@ -251,29 +220,21 @@ class AmazingStatIncrementProvider(StarforceIncrementProvider):
     def __init__(self, bonus) -> None:
         self._bonus = bonus
 
-    def get_increment(
-        self, meta: GearMeta, target_star: int, current_gear_stat: Stat
-    ) -> Stat:
-        stat_enhancement_increment = get_starforce_increment(
-            meta, target_star, amazing_scroll=True, att=False
-        ) + self._get_stat_bonus(meta, target_star)
+    def get_increment(self, meta: GearMeta, target_star: int, current_gear_stat: Stat) -> Stat:
+        stat_enhancement_increment = get_starforce_increment(meta, target_star, amazing_scroll=True, att=False) + self._get_stat_bonus(
+            meta, target_star
+        )
 
         increment = Stat()
 
         for prop_type in (StatProps.STR, StatProps.DEX, StatProps.INT, StatProps.LUK):
             if current_gear_stat.get(prop_type) > 0:
-                increment += Stat.parse_obj(
-                    {prop_type.value: stat_enhancement_increment}
-                )
+                increment += Stat.parse_obj({prop_type.value: stat_enhancement_increment})
 
         return increment
 
     def _get_stat_bonus(self, meta: GearMeta, target_star: int):
-        return (
-            (2 if target_star > 5 else 1)
-            if self._bonus and meta.type.is_accessory()
-            else 0
-        )
+        return (2 if target_star > 5 else 1) if self._bonus and meta.type.is_accessory() else 0
 
 
 class AmazingAttackIncrementProvider(StarforceIncrementProvider):
@@ -293,9 +254,7 @@ class StarforceIndex:
         raise ValueError("Given setting not available")
 
 
-def get_starforce_increment(
-    meta: GearMeta, target_star: int, amazing_scroll: bool, att: bool
-) -> int:
+def get_starforce_increment(meta: GearMeta, target_star: int, amazing_scroll: bool, att: bool) -> int:
     if meta.superior_eqp:
         if att:
             data = __superior_att_increments

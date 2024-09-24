@@ -40,6 +40,4 @@ def character_symbol_equipment_response() -> CharacterSymbolEquipment:
 
 @pytest.fixture
 def character_union_raiders_response() -> CharacterUnionRaider:
-    return cast(
-        CharacterUnionRaider, _macro_get_response("character_union_raiders.json")
-    )
+    return cast(CharacterUnionRaider, _macro_get_response("character_union_raiders.json"))

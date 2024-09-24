@@ -42,9 +42,7 @@ def thunder_attack_skill_state(
     )
 
 
-def test_frost_effect_reducer(
-    frost_effect: FrostEffect, frost_effect_state: FrostEffectState
-):
+def test_frost_effect_reducer(frost_effect: FrostEffect, frost_effect_state: FrostEffectState):
     # when
     state, _ = frost_effect.increase_step(None, frost_effect_state)
 
@@ -79,7 +77,4 @@ def test_with_some_stack(
 
     # then
     damage_events = [e for e in events if e["tag"] == Tag.DAMAGE]
-    assert (
-        damage_events[0]["payload"]["modifier"]
-        == Stat(damage_multiplier=12 * 3).model_dump()
-    )
+    assert damage_events[0]["payload"]["modifier"] == Stat(damage_multiplier=12 * 3).model_dump()

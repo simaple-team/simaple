@@ -6,7 +6,8 @@ from simaple.core import Stat, StatProps
 from simaple.system.base import UpgradableUserStat
 
 
-class HyperStatBasis(UpgradableUserStat): ...
+class HyperStatBasis(UpgradableUserStat):
+    ...
 
 
 class Hyperstat(BaseModel):
@@ -20,22 +21,12 @@ class Hyperstat(BaseModel):
             return character_level // 10 - 11
 
         def get_sumation_with_ten_step_unit(character_level: int) -> int:
-            return (
-                (
-                    get_character_level_point(140)
-                    + get_character_level_point(character_level)
-                    - 1
-                )
-                * (character_level // 10 - 14)
-                * 5
-            )
+            return (get_character_level_point(140) + get_character_level_point(character_level) - 1) * (character_level // 10 - 14) * 5
 
         if character_level < 140:
             return 0
 
-        return get_sumation_with_ten_step_unit(
-            character_level
-        ) + get_character_level_point(character_level) * (character_level % 10 + 1)
+        return get_sumation_with_ten_step_unit(character_level) + get_character_level_point(character_level) * (character_level % 10 + 1)
 
     def length(self):
         return len(self.options)
@@ -47,9 +38,7 @@ class Hyperstat(BaseModel):
         return sum(self.get_cost_for_level(lv) for lv in self.levels)
 
     def get_stat(self) -> Stat:
-        return sum(
-            [option[lv] for (_, option), lv in zip(self.options, self.levels)], Stat()
-        )
+        return sum([option[lv] for (_, option), lv in zip(self.options, self.levels)], Stat())
 
     def set_level(self, stat_type: StatProps, level: int) -> Hyperstat:
         for i, (prop, _) in enumerate(self.options):

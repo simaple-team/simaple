@@ -68,9 +68,7 @@ class StringPatch(DFSTraversePatch):
     def patch_dict(self, k, v, origin: dict):
         return {self.translate(k): self.translate(v)}
 
-    def translate(
-        self, maybe_representation: Union[int, str, float]
-    ) -> Union[int, str, float]:
+    def translate(self, maybe_representation: Union[int, str, float]) -> Union[int, str, float]:
         if not isinstance(maybe_representation, str):
             return maybe_representation
 
@@ -91,10 +89,7 @@ class KeywordExtendPatch(DFSTraversePatch):
 
     def patch_dict(self, k, v, origin: dict):
         if self.target_keyword in k:
-            return {
-                k.replace(self.target_keyword, replacement): v
-                for replacement in self.extends
-            }
+            return {k.replace(self.target_keyword, replacement): v for replacement in self.extends}
 
         return None
 

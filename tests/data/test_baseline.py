@@ -30,11 +30,4 @@ def test_gearset_ok() -> None:
         JobType.adele,
     )
 
-    assert (
-        int(
-            gearset.get_total_extended_stat().stat.get_base_stat_coefficient(
-                BaseStatType.STR
-            )
-        )
-        == 44964
-    )
+    assert int(gearset.get_total_extended_stat().stat.get_base_stat_coefficient(BaseStatType.STR)) == 44964

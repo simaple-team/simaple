@@ -24,9 +24,7 @@ def consumable_buff_component():
 
 
 @pytest.fixture
-def consumable_buff_state(
-    consumable_buff_component: ConsumableBuffSkillComponent, dynamics: Dynamics
-):
+def consumable_buff_state(consumable_buff_component: ConsumableBuffSkillComponent, dynamics: Dynamics):
     return ConsumableBuffSkillState.model_validate(
         {
             **consumable_buff_component.get_default_state(),

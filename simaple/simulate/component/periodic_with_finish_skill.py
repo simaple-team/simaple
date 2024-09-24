@@ -16,9 +16,7 @@ class PeriodicWithFinishState(ReducerState):
     dynamics: Dynamics
 
 
-class PeriodicWithFinishSkillComponent(
-    SkillComponent, UsePeriodicDamageTrait, PeriodicElapseTrait, CooldownValidityTrait
-):
+class PeriodicWithFinishSkillComponent(SkillComponent, UsePeriodicDamageTrait, PeriodicElapseTrait, CooldownValidityTrait):
     name: str
     delay: float
 
@@ -44,9 +42,7 @@ class PeriodicWithFinishSkillComponent(
         was_running = state.periodic.enabled()
         state, events = self.elapse_periodic_damage_trait(time, state)
         if not state.periodic.enabled() and was_running:
-            events.append(
-                self.event_provider.dealt(self.finish_damage, self.finish_hit)
-            )
+            events.append(self.event_provider.dealt(self.finish_damage, self.finish_hit))
 
         return state, events
 
@@ -70,7 +66,5 @@ class PeriodicWithFinishSkillComponent(
     def _get_lasting_duration(self, state: PeriodicWithFinishState) -> float:
         return self.lasting_duration
 
-    def _get_periodic_damage_hit(
-        self, state: PeriodicWithFinishState
-    ) -> tuple[float, float]:
+    def _get_periodic_damage_hit(self, state: PeriodicWithFinishState) -> tuple[float, float]:
         return self.periodic_damage, self.periodic_hit

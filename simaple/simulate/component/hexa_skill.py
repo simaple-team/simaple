@@ -58,14 +58,9 @@ class MultipleHitHexaSkillComponent(
 
         delay = self._get_delay()
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration()))
 
-        return state, [
-            self.event_provider.dealt(entry.damage, entry.hit)
-            for entry in self.damage_and_hits
-        ] + [
+        return state, [self.event_provider.dealt(entry.damage, entry.hit) for entry in self.damage_and_hits] + [
             self.event_provider.delayed(delay),
         ]
 
@@ -80,9 +75,7 @@ class PeriodicDamageHexaState(ReducerState):
     dynamics: Dynamics
 
 
-class PeriodicDamageConfiguratedHexaSkillComponent(
-    SkillComponent, PeriodicElapseTrait, InvalidatableCooldownTrait
-):
+class PeriodicDamageConfiguratedHexaSkillComponent(SkillComponent, PeriodicElapseTrait, InvalidatableCooldownTrait):
     """
     PeriodicDamageConfiguratedHexaSkillComponent
     This describes skill that act like:
@@ -121,15 +114,10 @@ class PeriodicDamageConfiguratedHexaSkillComponent(
 
         delay = self._get_delay()
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration()))
         state.periodic.set_time_left(self._get_lasting_duration(state))
 
-        return state, [
-            self.event_provider.dealt(entry.damage, entry.hit)
-            for entry in self.damage_and_hits
-        ] + [
+        return state, [self.event_provider.dealt(entry.damage, entry.hit) for entry in self.damage_and_hits] + [
             self.event_provider.delayed(delay),
         ]
 
@@ -149,9 +137,7 @@ class PeriodicDamageConfiguratedHexaSkillComponent(
     def _get_lasting_duration(self, state: PeriodicDamageHexaState) -> float:
         return self.lasting_duration
 
-    def _get_periodic_damage_hit(
-        self, state: PeriodicDamageHexaState
-    ) -> tuple[float, float]:
+    def _get_periodic_damage_hit(self, state: PeriodicDamageHexaState) -> tuple[float, float]:
         return self.periodic_damage, self.periodic_hit
 
 
@@ -207,10 +193,7 @@ class TriplePeriodicDamageHexaComponent(SkillComponent, InvalidatableCooldownTra
 
         for periodic, feature in self._get_all_periodics(state):
             lapse_count = periodic.elapse(time)
-            damage_events.extend(
-                self.event_provider.dealt(feature.damage, feature.hit)
-                for _ in range(lapse_count)
-            )
+            damage_events.extend(self.event_provider.dealt(feature.damage, feature.hit) for _ in range(lapse_count))
 
         return state, [self.event_provider.elapsed(time)] + damage_events
 
@@ -223,16 +206,11 @@ class TriplePeriodicDamageHexaComponent(SkillComponent, InvalidatableCooldownTra
 
         delay = self._get_delay()
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
+        state.cooldown.set_time_left(state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration()))
         for periodic, _feature in self._get_all_periodics(state):
             periodic.set_time_left(self._get_lasting_duration(state))
 
-        return state, [
-            self.event_provider.dealt(entry.damage, entry.hit)
-            for entry in self.damage_and_hits
-        ] + [
+        return state, [self.event_provider.dealt(entry.damage, entry.hit) for entry in self.damage_and_hits] + [
             self.event_provider.delayed(delay),
         ]
 
@@ -253,14 +231,10 @@ class TriplePeriodicDamageHexaComponent(SkillComponent, InvalidatableCooldownTra
     def buff(self, _: TriplePeriodicDamageHexaComponentState):
         return self.synergy
 
-    def _get_lasting_duration(
-        self, state: TriplePeriodicDamageHexaComponentState
-    ) -> float:
+    def _get_lasting_duration(self, state: TriplePeriodicDamageHexaComponentState) -> float:
         return self.lasting_duration
 
-    def _get_all_periodics(
-        self, state: TriplePeriodicDamageHexaComponentState
-    ) -> list[tuple[Periodic, PeriodicFeature]]:
+    def _get_all_periodics(self, state: TriplePeriodicDamageHexaComponentState) -> list[tuple[Periodic, PeriodicFeature]]:
         return [
             (state.periodic_01, self.periodic_01),
             (state.periodic_02, self.periodic_02),

@@ -62,9 +62,7 @@ FOURTH_ATTACK_TEST_CASE = (
 )
 
 
-@pytest.mark.parametrize(
-    "gear_name, prob, stat_prop, expected", FOURTH_ATTACK_TEST_CASE
-)
+@pytest.mark.parametrize("gear_name, prob, stat_prop, expected", FOURTH_ATTACK_TEST_CASE)
 def test_fourth_att_bonus(gear_name, prob, stat_prop, expected):
     repository = GearRepository()
 

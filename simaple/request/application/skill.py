@@ -24,9 +24,7 @@ class SkillOrder(Enum):
     sixth: str = "6"
 
 
-async def get_character_skill(
-    token: Token, character_id: CharacterID, order: SkillOrder | str
-) -> CharacterPropensity:
+async def get_character_skill(token: Token, character_id: CharacterID, order: SkillOrder | str) -> CharacterPropensity:
     if isinstance(order, SkillOrder):
         order = order.value
 

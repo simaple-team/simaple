@@ -95,9 +95,7 @@ class PresetOptimizer(BaseModel):
         """
         effects = sorted(
             get_artifact_effects(),
-            key=lambda x: self.damage_logic.get_damage_factor(
-                reference_stat + x.effects[1].stat
-            ),
+            key=lambda x: self.damage_logic.get_damage_factor(reference_stat + x.effects[1].stat),
             reverse=True,
         )
         effect_names = [effect.name for effect in effects]
@@ -132,32 +130,22 @@ class PresetOptimizer(BaseModel):
                 reference_stat,
                 self.damage_logic,
                 create_with_some_large_blocks(
-                    large_block_jobs=[self.character_job_type]
-                    + self.alternate_character_job_types,
+                    large_block_jobs=[self.character_job_type] + self.alternate_character_job_types,
                 ),
-                preempted_jobs=[self.character_job_type]
-                + self.alternate_character_job_types,
+                preempted_jobs=[self.character_job_type] + self.alternate_character_job_types,
             )
-            optimizer = StepwizeOptimizer(
-                union_squad_optimization_target, self.union_block_count, 1
-            )
+            optimizer = StepwizeOptimizer(union_squad_optimization_target, self.union_block_count, 1)
             output = optimizer.optimize()
 
         result: UnionSquad = output.get_result()
         return result
 
-    def calculate_optimal_union_occupation(
-        self, reference_stat: Stat, occupation_count: int
-    ) -> UnionOccupation:
+    def calculate_optimal_union_occupation(self, reference_stat: Stat, occupation_count: int) -> UnionOccupation:
         with Timer("union_occupation"):
-            union_occupation_target = UnionOccupationTarget(
-                reference_stat, self.damage_logic, UnionOccupation()
-            )
+            union_occupation_target = UnionOccupationTarget(reference_stat, self.damage_logic, UnionOccupation())
 
             if self.buff_duration_preempted:
-                union_occupation_target.set_state(
-                    get_buff_duration_preempted_union_occupation_state()
-                )
+                union_occupation_target.set_state(get_buff_duration_preempted_union_occupation_state())
 
             optimizer = StepwizeOptimizer(union_occupation_target, occupation_count, 2)
             output = optimizer.optimize()
@@ -179,9 +167,7 @@ class PresetOptimizer(BaseModel):
         result: LinkSkillset = output.get_result()
         return result
 
-    def calculate_optimal_weapon_potential(
-        self, reference_stat: Stat, weapon_potential_tiers
-    ) -> Tuple[Potential, Potential, Potential]:
+    def calculate_optimal_weapon_potential(self, reference_stat: Stat, weapon_potential_tiers) -> Tuple[Potential, Potential, Potential]:
         with Timer("weapon potential"):
             potentials = WeaponPotentialOptimizer(
                 default_stat=reference_stat,
@@ -228,24 +214,16 @@ class PresetOptimizer(BaseModel):
         )
 
         preset.artifact = Artifact(cards=[], effects=[])
-        preset.artifact = self.calculate_optimal_artifact(
-            preset.get_stat() + self.default_stat
-        )
+        preset.artifact = self.calculate_optimal_artifact(preset.get_stat() + self.default_stat)
 
         preset.links = LinkSkillset.empty()
-        preset.links = self.calculate_optimal_links(
-            preset.get_stat() + self.default_stat
-        )
+        preset.links = self.calculate_optimal_links(preset.get_stat() + self.default_stat)
 
         preset.union_squad = UnionSquad.empty()
-        preset.union_squad = self.calculate_optimal_union_squad(
-            preset.get_stat() + self.default_stat
-        )
+        preset.union_squad = self.calculate_optimal_union_squad(preset.get_stat() + self.default_stat)
 
         preset.hyperstat = get_kms_hyperstat()
-        preset.hyperstat = self.calculate_optimal_hyperstat(
-            preset.get_stat() + self.default_stat
-        )
+        preset.hyperstat = self.calculate_optimal_hyperstat(preset.get_stat() + self.default_stat)
 
         preset.union_occupation = UnionOccupation()
         preset.union_occupation = self.calculate_optimal_union_occupation(
