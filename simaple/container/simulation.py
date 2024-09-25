@@ -28,6 +28,8 @@ class SimulationEnvironment(pydantic.BaseModel):
     to configure Simulation Engine.
     """
 
+    model_config = pydantic.ConfigDict(extra="forbid")
+
     use_doping: bool = True
 
     armor: int = 300
@@ -39,6 +41,10 @@ class SimulationEnvironment(pydantic.BaseModel):
     hexa_mastery_level: int = 1
     v_improvements_level: int = 60
     hexa_improvements_level: int = 0
+
+    hexa_mastery_skill_levels: dict[str, int] = {}
+    hexa_skill_levels: dict[str, int] = {}
+    hexa_improvements_levels: dict[str, int] = {}
 
     weapon_attack_power: int = 0
 
@@ -90,19 +96,42 @@ class SimulationContainer:
     def builder(self):
         skill_profile = self.skill_profile()
 
+        skill_levels = skill_profile.get_skill_levels(
+            self.environment.v_skill_level,
+            self.environment.hexa_skill_level,
+            self.environment.hexa_mastery_level,
+        )
+        hexa_improvements = skill_profile.get_filled_hexa_improvements(
+            self.environment.hexa_improvements_level
+        )
+
+        for hexa_mastery_skill_name in self.environment.hexa_mastery_skill_levels:
+            assert (
+                hexa_mastery_skill_name in skill_levels
+            ), f"Given explicit skill name\
+passed to level: {hexa_mastery_skill_name} is not in {skill_levels}"
+        for hexa_skill_name in self.environment.hexa_skill_levels:
+            assert (
+                hexa_skill_name in skill_levels
+            ), f"Given explicit skill name \
+passed to level: {hexa_skill_name} is not in {skill_levels}"
+        for hexa_improvement_name in self.environment.hexa_improvements_levels:
+            assert (
+                hexa_improvement_name in hexa_improvements
+            ), f"Given explicit \
+improvement name passed to level: {hexa_improvement_name} is not in {hexa_improvements}"
+
+        skill_levels.update(self.environment.hexa_mastery_skill_levels)
+        skill_levels.update(self.environment.hexa_skill_levels)
+        hexa_improvements.update(self.environment.hexa_improvements_levels)
+
         return get_builder(
             skill_profile.get_groups(),
-            skill_profile.get_skill_levels(
-                self.environment.v_skill_level,
-                self.environment.hexa_skill_level,
-                self.environment.hexa_mastery_level,
-            ),
+            skill_levels,
             skill_profile.get_filled_v_improvements(
                 self.environment.v_improvements_level
             ),
-            skill_profile.get_filled_hexa_improvements(
-                self.environment.hexa_improvements_level
-            ),
+            hexa_improvements,
             skill_profile.get_skill_replacements(),
             {
                 "character_stat": self.environment.character.stat,
