@@ -34,10 +34,7 @@ environment:
     mob_level: 265
     force_advantage: 1
     v_skill_level: 30
-    hexa_skill_level: 1
-    hexa_mastery_level: 1
     v_improvements_level: 60
-    hexa_improvements_level: 0
     weapon_attack_power: 0
     passive_skill_level: 0
     combat_orders_level: 1
@@ -119,7 +116,7 @@ provider:
     name: "BaselineEnvironmentProvider"
     data:
         tier: Legendary
-        jobtype: archmagetc
+        jobtype: archmagefb
         level: 270
         artifact_level: 40
         passive_skill_level: 0

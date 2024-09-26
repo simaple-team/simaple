@@ -14,12 +14,21 @@ def test_minimal_environment_provider_passes_skill_levels():
         jobtype=JobType.archmagefb,
         level=280,
         hexa_skill_levels={
-            "undef 인페르날 베놈": 10,
+            "도트 퍼니셔": 10,
         },
     )
     env = env.get_simulation_environment()
-    assert env.hexa_skill_levels == {
-        "undef 인페르날 베놈": 10,
+    assert env.skill_levels == {
+        "도트 퍼니셔": 10,
+        "포이즌 노바": 30,
+        "오버로드 마나": 30,
+        "포이즌 체인": 30,
+        "퓨리 오브 이프리트": 30,
+        "메이플월드 여신의 축복": 30,
+        "인페르날 베놈": 1,
+        "플레임 스윕 VI": 1,
+        "미스트 이럽션 VI": 1,
+        "플레임 헤이즈 VI": 1,
     }
 
 
@@ -35,10 +44,19 @@ def test_baseline_environment_provider_passes_skill_levels():
         v_improvements_level=60,
         hexa_improvements_level=10,
         hexa_skill_levels={
-            "undef 인페르날 베놈": 10,
+            "도트 퍼니셔": 10,
         },
     )
     env = env.get_simulation_environment()
-    assert env.hexa_skill_levels == {
-        "undef 인페르날 베놈": 10,
+    assert env.skill_levels == {
+        "도트 퍼니셔": 10,
+        "포이즌 노바": 30,
+        "오버로드 마나": 30,
+        "포이즌 체인": 30,
+        "퓨리 오브 이프리트": 30,
+        "메이플월드 여신의 축복": 30,
+        "인페르날 베놈": 1,
+        "플레임 스윕 VI": 1,
+        "미스트 이럽션 VI": 1,
+        "플레임 헤이즈 VI": 1,
     }

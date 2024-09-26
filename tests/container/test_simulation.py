@@ -25,7 +25,7 @@ from simaple.simulate.policy.base import Operation
                 ),
                 action_stat=ActionStat(),
             ),
-            hexa_skill_levels={
+            skill_levels={
                 "undef 인페르날 베놈": 10,
             },
         ),
@@ -42,7 +42,7 @@ from simaple.simulate.policy.base import Operation
                 ),
                 action_stat=ActionStat(),
             ),
-            hexa_mastery_skill_levels={
+            skill_levels={
                 "undef 인페르날 베놈": 10,
             },
         ),
@@ -59,7 +59,7 @@ from simaple.simulate.policy.base import Operation
                 ),
                 action_stat=ActionStat(),
             ),
-            hexa_improvements_levels={
+            hexa_improvement_levels={
                 "undef 인페르날 베놈": 10,
             },
         ),
@@ -85,10 +85,7 @@ def test_simulation_environment_using_skill_levels():
             ),
             action_stat=ActionStat(),
         ),
-        hexa_skill_level=1,
-        hexa_mastery_level=1,
         v_improvements_level=60,
-        hexa_improvements_level=0,
     )
 
     environment_with_skill_level = SimulationEnvironment(
@@ -104,11 +101,8 @@ def test_simulation_environment_using_skill_levels():
             ),
             action_stat=ActionStat(),
         ),
-        hexa_skill_level=1,
-        hexa_mastery_level=1,
         v_improvements_level=60,
-        hexa_improvements_level=0,
-        hexa_skill_levels={
+        skill_levels={
             "인페르날 베놈": 10,
         },
     )
