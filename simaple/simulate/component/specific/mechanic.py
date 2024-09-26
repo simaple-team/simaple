@@ -26,7 +26,6 @@ from simaple.simulate.global_property import Dynamics
 class RobotMastery(Entity):
     summon_increment: float
     robot_damage_increment: float
-    robot_buff_damage_multiplier: float
 
     def get_summon_multiplier(self) -> float:
         return 1 + self.summon_increment / 100
@@ -34,21 +33,16 @@ class RobotMastery(Entity):
     def get_robot_modifier(self) -> Stat:
         return Stat(final_damage_multiplier=self.robot_damage_increment)
 
-    def get_robot_buff(self) -> Stat:
-        return Stat(damage_multiplier=self.robot_buff_damage_multiplier)
-
 
 class RobotMasteryComponent(Component):
     summon_increment: float
     robot_damage_increment: float
-    robot_buff_damage_multiplier: float
 
     def get_default_state(self):
         return {
             "robot_mastery": RobotMastery(
                 summon_increment=self.summon_increment,
                 robot_damage_increment=self.robot_damage_increment,
-                robot_buff_damage_multiplier=self.robot_buff_damage_multiplier,
             )
         }
 
@@ -90,13 +84,6 @@ class RobotSetupBuff(SkillComponent, BuffTrait, CooldownValidityTrait):
         return self.validity_in_cooldown_trait(state)
 
     @view_method
-    def buff(self, state: RobotSetupBuffState) -> Optional[Stat]:
-        if state.lasting.enabled():
-            return self.stat + state.robot_mastery.get_robot_buff()
-
-        return None
-
-    @view_method
     def running(self, state: RobotSetupBuffState) -> Running:
         return Running(
             id=self.id,
@@ -136,13 +123,6 @@ class RobotSummonSkill(
             "cooldown": Cooldown(time_left=0),
             "periodic": Periodic(interval=self.periodic_interval, time_left=0),
         }
-
-    @view_method
-    def buff(self, state: RobotSummonState):
-        if not state.periodic.enabled():
-            return None
-
-        return state.robot_mastery.get_robot_buff()
 
     @reducer_method
     def elapse(self, time: float, state: RobotSummonState):
@@ -440,13 +420,6 @@ class MultipleOptionComponent(SkillComponent, CooldownValidityTrait):
         ]
 
     @view_method
-    def buff(self, state: MultipleOptionState):
-        if not state.periodic.enabled():
-            return None
-
-        return state.robot_mastery.get_robot_buff()
-
-    @view_method
     def validity(self, state: MultipleOptionState):
         return self.validity_in_cooldown_trait(state)
 
@@ -572,13 +545,6 @@ class MecaCarrier(SkillComponent, CooldownValidityTrait):
         return state, [
             self.event_provider.delayed(self.delay),
         ]
-
-    @view_method
-    def buff(self, state: MecaCarrierState):
-        if not state.periodic.enabled():
-            return None
-
-        return state.robot_mastery.get_robot_buff()
 
     @view_method
     def validity(self, state: MecaCarrierState):
