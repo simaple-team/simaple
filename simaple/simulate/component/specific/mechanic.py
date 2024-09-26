@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simaple.core import Stat
 from simaple.simulate.base import Entity, Event
 from simaple.simulate.component.base import (
