@@ -1,3 +1,5 @@
+from typing import Optional
+
 from simaple.core import Stat
 from simaple.simulate.base import Entity, Event
 from simaple.simulate.component.base import (
@@ -72,6 +74,13 @@ class RobotSetupBuff(SkillComponent, BuffTrait, CooldownValidityTrait):
         state: RobotSetupBuffState,
     ):
         return self.use_buff_trait(state)
+
+    @view_method
+    def buff(self, state: RobotSetupBuffState) -> Optional[Stat]:
+        if state.lasting.enabled():
+            return self.stat
+
+        return None
 
     @reducer_method
     def elapse(self, time: float, state: RobotSetupBuffState):
