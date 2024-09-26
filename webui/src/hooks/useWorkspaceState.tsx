@@ -3,9 +3,10 @@ import {
   PlayLogResponse,
   SkillComponent,
 } from "@/sdk/models";
-import * as React from "react";
-import { usePySimaple } from "./useSimaple";
 import { useLocalStorageValue } from "@react-hookz/web";
+import * as React from "react";
+import { useEffect, useMemo, useState } from "react";
+import { usePySimaple } from "./useSimaple";
 
 type WorkspaceProviderProps = { children: React.ReactNode };
 
@@ -16,20 +17,29 @@ function useWorkspaceState() {
     plan: string;
   }>("workspace");
 
-  const [plan, setPlan] = React.useState<string>(storedWorkspace?.plan ?? "");
-  const [history, setHistory] = React.useState<PlayLogResponse[]>([]);
-  const [skillComponents, setSkillComponents] = React.useState<
-    SkillComponent[]
-  >([]);
-  const [errorMessage, setErrorMessage] = React.useState("");
+  const [plan, setPlan] = useState<string>(storedWorkspace?.plan ?? "");
+  const [history, setHistory] = useState<PlayLogResponse[]>([]);
+  const [skillComponents, setSkillComponents] = useState<SkillComponent[]>([]);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const playLog = history[history.length - 1];
-  const skillNames = React.useMemo(
+  const skillNames = useMemo(
     () => (playLog ? Object.keys(playLog.validity_view) : []),
     [playLog],
   );
+  const usedSkillNames = useMemo(
+    () =>
+      skillNames.filter((name) =>
+        history.some((log) =>
+          log.events.find(
+            (event) => event.name === name && event.method === "use",
+          ),
+        ),
+      ),
+    [skillNames, history],
+  );
 
-  const skillComponentMap = React.useMemo(
+  const skillComponentMap = useMemo(
     () =>
       skillComponents.reduce(
         (acc, component) => {
@@ -41,11 +51,11 @@ function useWorkspaceState() {
     [skillComponents],
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     setWorkspace({ plan });
   }, [plan, setWorkspace]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const components = pySimaple.getAllComponent();
     setSkillComponents(components);
   }, [pySimaple]);
@@ -105,7 +115,9 @@ function useWorkspaceState() {
     plan,
     setPlan,
     history,
+    playLog,
     skillNames,
+    usedSkillNames,
     errorMessage,
     clearErrorMessage,
     run,
