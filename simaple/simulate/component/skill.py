@@ -220,7 +220,8 @@ class BuffSkillComponent(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
     cooldown_duration: float
     delay: float
     lasting_duration: float
-    # TODO: use rem, red argument to apply cooltime reduction and buff remnance
+    apply_buff_duration: bool = True
+    # TODO: use apply_cooldown_reduction argument to apply cooltime reduction
 
     def get_default_state(self):
         return {
@@ -230,7 +231,7 @@ class BuffSkillComponent(SkillComponent, BuffTrait, InvalidatableCooldownTrait):
 
     @reducer_method
     def use(self, _: None, state: BuffSkillState):
-        return self.use_buff_trait(state)
+        return self.use_buff_trait(state, apply_buff_duration=self.apply_buff_duration)
 
     @reducer_method
     def elapse(self, time: float, state: BuffSkillState):
@@ -294,7 +295,8 @@ class StackableBuffSkillComponent(
     delay: float
     lasting_duration: float
     maximum_stack: int
-    # TODO: use rem, red argument to apply cooltime reduction and buff remnance
+    apply_buff_duration: bool = True
+    # TODO: use apply_cooldown_reduction argument to apply cooltime reduction
 
     def get_default_state(self):
         return {
@@ -314,7 +316,7 @@ class StackableBuffSkillComponent(
             state.stack.reset()
         state.stack.increase()
 
-        return self.use_buff_trait(state)
+        return self.use_buff_trait(state, apply_buff_duration=self.apply_buff_duration)
 
     @reducer_method
     def elapse(
@@ -363,7 +365,7 @@ class ConsumableBuffSkillComponent(
     delay: float
     lasting_duration: float
     maximum_stack: int
-    # TODO: use rem argument to apply buff remnance
+    apply_buff_duration: bool = True
 
     def get_default_state(self):
         return {
@@ -378,7 +380,9 @@ class ConsumableBuffSkillComponent(
 
     @reducer_method
     def use(self, _: None, state: ConsumableBuffSkillState):
-        return self.use_consumable_buff_trait(state)
+        return self.use_consumable_buff_trait(
+            state, apply_buff_duration=self.apply_buff_duration
+        )
 
     @reducer_method
     def elapse(self, time: float, state: ConsumableBuffSkillState):

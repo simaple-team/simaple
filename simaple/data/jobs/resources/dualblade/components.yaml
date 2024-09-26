@@ -350,7 +350,7 @@ data:
 
   delay: 700
   lasting_duration: 30_000
-  rem: False
+  apply_buff_duration: False
 
   final_damage_multiplier: "{{ 10 + skill_level // 5 }}"
   advanced_dark_sight_final_damage_multiplier: 20

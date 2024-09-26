@@ -60,7 +60,7 @@ data:
   name: 메디테이션
   cooldown_duration: 0
   delay: 0
-  rem: true
+  apply_buff_duration: true
   lasting_duration: 240_000
   stat:
     magic_attack: 30
@@ -106,7 +106,7 @@ data:
   name: 블리자드
   cooldown_duration: 45000
   delay: 690
-  rem: false
+  apply_buff_duration: false
   damage: "{{ 211 + 3 * skill_level }}"
   hit: 12
   default_skill_level: 30
@@ -133,7 +133,7 @@ data:
     프로즌 오브 VI.elapse.emitted.global.damage: use
   delay: 0
   cooldown_duration: 0
-  rem: false
+  apply_buff_duration: false
   damage: "{{ 100 + 4 * skill_level }}"
   hit: "{{ 0.02 * skill_level }}"
   default_skill_level: 30
@@ -356,10 +356,10 @@ data:
   id: 400021090-0-?
   name: 프로즌 라이트닝
   damage_and_hits:
-  - damage: "{{ 395 + skill_level * 14 }}"
-    hit: "{{7 * 32}}"
-  - damage: "{{ 398 + skill_level * 14 }}"
-    hit: "{{12 * 24}}"
+    - damage: "{{ 395 + skill_level * 14 }}"
+      hit: "{{7 * 32}}"
+    - damage: "{{ 398 + skill_level * 14 }}"
+      hit: "{{12 * 24}}"
 
   delay: 4_020
   cooldown_duration: 360_000
@@ -450,7 +450,7 @@ data:
   representative_name: 블리자드
   cooldown_duration: 45000
   delay: 690
-  rem: false
+  apply_buff_duration: false
   damage: "{{ 330 + 10 * skill_level }}"
   hit: 12
   default_skill_level: 30
@@ -479,7 +479,7 @@ data:
     프로즌 오브 VI.elapse.emitted.global.damage: use
   delay: 0
   cooldown_duration: 0
-  rem: false
+  apply_buff_duration: false
   damage: "{{ 220 + skill_level * 5 }}"
   hit: "{{ 0.7 }}"
   default_skill_level: 30

@@ -11,7 +11,7 @@ data:
   name: 레이스 오브 갓
   cooldown_duration: 120000
   delay: 0
-  rem: false
+  apply_buff_duration: false
   lasting_duration: 60000
   stat:
     damage_multiplier: 10
@@ -37,7 +37,7 @@ data:
   periodic_interval: 4000
 
   lasting_duration: "{{ (30 + skill_level) * 1000 }}"
-  rem: false
+  apply_buff_duration: false
 
   max_damage_multiplier: "{{ 20 + skill_level }}"
 ---
@@ -56,7 +56,7 @@ data:
   name: 그란디스 여신의 축복(레프)
   maximum_stack: 2
   cooldown_duration: 240_000
-  rem: false
+  apply_buff_duration: false
   delay: 480
   lasting_duration: 40_000
 

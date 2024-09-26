@@ -19,7 +19,7 @@ data:
   cooldown_duration: 180_000
   delay: 0
   red: true
-  rem: true
+  apply_buff_duration: true
   stat:
     damage_multiplier: "{{ 20 + 10/6 + 10/6 * (5/6 + 1/11) * (10 * skill_level * 0.01) }}"
 ---
@@ -261,7 +261,7 @@ data:
   cooldown_duration: 90_000
   delay: 900
   lasting_duration: 10_000
-  rem: False
+  apply_buff_duration: False
 ---
 kind: Component
 version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent

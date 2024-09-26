@@ -127,7 +127,7 @@ data:
   cooldown_duration: 0
   maximum_stack: 2
   lasting_duration: 30_000
-  rem: False
+  apply_buff_duration: False
 
   stat:
     final_damage_multiplier: 5
@@ -190,7 +190,7 @@ data:
   red: true
 
   lasting_duration: 7000
-  rem: false
+  apply_buff_duration: false
 
   periodic_interval: 405
   periodic_damage: "{{ 100 + 150 + 5 * skill_level }}"
@@ -275,7 +275,7 @@ data:
   delay: 0
   cooldown_duration: 0
   lasting_duration: 30_000
-  rem: false
+  apply_buff_duration: false
 
   stat:
     ignored_defence: 10
@@ -382,7 +382,7 @@ data:
   delay: 0
   cooldown_duration: 0
   lasting_duration: 999_999_999
-  rem: false
+  apply_buff_duration: false
 
   stat:
     damage_multiplier: 20
@@ -580,10 +580,10 @@ data:
   name: 마에스트로
 
   damage_and_hits:
-  - damage: "{{ 680 + skill_level * 23 }}"
-    hit: "{{ 10 * 29 }}"
-  - damage: "{{ 680 + skill_level * 23 }}"
-    hit: "{{ 14 * 57 }}"
+    - damage: "{{ 680 + skill_level * 23 }}"
+      hit: "{{ 10 * 29 }}"
+    - damage: "{{ 680 + skill_level * 23 }}"
+      hit: "{{ 14 * 57 }}"
 
   delay: 7_740
   cooldown_duration: 360_000

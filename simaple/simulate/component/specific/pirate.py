@@ -20,6 +20,7 @@ class PenalizedBuffSkill(SkillComponent, CooldownValidityTrait, BuffTrait):
     cooldown_duration: float
     delay: float
     lasting_duration: float
+    apply_buff_duration: bool = True
 
     def get_default_state(self):
         return {
@@ -29,7 +30,7 @@ class PenalizedBuffSkill(SkillComponent, CooldownValidityTrait, BuffTrait):
 
     @reducer_method
     def use(self, _: None, state: PenalizedBuffSkillState):
-        return self.use_buff_trait(state)
+        return self.use_buff_trait(state, apply_buff_duration=self.apply_buff_duration)
 
     @reducer_method
     def elapse(self, time: float, state: PenalizedBuffSkillState):

@@ -130,7 +130,7 @@ class Elysion(SkillComponent, BuffTrait, CooldownValidityTrait):
 
     @reducer_method
     def use(self, _: None, state: ElysionState):
-        return self.use_buff_trait(state)
+        return self.use_buff_trait(state, False)
 
     @view_method
     def validity(self, state: ElysionState) -> Validity:

@@ -16,7 +16,7 @@ data:
   cooldown_duration: 180_000
   delay: 450
   red: true
-  rem: false
+  apply_buff_duration: false
   stat:
     INT: "{{ floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
     damage_multiplier: "{{ floor(5 + 0.5 * skill_level) }}"
@@ -38,7 +38,7 @@ data:
   cooldown_duration: 180_000
   delay: 450
   red: true
-  rem: false
+  apply_buff_duration: false
   stat:
     LUK: "{{ floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
     damage_multiplier: "{{ floor(5 + 0.5 * skill_level) }}"

@@ -3,17 +3,17 @@ version: simaple.io/BuffSkillComponent
 metadata:
   label:
     group: windbreaker
-    name: '엘리멘트 : 스톰'
+    name: "엘리멘트 : 스톰"
     id: 13001022-0
 patch:
   - SkillLevelPatch
   - ArithmeticPatch
 data:
   id: 13001022-0
-  name: '엘리멘트 : 스톰'
+  name: "엘리멘트 : 스톰"
   delay: 0
   cooldown_duration: 0
-  lasting_duration: 999_999_999  # toggle skill
+  lasting_duration: 999_999_999 # toggle skill
   stat:
     damage_multiplier: 10
 ---
@@ -76,7 +76,7 @@ data:
   lasting_duration: 900_000
   red: true
   stat:
-    DEX: '{{ floor((18 + 5 * character_level) * ceil(skill_level / 2) * 0.01) }}'
+    DEX: "{{ floor((18 + 5 * character_level) * ceil(skill_level / 2) * 0.01) }}"
   combat_orders_enabled: true
   default_skill_level: 30
 ---
@@ -98,8 +98,8 @@ data:
   lasting_duration: 300_000
   red: true
   stat:
-    critical_rate: '{{ 5 + (skill_level // 2) }}'
-    critical_damage: '{{ skill_level // 2 }}'
+    critical_rate: "{{ 5 + (skill_level // 2) }}"
+    critical_damage: "{{ skill_level // 2 }}"
   combat_orders_enabled: true
   default_skill_level: 30
 ---
@@ -119,7 +119,7 @@ data:
   name: 천공의 노래
   maximum_keydown_time: 999_999_999
 
-  damage: '{{ 300 + 3 * skill_level }}'
+  damage: "{{ 300 + 3 * skill_level }}"
   hit: 1
   delay: 120
   cooldown_duration: 0
@@ -158,7 +158,7 @@ data:
   id: 13121054-0
   name: 스톰 브링어
   trigger_cooldown_duration: 0
-  trigger_damage: '{{ 305 + 5 * skill_level }}'
+  trigger_damage: "{{ 305 + 5 * skill_level }}"
   trigger_hit: 0.3
 
   cooldown_duration: 0
@@ -193,8 +193,8 @@ data:
   id: 13101022-0
   name: 트라이플링 윔
   trigger_cooldown_duration: 0
-  trigger_damage: '{{ (200 + skill_level * 3) * (1 - 0.01 * (10 + skill_level // 3)) + (300 + skill_level * 3) * 0.01 * (10 + skill_level // 3) }}'
-  trigger_hit: '{{ (35 + skill_level // 2) * 0.01 }}'
+  trigger_damage: "{{ (200 + skill_level * 3) * (1 - 0.01 * (10 + skill_level // 3)) + (300 + skill_level * 3) * 0.01 * (10 + skill_level // 3) }}"
+  trigger_hit: "{{ (35 + skill_level // 2) * 0.01 }}"
 
   cooldown_duration: 0
   delay: 0
@@ -235,7 +235,7 @@ data:
   delay: 600
   lasting_duration: 30_000
 
-  rem: false
+  apply_buff_duration: false
   combat_orders_enabled: true
   default_skill_level: 30
   v_improvement: 2
@@ -253,7 +253,7 @@ data:
   cooldown_duration: 120_000
   delay: 0
   red: false
-  rem: true
+  apply_buff_duration: true
   lasting_duration: 60_000
   stat:
     damage_multiplier: 10
@@ -279,9 +279,9 @@ data:
 
   periodic_interval: 150
   periodic_damage:
-    - ['{{ 325 + 13 * skill_level }}']
-    - ['{{ 785 + 31 * skill_level }}']
-    - ['{{ 785 + 31 * skill_level }}', '{{ 375 + 19 * skill_level }}']
+    - ["{{ 325 + 13 * skill_level }}"]
+    - ["{{ 785 + 31 * skill_level }}"]
+    - ["{{ 785 + 31 * skill_level }}", "{{ 375 + 19 * skill_level }}"]
   periodic_hit:
     - [3]
     - [3]
@@ -302,12 +302,12 @@ patch:
 data:
   id: 400031022-0
   name: 아이들 윔
-  damage: '{{ (550 + 22 * skill_level) * (1 + 0.85 * 9) / 10 }}'
+  damage: "{{ (550 + 22 * skill_level) * (1 + 0.85 * 9) / 10 }}"
   hit: 30
   cooldown_duration: 10_000
   delay: 450
 
-  dot_damage: '{{ 500 + 20 * skill_level }}'
+  dot_damage: "{{ 500 + 20 * skill_level }}"
   dot_lasting_duration: 9
 ---
 kind: Component
@@ -334,7 +334,7 @@ data:
   id: 400031030-0
   name: 윈드 월
   trigger_cooldown_duration: 2_000
-  trigger_damage: '{{ (550 + 22 * skill_level) * (1 + 0.5 * 2) / 3 }}'
+  trigger_damage: "{{ (550 + 22 * skill_level) * (1 + 0.5 * 2) / 3 }}"
   trigger_hit: 15
 
   cooldown_duration: 90_000
@@ -359,7 +359,7 @@ data:
   delay: 420 # approximate
 
   periodic_interval: 180
-  periodic_damage: '{{ 400 + 16 * skill_level }}'
+  periodic_damage: "{{ 400 + 16 * skill_level }}"
   periodic_hit: 6
   lasting_duration: 11_250
 
@@ -384,9 +384,9 @@ data:
   cooldown_duration: 0
 
   periodic_interval: 510
-  periodic_damage: '{{ 400 + 16 * skill_level }}'
+  periodic_damage: "{{ 400 + 16 * skill_level }}"
   periodic_hit: 1
-  lasting_duration: 999_999_999  # toggle skill
+  lasting_duration: 999_999_999 # toggle skill
 ---
 kind: Component
 version: simaple.io/KeydownSkillComponent
@@ -405,7 +405,7 @@ data:
   representative_name: 천공의 노래
   maximum_keydown_time: 999_999_999
 
-  damage: '{{ 540 + 14 * skill_level }}'
+  damage: "{{ 540 + 14 * skill_level }}"
   hit: 1
   delay: 120
   cooldown_duration: 0
@@ -443,7 +443,7 @@ data:
   name: 트라이플링 윔 VI
   representative_name: 트라이플링 윔
   trigger_cooldown_duration: 0
-  trigger_damage: '{{ (315 + skill_level * 7) * 0.8 + (420 + skill_level * 11) * 0.2 }}'
+  trigger_damage: "{{ (315 + skill_level * 7) * 0.8 + (420 + skill_level * 11) * 0.2 }}"
   trigger_hit: 0.5
 
   cooldown_duration: 0
@@ -467,8 +467,8 @@ data:
   name: 미스트랄 스프링
 
   damage_and_hits:
-  - damage: "{{ 830 + skill_level * 28 }}"
-    hit: "{{ 10 * 13 }}"
+    - damage: "{{ 830 + skill_level * 28 }}"
+      hit: "{{ 10 * 13 }}"
 
   delay: 4_560
   cooldown_duration: 360_000
