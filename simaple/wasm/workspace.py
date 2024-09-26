@@ -131,6 +131,7 @@ def provideEnvironmentAugmentedPlan(plan: str) -> str:
     augmented_metadata = yaml.safe_dump(
         json.loads(metadata.model_dump_json()),
         indent=2,
+        allow_unicode=True,
     )
     return f"---\n{augmented_metadata}\n---\n{original_operations}"
 
