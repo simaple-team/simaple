@@ -104,6 +104,10 @@ class MinimalEnvironmentProvider(MemoizableEnvironmentProvider):
     v_improvements_level: int = 60
     hexa_improvements_level: int = 0
 
+    hexa_mastery_skill_levels: dict[str, int] = {}
+    hexa_skill_levels: dict[str, int] = {}
+    hexa_improvements_levels: dict[str, int] = {}
+
     weapon_attack_power: int = 0
 
     def character(self) -> FinalCharacterStat:
@@ -126,6 +130,9 @@ class MinimalEnvironmentProvider(MemoizableEnvironmentProvider):
                 "hexa_mastery_level",
                 "v_improvements_level",
                 "hexa_improvements_level",
+                "hexa_mastery_skill_levels",
+                "hexa_skill_levels",
+                "hexa_improvements_levels",
                 "weapon_attack_power",
             }
         )
@@ -193,6 +200,10 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
     v_improvements_level: int = 60
     hexa_improvements_level: int = 0
 
+    hexa_mastery_skill_levels: dict[str, int] = {}
+    hexa_skill_levels: dict[str, int] = {}
+    hexa_improvements_levels: dict[str, int] = {}
+
     weapon_attack_power: int = 0
 
     def get_memoization_independent_environment(
@@ -209,6 +220,9 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
                 "hexa_mastery_level",
                 "v_improvements_level",
                 "hexa_improvements_level",
+                "hexa_mastery_skill_levels",
+                "hexa_skill_levels",
+                "hexa_improvements_levels",
                 "weapon_attack_power",
             }
         )
