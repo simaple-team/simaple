@@ -20,3 +20,25 @@ def test_ability(stat_name, a, b, c):
     result = stat_a + stat_b
 
     assert getattr(result, stat_name) == getattr(stat_c, stat_name)
+
+
+@pytest.mark.parametrize(
+    "original_cooldown, cooltime_reduce_rate, cooltime_reduce, expected_cooldown",
+    [
+        (100000, 5, 5000, 90000),
+        (12000, 5, 4000, 8700),
+        (10000, 5, 4000, 7600),
+        (5300, 5, 4000, 5000),
+        (5000, 5, 4000, 4750),
+        (1000, 5, 0, 1000),
+    ],
+)
+def test_cooltime_reduce(
+    original_cooldown, cooltime_reduce_rate, cooltime_reduce, expected_cooldown
+):
+    stat = ActionStat(
+        cooltime_reduce_rate=cooltime_reduce_rate,
+        cooltime_reduce=cooltime_reduce,
+    )
+
+    assert stat.calculate_cooldown(original_cooldown) == expected_cooldown
