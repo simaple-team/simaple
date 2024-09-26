@@ -112,6 +112,31 @@ ELAPSE 10.0
     assert not hasEnvironment(plan)
 
 
+def test_retreives_skill_level_with_unicode():
+    plan = """
+author: "Alice"
+provider:
+    name: "BaselineEnvironmentProvider"
+    data:
+        tier: Legendary
+        jobtype: archmagetc
+        level: 270
+        artifact_level: 40
+        passive_skill_level: 0
+        combat_orders_level: 1
+        hexa_improvements_levels: 
+          도트 퍼니셔: 3
+---
+ELAPSE 10.0
+ELAPSE 10.0
+ELAPSE 10.0
+ELAPSE 10.0
+    """
+
+    new_plan = provideEnvironmentAugmentedPlan(plan)
+    assert "도트 퍼니셔" in new_plan
+
+
 def test_has_environment_returns_true_with_environment(fixture_environment_given_plan):
     assert hasEnvironment(fixture_environment_given_plan)
 
