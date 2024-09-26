@@ -288,7 +288,6 @@ class Stat(BaseModel):
 
     @classmethod
     def sum(cls, stats: list[Stat]) -> Stat:
-
         final_damage_multiplier: float = 1
         for stat in stats:
             final_damage_multiplier += (
@@ -357,11 +356,24 @@ class ActionStat(BaseModel):
         return self
 
     def calculate_cooldown(self, original_cooldown):
-        # TODO - need to apply correct logic
-        return (
-            original_cooldown * (1 - self.cooltime_reduce_rate * 0.01)
-            - self.cooltime_reduce
-        )
+        if (
+            original_cooldown * (1 - 0.01 * self.cooltime_reduce_rate) <= 1000
+        ):  # 쿨감%부터 적용, 최소 1초까지
+            cd = min(original_cooldown, 1000)
+        else:
+            cd = original_cooldown * (1 - 0.01 * self.cooltime_reduce_rate)
+
+        if cd - self.cooltime_reduce <= 10000:
+            cooltime_cap = min(10000, cd)
+            cdr_left = (
+                self.cooltime_reduce - (cd - cooltime_cap)
+            ) / 1000  # 10초 이하에서 쿨감되는 수치 계산
+            cdr_applied = cooltime_cap * (1 - cdr_left * 0.05)  # 1초당 5%씩 감소
+        else:
+            cdr_applied = cd - self.cooltime_reduce
+
+        # 5초까지 감소, 단 이미 스킬쿨이 5초 아래였을 경우 그대로 사용
+        return max(cdr_applied, min(cd, 5000))
 
     def calculate_buff_duration(self, original_duration):
         return original_duration * (1 + 0.01 * self.buff_duration)
