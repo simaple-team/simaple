@@ -185,7 +185,7 @@ const UptimeChart: React.FC<{
           ),
         ),
       ),
-    [runningView, logs],
+    [skillNames, logs],
   );
   const [selectedSkillNames, setSelectedSkillNames] = React.useState<string[]>(
     [],
