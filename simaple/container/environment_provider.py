@@ -46,7 +46,8 @@ class EnvironmentProvider(pydantic.BaseModel, metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def get_simulation_environment(self) -> SimulationEnvironment: ...
+    def get_simulation_environment(self) -> SimulationEnvironment:
+        ...
 
     @classmethod
     def get_name(cls):
@@ -62,15 +63,18 @@ class MemoizableEnvironmentProvider(EnvironmentProvider):
     @abstractmethod
     def get_memoizable_environment(
         self,
-    ) -> dict[str, Any]: ...
+    ) -> dict[str, Any]:
+        ...
 
     @abstractmethod
     def get_memoization_independent_environment(
         self,
-    ) -> dict[str, Any]: ...
+    ) -> dict[str, Any]:
+        ...
 
     @abstractmethod
-    def get_memoization_key(self) -> str: ...
+    def get_memoization_key(self) -> str:
+        ...
 
     def get_simulation_environment(
         self,
@@ -277,7 +281,7 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
             weapon_pure_attack_power=self.weapon_pure_attack_power,
         )
 
-    def default_extended_stat(self):
+    def optimization_hint(self):
         passive = self.passive()
         doping = self.doping()
         ability_stat = self.ability_stat()
@@ -285,6 +289,17 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
 
         return add_extended_stats(
             passive,
+            doping,
+            ability_stat,
+            propensity.get_extended_stat(),
+        )
+
+    def default_extended_stat(self):
+        doping = self.doping()
+        ability_stat = self.ability_stat()
+        propensity = self.propensity()
+
+        return add_extended_stats(
             doping,
             ability_stat,
             propensity.get_extended_stat(),
@@ -298,7 +313,7 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
 
     def preset_optimizer(self):
         damage_logic = get_damage_logic(self.jobtype, self.combat_orders_level)
-        default_extended_stat = self.default_extended_stat()
+        optimization_hint = self.optimization_hint()
         return PresetOptimizer(
             union_block_count=self.union_block_count,
             level=self.level,
@@ -306,7 +321,7 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
             character_job_type=self.jobtype,
             alternate_character_job_types=[],
             link_count=self.link_count,
-            default_stat=default_extended_stat.stat,
+            default_stat=optimization_hint.stat,
             buff_duration_preempted=_is_buff_duration_preemptive(self.jobtype),
             artifact_level=self.artifact_level,
         )

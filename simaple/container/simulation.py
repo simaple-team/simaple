@@ -4,7 +4,11 @@ import pydantic
 
 from simaple.core import ActionStat, ExtendedStat, JobType, Stat
 from simaple.data.jobs import get_skill_profile
-from simaple.data.jobs.builtin import get_builtin_strategy, get_damage_logic
+from simaple.data.jobs.builtin import (
+    get_builtin_strategy,
+    get_damage_logic,
+    get_passive,
+)
 from simaple.simulate.base import SimulationRuntime
 from simaple.simulate.engine import OperationEngine
 from simaple.simulate.kms import get_builder
@@ -69,6 +73,18 @@ class SimulationContainer:
             self.environment.jobtype, self.environment.combat_orders_level
         )
 
+    def passive(self) -> ExtendedStat:
+        return get_passive(
+            self.environment.jobtype,
+            combat_orders_level=self.environment.combat_orders_level,
+            passive_skill_level=self.environment.passive_skill_level,
+            character_level=self.environment.level,
+            weapon_pure_attack_power=self.environment.weapon_pure_attack_power,
+        )
+
+    def stat(self) -> Stat:
+        return self.environment.character.stat + self.passive().stat
+
     def skill_profile(self):
         return get_skill_profile(self.environment.jobtype)
 
@@ -86,7 +102,7 @@ class SimulationContainer:
         level_advantage = self.level_advantage()
 
         return DamageCalculator(
-            character_spec=self.environment.character.stat,
+            character_spec=self.stat(),
             damage_logic=damage_logic,
             armor=self.environment.armor,
             level_advantage=level_advantage,
@@ -134,7 +150,7 @@ improvement name passed to level: {hexa_improvement_name} is not in {hexa_improv
             hexa_improvements,
             skill_profile.get_skill_replacements(),
             {
-                "character_stat": self.environment.character.stat,
+                "character_stat": self.stat(),
                 "character_level": self.environment.level,
                 "weapon_attack_power": self.environment.weapon_attack_power,
                 "weapon_pure_attack_power": self.environment.weapon_pure_attack_power,
