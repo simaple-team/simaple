@@ -37,14 +37,10 @@ class SimulationEnvironment(pydantic.BaseModel):
     force_advantage: float = 1.0
 
     v_skill_level: int = 30
-    hexa_skill_level: int = 1
-    hexa_mastery_level: int = 1
     v_improvements_level: int = 60
-    hexa_improvements_level: int = 0
 
-    hexa_mastery_skill_levels: dict[str, int] = {}
-    hexa_skill_levels: dict[str, int] = {}
-    hexa_improvements_levels: dict[str, int] = {}
+    skill_levels: dict[str, int] = {}
+    hexa_improvement_levels: dict[str, int] = {}
 
     weapon_attack_power: int = 0
 
@@ -96,42 +92,30 @@ class SimulationContainer:
     def builder(self):
         skill_profile = self.skill_profile()
 
-        skill_levels = skill_profile.get_skill_levels(
-            self.environment.v_skill_level,
-            self.environment.hexa_skill_level,
-            self.environment.hexa_mastery_level,
+        possible_skill_names = (
+            skill_profile.v_skill_names
+            + skill_profile.hexa_skill_names
+            + list(skill_profile.hexa_mastery.values())
         )
-        hexa_improvements = skill_profile.get_filled_hexa_improvements(
-            self.environment.hexa_improvements_level
-        )
-
-        for hexa_mastery_skill_name in self.environment.hexa_mastery_skill_levels:
+        for skill_name in self.environment.skill_levels:
             assert (
-                hexa_mastery_skill_name in skill_levels
-            ), f"Given explicit skill name\
-passed to level: {hexa_mastery_skill_name} is not in {skill_levels}"
-        for hexa_skill_name in self.environment.hexa_skill_levels:
-            assert (
-                hexa_skill_name in skill_levels
+                skill_name in possible_skill_names
             ), f"Given explicit skill name \
-passed to level: {hexa_skill_name} is not in {skill_levels}"
-        for hexa_improvement_name in self.environment.hexa_improvements_levels:
-            assert (
-                hexa_improvement_name in hexa_improvements
-            ), f"Given explicit \
-improvement name passed to level: {hexa_improvement_name} is not in {hexa_improvements}"
+passed to level: {skill_name} is not in {possible_skill_names}"
 
-        skill_levels.update(self.environment.hexa_mastery_skill_levels)
-        skill_levels.update(self.environment.hexa_skill_levels)
-        hexa_improvements.update(self.environment.hexa_improvements_levels)
+        for hexa_improvement_name in self.environment.hexa_improvement_levels:
+            assert (
+                hexa_improvement_name in skill_profile.hexa_improvement_names
+            ), f"Given explicit \
+improvement name passed to level: {hexa_improvement_name} is not in {skill_profile.hexa_improvement_names}"
 
         return get_builder(
             skill_profile.get_groups(),
-            skill_levels,
+            self.environment.skill_levels,
             skill_profile.get_filled_v_improvements(
                 self.environment.v_improvements_level
             ),
-            hexa_improvements,
+            self.environment.hexa_improvement_levels,
             skill_profile.get_skill_replacements(),
             {
                 "character_stat": self.environment.character.stat,
