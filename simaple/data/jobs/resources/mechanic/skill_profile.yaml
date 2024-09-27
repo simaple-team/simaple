@@ -30,6 +30,7 @@ data:
     - 그라운드 제로
   hexa_mastery:
     "매시브 파이어: IRON-B": "매시브 파이어: IRON-B VI"
+    "매시브 파이어: IRON-B (폭발)": "매시브 파이어: IRON-B VI (폭발)"
     "호밍 미사일": "호밍 미사일 VI"
   component_groups:
     - mechanic
