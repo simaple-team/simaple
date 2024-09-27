@@ -122,6 +122,7 @@ class BuffTrait(
     def use_buff_trait(
         self,
         state: CooldownDynamicsLastingGeneric,
+        apply_buff_duration: bool,
     ) -> tuple[CooldownDynamicsLastingGeneric, list[Event]]:
         state = state.deepcopy()
 
@@ -136,6 +137,8 @@ class BuffTrait(
             state.dynamics.stat.calculate_buff_duration(
                 self._get_lasting_duration(state)
             )
+            if apply_buff_duration
+            else self._get_lasting_duration(state)
         )
 
         return state, [self.event_provider.delayed(self._get_delay())]
@@ -165,7 +168,7 @@ class BuffTrait(
 
 class ConsumableBuffTrait(LastingTrait, EventProviderTrait, DelayTrait):
     def use_consumable_buff_trait(
-        self, state: ConsumableDynamicsLastingGeneric
+        self, state: ConsumableDynamicsLastingGeneric, apply_buff_duration: bool
     ) -> tuple[ConsumableDynamicsLastingGeneric, list[Event]]:
         state = state.deepcopy()
 
@@ -178,6 +181,8 @@ class ConsumableBuffTrait(LastingTrait, EventProviderTrait, DelayTrait):
             state.dynamics.stat.calculate_buff_duration(
                 self._get_lasting_duration(state)
             )
+            if apply_buff_duration
+            else self._get_lasting_duration(state)
         )
 
         return state, [self.event_provider.delayed(self._get_delay())]

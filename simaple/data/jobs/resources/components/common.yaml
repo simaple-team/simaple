@@ -15,7 +15,7 @@ data:
   cooldown_duration: 90_000
   delay: 900
   red: true
-  rem: true
+  apply_buff_duration: true
   lasting_duration: 10_000
   stat:
     damage_multiplier: 45

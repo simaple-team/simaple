@@ -10,7 +10,7 @@ data:
   name: 윌 오브 리버티
   cooldown_duration: 120000
   delay: 0
-  rem: false
+  apply_buff_duration: false
   lasting_duration: 60000
   stat:
     damage_multiplier: 10
@@ -55,7 +55,7 @@ data:
   cooldown_duration: 180_000
   delay: 450
   red: true
-  rem: false
+  apply_buff_duration: false
   stat:
     DEX: "{{ floor((18 + 5 * character_level) * 0.15) * (1 + 0.1 * skill_level) }}"
     damage_multiplier: "{{ floor(5 + 0.5 * skill_level) }}"

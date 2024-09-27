@@ -150,7 +150,7 @@ data:
   delay: 600
   cooldown_duration: 0
   lasting_duration: 30_000
-  rem: false
+  apply_buff_duration: false
   stat:
     final_damage_multiplier: 5
     ignored_defence: 10
@@ -218,7 +218,7 @@ data:
   delay: 600
   cooldown_duration: 180_000
   lasting_duration: 60_000
-  rem: false
+  apply_buff_duration: false
 
   stat:
     damage_multiplier: 10

@@ -37,7 +37,7 @@ data:
   cooldown_duration: 120000
   delay: 0
   red: false
-  rem: false
+  apply_buff_duration: false
   lasting_duration: 60000
   stat:
     final_damage_multiplier: 10
@@ -109,7 +109,7 @@ data:
   name: 메디테이션
   cooldown_duration: 0
   delay: 0
-  rem: true
+  apply_buff_duration: true
   lasting_duration: 240_000
   stat:
     magic_attack: 30
@@ -231,7 +231,7 @@ data:
   name: 메테오
   cooldown_duration: 45000
   delay: 690
-  rem: false
+  apply_buff_duration: false
   damage: "{{ 225 + 3 * skill_level }}"
   hit: 12
   default_skill_level: 30
@@ -263,7 +263,7 @@ data:
     # TODO: entangle many
   delay: 0
   cooldown_duration: 0
-  rem: false
+  apply_buff_duration: false
   damage: "{{ 100 + 4 * skill_level }}"
   hit: "{{ 0.02 * skill_level }}"
   default_skill_level: 30

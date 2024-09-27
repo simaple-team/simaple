@@ -17,7 +17,7 @@ data:
   lasting_duration: "{{ (7 + 2 * skill_level) * 1000 }}"
   delay: 60
   red: true
-  rem: false
+  apply_buff_duration: false
   stat:
     attack_power_multiplier: "{{ 25 * skill_level }}"
     magic_attack_multiplier: "{{ 25 * skill_level }}"
@@ -40,7 +40,7 @@ data:
   lasting_duration: "{{ (6 + 6 * skill_level) * 1000 }}"
   delay: 60
   red: true
-  rem: false
+  apply_buff_duration: false
   stat:
     attack_power_multiplier: "{{ 10 + 10 * skill_level }}"
     magic_attack_multiplier: "{{ 10 + 10 * skill_level }}"
@@ -63,7 +63,7 @@ data:
   lasting_duration: "{{ (7 + 2 * skill_level) * 1000 }}"
   delay: 60
   red: true
-  rem: false
+  apply_buff_duration: false
   stat:
     STR: "{{ 17.5 * weapon_attack_power * skill_level }}"
 ---
@@ -85,7 +85,7 @@ data:
   lasting_duration: "{{ (7 + 2 * skill_level) * 1000 }}"
   delay: 60
   red: true
-  rem: false
+  apply_buff_duration: false
   stat:
     DEX: "{{ 17.5 * weapon_attack_power * skill_level }}"
 ---
@@ -107,7 +107,7 @@ data:
   lasting_duration: "{{ (7 + 2 * skill_level) * 1000 }}"
   delay: 60
   red: true
-  rem: false
+  apply_buff_duration: false
   stat:
     INT: "{{ 17.5 * weapon_attack_power * skill_level }}"
 ---
@@ -129,6 +129,6 @@ data:
   lasting_duration: "{{ (7 + 2 * skill_level) * 1000 }}"
   delay: 60
   red: true
-  rem: false
+  apply_buff_duration: false
   stat:
     LUK: "{{ 17.5 * weapon_attack_power * skill_level }}"

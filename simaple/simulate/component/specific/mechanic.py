@@ -73,7 +73,7 @@ class RobotSetupBuff(SkillComponent, BuffTrait, CooldownValidityTrait):
         _: None,
         state: RobotSetupBuffState,
     ):
-        return self.use_buff_trait(state)
+        return self.use_buff_trait(state, apply_buff_duration=False)
 
     @view_method
     def buff(self, state: RobotSetupBuffState) -> Optional[Stat]:

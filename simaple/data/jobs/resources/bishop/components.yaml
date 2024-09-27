@@ -141,7 +141,7 @@ data:
   cooldown_duration: 0
   delay: 0
   lasting_duration: 240_000
-  rem: true
+  apply_buff_duration: true
   stat:
     boss_damage_multiplier: 10
     magic_attack: "{{ 20 + skill_level }}"
@@ -178,7 +178,7 @@ data:
   cooldown_duration: "{{ (260 - 12 * (character_stat.INT // 5000)) * 1000 }}"
   delay: 600 #?
   lasting_duration: 10_000
-  rem: false
+  apply_buff_duration: false
   stat:
     final_damage_multiplier: "{{ 1 + (character_stat.INT // 5000) }}"
 ---
@@ -218,7 +218,7 @@ data:
   cooldown_duration: 120_000
   delay: 360
   lasting_duration: "{{ (15 + skill_level // 2) * 1000 }}"
-  rem: false
+  apply_buff_duration: false
   stat:
     final_damage_multiplier: "{{ min((character_stat.INT // 2500), 15 + skill_level) }}"
 ---
@@ -341,10 +341,10 @@ data:
   name: 홀리 어드밴트
 
   damage_and_hits:
-  - damage: "{{ 270 + skill_level * 10 }}"
-    hit: "{{8 * 25}}"
-  - damage: "{{ 235 + skill_level * 8 }}"
-    hit: "{{12 * 35}}"
+    - damage: "{{ 270 + skill_level * 10 }}"
+      hit: "{{8 * 25}}"
+    - damage: "{{ 235 + skill_level * 8 }}"
+      hit: "{{12 * 35}}"
 
   delay: 3_660
   cooldown_duration: 360_000

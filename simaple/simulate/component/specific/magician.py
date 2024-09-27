@@ -25,6 +25,8 @@ class Infinity(SkillComponent, BuffTrait, CooldownValidityTrait):
     default_final_damage: float
     maximum_final_damage: float
 
+    apply_buff_duration: bool = True
+
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
@@ -33,7 +35,7 @@ class Infinity(SkillComponent, BuffTrait, CooldownValidityTrait):
 
     @reducer_method
     def use(self, _: None, state: InfinityState):
-        return self.use_buff_trait(state)
+        return self.use_buff_trait(state, apply_buff_duration=self.apply_buff_duration)
 
     @reducer_method
     def elapse(self, time: float, state: InfinityState):

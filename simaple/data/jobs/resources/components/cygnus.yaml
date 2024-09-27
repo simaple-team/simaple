@@ -15,10 +15,10 @@ data:
   delay: 600
 
   periodic_interval: 120
-  periodic_damage: '{{ 450 + 18 * skill_level }}'
+  periodic_damage: "{{ 450 + 18 * skill_level }}"
   periodic_hit: 1
   lasting_duration: 20_000
-  max_count: '{{ 40 + skill_level }}'
+  max_count: "{{ 40 + skill_level }}"
 ---
 kind: Component
 version: simaple.io/TranscendentCygnusBlessing
@@ -36,7 +36,7 @@ data:
   cooldown_duration: 240_000
   delay: 480
   lasting_duration: 45_000
-  rem: False
+  apply_buff_duration: False
 
   damage_increment: "{{ 6 + skill_level // 15 }}"
   increase_interval: 5_000

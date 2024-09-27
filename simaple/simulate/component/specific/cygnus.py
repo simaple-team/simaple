@@ -44,7 +44,7 @@ class TranscendentCygnusBlessing(
 
     @reducer_method
     def use(self, _: None, state: TranscendentCygnusBlessingState):
-        return self.use_consumable_buff_trait(state)
+        return self.use_consumable_buff_trait(state, False)
 
     @reducer_method
     def elapse(self, time: float, state: TranscendentCygnusBlessingState):

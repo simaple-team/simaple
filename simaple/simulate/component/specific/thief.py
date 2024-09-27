@@ -31,7 +31,7 @@ class UltimateDarkSightComponent(SkillComponent, BuffTrait, CooldownValidityTrai
 
     @reducer_method
     def use(self, _: None, state: UltimateDarkSightState):
-        return self.use_buff_trait(state)
+        return self.use_buff_trait(state, False)
 
     @reducer_method
     def elapse(self, time: float, state: UltimateDarkSightState):

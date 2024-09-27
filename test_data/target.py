@@ -36,7 +36,7 @@ SETTINGS = [
     ),
     (
         (JobType.bishop,),
-        9251885099074,
+        9119066916746,
     ),
     (
         (JobType.mechanic,),
@@ -50,7 +50,7 @@ SETTINGS = [
                 "weapon_pure_attack_power": 295,
             },
         ),
-        8782689556242,
+        8767345887765,
     ),
     (
         (
@@ -59,7 +59,7 @@ SETTINGS = [
                 "weapon_attack_power": 789,
             },
         ),
-        11411869302005,
+        10946944150279,
     ),
     (
         (
@@ -68,7 +68,7 @@ SETTINGS = [
                 "weapon_attack_power": 789,
             },
         ),
-        13343175412181,
+        12594480902240,
     ),
     (
         (
@@ -77,7 +77,7 @@ SETTINGS = [
                 "weapon_attack_power": 700,
             },
         ),
-        5887717338595,
+        5517050931371,
     ),
 ]
 

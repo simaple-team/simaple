@@ -29,6 +29,8 @@ class TriggableBuffSkillComponent(
     delay: float
     lasting_duration: float
 
+    apply_buff_duration: bool = True
+
     stat: Stat = Field(default_factory=Stat)
 
     def get_default_state(self):
@@ -40,7 +42,7 @@ class TriggableBuffSkillComponent(
 
     @reducer_method
     def use(self, _: None, state: TriggableBuffState):
-        return self.use_buff_trait(state)
+        return self.use_buff_trait(state, apply_buff_duration=self.apply_buff_duration)
 
     @reducer_method
     def elapse(
