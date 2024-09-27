@@ -1,13 +1,12 @@
 import copy
-from typing import Any
+from typing import Any, Union
 
 import pydantic
 
 from simaple.core import Stat
-from simaple.data.jobs.builtin import get_every_hyper_skills
 from simaple.data.jobs.definitions import PassiveHyperskillInterface
 from simaple.data.jobs.definitions.skill_improvement import SkillImprovement
-from simaple.spec.patch import Patch
+from simaple.spec.patch import DFSTraversePatch, Patch
 
 
 def _get_representative_skill_name(raw: dict[str, Any]) -> str:
@@ -35,21 +34,6 @@ class PassiveHyperskillPatch(Patch):
                 output = hyper_skill.modify(output)
 
         return output
-
-
-def get_hyper_skill_patch(
-    group: str,
-    skill_names: list[str] | None = None,
-    count=5,
-):
-    hyper_skills = get_every_hyper_skills(group)
-
-    if skill_names is None:
-        hyper_skills = hyper_skills[:count]
-    else:
-        hyper_skills = [sk for sk in hyper_skills if sk.get_name() in skill_names]
-
-    return PassiveHyperskillPatch(hyper_skills=hyper_skills)
 
 
 class VSkillImprovementPatch(Patch):
@@ -127,3 +111,40 @@ class SkillImprovementPatch(Patch):
             output = improvement.modify(output)
 
         return output
+
+
+class SkillLevelPatch(DFSTraversePatch):
+    combat_orders_level: int
+    passive_skill_level: int
+    skill_level_representation: str = "skill_level"
+    default_skill_levels: dict[str, int] = {}
+
+    def patch_value(self, value, origin: dict):
+        return self.translate(value, origin)
+
+    def patch_dict(self, k, v, origin: dict):
+        return {k: self.translate(v, origin)}
+
+    def translate(
+        self, maybe_representation: Union[int, str, float], origin: dict
+    ) -> Union[int, str, float]:
+        if not isinstance(maybe_representation, str):
+            return maybe_representation
+
+        output = maybe_representation.replace(
+            self.skill_level_representation, str(self.get_skill_level(origin))
+        )
+
+        return output
+
+    def get_skill_level(self, origin: dict):
+        if origin.get("name") and self.default_skill_levels.get(origin["name"]):
+            skill_level: int = self.default_skill_levels[origin["name"]]
+        else:
+            skill_level = origin.get("default_skill_level", 0)
+        if origin.get("passive_skill_enabled", False):
+            skill_level += self.passive_skill_level
+        if origin.get("combat_orders_enabled", False):
+            skill_level += self.combat_orders_level
+
+        return skill_level

@@ -4,10 +4,10 @@ from typing import Optional, cast
 from simaple.core import JobType
 from simaple.core.base import ExtendedStat
 from simaple.core.damage import DamageLogic
-from simaple.data.jobs.definitions import BuiltinStrategy, PassiveHyperskillInterface
+from simaple.data.jobs.definitions import BuiltinStrategy
 from simaple.data.jobs.definitions.passive import PassiveSkill
 from simaple.data.jobs.definitions.skill_profile import SkillProfile
-from simaple.data.patch import SkillLevelPatch
+from simaple.data.jobs.patch import SkillLevelPatch
 from simaple.spec.loader import SpecBasedLoader
 from simaple.spec.patch import ArithmeticPatch, Patch
 from simaple.spec.repository import DirectorySpecRepository
@@ -40,13 +40,6 @@ def get_skill_profile(jobtype: JobType) -> SkillProfile:
         loader.load(
             query={"group": jobtype.value, "kind": "SkillProfile"},
         ),
-    )
-
-
-def get_every_hyper_skills(group: str) -> list[PassiveHyperskillInterface]:
-    loader = get_kms_skill_loader()
-    return loader.load_all(
-        query={"group": group, "kind": "PassiveHyperskill"},
     )
 
 
