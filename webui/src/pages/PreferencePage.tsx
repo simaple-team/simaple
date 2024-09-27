@@ -16,17 +16,18 @@ export function PreferencePage() {
   const { preferences, setPreferences } = usePreference();
   const { register, control, getValues, watch } = useForm({
     defaultValues: {
-      startClock: preferences.startClock,
+      startClock: preferences.startClock / 1000,
       useDuration: preferences.duration !== null,
-      duration: preferences.duration,
+      duration:
+        preferences.duration === null ? null : preferences.duration / 1000,
     },
   });
 
   function handleSave() {
     const { startClock, useDuration, duration } = getValues();
     setPreferences({
-      startClock: Number(startClock),
-      duration: useDuration ? Number(duration) : null,
+      startClock: Number(startClock) * 1000,
+      duration: useDuration ? Number(duration) * 1000 : null,
     });
   }
 
@@ -37,24 +38,23 @@ export function PreferencePage() {
           <CardTitle>측정시간 설정</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-2 items-center">
-            <Controller
-              name="useDuration"
-              control={control}
-              render={({ field: { value, onChange } }) => (
-                <Checkbox
-                  id="useDuration"
-                  checked={value}
-                  onCheckedChange={onChange}
-                />
-              )}
-            />
-            <Label htmlFor="useDuration">측정 시간 사용</Label>
-          </div>
-
           <div className="flex flex-col gap-3">
             <div className="flex gap-2 items-center">
-              <Label htmlFor="startClock">시작 시각 (ms)</Label>
+              <Controller
+                name="useDuration"
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <Checkbox
+                    id="useDuration"
+                    checked={value}
+                    onCheckedChange={onChange}
+                  />
+                )}
+              />
+              <Label htmlFor="useDuration">측정 시간 사용</Label>
+            </div>
+            <div className="flex gap-2 items-center">
+              <Label htmlFor="startClock">시작 시각 (초)</Label>
               <Input
                 id="startClock"
                 className="w-32"
@@ -65,7 +65,7 @@ export function PreferencePage() {
 
             {watch("useDuration") && (
               <div className="flex gap-2 items-center">
-                <Label htmlFor="duration">측정 시간 (ms)</Label>
+                <Label htmlFor="duration">측정 시간 (초)</Label>
                 <Input
                   id="duration"
                   className="w-32"
