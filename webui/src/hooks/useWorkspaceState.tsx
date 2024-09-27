@@ -1,64 +1,71 @@
 import {
   BaselineEnvironmentProvider,
-  PlayLogResponse,
-  SkillComponent,
+  OperationLogResponse,
 } from "@/sdk/models";
 import { useLocalStorageValue } from "@react-hookz/web";
 import * as React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
+import { usePreference } from "./usePreference";
 import { usePySimaple } from "./useSimaple";
 
 type WorkspaceProviderProps = { children: React.ReactNode };
 
 function useWorkspaceState() {
   const { pySimaple } = usePySimaple();
+  const { preferences } = usePreference();
 
   const { value: storedWorkspace, set: setWorkspace } = useLocalStorageValue<{
     plan: string;
   }>("workspace");
 
-  const [plan, setPlan] = useState<string>(storedWorkspace?.plan ?? "");
-  const [history, setHistory] = useState<PlayLogResponse[]>([]);
-  const [skillComponents, setSkillComponents] = useState<SkillComponent[]>([]);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [plan, setPlan] = React.useState<string>(storedWorkspace?.plan ?? "");
+  const [operationLogs, setOperationLogs] = React.useState<
+    OperationLogResponse[]
+  >([]);
+  const [errorMessage, setErrorMessage] = React.useState("");
 
-  const playLog = history[history.length - 1];
-  const skillNames = useMemo(
-    () => (playLog ? Object.keys(playLog.validity_view) : []),
-    [playLog],
+  const unfilteredHistory = React.useMemo(
+    () =>
+      operationLogs
+        .flatMap((x) => x.logs)
+        .map((x) => ({
+          ...x,
+          clock: x.clock - preferences.startClock,
+        })),
+    [operationLogs, preferences.startClock],
+  );
+  const history = React.useMemo(
+    () =>
+      unfilteredHistory.filter(
+        (x) =>
+          x.clock >= 0 &&
+          (preferences.duration === null || x.clock <= preferences.duration),
+      ),
+    [unfilteredHistory, preferences],
+  );
+
+  const skillNames = React.useMemo(
+    () =>
+      unfilteredHistory[0]
+        ? Object.keys(unfilteredHistory[0].validity_view)
+        : [],
+    [unfilteredHistory],
   );
   const usedSkillNames = useMemo(
     () =>
       skillNames.filter((name) =>
-        history.some((log) =>
+        unfilteredHistory.some((log) =>
           log.events.find(
             (event) => event.name === name && event.method === "use",
           ),
         ),
       ),
-    [skillNames, history],
-  );
-
-  const skillComponentMap = useMemo(
-    () =>
-      skillComponents.reduce(
-        (acc, component) => {
-          acc[component.name] = component;
-          return acc;
-        },
-        {} as Record<string, SkillComponent>,
-      ),
-    [skillComponents],
+    [skillNames, unfilteredHistory],
   );
 
   useEffect(() => {
     setWorkspace({ plan });
   }, [plan, setWorkspace]);
-
-  useEffect(() => {
-    const components = pySimaple.getAllComponent();
-    setSkillComponents(components);
-  }, [pySimaple]);
 
   const run = React.useCallback(() => {
     const isEnvironmentProvided = pySimaple.hasEnvironment(plan);
@@ -76,7 +83,7 @@ function useWorkspaceState() {
       setErrorMessage(result.message);
       return;
     }
-    setHistory(result.data.flatMap((log) => log.logs));
+    setOperationLogs(result.data);
   }, [pySimaple, plan]);
 
   const runAsync = React.useCallback(() => {
@@ -96,14 +103,6 @@ function useWorkspaceState() {
     setErrorMessage("");
   }, []);
 
-  const getIconPath = React.useCallback(
-    (skillName: string) => {
-      const component = skillComponentMap[skillName];
-      return `/icons/${component?.id.split("-")[0]}.png`;
-    },
-    [skillComponentMap],
-  );
-
   const getInitialPlanFromBaseline = React.useCallback(
     (baseline: BaselineEnvironmentProvider) => {
       return pySimaple.getInitialPlanFromBaseline(baseline);
@@ -114,15 +113,14 @@ function useWorkspaceState() {
   return {
     plan,
     setPlan,
+    unfilteredHistory,
     history,
-    playLog,
     skillNames,
     usedSkillNames,
     errorMessage,
     clearErrorMessage,
     run,
     runAsync,
-    getIconPath,
     getInitialPlanFromBaseline,
   };
 }

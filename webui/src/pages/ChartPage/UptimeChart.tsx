@@ -1,3 +1,4 @@
+import { useWorkspace } from "@/hooks/useWorkspace";
 import { getColorFromIndex } from "@/lib/chart";
 import { secFormatter } from "@/lib/formatters.ts";
 import { PlayLogResponse } from "@/sdk/models";
@@ -14,16 +15,16 @@ import {
 import * as echarts from "echarts/core";
 import { SVGRenderer } from "echarts/renderers";
 import React, { useMemo } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../../components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import { Checkbox } from "./ui/checkbox";
-import { Label } from "./ui/label";
+} from "../../components/ui/card";
+import { Checkbox } from "../../components/ui/checkbox";
+import { Label } from "../../components/ui/label";
 
 echarts.use([
   TooltipComponent,
@@ -168,9 +169,8 @@ export function useChart(
   };
 }
 
-const UptimeChart: React.FC<{
-  logs: PlayLogResponse[];
-}> = ({ logs }) => {
+const UptimeChart: React.FC = () => {
+  const { history: logs, unfilteredHistory: unfilteredLogs } = useWorkspace();
   const runningView = logs[0]?.running_view;
   const skillNames = useMemo(
     () => (runningView ? Object.keys(runningView) : []),
@@ -179,19 +179,19 @@ const UptimeChart: React.FC<{
   const usedSkillNames = useMemo(
     () =>
       skillNames.filter((name) =>
-        logs.some((log) =>
+        unfilteredLogs.some((log) =>
           log.events.find(
             (event) => event.name === name && event.method === "use",
           ),
         ),
       ),
-    [skillNames, logs],
+    [skillNames, unfilteredLogs],
   );
   const [selectedSkillNames, setSelectedSkillNames] = React.useState<string[]>(
     [],
   );
 
-  const options = useChart(logs, selectedSkillNames);
+  const options = useChart(unfilteredLogs, selectedSkillNames);
 
   return (
     <Card>

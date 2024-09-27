@@ -1,7 +1,7 @@
-import { CumulativeDamageChart } from "@/components/CumulativeDamageChart";
-import { IntervalDamageChart } from "@/components/IntervalDamageChart";
-import { StackChart } from "@/components/StackChart";
-import UptimeChart from "@/components/UptimeChart";
+import { CumulativeDamageChart } from "@/pages/ChartPage/CumulativeDamageChart";
+import { IntervalDamageChart } from "@/pages/ChartPage/IntervalDamageChart";
+import { StackChart } from "@/pages/ChartPage/StackChart";
+import UptimeChart from "@/pages/ChartPage/UptimeChart";
 import { useWorkspace } from "@/hooks/useWorkspace";
 import * as React from "react";
 import { ErrorBoundary } from "react-error-boundary";
@@ -22,10 +22,10 @@ const ChartPage: React.FC = () => {
       <ErrorBoundary
         fallbackRender={({ error }) => <div>Error: {error.message}</div>}
       >
-        <CumulativeDamageChart logs={history} />
-        <IntervalDamageChart logs={history} />
-        <UptimeChart logs={history} />
-        <StackChart logs={history} />
+        <CumulativeDamageChart />
+        <IntervalDamageChart />
+        <UptimeChart />
+        <StackChart />
       </ErrorBoundary>
     </div>
   );

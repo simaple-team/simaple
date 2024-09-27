@@ -17,23 +17,19 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { PlayLogResponse } from "@/sdk/models";
-import { getIntervalDamage, getSkillNamesDamageDesc } from "@/lib/statistics";
-import { useMemo, useState } from "react";
-import { damageFormatter, secFormatter } from "@/lib/formatters";
-import { MAX_SUPPORTED_CHART_COLOR } from "@/lib/chart";
-import { Label } from "./ui/label";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-
-interface IntervalDamageChartProps {
-  logs: PlayLogResponse[];
-}
+} from "@/components/ui/select";
+import { useWorkspace } from "@/hooks/useWorkspace";
+import { MAX_SUPPORTED_CHART_COLOR } from "@/lib/chart";
+import { damageFormatter, secFormatter } from "@/lib/formatters";
+import { getIntervalDamage, getSkillNamesDamageDesc } from "@/lib/statistics";
+import { useMemo, useState } from "react";
 
 function grayscale(total: number, index: number): string {
   const grayscaleValue = Math.floor((index / total) * 255);
@@ -41,12 +37,13 @@ function grayscale(total: number, index: number): string {
   return `#${hexValue}${hexValue}${hexValue}`;
 }
 
-export function IntervalDamageChart({ logs }: IntervalDamageChartProps) {
+export function IntervalDamageChart() {
+  const { history: logs } = useWorkspace();
   const [interval, setInterval] = useState(10000);
   const skillNames = useMemo(() => getSkillNamesDamageDesc(logs), [logs]);
   const data = useMemo(
     () => getIntervalDamage(logs, interval),
-    [logs, skillNames, interval],
+    [logs, interval],
   );
 
   const chartConfig = Object.fromEntries(
