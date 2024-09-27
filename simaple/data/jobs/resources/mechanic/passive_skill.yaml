@@ -55,7 +55,7 @@ metadata:
 data:
   name: 오버 튜닝
   stat:
-    final_damage_multiplier: 39
+    final_damage_multiplier: 42
     critical_rate: 20
     ignored_defence: 30
 ---
@@ -69,4 +69,3 @@ data:
   name: 로봇 마스터리
   stat:
     damage_multiplier: 45
-

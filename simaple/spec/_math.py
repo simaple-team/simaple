@@ -23,6 +23,7 @@ __grammar = r"""
            | "floor(" expr ")" -> floor
            | "min(" expr "," expr ")" -> min
            | "max(" expr "," expr ")" -> max
+           | "apply_attack_speed(" expr ")" -> apply_attack_speed
            | VARIABLE -> variable
            | "-" factor    -> neg
            | "(" expr ")"
@@ -86,6 +87,9 @@ class CalcTransformer(Transformer):
 
     def lt(self, items):
         return items[0] < items[1]
+
+    def apply_attack_speed(self, items):
+        return 30 * math.ceil(items[0] * ((16 - 4) / 16) / 30)
 
 
 __arithmetic_parser = Lark(__grammar)

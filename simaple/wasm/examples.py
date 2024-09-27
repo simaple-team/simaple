@@ -9,7 +9,7 @@ def _get_example_files() -> dict[JobType, str]:
 
     example_plans = {}
     for file_name in example_plan_files:
-        with open(os.path.join(example_dir, file_name)) as f:
+        with open(os.path.join(example_dir, file_name), encoding="utf-8") as f:
             plan = f.read()
 
         example_plans[JobType(file_name.split(".")[0])] = plan

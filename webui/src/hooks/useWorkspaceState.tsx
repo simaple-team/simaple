@@ -5,6 +5,7 @@ import {
 } from "@/sdk/models";
 import { useLocalStorageValue } from "@react-hookz/web";
 import * as React from "react";
+import { useEffect, useMemo, useState } from "react";
 import { usePySimaple } from "./useSimaple";
 import { usePreference } from "./usePreference";
 
@@ -52,8 +53,19 @@ function useWorkspaceState() {
       ),
     [unfilteredHistory, preferences],
   );
+  const usedSkillNames = useMemo(
+    () =>
+      skillNames.filter((name) =>
+        history.some((log) =>
+          log.events.find(
+            (event) => event.name === name && event.method === "use",
+          ),
+        ),
+      ),
+    [skillNames, history],
+  );
 
-  const skillComponentMap = React.useMemo(
+  const skillComponentMap = useMemo(
     () =>
       skillComponents.reduce(
         (acc, component) => {
@@ -65,11 +77,11 @@ function useWorkspaceState() {
     [skillComponents],
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     setWorkspace({ plan });
   }, [plan, setWorkspace]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const components = pySimaple.getAllComponent();
     setSkillComponents(components);
   }, [pySimaple]);
@@ -130,7 +142,9 @@ function useWorkspaceState() {
     setPlan,
     unfilteredHistory,
     history,
+    playLog,
     skillNames,
+    usedSkillNames,
     errorMessage,
     clearErrorMessage,
     run,

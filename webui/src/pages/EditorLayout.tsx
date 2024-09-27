@@ -20,6 +20,18 @@ const Tab = ({ to, children }: { to: string; children: React.ReactNode }) => {
   );
 };
 
+export function EditorNav() {
+  return (
+    <div className="h-12 border-b border-border/40 bg-background shrink-0">
+      <div className="flex h-full gap-4 px-4">
+        <Tab to="/editor/summary">전투분석</Tab>
+        <Tab to="/editor/log">로그</Tab>
+        <Tab to="/editor/chart">차트</Tab>
+      </div>
+    </div>
+  );
+}
+
 export function EditorLayout() {
   const { isLoaded } = usePySimapleBeforeLoad();
 
@@ -35,14 +47,7 @@ export function EditorLayout() {
           <div className="flex h-[calc(100vh-4rem)]">
             <Editor />
             <div className="flex grow flex-col">
-              <div className="h-12 border-b border-border/40 bg-background shrink-0">
-                <div className="flex h-full gap-4 px-4">
-                  <Tab to="/editor/summary">전투분석</Tab>
-                  <Tab to="/editor/log">로그</Tab>
-                  <Tab to="/editor/chart">차트</Tab>
-                  <Tab to="/editor/preference">설정</Tab>
-                </div>
-              </div>
+              <EditorNav />
               <Outlet />
             </div>
           </div>

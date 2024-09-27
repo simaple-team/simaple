@@ -34,6 +34,26 @@ from simaple.spec._math import evaluate_expression
             {"character_stat.INT": 30000, "skill_level": 10},
             4,
         ),
+        (
+            "apply_attack_speed(180)",
+            {},
+            150,
+        ),
+        (
+            "apply_attack_speed(240)",
+            {},
+            180,
+        ),
+        (
+            "apply_attack_speed(600)",
+            {},
+            450,
+        ),
+        (
+            "apply_attack_speed(620)",
+            {},
+            480,
+        ),
     ],
 )
 def test_math_expr(arithmetic_expr, variables, expected):

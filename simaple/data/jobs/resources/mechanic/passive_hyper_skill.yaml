@@ -35,15 +35,16 @@ data:
     damage_multiplier: 10
 ---
 kind: PassiveHyperskill
-version: simaple.io/MultiplierPassiveHyperskill
+version: simaple.io/StatIncreasePassiveHyperskill
 metadata:
   label:
     group: mechanic
 data:
-  name: 마그네틱 필드 - 쿨타임 리듀스
+  name: 마그네틱 필드 - 이그노어 가드
   target: 마그네틱 필드
-  key: cooldown_duration
-  multiplier: 0.75
+  key: modifier
+  increment:
+    ignored_defence: 20
 ---
 kind: PassiveHyperskill
 version: simaple.io/StatIncreasePassiveHyperskill
@@ -55,4 +56,4 @@ data:
   target: "서포트 웨이버: H-EX"
   key: stat
   increment:
-    final_damage_multiplier: 4
+    final_damage_multiplier: 2

@@ -1,3 +1,4 @@
+import { SkillIcon } from "@/components/SkillIcon";
 import {
   Select,
   SelectContent,
@@ -23,7 +24,7 @@ import { getBattleStatistics } from "@/lib/statistics";
 import { useMemo, useState } from "react";
 
 export function SummaryPage() {
-  const { history, getIconPath } = useWorkspace();
+  const { history } = useWorkspace();
   const [sortBy, setSortBy] = useState("totalDamage");
   const [order, setOrder] = useState("desc");
 
@@ -92,7 +93,9 @@ export function SummaryPage() {
               className={index % 2 === 0 ? "bg-gray-100" : ""}
             >
               <TableCell>
-                <img src={getIconPath(stats.name)} /> {stats.name}
+                <div className="flex items-center gap-2">
+                  <SkillIcon name={stats.name} /> {stats.name}
+                </div>
               </TableCell>
               <TableCell>{damageFormatter(stats.totalDamage)}</TableCell>
               <TableCell>{percentageFormatter(stats.damageShare)}</TableCell>

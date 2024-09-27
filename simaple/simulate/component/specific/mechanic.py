@@ -26,7 +26,6 @@ from simaple.simulate.global_property import Dynamics
 class RobotMastery(Entity):
     summon_increment: float
     robot_damage_increment: float
-    robot_buff_damage_multiplier: float
 
     def get_summon_multiplier(self) -> float:
         return 1 + self.summon_increment / 100
@@ -34,21 +33,16 @@ class RobotMastery(Entity):
     def get_robot_modifier(self) -> Stat:
         return Stat(final_damage_multiplier=self.robot_damage_increment)
 
-    def get_robot_buff(self) -> Stat:
-        return Stat(damage_multiplier=self.robot_buff_damage_multiplier)
-
 
 class RobotMasteryComponent(Component):
     summon_increment: float
     robot_damage_increment: float
-    robot_buff_damage_multiplier: float
 
     def get_default_state(self):
         return {
             "robot_mastery": RobotMastery(
                 summon_increment=self.summon_increment,
                 robot_damage_increment=self.robot_damage_increment,
-                robot_buff_damage_multiplier=self.robot_buff_damage_multiplier,
             )
         }
 
@@ -81,6 +75,13 @@ class RobotSetupBuff(SkillComponent, BuffTrait, CooldownValidityTrait):
     ):
         return self.use_buff_trait(state)
 
+    @view_method
+    def buff(self, state: RobotSetupBuffState) -> Optional[Stat]:
+        if state.lasting.enabled():
+            return self.stat
+
+        return None
+
     @reducer_method
     def elapse(self, time: float, state: RobotSetupBuffState):
         return self.elapse_buff_trait(time, state)
@@ -88,13 +89,6 @@ class RobotSetupBuff(SkillComponent, BuffTrait, CooldownValidityTrait):
     @view_method
     def validity(self, state: RobotSetupBuffState):
         return self.validity_in_cooldown_trait(state)
-
-    @view_method
-    def buff(self, state: RobotSetupBuffState) -> Optional[Stat]:
-        if state.lasting.enabled():
-            return self.stat + state.robot_mastery.get_robot_buff()
-
-        return None
 
     @view_method
     def running(self, state: RobotSetupBuffState) -> Running:
@@ -136,13 +130,6 @@ class RobotSummonSkill(
             "cooldown": Cooldown(time_left=0),
             "periodic": Periodic(interval=self.periodic_interval, time_left=0),
         }
-
-    @view_method
-    def buff(self, state: RobotSummonState):
-        if not state.periodic.enabled():
-            return None
-
-        return state.robot_mastery.get_robot_buff()
 
     @reducer_method
     def elapse(self, time: float, state: RobotSummonState):
@@ -211,6 +198,8 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
     periodic_hit: float
     lasting_duration: float
 
+    final_damage_multiplier_during_barrage: float
+
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
@@ -234,7 +223,15 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
 
         return state, [self.event_provider.elapsed(time)] + [
             self.event_provider.dealt(
-                self.periodic_damage, self.get_homming_missile_hit(state)
+                self.periodic_damage,
+                self.get_homming_missile_hit(state),
+                (
+                    Stat(
+                        final_damage_multiplier=self.final_damage_multiplier_during_barrage
+                    )
+                    if state.full_barrage_keydown.running
+                    else None
+                ),
             )
             for _ in range(lapse_count)
         ]
@@ -295,7 +292,7 @@ class FullMetalBarrageComponent(
     keydown_end_delay: float
 
     homing_penalty_duration: float
-    final_damage_multiplier_during_keydown: float
+    homing_final_damage_multiplier: float
 
     def get_default_state(self):
         return {
@@ -330,15 +327,6 @@ class FullMetalBarrageComponent(
             state.penalty_lasting.set_time_left(self.homing_penalty_duration)
 
         return state, event
-
-    @view_method
-    def buff(self, state: FullMetalBarrageState):
-        if state.keydown.running:
-            return Stat(
-                final_damage_multiplier=self.final_damage_multiplier_during_keydown
-            )
-
-        return None
 
     @view_method
     def validity(self, state: FullMetalBarrageState):
@@ -437,13 +425,6 @@ class MultipleOptionComponent(SkillComponent, CooldownValidityTrait):
         return state, [
             self.event_provider.delayed(self.delay),
         ]
-
-    @view_method
-    def buff(self, state: MultipleOptionState):
-        if not state.periodic.enabled():
-            return None
-
-        return state.robot_mastery.get_robot_buff()
 
     @view_method
     def validity(self, state: MultipleOptionState):
@@ -571,13 +552,6 @@ class MecaCarrier(SkillComponent, CooldownValidityTrait):
         return state, [
             self.event_provider.delayed(self.delay),
         ]
-
-    @view_method
-    def buff(self, state: MecaCarrierState):
-        if not state.periodic.enabled():
-            return None
-
-        return state.robot_mastery.get_robot_buff()
 
     @view_method
     def validity(self, state: MecaCarrierState):

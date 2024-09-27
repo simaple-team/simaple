@@ -9,6 +9,7 @@ from simaple.core import ActionStat, ExtendedStat, JobType, Stat
 from simaple.data import get_best_ability
 from simaple.data.baseline import get_baseline_gearset
 from simaple.data.doping import get_normal_doping
+from simaple.data.jobs import get_skill_profile
 from simaple.data.jobs.builtin import get_damage_logic, get_passive
 from simaple.optimizer.preset import PresetOptimizer
 from simaple.system.ability import get_ability_stat
@@ -26,6 +27,61 @@ def _is_buff_duration_preemptive(jobtype: JobType) -> bool:
 
 def add_extended_stats(*action_stats):
     return sum(action_stats, ExtendedStat())
+
+
+def _compute_skill_levels(
+    hexa_mastery_skill_levels: dict[str, int],
+    hexa_skill_levels: dict[str, int],
+    jobtype: JobType,
+    default_v_skill_level: int,
+    default_hexa_skill_level: int,
+    default_hexa_mastery_level: int,
+):
+    skill_profile = get_skill_profile(jobtype)
+    default_skill_levels = skill_profile.get_skill_levels(
+        default_v_skill_level,
+        default_hexa_skill_level,
+        default_hexa_mastery_level,
+    )
+
+    for hexa_skill_name in hexa_skill_levels:
+        assert (
+            hexa_skill_name in default_skill_levels
+        ), f"Given explicit skill name \
+passed to level: {hexa_skill_name} is not in {default_skill_levels}"
+    for hexa_mastery_skill_name in hexa_mastery_skill_levels:
+        assert (
+            hexa_mastery_skill_name in default_skill_levels
+        ), f"Given explicit skill name\
+passed to level: {hexa_mastery_skill_name} is not in {default_skill_levels}"
+
+    skill_levels = default_skill_levels.copy()
+    skill_levels.update(hexa_mastery_skill_levels)
+    skill_levels.update(hexa_skill_levels)
+
+    return skill_levels
+
+
+def _compute_hexa_improvement_levels(
+    hexa_improvements_levels: dict[str, int],
+    jobtype: JobType,
+    default_hexa_improvements_level: int,
+):
+    skill_profile = get_skill_profile(jobtype)
+    default_hexa_improvement_levels = skill_profile.get_filled_hexa_improvements(
+        default_hexa_improvements_level,
+    )
+
+    for hexa_improvement_name in hexa_improvements_levels:
+        assert (
+            hexa_improvement_name in default_hexa_improvement_levels
+        ), f"Given explicit \
+improvement name passed to level: {hexa_improvement_name} is not in {default_hexa_improvement_levels}"
+
+    hexa_improvements = default_hexa_improvement_levels.copy()
+    hexa_improvements.update(hexa_improvements_levels)
+
+    return hexa_improvements
 
 
 class MemoizableEnvironment(pydantic.BaseModel):
@@ -104,6 +160,10 @@ class MinimalEnvironmentProvider(MemoizableEnvironmentProvider):
     v_improvements_level: int = 60
     hexa_improvements_level: int = 0
 
+    hexa_mastery_skill_levels: dict[str, int] = {}
+    hexa_skill_levels: dict[str, int] = {}
+    hexa_improvement_levels: dict[str, int] = {}
+
     weapon_attack_power: int = 0
 
     def character(self) -> FinalCharacterStat:
@@ -115,20 +175,35 @@ class MinimalEnvironmentProvider(MemoizableEnvironmentProvider):
     def get_memoization_independent_environment(
         self,
     ) -> dict[str, Any]:
-        return self.model_dump(
+        configuration_without_skill_levels = self.model_dump(
             include={
                 "use_doping",
                 "armor",
                 "mob_level",
                 "force_advantage",
                 "v_skill_level",
-                "hexa_skill_level",
-                "hexa_mastery_level",
                 "v_improvements_level",
-                "hexa_improvements_level",
                 "weapon_attack_power",
             }
         )
+
+        configuration_without_skill_levels["skill_levels"] = _compute_skill_levels(
+            self.hexa_mastery_skill_levels,
+            self.hexa_skill_levels,
+            self.jobtype,
+            self.v_skill_level,
+            self.hexa_skill_level,
+            self.hexa_mastery_level,
+        )
+
+        configuration_without_skill_levels["hexa_improvement_levels"] = (
+            _compute_hexa_improvement_levels(
+                self.hexa_improvement_levels,
+                self.jobtype,
+                self.hexa_improvements_level,
+            )
+        )
+        return configuration_without_skill_levels
 
     def get_memoizable_environment(
         self,
@@ -193,25 +268,44 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
     v_improvements_level: int = 60
     hexa_improvements_level: int = 0
 
+    hexa_mastery_skill_levels: dict[str, int] = {}
+    hexa_skill_levels: dict[str, int] = {}
+    hexa_improvement_levels: dict[str, int] = {}
+
     weapon_attack_power: int = 0
 
     def get_memoization_independent_environment(
         self,
     ) -> dict[str, Any]:
-        return self.model_dump(
+        configuration_without_skill_levels = self.model_dump(
             include={
                 "use_doping",
                 "armor",
                 "mob_level",
                 "force_advantage",
                 "v_skill_level",
-                "hexa_skill_level",
-                "hexa_mastery_level",
                 "v_improvements_level",
-                "hexa_improvements_level",
                 "weapon_attack_power",
             }
         )
+
+        configuration_without_skill_levels["skill_levels"] = _compute_skill_levels(
+            self.hexa_mastery_skill_levels,
+            self.hexa_skill_levels,
+            self.jobtype,
+            self.v_skill_level,
+            self.hexa_skill_level,
+            self.hexa_mastery_level,
+        )
+
+        configuration_without_skill_levels["hexa_improvement_levels"] = (
+            _compute_hexa_improvement_levels(
+                self.hexa_improvement_levels,
+                self.jobtype,
+                self.hexa_improvements_level,
+            )
+        )
+        return configuration_without_skill_levels
 
     def get_memoization_key(self) -> str:
         return json.dumps(

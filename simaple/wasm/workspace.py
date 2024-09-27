@@ -12,6 +12,7 @@ from simaple.simulate.report.dpm import DamageCalculator
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 from simaple.wasm.base import (
     pyodide_reveal_base_model,
+    pyodide_reveal_base_model_list,
     return_js_object_from_pydantic_list,
     return_js_object_from_pydantic_object,
     wrap_response_by_handling_exception,
@@ -30,9 +31,8 @@ def _extract_engine_history_as_response(
     damage_calculator: DamageCalculator,
 ) -> list[OperationLogResponse]:
     responses: list[OperationLogResponse] = []
-    history = engine.history()
 
-    for idx, operation_log in enumerate(history):
+    for idx, operation_log in enumerate(engine.operation_logs()):
         playlog_responses = []
 
         for playlog in operation_log.playlogs:
@@ -129,7 +129,9 @@ def provideEnvironmentAugmentedPlan(plan: str) -> str:
     )
 
     augmented_metadata = yaml.safe_dump(
-        json.loads(metadata.model_dump_json()), indent=2
+        json.loads(metadata.model_dump_json()),
+        indent=2,
+        allow_unicode=True,
     )
     return f"---\n{augmented_metadata}\n---\n{original_operations}"
 
@@ -194,6 +196,68 @@ def getInitialPlanFromBaseline(
     )
 
     augmented_metadata = yaml.safe_dump(
-        json.loads(metadata.model_dump_json()), indent=2
+        json.loads(metadata.model_dump_json()), indent=2, allow_unicode=True
     )
     return f"---\n{augmented_metadata}\n---\n{original_operations}"
+
+
+@wrap_response_by_handling_exception
+@return_js_object_from_pydantic_list
+def runPlanWithHint(
+    previous_plan: str, previous_history: list[OperationLogResponse], plan: str
+) -> list[OperationLogResponse]:
+    previous_history = pyodide_reveal_base_model_list(
+        previous_history, OperationLogResponse
+    )
+    previous_plan_metadata_dict, previous_commands = parse_simaple_runtime(
+        previous_plan.strip()
+    )
+    plan_metadata_dict, commands = parse_simaple_runtime(plan.strip())
+    plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
+
+    simulation_container = plan_metadata.load_container()
+
+    engine = simulation_container.operation_engine()
+
+    if plan_metadata_dict != previous_plan_metadata_dict:
+        for command in commands:
+            engine.exec(command)
+
+        return _extract_engine_history_as_response(
+            engine, simulation_container.damage_calculator()
+        )
+
+    # Since first operation in history is always "init", we skip this for retrieval;
+    history_for_matching = previous_history[1:]
+
+    cache_count: int = 0
+
+    for idx, command in enumerate(commands):
+        if len(previous_commands) <= idx or len(history_for_matching) <= idx:
+            break
+
+        previous_command = previous_commands[idx]
+        previous_operation_log = history_for_matching[idx]
+        if previous_command != previous_operation_log.command:
+            break
+
+        if command == previous_command:
+            cache_count += 1
+            continue
+        break
+
+    engine.reload(
+        [
+            operation_log_response.restore_operation_log()
+            for operation_log_response in previous_history[: cache_count + 1]
+        ]
+    )
+
+    for command in commands[cache_count:]:
+        engine.exec(command)
+
+    new_operation_logs = _extract_engine_history_as_response(
+        engine, simulation_container.damage_calculator()
+    )
+
+    return new_operation_logs

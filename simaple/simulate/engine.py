@@ -1,4 +1,4 @@
-from typing import Any, Callable, Generator, Protocol, runtime_checkable
+from typing import Callable, Generator, Protocol, runtime_checkable
 
 from simaple.simulate.base import (
     AddressedStore,
@@ -31,21 +31,17 @@ class OperationEngine(Protocol):
 
     def operation_logs(self) -> Generator[OperationLog, None, None]: ...
 
-    def history(self) -> SimulationHistory: ...
-
     def get_simulation_entry(self, playlog: PlayLog) -> SimulationEntry: ...
 
     def rollback(self, idx: int): ...
 
-    def load_history(self, saved_history: dict[str, Any]) -> None: ...
-
     def simulation_entries(self) -> Generator[SimulationEntry, None, None]: ...
-
-    def save_history(self) -> dict[str, Any]: ...
 
     def get_viewer(self, playlog: PlayLog) -> ViewerType: ...
 
     def exec(self, command: Command) -> OperationLog: ...
+
+    def reload(self, previous_operation_logs: list[OperationLog]) -> None: ...
 
 
 class BasicOperationEngine:
@@ -69,22 +65,12 @@ class BasicOperationEngine:
         self._history = SimulationHistory(store)
         self._callbacks: list[PostActionCallback] = []
 
-    def save_history(self) -> dict[str, Any]:
-        return self._history.save()
-
     def operation_logs(self) -> Generator[OperationLog, None, None]:
         for operation_log in self._history:
             yield operation_log
 
-    def history(self) -> SimulationHistory:
-        """This returns "Shallow Copy" of SimulationHistory.
-        Be cautious not to modify the returned SimulationHistory.
-        Use this only for read.
-        """
-        return self._history.shallow_copy()
-
-    def load_history(self, saved_history: dict[str, Any]) -> None:
-        self._history.load(saved_history)
+    def reload(self, previous_operation_logs: list[OperationLog]) -> None:
+        self._history = SimulationHistory(logs=previous_operation_logs)
 
     def exec(self, command: Command) -> OperationLog:
         match command:

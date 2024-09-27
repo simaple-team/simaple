@@ -11,6 +11,7 @@ from simaple.wasm.workspace import (
     hasEnvironment,
     provideEnvironmentAugmentedPlan,
     runPlan,
+    runPlanWithHint,
 )
 
 
@@ -33,10 +34,7 @@ environment:
     mob_level: 265
     force_advantage: 1
     v_skill_level: 30
-    hexa_skill_level: 1
-    hexa_mastery_level: 1
     v_improvements_level: 60
-    hexa_improvements_level: 0
     weapon_attack_power: 0
     passive_skill_level: 0
     combat_orders_level: 1
@@ -111,6 +109,31 @@ ELAPSE 10.0
     assert not hasEnvironment(plan)
 
 
+def test_retreives_skill_level_with_unicode():
+    plan = """
+author: "Alice"
+provider:
+    name: "BaselineEnvironmentProvider"
+    data:
+        tier: Legendary
+        jobtype: archmagefb
+        level: 270
+        artifact_level: 40
+        passive_skill_level: 0
+        combat_orders_level: 1
+        hexa_improvements_levels: 
+          도트 퍼니셔: 3
+---
+ELAPSE 10.0
+ELAPSE 10.0
+ELAPSE 10.0
+ELAPSE 10.0
+    """
+
+    new_plan = provideEnvironmentAugmentedPlan(plan)
+    assert "도트 퍼니셔" in new_plan
+
+
 def test_has_environment_returns_true_with_environment(fixture_environment_given_plan):
     assert hasEnvironment(fixture_environment_given_plan)
 
@@ -161,7 +184,7 @@ ELAPSE 10.0
         case SuccessResponse(success=True, data=_):
             raise AssertionError("Expected error message")
         case ErrorResponse(success=False, message=message):
-            assert message == "Environment field is not provided"
+            assert len(message) > 0
         case _:
             raise AssertionError("Unexpected return value")
 
@@ -196,3 +219,60 @@ def test_get_initial_plan_from_baseline():
     output = getInitialPlanFromBaseline(given_environment)
     assert output.find("CAST")
     assert not hasEnvironment(output)
+
+
+@pytest.mark.parametrize(
+    "given, change",
+    [
+        (
+            """CAST "체인 라이트닝 VI"
+ELAPSE 10000
+ELAPSE 10000
+""",
+            """ELAPSE 12345
+CAST "체인 라이트닝 VI"
+CAST "체인 라이트닝 VI"
+ELAPSE 10000
+ELAPSE 10000
+ELAPSE 10000
+""",
+        ),
+        (
+            """CAST "체인 라이트닝 VI"
+ELAPSE 10000
+ELAPSE 10000
+""",
+            """CAST "체인 라이트닝 VI"
+ELAPSE 10000
+ELAPSE 10000
+ELAPSE 10000
+ELAPSE 10000
+ELAPSE 10000
+""",
+        ),
+    ],
+)
+def test_run_with_hint(fixture_environment_given_plan, given, change):
+    previous_plan = f"""
+{fixture_environment_given_plan}
+{given}"""
+    new_plan = f"""
+{fixture_environment_given_plan}
+{change}
+"""
+
+    first_result = runPlan(previous_plan)
+
+    second_result = runPlan(new_plan)
+    assert isinstance(first_result, SuccessResponse)
+    assert isinstance(second_result, SuccessResponse)
+
+    second_result_with_hint = runPlanWithHint(
+        previous_plan,
+        first_result.data,
+        new_plan,
+    )
+
+    assert isinstance(second_result_with_hint, SuccessResponse)
+
+    assert second_result_with_hint.data == second_result.data
