@@ -232,9 +232,7 @@ patch:
 data:
   id: 35101002-0
   name: "호밍 미사일" # 어드밴스드 호밍 미사일 데이터 적용중
-  damage: 0
   delay: 0
-  hit: 0
   cooldown_duration: 0
 
   periodic_interval: 540
@@ -467,9 +465,7 @@ data:
   id: 35141003-0
   name: "호밍 미사일 VI"
   representative_name: "호밍 미사일"
-  damage: 0
   delay: 0
-  hit: 0
   cooldown_duration: 0
 
   periodic_interval: 540
