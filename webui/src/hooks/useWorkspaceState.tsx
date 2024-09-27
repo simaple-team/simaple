@@ -61,22 +61,26 @@ function useWorkspaceState() {
   }, [pySimaple]);
 
   const run = React.useCallback(() => {
-    const isEnvironmentProvided = pySimaple.hasEnvironment(plan);
-    const planToRun = isEnvironmentProvided
-      ? plan
-      : pySimaple.provideEnvironmentAugmentedPlan(plan);
+    try {
+      const isEnvironmentProvided = pySimaple.hasEnvironment(plan);
+      const planToRun = isEnvironmentProvided
+        ? plan
+        : pySimaple.provideEnvironmentAugmentedPlan(plan);
 
-    if (!isEnvironmentProvided) {
-      setPlan(planToRun);
+      if (!isEnvironmentProvided) {
+        setPlan(planToRun);
+      }
+
+      const result = pySimaple.runPlan(planToRun);
+
+      if (!result.success) {
+        setErrorMessage(result.message);
+        return;
+      }
+      setHistory(result.data.flatMap((log) => log.logs));
+    } catch (error: any) {
+      setErrorMessage(error.message);
     }
-
-    const result = pySimaple.runPlan(planToRun);
-
-    if (!result.success) {
-      setErrorMessage(result.message);
-      return;
-    }
-    setHistory(result.data.flatMap((log) => log.logs));
   }, [pySimaple, plan]);
 
   const runAsync = React.useCallback(() => {
