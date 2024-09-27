@@ -1,5 +1,6 @@
-from simaple.core import StatProps
+from simaple.core import ExtendedStat, StatProps
 from simaple.data.system.hyperstat import get_kms_hyperstat
+from simaple.request.adapter.ability import get_ability_stat
 from simaple.request.adapter.hyperstat import get_hyperstat
 from simaple.request.adapter.propensity import get_propensity
 from simaple.request.adapter.union import get_union_squad, get_union_squad_effect
@@ -44,3 +45,28 @@ def test_union_raiders_response(character_union_raiders_response):
     squad_effect = get_union_squad_effect(character_union_raiders_response)
 
     assert union_squad.get_stat().short_dict() == squad_effect.stat.short_dict()
+
+
+def test_ability_response(character_ability_response):
+    ability = get_ability_stat(character_ability_response)
+
+    assert ability == ExtendedStat.model_validate(
+        {
+            "stat": {
+                "critical_rate": 20,
+                "boss_damage_multiplier": 8,
+            },
+            "action_stat": {"buff_duration": 50},
+        }
+    )
+
+
+def test_noisy_ability_response(character_ability_response_2):
+    ability = get_ability_stat(character_ability_response_2)
+
+    assert ability == ExtendedStat.model_validate(
+        {
+            "stat": {"LUK_static": 9, "INT_static": 36},
+            "action_stat": {"buff_duration": 45},
+        }
+    )

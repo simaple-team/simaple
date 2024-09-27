@@ -5,6 +5,7 @@ from typing import Any, cast
 import pytest
 
 from simaple.request.schema.character import (
+    CharacterAbility,
     CharacterHyperStat,
     CharacterPropensity,
     CharacterUnionRaider,
@@ -43,3 +44,13 @@ def character_union_raiders_response() -> CharacterUnionRaider:
     return cast(
         CharacterUnionRaider, _macro_get_response("character_union_raiders.json")
     )
+
+
+@pytest.fixture
+def character_ability_response() -> CharacterAbility:
+    return cast(CharacterAbility, _macro_get_response("character_ability.json"))
+
+
+@pytest.fixture
+def character_ability_response_2() -> CharacterAbility:
+    return cast(CharacterAbility, _macro_get_response("character_ability_2.json"))

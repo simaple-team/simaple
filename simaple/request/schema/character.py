@@ -82,3 +82,16 @@ class CharacterUnionRaider(TypedDict):
     union_occupied_stat: list[str]
     union_block: list[CharacterUnionRaiderBlock]
     union_inner_stat: list[UnionInnerStatRow]
+
+
+class _CharacterAbilityLine(TypedDict):
+    ability_grade: str
+    ability_value: str
+
+
+class CharacterAbility(TypedDict):
+    date: str
+    ability_grade: str
+    ability_info: list[_CharacterAbilityLine]
+    remain_fame: float
+    preset_no: int

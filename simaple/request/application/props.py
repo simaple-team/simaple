@@ -95,3 +95,27 @@ async def get_character_union_raiders(
             for raw in resp["union_inner_stat"]
         ],
     }
+
+
+def _as_character_ability_line(raw: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "ability_grade": raw["ability_grade"],
+        "ability_value": raw["ability_value"],
+    }
+
+
+async def get_ability(
+    token: Token,
+    character_id: CharacterID,
+):
+    uri = f"{HOST}/maplestory/v1/character/ability"
+    resp = await token.request(uri, get_character_id_param(character_id))
+    return {
+        "date": resp["date"],
+        "ability_grade": resp["ability_grade"],
+        "ability_info": [
+            _as_character_ability_line(raw) for raw in resp["ability_info"]
+        ],
+        "remain_fame": float(resp["remain_fame"]),
+        "preset_no": int(resp["preset_no"]),
+    }
