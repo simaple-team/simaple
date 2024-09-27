@@ -5,7 +5,6 @@ metadata:
     group: soulmaster
 data:
   normal_default_order:
-    - 메이플 용사
     - "솔루나 타임"
     - "엘리멘트: 소울"
     - "트루 사이트"
@@ -17,4 +16,3 @@ data:
     - "엘리시온"
     - "크로스 더 스틱스"
     - "솔라 슬래시/루나 디바이드"
-

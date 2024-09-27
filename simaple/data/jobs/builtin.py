@@ -1,5 +1,6 @@
+import itertools
 from pathlib import Path
-from typing import Optional, cast
+from typing import Iterable, Optional, cast
 
 from simaple.core import JobType
 from simaple.core.base import ExtendedStat
@@ -88,6 +89,7 @@ def get_passive(
     character_level: int,
     weapon_pure_attack_power: Optional[int] = None,
 ) -> ExtendedStat:
+    skill_profile = get_skill_profile(jobtype)
     loader = get_kms_skill_loader()
     patches = _get_patches(
         combat_orders_level,
@@ -95,8 +97,13 @@ def get_passive(
         character_level,
         weapon_pure_attack_power=weapon_pure_attack_power,
     )
-    passive_skills: list[PassiveSkill] = loader.load_all(
-        query={"group": jobtype.value, "kind": "PassiveSkill"}, patches=patches
+    passive_skills: Iterable[PassiveSkill] = itertools.chain(
+        *[
+            loader.load_all(
+                query={"group": group, "kind": "PassiveSkill"}, patches=patches
+            )
+            for group in skill_profile.get_groups()
+        ]
     )
 
     return sum(
