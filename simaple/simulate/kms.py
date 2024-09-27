@@ -6,11 +6,11 @@ from simaple.core.base import ActionStat, Stat
 from simaple.data.jobs.builtin import get_kms_skill_loader
 from simaple.data.jobs.patch import (
     HexaSkillImprovementPatch,
+    PassiveHyperskillPatch,
     SkillImprovementPatch,
+    SkillLevelPatch,
     VSkillImprovementPatch,
-    get_hyper_skill_patch,
 )
-from simaple.data.patch import SkillLevelPatch
 from simaple.simulate.base import AddressedStore, ConcreteStore
 from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.component.base import Component
@@ -135,7 +135,11 @@ def get_builder(
                 ArithmeticPatch(variables=reference_variables),
                 VSkillImprovementPatch(improvements=v_improvements),
                 HexaSkillImprovementPatch(improvements=hexa_improvements),
-                get_hyper_skill_patch(group),
+                PassiveHyperskillPatch(
+                    hyper_skills=loader.load_all(
+                        query={"group": group, "kind": "PassiveHyperskill"},
+                    )
+                ),
                 SkillImprovementPatch(improvements=skill_improvements),
             ],
         )
