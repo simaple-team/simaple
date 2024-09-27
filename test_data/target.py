@@ -36,7 +36,7 @@ SETTINGS = [
     ),
     (
         (JobType.bishop,),
-        9251885099074,
+        9119066916746,
     ),
     (
         (JobType.mechanic,),
