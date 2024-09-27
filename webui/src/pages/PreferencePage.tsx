@@ -37,6 +37,21 @@ export function PreferencePage() {
           <CardTitle>측정시간 설정</CardTitle>
         </CardHeader>
         <CardContent>
+          <div className="flex gap-2 items-center">
+            <Controller
+              name="useDuration"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <Checkbox
+                  id="useDuration"
+                  checked={value}
+                  onCheckedChange={onChange}
+                />
+              )}
+            />
+            <Label htmlFor="useDuration">측정 시간 사용</Label>
+          </div>
+
           <div className="flex flex-col gap-3">
             <div className="flex gap-2 items-center">
               <Label htmlFor="startClock">시작 시각 (ms)</Label>
@@ -46,21 +61,6 @@ export function PreferencePage() {
                 type="number"
                 {...register("startClock")}
               />
-            </div>
-
-            <div className="flex gap-2 items-center">
-              <Controller
-                name="useDuration"
-                control={control}
-                render={({ field: { value, onChange } }) => (
-                  <Checkbox
-                    id="useDuration"
-                    checked={value}
-                    onCheckedChange={onChange}
-                  />
-                )}
-              />
-              <Label htmlFor="useDuration">측정 시간 사용</Label>
             </div>
 
             {watch("useDuration") && (

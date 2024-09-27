@@ -1,4 +1,4 @@
-import { useWorkspace } from "@/hooks/useWorkspace";
+import { useSkillData } from "@/hooks/useSkillData";
 
 interface SkillIconProps {
   name: string;
@@ -7,7 +7,7 @@ interface SkillIconProps {
 export function SkillIcon(props: SkillIconProps) {
   const { name } = props;
 
-  const { getIconPath } = useWorkspace();
+  const { getIconPath } = useSkillData();
 
   return (
     <div className="inline-flex w-8 h-8">

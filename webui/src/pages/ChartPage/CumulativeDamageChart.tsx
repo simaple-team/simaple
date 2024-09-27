@@ -5,10 +5,10 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useWorkspace } from "@/hooks/useWorkspace";
 import { getXAxisTicks } from "@/lib/chart";
 import { damageFormatter, secFormatter } from "@/lib/formatters";
 import { getCumulativeDamage } from "@/lib/statistics";
-import { PlayLogResponse } from "@/sdk/models";
 import { useMemo } from "react";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
@@ -19,11 +19,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-interface CumulativeDamageChartProps {
-  logs: PlayLogResponse[];
-}
-
-export function CumulativeDamageChart({ logs }: CumulativeDamageChartProps) {
+export function CumulativeDamageChart() {
+  const { history: logs } = useWorkspace();
   const data = useMemo(() => getCumulativeDamage(logs), [logs]);
   const ticks = useMemo(() => getXAxisTicks(logs), [logs]);
 

@@ -1,7 +1,7 @@
 import "./App.css";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ChartPage from "./pages/ChartPage";
+import ChartPage from "./pages/ChartPage/ChartPage";
 import { EditorLayout } from "./pages/EditorLayout";
 import LogPage from "./pages/LogPage";
 import { PrepareSimaple } from "./pages/PrepareSimaple";

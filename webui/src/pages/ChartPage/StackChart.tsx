@@ -15,18 +15,18 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useWorkspace } from "@/hooks/useWorkspace";
 import { secFormatter } from "@/lib/formatters";
 import { getStack } from "@/lib/statistics";
-import { PlayLogResponse } from "@/sdk/models";
 import { useMemo, useState } from "react";
-import { Label } from "./ui/label";
+import { Label } from "../../components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "../../components/ui/select";
 
 const chartConfig = {
   stack: {
@@ -35,11 +35,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-interface StackChartProps {
-  logs: PlayLogResponse[];
-}
-
-export function StackChart({ logs }: StackChartProps) {
+export function StackChart() {
+  const { history: logs } = useWorkspace();
   const runningView = logs[0]?.running_view;
   const skillNames = useMemo(
     () => (runningView ? Object.keys(runningView) : []),
