@@ -34,13 +34,8 @@ metadata:
 data:
   id: 212053-0
   name: 퍼번트 드레인
-  cooldown_duration: 120000
+  cooldown_duration: 0
   delay: 0
-  red: false
-  apply_buff_duration: false
-  lasting_duration: 60000
-  stat:
-    final_damage_multiplier: 10
 ---
 kind: Component
 version: simaple.io/DOTEmittingAttackSkillComponent
@@ -209,7 +204,6 @@ data:
   hit: 5
   multiple: 25
   red: true
-  cooltime: 25000
   damage: "{{ (400 + 15 * skill_level) * (1 + 0.35 * 24) / 25 }}"
 
   dot_damage: "{{ 200 + 3 * skill_level }}"
@@ -231,7 +225,6 @@ data:
   name: 메테오
   cooldown_duration: 45000
   delay: 690
-  apply_buff_duration: false
   damage: "{{ 225 + 3 * skill_level }}"
   hit: 12
   default_skill_level: 30
@@ -263,7 +256,6 @@ data:
     # TODO: entangle many
   delay: 0
   cooldown_duration: 0
-  apply_buff_duration: false
   damage: "{{ 100 + 4 * skill_level }}"
   hit: "{{ 0.02 * skill_level }}"
   default_skill_level: 30
