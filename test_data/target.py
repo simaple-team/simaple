@@ -32,7 +32,7 @@ SETTINGS = [
     ),
     (
         (JobType.archmagetc,),
-        13395121192957,
+        13261583300677,
     ),
     (
         (JobType.bishop,),
