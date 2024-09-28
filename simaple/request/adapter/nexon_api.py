@@ -5,10 +5,6 @@ import aiohttp
 
 HOST = "https://open.api.nexon.com"
 
-URIS = {
-    "get_character_id": "https://maplestory.nexon.com/Common/Character/GetCharacterId",
-}
-
 
 class CharacterID(TypedDict):
     ocid: str
