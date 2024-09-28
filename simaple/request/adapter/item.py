@@ -196,6 +196,7 @@ def get_gearset(
         get_pet_equip_stat_from_response(pet_response)
     )
 
+    # TODO
     """
     gearset.set_pet_set_option(self.pet_set)
     gearset.set_cash_item_stat(self.cash)
@@ -203,6 +204,5 @@ def get_gearset(
     gearset.set_set_items(set_item_repository.get_all(gearset.get_gears()))
 
     return gearset
-
     """
     return gearset
