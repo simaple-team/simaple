@@ -40,57 +40,50 @@ def meca_carrier_state(
     )
 
 
-def test_meca_carrier_usage_increase_count(
+def test_meca_carrier_usage_count(
     meca_carrier: MecaCarrier, meca_carrier_state: MecaCarrierState
 ):
-    # when
     state, _ = meca_carrier.use(None, meca_carrier_state)
-    state, events = meca_carrier.elapse(30_000, state)
 
-    # then
+    state, events = meca_carrier.elapse(0, state)
     dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
+    assert len(dealing_event) == 9
 
-    for idx in range(len(dealing_event) - 1):
-        assert (
-            dealing_event[idx]["payload"]["hit"]
-            == dealing_event[idx + 1]["payload"]["hit"] - 4
-        )
-
-
-def test_meca_carrier_usage_delays_more(
-    meca_carrier: MecaCarrier, meca_carrier_state: MecaCarrierState
-):
-    # when
-    state, _ = meca_carrier.use(None, meca_carrier_state)
-    state, events = meca_carrier.elapse(3000 * 3 + 120 * (8 + 9), state)
-
-    # then
+    state, events = meca_carrier.elapse(2850 + 120 * 9, state)
     dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
+    assert len(dealing_event) == 10
 
-    assert len(dealing_event) == 3
-
-
-def test_meca_carrier_usage_bounds_count(
-    meca_carrier: MecaCarrier, meca_carrier_state: MecaCarrierState
-):
-    # when
-    state, _ = meca_carrier.use(None, meca_carrier_state)
-    state, events = meca_carrier.elapse(120_000, state)
-
-    # then
+    state, events = meca_carrier.elapse(2850 + 120 * 10, state)
     dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
+    assert len(dealing_event) == 11
 
-    for idx in range(len(dealing_event) - 1):
-        if dealing_event[idx]["payload"]["hit"] != 64:
-            assert (
-                dealing_event[idx]["payload"]["hit"]
-                == dealing_event[idx + 1]["payload"]["hit"] - 4
-            )
-        else:
-            assert (
-                dealing_event[idx]["payload"]["hit"]
-                == dealing_event[idx + 1]["payload"]["hit"]
-            )
+    state, events = meca_carrier.elapse(2850 + 120 * 11, state)
+    dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
+    assert len(dealing_event) == 12
+
+    state, events = meca_carrier.elapse(2850 + 120 * 12, state)
+    dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
+    assert len(dealing_event) == 13
+
+    state, events = meca_carrier.elapse(2850 + 120 * 13, state)
+    dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
+    assert len(dealing_event) == 14
+
+    state, events = meca_carrier.elapse(2850 + 120 * 14, state)
+    dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
+    assert len(dealing_event) == 15
+
+    state, events = meca_carrier.elapse(2850 + 120 * 15, state)
+    dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
+    assert len(dealing_event) == 16
+
+    state, events = meca_carrier.elapse(2850 + 120 * 16, state)
+    dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
+    assert len(dealing_event) == 16
+
+    state, events = meca_carrier.elapse(2850 + 120 * 16, state)
+    dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
+    assert len(dealing_event) == 16
 
 
 def test_meca_carrier_total_hit_count(
