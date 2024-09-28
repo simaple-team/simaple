@@ -1,4 +1,9 @@
+from simaple.request.adapter.ability import get_ability_stat
 from simaple.request.application.base import Token, get_character_id
+from simaple.request.application.props import (
+    get_character_ability,
+    get_character_propensity,
+)
 
 
 async def compute_character(
@@ -7,13 +12,11 @@ async def compute_character(
 ):
     character_id = await get_character_id(token, character_name)
 
-    async def ability_stat(self): ...
+    ability_stat = get_ability_stat(await get_character_ability(token, character_id))
 
-    async def propensity(self): ...
+    propensity = await get_character_propensity(token, character_id)
 
-    async def doping(self): ...
-
-    def passive(self): ...
+    passive = ...
 
     def default_extended_stat(self): ...
 

@@ -7,12 +7,14 @@ from simaple.request.application.base import (
     get_character_id_param,
 )
 from simaple.request.schema.character import (
+    CharacterAbility,
     CharacterHyperStat,
     CharacterPopularity,
     CharacterPropensity,
     CharacterUnion,
     CharacterUnionRaider,
     CharacterUnionRaiderBlock,
+    _CharacterAbilityLine,
 )
 
 
@@ -97,17 +99,17 @@ async def get_character_union_raiders(
     }
 
 
-def _as_character_ability_line(raw: dict[str, Any]) -> dict[str, Any]:
+def _as_character_ability_line(raw: dict[str, Any]) -> _CharacterAbilityLine:
     return {
         "ability_grade": raw["ability_grade"],
         "ability_value": raw["ability_value"],
     }
 
 
-async def get_ability(
+async def get_character_ability(
     token: Token,
     character_id: CharacterID,
-):
+) -> CharacterAbility:
     uri = f"{HOST}/maplestory/v1/character/ability"
     resp = await token.request(uri, get_character_id_param(character_id))
     return {
