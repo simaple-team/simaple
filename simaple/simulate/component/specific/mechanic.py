@@ -239,7 +239,7 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
     def get_homming_missile_hit(self, state: HommingMissileState) -> int:
         hit = int(self.periodic_hit)
         if state.bomber_time.enabled():
-            hit += 5
+            hit += 6
 
         if state.full_barrage_keydown.running:
             hit += 7
