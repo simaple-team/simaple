@@ -1,6 +1,8 @@
 from abc import ABCMeta, abstractmethod
 from typing import Optional
 
+from pydantic import BaseModel
+
 from simaple.core.base import Stat
 from simaple.simulate.base import Event
 from simaple.simulate.reserved_names import Tag
@@ -90,3 +92,7 @@ class NamedEventProvider(EventProvider):
             "method": "",
             "handler": None,
         }
+
+
+class DelayPayload(BaseModel):
+    time: float

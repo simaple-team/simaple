@@ -20,6 +20,7 @@ from simaple.simulate.component.trait.impl import (
 )
 from simaple.simulate.component.util import is_keydown_ended
 from simaple.simulate.component.view import Running
+from simaple.simulate.event import DelayPayload
 from simaple.simulate.global_property import Dynamics
 
 
@@ -235,6 +236,14 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
             )
             for _ in range(lapse_count)
         ]
+
+    @reducer_method
+    def pause(self, payload: DelayPayload, state: HommingMissileState):
+        state = state.deepcopy()
+
+        state.periodic.set_interval_counter(payload.time)
+
+        return state, []
 
     def get_homming_missile_hit(self, state: HommingMissileState) -> int:
         hit = int(self.periodic_hit)
@@ -453,20 +462,18 @@ class DynamicIntervalPeriodic(Entity):
 
     def set_time_left(self, time: float, count: int):
         self.time_left = time
-        self.interval_counter = self.interval
+        self.interval_counter = 0
         self.count = count
 
     def enabled(self):
         return self.time_left > 0
 
     def resolving(self, time: float):
-        maximum_elapsed = max(0, int(self.time_left // self.interval))
-
+        self.interval_counter -= min(time, self.time_left)
         self.time_left -= time
-        self.interval_counter -= time
         elapse_count = 0
 
-        while self.interval_counter <= 0 and elapse_count < maximum_elapsed:
+        while self.interval_counter <= 0:
             self.interval_counter += (
                 self.interval + self.count * self.count_interval_penalty
             )
@@ -526,13 +533,14 @@ class MecaCarrier(SkillComponent, CooldownValidityTrait):
         dealing_events = []
 
         for intercepter_count in state.periodic.resolving(time):
-            dealing_events.append(
-                self.event_provider.dealt(
-                    self.damage_per_intercepter,
-                    self.hit_per_intercepter * intercepter_count,
-                    modifier=state.robot_mastery.get_robot_modifier(),
+            for _ in range(intercepter_count):
+                dealing_events.append(
+                    self.event_provider.dealt(
+                        self.damage_per_intercepter,
+                        self.hit_per_intercepter,
+                        modifier=state.robot_mastery.get_robot_modifier(),
+                    )
                 )
-            )
 
         return state, [self.event_provider.elapsed(time)] + dealing_events
 

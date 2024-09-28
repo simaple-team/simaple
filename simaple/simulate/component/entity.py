@@ -104,6 +104,9 @@ class Periodic(Entity):
         )
         self.count = 0
 
+    def set_interval_counter(self, counter: float):
+        self.interval_counter = counter
+
     def enabled(self):
         return self.time_left > 0
 
