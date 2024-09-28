@@ -59,7 +59,7 @@ def _line_to_stat(line: str) -> Stat:
             return Stat()
 
 
-def parse_title_stat(title: str):
+def parse_title_stat(title: str) -> Stat:
     lines = title.split("\n")
     return sum((_line_to_stat(line) for line in lines), Stat())
 

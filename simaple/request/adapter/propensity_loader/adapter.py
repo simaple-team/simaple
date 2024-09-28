@@ -27,7 +27,7 @@ class NexonAPIPropensityLoader(PropensityLoader):
         return get_propensity(resp)
 
 
-def get_propensity(propensity_response: CharacterPropensityResponse):
+def get_propensity(propensity_response: CharacterPropensityResponse) -> Propensity:
     return Propensity(
         ambition=propensity_response["charisma_level"],
         insight=propensity_response["insight_level"],

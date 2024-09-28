@@ -2,14 +2,17 @@ import re
 
 from simaple.core import ExtendedStat, StatProps
 from simaple.request.adapter.translator.asset.stat_provider import (
+    AbstractStatProvider,
     ActionStatProvider,
     AllStatProvider,
     StatProvider,
 )
 
 
-def kms_ability_provider_patterns() -> list[tuple[re.Pattern, list[StatProvider]]]:
-    patterns = [
+def kms_ability_provider_patterns() -> (
+    list[tuple[re.Pattern, list[AbstractStatProvider]]]
+):
+    patterns: list[tuple[re.Pattern, list[AbstractStatProvider]]] = [
         (
             re.compile(r"^버프 스킬의 지속 시간 ([0-9]+)% 증가$"),
             [ActionStatProvider(target="buff_duration")],
@@ -51,7 +54,7 @@ def kms_ability_provider_patterns() -> list[tuple[re.Pattern, list[StatProvider]
 
     for first_stat in ("INT", "STR", "DEX", "LUK"):
         for second_stat in ("INT", "STR", "DEX", "LUK"):
-            patterns += [
+            patterns.append(
                 (
                     re.compile(
                         f"^{first_stat} ([0-9]+) 증가, {second_stat} ([0-9]+) 증가$"
@@ -61,7 +64,7 @@ def kms_ability_provider_patterns() -> list[tuple[re.Pattern, list[StatProvider]
                         StatProvider(target=StatProps(f"{second_stat}_static")),
                     ],
                 )
-            ]
+            )
 
     return patterns
 

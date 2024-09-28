@@ -7,7 +7,6 @@ from simaple.request.adapter.nexon_api import (
     Token,
     get_character_id_param,
 )
-from simaple.request.adapter.schema.character import CharacterPropensity
 
 
 class SkillOrder(Enum):
@@ -22,18 +21,3 @@ class SkillOrder(Enum):
     hyperactive: str = "hyperactive"
     fifth: str = "5"
     sixth: str = "6"
-
-
-async def get_character_skill(
-    token: Token, character_id: CharacterID, order: SkillOrder | str
-) -> CharacterPropensity:
-    if isinstance(order, SkillOrder):
-        order = order.value
-
-    uri = f"{HOST}/maplestory/v1/character/skill"
-
-    param = get_character_id_param(character_id)
-
-    param["character_skill_grade"] = order
-    resp = await token.request(uri, param)
-    return cast(CharacterPropensity, resp)
