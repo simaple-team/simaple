@@ -28,19 +28,19 @@ def container_test_setting(
 SETTINGS = [
     (
         (JobType.archmagefb,),
-        15919731027452,
+        16039979770012,
     ),
     (
         (JobType.archmagetc,),
-        13395121192957,
+        13496300445113,
     ),
     (
         (JobType.bishop,),
-        9119066916746,
+        9187430863944,
     ),
     (
         (JobType.mechanic,),
-        7300039064501,
+        7563274726317,
     ),
     (
         (
@@ -50,7 +50,7 @@ SETTINGS = [
                 "weapon_pure_attack_power": 295,
             },
         ),
-        8767345887765,
+        9068638620941,
     ),
     (
         (
@@ -59,7 +59,7 @@ SETTINGS = [
                 "weapon_attack_power": 789,
             },
         ),
-        10946944150279,
+        11031190295810,
     ),
     (
         (
@@ -68,7 +68,7 @@ SETTINGS = [
                 "weapon_attack_power": 789,
             },
         ),
-        12594480902240,
+        12689549643945,
     ),
     (
         (
@@ -77,7 +77,7 @@ SETTINGS = [
                 "weapon_attack_power": 700,
             },
         ),
-        5517050931371,
+        5560719214823,
     ),
 ]
 

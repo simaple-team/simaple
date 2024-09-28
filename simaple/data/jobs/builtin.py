@@ -97,13 +97,15 @@ def get_passive(
         character_level,
         weapon_pure_attack_power=weapon_pure_attack_power,
     )
-    passive_skills: Iterable[PassiveSkill] = itertools.chain(
-        *[
-            loader.load_all(
-                query={"group": group, "kind": "PassiveSkill"}, patches=patches
-            )
-            for group in skill_profile.get_groups()
-        ]
+    passive_skills: list[PassiveSkill] = list(
+        itertools.chain(
+            *[
+                loader.load_all(
+                    query={"group": group, "kind": "PassiveSkill"}, patches=patches
+                )
+                for group in skill_profile.get_groups()
+            ]
+        )
     )
 
     return sum(
