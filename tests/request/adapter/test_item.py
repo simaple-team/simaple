@@ -1,12 +1,25 @@
 from simaple.core import ActionStat, Stat
 from simaple.gear.gear_repository import GearRepository
-from simaple.request.adapter.item import get_gears, get_gearset, get_symbols
-from simaple.request.schema.item import CharacterItemEquipment, CharacterSymbolEquipment
+
+from simaple.request.adapter.gear_loader._converter import (
+    get_equipments, get_symbols
+)
+from simaple.request.adapter.gear_loader._gearset_converter import (
+    get_gearset
+)
+from simaple.request.adapter.gear_loader._pet_converter import (
+    get_pet_equip_stat_from_response
+)
+from simaple.request.adapter.gear_loader._schema import (
+    PetResponse,
+    CharacterItemEquipment,
+    CharacterSymbolEquipment,
+)
 
 
 def test_item_equipment(character_item_equipment_response: CharacterItemEquipment):
     gear_repository = GearRepository()
-    gears = get_gears(character_item_equipment_response, gear_repository)
+    gears = get_equipments(character_item_equipment_response, gear_repository)
 
     gear = gears[0][0]
     assert gear.stat == Stat.model_validate(
@@ -33,12 +46,19 @@ def test_get_symbols(character_symbol_equipment_response: CharacterSymbolEquipme
     assert total_stat == Stat(INT_static=21200)
 
 
+def test_get_pet_stat(pet_response: PetResponse):
+    stat = get_pet_equip_stat_from_response(pet_response)
+    assert stat == Stat(attack_power=20, magic_attack=127)
+
+
 def test_get_gearset(
     character_item_equipment_response: CharacterItemEquipment,
     character_symbol_equipment_response: CharacterSymbolEquipment,
+    pet_response: PetResponse,
 ):
     gearset = get_gearset(
         character_item_equipment_response,
         character_symbol_equipment_response,
+        pet_response,
         GearRepository(),
     )

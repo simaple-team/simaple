@@ -1,9 +1,9 @@
-from simaple.request.adapter.ability import get_ability_stat
-from simaple.request.application.base import Token, get_character_id
+from simaple.request.adapter.nexon_api import Token, get_character_id
 from simaple.request.application.props import (
     get_character_ability,
     get_character_propensity,
 )
+from simaple.request.converter.ability import get_ability_stat
 
 
 async def compute_character(

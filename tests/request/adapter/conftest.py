@@ -4,13 +4,17 @@ from typing import Any, cast
 
 import pytest
 
-from simaple.request.schema.character import (
-    CharacterAbility,
-    CharacterHyperStat,
-    CharacterPropensity,
-    CharacterUnionRaider,
+from simaple.request.adapter.ability_loader._schema import CharacterAbilityResponse
+from simaple.request.adapter.hyperstat_loader._schema import CharacterHyperStatResponse
+from simaple.request.adapter.propensity_loader._schema import (
+    CharacterPropensityResponse,
 )
-from simaple.request.schema.item import CharacterItemEquipment, CharacterSymbolEquipment
+from simaple.request.adapter.gear_loader._schema import (
+    CharacterItemEquipment,
+    CharacterSymbolEquipment,
+    PetResponse,
+)
+from simaple.request.adapter.union_loader._schema import CharacterUnionRaiderResponse
 
 
 def _macro_get_response(file_name: str) -> dict[str, Any]:
@@ -20,13 +24,13 @@ def _macro_get_response(file_name: str) -> dict[str, Any]:
 
 
 @pytest.fixture
-def character_hyper_stat_response() -> CharacterHyperStat:
-    return cast(CharacterHyperStat, _macro_get_response("hyperstat.json"))
+def character_hyper_stat_response() -> CharacterHyperStatResponse:
+    return cast(CharacterHyperStatResponse, _macro_get_response("hyperstat.json"))
 
 
 @pytest.fixture
-def character_propensity_response() -> CharacterPropensity:
-    return cast(CharacterPropensity, _macro_get_response("propensity.json"))
+def character_propensity_response() -> CharacterPropensityResponse:
+    return cast(CharacterPropensityResponse, _macro_get_response("propensity.json"))
 
 
 @pytest.fixture
@@ -40,17 +44,25 @@ def character_symbol_equipment_response() -> CharacterSymbolEquipment:
 
 
 @pytest.fixture
-def character_union_raiders_response() -> CharacterUnionRaider:
+def pet_response() -> PetResponse:
+    return cast(PetResponse, _macro_get_response("pet_equipment.json"))
+
+
+@pytest.fixture
+def character_union_raiders_response() -> CharacterUnionRaiderResponse:
     return cast(
-        CharacterUnionRaider, _macro_get_response("character_union_raiders.json")
+        CharacterUnionRaiderResponse,
+        _macro_get_response("character_union_raiders.json"),
     )
 
 
 @pytest.fixture
-def character_ability_response() -> CharacterAbility:
-    return cast(CharacterAbility, _macro_get_response("character_ability.json"))
+def character_ability_response() -> CharacterAbilityResponse:
+    return cast(CharacterAbilityResponse, _macro_get_response("character_ability.json"))
 
 
 @pytest.fixture
-def character_ability_response_2() -> CharacterAbility:
-    return cast(CharacterAbility, _macro_get_response("character_ability_2.json"))
+def character_ability_response_2() -> CharacterAbilityResponse:
+    return cast(
+        CharacterAbilityResponse, _macro_get_response("character_ability_2.json")
+    )

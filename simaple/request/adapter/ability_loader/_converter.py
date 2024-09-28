@@ -1,12 +1,9 @@
 import re
 
 from simaple.core import ExtendedStat, StatProps
-from simaple.request.translator.asset.stat_provider import (
+from simaple.request.adapter.translator.asset.stat_provider import (
     ActionStatProvider,
-    AllStatMultiplierProvider,
     AllStatProvider,
-    LevelStatProvider,
-    NullStatProvider,
     StatProvider,
 )
 

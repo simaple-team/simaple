@@ -4,7 +4,10 @@ import pydantic
 
 from simaple.core import ExtendedStat
 from simaple.gear.potential import Potential
-from simaple.request.translator.base import AbstractStatProvider, NoMatchedStringError
+from simaple.request.adapter.translator.base import (
+    AbstractStatProvider,
+    NoMatchedStringError,
+)
 
 
 class PotentialTranslator(pydantic.BaseModel):

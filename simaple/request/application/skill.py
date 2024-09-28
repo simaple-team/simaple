@@ -1,13 +1,13 @@
 from enum import Enum
 from typing import cast
 
-from simaple.request.application.base import (
+from simaple.request.adapter.nexon_api import (
     HOST,
     CharacterID,
     Token,
     get_character_id_param,
 )
-from simaple.request.schema.character import CharacterPropensity
+from simaple.request.adapter.schema.character import CharacterPropensity
 
 
 class SkillOrder(Enum):
