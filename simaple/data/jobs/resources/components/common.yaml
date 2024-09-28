@@ -20,82 +20,58 @@ data:
   stat:
     damage_multiplier: 45
 ---
-kind: Component
-version: simaple.io/BuffSkillComponent
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
 metadata:
   label:
     group: str_based
     name: 메이플 용사
-    id: 1121000-0
 patch:
   - SkillLevelPatch
   - ArithmeticPatch
 data:
-  id: 1121000-0
   name: 메이플 용사
-  default_skill_level: 30
-  cooldown_duration: 0
-  delay: 0
-  lasting_duration: 900_000
   stat:
     STR: "{{ floor((18 + 5 * character_level) * 0.15) }}"
 ---
-kind: Component
-version: simaple.io/BuffSkillComponent
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
 metadata:
   label:
     group: dex_based
     name: 메이플 용사
-    id: 1121000-1
 patch:
   - SkillLevelPatch
   - ArithmeticPatch
 data:
-  id: 1121000-1
   name: 메이플 용사
-  default_skill_level: 30
-  cooldown_duration: 0
-  delay: 0
-  lasting_duration: 900_000
   stat:
     DEX: "{{ floor((18 + 5 * character_level) * 0.15) }}"
 ---
-kind: Component
-version: simaple.io/BuffSkillComponent
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
 metadata:
   label:
     group: int_based
     name: 메이플 용사
-    id: 1121000-2
 patch:
   - SkillLevelPatch
   - ArithmeticPatch
 data:
-  id: 1121000-2
   name: 메이플 용사
-  default_skill_level: 30
-  cooldown_duration: 0
-  delay: 0
-  lasting_duration: 900_000
   stat:
     INT: "{{ floor((18 + 5 * character_level) * 0.15) }}"
 ---
-kind: Component
-version: simaple.io/BuffSkillComponent
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
 metadata:
   label:
     group: luk_based
     name: 메이플 용사
-    id: 1121000-3
 patch:
   - SkillLevelPatch
   - ArithmeticPatch
 data:
-  id: 1121000-3
   name: 메이플 용사
-  default_skill_level: 30
-  cooldown_duration: 0
-  delay: 0
-  lasting_duration: 900_000
   stat:
     LUK: "{{ floor((18 + 5 * character_level) * 0.15) }}"
