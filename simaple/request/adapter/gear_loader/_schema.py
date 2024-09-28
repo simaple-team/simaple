@@ -110,12 +110,10 @@ class CharacterSymbolEquipment(TypedDict):
     symbol: list[CharacterSymbolElement]
 
 
-
 # Pet responses
 
 
-
-class PetOptionValueAndType(TypedDict):
+class OptionValueAndType(TypedDict):
     option_type: str
     option_value: int
 
@@ -124,7 +122,7 @@ class PetEquipment(TypedDict):
     item_name: str
     item_icon: str
     item_description: str
-    item_option: list[PetOptionValueAndType]
+    item_option: list[OptionValueAndType]
     scroll_upgrade: int
     scroll_upgradable: int
     item_shape: str
@@ -175,3 +173,56 @@ class PetResponse(TypedDict):
     pet_3_date_expire: str
     pet_3_appearance: str
     pet_3_appearance_icon: str
+
+
+# Set Item Response
+
+
+class _SetOption(TypedDict):
+    set_count: int
+    set_option: str
+
+
+class _SetEffect(TypedDict):
+    set_name: str
+    total_set_count: int
+    set_effect_info: list[_SetOption]
+    set_option_full: list[_SetOption]
+
+
+class SetEffectResponse(TypedDict):
+    date: str
+    set_effect: list[_SetEffect]
+
+
+# Cash Item Response
+
+
+class _CashItemElement(TypedDict):
+    cash_item_equipment_part: str
+    cash_item_equipment_slot: str
+    cash_item_name: str
+    cash_item_icon: str
+    cash_item_description: str | None
+    cash_item_option: list[OptionValueAndType]
+    date_expire: str | None
+    date_option_expire: str | None
+    cash_item_label: str | None
+    cash_item_coloring_prism: str | None
+    item_gender: str | None
+
+
+class CashItemResponse(TypedDict):
+    date: str
+    character_gender: str
+    character_class: str
+    character_look_mode: str
+    preset_no: int
+    cash_item_equipment_base: list[_CashItemElement]
+    cash_item_equipment_preset_1: list[_CashItemElement]
+    cash_item_equipment_preset_2: list[_CashItemElement]
+    cash_item_equipment_preset_3: list[_CashItemElement]
+    additional_cash_item_equipment_base: list[_CashItemElement]
+    additional_cash_item_equipment_preset_1: list[_CashItemElement]
+    additional_cash_item_equipment_preset_2: list[_CashItemElement]
+    additional_cash_item_equipment_preset_3: list[_CashItemElement]

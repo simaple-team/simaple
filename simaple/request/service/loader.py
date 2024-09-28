@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 
 from simaple.core import ExtendedStat, Stat
+from simaple.gear.gear import Gear
+from simaple.gear.symbol_gear import SymbolGear
 from simaple.system.hyperstat import Hyperstat
 from simaple.system.propensity import Propensity
 from simaple.system.union import UnionSquad
-from simaple.gear.gear import Gear
-from simaple.gear.symbol_gear import SymbolGear
 
 
 class AbilityLoader(ABC):
@@ -47,4 +47,8 @@ class GearLoader(ABC):
 
     @abstractmethod
     async def load_pet_equipments_stat(self, character_name: str) -> Stat:
+        pass
+
+    @abstractmethod
+    async def load_gear_related_stat(self, character_name: str) -> ExtendedStat:
         pass

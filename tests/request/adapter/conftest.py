@@ -5,14 +5,16 @@ from typing import Any, cast
 import pytest
 
 from simaple.request.adapter.ability_loader._schema import CharacterAbilityResponse
-from simaple.request.adapter.hyperstat_loader._schema import CharacterHyperStatResponse
-from simaple.request.adapter.propensity_loader._schema import (
-    CharacterPropensityResponse,
-)
 from simaple.request.adapter.gear_loader._schema import (
+    CashItemResponse,
     CharacterItemEquipment,
     CharacterSymbolEquipment,
     PetResponse,
+    SetEffectResponse,
+)
+from simaple.request.adapter.hyperstat_loader._schema import CharacterHyperStatResponse
+from simaple.request.adapter.propensity_loader._schema import (
+    CharacterPropensityResponse,
 )
 from simaple.request.adapter.union_loader._schema import CharacterUnionRaiderResponse
 
@@ -66,3 +68,13 @@ def character_ability_response_2() -> CharacterAbilityResponse:
     return cast(
         CharacterAbilityResponse, _macro_get_response("character_ability_2.json")
     )
+
+
+@pytest.fixture
+def set_effect_response() -> SetEffectResponse:
+    return cast(SetEffectResponse, _macro_get_response("set_effect.json"))
+
+
+@pytest.fixture
+def cashitem_equipment_response() -> CashItemResponse:
+    return cast(CashItemResponse, _macro_get_response("cashitem_equipment.json"))

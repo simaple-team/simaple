@@ -1,61 +1,110 @@
+import datetime
 from typing import cast
-from simaple.core import Stat, ExtendedStat
+
+from simaple.core import ExtendedStat, Stat
+from simaple.gear.gear import Gear
+from simaple.gear.gear_repository import GearRepository
+from simaple.gear.symbol_gear import SymbolGear
+from simaple.request.adapter.gear_loader._cashitem_converter import get_cash_item_stat
+from simaple.request.adapter.gear_loader._converter import get_equipments, get_symbols
+from simaple.request.adapter.gear_loader._gearset_converter import get_equipment_stat
+from simaple.request.adapter.gear_loader._pet_converter import (
+    get_pet_equip_stat_from_response,
+)
+from simaple.request.adapter.gear_loader._schema import (
+    CashItemResponse,
+    CharacterItemEquipment,
+    CharacterSymbolEquipment,
+    PetResponse,
+    SetEffectResponse,
+)
+from simaple.request.adapter.gear_loader._set_item_converter import get_set_item_stats
 from simaple.request.adapter.nexon_api import (
     HOST,
+    CharacterID,
     Token,
     get_character_id,
     get_character_id_param,
 )
 from simaple.request.service.loader import GearLoader
-from simaple.gear.gear import Gear
-from simaple.request.adapter.gear_loader._schema import (
-    CharacterItemEquipment,
-    CharacterSymbolEquipment,
-    PetResponse,
-)
-from simaple.request.adapter.gear_loader._converter import (
-    get_equipments, get_symbols
-)
-from simaple.request.adapter.gear_loader._gearset_converter import (
-    get_gearset
-)
-from simaple.request.adapter.gear_loader._pet_converter import (
-    get_pet_equip_stat_from_response
-)
-from simaple.gear.gear_repository import GearRepository
-from simaple.gear.symbol_gear import SymbolGear
 
 
 class NexonAPIGearLoader(GearLoader):
-    def __init__(self, token_value: str):
+    def __init__(self, token_value: str, date: datetime.date | None = None):
         self._token = Token(token_value)
         self._gear_repository = GearRepository()
+        self.date = date
+
+    async def get_character_id(self, character_name: str) -> CharacterID:
+        return await get_character_id(self._token, character_name, date=self.date)
 
     async def load_equipments(self, character_name: str) -> list[tuple[Gear, str]]:
-        character_id = await get_character_id(self._token, character_name)
+        character_id = await self.get_character_id(character_name)
         uri = f"{HOST}/maplestory/v1/character/item-equipment"
 
         resp = cast(
             CharacterItemEquipment,
-            await self._token.request(uri, get_character_id_param(character_id))
+            await self._token.request(uri, get_character_id_param(character_id)),
         )
         gears = get_equipments(resp, self._gear_repository)
         return gears
 
     async def load_symbols(self, character_name: str) -> list[SymbolGear]:
-        character_id = await get_character_id(self._token, character_name)
+        character_id = await self.get_character_id(character_name)
         uri = f"{HOST}/maplestory/v1/character/symbol-equipment"
 
         resp = cast(
             CharacterSymbolEquipment,
-            await self._token.request(uri, get_character_id_param(character_id))
+            await self._token.request(uri, get_character_id_param(character_id)),
         )
         return get_symbols(resp)
 
     async def load_pet_equipments_stat(self, character_name: str) -> Stat:
-        character_id = await get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/character/pet"
+        character_id = await self.get_character_id(character_name)
+        uri = f"{HOST}/maplestory/v1/character/pet-equipment"
         resp = cast(
-            PetResponse, await self._token.request(uri, get_character_id_param(character_id))
+            PetResponse,
+            await self._token.request(uri, get_character_id_param(character_id)),
         )
         return get_pet_equip_stat_from_response(resp)
+
+    async def load_gear_related_stat(self, character_name: str) -> ExtendedStat:
+        character_id = await self.get_character_id(character_name)
+
+        equipment_stat = get_equipment_stat(
+            cast(
+                CharacterItemEquipment,
+                await self._token.request(
+                    f"{HOST}/maplestory/v1/character/item-equipment",
+                    get_character_id_param(character_id),
+                ),
+            ),
+            self._gear_repository,
+        )
+
+        pet_equipment_stat = await self.load_pet_equipments_stat(character_name)
+        symbol_stat = sum(
+            (symbol.stat for symbol in await self.load_symbols(character_name)), Stat()
+        )
+        set_item_stat = get_set_item_stats(
+            cast(
+                SetEffectResponse,
+                await self._token.request(
+                    f"{HOST}/maplestory/v1/character/set-effect",
+                    get_character_id_param(character_id),
+                ),
+            )
+        )
+        cash_item_stat = get_cash_item_stat(
+            cast(
+                CashItemResponse,
+                await self._token.request(
+                    f"{HOST}/maplestory/v1/character/cashitem-equipment",
+                    get_character_id_param(character_id),
+                ),
+            )
+        )
+
+        return equipment_stat + ExtendedStat(
+            stat=(pet_equipment_stat + symbol_stat + set_item_stat + cash_item_stat)
+        )

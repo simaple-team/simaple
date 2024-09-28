@@ -10,6 +10,7 @@ from simaple.request.adapter.gear_loader._schema import (
     CharacterItemEquipment,
     CharacterSymbolElement,
     CharacterSymbolEquipment,
+    OptionValueAndType,
 )
 from simaple.request.adapter.translator.kms.potential import kms_potential_translator
 
@@ -31,18 +32,21 @@ def _get_stat(item_option: CharacterItemElementOption) -> Stat:
         damage_multiplier=item_option.get("damage", 0),
         MHP_multiplier=item_option.get("max_hp_rate", 0),
         MMP_multiplier=item_option.get("max_mp_rate", 0),
-    ) + Stat.all_stat(item_option.get("all_stat", 0))
+    ) + Stat.all_stat_multiplier(item_option.get("all_stat", 0))
 
 
 def _get_gear(
     item_element: CharacterItemElement, gear_repository: GearRepository
 ) -> Gear:
     base_gear = gear_repository.get_by_name(item_element["item_name"])
-    assert base_gear.meta.base_stat == _get_stat(item_element["item_base_option"])
+    if base_gear.meta.base_stat != _get_stat(item_element["item_base_option"]):
+        logger.warning(
+            f"Item {base_gear.meta.name} stat not matched. Maybe special item?"
+        )
 
     base_gear = Gear(
         meta=base_gear.meta,
-        stat=base_gear.stat,
+        stat=_get_stat(item_element["item_base_option"]),
         scroll_chance=item_element["scroll_upgradeable_count"],
     )
 
@@ -89,6 +93,13 @@ def _get_gear(
         )
     )
 
+    # soul option
+    if item_element["soul_option"] is not None:
+        base_gear = base_gear.add_stat(
+            _potential_translator.translate_expression(item_element["soul_option"]).stat
+        )
+
+    print(base_gear.show())
     return base_gear
 
 
@@ -119,3 +130,42 @@ def get_symbols(symbol_equipment: CharacterSymbolEquipment) -> list[SymbolGear]:
     return [
         _get_symbol(symbol_element) for symbol_element in symbol_equipment["symbol"]
     ]
+
+
+def get_stat_from_option_value_and_type(
+    option_value_and_type: OptionValueAndType,
+) -> Stat:
+    option_type = option_value_and_type["option_type"]
+    option_value = option_value_and_type["option_value"]
+
+    match option_type:
+        case "공격력":
+            return Stat(
+                attack_power=option_value,
+            )
+        case "마력":
+            return Stat(
+                magic_attack=option_value,
+            )
+        case "이동속도":
+            return Stat()
+        case "올스탯":
+            return Stat.all_stat(option_value)
+        case "STR":
+            return Stat(STR=option_value)
+        case "DEX":
+            return Stat(DEX=option_value)
+        case "INT":
+            return Stat(INT=option_value)
+        case "LUK":
+            return Stat(LUK=option_value)
+        case "HP":
+            return Stat(MHP=option_value)
+        case "MP":
+            return Stat(MMP=option_value)
+        case "방어력":
+            return Stat()
+        case "점프력":
+            return Stat()
+        case _:
+            raise ValueError(f"Unknown option type: {option_type}")

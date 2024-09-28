@@ -1,15 +1,10 @@
-from enum import Enum
-
 import pydantic
 
 from simaple.core import Stat
+from simaple.request.adapter.gear_loader._converter import (
+    get_stat_from_option_value_and_type,
+)
 from simaple.request.adapter.gear_loader._schema import PetEquipment, PetResponse
-
-
-class PetOptionTypes(Enum):
-    attack_power = "공격력"
-    magic_attack = "마력"
-    speed = "이동속도"
 
 
 class PetItem(pydantic.BaseModel):
@@ -20,19 +15,7 @@ class PetItem(pydantic.BaseModel):
 def get_pet_equipment_stat_from_equipment_response(pet_equipment: PetEquipment) -> Stat:
     pet_item_stat = Stat()
     for option in pet_equipment["item_option"]:
-        match PetOptionTypes(option["option_type"]):
-            case PetOptionTypes.attack_power:
-                pet_item_stat += Stat(
-                    attack_power=option["option_value"],
-                )
-            case PetOptionTypes.magic_attack:
-                pet_item_stat += Stat(
-                    magic_attack=option["option_value"],
-                )
-            case PetOptionTypes.speed:
-                pass
-            case _:
-                raise ValueError(f"Unknown option type: {option['option_type']}")
+        pet_item_stat += get_stat_from_option_value_and_type(option)
 
     return pet_item_stat
 

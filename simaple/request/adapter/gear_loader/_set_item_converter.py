@@ -1,18 +1,19 @@
 import re
 
-from simaple.core import ExtendedStat, Stat
-from simaple.gear.gear_repository import GearRepository
-from simaple.request.adapter.gear_loader._converter import get_equipments
-from simaple.request.adapter.gear_loader._schema import CharacterItemEquipment
+from simaple.core import Stat
+from simaple.request.adapter.gear_loader._schema import SetEffectResponse
 
 
-def _line_to_stat(line: str) -> Stat:
-    pattern = re.compile(r"([A-Z/가-힣a-z\s]+)\+(\d+)(%?)")
-    match = pattern.search(line)
+def _parse_each_option(option_string: str) -> Stat:
+    if ":" not in option_string:
+        return Stat()
+
+    pattern = re.compile(r"([a-zA-Z가-힣\s]+) : \+(\d+)(%?)")
+    match = pattern.search(option_string)
     if not match:
         return Stat()
 
-    option_name = match.group(1).strip()
+    option_name = match.group(1)
     option_value = int(match.group(2))
     is_percentage = match.group(3) == "%"
 
@@ -51,36 +52,26 @@ def _line_to_stat(line: str) -> Stat:
             return Stat(INT=option_value)
         case ("LUK", False):
             return Stat(LUK=option_value)
-        case ("공격력/마력", False):
-            return Stat(attack_power=option_value, magic_attack=option_value)
-        case ("최대 HP/최대 MP", False):
-            return Stat(MHP=option_value, MMP=option_value)
         case _:
             return Stat()
 
 
-def parse_title_stat(title: str):
-    lines = title.split("\n")
-    return sum((_line_to_stat(line) for line in lines), Stat())
+def parse_set_option_text_into_stat(value_string: str):
+    each_options = value_string.split(", ")
+    stat = Stat()
+
+    for option in each_options:
+        stat += _parse_each_option(option)
+
+    return stat
 
 
-def _get_title_stat(title_description: str) -> Stat:
-    return parse_title_stat(title_description)
+def get_set_item_stats(response: SetEffectResponse):
+    set_item_stat = Stat()
 
+    for effect in response["set_effect"]:
+        for set_option in effect["set_effect_info"]:
+            stat = parse_set_option_text_into_stat(set_option["set_option"])
+            set_item_stat += stat
 
-def get_equipment_stat(
-    item_equipment: CharacterItemEquipment,
-    gear_repository: GearRepository,
-) -> ExtendedStat:
-    total_stat = ExtendedStat()
-    item_gears = get_equipments(item_equipment, gear_repository)
-
-    for gear, _ in item_gears:
-        total_stat += gear.sum_extended_stat()
-
-    total_stat += ExtendedStat(
-        stat=_get_title_stat(
-            item_equipment["title"]["title_description"],
-        )
-    )
-    return total_stat
+    return set_item_stat
