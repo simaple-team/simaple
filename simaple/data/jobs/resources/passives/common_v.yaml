@@ -1,0 +1,14 @@
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: common
+    name: 쓸만한 어드밴스드 블레스
+data:
+  name: 쓸만한 어드밴스드 블레스
+  stat:
+    attack_power: 20
+    magic_attack: 20
+    MHP: 475
+    MMP: 475
