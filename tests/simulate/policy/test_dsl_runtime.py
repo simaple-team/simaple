@@ -49,4 +49,4 @@ def test_dsl(
 
     dpm = container.damage_calculator().calculate_dpm(list(engine.simulation_entries()))
     print(f"{engine.get_current_viewer()('clock')} | {dpm:,} ")
-    assert pytest.approx(dpm) == 12281922353274.621
+    assert pytest.approx(dpm) == 13415528573134.246

@@ -28,15 +28,15 @@ def container_test_setting(
 SETTINGS = [
     (
         (JobType.archmagefb,),
-        16039979770012,
+        16195121054262,
     ),
     (
         (JobType.archmagetc,),
-        13361753882297,
+        13407067282228,
     ),
     (
         (JobType.bishop,),
-        9187430863944,
+        9374188673726,
     ),
     (
         (JobType.mechanic,),
@@ -59,7 +59,7 @@ SETTINGS = [
                 "weapon_attack_power": 789,
             },
         ),
-        11031190295810,
+        11178296867273,
     ),
     (
         (

@@ -13,7 +13,7 @@ data:
   id: 400001042-0
   name: 메이플월드 여신의 축복
   lasting_duration: 60_000
-  cooldown_duration: 180_000
+  cooldown_duration: 120_000
   delay: 450
   red: true
   apply_buff_duration: false
@@ -35,7 +35,7 @@ data:
   id: 400001042-1
   name: 메이플월드 여신의 축복
   lasting_duration: 60_000
-  cooldown_duration: 180_000
+  cooldown_duration: 120_000
   delay: 450
   red: true
   apply_buff_duration: false
