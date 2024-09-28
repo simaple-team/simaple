@@ -13,7 +13,7 @@ data:
   id: 80001155-0
   name: 소울 컨트랙트
   cooldown_duration: 90_000
-  delay: 900
+  delay: 0
   red: true
   apply_buff_duration: true
   lasting_duration: 10_000
