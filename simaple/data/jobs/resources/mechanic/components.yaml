@@ -229,6 +229,7 @@ patch:
   - SkillLevelPatch
   - ArithmeticPatch
   - VSkillImprovementPatch
+  - SkillImprovementPatch
 data:
   id: 35101002-0
   name: "호밍 미사일" # 어드밴스드 호밍 미사일 데이터 적용중
@@ -373,9 +374,6 @@ data:
     - target_name: 호밍 미사일
       target_field: final_damage_multiplier_during_barrage
       value: 67
-    - target_name: 호밍 미사일 VI
-      target_field: final_damage_multiplier_during_barrage
-      value: 67
 ---
 kind: Component
 version: simaple.io/MecaCarrier
@@ -461,6 +459,7 @@ patch:
   - SkillLevelPatch
   - ArithmeticPatch
   - VSkillImprovementPatch
+  - SkillImprovementPatch
 data:
   id: 35141003-0
   name: "호밍 미사일 VI"
