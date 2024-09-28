@@ -25,7 +25,7 @@ kind: Component
 version: simaple.io/BuffSkillComponent
 metadata:
   label:
-    group: adventurer.magician
+    group: magician
     name: 오버로드 마나
     id: 400021000-0
 patch:
@@ -39,21 +39,3 @@ data:
   lasting_duration: 999_999_999
   stat:
     final_damage_multiplier: "{{ 8 + skill_level // 10 }}"
----
-kind: Component
-version: simaple.io/BuffSkillComponent
-metadata:
-  label:
-    group: adventurer.magician
-    name: 에픽 어드벤쳐
-    id: 2121053-0
-data:
-  id: 2121053-0
-  name: 에픽 어드벤쳐
-  cooldown_duration: 120000
-  delay: 0
-  red: false
-  apply_buff_duration: false
-  lasting_duration: 60000
-  stat:
-    damage_multiplier: 10

@@ -35,5 +35,8 @@ data:
     - archmagetc
     - common
     - int_based
+    - magician
+    - adventurer
     - adventurer.magician
+    - adventurer.int
     - mob
