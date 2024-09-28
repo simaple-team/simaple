@@ -210,13 +210,13 @@ metadata:
   label:
     group: windbreaker
     name: 스톰 윔
-    id: TBD-TBD
+    id: 13121055-0
 patch:
   - SkillLevelPatch
   - ArithmeticPatch
   - VSkillImprovementPatch
 data:
-  id: TBD-TBD
+  id: 13121055-0
   listening_actions:
     핀포인트 피어스.use.emitted.global.damage: trigger
     천공의 노래.elapse.emitted.global.damage: trigger

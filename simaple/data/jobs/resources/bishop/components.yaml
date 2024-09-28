@@ -332,12 +332,12 @@ metadata:
   label:
     group: bishop
     name: 홀리 어드밴트
-    id: 2341500-0-?
+    id: 2341500-0
 patch:
   - SkillLevelPatch
   - ArithmeticPatch
 data:
-  id: 2341500-0-?
+  id: 2341500-0
   name: 홀리 어드밴트
 
   damage_and_hits:
