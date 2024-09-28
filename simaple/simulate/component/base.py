@@ -386,3 +386,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
             )
             for method_name in getattr(self, "__views__")
         }
+
+
+class DelayPayload(BaseModel):
+    time: float

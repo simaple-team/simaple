@@ -4,6 +4,7 @@ from simaple.core import Stat
 from simaple.simulate.base import Entity, Event
 from simaple.simulate.component.base import (
     Component,
+    DelayPayload,
     ReducerState,
     reducer_method,
     view_method,
@@ -235,6 +236,15 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
             )
             for _ in range(lapse_count)
         ]
+
+    @reducer_method
+    def pause(self, payload: DelayPayload, state: HommingMissileState):
+        state = state.deepcopy()
+        print(payload)
+
+        state.periodic.set_interval_counter(payload.time)
+
+        return state, []
 
     def get_homming_missile_hit(self, state: HommingMissileState) -> int:
         hit = int(self.periodic_hit)

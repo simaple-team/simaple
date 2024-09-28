@@ -233,6 +233,9 @@ patch:
 data:
   id: 35101002-0
   name: "호밍 미사일" # 어드밴스드 호밍 미사일 데이터 적용중
+  listening_actions:
+    "그라운드 제로.use.emitted.global.delay": pause
+
   delay: 0
   cooldown_duration: 0
 
@@ -464,6 +467,9 @@ data:
   id: 35141003-0
   name: "호밍 미사일 VI"
   representative_name: "호밍 미사일"
+  listening_actions:
+    "그라운드 제로.use.emitted.global.delay": pause
+
   delay: 0
   cooldown_duration: 0
 
