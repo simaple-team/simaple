@@ -25,7 +25,7 @@ const ErrorDialog: React.FC<{
           </DialogDescription>
         </DialogHeader>
         <DialogClose />
-        <div className="flex flex-col gap-2">{children}</div>
+        <pre className="flex flex-col gap-2">{children}</pre>
         <DialogFooter>
           <Button onClick={() => onOpenChange(false)}>확인</Button>
         </DialogFooter>
