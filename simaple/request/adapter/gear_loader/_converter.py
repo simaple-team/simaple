@@ -99,7 +99,6 @@ def _get_gear(
             _potential_translator.translate_expression(item_element["soul_option"]).stat
         )
 
-    print(base_gear.show())
     return base_gear
 
 
