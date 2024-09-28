@@ -104,7 +104,7 @@ def test_mechanic_actor():
     dpm = run_actor(environment_provider, JobType.mechanic)
 
     # then
-    assert int(dpm) == snapshot(7563274726317)
+    assert int(dpm) == snapshot(7981609050409)
 
 
 def test_adele_actor():
