@@ -169,4 +169,4 @@ def test_dualblade_actor():
     dpm = run_actor(environment_provider, JobType.dualblade)
 
     # then
-    assert int(dpm) == snapshot(5560719214823)
+    assert int(dpm) == snapshot(5640506230723)

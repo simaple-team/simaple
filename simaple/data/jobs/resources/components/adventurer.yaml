@@ -3,7 +3,25 @@ kind: Component
 version: simaple.io/BuffSkillComponent
 metadata:
   label:
-    group: adventurer.magician
+    group: adventurer
+    name: 에픽 어드벤쳐
+    id: 2121053-0
+data:
+  id: 2121053-0
+  name: 에픽 어드벤쳐
+  cooldown_duration: 120000
+  delay: 0
+  red: false
+  apply_buff_duration: false
+  lasting_duration: 60000
+  stat:
+    damage_multiplier: 10
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: adventurer.int
     name: 메이플월드 여신의 축복
     id: 400001042-0
 patch:
@@ -25,7 +43,7 @@ kind: Component
 version: simaple.io/BuffSkillComponent
 metadata:
   label:
-    group: adventurer.thief
+    group: adventurer.luk
     name: 메이플월드 여신의 축복
     id: 400001042-1
 patch:

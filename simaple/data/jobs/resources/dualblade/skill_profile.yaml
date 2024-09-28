@@ -22,5 +22,7 @@ data:
     - dualblade
     - common
     - luk_based
+    - adventurer
     - adventurer.thief
+    - adventurer.luk
     - thief

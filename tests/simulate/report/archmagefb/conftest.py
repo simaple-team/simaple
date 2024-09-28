@@ -10,7 +10,16 @@ from simaple.simulate.kms import get_builder
 @pytest.fixture
 def archmagefb_simulation_runtime() -> SimulationRuntime:
     return get_builder(
-        ["archmagefb", "common", "adventurer.magician", "mob"],
+        [
+            "archmagefb",
+            "common",
+            "int_based",
+            "magician",
+            "adventurer",
+            "adventurer.int",
+            "adventurer.magician",
+            "mob",
+        ],
         {
             "도트 퍼니셔": 30,
             "포이즌 노바": 30,
