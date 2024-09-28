@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 import pytest
+from inline_snapshot import snapshot
 
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.environment_provider import BaselineEnvironmentProvider
@@ -49,4 +50,4 @@ def test_dsl(
 
     dpm = container.damage_calculator().calculate_dpm(list(engine.simulation_entries()))
     print(f"{engine.get_current_viewer()('clock')} | {dpm:,} ")
-    assert pytest.approx(dpm) == 13415528573134.246
+    assert pytest.approx(dpm) == snapshot(13415528573134.246)

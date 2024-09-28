@@ -46,6 +46,7 @@ coverage-report = "pytest --cov=simaple --cov-report=xml"
 unittest = "pytest -vv -x tests/"
 test_wasm = "pytest -vv -x tests/wasm"
 test_data = "pytest -vv -x test_data/"
+test_data_review = "pytest -vv -x test_data/ tests/simulate/policy/test_dsl_runtime.py --inline-snapshot=review"
 rsctest = "pytest -vv -x test_resource/"
 typetest = "mypy simaple tests"
 simulatetest = "pytest -vv -x tests/simulate"
@@ -139,6 +140,7 @@ twine = "^5.0.1"
 pytest = "7.4.2"
 pytest-asyncio = "^0.23.2"
 types-PyYAML = "^6.0.4"
+inline-snapshot = "^0.13.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
