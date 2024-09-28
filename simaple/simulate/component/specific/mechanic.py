@@ -240,7 +240,6 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
     @reducer_method
     def pause(self, payload: DelayPayload, state: HommingMissileState):
         state = state.deepcopy()
-        print(payload)
 
         state.periodic.set_interval_counter(payload.time)
 
