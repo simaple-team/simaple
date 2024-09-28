@@ -3,7 +3,7 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ChartPage from "./pages/ChartPage/ChartPage";
 import { EditorLayout } from "./pages/EditorLayout";
-import LogPage from "./pages/LogPage";
+import LogPage from "./pages/LogPage/LogPage";
 import { PrepareSimaple } from "./pages/PrepareSimaple";
 import { SummaryPage } from "./pages/SummaryPage";
 import { PreferencePage } from "./pages/PreferencePage";

@@ -1,6 +1,12 @@
-import { SkillIcon } from "@/components/SkillIcon";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -16,9 +22,19 @@ import { PlayLogResponse } from "@/sdk/models";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import {
+  BuffTable,
+  DamageTable,
+  EventTable,
+  RunningTable,
+  VadilityTable,
+} from "./Table";
 
 interface LogRowProps {
-  playLog: PlayLogResponse;
+  playLog: PlayLogResponse & {
+    hasRejectedEvent: boolean;
+    hasHighlightedSkill: boolean;
+  };
 
   isSelected?: boolean;
 
@@ -27,10 +43,6 @@ interface LogRowProps {
 
 const LogRow = (props: LogRowProps) => {
   const { playLog, isSelected, onSelect } = props;
-
-  const hasRejectedEvent = playLog.events.some(
-    (event) => event.tag === "global.reject",
-  );
 
   function handleClick() {
     onSelect?.(playLog);
@@ -41,7 +53,8 @@ const LogRow = (props: LogRowProps) => {
       onClick={handleClick}
       className={cn(
         isSelected ? "bg-primary/10 hover:bg-primary/15" : "cursor-pointer",
-        hasRejectedEvent && "bg-red-200",
+        playLog.hasHighlightedSkill && "bg-blue-200",
+        playLog.hasRejectedEvent && "bg-red-200",
       )}
     >
       <TableCell>{secFormatter(playLog.clock)}</TableCell>
@@ -54,164 +67,6 @@ const LogRow = (props: LogRowProps) => {
   );
 };
 
-const VadilityTable = ({ playLog }: { playLog: PlayLogResponse }) => {
-  const { usedSkillNames } = useWorkspace();
-  const { validity_view: validityView } = playLog;
-  // 쿨이 돌고 있거나 사용한 적이 있는 스킬만 남기고, 노쿨 스킬은 제외한다.
-  const skills = useMemo(
-    () =>
-      Object.entries(validityView).filter(
-        (x) =>
-          (x[1].time_left > 0 || usedSkillNames.includes(x[0])) &&
-          x[1].cooldown_duration > 0,
-      ),
-    [validityView, usedSkillNames],
-  );
-
-  return (
-    <Table>
-      <TableHeader className="sticky top-0 bg-background">
-        <TableRow>
-          <TableHead>스킬명</TableHead>
-          <TableHead>남은 쿨타임</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {skills.map(([key, value]) => (
-          <TableRow key={key}>
-            <TableCell>
-              <div className="flex items-center gap-2">
-                <SkillIcon name={key} />
-                {key}
-              </div>
-            </TableCell>
-            <TableCell>{secFormatter(value.time_left)}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
-};
-
-const RunningTable = ({ playLog }: { playLog: PlayLogResponse }) => {
-  const { running_view: runningView } = playLog;
-  const runningSkills = useMemo(
-    () =>
-      Object.entries(runningView)
-        .filter((x) => x[1].time_left > 0)
-        .sort((a, b) => a[1].time_left - b[1].time_left),
-    [runningView],
-  );
-
-  return (
-    <Table>
-      <TableHeader className="sticky top-0 bg-background">
-        <TableRow>
-          <TableHead>스킬명</TableHead>
-          <TableHead>남은 지속시간</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {runningSkills.map(([key, value]) => (
-          <TableRow key={key}>
-            <TableCell>
-              <div className="flex items-center gap-2">
-                <SkillIcon name={key} />
-                {key}
-              </div>
-            </TableCell>
-            <TableCell>{secFormatter(value.time_left)}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
-};
-
-const DamageTable = ({ playLog }: { playLog: PlayLogResponse }) => {
-  const { damage_records: damageRecords } = playLog;
-  const damages = useMemo(
-    () => Object.values(damageRecords).sort((a, b) => a.damage - b.damage),
-    [damageRecords],
-  );
-
-  return (
-    <Table>
-      <TableHeader className="sticky top-0 bg-background">
-        <TableRow>
-          <TableHead>스킬명</TableHead>
-          <TableHead>데미지</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {damages.map(({ name, damage }, i) => (
-          <TableRow key={i}>
-            <TableCell>
-              <div className="flex items-center gap-2">
-                <SkillIcon name={name} />
-                {name}
-              </div>
-            </TableCell>
-            <TableCell>{damageFormatter(damage)}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
-};
-
-const BuffTable = ({ playLog }: { playLog: PlayLogResponse }) => {
-  return (
-    <Table>
-      <TableHeader className="sticky top-0 bg-background">
-        <TableRow>
-          <TableHead>스탯</TableHead>
-          <TableHead>수치</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {Object.entries(playLog.buff_view).map(([key, value]) => (
-          <TableRow key={key}>
-            <TableCell>{key}</TableCell>
-            <TableCell>{String(value)}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
-};
-
-const EventTable = ({ playLog }: { playLog: PlayLogResponse }) => {
-  return (
-    <Table>
-      <TableHeader className="sticky top-0 bg-background">
-        <TableRow>
-          <TableHead>태그</TableHead>
-          <TableHead>이름</TableHead>
-          <TableHead>핸들러</TableHead>
-          <TableHead>메소드</TableHead>
-          <TableHead>페이로드</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {playLog.events.map((event, i) => (
-          <TableRow key={i}>
-            <TableCell>{event.tag}</TableCell>
-            <TableCell>{event.name}</TableCell>
-            <TableCell>{event.handler}</TableCell>
-            <TableCell>{event.method}</TableCell>
-            <TableCell>
-              <pre className="h-24 overflow-scroll">
-                {JSON.stringify(event.payload, null, 2)}
-              </pre>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
-};
-
 const LogPage: React.FC = () => {
   const { history } = useWorkspace();
   const [selectedLog, setSelectedLog] = useState<PlayLogResponse | null>(null);
@@ -219,6 +74,30 @@ const LogPage: React.FC = () => {
     "validity" | "buff" | "running" | "events" | "damage"
   >("validity");
   const [autoSelectLast, setAutoSelectLast] = useState(true);
+  const [skillNameHighlight, setSkillNameHighlight] = useState<string>("NONE");
+
+  const damageEmittedSkillNames = useMemo(
+    () =>
+      history
+        .flatMap((x) => x.damage_records.flatMap((y) => y.name))
+        .filter((x, i, arr) => arr.indexOf(x) === i),
+    [history],
+  );
+
+  const processedHistory = useMemo(() => {
+    return history
+      .slice()
+      .reverse()
+      .map((x) => {
+        const hasHighlightedSkill = x.damage_records.some((y) =>
+          y.name.includes(skillNameHighlight),
+        );
+        const hasRejectedEvent = x.events.some(
+          (event) => event.tag === "global.reject",
+        );
+        return { ...x, hasHighlightedSkill, hasRejectedEvent };
+      });
+  }, [history, skillNameHighlight]);
 
   useEffect(() => {
     if (autoSelectLast) {
@@ -226,18 +105,34 @@ const LogPage: React.FC = () => {
     }
   }, [history, autoSelectLast]);
 
-  const reversedHistory = useMemo(() => {
-    return history.slice().reverse();
-  }, [history]);
-
   return (
     <ErrorBoundary
       fallbackRender={({ error }) => <div>Error: {error.message}</div>}
     >
       <div className="flex flex-col overflow-scroll">
-        <div className="py-2 px-4">
+        <div className="flex items-center py-2 px-4 gap-2">
           <div className="flex items-center gap-1">
-            <Checkbox
+            <Label className="text-sm">다음 스킬이 포함된 로그 강조:</Label>
+            <Select
+              value={skillNameHighlight}
+              onValueChange={setSkillNameHighlight}
+            >
+              <SelectTrigger className="w-64">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={"NONE"}>없음</SelectItem>
+                {damageEmittedSkillNames.map((skillName) => (
+                  <SelectItem key={skillName} value={skillName}>
+                    {skillName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="border-r border-border/40 h-6" />
+          <div className="flex items-center gap-1">
+            <Switch
               id="autoSelectLast"
               checked={autoSelectLast}
               onCheckedChange={(x) => setAutoSelectLast(Boolean(x))}
@@ -263,7 +158,7 @@ const LogPage: React.FC = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {reversedHistory.map((playLog, i) => (
+                {processedHistory.map((playLog, i) => (
                   <LogRow
                     key={i}
                     playLog={playLog}
