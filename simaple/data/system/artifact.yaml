@@ -4,9 +4,9 @@ version: simaple.io/ArtifactEffect
 metadata:
   label:
     type: ArtifactEffect
-    name: all_stat
+    name: 올스탯 증가
 data:  
-  name: all_stat
+  name: 올스탯 증가
   effects: 
   - {}
   - stat:
@@ -65,9 +65,9 @@ version: simaple.io/ArtifactEffect
 metadata:
   label:
     type: ArtifactEffect
-    name: MHP/MP
+    name: 최대 HP/MP 증가
 data:  
-  name: MHP/MP
+  name: 최대 HP/MP 증가
   effects: 
   - {}
   - stat:
@@ -106,9 +106,9 @@ version: simaple.io/ArtifactEffect
 metadata:
   label:
     type: ArtifactEffect
-    name: attack/magic_attack
+    name: 공격력/마력 증가
 data:  
-  name: attack/magic_attack
+  name: 공격력/마력 증가
   effects: 
   - {}
   - stat:
@@ -147,9 +147,9 @@ version: simaple.io/ArtifactEffect
 metadata:
   label:
     type: ArtifactEffect
-    name: damage_multiplier
+    name: 데미지 증가
 data:  
-  name: damage_multiplier
+  name: 데미지 증가
   effects: 
   - {}
   - stat:
@@ -178,9 +178,9 @@ version: simaple.io/ArtifactEffect
 metadata:
   label:
     type: ArtifactEffect
-    name: boss_damage_multiplier
+    name: 보스 몬스터 공격 시 데미지 증가
 data:  
-  name: boss_damage_multiplier
+  name: 보스 몬스터 공격 시 데미지 증가
   effects: 
   - {}
   - stat:
@@ -209,9 +209,9 @@ version: simaple.io/ArtifactEffect
 metadata:
   label:
     type: ArtifactEffect
-    name: ignored_defence
+    name: 몬스터 방어율 무시 증가
 data:  
-  name: ignored_defence
+  name: 몬스터 방어율 무시 증가
   effects: 
   - {}
   - stat:
@@ -240,9 +240,9 @@ version: simaple.io/ArtifactEffect
 metadata:
   label:
     type: ArtifactEffect
-    name: buff_duration
+    name: 버프 지속시간 증가
 data:  
-  name: buff_duration
+  name: 버프 지속시간 증가
   effects: 
   - {}
   - action_stat:
@@ -271,9 +271,9 @@ version: simaple.io/ArtifactEffect
 metadata:
   label:
     type: ArtifactEffect
-    name: critical_rate
+    name: 크리티컬 확률 증가
 data:  
-  name: critical_rate
+  name: 크리티컬 확률 증가
   effects: 
   - {}
   - stat:
@@ -302,9 +302,9 @@ version: simaple.io/ArtifactEffect
 metadata:
   label:
     type: ArtifactEffect
-    name: critical_damage
+    name: 크리티컬 데미지 증가
 data:  
-  name: critical_damage
+  name: 크리티컬 데미지 증가
   effects: 
   - {}
   - stat:
@@ -333,9 +333,9 @@ version: simaple.io/ArtifactEffect
 metadata:
   label:
     type: ArtifactEffect
-    name: summon_duration
+    name: 소환수 지속시간 증가
 data:  
-  name: summon_duration
+  name: 소환수 지속시간 증가
   effects: 
   - {}
   - action_stat:
