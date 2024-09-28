@@ -4,7 +4,6 @@ from simaple.core import Stat
 from simaple.simulate.base import Entity, Event
 from simaple.simulate.component.base import (
     Component,
-    DelayPayload,
     ReducerState,
     reducer_method,
     view_method,
@@ -21,6 +20,7 @@ from simaple.simulate.component.trait.impl import (
 )
 from simaple.simulate.component.util import is_keydown_ended
 from simaple.simulate.component.view import Running
+from simaple.simulate.event import DelayPayload
 from simaple.simulate.global_property import Dynamics
 
 
