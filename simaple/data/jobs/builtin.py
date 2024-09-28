@@ -1,6 +1,6 @@
 import itertools
 from pathlib import Path
-from typing import Iterable, Optional, cast
+from typing import Optional, cast
 
 from simaple.core import JobType
 from simaple.core.base import ExtendedStat
