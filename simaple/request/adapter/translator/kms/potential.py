@@ -1,7 +1,7 @@
 import re
 
 from simaple.core import StatProps
-from simaple.request.translator.asset.stat_provider import (
+from simaple.request.adapter.translator.asset.stat_provider import (
     ActionStatProvider,
     AllStatMultiplierProvider,
     AllStatProvider,
@@ -9,7 +9,7 @@ from simaple.request.translator.asset.stat_provider import (
     NullStatProvider,
     StatProvider,
 )
-from simaple.request.translator.potential import (
+from simaple.request.adapter.translator.potential import (
     AbstractStatProvider,
     PotentialTranslator,
 )

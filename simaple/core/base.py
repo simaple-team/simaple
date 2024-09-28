@@ -389,7 +389,7 @@ class LevelStat(BaseModel):
     magic_attack: float = 0.0
 
     def get_stat(self, level: int) -> Stat:
-        multiplier = level // 10
+        multiplier = level // 9
         return Stat(
             STR=self.STR * multiplier,
             LUK=self.LUK * multiplier,

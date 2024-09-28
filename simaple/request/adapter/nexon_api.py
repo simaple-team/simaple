@@ -5,10 +5,6 @@ import aiohttp
 
 HOST = "https://open.api.nexon.com"
 
-URIS = {
-    "get_character_id": "https://maplestory.nexon.com/Common/Character/GetCharacterId",
-}
-
 
 class CharacterID(TypedDict):
     ocid: str
@@ -48,11 +44,16 @@ class Token:
                 return cast(dict, await resp.json())
 
 
-async def get_character_id(token: Token, name: str) -> CharacterID:
+async def get_character_id(
+    token: Token, name: str, date: datetime.date | None = None
+) -> CharacterID:
+    if date is None:
+        date = datetime.date.today() - datetime.timedelta(days=2)
+
     uri = f"{HOST}/maplestory/v1/id"
 
     resp = await token.request(uri, {"character_name": name})
     return {
         "ocid": resp["ocid"],
-        "date": datetime.datetime.now().date() - datetime.timedelta(days=2),
+        "date": date,
     }

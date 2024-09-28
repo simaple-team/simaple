@@ -1,0 +1,123 @@
+{
+    "date": "2024-09-19T00:00+09:00",
+    "pet_1_name": "마주르카",
+    "pet_1_nickname": "마주르카",
+    "pet_1_icon": "https://open.api.nexon.com/static/maplestory/ItemIcon/KAPCJCIA.png",
+    "pet_1_description": "환상의 시간 속 공간에서 나타난 마주르카입니다. \n장착 시 째깍째깍 동화 시간 세트효과를 얻게 되며, 장착한 쁘띠 마스터 타임 펫의 종류가 많을수록 해당 세트효과는 강화됩니다.\n쁘띠 마스터 타임 펫은 달빛의 힘으로 더욱 넓은 영역의 아이템을 획득할 수 있습니다.",
+    "pet_1_equipment": {
+        "item_name": "영원 마스터 타임",
+        "item_icon": "https://open.api.nexon.com/static/maplestory/ItemIcon/KEHCJOII.png",
+        "item_description": "마주르카의 영원 마스터 타임",
+        "item_option": [
+            {
+                "option_type": "공격력",
+                "option_value": "10"
+            },
+            {
+                "option_type": "마력",
+                "option_value": "44"
+            }
+        ],
+        "scroll_upgrade": 8,
+        "scroll_upgradable": 0,
+        "item_shape": "영원 마스터 타임",
+        "item_shape_icon": "https://open.api.nexon.com/static/maplestory/ItemIcon/KEHCJOII.png"
+    },
+    "pet_1_auto_skill": {
+        "skill_1": "메디테이션",
+        "skill_1_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKHPBMB.png",
+        "skill_2": null,
+        "skill_2_icon": null
+    },
+    "pet_1_pet_type": "루나 쁘띠",
+    "pet_1_skill": [
+        "아이템 줍기",
+        "자동 줍기",
+        "버프 스킬 자동 사용",
+        "펫 훈련 스킬"
+    ],
+    "pet_1_date_expire": "2024-10-05T15:00+09:00",
+    "pet_1_appearance": "마주르카",
+    "pet_1_appearance_icon": "https://open.api.nexon.com/static/maplestory/ItemIcon/KAPCJCIA.png",
+    "pet_2_name": "피치버블",
+    "pet_2_nickname": "피치버블",
+    "pet_2_icon": "https://open.api.nexon.com/static/maplestory/ItemIcon/KAPCJFJC.png",
+    "pet_2_description": "사랑스러운 오로라 빛을 가진 피치버블입니다.",
+    "pet_2_equipment": {
+        "item_name": "피치버블 스타",
+        "item_icon": "https://open.api.nexon.com/static/maplestory/ItemIcon/KEHCJPMI.png",
+        "item_description": "사랑스러운 피치버블의 반짝이는 별빛",
+        "item_option": [
+            {
+                "option_type": "공격력",
+                "option_value": "5"
+            },
+            {
+                "option_type": "마력",
+                "option_value": "41"
+            }
+        ],
+        "scroll_upgrade": 9,
+        "scroll_upgradable": 0,
+        "item_shape": "피치버블 스타",
+        "item_shape_icon": "https://open.api.nexon.com/static/maplestory/ItemIcon/KEHCJPMI.png"
+    },
+    "pet_2_auto_skill": {
+        "skill_1": null,
+        "skill_1_icon": null,
+        "skill_2": "쓸만한 샤프 아이즈",
+        "skill_2_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBMC.png"
+    },
+    "pet_2_pet_type": "루나 드림",
+    "pet_2_skill": [
+        "아이템 줍기",
+        "자동 줍기",
+        "버프 스킬 자동 사용",
+        "펫 훈련 스킬"
+    ],
+    "pet_2_date_expire": "2024-11-14T01:00+09:00",
+    "pet_2_appearance": "피치버블",
+    "pet_2_appearance_icon": "https://open.api.nexon.com/static/maplestory/ItemIcon/KAPCJFJC.png",
+    "pet_3_name": "초크삐",
+    "pet_3_nickname": "초크삐",
+    "pet_3_icon": "https://open.api.nexon.com/static/maplestory/ItemIcon/KAPCJGGJ.png",
+    "pet_3_description": "장난꾸러기 초크삐입니다.",
+    "pet_3_equipment": {
+        "item_name": "머리 위 초크베리",
+        "item_icon": "https://open.api.nexon.com/static/maplestory/ItemIcon/KEHCJAIG.png",
+        "item_description": "초크삐의 자랑스러운 머리 위 초크베리",
+        "item_option": [
+            {
+                "option_type": "공격력",
+                "option_value": "5"
+            },
+            {
+                "option_type": "마력",
+                "option_value": "42"
+            }
+        ],
+        "scroll_upgrade": 9,
+        "scroll_upgradable": 0,
+        "item_shape": "머리 위 초크베리",
+        "item_shape_icon": "https://open.api.nexon.com/static/maplestory/ItemIcon/KEHCJAIG.png"
+    },
+    "pet_3_auto_skill": {
+        "skill_1": "쓸만한 컴뱃 오더스",
+        "skill_1_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBME.png",
+        "skill_2": "쓸만한 홀리 심볼",
+        "skill_2_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBOA.png"
+    },
+    "pet_3_pet_type": "루나 드림",
+    "pet_3_skill": [
+        "아이템 줍기",
+        "이동반경 확대",
+        "자동 줍기",
+        "특정 아이템 줍지 않기",
+        "HP 물약충전",
+        "버프 스킬 자동 사용",
+        "펫 훈련 스킬"
+    ],
+    "pet_3_date_expire": "2024-11-20T01:00+09:00",
+    "pet_3_appearance": "초크삐",
+    "pet_3_appearance_icon": "https://open.api.nexon.com/static/maplestory/ItemIcon/KAPCJGGJ.png"
+}

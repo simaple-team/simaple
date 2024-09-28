@@ -1,14 +1,14 @@
 import re
 
 from simaple.core import ExtendedStat, Stat, StatProps
-from simaple.request.translator.asset.stat_provider import (
+from simaple.request.adapter.translator.asset.stat_provider import (
     AbstractStatProvider,
     ActionStatProvider,
     AllAttackProvider,
     NullStatProvider,
     StatProvider,
 )
-from simaple.request.translator.base import NoMatchedStringError
+from simaple.request.adapter.translator.base import NoMatchedStringError
 
 
 class ZenonProvider(AbstractStatProvider):

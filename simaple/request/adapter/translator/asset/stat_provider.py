@@ -1,5 +1,5 @@
 from simaple.core import ActionStat, ExtendedStat, LevelStat, Stat, StatProps
-from simaple.request.translator.potential import AbstractStatProvider
+from simaple.request.adapter.translator.potential import AbstractStatProvider
 
 
 class AllAttackProvider(AbstractStatProvider):
