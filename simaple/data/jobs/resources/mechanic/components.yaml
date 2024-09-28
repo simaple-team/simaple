@@ -394,13 +394,13 @@ data:
   delay: 720
   lasting_duration: 70_000
 
-  periodic_interval: 2850
+  periodic_interval: 2850 # 첫 발사까지 810, 공격 후 돌아올 때까지 1260, 교체 애니매이션 540, 240
 
   maximum_intercepter: 16
   start_intercepter: 9
   damage_per_intercepter: "{{ 250 + 10 * skill_level }}"
   hit_per_intercepter: 4
-  intercepter_penalty: 120
+  intercepter_penalty: 120 # 발사 사이 간격 120
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
