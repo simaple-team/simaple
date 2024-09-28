@@ -346,12 +346,12 @@ metadata:
   label:
     group: archmagetc
     name: 프로즌 라이트닝
-    id: 400021090-0-?
+    id: 2241500-0
 patch:
   - SkillLevelPatch
   - ArithmeticPatch
 data:
-  id: 400021090-0-?
+  id: 2241500-0
   name: 프로즌 라이트닝
   damage_and_hits:
     - damage: "{{ 395 + skill_level * 14 }}"

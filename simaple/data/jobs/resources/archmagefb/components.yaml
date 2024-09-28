@@ -30,9 +30,9 @@ metadata:
   label:
     group: archmagefb
     name: 퍼번트 드레인
-    id: 212053-0
+    id: 2120014-0
 data:
-  id: 212053-0
+  id: 2120014-0
   name: 퍼번트 드레인
   cooldown_duration: 0
   delay: 0
@@ -450,12 +450,12 @@ metadata:
   label:
     group: archmagefb
     name: 인페르날 베놈
-    id: 400021411-0
+    id: 2141500-0
 patch:
   - SkillLevelPatch
   - ArithmeticPatch
 data:
-  id: 400021411-0
+  id: 2141500-0
   name: 인페르날 베놈
   binds:
     drain_stack: ".퍼번트 드레인.drain_stack"

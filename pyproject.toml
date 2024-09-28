@@ -32,6 +32,7 @@ _build = "poetry build"
 _clean_dist_build = "rm -rf dist/ webui/public/*.whl"
 export-whl = ["_clean_dist_build", "_build", "setup-webui-whl"]
 gen-schema = "python scripts/build/generate_json_schema_for_wasm.py"
+check-icon = "python scripts/build/check_icon.py"
 
 _black = "black simaple tests scripts"
 _isort = "isort simaple tests scripts"
