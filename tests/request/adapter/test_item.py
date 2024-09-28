@@ -23,15 +23,19 @@ def test_item_equipment(character_item_equipment_response: CharacterItemEquipmen
     gear = gears[0][0]
     assert gear.stat == Stat.model_validate(
         {
-            "STR": 5.0,
-            "LUK": 178.0,
-            "INT": 226.0,
-            "DEX": 45.0,
+            "STR": 0.0,
+            "LUK": 173.0,
+            "INT": 221.0,
+            "DEX": 40.0,
             "attack_power": 85.0,
             "magic_attack": 87.0,
             "ignored_defence": 10.0,
             "MHP": 615.0,
             "MMP": 360.0,
+            "STR_multiplier": 5.0,
+            "LUK_multiplier": 5.0,
+            "INT_multiplier": 5.0,
+            "DEX_multiplier": 5.0,
         }
     )
 
