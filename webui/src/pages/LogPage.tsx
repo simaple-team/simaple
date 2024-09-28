@@ -71,8 +71,10 @@ const VadilityTable = ({ playLog }: { playLog: PlayLogResponse }) => {
   return (
     <Table>
       <TableHeader className="sticky top-0 bg-background">
-        <TableHead>스킬명</TableHead>
-        <TableHead>남은 쿨타임</TableHead>
+        <TableRow>
+          <TableHead>스킬명</TableHead>
+          <TableHead>남은 쿨타임</TableHead>
+        </TableRow>
       </TableHeader>
       <TableBody>
         {skills.map(([key, value]) => (
@@ -104,8 +106,10 @@ const RunningTable = ({ playLog }: { playLog: PlayLogResponse }) => {
   return (
     <Table>
       <TableHeader className="sticky top-0 bg-background">
-        <TableHead>스킬명</TableHead>
-        <TableHead>남은 지속시간</TableHead>
+        <TableRow>
+          <TableHead>스킬명</TableHead>
+          <TableHead>남은 지속시간</TableHead>
+        </TableRow>
       </TableHeader>
       <TableBody>
         {runningSkills.map(([key, value]) => (
@@ -134,8 +138,10 @@ const DamageTable = ({ playLog }: { playLog: PlayLogResponse }) => {
   return (
     <Table>
       <TableHeader className="sticky top-0 bg-background">
-        <TableHead>스킬명</TableHead>
-        <TableHead>데미지</TableHead>
+        <TableRow>
+          <TableHead>스킬명</TableHead>
+          <TableHead>데미지</TableHead>
+        </TableRow>
       </TableHeader>
       <TableBody>
         {damages.map(({ name, damage }, i) => (
@@ -158,8 +164,10 @@ const BuffTable = ({ playLog }: { playLog: PlayLogResponse }) => {
   return (
     <Table>
       <TableHeader className="sticky top-0 bg-background">
-        <TableHead>스탯</TableHead>
-        <TableHead>수치</TableHead>
+        <TableRow>
+          <TableHead>스탯</TableHead>
+          <TableHead>수치</TableHead>
+        </TableRow>
       </TableHeader>
       <TableBody>
         {Object.entries(playLog.buff_view).map(([key, value]) => (
@@ -177,11 +185,13 @@ const EventTable = ({ playLog }: { playLog: PlayLogResponse }) => {
   return (
     <Table>
       <TableHeader className="sticky top-0 bg-background">
-        <TableHead>태그</TableHead>
-        <TableHead>이름</TableHead>
-        <TableHead>핸들러</TableHead>
-        <TableHead>메소드</TableHead>
-        <TableHead>페이로드</TableHead>
+        <TableRow>
+          <TableHead>태그</TableHead>
+          <TableHead>이름</TableHead>
+          <TableHead>핸들러</TableHead>
+          <TableHead>메소드</TableHead>
+          <TableHead>페이로드</TableHead>
+        </TableRow>
       </TableHeader>
       <TableBody>
         {playLog.events.map((event, i) => (
@@ -246,9 +256,11 @@ const LogPage: React.FC = () => {
           <div className="w-[600px] flex">
             <Table>
               <TableHeader className="sticky top-0 bg-background">
-                <TableHead>시간</TableHead>
-                <TableHead>행동</TableHead>
-                <TableHead>데미지</TableHead>
+                <TableRow>
+                  <TableHead>시간</TableHead>
+                  <TableHead>행동</TableHead>
+                  <TableHead>데미지</TableHead>
+                </TableRow>
               </TableHeader>
               <TableBody>
                 {reversedHistory.map((playLog, i) => (
