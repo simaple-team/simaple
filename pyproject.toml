@@ -26,7 +26,7 @@ _black-check = "black --check simaple tests"
 _isort-check = "isort --check-only simaple tests"
 formatting-check = ["_black-check", "_isort-check"]
 
-_build = "pyproject-build"
+_build = "poetry build"
 
 
 _clean_dist_build = "rm -rf dist/ webui/public/*.whl"
