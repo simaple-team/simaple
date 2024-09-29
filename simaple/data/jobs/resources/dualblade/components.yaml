@@ -195,13 +195,13 @@ data:
   id: 4341052-0
   name: 아수라
 
-  damage: 693
-  hit: 5
+  damage: 560
+  hit: 6
   cooldown_duration: 60_000
 
-  maximum_keydown_time: 5000
+  maximum_keydown_time: 3000
   keydown_prepare_delay: 810
-  delay: 300
+  delay: 180
   keydown_end_delay: 360
 
   finish_damage: 0
@@ -226,11 +226,11 @@ data:
   id: 400041006-0
   name: 블레이드 스톰
 
-  damage: "{{ 570 + skill_level * 13 }}"
-  delay: 120
-  hit: 5
+  damage: "{{ 400 + skill_level * 8 }}"
+  delay: 90
+  hit: 7
 
-  maximum_keydown_time: 5000
+  maximum_keydown_time: 4000
 
   keydown_prepare_delay: 120
   prepare_damage: "{{ 580 + skill_level * 23 }}"
@@ -401,13 +401,13 @@ data:
   name: 아수라 VI
   representative_name: "아수라"
 
-  damage: 693
-  hit: 5
+  damage: "{{ 600 + skill_level * 17 }}"
+  hit: 6
   cooldown_duration: 60_000
 
-  maximum_keydown_time: 5000
+  maximum_keydown_time: 3000
   keydown_prepare_delay: 810
-  delay: 300
+  delay: 180
   keydown_end_delay: 360
 
   finish_damage: 0

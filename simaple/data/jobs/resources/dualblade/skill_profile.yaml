@@ -25,8 +25,8 @@ data:
   hexa_skill_names:
     - 카르마 블레이드
   hexa_mastery:
-    - 팬텀 블로우: 팬텀 블로우 VI
-    - 아수라: 아수라 VI
+    팬텀 블로우: 팬텀 블로우 VI
+    아수라: 아수라 VI
   component_groups:
     - dualblade
     - common
