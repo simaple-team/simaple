@@ -380,7 +380,7 @@ data:
   hit: 6
 
   modifier:
-    ignored_defence: 40
+    ignored_defence: "{{ 30 + ceil(skill_level / 3) }}"
 
   default_skill_level: 30
   v_improvement: 2
