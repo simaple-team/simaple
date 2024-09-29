@@ -6,7 +6,6 @@ import { EditorLayout } from "./pages/EditorLayout";
 import LogPage from "./pages/LogPage/LogPage";
 import { PrepareSimaple } from "./pages/PrepareSimaple";
 import { SummaryPage } from "./pages/SummaryPage";
-import { PreferencePage } from "./pages/PreferencePage";
 
 const router = createBrowserRouter([
   {
@@ -28,10 +27,6 @@ const router = createBrowserRouter([
       {
         path: "summary",
         element: <SummaryPage />,
-      },
-      {
-        path: "preference",
-        element: <PreferencePage />,
       },
     ],
   },
