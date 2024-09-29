@@ -13,7 +13,7 @@ data:
   id: 400041032-0
   name: 레디 투 다이
   cooldown_duration: "{{ (90 - skill_level // 2) * 1000 }}"
-  delay: 600
+  delay: "apply_attack_speed(780)"
   lasting_duration: 15_000
   stat:
-    final_damage_multiplier: "{{ 30 + skill_level // 5 }}"
+    final_damage_multiplier: "{{ 24 + skill_level // 5 }}"
