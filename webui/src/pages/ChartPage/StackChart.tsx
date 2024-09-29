@@ -59,7 +59,7 @@ export function StackChart() {
   }
 
   return (
-    <Card>
+    <Card className="max-w-[1200px]">
       <CardHeader>
         <CardTitle>스택</CardTitle>
       </CardHeader>

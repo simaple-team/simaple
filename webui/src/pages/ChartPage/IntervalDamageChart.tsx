@@ -65,7 +65,7 @@ export function IntervalDamageChart() {
   ) satisfies ChartConfig;
 
   return (
-    <Card>
+    <Card className="max-w-[1200px]">
       <CardHeader>
         <CardTitle>구간 데미지</CardTitle>
       </CardHeader>
