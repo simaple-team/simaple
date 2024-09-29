@@ -1,3 +1,4 @@
+import re
 from typing import cast
 
 from simaple.core import ExtendedStat, JobType
@@ -53,6 +54,15 @@ class NexonAPIUnionLoader(UnionLoader):
             await self._token.request(uri, get_character_id_param(character_id)),
         )
         return get_union_artifact(resp)
+
+    async def load_union_occupation_stat(self, character_name: str) -> ExtendedStat:
+        character_id = await get_character_id(self._token, character_name)
+        uri = f"{HOST}/maplestory/v1/user/union-raider"
+        resp = cast(
+            CharacterUnionRaiderResponse,
+            await self._token.request(uri, get_character_id_param(character_id)),
+        )
+        return get_union_occupration_stat(resp)
 
 
 def _get_block_size(level: int) -> int:
