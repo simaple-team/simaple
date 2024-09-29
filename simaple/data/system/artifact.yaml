@@ -358,3 +358,159 @@ data:
       summon_duration: 18
   - action_stat:
       summon_duration: 20
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: 아이템 드롭률 증가
+data:  
+  name: 아이템 드롭률 증가
+  effects: 
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: 파이널 어택류 스킬 데미지 증가
+data:  
+  name: 파이널 어택류 스킬 데미지 증가
+  effects: 
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: 상태이상 내성 증가
+data:  
+  name: 상태이상 내성 증가
+  effects: 
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: 추가 경험치 획득 증가
+data:  
+  name: 추가 경험치 획득 증가
+  effects: 
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: 메소 획득량 증가
+data:  
+  name: 메소 획득량 증가
+  effects: 
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+---
+kind: ArtifactEffect 
+version: simaple.io/ArtifactEffect
+metadata:
+  label:
+    type: ArtifactEffect
+    name: 재사용 대기시간 미적용 확률 증가
+data:  
+  name: 재사용 대기시간 미적용 확률 증가
+  effects: 
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}

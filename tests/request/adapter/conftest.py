@@ -78,3 +78,8 @@ def set_effect_response() -> SetEffectResponse:
 @pytest.fixture
 def cashitem_equipment_response() -> CashItemResponse:
     return cast(CashItemResponse, _macro_get_response("cashitem_equipment.json"))
+
+
+@pytest.fixture
+def union_artifact_response() -> dict[str, Any]:
+    return _macro_get_response("union_artifact.json")

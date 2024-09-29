@@ -1,6 +1,7 @@
 from typing import cast
 
 from simaple.core import ExtendedStat, JobType
+from simaple.data.system.artifact import get_artifact_effects
 from simaple.data.system.union_block import get_all_blocks
 from simaple.request.adapter.nexon_api import (
     HOST,
@@ -15,8 +16,10 @@ from simaple.request.adapter.translator.kms.union_raider import (
 from simaple.request.adapter.union_loader._schema import (
     CharacterUnionRaiderBlock,
     CharacterUnionRaiderResponse,
+    UnionArtifactResponse,
 )
 from simaple.request.service.loader import UnionLoader
+from simaple.system.artifact import Artifact, ArtifactCard, ArtifactEffect
 from simaple.system.union import UnionSquad
 
 
@@ -107,3 +110,28 @@ def get_union_squad_effect(
         stat += translator.translate(expression)
 
     return stat
+
+
+def get_union_artifact(
+    response: UnionArtifactResponse,
+) -> Artifact:
+    effects = get_artifact_effects()
+
+    cards = []
+
+    for crystal in response["union_artifact_crystal"]:
+        if crystal["validity_flag"] != "0":
+            continue
+
+        cards.append(
+            ArtifactCard(
+                effects=(
+                    crystal["crystal_option_name_1"],
+                    crystal["crystal_option_name_2"],
+                    crystal["crystal_option_name_3"],
+                ),
+                level=crystal["level"],
+            )
+        )
+
+    return Artifact(cards=cards, effects=effects)
