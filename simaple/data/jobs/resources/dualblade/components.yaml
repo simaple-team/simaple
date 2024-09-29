@@ -360,7 +360,7 @@ kind: Component
 version: simaple.io/AttackSkillComponent
 metadata:
   label:
-    group: mechanic
+    group: dualblade
     name: 팬텀 블로우 VI
     id: 4361000-0
 patch:
@@ -399,6 +399,7 @@ patch:
 data:
   id: 4361001-0
   name: 아수라 VI
+  representative_name: "아수라"
 
   damage: 693
   hit: 5
@@ -421,7 +422,7 @@ kind: SkillImprovement
 version: simaple.io/SkillAdditiveImprovement
 metadata:
   label:
-    group: archmagetc
+    group: dualblade
     name: 아수라 VI
 patch:
   - SkillLevelPatch
