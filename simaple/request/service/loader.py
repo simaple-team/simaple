@@ -63,3 +63,7 @@ class CharacterBasicLoader(ABC):
     @abstractmethod
     async def load_character_level(self, character_name: str) -> int:
         pass
+
+    @abstractmethod
+    async def load_character_ap_based_stat(self, character_name: str) -> Stat:
+        pass
