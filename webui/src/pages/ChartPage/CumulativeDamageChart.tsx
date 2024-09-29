@@ -25,7 +25,7 @@ export function CumulativeDamageChart() {
   const ticks = useMemo(() => getXAxisTicks(logs), [logs]);
 
   return (
-    <Card>
+    <Card className="max-w-[1200px]">
       <CardHeader>
         <CardTitle>누적 데미지</CardTitle>
       </CardHeader>

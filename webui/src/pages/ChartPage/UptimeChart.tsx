@@ -194,7 +194,7 @@ const UptimeChart: React.FC = () => {
   const options = useChart(unfilteredLogs, selectedSkillNames);
 
   return (
-    <Card>
+    <Card className="max-w-[1200px]">
       <CardHeader>
         <CardTitle>지속시간</CardTitle>
       </CardHeader>
