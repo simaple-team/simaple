@@ -41,8 +41,6 @@ type ECOption = echarts.ComposeOption<
   | MarkLineComponentOption
 >;
 
-const MAX_CLOCK = 180 * 1000;
-
 export function useChart(
   history: PlayLogResponse[],
   skillNames: string[],
@@ -64,7 +62,7 @@ export function useChart(
           value: [
             i,
             log.clock,
-            Math.min(log.clock + log.running_view[name].time_left, MAX_CLOCK),
+            Math.min(log.clock + log.running_view[name].time_left, clock),
           ],
           itemStyle: {
             normal: {
@@ -154,7 +152,7 @@ export function useChart(
     xAxis: {
       type: "value",
       min: 0,
-      max: MAX_CLOCK,
+      max: clock,
       axisLabel: {
         formatter: secFormatter,
       },
