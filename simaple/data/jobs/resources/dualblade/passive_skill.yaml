@@ -27,6 +27,17 @@ version: simaple.io/PassiveSkill
 metadata:
   label:
     group: dualblade
+    name: 베놈
+data:
+  name: 베놈
+  stat:
+    final_damage_multiplier: 9
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: dualblade
     name: 이도 엑셀레이션
 data:
   name: 이도 엑셀레이션
@@ -47,6 +58,17 @@ data:
   stat:
     attack_power: "{{ 10 + skill_level }}"
   default_skill_level: 20
+---
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: dualblade
+    name: 섀도우 이베이젼
+data:
+  name: 섀도우 이베이젼
+  stat:
+    final_damage_multiplier: 6
 ---
 kind: PassiveSkill
 version: simaple.io/PassiveSkill
