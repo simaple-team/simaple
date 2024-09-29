@@ -322,6 +322,12 @@ metadata:
     name: demonavenger
 data:
   job: demonavenger
+  options:
+  - boss_damage_multiplier: 1
+  - boss_damage_multiplier: 2
+  - boss_damage_multiplier: 3
+  - boss_damage_multiplier: 5
+  - boss_damage_multiplier: 6
 ---
 kind: UnionBlock 
 version: simaple.io/UnionBlock
@@ -331,12 +337,6 @@ metadata:
     name: demonslayer
 data:
   job: demonslayer
-  options:
-  - boss_damage_multiplier: 1
-  - boss_damage_multiplier: 2
-  - boss_damage_multiplier: 3
-  - boss_damage_multiplier: 5
-  - boss_damage_multiplier: 6
 ---
 kind: UnionBlock 
 version: simaple.io/UnionBlock

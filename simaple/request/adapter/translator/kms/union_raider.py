@@ -87,6 +87,10 @@ def kms_union_provider_patterns() -> list[tuple[re.Pattern, AbstractStatProvider
             re.compile(r"^공격 시 20%의 확률로 데미지 ([0-9]+)% 증가$"),
             WildHunterProvider(),
         ),
+        (
+            re.compile(r"^소환수 지속시간 ([0-9]+)% 증가$"),
+            ActionStatProvider(target="summon_duration"),
+        ),
     ]
 
 

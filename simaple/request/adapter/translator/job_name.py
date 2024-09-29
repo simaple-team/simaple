@@ -21,6 +21,7 @@ _kms_job_names: dict[str, JobType] = {
     "와일드헌터": JobType.wildhunter,
     "섀도어": JobType.shadower,
     "캐논슈터": JobType.cannoneer,
+    "캐논마스터": JobType.cannoneer,
     "미하일": JobType.mihile,
     "듀얼블레이더": JobType.dualblade,
     "듀얼블레이드": JobType.dualblade,

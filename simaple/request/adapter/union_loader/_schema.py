@@ -15,7 +15,7 @@ class _CharacterUnionRaiderBlockPos(TypedDict):
 class CharacterUnionRaiderBlock(TypedDict):
     block_type: str
     block_class: str
-    block_level: int
+    block_level: str
     block_control_point: _CharacterUnionRaiderBlockPos
     block_position: list[_CharacterUnionRaiderBlockPos]
 

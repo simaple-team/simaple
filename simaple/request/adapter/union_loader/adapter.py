@@ -54,6 +54,7 @@ class NexonAPIUnionLoader(UnionLoader):
         )
         return get_union_artifact(resp)
 
+
 def _get_block_size(level: int) -> int:
     if level <= 60:
         return 0
@@ -84,7 +85,7 @@ def _get_maplestory_m_block_size(level: int) -> int:
 
 def parse_block(block: CharacterUnionRaiderBlock) -> tuple[JobType, int]:
     job_type = translate_kms_name(block["block_class"])
-    level = block["block_level"]
+    level = int(block["block_level"])
 
     if job_type == JobType.virtual_maplestory_m:
         block_size = _get_maplestory_m_block_size(level)
