@@ -159,10 +159,14 @@ data:
   name: 히든 블레이드
   listening_actions:
     "아수라.elapse.emitted.global.damage": trigger
+    "아수라 VI.elapse.emitted.global.damage": trigger
     "팬텀 블로우.use.emitted.global.damage": trigger
+    "팬텀 블로우 VI.use.emitted.global.damage": trigger
     "써든레이드.use.emitted.global.damage": trigger
     "플래시 뱅.use.emitted.global.damage": trigger
     "파이널 컷.use.emitted.global.damage": trigger
+    "블레이드 스톰.use.emitted.global.damage": trigger
+    "블레이드 스톰.elapse.emitted.global.damage": trigger
     "카르마 퓨리.use.emitted.global.damage": trigger
     "블레이드 토네이도.use.emitted.global.damage": trigger
     "블레이드 토네이도.elapse.emitted.global.damage": trigger
@@ -319,6 +323,7 @@ data:
   name: 헌티드 엣지 - 나찰
   listening_actions:
     "팬텀 블로우.use.emitted.global.delay": use
+    "팬텀 블로우 VI.use.emitted.global.delay": use
 
   damage: "{{ 435 + skill_level * 17 }}"
   delay: 0
