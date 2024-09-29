@@ -17,7 +17,7 @@ data:
   id: 4341009-0
   name: 팬텀 블로우
   cooldown_duration: 0
-  delay: 540
+  delay: "{{ apply_attack_speed(720) }}"
   damage: "{{ 240 + 3 * skill_level }}"
   hit: 6
 
@@ -166,8 +166,9 @@ data:
     "카르마 퓨리.use.emitted.global.damage": trigger
     "블레이드 토네이도.use.emitted.global.damage": trigger
     "블레이드 토네이도.elapse.emitted.global.damage": trigger
+    "헌티드 엣지 - 나찰.use.emitted.global.damage": trigger
   delay: 0
-  cooldown_duration: 90000
+  cooldown_duration: 0
   lasting_duration: 90000
 
   trigger_cooldown_duration: 0
@@ -345,12 +346,89 @@ patch:
 data:
   id: 400001023-0
   name: 얼티밋 다크 사이트
-  cooldown_duration: "{{ (220 - skill_level) * 1000 }}"
+  cooldown_duration: "{{ (210 - skill_level) * 1000 }}"
   red: True
 
-  delay: 700
+  delay: 700 # TODO: Check delay
   lasting_duration: 30_000
   apply_buff_duration: False
 
-  final_damage_multiplier: "{{ 10 + skill_level // 5 }}"
+  final_damage_multiplier: "{{ 8 + skill_level // 5 }}"
   advanced_dark_sight_final_damage_multiplier: 20
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: mechanic
+    name: 팬텀 블로우 VI
+    id: 4361000-0
+patch:
+  - SkillLevelPatch
+  - ArithmeticPatch
+  - VSkillImprovementPatch
+  - PassiveHyperskillPatch
+  - SkillImprovementPatch
+data:
+  id: 4361000-0
+  name: 팬텀 블로우 VI
+  representative_name: "팬텀 블로우"
+
+  cooldown_duration: 0
+  delay: "{{ apply_attack_speed(720) }}"
+  damage: "{{ 350 + 6 * skill_level }}"
+  hit: 6
+
+  modifier:
+    ignored_defence: 40
+
+  default_skill_level: 30
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/KeydownSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 아수라 VI
+    id: 4361001-0
+patch:
+  - SkillLevelPatch
+  - ArithmeticPatch
+  - VSkillImprovementPatch
+data:
+  id: 4361001-0
+  name: 아수라 VI
+
+  damage: 693
+  hit: 5
+  cooldown_duration: 60_000
+
+  maximum_keydown_time: 5000
+  keydown_prepare_delay: 810
+  delay: 300
+  keydown_end_delay: 360
+
+  finish_damage: 0
+  finish_hit: 0
+
+  modifier:
+    ignored_defence: 100
+
+  v_improvement: 2
+---
+kind: SkillImprovement
+version: simaple.io/SkillAdditiveImprovement
+metadata:
+  label:
+    group: archmagetc
+    name: 아수라 VI
+patch:
+  - SkillLevelPatch
+  - ArithmeticPatch
+data:
+  name: 아수라 VI
+  advantages:
+    - target_name: 팬텀 블로우 IV
+      target_field: damage
+      value: "{{ (46 + skill_level * 2) * (skill_level > 0) }}"
