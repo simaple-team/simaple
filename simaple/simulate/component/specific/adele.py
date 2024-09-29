@@ -80,8 +80,10 @@ class AdeleEtherComponent(Component):
     ):
         state = state.deepcopy()
 
-        lapse_count = state.periodic.elapse(time)
-        state.ether_gauge.increase(lapse_count * self.stack_per_period)
+        resolving = state.periodic.resolving(time)
+
+        for _ in resolving:
+            state.ether_gauge.increase(self.stack_per_period)
 
         return state, [self.event_provider.elapsed(time)]
 
@@ -480,19 +482,19 @@ class AdeleRuinComponent(
         state = state.deepcopy()
 
         state.cooldown.elapse(time)
-        lapse_count_first = state.interval_state_first.elapse(time)
-        lapse_count_second = state.interval_state_second.elapse(time)
+        resolving_first = state.interval_state_first.resolving(time)
+        resolving_second = state.interval_state_second.resolving(time)
 
         return state, [self.event_provider.elapsed(time)] + [
             self.event_provider.dealt(
                 self.periodic_damage_first, self.periodic_hit_first
             )
-            for _ in range(lapse_count_first)
+            for _ in resolving_first
         ] + [
             self.event_provider.dealt(
                 self.periodic_damage_second, self.periodic_hit_second
             )
-            for _ in range(lapse_count_second)
+            for _ in resolving_second
         ]
 
     @reducer_method

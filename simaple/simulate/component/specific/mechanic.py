@@ -137,7 +137,7 @@ class RobotSummonSkill(
         state = state.deepcopy()
 
         state.cooldown.elapse(time)
-        lapse_count = state.periodic.elapse(time)
+        resolving = state.periodic.resolving(time)
 
         return state, [self.event_provider.elapsed(time)] + [
             self.event_provider.dealt(
@@ -145,7 +145,7 @@ class RobotSummonSkill(
                 self.periodic_hit,
                 modifier=state.robot_mastery.get_robot_modifier(),
             )
-            for _ in range(lapse_count)
+            for _ in resolving
         ]
 
     @reducer_method
@@ -220,7 +220,7 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
         state = state.deepcopy()
 
         state.cooldown.elapse(time)
-        lapse_count = state.periodic.elapse(time)
+        resolving = state.periodic.resolving(time)
 
         return state, [self.event_provider.elapsed(time)] + [
             self.event_provider.dealt(
@@ -234,7 +234,7 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
                     else None
                 ),
             )
-            for _ in range(lapse_count)
+            for _ in resolving
         ]
 
     @reducer_method

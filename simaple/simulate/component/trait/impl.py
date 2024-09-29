@@ -213,15 +213,13 @@ class PeriodicElapseTrait(
         state: CooldownPeriodicGeneric,
     ) -> tuple[CooldownPeriodicGeneric, list[Event]]:
         state = state.deepcopy()
-
         state.cooldown.elapse(time)
-        lapse_count = state.periodic.elapse(time)
 
         periodic_damage, periodic_hit = self._get_periodic_damage_hit(state)
+        resolving = state.periodic.resolving(time)
 
         return state, [self.event_provider.elapsed(time)] + [
-            self.event_provider.dealt(periodic_damage, periodic_hit)
-            for _ in range(lapse_count)
+            self.event_provider.dealt(periodic_damage, periodic_hit) for _ in resolving
         ]
 
 

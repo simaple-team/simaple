@@ -8,7 +8,7 @@ from simaple.simulate.component.skill import Periodic
     [
         (1500, 12),
         (300, 3),
-        (750, 7),
+        (750, 8),
     ],
 )
 def test_periodic_iterator(time, expected):

@@ -99,9 +99,7 @@ class Periodic(Entity):
 
     def set_time_left(self, time: float, initial_counter: Optional[float] = None):
         self.time_left = time
-        self.interval_counter = (
-            initial_counter if initial_counter is not None else self.interval
-        )
+        self.interval_counter = initial_counter if initial_counter is not None else 0
         self.count = 0
 
     def set_interval_counter(self, counter: float):
@@ -110,41 +108,18 @@ class Periodic(Entity):
     def enabled(self):
         return self.time_left > 0
 
-    def elapse(self, time: float) -> int:
-        if self.time_left <= 0:
-            return 0
-
-        maximum_elapsed = max(
-            0, int((self.time_left - self.interval_counter) // self.interval) + 1
-        )
-        self.time_left -= time
-        self.interval_counter -= time
-
-        if self.interval_counter < 0:
-            lapse_count = int(self.interval_counter // self.interval)
-            self.interval_counter = self.interval_counter % self.interval
-            count = min(maximum_elapsed, lapse_count * -1)
-            self.count += count
-            return count
-
-        return 0
-
     def resolving(self, time: float):
         if self.time_left <= 0:
             return 0
 
-        maximum_elapsed = max(
-            0, int((self.time_left - self.interval_counter) // self.interval) + 1
-        )
-
+        self.interval_counter -= min(time, self.time_left)
         self.time_left -= time
-        self.interval_counter -= time
         elapse_count = 0
 
-        while self.interval_counter <= 0 and elapse_count < maximum_elapsed:
+        while self.interval_counter < 0:
             self.interval_counter += self.interval
             elapse_count += 1
-            yield 1
+            yield self.count
             self.count += 1
 
     def disable(self):
