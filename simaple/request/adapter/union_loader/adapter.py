@@ -45,6 +45,14 @@ class NexonAPIUnionLoader(UnionLoader):
         )
         return get_union_squad_effect(resp)
 
+    async def load_union_artifact(self, character_name: str) -> Artifact:
+        character_id = await get_character_id(self._token, character_name)
+        uri = f"{HOST}/maplestory/v1/user/union-artifact"
+        resp = cast(
+            UnionArtifactResponse,
+            await self._token.request(uri, get_character_id_param(character_id)),
+        )
+        return get_union_artifact(resp)
 
 def _get_block_size(level: int) -> int:
     if level <= 60:

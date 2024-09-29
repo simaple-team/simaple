@@ -6,7 +6,7 @@ from simaple.gear.symbol_gear import SymbolGear
 from simaple.system.hyperstat import Hyperstat
 from simaple.system.propensity import Propensity
 from simaple.system.union import UnionSquad
-
+from simaple.system.artifact import Artifact
 
 class AbilityLoader(ABC):
     @abstractmethod
@@ -35,6 +35,9 @@ class UnionLoader(ABC):
     async def load_union_squad_effect(self, character_name: str) -> ExtendedStat:
         pass
 
+    @abstractmethod
+    async def load_union_artifact(self, character_name: str) -> Artifact:
+        pass
 
 class GearLoader(ABC):
     @abstractmethod
