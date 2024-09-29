@@ -5,6 +5,7 @@ from typing import Any, cast
 import pytest
 
 from simaple.request.adapter.ability_loader._schema import CharacterAbilityResponse
+from simaple.request.adapter.character_basic_loader._schema import CharacterStatResponse
 from simaple.request.adapter.gear_loader._schema import (
     CashItemResponse,
     CharacterItemEquipment,
@@ -83,3 +84,8 @@ def cashitem_equipment_response() -> CashItemResponse:
 @pytest.fixture
 def union_artifact_response() -> dict[str, Any]:
     return _macro_get_response("union_artifact.json")
+
+
+@pytest.fixture
+def character_stat_response() -> CharacterStatResponse:
+    return cast(CharacterStatResponse, _macro_get_response("character_stat.json"))

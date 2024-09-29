@@ -3,10 +3,11 @@ from abc import ABC, abstractmethod
 from simaple.core import ExtendedStat, Stat
 from simaple.gear.gear import Gear
 from simaple.gear.symbol_gear import SymbolGear
+from simaple.system.artifact import Artifact
 from simaple.system.hyperstat import Hyperstat
 from simaple.system.propensity import Propensity
 from simaple.system.union import UnionSquad
-from simaple.system.artifact import Artifact
+
 
 class AbilityLoader(ABC):
     @abstractmethod
@@ -39,6 +40,7 @@ class UnionLoader(ABC):
     async def load_union_artifact(self, character_name: str) -> Artifact:
         pass
 
+
 class GearLoader(ABC):
     @abstractmethod
     async def load_equipments(self, character_name: str) -> list[tuple[Gear, str]]:
@@ -54,4 +56,10 @@ class GearLoader(ABC):
 
     @abstractmethod
     async def load_gear_related_stat(self, character_name: str) -> ExtendedStat:
+        pass
+
+
+class CharacterBasicLoader(ABC):
+    @abstractmethod
+    async def load_character_level(self, character_name: str) -> int:
         pass
