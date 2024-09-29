@@ -14,6 +14,9 @@ from simaple.request.adapter.translator.job_name import translate_kms_name
 from simaple.request.adapter.translator.kms.union_raider import (
     kms_union_stat_translator,
 )
+from simaple.request.adapter.union_loader._converter import (
+    get_stat_from_occupation_description,
+)
 from simaple.request.adapter.union_loader._schema import (
     CharacterUnionRaiderBlock,
     CharacterUnionRaiderResponse,
@@ -62,7 +65,13 @@ class NexonAPIUnionLoader(UnionLoader):
             CharacterUnionRaiderResponse,
             await self._token.request(uri, get_character_id_param(character_id)),
         )
-        return get_union_occupration_stat(resp)
+        return sum(
+            [
+                get_stat_from_occupation_description(expression)
+                for expression in resp["union_occupied_stat"]
+            ],
+            ExtendedStat(),
+        )
 
 
 def _get_block_size(level: int) -> int:

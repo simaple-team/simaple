@@ -40,6 +40,10 @@ class UnionLoader(ABC):
     async def load_union_artifact(self, character_name: str) -> Artifact:
         pass
 
+    @abstractmethod
+    async def load_union_occupation_stat(self, character_name: str) -> ExtendedStat:
+        pass
+
 
 class GearLoader(ABC):
     @abstractmethod

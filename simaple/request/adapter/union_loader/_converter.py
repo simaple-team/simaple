@@ -45,7 +45,7 @@ def get_stat_from_occupation_description(
             return ExtendedStat()
         case ("상태이상 내성", True):
             return ExtendedStat()
-        case ("일반 몬스터 공격 데미지", True):
+        case ("일반 몬스터 공격 시 데미지", True):
             return ExtendedStat()
         case ("버프 지속시간", True):
             return ExtendedStat(action_stat=ActionStat(buff_duration=option_value))
