@@ -30,10 +30,15 @@ from simaple.wasm.models.simulation import (
 def _extract_engine_history_as_response(
     engine: OperationEngine,
     damage_calculator: DamageCalculator,
+    start: int = 0,
+    checkpoint_interval: int = 10,
 ) -> list[OperationLogResponse]:
     responses: list[OperationLogResponse] = []
 
     for idx, operation_log in enumerate(engine.operation_logs()):
+        if idx < start:
+            continue
+
         playlog_responses = []
 
         for playlog in operation_log.playlogs:
@@ -51,6 +56,7 @@ def _extract_engine_history_as_response(
             ]
             damage = damage_calculator.calculate_damage(entry)
 
+            # Saves checkpoint iff it is a multiple of checkpoint_interval
             playlog_responses.append(
                 PlayLogResponse(
                     events=playlog.events,
@@ -61,7 +67,9 @@ def _extract_engine_history_as_response(
                     report=_Report(time_series=[entry]),
                     delay=playlog.get_delay_left(),
                     action=playlog.action,
-                    checkpoint=playlog.checkpoint,
+                    checkpoint=(
+                        playlog.checkpoint if idx % checkpoint_interval == 0 else None
+                    ),
                     total_damage=damage,
                     damage_records=damages,
                 )
@@ -246,6 +254,10 @@ def runPlanWithHint(
             continue
         break
 
+    # Find latest restorable operation log
+    while cache_count > 0 and not previous_history[cache_count].contains_chekcpoint():
+        cache_count -= 1
+
     engine.reload(
         [
             operation_log_response.restore_operation_log()
@@ -257,7 +269,9 @@ def runPlanWithHint(
         engine.exec(command)
 
     new_operation_logs = _extract_engine_history_as_response(
-        engine, get_damage_calculator(environment)
+        engine,
+        get_damage_calculator(environment),
+        start=cache_count + 1,
     )
 
-    return new_operation_logs
+    return previous_history[: cache_count + 1] + new_operation_logs
