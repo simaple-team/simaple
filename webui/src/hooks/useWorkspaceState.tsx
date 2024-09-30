@@ -1,3 +1,4 @@
+import { pySimaple } from "@/sdk";
 import {
   BaselineEnvironmentProvider,
   OperationLogResponse,
@@ -6,12 +7,10 @@ import { useLocalStorageValue } from "@react-hookz/web";
 import * as React from "react";
 import { useEffect, useMemo } from "react";
 import { usePreference } from "./usePreference";
-import { usePySimaple } from "./useSimaple";
 
 type WorkspaceProviderProps = { children: React.ReactNode };
 
 function useWorkspaceState() {
-  const { pySimaple } = usePySimaple();
   const { preferences } = usePreference();
 
   const { value: storedWorkspace, set: setWorkspace } = useLocalStorageValue<{
@@ -68,19 +67,17 @@ function useWorkspaceState() {
     setWorkspace({ plan });
   }, [plan, setWorkspace]);
 
-  const run = React.useCallback(() => {
-    const isEnvironmentProvided = pySimaple.hasEnvironment(plan);
+  const run = React.useCallback(async () => {
+    const isEnvironmentProvided = await pySimaple.hasEnvironment(plan);
     const planToRun = isEnvironmentProvided
       ? plan
-      : pySimaple.provideEnvironmentAugmentedPlan(plan);
+      : await pySimaple.provideEnvironmentAugmentedPlan(plan);
 
     if (!isEnvironmentProvided) {
       setPlan(planToRun);
     }
 
-    const result = pySimaple.runPlan(planToRun);
-
-    console.log(result);
+    const result = await pySimaple.runPlan(planToRun);
 
     if (!result.success) {
       setErrorMessage(result.message);
@@ -88,20 +85,7 @@ function useWorkspaceState() {
     }
     setSubmittedPlan(planToRun);
     setOperationLogs(result.data);
-  }, [pySimaple, plan]);
-
-  const runAsync = React.useCallback(() => {
-    return new Promise<void>((resolve, reject) => {
-      setTimeout(() => {
-        try {
-          run();
-          resolve();
-        } catch (error) {
-          reject(error);
-        }
-      }, 0);
-    });
-  }, [run]);
+  }, [plan]);
 
   const clearErrorMessage = React.useCallback(() => {
     setErrorMessage("");
@@ -111,7 +95,7 @@ function useWorkspaceState() {
     (baseline: BaselineEnvironmentProvider) => {
       return pySimaple.getInitialPlanFromBaseline(baseline);
     },
-    [pySimaple],
+    [],
   );
 
   return {
@@ -125,7 +109,6 @@ function useWorkspaceState() {
     errorMessage,
     clearErrorMessage,
     run,
-    runAsync,
     getInitialPlanFromBaseline,
   };
 }

@@ -1,7 +1,7 @@
 import { Editor } from "@/components/Editor";
 import Header from "@/components/Header";
 import { PreferenceProvider } from "@/hooks/usePreference";
-import { usePySimapleBeforeLoad } from "@/hooks/useSimaple";
+import { usePySimaple } from "@/hooks/useSimaple";
 import { SkillDataProvider } from "@/hooks/useSkillData";
 import { WorkspaceProvider } from "@/hooks/useWorkspaceState";
 import { Navigate, NavLink, Outlet } from "react-router-dom";
@@ -43,7 +43,7 @@ export function EditorNav() {
 }
 
 export function EditorLayout() {
-  const { isLoaded } = usePySimapleBeforeLoad();
+  const { isLoaded } = usePySimaple();
 
   if (!isLoaded) {
     return <Navigate to="/" replace={true} />;
