@@ -1,48 +1,75 @@
-import { loadPyodide } from "pyodide";
 import { OperationLogResponse } from "./models/OperationLogResponse.schema";
 import { SuccessResponse } from "./models/SuccessResponse.schema.manual";
 import { ErrorResponse } from "./models/ErrorResponse.schema";
-
-import { SIMAPLE_FILE_NAME } from "./dependency";
 import { BaselineEnvironmentProvider, SkillComponent } from "./models";
 
+// Initialize the Web Worker
+const pyodideWorker = new Worker(new URL("./webworker.mjs", import.meta.url), {
+  type: "module",
+});
+
+// Store callbacks for resolving promises
+const callbacks: Record<string, (data: unknown) => void> = {};
+
+// Handle messages received from the worker
+pyodideWorker.onmessage = (event) => {
+  const { id, result } = event.data;
+  const onSuccess = callbacks[id];
+  delete callbacks[id];
+  onSuccess(result);
+};
+
+// Generate unique IDs for each message
+let idCounter = 0;
+function generateId() {
+  idCounter = (idCounter + 1) % Number.MAX_SAFE_INTEGER;
+  return idCounter;
+}
+
+// Send a message to the worker and return a promise
+function sendMessage(message: {
+  method: string;
+  [key: string]: unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+}): Promise<any> {
+  return new Promise((resolve) => {
+    const id = generateId();
+    callbacks[id] = resolve;
+    pyodideWorker.postMessage({ id, ...message });
+  });
+}
+
 export interface PySimaple {
+  ready(): Promise<void>;
   runPlan(
     plan: string,
-  ): SuccessResponse<OperationLogResponse[]> | ErrorResponse;
+  ): Promise<SuccessResponse<OperationLogResponse[]> | ErrorResponse>;
   getInitialPlanFromBaseline(
     baselineEnvironmentProvider: BaselineEnvironmentProvider,
-  ): string;
-  hasEnvironment(plan: string): boolean;
-  provideEnvironmentAugmentedPlan(plan: string): string;
+  ): Promise<string>;
+  hasEnvironment(plan: string): Promise<boolean>;
+  provideEnvironmentAugmentedPlan(plan: string): Promise<string>;
   getAllComponent(
     plan: string,
-  ): SuccessResponse<SkillComponent[]> | ErrorResponse;
+  ): Promise<SuccessResponse<SkillComponent[]> | ErrorResponse>;
 }
 
-export async function loadPySimaple(): Promise<{ pySimaple: PySimaple }> {
-  const pyodide = await loadPyodide({
-    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.2/full/",
-  });
+// Define multiple methods
+const pySimaple: PySimaple = {
+  ready: () => sendMessage({ method: "ready" }),
+  runPlan: (plan: string) => sendMessage({ method: "runPlan", plan }),
+  getInitialPlanFromBaseline: (baselineEnvironmentProvider: unknown) =>
+    sendMessage({
+      method: "getInitialPlanFromBaseline",
+      baselineEnvironmentProvider,
+    }),
+  hasEnvironment: (plan: string) =>
+    sendMessage({ method: "hasEnvironment", plan }),
+  provideEnvironmentAugmentedPlan: (plan: string) =>
+    sendMessage({ method: "provideEnvironmentAugmentedPlan", plan }),
+  getAllComponent: (plan: string) =>
+    sendMessage({ method: "getAllComponent", plan }),
+};
 
-  await pyodide.loadPackage(["pydantic", "micropip", "sqlite3", "lzma"], {
-    checkIntegrity: false,
-  });
-
-  const micropip = pyodide.pyimport("micropip");
-  await micropip.install(["loguru", "lark", "numpy", "pyyaml", "pyfunctional"]);
-
-  await micropip.install(
-    `${window.location.origin}/${SIMAPLE_FILE_NAME}`,
-    false,
-    false,
-  );
-
-  const pySimaple = await pyodide.runPythonAsync(`
-    import simaple.wasm as wasm
-    wasm`);
-
-  return {
-    pySimaple,
-  };
-}
+// Export the methods
+export { pySimaple };

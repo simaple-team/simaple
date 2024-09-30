@@ -1,13 +1,12 @@
+import { pySimaple } from "@/sdk";
 import { SkillComponent } from "@/sdk/models";
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { usePySimaple } from "./useSimaple";
 import { useWorkspace } from "./useWorkspace";
 
 type SkillDataProviderProps = { children: React.ReactNode };
 
 function useSkillDataState() {
-  const { pySimaple } = usePySimaple();
   const { submittedPlan } = useWorkspace();
 
   const [skillComponents, setSkillComponents] = useState<SkillComponent[]>([]);
@@ -28,15 +27,19 @@ function useSkillDataState() {
     if (!pySimaple || !submittedPlan) {
       return;
     }
-    const result = pySimaple.getAllComponent(submittedPlan);
 
-    if (!result.success) {
-      console.error(result.message);
-      return;
+    async function run() {
+      const result = await pySimaple.getAllComponent(submittedPlan);
+
+      if (!result.success) {
+        console.error(result.message);
+        return;
+      }
+
+      setSkillComponents(result.data);
     }
-
-    setSkillComponents(result.data);
-  }, [pySimaple, submittedPlan]);
+    run();
+  }, [submittedPlan]);
 
   const getIconPath = useCallback(
     (skillName: string) => {

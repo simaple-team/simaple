@@ -89,8 +89,8 @@ def _extract_engine_history_as_response(
     return responses
 
 
+@return_js_object_from_pydantic_object
 @wrap_response_by_handling_exception
-@return_js_object_from_pydantic_list
 def runPlan(
     plan: str,
 ) -> list[OperationLogResponse]:
