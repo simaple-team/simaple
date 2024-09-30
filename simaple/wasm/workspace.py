@@ -30,10 +30,14 @@ from simaple.wasm.models.simulation import (
 def _extract_engine_history_as_response(
     engine: OperationEngine,
     damage_calculator: DamageCalculator,
+    start: int = 0,
 ) -> list[OperationLogResponse]:
     responses: list[OperationLogResponse] = []
 
     for idx, operation_log in enumerate(engine.operation_logs()):
+        if idx < start:
+            continue
+
         playlog_responses = []
 
         for playlog in operation_log.playlogs:
@@ -257,7 +261,9 @@ def runPlanWithHint(
         engine.exec(command)
 
     new_operation_logs = _extract_engine_history_as_response(
-        engine, get_damage_calculator(environment)
+        engine,
+        get_damage_calculator(environment),
+        start=cache_count + 1,
     )
 
-    return new_operation_logs
+    return previous_history[: cache_count + 1] + new_operation_logs
