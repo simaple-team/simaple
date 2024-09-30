@@ -78,7 +78,9 @@ def get_skill_components(environment: SimulationEnvironment) -> list[Component]:
         + list(skill_profile.hexa_mastery.values())
     )
     for skill_name in environment.skill_levels:
-        assert skill_name in possible_skill_names, f"Given explicit skill name \
+        assert (
+            skill_name in possible_skill_names
+        ), f"Given explicit skill name \
 passed to level: {skill_name} is not in {possible_skill_names}"
 
     for hexa_improvement_name in environment.hexa_improvement_levels:
