@@ -7,7 +7,7 @@ from inline_snapshot import snapshot
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
-from simaple.container.simulation import SimulationContainer
+from simaple.container.simulation import get_damage_calculator, get_operation_engine
 from simaple.core.jobtype import JobType
 from simaple.simulate.policy.parser import parse_dsl_to_operations
 
@@ -40,14 +40,15 @@ def test_dsl(
     ).compute_environment(
         dsl_test_setting,
     )
-    container = SimulationContainer(environment)
-    engine = container.operation_engine()
+    engine = get_operation_engine(environment)
 
     for dsl in dsl_list:
         operations = parse_dsl_to_operations(dsl)
         for op in operations:
             engine.exec(op)
 
-    dpm = container.damage_calculator().calculate_dpm(list(engine.simulation_entries()))
+    dpm = get_damage_calculator(environment).calculate_dpm(
+        list(engine.simulation_entries())
+    )
     print(f"{engine.get_current_viewer()('clock')} | {dpm:,} ")
     assert pytest.approx(dpm) == snapshot(13415528573134.246)

@@ -5,8 +5,9 @@ from inline_snapshot import snapshot
 import simaple.simulate.component.skill  # pylint: disable=W0611
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
-from simaple.container.simulation import SimulationContainer
+from simaple.container.simulation import get_damage_calculator, get_operation_engine
 from simaple.core.jobtype import JobType
+from simaple.data.jobs.builtin import get_builtin_strategy
 from simaple.simulate.strategy.base import exec_by_strategy
 
 
@@ -37,10 +38,9 @@ def run_actor(environment_provider: BaselineEnvironmentProvider, jobtype: JobTyp
     environment = PersistentStorageMemoizer(
         os.path.join(os.path.dirname(__file__), ".memo.simaple.json")
     ).compute_environment(environment_provider)
-    container = SimulationContainer(environment)
-    engine = container.operation_engine()
+    engine = get_operation_engine(environment)
 
-    policy = container.builtin_strategy().get_priority_based_policy()
+    policy = get_builtin_strategy(environment.jobtype).get_priority_based_policy()
 
     while engine.get_current_viewer()("clock") < 50_000:
         exec_by_strategy(engine, policy)
@@ -58,7 +58,7 @@ def run_actor(environment_provider: BaselineEnvironmentProvider, jobtype: JobTyp
                 f.write(f"{playlog.clock} | {playlog.action} | {playlog.events} \n")
     """
 
-    dpm = container.damage_calculator().calculate_dpm(report)
+    dpm = get_damage_calculator(environment).calculate_dpm(report)
     print(f"{engine.get_current_viewer()('clock')} | {jobtype} | {dpm:,} ")
     return dpm
 

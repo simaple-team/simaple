@@ -1,7 +1,7 @@
 import simaple.simulate.component.skill  # noqa: F401
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
-from simaple.container.simulation import SimulationContainer
+from simaple.container.simulation import get_operation_engine
 from simaple.core.jobtype import JobType
 from simaple.simulate.policy.parser import parse_simaple_runtime
 
@@ -19,10 +19,10 @@ def test_run_engine():
         hexa_improvements_level=10,
     )
     _simulation_environment_memoizer = PersistentStorageMemoizer()
-    container = SimulationContainer(
-        _simulation_environment_memoizer.compute_environment(_environment_provider)
+    environment = _simulation_environment_memoizer.compute_environment(
+        _environment_provider
     )
-    engine = container.operation_engine()
+    engine = get_operation_engine(environment)
     _, commands = parse_simaple_runtime(
         """
 author: "Alice"
