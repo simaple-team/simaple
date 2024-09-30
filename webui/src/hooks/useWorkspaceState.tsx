@@ -77,7 +77,9 @@ function useWorkspaceState() {
       setPlan(planToRun);
     }
 
-    const result = await pySimaple.runPlan(planToRun);
+    const result = submittedPlan
+      ? await pySimaple.runPlanWithHint(submittedPlan, operationLogs, planToRun)
+      : await pySimaple.runPlan(planToRun);
 
     if (!result.success) {
       setErrorMessage(result.message);
