@@ -13,8 +13,6 @@ from simaple.simulate.report.dpm import DamageCalculator
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 from simaple.wasm.base import (
     pyodide_reveal_base_model,
-    pyodide_reveal_base_model_list,
-    return_js_object_from_pydantic_list,
     return_js_object_from_pydantic_object,
     wrap_response_by_handling_exception,
 )
@@ -23,7 +21,8 @@ from simaple.wasm.models.simulation import (
     DamageRecord,
     OperationLogResponse,
     PlayLogResponse,
-    _Report,
+    operation_log_contains_checkpoint,
+    restore_operation_log,
 )
 
 
@@ -64,7 +63,6 @@ def _extract_engine_history_as_response(
                     running_view={v.name: v for v in viewer("running")},
                     buff_view=viewer("buff"),
                     clock=playlog.clock,
-                    report=_Report(time_series=[entry]),
                     delay=playlog.get_delay_left(),
                     action=playlog.action,
                     checkpoint=(
@@ -211,13 +209,11 @@ def getInitialPlanFromBaseline(
 
 
 @wrap_response_by_handling_exception
-@return_js_object_from_pydantic_list
 def runPlanWithHint(
     previous_plan: str, previous_history: list[OperationLogResponse], plan: str
 ) -> list[OperationLogResponse]:
-    previous_history = pyodide_reveal_base_model_list(
-        previous_history, OperationLogResponse
-    )
+    type_adapter = pydantic.TypeAdapter(OperationLogResponse)
+    previous_history = [type_adapter.validate_python(obj) for obj in previous_history]
     previous_plan_metadata_dict, previous_commands = parse_simaple_runtime(
         previous_plan.strip()
     )
@@ -246,7 +242,7 @@ def runPlanWithHint(
 
         previous_command = previous_commands[idx]
         previous_operation_log = history_for_matching[idx]
-        if previous_command != previous_operation_log.command:
+        if previous_command != previous_operation_log["command"]:
             break
 
         if command == previous_command:
@@ -255,12 +251,14 @@ def runPlanWithHint(
         break
 
     # Find latest restorable operation log
-    while cache_count > 0 and not previous_history[cache_count].contains_chekcpoint():
+    while cache_count > 0 and not operation_log_contains_checkpoint(
+        previous_history[cache_count]
+    ):
         cache_count -= 1
 
     engine.reload(
         [
-            operation_log_response.restore_operation_log()
+            restore_operation_log(operation_log_response)
             for operation_log_response in previous_history[: cache_count + 1]
         ]
     )
