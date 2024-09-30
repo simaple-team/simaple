@@ -441,7 +441,7 @@ patch:
 data:
   name: 아수라 VI
   advantages:
-    - target_name: 팬텀 블로우 IV
+    - target_name: 팬텀 블로우 VI
       target_field: damage
       value: "{{ (46 + skill_level * 2) * (skill_level > 0) }}"
 ---
