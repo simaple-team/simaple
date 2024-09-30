@@ -31,6 +31,7 @@ def _extract_engine_history_as_response(
     engine: OperationEngine,
     damage_calculator: DamageCalculator,
     start: int = 0,
+    checkpoint_interval: int = 10,
 ) -> list[OperationLogResponse]:
     responses: list[OperationLogResponse] = []
 
@@ -55,6 +56,7 @@ def _extract_engine_history_as_response(
             ]
             damage = damage_calculator.calculate_damage(entry)
 
+            # Saves checkpoint iff it is a multiple of checkpoint_interval
             playlog_responses.append(
                 PlayLogResponse(
                     events=playlog.events,
@@ -65,7 +67,9 @@ def _extract_engine_history_as_response(
                     report=_Report(time_series=[entry]),
                     delay=playlog.get_delay_left(),
                     action=playlog.action,
-                    checkpoint=playlog.checkpoint,
+                    checkpoint=(
+                        playlog.checkpoint if idx % checkpoint_interval == 0 else None
+                    ),
                     total_damage=damage,
                     damage_records=damages,
                 )
@@ -249,6 +253,10 @@ def runPlanWithHint(
             cache_count += 1
             continue
         break
+
+    # Find latest restorable operation log
+    while cache_count > 0 and not previous_history[cache_count].contains_chekcpoint():
+        cache_count -= 1
 
     engine.reload(
         [
