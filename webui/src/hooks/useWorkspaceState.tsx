@@ -19,6 +19,7 @@ function useWorkspaceState() {
   }>("workspace");
 
   const [plan, setPlan] = React.useState<string>(storedWorkspace?.plan ?? "");
+  const [submittedPlan, setSubmittedPlan] = React.useState<string>("");
   const [operationLogs, setOperationLogs] = React.useState<
     OperationLogResponse[]
   >([]);
@@ -79,10 +80,13 @@ function useWorkspaceState() {
 
     const result = pySimaple.runPlan(planToRun);
 
+    console.log(result);
+
     if (!result.success) {
       setErrorMessage(result.message);
       return;
     }
+    setSubmittedPlan(planToRun);
     setOperationLogs(result.data);
   }, [pySimaple, plan]);
 
@@ -113,6 +117,7 @@ function useWorkspaceState() {
   return {
     plan,
     setPlan,
+    submittedPlan,
     unfilteredHistory,
     history,
     skillNames,

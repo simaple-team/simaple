@@ -6,6 +6,7 @@ import { EditorLayout } from "./pages/EditorLayout";
 import LogPage from "./pages/LogPage/LogPage";
 import { PrepareSimaple } from "./pages/PrepareSimaple";
 import { SummaryPage } from "./pages/SummaryPage";
+import { SkillDataPage } from "./pages/SkillDataPage";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "summary",
         element: <SummaryPage />,
+      },
+      {
+        path: "skill-data",
+        element: <SkillDataPage />,
       },
     ],
   },

@@ -30,6 +30,7 @@ export function EditorNav() {
         <Tab to="/editor/summary">전투분석</Tab>
         <Tab to="/editor/log">로그</Tab>
         <Tab to="/editor/chart">차트</Tab>
+        <Tab to="/editor/skill-data">스킬데이터</Tab>
         <PreferencePopover>
           <button className="flex gap-1 items-center justify-center px-4 text-center text-sm text-primary pb-0.5">
             <Settings className="w-4 h-4" />
