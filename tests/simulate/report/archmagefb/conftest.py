@@ -3,13 +3,14 @@ import pytest
 import simaple.simulate.component.skill  # noqa: F401
 import simaple.simulate.component.specific  # noqa: F401
 from simaple.core import ActionStat, Stat
+from simaple.data.jobs.builtin import build_skills
 from simaple.simulate.base import SimulationRuntime
 from simaple.simulate.kms import get_builder
 
 
 @pytest.fixture
 def archmagefb_simulation_runtime() -> SimulationRuntime:
-    return get_builder(
+    skill_components = build_skills(
         [
             "archmagefb",
             "common",
@@ -40,11 +41,11 @@ def archmagefb_simulation_runtime() -> SimulationRuntime:
         {},
         {
             "character_level": 260,
-            "action_stat": ActionStat(),
             "character_stat": Stat(),
             "combat_orders_level": 0,
             "passive_skill_level": 0,
             "weapon_pure_attack_power": 0,
             "weapon_attack_power": 0,
         },
-    ).build_simulation_runtime()
+    )
+    return get_builder(skill_components, ActionStat()).build_simulation_runtime()

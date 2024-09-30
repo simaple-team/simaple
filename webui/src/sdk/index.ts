@@ -15,7 +15,9 @@ export interface PySimaple {
   ): string;
   hasEnvironment(plan: string): boolean;
   provideEnvironmentAugmentedPlan(plan: string): string;
-  getAllComponent(): SkillComponent[];
+  getAllComponent(
+    plan: string,
+  ): SuccessResponse<SkillComponent[]> | ErrorResponse;
 }
 
 export async function loadPySimaple(): Promise<{ pySimaple: PySimaple }> {
@@ -41,16 +43,6 @@ export async function loadPySimaple(): Promise<{ pySimaple: PySimaple }> {
     wasm`);
 
   return {
-    pySimaple: {
-      runPlan: pySimaple.runPlan,
-      getInitialPlanFromBaseline: pySimaple.getInitialPlanFromBaseline,
-      hasEnvironment: pySimaple.hasEnvironment,
-      provideEnvironmentAugmentedPlan:
-        pySimaple.provideEnvironmentAugmentedPlan,
-      getAllComponent: () =>
-        pySimaple.getAllComponent().toJs({
-          dict_converter: Object.fromEntries,
-        }),
-    },
+    pySimaple,
   };
 }

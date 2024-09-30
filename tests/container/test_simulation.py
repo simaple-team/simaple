@@ -2,8 +2,9 @@ import pytest
 
 from simaple.container.simulation import (
     FinalCharacterStat,
-    SimulationContainer,
     SimulationEnvironment,
+    get_operation_engine,
+    get_skill_components,
 )
 from simaple.core import ActionStat, JobType, Stat
 from simaple.simulate.policy.base import Operation
@@ -65,9 +66,9 @@ from simaple.simulate.policy.base import Operation
         ),
     ],
 )
-def test_simulation_with_improper_name_may_fail(wrong_envs):
+def test_get_skill_components_with_improper_name_may_fail(wrong_envs):
     with pytest.raises(AssertionError):
-        SimulationContainer(wrong_envs).builder()
+        get_skill_components(wrong_envs)
 
 
 def test_simulation_environment_using_skill_levels():
@@ -107,10 +108,8 @@ def test_simulation_environment_using_skill_levels():
         },
     )
 
-    engine = SimulationContainer(no_skill_environment).operation_engine()
-    engine_with_skill = SimulationContainer(
-        environment_with_skill_level
-    ).operation_engine()
+    engine = get_operation_engine(no_skill_environment)
+    engine_with_skill = get_operation_engine(environment_with_skill_level)
 
     op = Operation(
         command="CAST",
