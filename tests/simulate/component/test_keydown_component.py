@@ -1,7 +1,7 @@
 # pylint: disable=W0621
 import pytest
 
-from simaple.simulate.component.keydown_skill import (
+from simaple.simulate.component.common.keydown_skill import (
     KeydownSkillComponent,
     KeydownSkillState,
 )
@@ -36,7 +36,7 @@ def keydown_fixture(request, dynamics: Dynamics):
 
 
 def test_use_reject(
-    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float],
 ):
     # given
     component, state, _ = keydown_fixture
@@ -51,7 +51,7 @@ def test_use_reject(
 
 
 def test_stop_reject(
-    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float],
 ):
     # given
     component, state, _ = keydown_fixture
@@ -75,7 +75,7 @@ def test_use(keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, fl
 
 
 def test_use_and_stop(
-    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float],
 ):
     # given
     component, state, _ = keydown_fixture
@@ -93,7 +93,7 @@ def test_use_and_stop(
 
 
 def test_use_and_elapse_lesser_than_prepare_delay(
-    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float],
 ):
     # given
     component, state, delay = keydown_fixture
@@ -109,7 +109,7 @@ def test_use_and_elapse_lesser_than_prepare_delay(
 
 
 def test_use_and_elapse_equals_prepare_delay(
-    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float],
 ):
     # given
     component, state, delay = keydown_fixture
@@ -125,7 +125,7 @@ def test_use_and_elapse_equals_prepare_delay(
 
 
 def test_use_and_elapse_greater_than_prepare_delay(
-    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float],
 ):
     # given
     component, state, delay = keydown_fixture
@@ -141,7 +141,7 @@ def test_use_and_elapse_greater_than_prepare_delay(
 
 
 def test_elapse_until_finish(
-    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float],
 ):
     # given
     component, state, delay = keydown_fixture
@@ -159,7 +159,7 @@ def test_elapse_until_finish(
 
 
 def test_elapse_during_finish_delay(
-    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float],
 ):
     # given
     component, state, delay = keydown_fixture
@@ -177,7 +177,7 @@ def test_elapse_during_finish_delay(
 
 
 def test_elapse_just_before_finish(
-    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float],
 ):
     # given
     component, state, delay = keydown_fixture
@@ -191,7 +191,7 @@ def test_elapse_just_before_finish(
 
 
 def test_elapse_very_long(
-    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float]
+    keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, float],
 ):
     # given
     component, state, delay = keydown_fixture

@@ -1,11 +1,15 @@
 # pylint: disable=W0621
 import pytest
 
-from simaple.simulate.component.hexa_skill import (
+from simaple.simulate.component.common.multiple_hit_hexa_skill import (
     MultipleHitHexaSkillComponent,
     MultipleHitHexaSkillState,
+)
+from simaple.simulate.component.common.periodic_damage_configurated_hexa_skill import (
     PeriodicDamageConfiguratedHexaSkillComponent,
     PeriodicDamageHexaState,
+)
+from simaple.simulate.component.common.triple_periodic_damage_hexa_skill import (
     TriplePeriodicDamageHexaComponent,
     TriplePeriodicDamageHexaComponentState,
 )

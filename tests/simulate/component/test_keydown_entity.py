@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.simulate.component.keydown_skill import Keydown
+from simaple.simulate.component.common.keydown_skill import Keydown
 
 
 @pytest.mark.parametrize(

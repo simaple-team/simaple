@@ -1,7 +1,7 @@
 # pylint: disable=W0621
 import pytest
 
-from simaple.simulate.component.periodic_with_finish_skill import (
+from simaple.simulate.component.common.periodic_with_finish_skill import (
     PeriodicWithFinishSkillComponent,
     PeriodicWithFinishState,
 )

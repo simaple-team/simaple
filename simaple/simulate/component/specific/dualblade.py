@@ -1,6 +1,6 @@
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
-from simaple.simulate.component.entity import Keydown, LastingStack
-from simaple.simulate.component.skill import Cooldown, SkillComponent
+from simaple.simulate.component.entity import Cooldown, Keydown, LastingStack
+from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import (
     CooldownValidityTrait,
     KeydownSkillTrait,

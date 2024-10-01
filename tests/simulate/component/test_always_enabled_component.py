@@ -1,7 +1,10 @@
 import pytest
 
 from simaple.core import Stat
-from simaple.simulate.component.skill import AlwaysEnabledComponent, NoState
+from simaple.simulate.component.common.always_enabled import (
+    AlwaysEnabledComponent,
+    NoState,
+)
 
 
 @pytest.fixture(name="always_enabled_component")

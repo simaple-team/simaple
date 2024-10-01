@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.simulate.component.skill import Periodic
+from simaple.simulate.component.entity import Periodic
 
 
 @pytest.mark.parametrize(

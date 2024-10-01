@@ -589,7 +589,7 @@ data:
   cooldown_duration: 360_000
 ---
 kind: Component
-version: simaple.io/AttackSkillIncludeReforged
+version: simaple.io/TemporalEnhancingAttackSkill
 metadata:
   label:
     group: adele

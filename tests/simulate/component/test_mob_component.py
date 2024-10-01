@@ -1,6 +1,6 @@
 import pytest
 
-from simaple.simulate.component.mob import (
+from simaple.simulate.component.common.mob import (
     DOT,
     DOTRequestPayload,
     MobComponent,

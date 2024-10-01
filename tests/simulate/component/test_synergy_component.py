@@ -2,7 +2,10 @@
 import pytest
 
 from simaple.core.base import Stat
-from simaple.simulate.component.complex_skill import SynergySkillComponent, SynergyState
+from simaple.simulate.component.common.synergy_skill import (
+    SynergySkillComponent,
+    SynergyState,
+)
 from simaple.simulate.global_property import Dynamics
 from simaple.simulate.reserved_names import Tag
 
