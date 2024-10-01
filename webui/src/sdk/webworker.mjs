@@ -36,28 +36,46 @@ self.onmessage = async (event) => {
       case "ready":
         break;
       case "runPlan":
-        result = await pyodide.runPlan(params.plan);
+        result = pyodide.runPlan(params.plan);
         break;
       case "runPlanWithHint":
-        result = await pyodide.runPlanWithHint(params.previousPlan, params.history, params.plan);
+        result = pyodide.runPlanWithHint(
+          params.previousPlan,
+          params.history,
+          params.plan,
+        );
         break;
       case "getInitialPlanFromBaseline":
-        result = await pyodide.getInitialPlanFromBaseline(params.baselineEnvironmentProvider);
+        result = pyodide.getInitialPlanFromBaseline(
+          params.baselineEnvironmentProvider,
+        );
         break;
       case "hasEnvironment":
-        result = await pyodide.hasEnvironment(params.plan);
+        result = pyodide.hasEnvironment(params.plan);
         break;
       case "provideEnvironmentAugmentedPlan":
-        result = await pyodide.provideEnvironmentAugmentedPlan(params.plan);
+        result = pyodide.provideEnvironmentAugmentedPlan(params.plan);
         break;
       case "getAllComponent":
-        result = await pyodide.getAllComponent(params.plan);
+        result = pyodide.getAllComponent(params.plan);
         break;
       default:
         throw new Error(`Unknown method: ${method}`);
     }
-    self.postMessage({ id, result });
+    self.postMessage({
+      id,
+      result: {
+        success: true,
+        data: result,
+      },
+    });
   } catch (error) {
-    self.postMessage({ id, error: error.message });
+    self.postMessage({
+      id,
+      result: {
+        success: false,
+        error: error.message,
+      },
+    });
   }
 };

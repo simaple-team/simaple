@@ -32,6 +32,7 @@
     "echarts": "^5.5.0",
     "echarts-for-react": "^3.0.2",
     "lucide-react": "^0.441.0",
+    "neverthrow": "^8.0.0",
     "pyodide": "^0.26.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -40,7 +41,8 @@
     "react-router-dom": "^6.26.2",
     "recharts": "^2.12.7",
     "tailwind-merge": "^2.3.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "ts-pattern": "^5.4.0"
   },
   "devDependencies": {
     "@lezer/generator": "^1.7.1",
@@ -53,6 +55,7 @@
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
+    "eslint-plugin-neverthrow": "^1.1.4",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
     "json-schema-to-typescript": "^15.0.2",

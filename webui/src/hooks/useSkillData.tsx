@@ -28,15 +28,13 @@ function useSkillDataState() {
       return;
     }
 
-    async function run() {
-      const result = await pySimaple.getAllComponent(submittedPlan);
-
-      if (!result.success) {
-        console.error(result.message);
-        return;
-      }
-
-      setSkillComponents(result.data);
+    function run() {
+      pySimaple.getAllComponent(submittedPlan).match(
+        (result) => {
+          setSkillComponents(result);
+        },
+        (err) => console.error(err),
+      );
     }
     run();
   }, [submittedPlan]);

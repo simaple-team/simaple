@@ -7,6 +7,8 @@ import { useLocalStorageValue } from "@react-hookz/web";
 import * as React from "react";
 import { useEffect, useMemo } from "react";
 import { usePreference } from "./usePreference";
+import { ok } from "neverthrow";
+import { match } from "ts-pattern";
 
 type WorkspaceProviderProps = { children: React.ReactNode };
 
@@ -68,25 +70,35 @@ function useWorkspaceState() {
   }, [plan, setWorkspace]);
 
   const run = React.useCallback(async () => {
-    const isEnvironmentProvided = await pySimaple.hasEnvironment(plan);
-    const planToRun = isEnvironmentProvided
-      ? plan
-      : await pySimaple.provideEnvironmentAugmentedPlan(plan);
-
-    if (!isEnvironmentProvided) {
-      setPlan(planToRun);
-    }
-
-    const result = submittedPlan
-      ? await pySimaple.runPlanWithHint(submittedPlan, operationLogs, planToRun)
-      : await pySimaple.runPlan(planToRun);
-
-    if (!result.success) {
-      setErrorMessage(result.message);
-      return;
-    }
-    setSubmittedPlan(planToRun);
-    setOperationLogs(result.data);
+    return pySimaple
+      .hasEnvironment(plan)
+      .andThen((hasEnv) => {
+        return match(hasEnv)
+          .with(true, () => ok(plan))
+          .with(false, () => pySimaple.provideEnvironmentAugmentedPlan(plan))
+          .exhaustive();
+      })
+      .andThen((augmentedPlan) =>
+        match(submittedPlan)
+          .with("", () => pySimaple.runPlan(augmentedPlan))
+          .otherwise(() =>
+            pySimaple.runPlanWithHint(
+              submittedPlan,
+              operationLogs,
+              augmentedPlan,
+            ),
+          )
+          .andTee(() => setSubmittedPlan(augmentedPlan)),
+      )
+      .match(
+        (result) => {
+          console.log(result);
+          setOperationLogs(result);
+        },
+        (err) => {
+          setErrorMessage(err);
+        },
+      );
   }, [plan]);
 
   const clearErrorMessage = React.useCallback(() => {

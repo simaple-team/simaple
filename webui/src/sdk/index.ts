@@ -1,7 +1,9 @@
-import { OperationLogResponse } from "./models/OperationLogResponse.schema";
-import { SuccessResponse } from "./models/SuccessResponse.schema.manual";
-import { ErrorResponse } from "./models/ErrorResponse.schema";
-import { BaselineEnvironmentProvider, SkillComponent } from "./models";
+import { err, ok, ResultAsync } from "neverthrow";
+import {
+  BaselineEnvironmentProvider,
+  OperationLogResponse,
+  SkillComponent,
+} from "./models";
 
 // Initialize the Web Worker
 const pyodideWorker = new Worker(new URL("./webworker.mjs", import.meta.url), {
@@ -14,9 +16,14 @@ const callbacks: Record<string, (data: unknown) => void> = {};
 // Handle messages received from the worker
 pyodideWorker.onmessage = (event) => {
   const { id, result } = event.data;
-  const onSuccess = callbacks[id];
+  const cb = callbacks[id];
   delete callbacks[id];
-  onSuccess(result);
+
+  if (result.success) {
+    cb(ok(result.data));
+  } else {
+    cb(err(result.error));
+  }
 };
 
 // Generate unique IDs for each message
@@ -31,32 +38,31 @@ function sendMessage(message: {
   method: string;
   [key: string]: unknown;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-}): Promise<any> {
-  return new Promise((resolve) => {
-    const id = generateId();
-    callbacks[id] = resolve;
-    pyodideWorker.postMessage({ id, ...message });
-  });
+}): ResultAsync<any, string> {
+  return new ResultAsync(
+    new Promise((resolve) => {
+      const id = generateId();
+      // @ts-ignore
+      callbacks[id] = resolve;
+      pyodideWorker.postMessage({ id, ...message });
+    }),
+  );
 }
 
 export interface PySimaple {
-  ready(): Promise<void>;
-  runPlan(
-    plan: string,
-  ): Promise<SuccessResponse<OperationLogResponse[]> | ErrorResponse>;
+  ready(): ResultAsync<void, string>;
+  runPlan(plan: string): ResultAsync<OperationLogResponse[], string>;
   runPlanWithHint(
     previousPlan: string,
     history: OperationLogResponse[],
     plan: string,
-  ): Promise<SuccessResponse<OperationLogResponse[]> | ErrorResponse>;
+  ): ResultAsync<OperationLogResponse[], string>;
   getInitialPlanFromBaseline(
     baselineEnvironmentProvider: BaselineEnvironmentProvider,
-  ): Promise<string>;
-  hasEnvironment(plan: string): Promise<boolean>;
-  provideEnvironmentAugmentedPlan(plan: string): Promise<string>;
-  getAllComponent(
-    plan: string,
-  ): Promise<SuccessResponse<SkillComponent[]> | ErrorResponse>;
+  ): ResultAsync<string, string>;
+  hasEnvironment(plan: string): ResultAsync<boolean, string>;
+  provideEnvironmentAugmentedPlan(plan: string): ResultAsync<string, string>;
+  getAllComponent(plan: string): ResultAsync<SkillComponent[], string>;
 }
 
 // Define multiple methods

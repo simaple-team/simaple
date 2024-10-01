@@ -51,7 +51,7 @@ const CreateBaselineFileDialog: React.FC<{
 
   async function handleSubmit() {
     const values = getValues();
-    const plan = await getInitialPlanFromBaseline({
+    await getInitialPlanFromBaseline({
       tier: values.tier,
       jobtype: values.jobtype as JobType,
       level: values.level,
@@ -69,8 +69,13 @@ const CreateBaselineFileDialog: React.FC<{
       v_improvements_level: values.v_improvements_level,
       weapon_attack_power: values.weapon_attack_power,
       weapon_pure_attack_power: values.weapon_pure_attack_power,
-    });
-    setPlan(plan);
+    }).match(
+      (plan) => {
+        setPlan(plan);
+        setIsOpen(false);
+      },
+      (err) => console.error(err),
+    );
     setIsOpen(false);
   }
 

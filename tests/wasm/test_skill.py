@@ -75,12 +75,9 @@ environment:
 ELAPSE 0
 """
     )
-    assert result.success is True
-
-    components = result.data
-    assert len(components) > 1
+    assert len(result) > 1
 
     # every component should have a name and id
-    for component in components:
+    for component in result:
         assert component.name is not None
         assert component.id is not None

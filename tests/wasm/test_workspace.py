@@ -4,7 +4,6 @@ import yaml
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.simulation import SimulationEnvironment
 from simaple.core import JobType
-from simaple.wasm.base import ErrorResponse, SuccessResponse
 from simaple.wasm.workspace import (
     computeMaximumDealingInterval,
     getInitialPlanFromBaseline,
@@ -179,26 +178,14 @@ ELAPSE 10.0
 ELAPSE 10.0
 ELAPSE 10.0
 """
-    result = runPlan(plan)
-    match result:
-        case SuccessResponse(success=True, data=_):
-            raise AssertionError("Expected error message")
-        case ErrorResponse(success=False, message=message):
-            assert len(message) > 0
-        case _:
-            raise AssertionError("Unexpected return value")
+    with pytest.raises(Exception):
+        runPlan(plan)
 
 
 def test_run_plan_runs_with_environment(fixture_environment_given_plan):
     result = runPlan(fixture_environment_given_plan)
 
-    match result:
-        case SuccessResponse(success=True, data=data):
-            assert len(data) > 0
-        case ErrorResponse(success=False, message=message):
-            raise AssertionError(f"Error message: {message}")
-        case _:
-            raise AssertionError("Unexpected return value")
+    assert len(result) > 0
 
 
 def test_compute_maximum_dealing_interval(fixture_environment_given_plan):
@@ -262,17 +249,13 @@ def test_run_with_hint(fixture_environment_given_plan, given, change):
 """
 
     first_result = runPlan(previous_plan)
-
     second_result = runPlan(new_plan)
-    assert isinstance(first_result, SuccessResponse)
-    assert isinstance(second_result, SuccessResponse)
 
     second_result_with_hint = runPlanWithHint(
         previous_plan,
-        first_result.data,
+        first_result,
         new_plan,
     )
 
-    assert isinstance(second_result_with_hint, SuccessResponse)
-    assert len(second_result_with_hint.data) == len(second_result.data)
-    assert second_result_with_hint.data == second_result.data
+    assert len(second_result_with_hint) == len(second_result)
+    assert second_result_with_hint == second_result
