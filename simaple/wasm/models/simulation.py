@@ -1,29 +1,14 @@
 from __future__ import annotations
 
-from typing import Any
-
-import pydantic
+from typing import Any, TypedDict
 
 from simaple.core.base import Stat
 from simaple.simulate.base import Action, AddressedStore, Checkpoint, Event, PlayLog
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.policy.base import Command, OperationLog
-from simaple.simulate.report.base import SimulationEntry
 
 
-class _Report(pydantic.BaseModel):
-    """
-    For backward Compat. only (this is redundant)
-    """
-
-    model_config = pydantic.ConfigDict(extra="forbid")
-
-    time_series: list[SimulationEntry]
-
-
-class DamageRecord(pydantic.BaseModel):
-    model_config = pydantic.ConfigDict(extra="forbid")
-
+class DamageRecord(TypedDict):
     name: str
     damage: float
     hit: float
@@ -36,14 +21,11 @@ class DummyCheckpoint(Checkpoint):
         raise ValueError("DummyCheckpoint cannot be restored")
 
 
-class PlayLogResponse(pydantic.BaseModel):
-    model_config = pydantic.ConfigDict(extra="forbid")
-
+class PlayLogResponse(TypedDict):
     events: list[Event]
     validity_view: dict[str, Validity]
     running_view: dict[str, Running]
     buff_view: Stat
-    report: _Report
     clock: float
     delay: float
     action: Action
@@ -51,26 +33,26 @@ class PlayLogResponse(pydantic.BaseModel):
     total_damage: float
     damage_records: list[DamageRecord]
 
-    def contains_chekcpoint(self) -> bool:
-        return self.checkpoint is not None
 
-    def restore_playlog(self) -> PlayLog:
-        if self.checkpoint is None:
-            checkpoint: Checkpoint = DummyCheckpoint()
-        else:
-            checkpoint = self.checkpoint
-
-        return PlayLog(
-            events=self.events,
-            clock=self.clock,
-            action=self.action,
-            checkpoint=checkpoint,
-        )
+def play_log_contains_checkpoint(play_log_response: PlayLogResponse) -> bool:
+    return play_log_response["checkpoint"] is not None
 
 
-class OperationLogResponse(pydantic.BaseModel):
-    model_config = pydantic.ConfigDict(extra="forbid")
+def restore_playlog(play_log_response: PlayLogResponse) -> PlayLog:
+    if play_log_response["checkpoint"] is None:
+        checkpoint: Checkpoint = DummyCheckpoint()
+    else:
+        checkpoint = play_log_response["checkpoint"]
 
+    return PlayLog(
+        events=play_log_response["events"],
+        clock=play_log_response["clock"],
+        action=play_log_response["action"],
+        checkpoint=checkpoint,
+    )
+
+
+class OperationLogResponse(TypedDict):
     logs: list[PlayLogResponse]
     hash: str
     previous_hash: str
@@ -78,15 +60,20 @@ class OperationLogResponse(pydantic.BaseModel):
     index: int
     description: str | None
 
-    def restore_operation_log(self) -> OperationLog:
-        return OperationLog(
-            command=self.command,
-            playlogs=[log.restore_playlog() for log in self.logs],
-            previous_hash=self.previous_hash,
-            description=self.description,
-        )
 
-    def contains_chekcpoint(self) -> bool:
-        return (
-            all(log.contains_chekcpoint() for log in self.logs) and len(self.logs) > 0
-        )
+def restore_operation_log(operation_log_response: OperationLogResponse) -> OperationLog:
+    return OperationLog(
+        command=operation_log_response["command"],
+        playlogs=[restore_playlog(log) for log in operation_log_response["logs"]],
+        previous_hash=operation_log_response["previous_hash"],
+        description=operation_log_response["description"],
+    )
+
+
+def operation_log_contains_checkpoint(
+    operation_log_response: OperationLogResponse,
+) -> bool:
+    return (
+        all(play_log_contains_checkpoint(log) for log in operation_log_response["logs"])
+        and len(operation_log_response["logs"]) > 0
+    )
