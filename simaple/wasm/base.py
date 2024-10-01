@@ -5,9 +5,8 @@ These functions are for Javascript-call only; all methods may
 named as camelCase and all arguments maybe pyodide objects.
 """
 
-import traceback
 from functools import wraps
-from typing import Callable, Generic, Literal, Sequence, Type, TypeVar, cast
+from typing import Callable, Sequence, Type, TypeVar, cast
 
 import pydantic
 
@@ -48,37 +47,6 @@ def return_js_object_from_pydantic_object(
             return to_js(result.model_dump(), dict_converter=Object.fromEntries)
         except ImportError:
             return f(*args, **kwargs)
-
-    return wrapper
-
-
-T = TypeVar("T")
-
-
-class SuccessResponse(pydantic.BaseModel, Generic[T]):
-    model_config = pydantic.ConfigDict(extra="forbid")
-
-    success: Literal[True]
-    data: T
-
-
-class ErrorResponse(pydantic.BaseModel):
-    model_config = pydantic.ConfigDict(extra="forbid")
-
-    success: Literal[False]
-    message: str
-
-
-def wrap_response_by_handling_exception(
-    f: Callable[..., T],
-) -> Callable[..., SuccessResponse[T] | ErrorResponse]:
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        try:
-            return SuccessResponse(success=True, data=f(*args, **kwargs))
-        except Exception as e:
-            e.__traceback__
-            return ErrorResponse(success=False, message=str(traceback.format_exc()))
 
     return wrapper
 

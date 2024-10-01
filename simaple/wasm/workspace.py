@@ -16,7 +16,6 @@ from simaple.wasm.base import (
     pyodide_reveal_base_model_list,
     return_js_object_from_pydantic_list,
     return_js_object_from_pydantic_object,
-    wrap_response_by_handling_exception,
 )
 from simaple.wasm.examples import get_example_plan
 from simaple.wasm.models.simulation import (
@@ -89,8 +88,7 @@ def _extract_engine_history_as_response(
     return responses
 
 
-@return_js_object_from_pydantic_object
-@wrap_response_by_handling_exception
+@return_js_object_from_pydantic_list
 def runPlan(
     plan: str,
 ) -> list[OperationLogResponse]:
@@ -210,7 +208,6 @@ def getInitialPlanFromBaseline(
     return f"---\n{augmented_metadata}\n---\n{original_operations}"
 
 
-@wrap_response_by_handling_exception
 @return_js_object_from_pydantic_list
 def runPlanWithHint(
     previous_plan: str, previous_history: list[OperationLogResponse], plan: str
