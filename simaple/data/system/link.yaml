@@ -4,8 +4,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: mercedes
+    group: mercedes
+    name: 엘프의 축복
 data:
+  name: 엘프의 축복
   providing_jobs: 
   - mercedes
   options:
@@ -17,8 +19,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: evan
+    group: evan
+    name: 룬 퍼시스턴스
 data:
+  name: 룬 퍼시스턴스
   providing_jobs: 
   - evan
   options:
@@ -30,8 +34,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: aran
+    group: aran
+    name: 콤보킬 어드밴티지
 data:
+  name: 콤보킬 어드밴티지
   providing_jobs: 
   - aran
   options:
@@ -43,8 +49,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: adventure_mage
+    name: 임피리컬 널리지
+    group: adventure_mage
 data:
+  name: 임피리컬 널리지
   providing_jobs: 
   - archmagefb
   - archmagetc
@@ -68,8 +76,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: adventure_archer
+    group: adventure_archer
+    name: 어드벤쳐러 큐리어스
 data:
+  name: 어드벤쳐러 큐리어스
   providing_jobs: 
   - bowmaster
   - sniper
@@ -87,8 +97,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: adventure_theif
+    name: 시프 커닝
+    group: adventure_theif
 data:
+  name: 시프 커닝
   providing_jobs: 
   - shadower
   - corsair
@@ -108,8 +120,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: adventure_pirate
+    name: 파이렛 블레스
+    group: adventure_pirate
 data:
+  name: 파이렛 블레스
   providing_jobs: 
   - buccaneer
   - corsair
@@ -151,8 +165,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: demonslayer
+    name: 데몬스 퓨리
+    group: demonslayer
 data:
+  name: 데몬스 퓨리
   providing_jobs: 
   - demonslayer
   options:
@@ -164,8 +180,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: luminous
+    group: luminous
+    name: 퍼미에이트
 data:
+  name: 퍼미에이트
   providing_jobs: 
   - luminous
   options:
@@ -177,8 +195,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: phantom
+    name: 데들리 인스팅트
+    group: phantom
 data:
+  name: 데들리 인스팅트
   providing_jobs: 
   - phantom
   options:
@@ -190,8 +210,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: kinesis
+    name: 판단
+    group: kinesis
 data:
+  name: 판단
   providing_jobs: 
   - kinesis
   options:
@@ -203,8 +225,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: angelicbuster
+    name: 소울 컨트랙트
+    group: angelicbuster
 data:
+  name: 소울 컨트랙트
   providing_jobs: 
   - angelicbuster
   options:
@@ -216,8 +240,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: zero
+    name: 륀느의 축복
+    group: zero
 data:
+  name: 륀느의 축복
   providing_jobs: 
   - zero
   options:
@@ -232,8 +258,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: zenon
+    name: 하이브리드 로직
+    group: zenon
 data:
+  name: 하이브리드 로직
   providing_jobs: 
   - zenon
   options:
@@ -251,8 +279,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: cadena
+    group: cadena
+    name: 인텐시브 인썰트
 data:
+  name: 인텐시브 인썰트
   providing_jobs: 
   - cadena
   options:
@@ -266,8 +296,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: ark
+    group: ark
+    name: 무아
 data:
+  name: 무아
   providing_jobs: 
   - ark
   options:
@@ -281,8 +313,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: hoyoung
+    group: hoyoung
+    name: 자신감
 data:
+  name: 자신감
   providing_jobs: 
   - hoyoung
   options:
@@ -294,8 +328,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: adele
+    group: adele
+    name: 노블레스
 data:
+  name: 노블레스
   providing_jobs: 
   - adele
   options:
@@ -310,8 +346,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: kain
+    group: kain
+    name: 프라이어 프리퍼레이션
 data:
+  name: 프라이어 프리퍼레이션
   providing_jobs: 
   - kain
   options:
@@ -324,8 +362,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: adventure_warrior
+    group: adventure_warrior
+    name: 인빈서블 빌리프
 data:
+  name: 인빈서블 빌리프
   providing_jobs: 
   - paladin
   - darkknight
@@ -343,8 +383,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: mihile
+    name: 빛의 수호
+    group: mihile
 data:
+  name: 빛의 수호
   providing_jobs: 
   - mihile
   options:
@@ -356,8 +398,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: resistance
+    name: 스피릿 오브 프리덤
+    group: resistance
 data:
+  name: 스피릿 오브 프리덤
   providing_jobs: 
   - blaster
   - battlemage
@@ -372,8 +416,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: kaiser
+    name: 아이언 윌
+    group: kaiser
 data:
+  name: 아이언 윌
   providing_jobs: 
   - kaiser
   options:
@@ -385,8 +431,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: eunwol
+    name: 구사 일생
+    group: eunwol
 data:
+  name: 구사 일생
   providing_jobs: 
   - eunwol
   options:
@@ -398,8 +446,10 @@ version: simaple.io/LinkSkill
 metadata:
   label:
     type: LinkSkill
-    name: cygnus
+    group: cygnus
+    name: 시그너스 블레스
 data:
+  name: 시그너스 블레스
   providing_jobs: 
   - soulmaster
   - flamewizard
