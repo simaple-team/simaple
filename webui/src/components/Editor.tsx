@@ -7,10 +7,15 @@ import {
 } from "@codemirror/autocomplete";
 import { yamlFrontmatter } from "@codemirror/lang-yaml";
 import { LanguageSupport, LRLanguage, syntaxTree } from "@codemirror/language";
+import { Diagnostic, linter } from "@codemirror/lint";
 import { styleTags } from "@lezer/highlight";
-import CodeMirror, { EditorView, keymap } from "@uiw/react-codemirror";
+import CodeMirror, {
+  EditorView,
+  Extension,
+  keymap,
+} from "@uiw/react-codemirror";
 import { Loader2 } from "lucide-react";
-import * as React from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useWorkspace } from "../hooks/useWorkspace";
 import { parser } from "../parser";
 import CreateBaselineFileDialog from "./CreateBaselineFileDialog";
@@ -36,7 +41,7 @@ function createCompletion(skillNames: string[]) {
     type: "constant",
   }));
 
-  function myCompletions(context: CompletionContext): CompletionResult | null {
+  function getCompletions(context: CompletionContext): CompletionResult | null {
     const before = context.matchBefore(/([가-힣]+|\w+)/);
     const quotedBefore = context.matchBefore(/"([가-힣]*|\w*)/);
 
@@ -79,7 +84,37 @@ function createCompletion(skillNames: string[]) {
     };
   }
 
-  return myCompletions;
+  return getCompletions;
+}
+
+function skillNameLinter(skillNames: string[]) {
+  return linter((view) => {
+    if (skillNames.length === 0) {
+      return [];
+    }
+
+    const diagnostics: Diagnostic[] = [];
+    syntaxTree(view.state)
+      .cursor()
+      .iterate((node) => {
+        if (node.name === "QuotedString") {
+          const skillName = view.state.doc
+            .slice(node.from, node.to)
+            .toString()
+            .replace(/"/g, "");
+
+          if (!skillNames.includes(skillName)) {
+            diagnostics.push({
+              from: node.from,
+              to: node.to,
+              severity: "error",
+              message: "Wrong skill name",
+            });
+          }
+        }
+      });
+    return diagnostics;
+  });
 }
 
 const myTheme = EditorView.theme({
@@ -88,16 +123,11 @@ const myTheme = EditorView.theme({
 });
 
 export function Editor() {
-  const [isRunning, setIsRunning] = React.useState(false);
+  const [isRunning, setIsRunning] = useState(false);
   const { plan, setPlan, skillNames, run, errorMessage, clearErrorMessage } =
     useWorkspace();
 
-  const myCompletions = React.useMemo(
-    () => createCompletion(skillNames),
-    [skillNames],
-  );
-
-  async function handleRun() {
+  const handleRun = useCallback(async () => {
     if (isRunning) {
       return;
     }
@@ -105,29 +135,33 @@ export function Editor() {
     setIsRunning(true);
     await run();
     setIsRunning(false);
-  }
+  }, [isRunning, run]);
 
-  function handleHotkeyRun(): boolean {
-    handleRun();
-    return true;
-  }
+  const extensions: Extension[] = useMemo(
+    () => [
+      myTheme,
+      keymap.of([
+        {
+          key: "Shift-Enter",
+          run: () => {
+            handleRun();
+            return true;
+          },
+        },
+      ]),
+      languageSupport(),
+      skillNameLinter(skillNames),
+      autocompletion({ override: [createCompletion(skillNames)] }),
+    ],
+    [skillNames, handleRun],
+  );
 
   return (
     <div className="flex h-full flex-col shrink-0 w-[480px] gap-2 border-r border-border/40">
       <CodeMirror
         className="h-[calc(100%-4rem)]"
         basicSetup={{ closeBrackets: false }}
-        extensions={[
-          myTheme,
-          keymap.of([
-            {
-              key: "Shift-Enter",
-              run: handleHotkeyRun,
-            },
-          ]),
-          languageSupport(),
-          autocompletion({ override: [myCompletions] }),
-        ]}
+        extensions={extensions}
         value={plan}
         onChange={(value) => setPlan(value)}
       />
