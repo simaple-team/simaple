@@ -11,63 +11,63 @@ from simaple.system.union import UnionSquad
 
 class AbilityLoader(ABC):
     @abstractmethod
-    async def load_stat(self, character_name: str) -> ExtendedStat:
+    def load_stat(self, character_name: str) -> ExtendedStat:
         pass
 
 
 class PropensityLoader(ABC):
     @abstractmethod
-    async def load_propensity(self, character_name: str) -> Propensity:
+    def load_propensity(self, character_name: str) -> Propensity:
         pass
 
 
 class HyperstatLoader(ABC):
     @abstractmethod
-    async def load_hyper_stat(self, character_name: str) -> Hyperstat:
+    def load_hyper_stat(self, character_name: str) -> Hyperstat:
         pass
 
 
 class UnionLoader(ABC):
     @abstractmethod
-    async def load_union_squad(self, character_name: str) -> UnionSquad:
+    def load_union_squad(self, character_name: str) -> UnionSquad:
         pass
 
     @abstractmethod
-    async def load_union_squad_effect(self, character_name: str) -> ExtendedStat:
+    def load_union_squad_effect(self, character_name: str) -> ExtendedStat:
         pass
 
     @abstractmethod
-    async def load_union_artifact(self, character_name: str) -> Artifact:
+    def load_union_artifact(self, character_name: str) -> Artifact:
         pass
 
     @abstractmethod
-    async def load_union_occupation_stat(self, character_name: str) -> ExtendedStat:
+    def load_union_occupation_stat(self, character_name: str) -> ExtendedStat:
         pass
 
 
 class GearLoader(ABC):
     @abstractmethod
-    async def load_equipments(self, character_name: str) -> list[tuple[Gear, str]]:
+    def load_equipments(self, character_name: str) -> list[tuple[Gear, str]]:
         pass
 
     @abstractmethod
-    async def load_symbols(self, character_name: str) -> list[SymbolGear]:
+    def load_symbols(self, character_name: str) -> list[SymbolGear]:
         pass
 
     @abstractmethod
-    async def load_pet_equipments_stat(self, character_name: str) -> Stat:
+    def load_pet_equipments_stat(self, character_name: str) -> Stat:
         pass
 
     @abstractmethod
-    async def load_gear_related_stat(self, character_name: str) -> ExtendedStat:
+    def load_gear_related_stat(self, character_name: str) -> ExtendedStat:
         pass
 
 
 class CharacterBasicLoader(ABC):
     @abstractmethod
-    async def load_character_level(self, character_name: str) -> int:
+    def load_character_level(self, character_name: str) -> int:
         pass
 
     @abstractmethod
-    async def load_character_ap_based_stat(self, character_name: str) -> Stat:
+    def load_character_ap_based_stat(self, character_name: str) -> Stat:
         pass

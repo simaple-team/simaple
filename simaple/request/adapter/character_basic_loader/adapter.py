@@ -18,21 +18,21 @@ class NexonAPICharacterBasicLoader(CharacterBasicLoader):
     def __init__(self, token_value: str):
         self._token = Token(token_value)
 
-    async def load_character_level(self, character_name: str) -> int:
-        character_id = await get_character_id(self._token, character_name)
+    def load_character_level(self, character_name: str) -> int:
+        character_id = get_character_id(self._token, character_name)
         uri = f"{HOST}/maplestory/v1/character/basic"
         resp = cast(
             CharacterBasicResponse,
-            await self._token.request(uri, get_character_id_param(character_id)),
+            self._token.request(uri, get_character_id_param(character_id)),
         )
         return resp["character_level"]
 
-    async def load_character_ap_based_stat(self, character_name: str) -> Stat:
-        character_id = await get_character_id(self._token, character_name)
+    def load_character_ap_based_stat(self, character_name: str) -> Stat:
+        character_id = get_character_id(self._token, character_name)
         uri = f"{HOST}/maplestory/v1/character/stat"
         resp = cast(
             CharacterStatResponse,
-            await self._token.request(uri, get_character_id_param(character_id)),
+            self._token.request(uri, get_character_id_param(character_id)),
         )
         return extract_character_ap_based_stat(resp)
 

@@ -17,12 +17,12 @@ class NexonAPIPropensityLoader(PropensityLoader):
     def __init__(self, token_value: str):
         self._token = Token(token_value)
 
-    async def load_propensity(self, character_name: str) -> Propensity:
-        character_id = await get_character_id(self._token, character_name)
+    def load_propensity(self, character_name: str) -> Propensity:
+        character_id = get_character_id(self._token, character_name)
         uri = f"{HOST}/maplestory/v1/character/propensity"
         resp = cast(
             CharacterPropensityResponse,
-            await self._token.request(uri, get_character_id_param(character_id)),
+            self._token.request(uri, get_character_id_param(character_id)),
         )
         return get_propensity(resp)
 

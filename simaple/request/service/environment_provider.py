@@ -33,52 +33,49 @@ class LoadedEnvironmentProvider:
         self.character_basic_loader = character_basic_loader
 
     def get_simulation_environment(self) -> SimulationEnvironment: ...
-        
 
-    async def compute_character(
+    def compute_character(
         self,
         character_name: str,
     ):
         total_extended_stat = ExtendedStat()
 
-        ability_extended_stat = await self.ability_loader.load_stat(character_name)
+        ability_extended_stat = self.ability_loader.load_stat(character_name)
         total_extended_stat += ability_extended_stat
 
-        propensity = await self.propensity_loader.load_propensity(character_name)
+        propensity = self.propensity_loader.load_propensity(character_name)
         propensity_extended_stat = propensity.get_extended_stat()
         total_extended_stat += propensity_extended_stat
 
-        hyperstat = await self.hyperstat_loader.load_hyper_stat(character_name)
+        hyperstat = self.hyperstat_loader.load_hyper_stat(character_name)
         hyperstat_extended_stat = ExtendedStat(stat=hyperstat.get_stat())
         total_extended_stat += hyperstat_extended_stat
 
-        union_squad_extended_stat = await self.union_loader.load_union_squad_effect(
+        union_squad_extended_stat = self.union_loader.load_union_squad_effect(
             character_name
         )
-        union_occupation_extended_stat = (
-            await self.union_loader.load_union_occupation_stat(character_name)
+        union_occupation_extended_stat = self.union_loader.load_union_occupation_stat(
+            character_name
         )
         total_extended_stat += union_squad_extended_stat
         total_extended_stat += union_occupation_extended_stat
 
-        artifacts = await self.union_loader.load_union_artifact(character_name)
+        artifacts = self.union_loader.load_union_artifact(character_name)
         artifacts_extended_stat = artifacts.get_extended_stat()
         total_extended_stat += artifacts_extended_stat
 
-        gear_related_extended_stat = await self.gear_loader.load_gear_related_stat(
+        gear_related_extended_stat = self.gear_loader.load_gear_related_stat(
             character_name
         )
         total_extended_stat += gear_related_extended_stat
 
-        character_ap_stat = (
-            await self.character_basic_loader.load_character_ap_based_stat(
-                character_name
-            )
+        character_ap_stat = self.character_basic_loader.load_character_ap_based_stat(
+            character_name
         )
         character_ap_extended_stat = ExtendedStat(stat=character_ap_stat)
         total_extended_stat += character_ap_extended_stat
 
-        character_level = await self.character_basic_loader.load_character_level(
+        character_level = self.character_basic_loader.load_character_level(
             character_name
         )
 

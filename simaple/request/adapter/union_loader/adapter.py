@@ -31,39 +31,39 @@ class NexonAPIUnionLoader(UnionLoader):
     def __init__(self, token_value: str):
         self._token = Token(token_value)
 
-    async def load_union_squad(self, character_name: str) -> UnionSquad:
-        character_id = await get_character_id(self._token, character_name)
+    def load_union_squad(self, character_name: str) -> UnionSquad:
+        character_id = get_character_id(self._token, character_name)
         uri = f"{HOST}/maplestory/v1/user/union-raider"
         resp = cast(
             CharacterUnionRaiderResponse,
-            await self._token.request(uri, get_character_id_param(character_id)),
+            self._token.request(uri, get_character_id_param(character_id)),
         )
         return get_union_squad(resp)
 
-    async def load_union_squad_effect(self, character_name: str) -> ExtendedStat:
-        character_id = await get_character_id(self._token, character_name)
+    def load_union_squad_effect(self, character_name: str) -> ExtendedStat:
+        character_id = get_character_id(self._token, character_name)
         uri = f"{HOST}/maplestory/v1/user/union-raider"
         resp = cast(
             CharacterUnionRaiderResponse,
-            await self._token.request(uri, get_character_id_param(character_id)),
+            self._token.request(uri, get_character_id_param(character_id)),
         )
         return get_union_squad_effect(resp)
 
-    async def load_union_artifact(self, character_name: str) -> Artifact:
-        character_id = await get_character_id(self._token, character_name)
+    def load_union_artifact(self, character_name: str) -> Artifact:
+        character_id = get_character_id(self._token, character_name)
         uri = f"{HOST}/maplestory/v1/user/union-artifact"
         resp = cast(
             UnionArtifactResponse,
-            await self._token.request(uri, get_character_id_param(character_id)),
+            self._token.request(uri, get_character_id_param(character_id)),
         )
         return get_union_artifact(resp)
 
-    async def load_union_occupation_stat(self, character_name: str) -> ExtendedStat:
-        character_id = await get_character_id(self._token, character_name)
+    def load_union_occupation_stat(self, character_name: str) -> ExtendedStat:
+        character_id = get_character_id(self._token, character_name)
         uri = f"{HOST}/maplestory/v1/user/union-raider"
         resp = cast(
             CharacterUnionRaiderResponse,
-            await self._token.request(uri, get_character_id_param(character_id)),
+            self._token.request(uri, get_character_id_param(character_id)),
         )
         return sum(
             [

@@ -2,6 +2,7 @@ import datetime
 from typing import Any, TypedDict, cast
 
 import aiohttp
+import requests
 
 HOST = "https://open.api.nexon.com"
 
@@ -30,21 +31,20 @@ class Token:
     def access_token(self) -> str:
         return self._access_token
 
-    async def request(self, uri: str, param: dict[str, Any]) -> dict:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(
-                f"{uri}",
-                headers={
-                    "X-Nxopen-Api-Key": self._access_token,
-                    "Accept": "application/json",
-                },
-                params=param,
-                allow_redirects=True,
-            ) as resp:
-                return cast(dict, await resp.json())
+    def request(self, uri: str, param: dict[str, Any]) -> dict:
+        resp = requests.get(
+            f"{uri}",
+            headers={
+                "X-Nxopen-Api-Key": self._access_token,
+                "Accept": "application/json",
+            },
+            params=param,
+            allow_redirects=True,
+        )
+        return cast(dict, resp.json())
 
 
-async def get_character_id(
+def get_character_id(
     token: Token, name: str, date: datetime.date | None = None
 ) -> CharacterID:
     if date is None:
@@ -52,7 +52,7 @@ async def get_character_id(
 
     uri = f"{HOST}/maplestory/v1/id"
 
-    resp = await token.request(uri, {"character_name": name})
+    resp = token.request(uri, {"character_name": name})
     return {
         "ocid": resp["ocid"],
         "date": date,

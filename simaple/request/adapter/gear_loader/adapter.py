@@ -35,46 +35,46 @@ class NexonAPIGearLoader(GearLoader):
         self._gear_repository = GearRepository()
         self.date = date
 
-    async def get_character_id(self, character_name: str) -> CharacterID:
-        return await get_character_id(self._token, character_name, date=self.date)
+    def get_character_id(self, character_name: str) -> CharacterID:
+        return get_character_id(self._token, character_name, date=self.date)
 
-    async def load_equipments(self, character_name: str) -> list[tuple[Gear, str]]:
-        character_id = await self.get_character_id(character_name)
+    def load_equipments(self, character_name: str) -> list[tuple[Gear, str]]:
+        character_id = self.get_character_id(character_name)
         uri = f"{HOST}/maplestory/v1/character/item-equipment"
 
         resp = cast(
             CharacterItemEquipment,
-            await self._token.request(uri, get_character_id_param(character_id)),
+            self._token.request(uri, get_character_id_param(character_id)),
         )
         gears = get_equipments(resp, self._gear_repository)
         return gears
 
-    async def load_symbols(self, character_name: str) -> list[SymbolGear]:
-        character_id = await self.get_character_id(character_name)
+    def load_symbols(self, character_name: str) -> list[SymbolGear]:
+        character_id = self.get_character_id(character_name)
         uri = f"{HOST}/maplestory/v1/character/symbol-equipment"
 
         resp = cast(
             CharacterSymbolEquipment,
-            await self._token.request(uri, get_character_id_param(character_id)),
+            self._token.request(uri, get_character_id_param(character_id)),
         )
         return get_symbols(resp)
 
-    async def load_pet_equipments_stat(self, character_name: str) -> Stat:
-        character_id = await self.get_character_id(character_name)
+    def load_pet_equipments_stat(self, character_name: str) -> Stat:
+        character_id = self.get_character_id(character_name)
         uri = f"{HOST}/maplestory/v1/character/pet-equipment"
         resp = cast(
             PetResponse,
-            await self._token.request(uri, get_character_id_param(character_id)),
+            self._token.request(uri, get_character_id_param(character_id)),
         )
         return get_pet_equip_stat_from_response(resp)
 
-    async def load_gear_related_stat(self, character_name: str) -> ExtendedStat:
-        character_id = await self.get_character_id(character_name)
+    def load_gear_related_stat(self, character_name: str) -> ExtendedStat:
+        character_id = self.get_character_id(character_name)
 
         equipment_stat = get_equipment_stat(
             cast(
                 CharacterItemEquipment,
-                await self._token.request(
+                self._token.request(
                     f"{HOST}/maplestory/v1/character/item-equipment",
                     get_character_id_param(character_id),
                 ),
@@ -82,14 +82,14 @@ class NexonAPIGearLoader(GearLoader):
             self._gear_repository,
         )
 
-        pet_equipment_stat = await self.load_pet_equipments_stat(character_name)
+        pet_equipment_stat = self.load_pet_equipments_stat(character_name)
         symbol_stat = sum(
-            (symbol.stat for symbol in await self.load_symbols(character_name)), Stat()
+            (symbol.stat for symbol in self.load_symbols(character_name)), Stat()
         )
         set_item_stat = get_set_item_stats(
             cast(
                 SetEffectResponse,
-                await self._token.request(
+                self._token.request(
                     f"{HOST}/maplestory/v1/character/set-effect",
                     get_character_id_param(character_id),
                 ),
@@ -98,7 +98,7 @@ class NexonAPIGearLoader(GearLoader):
         cash_item_stat = get_cash_item_stat(
             cast(
                 CashItemResponse,
-                await self._token.request(
+                self._token.request(
                     f"{HOST}/maplestory/v1/character/cashitem-equipment",
                     get_character_id_param(character_id),
                 ),

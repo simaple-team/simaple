@@ -20,12 +20,12 @@ class NexonAPIHyperStatLoader(HyperstatLoader):
     def __init__(self, token_value: str):
         self._token = Token(token_value)
 
-    async def load_hyper_stat(self, character_name: str) -> Hyperstat:
-        character_id = await get_character_id(self._token, character_name)
+    def load_hyper_stat(self, character_name: str) -> Hyperstat:
+        character_id = get_character_id(self._token, character_name)
         uri = f"{HOST}/maplestory/v1/character/hyper-stat"
         resp = cast(
             CharacterHyperStatResponse,
-            await self._token.request(uri, get_character_id_param(character_id)),
+            self._token.request(uri, get_character_id_param(character_id)),
         )
         return get_hyperstat(resp)
 
