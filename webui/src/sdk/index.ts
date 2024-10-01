@@ -44,6 +44,11 @@ export interface PySimaple {
   runPlan(
     plan: string,
   ): Promise<SuccessResponse<OperationLogResponse[]> | ErrorResponse>;
+  runPlanWithHint(
+    previousPlan: string,
+    history: OperationLogResponse[],
+    plan: string,
+  ): Promise<SuccessResponse<OperationLogResponse[]> | ErrorResponse>;
   getInitialPlanFromBaseline(
     baselineEnvironmentProvider: BaselineEnvironmentProvider,
   ): Promise<string>;
@@ -58,6 +63,11 @@ export interface PySimaple {
 const pySimaple: PySimaple = {
   ready: () => sendMessage({ method: "ready" }),
   runPlan: (plan: string) => sendMessage({ method: "runPlan", plan }),
+  runPlanWithHint: (
+    previousPlan: string,
+    history: OperationLogResponse[],
+    plan: string,
+  ) => sendMessage({ method: "runPlanWithHint", previousPlan, history, plan }),
   getInitialPlanFromBaseline: (baselineEnvironmentProvider: unknown) =>
     sendMessage({
       method: "getInitialPlanFromBaseline",

@@ -38,6 +38,9 @@ self.onmessage = async (event) => {
       case "runPlan":
         result = await pyodide.runPlan(params.plan);
         break;
+      case "runPlanWithHint":
+        result = await pyodide.runPlanWithHint(params.previousPlan, params.history, params.plan);
+        break;
       case "getInitialPlanFromBaseline":
         result = await pyodide.getInitialPlanFromBaseline(params.baselineEnvironmentProvider);
         break;
