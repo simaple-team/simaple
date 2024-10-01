@@ -410,6 +410,12 @@ data:
   options:
   - {}
   - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
+  - {}
 ---
 kind: LinkSkill 
 version: simaple.io/LinkSkill
@@ -477,3 +483,33 @@ data:
     magic_attack: 23
   - attack_power: 25
     magic_attack: 25
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: 와일드 레이지
+    group: demonslayer
+data:
+  name: 와일드 레이지
+  providing_jobs: 
+  - demonavenger
+  options:
+  - damage_multiplier: 5
+  - damage_multiplier: 10
+---
+kind: LinkSkill 
+version: simaple.io/LinkSkill
+metadata:
+  label:
+    type: LinkSkill
+    name: 전투의 흐름
+    group: illium
+data:
+  name: 전투의 흐름
+  providing_jobs: 
+  - demonavenger
+  options:
+  - damage_multiplier: 8
+  - damage_multiplier: 12

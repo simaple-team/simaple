@@ -7,6 +7,7 @@ from simaple.system.artifact import Artifact
 from simaple.system.hyperstat import Hyperstat
 from simaple.system.propensity import Propensity
 from simaple.system.union import UnionSquad
+from simaple.system.link import LinkSkill, LinkSkillset
 
 
 class AbilityLoader(ABC):
@@ -70,4 +71,10 @@ class CharacterBasicLoader(ABC):
 
     @abstractmethod
     def load_character_ap_based_stat(self, character_name: str) -> Stat:
+        pass
+
+
+class LinkSkillLoader(ABC):
+    @abstractmethod
+    def load_link_skill(self, character_name: str) -> LinkSkillset:
         pass

@@ -18,6 +18,7 @@ from simaple.request.adapter.propensity_loader._schema import (
     CharacterPropensityResponse,
 )
 from simaple.request.adapter.union_loader._schema import CharacterUnionRaiderResponse
+from simaple.request.adapter.link_skill_loader._schema import LinkSkillResponse
 
 
 def _macro_get_response(file_name: str) -> dict[str, Any]:
@@ -89,3 +90,8 @@ def union_artifact_response() -> dict[str, Any]:
 @pytest.fixture
 def character_stat_response() -> CharacterStatResponse:
     return cast(CharacterStatResponse, _macro_get_response("character_stat.json"))
+
+
+@pytest.fixture
+def link_skill_response() -> LinkSkillResponse:
+    return cast(LinkSkillResponse, _macro_get_response("link_skill.json"))
