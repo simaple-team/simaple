@@ -14,11 +14,11 @@ from simaple.request.adapter.gear_loader._schema import (
     SetEffectResponse,
 )
 from simaple.request.adapter.hyperstat_loader._schema import CharacterHyperStatResponse
+from simaple.request.adapter.link_skill_loader._schema import LinkSkillResponse
 from simaple.request.adapter.propensity_loader._schema import (
     CharacterPropensityResponse,
 )
 from simaple.request.adapter.union_loader._schema import CharacterUnionRaiderResponse
-from simaple.request.adapter.link_skill_loader._schema import LinkSkillResponse
 
 
 def _macro_get_response(file_name: str) -> dict[str, Any]:

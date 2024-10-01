@@ -1,15 +1,15 @@
+from typing import cast
+
+from simaple.data.system.link import get_all_linkskills
+from simaple.request.adapter.link_skill_loader._schema import LinkSkillResponse
 from simaple.request.adapter.nexon_api import (
     HOST,
     Token,
     get_character_id,
     get_character_id_param,
 )
-from typing import cast
-
 from simaple.request.service.loader import LinkSkillLoader
 from simaple.system.link import LinkSkill, LinkSkillset
-from simaple.request.adapter.link_skill_loader._schema import LinkSkillResponse
-from simaple.data.system.link import get_all_linkskills
 
 
 class NexonAPILinkSkillLoader(LinkSkillLoader):
@@ -18,7 +18,7 @@ class NexonAPILinkSkillLoader(LinkSkillLoader):
 
     def load_link_skill(self, character_name: str) -> LinkSkillset:
         character_id = get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/user/link-skill"
+        uri = f"{HOST}/maplestory/v1/character/link-skill"
         resp = cast(
             LinkSkillResponse,
             self._token.request(uri, get_character_id_param(character_id)),
