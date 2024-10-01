@@ -72,6 +72,8 @@ function createCompletion(skillNames: string[]) {
         })),
         { label: "CAST", type: "keyword" },
         { label: "ELAPSE", type: "keyword" },
+        { label: "RESOLVE", type: "keyword" },
+        { label: "KEYDOWNEND", type: "keyword" },
       ],
       validFor: /^([가-힣]*|\w*)$/,
     };
