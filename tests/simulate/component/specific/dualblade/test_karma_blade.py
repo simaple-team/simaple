@@ -55,6 +55,25 @@ def test_triggable_count(
     assert count_damage_skill(total_events) == 35 + 1
 
 
+def test_trigger_cooldown(
+    karma_blade_trigger: KarmaBladeTriggerComponent,
+    karma_blade_trigger_state: KarmaBladeTriggerState,
+):
+    """
+    쿨다운이 지나지 않으면 트리거에서 데미지를 발생시키지 않는다.
+    """
+    # given
+    state, _ = karma_blade_trigger.use(None, karma_blade_trigger_state)
+    state, _ = karma_blade_trigger.trigger(None, state)
+    state, _ = karma_blade_trigger.elapse(50, state)
+
+    # when
+    state, events = karma_blade_trigger.trigger(None, state)
+
+    # then
+    assert count_damage_skill(events) == 0
+
+
 def test_elapse_finish_damage(
     karma_blade_trigger: KarmaBladeTriggerComponent,
     karma_blade_trigger_state: KarmaBladeTriggerState,
