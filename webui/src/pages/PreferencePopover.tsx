@@ -14,9 +14,15 @@ interface PreferencePopoverProps {
   children?: React.ReactNode;
 }
 
+interface PreferenceForm {
+  startClock: number;
+  useDuration: boolean;
+  duration: number | null;
+}
+
 export function PreferencePopover(props: PreferencePopoverProps) {
   const { preferences, setPreferences } = usePreference();
-  const { register, control, getValues, watch } = useForm({
+  const { register, control, watch, handleSubmit } = useForm<PreferenceForm>({
     defaultValues: {
       startClock: preferences.startClock / 1000,
       useDuration: preferences.duration !== null,
@@ -25,8 +31,8 @@ export function PreferencePopover(props: PreferencePopoverProps) {
     },
   });
 
-  function handleSave() {
-    const { startClock, useDuration, duration } = getValues();
+  function handleSave(data: PreferenceForm) {
+    const { startClock, useDuration, duration } = data;
     setPreferences({
       startClock: Number(startClock) * 1000,
       duration: useDuration ? Number(duration) * 1000 : null,
@@ -37,7 +43,7 @@ export function PreferencePopover(props: PreferencePopoverProps) {
     <Popover>
       <PopoverTrigger asChild>{props.children}</PopoverTrigger>
       <PopoverContent className="w-96">
-        <div className="grid gap-4">
+        <form className="grid gap-4" onSubmit={handleSubmit(handleSave)}>
           <div className="space-y-2">
             <h4 className="font-medium leading-none">시간 설정</h4>
             <p className="text-sm text-muted-foreground">
@@ -65,6 +71,7 @@ export function PreferencePopover(props: PreferencePopoverProps) {
                 id="startClock"
                 className="h-8"
                 type="number"
+                step=".01"
                 {...register("startClock")}
               />
             </div>
@@ -75,13 +82,14 @@ export function PreferencePopover(props: PreferencePopoverProps) {
                   id="duration"
                   className="h-8"
                   type="number"
+                  step=".01"
                   {...register("duration")}
                 />
               </div>
             )}
           </div>
-          <Button onClick={() => handleSave()}>저장</Button>
-        </div>
+          <Button type="submit">저장</Button>
+        </form>
       </PopoverContent>
     </Popover>
   );
