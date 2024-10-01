@@ -17,7 +17,16 @@ data:
     - 써든레이드
     - 히든 블레이드
     - 아수라
-  hexa_improvement_names: []
+  hexa_improvement_names:
+    - 블레이드 스톰
+    - 카르마 퓨리
+    - 블레이드 토네이도
+    - 헌티드 엣지 - 나찰
+  hexa_skill_names:
+    - 카르마 블레이드
+  hexa_mastery:
+    팬텀 블로우: 팬텀 블로우 VI
+    아수라: 아수라 VI
   component_groups:
     - dualblade
     - common

@@ -197,6 +197,9 @@ class LastingStack(Entity):
         self.stack = 0
         self.time_left = 0
 
+    def enabled(self) -> bool:
+        return self.time_left > 0
+
     def increase(self, value: int = 1):
         self.stack = min(self.maximum_stack, self.stack + value)
         self.time_left = self.duration
