@@ -16,7 +16,7 @@ with open(os.path.join("dist", builtin_whl_fname), 'rb', buffering=0) as f:
 output_whl_file_name = f"simaple-0.0.0dev+local{digest}-py3-none-any.whl"
 
 shutil.copy(os.path.join("dist", builtin_whl_fname), os.path.join("webui/public", output_whl_file_name))
-with open("webui/src/sdk/dependency.ts", 'w') as f:
+with open("webui/src/sdk/dependency.mjs", 'w') as f:
     f.write(f'export const SIMAPLE_FILE_NAME = "{output_whl_file_name}"')
 """
 interpreter = "python"

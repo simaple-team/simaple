@@ -5,7 +5,8 @@ import yaml
 
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.plan_metadata import PlanMetadata
-from simaple.container.simulation import OperationEngine
+from simaple.container.simulation import get_damage_calculator, get_operation_engine
+from simaple.simulate.engine import OperationEngine
 from simaple.simulate.policy.parser import parse_simaple_runtime
 from simaple.simulate.report.base import DamageLog
 from simaple.simulate.report.dpm import DamageCalculator
@@ -29,10 +30,15 @@ from simaple.wasm.models.simulation import (
 def _extract_engine_history_as_response(
     engine: OperationEngine,
     damage_calculator: DamageCalculator,
+    start: int = 0,
+    checkpoint_interval: int = 10,
 ) -> list[OperationLogResponse]:
     responses: list[OperationLogResponse] = []
 
     for idx, operation_log in enumerate(engine.operation_logs()):
+        if idx < start:
+            continue
+
         playlog_responses = []
 
         for playlog in operation_log.playlogs:
@@ -50,6 +56,7 @@ def _extract_engine_history_as_response(
             ]
             damage = damage_calculator.calculate_damage(entry)
 
+            # Saves checkpoint iff it is a multiple of checkpoint_interval
             playlog_responses.append(
                 PlayLogResponse(
                     events=playlog.events,
@@ -60,7 +67,9 @@ def _extract_engine_history_as_response(
                     report=_Report(time_series=[entry]),
                     delay=playlog.get_delay_left(),
                     action=playlog.action,
-                    checkpoint=playlog.checkpoint,
+                    checkpoint=(
+                        playlog.checkpoint if idx % checkpoint_interval == 0 else None
+                    ),
                     total_damage=damage,
                     damage_records=damages,
                 )
@@ -80,8 +89,8 @@ def _extract_engine_history_as_response(
     return responses
 
 
+@return_js_object_from_pydantic_object
 @wrap_response_by_handling_exception
-@return_js_object_from_pydantic_list
 def runPlan(
     plan: str,
 ) -> list[OperationLogResponse]:
@@ -94,14 +103,14 @@ def runPlan(
     if plan_metadata.environment is None or plan_metadata.environment == {}:
         raise ValueError("Environment field is not provided")
 
-    simulation_container = plan_metadata.load_container()
-    engine = simulation_container.operation_engine()
+    environment = plan_metadata.get_environment()
+    engine = get_operation_engine(environment)
 
     for command in commands:
         engine.exec(command)
 
     return _extract_engine_history_as_response(
-        engine, simulation_container.damage_calculator()
+        engine, get_damage_calculator(environment)
     )
 
 
@@ -158,8 +167,8 @@ def computeMaximumDealingInterval(
     if plan_metadata.environment is None or plan_metadata.environment == {}:
         raise ValueError("Environment field is not provided")
 
-    simulation_container = plan_metadata.load_container()
-    engine = simulation_container.operation_engine()
+    environment = plan_metadata.get_environment()
+    engine = get_operation_engine(environment)
 
     for command in commands:
         engine.exec(command)
@@ -168,7 +177,7 @@ def computeMaximumDealingInterval(
 
     damage, _start, _end = MaximumDealingIntervalFeature(
         interval=interval
-    ).find_maximum_dealing_interval(report, simulation_container.damage_calculator())
+    ).find_maximum_dealing_interval(report, get_damage_calculator(environment))
     return MaximumDealingIntervalResult(damage=damage, start=_start, end=_end)
 
 
@@ -215,16 +224,15 @@ def runPlanWithHint(
     plan_metadata_dict, commands = parse_simaple_runtime(plan.strip())
     plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
 
-    simulation_container = plan_metadata.load_container()
-
-    engine = simulation_container.operation_engine()
+    environment = plan_metadata.get_environment()
+    engine = get_operation_engine(environment)
 
     if plan_metadata_dict != previous_plan_metadata_dict:
         for command in commands:
             engine.exec(command)
 
         return _extract_engine_history_as_response(
-            engine, simulation_container.damage_calculator()
+            engine, get_damage_calculator(environment)
         )
 
     # Since first operation in history is always "init", we skip this for retrieval;
@@ -246,6 +254,10 @@ def runPlanWithHint(
             continue
         break
 
+    # Find latest restorable operation log
+    while cache_count > 0 and not previous_history[cache_count].contains_chekcpoint():
+        cache_count -= 1
+
     engine.reload(
         [
             operation_log_response.restore_operation_log()
@@ -257,7 +269,9 @@ def runPlanWithHint(
         engine.exec(command)
 
     new_operation_logs = _extract_engine_history_as_response(
-        engine, simulation_container.damage_calculator()
+        engine,
+        get_damage_calculator(environment),
+        start=cache_count + 1,
     )
 
-    return new_operation_logs
+    return previous_history[: cache_count + 1] + new_operation_logs

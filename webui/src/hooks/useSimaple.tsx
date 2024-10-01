@@ -1,28 +1,25 @@
 import * as React from "react";
-import { loadPySimaple, PySimaple } from "../sdk";
+import { pySimaple } from "../sdk";
 
 type PySimapleProviderProps = { children: React.ReactNode };
 
 function usePySimapleState() {
   const [isLoading, setIsLoading] = React.useState(false);
-  const [pySimaple, setPySimaple] = React.useState<PySimaple>();
-
-  const isLoaded = React.useMemo(() => !!pySimaple, [pySimaple]);
+  const [isLoaded, setIsLoaded] = React.useState(false);
 
   async function load() {
     try {
       setIsLoading(true);
 
-      const { pySimaple } = await loadPySimaple();
+      await pySimaple.ready();
 
-      setPySimaple(pySimaple);
+      setIsLoaded(true);
     } finally {
       setIsLoading(false);
     }
   }
 
   return {
-    pySimaple,
     isLoading,
     isLoaded,
     load,
@@ -43,25 +40,12 @@ function PySimapleProvider({ children }: PySimapleProviderProps) {
   );
 }
 
-function usePySimapleBeforeLoad() {
-  const context = React.useContext(PySimapleStateContext);
-  if (context === undefined) {
-    throw new Error("usePySimaple must be used within a PySimapleProvider");
-  }
-  return context as ReturnType<typeof usePySimapleState>;
-}
-
 function usePySimaple() {
   const context = React.useContext(PySimapleStateContext);
   if (context === undefined) {
     throw new Error("usePySimaple must be used within a PySimapleProvider");
   }
-  if (!context.pySimaple) {
-    throw new Error("PySimaple is not loaded");
-  }
-  return context as ReturnType<typeof usePySimapleState> & {
-    pySimaple: PySimaple;
-  };
+  return context;
 }
 
-export { PySimapleProvider, usePySimaple, usePySimapleBeforeLoad };
+export { PySimapleProvider, usePySimaple };

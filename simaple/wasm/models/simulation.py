@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from typing import Any
+
 import pydantic
 
 from simaple.core.base import Stat
-from simaple.simulate.base import Action, Checkpoint, Event, PlayLog
+from simaple.simulate.base import Action, AddressedStore, Checkpoint, Event, PlayLog
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.policy.base import Command, OperationLog
 from simaple.simulate.report.base import SimulationEntry
@@ -27,6 +29,13 @@ class DamageRecord(pydantic.BaseModel):
     hit: float
 
 
+class DummyCheckpoint(Checkpoint):
+    store_ckpt: dict[str, Any] = {}
+
+    def restore(self) -> AddressedStore:
+        raise ValueError("DummyCheckpoint cannot be restored")
+
+
 class PlayLogResponse(pydantic.BaseModel):
     model_config = pydantic.ConfigDict(extra="forbid")
 
@@ -38,16 +47,24 @@ class PlayLogResponse(pydantic.BaseModel):
     clock: float
     delay: float
     action: Action
-    checkpoint: Checkpoint
+    checkpoint: Checkpoint | None
     total_damage: float
     damage_records: list[DamageRecord]
 
+    def contains_chekcpoint(self) -> bool:
+        return self.checkpoint is not None
+
     def restore_playlog(self) -> PlayLog:
+        if self.checkpoint is None:
+            checkpoint: Checkpoint = DummyCheckpoint()
+        else:
+            checkpoint = self.checkpoint
+
         return PlayLog(
             events=self.events,
             clock=self.clock,
             action=self.action,
-            checkpoint=self.checkpoint,
+            checkpoint=checkpoint,
         )
 
 
@@ -67,4 +84,9 @@ class OperationLogResponse(pydantic.BaseModel):
             playlogs=[log.restore_playlog() for log in self.logs],
             previous_hash=self.previous_hash,
             description=self.description,
+        )
+
+    def contains_chekcpoint(self) -> bool:
+        return (
+            all(log.contains_chekcpoint() for log in self.logs) and len(self.logs) > 0
         )

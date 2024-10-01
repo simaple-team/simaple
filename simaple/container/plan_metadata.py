@@ -6,7 +6,7 @@ from simaple.container.environment_provider import (
     EnvironmentProvider,
     get_environment_provider,
 )
-from simaple.container.simulation import SimulationContainer, SimulationEnvironment
+from simaple.container.simulation import SimulationEnvironment
 
 
 class _ProviderMetadata(pydantic.BaseModel):
@@ -29,11 +29,11 @@ class PlanMetadata(pydantic.BaseModel):
         assert self.provider is not None
         return self.provider.get_environment_provider()
 
-    def load_container(self) -> SimulationContainer:
+    def get_environment(self) -> SimulationEnvironment:
         if self.environment is None:
             assert self.provider is not None
             environment = self.provider.get_simulation_environment()
         else:
             environment = self.environment
 
-        return SimulationContainer(environment)
+        return environment

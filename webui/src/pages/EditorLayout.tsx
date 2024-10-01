@@ -1,7 +1,7 @@
 import { Editor } from "@/components/Editor";
 import Header from "@/components/Header";
 import { PreferenceProvider } from "@/hooks/usePreference";
-import { usePySimapleBeforeLoad } from "@/hooks/useSimaple";
+import { usePySimaple } from "@/hooks/useSimaple";
 import { SkillDataProvider } from "@/hooks/useSkillData";
 import { WorkspaceProvider } from "@/hooks/useWorkspaceState";
 import { Navigate, NavLink, Outlet } from "react-router-dom";
@@ -30,6 +30,7 @@ export function EditorNav() {
         <Tab to="/editor/summary">전투분석</Tab>
         <Tab to="/editor/log">로그</Tab>
         <Tab to="/editor/chart">차트</Tab>
+        <Tab to="/editor/skill-data">스킬데이터</Tab>
         <PreferencePopover>
           <button className="flex gap-1 items-center justify-center px-4 text-center text-sm text-primary pb-0.5">
             <Settings className="w-4 h-4" />
@@ -42,7 +43,7 @@ export function EditorNav() {
 }
 
 export function EditorLayout() {
-  const { isLoaded } = usePySimapleBeforeLoad();
+  const { isLoaded } = usePySimaple();
 
   if (!isLoaded) {
     return <Navigate to="/" replace={true} />;

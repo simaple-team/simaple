@@ -72,6 +72,8 @@ function createCompletion(skillNames: string[]) {
         })),
         { label: "CAST", type: "keyword" },
         { label: "ELAPSE", type: "keyword" },
+        { label: "RESOLVE", type: "keyword" },
+        { label: "KEYDOWNEND", type: "keyword" },
       ],
       validFor: /^([가-힣]*|\w*)$/,
     };
@@ -87,14 +89,8 @@ const myTheme = EditorView.theme({
 
 export function Editor() {
   const [isRunning, setIsRunning] = React.useState(false);
-  const {
-    plan,
-    setPlan,
-    skillNames,
-    runAsync,
-    errorMessage,
-    clearErrorMessage,
-  } = useWorkspace();
+  const { plan, setPlan, skillNames, run, errorMessage, clearErrorMessage } =
+    useWorkspace();
 
   const myCompletions = React.useMemo(
     () => createCompletion(skillNames),
@@ -107,7 +103,7 @@ export function Editor() {
     }
 
     setIsRunning(true);
-    await runAsync();
+    await run();
     setIsRunning(false);
   }
 

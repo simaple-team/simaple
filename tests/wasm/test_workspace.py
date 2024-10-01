@@ -226,11 +226,11 @@ def test_get_initial_plan_from_baseline():
     [
         (
             """CAST "체인 라이트닝 VI"
-ELAPSE 10000
+x10 ELAPSE 10000
 ELAPSE 10000
 """,
             """ELAPSE 12345
-CAST "체인 라이트닝 VI"
+x10 CAST "체인 라이트닝 VI"
 CAST "체인 라이트닝 VI"
 ELAPSE 10000
 ELAPSE 10000
@@ -239,11 +239,11 @@ ELAPSE 10000
         ),
         (
             """CAST "체인 라이트닝 VI"
-ELAPSE 10000
+x10 ELAPSE 10000
 ELAPSE 10000
 """,
             """CAST "체인 라이트닝 VI"
-ELAPSE 10000
+x10 ELAPSE 10000
 ELAPSE 10000
 ELAPSE 10000
 ELAPSE 10000
@@ -274,5 +274,5 @@ def test_run_with_hint(fixture_environment_given_plan, given, change):
     )
 
     assert isinstance(second_result_with_hint, SuccessResponse)
-
+    assert len(second_result_with_hint.data) == len(second_result.data)
     assert second_result_with_hint.data == second_result.data

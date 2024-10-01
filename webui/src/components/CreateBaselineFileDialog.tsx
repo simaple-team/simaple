@@ -49,9 +49,9 @@ const CreateBaselineFileDialog: React.FC<{
   });
   const [isOpen, setIsOpen] = React.useState(false);
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const values = getValues();
-    const plan = getInitialPlanFromBaseline({
+    const plan = await getInitialPlanFromBaseline({
       tier: values.tier,
       jobtype: values.jobtype as JobType,
       level: values.level,
