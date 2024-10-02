@@ -164,6 +164,27 @@ class Dispatcher(metaclass=ABCMeta):
     def init_store(self, store: Store) -> None: ...
 
 
+class TandemDispatcher(Dispatcher):
+    def __init__(
+        self, base_dispatcher: Dispatcher, next_dispatchers: list[Dispatcher]
+    ) -> None:
+        self._base_dispatcher = base_dispatcher
+        self._next_dispatchers = next_dispatchers
+
+    def __call__(self, action: Action, store: Store) -> list[Event]:
+        events = self._base_dispatcher(action, store)
+        for dispatcher in self._next_dispatchers:
+            events += dispatcher(action, store)
+
+        return events
+
+    def includes(self, signature: str) -> bool:
+        return self._base_dispatcher.includes(signature)
+
+    def init_store(self, store: Store) -> None:
+        self._base_dispatcher.init_store(store)
+
+
 def named_dispatcher(direction: str):
     def decorator(dispatcher: Dispatcher):
         def _includes(signature: str) -> bool:

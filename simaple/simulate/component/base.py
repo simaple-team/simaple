@@ -12,6 +12,7 @@ from simaple.simulate.base import (
     Entity,
     Event,
     Store,
+    TandemDispatcher,
     message_signature,
 )
 from simaple.simulate.event import EventProvider, NamedEventProvider
@@ -124,6 +125,55 @@ class StoreAdapter:
         return names
 
 
+class _ComponentAddon(
+    BaseModel,
+):
+    """
+    ComponentAddon is plug-and-play definition for inter-component communication.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    when: str
+    destination: str
+    method: str
+    payload: dict
+
+
+class ContextDispatcher(Dispatcher):
+    """
+    Context Dispatcher triggers another dispatcher with defined action.
+    """
+
+    def __init__(self, defined_action: Action, context: Dispatcher):
+        self._defined_action = defined_action
+        self._context = context
+        self._signature = message_signature(self._defined_action)
+
+    def __call__(self, _: Action, store: Store) -> list[Event]:
+        return self._context(self._defined_action, store)
+
+    def includes(self, signature: str) -> bool:
+        return signature == self._signature
+
+    def init_store(self, store: Store):
+        """
+        Since context dispatcher triggers reducer that already initialized, this method may do nothing.
+        """
+        pass
+
+
+def addon_to_dispatcher(addon: _ComponentAddon, context_dispatcher: Dispatcher):
+    return ContextDispatcher(
+        {
+            "name": addon.destination,
+            "method": addon.method,
+            "payload": addon.payload,
+        },
+        context_dispatcher,
+    )
+
+
 class ReducerMethodWrappingDispatcher(Dispatcher):
     def __init__(
         self,
@@ -132,12 +182,20 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
         reducer_mappings: dict[str, ComponentMethodWrapper],
         default_state: dict[str, Entity],
         binds=None,
+        addons: list[_ComponentAddon] | None = None,
     ):
         self._name = name
         self._default_state = default_state
         self.method_mappings = method_mappings
         self.reducer_mappings = reducer_mappings
+        self._addons = addons or []
         self._store_adapter = StoreAdapter(self._default_state, binds)
+
+    def get_context_synced_dispatcher(self, context_dispatcher: Dispatcher):
+        return TandemDispatcher(
+            self,
+            [addon_to_dispatcher(addon, context_dispatcher) for addon in self._addons],
+        )
 
     def includes(self, signature: str) -> bool:
         return self._find_mapping_name(signature) is not None
@@ -310,6 +368,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         default_factory=dict
     )
     binds: dict[str, str] = Field(default_factory=dict)
+    addons: list[_ComponentAddon] = Field(default_factory=list)
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -363,6 +422,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
             reducer_mappings,
             self.get_default_state(),
             binds=self.binds,
+            addons=self.addons,
         )
 
     def get_every_reducer_methods(self):
