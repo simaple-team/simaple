@@ -47,7 +47,7 @@ class EngineBuilder:
 
     def add_component(self, component: Component) -> "EngineBuilder":
         dispatcher = component.export_dispatcher()
-        self.add_dispatcher(dispatcher)
+        self.add_dispatcher(dispatcher.get_context_synced_dispatcher(self._router))
 
         for view_name, view in component.get_views().items():
             self._viewset.add_view(f"{component.name}.{view_name}", view)

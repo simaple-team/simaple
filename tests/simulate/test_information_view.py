@@ -42,6 +42,7 @@ def test_view():
             "id": "test",
             "name": "test_component",
             "listening_actions": {},
+            "addons": [],
             "binds": {"dynamics": "global.dynamics"},
             "disable_validity": False,
             "modifier": None,
