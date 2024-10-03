@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from simaple.core import ExtendedStat, Stat
 from simaple.gear.gear import Gear
 from simaple.gear.symbol_gear import SymbolGear
+from simaple.request.service.util import BestStatSelector
 from simaple.system.artifact import Artifact
 from simaple.system.hyperstat import Hyperstat
 from simaple.system.link import LinkSkillset
@@ -13,6 +14,12 @@ from simaple.system.union import UnionSquad
 class AbilityLoader(ABC):
     @abstractmethod
     def load_stat(self, character_name: str) -> ExtendedStat:
+        pass
+
+    @abstractmethod
+    def load_best_stat(
+        self, character_name: str, selector: BestStatSelector
+    ) -> ExtendedStat:
         pass
 
 
@@ -82,5 +89,7 @@ class LinkSkillLoader(ABC):
 
 class CharacterSkillLoader(ABC):
     @abstractmethod
-    def load_character_passive_stat(self, character_name: str, character_level: int) -> ExtendedStat:
+    def load_character_passive_stat(
+        self, character_name: str, character_level: int
+    ) -> ExtendedStat:
         pass

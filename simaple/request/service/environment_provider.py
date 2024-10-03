@@ -2,12 +2,12 @@ from simaple.core import ExtendedStat
 from simaple.request.service.loader import (
     AbilityLoader,
     CharacterBasicLoader,
+    CharacterSkillLoader,
     GearLoader,
     HyperstatLoader,
     LinkSkillLoader,
     PropensityLoader,
     UnionLoader,
-    CharacterSkillLoader,
 )
 
 
@@ -80,8 +80,10 @@ class LoadedEnvironmentProvider:
             character_name
         )
 
-        character_passive_stat = self.character_skill_loader.load_character_passive_stat(
-            character_name, character_level
+        character_passive_stat = (
+            self.character_skill_loader.load_character_passive_stat(
+                character_name, character_level
+            )
         )
         total_extended_stat += character_passive_stat
 
