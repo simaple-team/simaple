@@ -9,15 +9,13 @@ from simaple.simulate.kms import get_builder
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 
 
-def add_extended_stats(*action_stats):
-    return sum(action_stats, ExtendedStat())
-
-
 class FinalCharacterStat(pydantic.BaseModel):
     model_config = pydantic.ConfigDict(extra="forbid")
 
     stat: Stat
     action_stat: ActionStat
+
+    active_buffs: dict[str, Stat]
 
 
 class SimulationEnvironment(pydantic.BaseModel):

@@ -170,6 +170,7 @@ class MinimalEnvironmentProvider(MemoizableEnvironmentProvider):
         return FinalCharacterStat(
             stat=self.stat,
             action_stat=self.action_stat,
+            active_buffs={},
         )
 
     def get_memoization_independent_environment(
@@ -428,6 +429,7 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
         return FinalCharacterStat(
             stat=total_extend_stat.compute_by_level(self.level),
             action_stat=total_extend_stat.action_stat,
+            active_buffs={},
         )
 
 

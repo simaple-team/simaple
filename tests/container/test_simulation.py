@@ -25,6 +25,7 @@ from simaple.simulate.policy.base import Operation
                     magic_attack=1000,
                 ),
                 action_stat=ActionStat(),
+                active_buffs={},
             ),
             skill_levels={
                 "undef 인페르날 베놈": 10,
@@ -42,6 +43,7 @@ from simaple.simulate.policy.base import Operation
                     magic_attack=1000,
                 ),
                 action_stat=ActionStat(),
+                active_buffs={},
             ),
             skill_levels={
                 "undef 인페르날 베놈": 10,
@@ -59,6 +61,7 @@ from simaple.simulate.policy.base import Operation
                     magic_attack=1000,
                 ),
                 action_stat=ActionStat(),
+                active_buffs={},
             ),
             hexa_improvement_levels={
                 "undef 인페르날 베놈": 10,
@@ -85,6 +88,7 @@ def test_simulation_environment_using_skill_levels():
                 magic_attack=1000,
             ),
             action_stat=ActionStat(),
+            active_buffs={},
         ),
         v_improvements_level=60,
     )
@@ -101,6 +105,7 @@ def test_simulation_environment_using_skill_levels():
                 magic_attack=1000,
             ),
             action_stat=ActionStat(),
+            active_buffs={},
         ),
         v_improvements_level=60,
         skill_levels={
