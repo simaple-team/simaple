@@ -2,7 +2,7 @@
 import pytest
 
 from simaple.core import Stat
-from simaple.simulate.component.skill import (
+from simaple.simulate.component.common.consumable_buff_skill import (
     ConsumableBuffSkillComponent,
     ConsumableBuffSkillState,
 )

@@ -1,7 +1,7 @@
 # pylint: disable=W0621
 import pytest
 
-from simaple.simulate.component.skill import (
+from simaple.simulate.component.common.periodic_damage_configurated_attack_skill import (
     PeriodicDamageConfiguratedAttackSkillComponent,
     PeriodicDamageState,
 )

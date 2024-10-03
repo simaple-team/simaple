@@ -2,7 +2,7 @@
 import pytest
 
 from simaple.core.base import Stat
-from simaple.simulate.component.triggable_buff_skill import (
+from simaple.simulate.component.common.triggable_buff_skill import (
     TriggableBuffSkillComponent,
     TriggableBuffState,
 )

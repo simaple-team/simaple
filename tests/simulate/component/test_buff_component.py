@@ -2,7 +2,10 @@
 import pytest
 
 from simaple.core import Stat
-from simaple.simulate.component.skill import BuffSkillComponent, BuffSkillState
+from simaple.simulate.component.common.buff_skill import (
+    BuffSkillComponent,
+    BuffSkillState,
+)
 from simaple.simulate.global_property import Dynamics
 
 
