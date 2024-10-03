@@ -15,6 +15,7 @@ from simaple.request.adapter.nexon_api import (
 from simaple.request.adapter.skill_loader._converter import (
     compute_hexa_stat,
     compute_passive_skill_stat,
+    get_zero_order_skill_effect,
 )
 from simaple.request.adapter.skill_loader._schema import (
     AggregatedCharacterSkillResponse,
@@ -47,60 +48,75 @@ class NexonAPICharacterSkillLoader(CharacterSkillLoader):
         )
         return compute_hexa_stat(response)
 
+    def load_zero_grade_skill_passive_stat(
+        self, character_name: str
+    ) -> tuple[ExtendedStat, bool]:
+        uri = f"{HOST}/maplestory/v1/character/skill"
+        response = cast(
+            CharacterSkillResponse,
+            self._token.request(uri, self._get_query_param(character_name, "0")),
+        )
+        return get_zero_order_skill_effect(response)
+
+    def _get_query_param(self, character_name: str, skill_order: str) -> dict:
+        character_id = get_character_id(self._token, character_name)
+        return {
+            "character_skill_grade": skill_order,
+            **get_character_id_param(character_id),
+        }
+
     def _get_aggregated_response(
         self, character_name: str
     ) -> AggregatedCharacterSkillResponse:
-        def _get_query_param(skill_order: str) -> dict:
-            character_id = get_character_id(self._token, character_name)
-            return {
-                "character_skill_grade": skill_order,
-                **get_character_id_param(character_id),
-            }
 
         uri = f"{HOST}/maplestory/v1/character/skill"
         return {
             "response_at_0": cast(
                 CharacterSkillResponse,
-                self._token.request(uri, _get_query_param("0")),
+                self._token.request(uri, self._get_query_param(character_name, "0")),
             ),
             "response_at_1": cast(
                 CharacterSkillResponse,
-                self._token.request(uri, _get_query_param("0")),
+                self._token.request(uri, self._get_query_param(character_name, "0")),
             ),
             "response_at_1_and_half": cast(
                 CharacterSkillResponse,
-                self._token.request(uri, _get_query_param("1.5")),
+                self._token.request(uri, self._get_query_param(character_name, "1.5")),
             ),
             "response_at_2": cast(
                 CharacterSkillResponse,
-                self._token.request(uri, _get_query_param("2")),
+                self._token.request(uri, self._get_query_param(character_name, "2")),
             ),
             "response_at_2_and_half": cast(
                 CharacterSkillResponse,
-                self._token.request(uri, _get_query_param("2.5")),
+                self._token.request(uri, self._get_query_param(character_name, "2.5")),
             ),
             "response_at_3": cast(
                 CharacterSkillResponse,
-                self._token.request(uri, _get_query_param("3")),
+                self._token.request(uri, self._get_query_param(character_name, "3")),
             ),
             "response_at_4": cast(
                 CharacterSkillResponse,
-                self._token.request(uri, _get_query_param("4")),
+                self._token.request(uri, self._get_query_param(character_name, "4")),
             ),
             "response_at_hyper_passive": cast(
                 CharacterSkillResponse,
-                self._token.request(uri, _get_query_param("hyperpassive")),
+                self._token.request(
+                    uri, self._get_query_param(character_name, "hyperpassive")
+                ),
             ),
             "response_at_hyper_active": cast(
                 CharacterSkillResponse,
-                self._token.request(uri, _get_query_param("hyperactive")),
+                self._token.request(
+                    uri, self._get_query_param(character_name, "hyperactive")
+                ),
             ),
             "response_at_5": cast(
                 CharacterSkillResponse,
-                self._token.request(uri, _get_query_param("5")),
+                self._token.request(uri, self._get_query_param(character_name, "5")),
             ),
             "response_at_6": cast(
                 CharacterSkillResponse,
-                self._token.request(uri, _get_query_param("6")),
+                self._token.request(uri, self._get_query_param(character_name, "6")),
             ),
         }

@@ -13,11 +13,14 @@ Skill 관련 정보는 다음과 같이 처리됩니다.
 이 경우 다양한 스킬 효과 변경에 대응할 수 있지만, 그 반대급부로 가끔 잘못된 정보가 제공될 수 있습니다.
 """
 
-from simaple.core import ExtendedStat, JobType
+import re
+
+from simaple.core import ActionStat, ExtendedStat, JobType, Stat
 from simaple.data.jobs.builtin import get_damage_logic, get_passive
 from simaple.data.system.hexa_stat import get_all_hexa_stat_cores
 from simaple.request.adapter.skill_loader._schema import (
     AggregatedCharacterSkillResponse,
+    CharacterSkillDescription,
     CharacterSkillResponse,
     HexaStatResponse,
 )
@@ -82,6 +85,60 @@ def compute_passive_skill_stat(
     return passive_stat
 
 
+def get_stat_from_skill_description(
+    line: str,
+) -> ExtendedStat:
+    pattern = re.compile(r"([A-Z/가-힣a-z\s]+)([\d\.]+)(%?) 증가")
+    match = pattern.search(line)
+    if not match:
+        raise ValueError(f"Invalid occupation description: {line}")
+
+    option_name = match.group(1).strip()
+    option_value_float = float(match.group(2))
+    option_value = int(option_value_float)
+    is_percentage = match.group(3) == "%"
+
+    match (option_name, is_percentage):
+        case ("STR", False):
+            return ExtendedStat(stat=Stat(STR_static=option_value))
+        case ("DEX", False):
+            return ExtendedStat(stat=Stat(DEX_static=option_value))
+        case ("INT", False):
+            return ExtendedStat(stat=Stat(INT_static=option_value))
+        case ("LUK", False):
+            return ExtendedStat(stat=Stat(LUK_static=option_value))
+        case ("마력", False):
+            return ExtendedStat(stat=Stat(magic_attack=option_value))
+        case ("공격력", False):
+            return ExtendedStat(stat=Stat(attack_power=option_value))
+        case ("최대 HP", False):
+            return ExtendedStat(stat=Stat(MHP=option_value))
+        case ("최대 MP", False):
+            return ExtendedStat(stat=Stat(MMP=option_value))
+        case ("크리티컬 데미지", True):
+            return ExtendedStat(stat=Stat(critical_damage=option_value_float))
+        case ("크리티컬 확률", True):
+            return ExtendedStat(stat=Stat(critical_rate=option_value))
+        case ("방어율 무시", True):
+            return ExtendedStat(stat=Stat(ignored_defence=option_value))
+        case ("보스 몬스터 공격 시 데미지", True):
+            return ExtendedStat(stat=Stat(boss_damage_multiplier=option_value))
+        case ("몬스터 방어율 무시", True):
+            return ExtendedStat(stat=Stat(ignored_defence=option_value))
+        case ("공격력/마력", False):
+            return ExtendedStat(
+                stat=Stat(attack_power=option_value, magic_attack=option_value)
+            )
+        case ("일반 몬스터 공격 시 데미지", True):
+            return ExtendedStat()
+        case ("버프 지속시간", True):
+            return ExtendedStat(action_stat=ActionStat(buff_duration=option_value))
+        case ("올스탯", False):
+            return ExtendedStat(stat=Stat.all_stat(option_value))
+
+    return ExtendedStat()
+
+
 def _translate_if_main_stat_core(core_name: str, job_type: JobType):
     if core_name != "주력 스탯 증가":
         return core_name
@@ -114,4 +171,121 @@ def compute_hexa_stat(resp: HexaStatResponse) -> HexaStat:
                 resp["character_hexa_stat_core"] + resp["character_hexa_stat_core_2"]
             )
         ],
+    )
+
+
+def _get_passive_skill_effect_from_description(
+    skill: CharacterSkillDescription,
+) -> ExtendedStat:
+    """
+    패시브 스킬의 설명을 분석하여 스탯을 반환합니다.
+    """
+
+    # 여축, 정축 계산
+    if skill["skill_name"] in ["정령의 축복", "여제의 축복"]:
+        return ExtendedStat(
+            stat=Stat(
+                attack_power=skill["skill_level"], magic_attack=skill["skill_level"]
+            )
+        )
+
+    # 연합의 의지
+    if skill["skill_name"] == "연합의 의지":
+        return ExtendedStat(
+            stat=Stat(
+                attack_power=5,
+                magic_attack=5,
+                STR=5,
+                DEX=5,
+                INT=5,
+                LUK=5,
+            )
+        )
+    # 창조의 아이온
+    if skill["skill_name"] == "파괴의 얄다바오트":
+        return ExtendedStat(
+            stat=Stat(
+                final_damage_multiplier=10,
+            )
+        )
+
+    # None skill 반환
+    if skill["skill_effect"] is None:
+        return ExtendedStat()
+
+    # 펫 계열 버프 계산
+    pet_skill_regex = r"^공격력 ([0-9]+), 마력 ([0-9]+)증가$"
+    if match := re.compile(pet_skill_regex).match(skill["skill_effect"]):
+        return ExtendedStat(
+            stat=Stat(
+                attack_power=int(match.group(1)),
+                magic_attack=int(match.group(2)),
+            )
+        )
+
+    # 보약버프류 계산
+    # 보공, 방무 명시가 되어있으면 해당 계열로 판정합니다.
+    event_skill_detector = {
+        "보스 몬스터 공격 시",
+        "방어율 무시",
+        "버프 지속시간",
+        "일반 몬스터",
+        "폴로/프리토",
+        "몬스터파크 퇴장 시",
+    }
+    _event_skill_count = 0
+    for event in event_skill_detector:
+        if event in skill["skill_effect"]:
+            _event_skill_count += 1
+    if len(skill["skill_effect"].split("\n")) > 2:
+        _event_skill_count += 1
+
+    if _event_skill_count >= 2:
+        return sum(
+            [
+                get_stat_from_skill_description(line.strip())
+                for line in skill["skill_effect"].split("\n")
+            ],
+            ExtendedStat(),
+        )
+
+    return ExtendedStat()
+
+
+def get_zero_order_skill_effect(
+    response: CharacterSkillResponse,
+) -> tuple[ExtendedStat, bool]:
+    """
+    0차 스킬의 효과를 추정합니다.
+    """
+    _has_liberated_skill = "파괴의 얄다바오트" in [
+        skill["skill_name"] for skill in response["character_skill"]
+    ]
+
+    _ignored_skill_names = []
+    _skill_effect_map = {
+        skill["skill_name"]: _get_passive_skill_effect_from_description(skill)
+        for skill in response["character_skill"]
+        if skill["skill_name"] in {"정령의 축복", "여제의 축복"}
+    }
+
+    if "정령의 축복" in _skill_effect_map and "여제의 축복" in _skill_effect_map:
+        if (
+            _skill_effect_map["정령의 축복"].stat.attack_power
+            > _skill_effect_map["여제의 축복"].stat.attack_power
+        ):
+            _ignored_skill_names.append("여제의 축복")
+        else:
+            _ignored_skill_names.append("정령의 축복")
+
+    return (
+        sum(
+            [
+                _get_passive_skill_effect_from_description(skill)
+                for skill in response["character_skill"]
+                if skill["skill_name"] not in _ignored_skill_names
+            ],
+            ExtendedStat(),
+        ),
+        _has_liberated_skill,
     )

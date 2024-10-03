@@ -102,6 +102,11 @@ def link_skill_response() -> LinkSkillResponse:
 
 
 @pytest.fixture
+def skill_0_response() -> CharacterSkillResponse:
+    return cast(CharacterSkillResponse, _macro_get_response("skill_0.json"))
+
+
+@pytest.fixture
 def skill_aggregated_response() -> AggregatedCharacterSkillResponse:
     return {
         "response_at_0": cast(

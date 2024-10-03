@@ -5,7 +5,7 @@ class CharacterSkillDescription(TypedDict):
     skill_name: str
     skill_description: str
     skill_level: int
-    skill_effect: str
+    skill_effect: str | None
     skill_icon: str
     skill_effect_next: str
 

@@ -114,3 +114,13 @@ class CharacterSkillLoader(ABC):
         character_name: str,
     ) -> HexaStat:
         pass
+
+    @abstractmethod
+    def load_zero_grade_skill_passive_stat(
+        self, character_name: str, character_level: int
+    ) -> tuple[ExtendedStat, bool]:
+        """
+        0차 스킬로부터 얻는 패시브 스탯을 반환합니다.
+        더불어, 해방 무기 장착 여부도 반환합니다.
+        """
+        pass
