@@ -1,10 +1,9 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from simaple.container.environment_provider import BaselineEnvironmentProvider
 import simaple.wasm as wasm
-from fastapi.middleware.cors import CORSMiddleware
-
+from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.wasm.models.simulation import OperationLogResponse
 
 app = FastAPI()
