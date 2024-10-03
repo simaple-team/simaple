@@ -29,3 +29,24 @@ class AggregatedCharacterSkillResponse(TypedDict):
     response_at_hyper_active: CharacterSkillResponse
     response_at_5: CharacterSkillResponse
     response_at_6: CharacterSkillResponse
+
+
+
+class _HexaStatCore(TypedDict):
+    slot_id: str
+    main_stat_name: str
+    sub_stat_name_1: str
+    sub_stat_name_2: str
+    main_stat_level: int
+    sub_stat_level_1: int
+    sub_stat_level_2: int
+    stat_grade: int
+
+
+class HexaStatResponse(TypedDict):
+    date: str
+    character_class: str
+    character_hexa_stat_core: list[_HexaStatCore]  # always length 1
+    character_hexa_stat_core_2: list[_HexaStatCore]  # always length 1
+    preset_hexa_stat_core: list[_HexaStatCore]
+    preset_hexa_stat_core_2: list[_HexaStatCore]

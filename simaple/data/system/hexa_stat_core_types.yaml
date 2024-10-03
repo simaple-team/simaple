@@ -1,0 +1,64 @@
+---
+kind: HexaStatCoreType 
+version: simaple.io/HexaStatCoreType
+metadata:
+  label:
+    name: 주스탯
+data:  
+  name: 주스탯
+  basis: 
+    STR: 100
+    DEX: 100
+    INT: 100
+    LUK: 100
+---
+kind: HexaStatCoreType 
+version: simaple.io/HexaStatCoreType
+metadata:
+  label:
+    name: 공격력/마력
+data:  
+  name: 공격력/마력
+  basis: 
+    attack_power: 5
+    magic_attack: 5
+---
+kind: HexaStatCoreType 
+version: simaple.io/HexaStatCoreType
+metadata:
+  label:
+    name: 데미지
+data:  
+  name: 데미지
+  basis: 
+    damage_multiplier: 0.75
+---
+kind: HexaStatCoreType 
+version: simaple.io/HexaStatCoreType
+metadata:
+  label:
+    name: 방어율 무시
+data:  
+  name: 방어율 무시
+  basis: 
+    ignored_defence: 1
+---
+kind: HexaStatCoreType 
+version: simaple.io/HexaStatCoreType
+metadata:
+  label:
+    name: 보스 데미지
+data:  
+  name: 보스 데미지
+  basis: 
+    boss_damage_multiplier: 1
+---
+kind: HexaStatCoreType 
+version: simaple.io/HexaStatCoreType
+metadata:
+  label:
+    name: 크리티컬 데미지
+data:  
+  name: 크리티컬 데미지
+  basis: 
+    critical_damage: 0.35
