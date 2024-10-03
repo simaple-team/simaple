@@ -23,7 +23,9 @@ class NexonAPICharacterSkillLoader(CharacterSkillLoader):
     def __init__(self, token_value: str):
         self._token = Token(token_value)
 
-    def load_character_passive_stat(self, character_name: str, character_level: int) -> ExtendedStat:
+    def load_character_passive_stat(
+        self, character_name: str, character_level: int
+    ) -> ExtendedStat:
         aggregated_response = self._get_aggregated_response(character_name)
         return compute_passive_skill_stat(aggregated_response, character_level)
 
