@@ -26,7 +26,7 @@ from simaple.request.adapter.skill_loader._schema import (
 )
 from simaple.request.adapter.translator.job_name import translate_kms_name
 from simaple.system.hexa_stat import HexaStat, HexaStatCore
-
+from  loguru import logger
 
 def extract_levels(response: CharacterSkillResponse) -> dict[str, int]:
     levels = {}
@@ -91,7 +91,8 @@ def get_stat_from_skill_description(
     pattern = re.compile(r"([A-Z/가-힣a-z\s]+)([\d\.]+)(%?) 증가")
     match = pattern.search(line)
     if not match:
-        raise ValueError(f"Invalid occupation description: {line}")
+        logger.warning(f"Invalid occupation description: {line}")
+        return ExtendedStat()
 
     option_name = match.group(1).strip()
     option_value_float = float(match.group(2))

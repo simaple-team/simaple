@@ -68,6 +68,13 @@ class NexonAPICharacterSkillLoader(CharacterSkillLoader):
             skill_info["skill_name"]: skill_info["skill_level"]
             for skill_info in response["character_skill"]
             if "강화" not in skill_info["skill_name"]
+            and skill_info["skill_name"] not in {
+                "HEXA 스텟",
+                "솔 야누스 : 새벽",
+                "솔 야누스 : 황혼",
+                "솔 야누스",
+                "HEXA 스탯",
+            }
         }
         hexa_improvement_levels = {
             skill_info["skill_name"]

@@ -7,6 +7,7 @@ from simaple.simulate.component.base import Component
 from simaple.simulate.engine import OperationEngine
 from simaple.simulate.kms import get_builder
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
+from loguru import logger
 
 
 class FinalCharacterStat(pydantic.BaseModel):
@@ -76,22 +77,20 @@ def get_skill_components(environment: SimulationEnvironment) -> list[Component]:
         + list(skill_profile.hexa_mastery.values())
     )
     for skill_name in environment.skill_levels:
-        assert (
-            skill_name in possible_skill_names
-        ), f"Given explicit skill name \
-passed to level: {skill_name} is not in {possible_skill_names}"
+        if skill_name not in possible_skill_names:
+            logger.warning(f"Given explicit skill name \
+passed to level: {skill_name} is not in {possible_skill_names}")
 
     for hexa_improvement_name in environment.hexa_improvement_levels:
-        assert (
-            hexa_improvement_name in skill_profile.hexa_improvement_names
-        ), f"Given explicit \
-improvement name passed to level: {hexa_improvement_name} is not in {skill_profile.hexa_improvement_names}"
+        if hexa_improvement_name not in skill_profile.hexa_improvement_names:
+            logger.warning(f"Given explicit improvement name \
+improvement name passed to level: {hexa_improvement_name} is not in {skill_profile.hexa_improvement_names}")
 
     return build_skills(
         skill_profile.get_groups(),
-        environment.skill_levels,
+        {k: v for k, v in environment.skill_levels.items() if k in possible_skill_names},
         skill_profile.get_filled_v_improvements(environment.v_improvements_level),
-        environment.hexa_improvement_levels,
+        {k:v for k, v in environment.hexa_improvement_levels.items() if k in skill_profile.hexa_improvement_names},
         skill_profile.get_skill_replacements(),
         {
             "character_stat": environment.character.stat,
