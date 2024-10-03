@@ -47,7 +47,7 @@ class NexonAPIAbilityLoader(AbilityLoader):
         self, character_name: str, selector: BestStatSelector
     ) -> ExtendedStat:
         character_id = get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/character/ability/best"
+        uri = f"{HOST}/maplestory/v1/character/ability"
         resp = cast(
             CharacterAbilityResponse,
             self._token.request(uri, get_character_id_param(character_id)),

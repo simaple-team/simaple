@@ -9,6 +9,7 @@ from simaple.request.service.loader import (
     PropensityLoader,
     UnionLoader,
 )
+from simaple.data.jobs.builtin import get_damage_logic
 
 
 class LoadedEnvironmentProvider:
@@ -37,8 +38,18 @@ class LoadedEnvironmentProvider:
         character_name: str,
     ):
         total_extended_stat = ExtendedStat()
+        job_type = self.character_basic_loader.load_character_job_type(character_name)
+        damage_logic = get_damage_logic(job_type, True)  # Force combat orders on; since this is just weak reference
 
-        ability_extended_stat = self.ability_loader.load_stat(character_name)
+        gear_related_extended_stat = self.gear_loader.load_gear_related_stat(
+            character_name
+        )
+        total_extended_stat += gear_related_extended_stat
+
+        ability_extended_stat = self.ability_loader.load_best_stat(character_name, {
+            "reference_stat": total_extended_stat,
+            "damage_logic": damage_logic
+        })
         total_extended_stat += ability_extended_stat
 
         propensity = self.propensity_loader.load_propensity(character_name)
@@ -62,11 +73,6 @@ class LoadedEnvironmentProvider:
         artifacts_extended_stat = artifacts.get_extended_stat()
         total_extended_stat += artifacts_extended_stat
 
-        gear_related_extended_stat = self.gear_loader.load_gear_related_stat(
-            character_name
-        )
-        total_extended_stat += gear_related_extended_stat
-
         character_ap_stat = self.character_basic_loader.load_character_ap_based_stat(
             character_name
         )
@@ -89,6 +95,8 @@ class LoadedEnvironmentProvider:
 
         total_action_stat = total_extended_stat.action_stat
         total_stat = total_extended_stat.compute_by_level(character_level)
+
+        print("Combat power", damage_logic.get_compat_power(total_stat))
 
         return {
             "character_name": character_name,

@@ -1,6 +1,6 @@
 from typing import cast
 
-from simaple.core import Stat
+from simaple.core import Stat, JobType
 from simaple.request.adapter.character_basic_loader._schema import (
     CharacterBasicResponse,
     CharacterStatResponse,
@@ -12,7 +12,7 @@ from simaple.request.adapter.nexon_api import (
     get_character_id_param,
 )
 from simaple.request.service.loader import CharacterBasicLoader
-
+from simaple.request.adapter.translator.job_name import translate_kms_name
 
 class NexonAPICharacterBasicLoader(CharacterBasicLoader):
     def __init__(self, token_value: str):
@@ -35,6 +35,15 @@ class NexonAPICharacterBasicLoader(CharacterBasicLoader):
             self._token.request(uri, get_character_id_param(character_id)),
         )
         return extract_character_ap_based_stat(resp)
+
+    def load_character_job_type(self, character_name: str) -> JobType:
+        character_id = get_character_id(self._token, character_name)
+        uri = f"{HOST}/maplestory/v1/character/basic"
+        resp = cast(
+            CharacterBasicResponse,
+            self._token.request(uri, get_character_id_param(character_id)),
+        )
+        return translate_kms_name(resp["character_class"])
 
 
 def extract_character_ap_based_stat(response: CharacterStatResponse) -> Stat:

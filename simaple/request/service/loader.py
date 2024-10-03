@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from simaple.core import ExtendedStat, Stat
+from simaple.core import ExtendedStat, Stat, JobType
 from simaple.gear.gear import Gear
 from simaple.gear.symbol_gear import SymbolGear
 from simaple.request.service.util import BestStatSelector
@@ -80,6 +80,9 @@ class CharacterBasicLoader(ABC):
     def load_character_ap_based_stat(self, character_name: str) -> Stat:
         pass
 
+    @abstractmethod
+    def load_character_job_type(self, character_name: str) -> JobType:
+        pass
 
 class LinkSkillLoader(ABC):
     @abstractmethod
