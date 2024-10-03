@@ -19,7 +19,7 @@ async function loadPyodideAndPackages() {
   );
 
   const pySimaple = await self.pyodide.runPythonAsync(`
-      import simaple.wasm as wasm
+      import simaple.api.prod as wasm
       wasm`);
 
   return pySimaple;

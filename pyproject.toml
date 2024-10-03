@@ -22,7 +22,7 @@ with open("webui/public/dependency.js", 'w') as f:
 interpreter = "python"
 
 [tool.poe.tasks]
-dev = "uvicorn simaple.http.dev:app --reload"
+dev = "uvicorn simaple.api.dev:app --reload"
 
 _black-check = "black --check simaple tests"
 _isort-check = "isort --check-only simaple tests"

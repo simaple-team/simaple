@@ -1,8 +1,8 @@
-from simaple.wasm.skill import getAllComponent
+from simaple.api.base import get_all_component
 
 
 def test_get_all_component():
-    result = getAllComponent(
+    result = get_all_component(
         """
 ---
 author: meson3241
@@ -79,5 +79,5 @@ ELAPSE 0
 
     # every component should have a name and id
     for component in result:
-        assert component["name"] is not None  # type: ignore
-        assert component["id"] is not None  # type: ignore
+        assert component.name is not None
+        assert component.id is not None
