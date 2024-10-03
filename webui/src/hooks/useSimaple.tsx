@@ -1,5 +1,5 @@
 import * as React from "react";
-import { pySimaple } from "../sdk";
+import { pySimaple } from "@/sdk";
 
 type PySimapleProviderProps = { children: React.ReactNode };
 
