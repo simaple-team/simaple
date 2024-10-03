@@ -1,9 +1,6 @@
 import pytest
 import yaml
 
-from simaple.container.environment_provider import BaselineEnvironmentProvider
-from simaple.container.simulation import SimulationEnvironment
-from simaple.core import JobType
 from simaple.api.base import (
     compute_maximum_dealing_interval,
     get_initial_plan_from_baseline,
@@ -12,6 +9,9 @@ from simaple.api.base import (
     run_plan,
     run_plan_with_hint,
 )
+from simaple.container.environment_provider import BaselineEnvironmentProvider
+from simaple.container.simulation import SimulationEnvironment
+from simaple.core import JobType
 
 
 @pytest.fixture

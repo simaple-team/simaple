@@ -4,6 +4,7 @@ Collection of functions that are used in the WASM interface.
 These functions are for Javascript-call only; all methods may
 named as camelCase and all arguments maybe pyodide objects.
 """
+
 from typing import Sequence, Type, TypeVar, cast
 
 import pydantic
