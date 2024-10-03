@@ -71,4 +71,5 @@ def test_get_equipment_stat(character_item_equipment_response: CharacterItemEqui
 
 
 def test_get_set_item_stats(set_effect_response: SetEffectResponse):
-    assert isinstance(get_set_item_stats(set_effect_response), Stat)
+    stat = get_set_item_stats(set_effect_response)
+    assert stat.critical_damage == 5
