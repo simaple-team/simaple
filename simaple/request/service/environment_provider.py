@@ -45,8 +45,8 @@ class LoadedEnvironmentProvider:
             character_name
         )
 
-        damage_logic = get_damage_logic(
-            job_type, True
+        temp_damage_logic = get_damage_logic(
+            job_type, False
         )  # Force combat orders on; since this is just weak reference
 
         gear_related_extended_stat = self.gear_loader.load_gear_related_stat(
@@ -60,7 +60,7 @@ class LoadedEnvironmentProvider:
 
         ability_extended_stat = self.ability_loader.load_best_stat(
             character_name,
-            {"reference_stat": total_extended_stat, "damage_logic": damage_logic},
+            {"reference_stat": total_extended_stat, "damage_logic": temp_damage_logic},
         )
         total_extended_stat += ability_extended_stat
 
@@ -78,7 +78,7 @@ class LoadedEnvironmentProvider:
 
         best_union_stat = self.union_loader.load_best_union_stat(
             character_name,
-            {"reference_stat": total_extended_stat, "damage_logic": damage_logic},
+            {"reference_stat": total_extended_stat, "damage_logic": temp_damage_logic},
         )
 
         total_extended_stat += best_union_stat
@@ -106,15 +106,29 @@ class LoadedEnvironmentProvider:
         total_extended_stat += ExtendedStat(stat=hexa_stat.get_stat())
         logger.info("Hexa Stat: {}", hexa_stat.get_stat().short_dict())
 
+        zero_grade_skill_stat, has_liberated = (
+            self.character_skill_loader.load_zero_grade_skill_passive_stat(
+                character_name
+            )
+        )
+        total_extended_stat += zero_grade_skill_stat
+        logger.info(
+            "Zero grade skill stat: {}", zero_grade_skill_stat.stat.short_dict()
+        )
+
+        damage_logic = get_damage_logic(
+            job_type, has_liberated
+        )  # Force combat orders on; since this is just weak reference
+
         logger.info("Character level: {}", character_level)
         logger.info(
             "Stat before adding skills: {}",
             total_extended_stat.compute_by_level(character_level).short_dict(),
         )
 
-        print(
+        logger.info(
             "Combat power",
-            damage_logic.get_compat_power(
+            temp_damage_logic.get_compat_power(
                 total_extended_stat.compute_by_level(character_level)
             ),
         )

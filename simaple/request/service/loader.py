@@ -117,7 +117,8 @@ class CharacterSkillLoader(ABC):
 
     @abstractmethod
     def load_zero_grade_skill_passive_stat(
-        self, character_name: str, character_level: int
+        self,
+        character_name: str,
     ) -> tuple[ExtendedStat, bool]:
         """
         0차 스킬로부터 얻는 패시브 스탯을 반환합니다.
