@@ -37,6 +37,7 @@ self.onmessage = async (event) => {
         break;
       case "runPlan":
         result = pyodide.runPlan(params.plan);
+        result = result.toJs({ dict_converter: Object.fromEntries });
         break;
       case "runPlanWithHint":
         result = pyodide.runPlanWithHint(
@@ -44,6 +45,7 @@ self.onmessage = async (event) => {
           params.history,
           params.plan,
         );
+        result = result.toJs({ dict_converter: Object.fromEntries });
         break;
       case "getInitialPlanFromBaseline":
         result = pyodide.getInitialPlanFromBaseline(
@@ -58,6 +60,7 @@ self.onmessage = async (event) => {
         break;
       case "getAllComponent":
         result = pyodide.getAllComponent(params.plan);
+        result = result.toJs({ dict_converter: Object.fromEntries });
         break;
       default:
         throw new Error(`Unknown method: ${method}`);

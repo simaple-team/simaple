@@ -2,10 +2,10 @@ from simaple.container.plan_metadata import PlanMetadata
 from simaple.container.simulation import get_skill_components
 from simaple.simulate.component.base import Component
 from simaple.simulate.policy.parser import parse_simaple_runtime
-from simaple.wasm.base import return_js_object_from_pydantic_list
+from simaple.wasm.base import return_dict_from_pydantic_list
 
 
-@return_js_object_from_pydantic_list
+@return_dict_from_pydantic_list
 def getAllComponent(
     plan: str,
 ) -> list[Component]:

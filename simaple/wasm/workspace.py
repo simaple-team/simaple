@@ -14,8 +14,8 @@ from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 from simaple.wasm.base import (
     pyodide_reveal_base_model,
     pyodide_reveal_base_model_list,
-    return_js_object_from_pydantic_list,
-    return_js_object_from_pydantic_object,
+    return_dict_from_pydantic_list,
+    return_dict_from_pydantic_object,
 )
 from simaple.wasm.examples import get_example_plan
 from simaple.wasm.models.simulation import (
@@ -88,7 +88,7 @@ def _extract_engine_history_as_response(
     return responses
 
 
-@return_js_object_from_pydantic_list
+@return_dict_from_pydantic_list
 def runPlan(
     plan: str,
 ) -> list[OperationLogResponse]:
@@ -151,7 +151,7 @@ class MaximumDealingIntervalResult(pydantic.BaseModel):
     end: int
 
 
-@return_js_object_from_pydantic_object
+@return_dict_from_pydantic_object
 def computeMaximumDealingInterval(
     plan: str,
     interval: int,
@@ -208,7 +208,7 @@ def getInitialPlanFromBaseline(
     return f"---\n{augmented_metadata}\n---\n{original_operations}"
 
 
-@return_js_object_from_pydantic_list
+@return_dict_from_pydantic_list
 def runPlanWithHint(
     previous_plan: str, previous_history: list[OperationLogResponse], plan: str
 ) -> list[OperationLogResponse]:

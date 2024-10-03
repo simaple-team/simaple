@@ -15,36 +15,28 @@ PyodideJS = TypeVar("PyodideJS")
 CallableArgT = TypeVar("CallableArgT", bound=list)
 
 
-def return_js_object_from_pydantic_list(
+def return_dict_from_pydantic_list(
     f: Callable[..., list[BaseModelT]],
 ) -> Callable[..., list[BaseModelT]]:
     @wraps(f)
     def wrapper(*args, **kwargs):
         try:
-            from js import Object  # type: ignore
-            from pyodide.ffi import to_js  # type: ignore
-
             result = f(*args, **kwargs)
-            return to_js(
-                [v.model_dump() for v in result], dict_converter=Object.fromEntries
-            )
+            return [v.model_dump() for v in result]
         except ImportError:
             return f(*args, **kwargs)
 
     return wrapper
 
 
-def return_js_object_from_pydantic_object(
+def return_dict_from_pydantic_object(
     f: Callable[..., BaseModelT],
 ) -> Callable[..., BaseModelT]:
     @wraps(f)
     def wrapper(*args, **kwargs):
         try:
-            from js import Object  # type: ignore
-            from pyodide.ffi import to_js  # type: ignore
-
             result = f(*args, **kwargs)
-            return to_js(result.model_dump(), dict_converter=Object.fromEntries)
+            return result.model_dump()
         except ImportError:
             return f(*args, **kwargs)
 
