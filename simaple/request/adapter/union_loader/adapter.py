@@ -18,10 +18,12 @@ from simaple.request.adapter.union_loader._converter import (
 )
 from simaple.request.adapter.union_loader._schema import (
     CharacterUnionRaiderBlock,
+    CharacterUnionRaiderPreset,
     CharacterUnionRaiderResponse,
     UnionArtifactResponse,
 )
 from simaple.request.service.loader import UnionLoader
+from simaple.request.service.util import BestStatSelector, get_best_stat_index
 from simaple.system.artifact import Artifact, ArtifactCard
 from simaple.system.union import UnionSquad
 
@@ -64,13 +66,29 @@ class NexonAPIUnionLoader(UnionLoader):
             CharacterUnionRaiderResponse,
             self._token.request(uri, get_character_id_param(character_id)),
         )
-        return sum(
-            [
-                get_stat_from_occupation_description(expression)
-                for expression in resp["union_occupied_stat"]
-            ],
-            ExtendedStat(),
+        return get_occupation_stat(resp)
+
+    def load_best_union_stat(
+        self, character_name: str, selector: BestStatSelector
+    ) -> ExtendedStat:
+        character_id = get_character_id(self._token, character_name)
+        uri = f"{HOST}/maplestory/v1/user/union-raider"
+        resp = cast(
+            CharacterUnionRaiderResponse,
+            self._token.request(uri, get_character_id_param(character_id)),
         )
+
+        candidates = [
+            get_occupation_stat(preset) + get_union_squad_effect(preset)
+            for preset in [
+                resp["union_raider_preset_1"],
+                resp["union_raider_preset_2"],
+                resp["union_raider_preset_3"],
+            ]
+        ]
+
+        best_candidate_index = get_best_stat_index(candidates, selector)
+        return candidates[best_candidate_index]
 
 
 def _get_block_size(level: int) -> int:
@@ -113,7 +131,7 @@ def parse_block(block: CharacterUnionRaiderBlock) -> tuple[JobType, int]:
     return job_type, block_size
 
 
-def get_union_squad(raider_response: CharacterUnionRaiderResponse) -> UnionSquad:
+def get_union_squad(raider_response: CharacterUnionRaiderPreset) -> UnionSquad:
 
     block_candidates = {block.job: block for block in get_all_blocks()}
 
@@ -128,7 +146,7 @@ def get_union_squad(raider_response: CharacterUnionRaiderResponse) -> UnionSquad
 
 
 def get_union_squad_effect(
-    raider_response: CharacterUnionRaiderResponse,
+    raider_response: CharacterUnionRaiderPreset,
 ) -> ExtendedStat:
     translator = kms_union_stat_translator()
     stat = ExtendedStat()
@@ -137,6 +155,16 @@ def get_union_squad_effect(
         stat += translator.translate(expression)
 
     return stat
+
+
+def get_occupation_stat(response: CharacterUnionRaiderPreset) -> ExtendedStat:
+    return sum(
+        [
+            get_stat_from_occupation_description(expression)
+            for expression in response["union_occupied_stat"]
+        ],
+        ExtendedStat(),
+    )
 
 
 def get_union_artifact(

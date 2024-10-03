@@ -76,18 +76,14 @@ class LoadedEnvironmentProvider:
         total_extended_stat += hyperstat_extended_stat
         logger.info("Hyper Stat: {}", hyperstat.get_stat().short_dict())
 
-        union_squad_extended_stat = self.union_loader.load_union_squad_effect(
-            character_name
+        best_union_stat = self.union_loader.load_best_union_stat(
+            character_name,
+            {"reference_stat": total_extended_stat, "damage_logic": damage_logic},
         )
-        union_occupation_extended_stat = self.union_loader.load_union_occupation_stat(
-            character_name
-        )
-        total_extended_stat += union_squad_extended_stat
-        total_extended_stat += union_occupation_extended_stat
-        logger.info("Union Squad Stat: {}", union_squad_extended_stat.stat.short_dict())
+
+        total_extended_stat += best_union_stat
         logger.info(
-            "Union Occupation Stat: {}",
-            union_occupation_extended_stat.stat.short_dict(),
+            "Union Squad and Occupation Stat: {}", best_union_stat.stat.short_dict()
         )
 
         artifacts = self.union_loader.load_union_artifact(character_name)

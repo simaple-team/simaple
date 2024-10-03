@@ -53,6 +53,15 @@ class UnionLoader(ABC):
     def load_union_occupation_stat(self, character_name: str) -> ExtendedStat:
         pass
 
+    @abstractmethod
+    def load_best_union_stat(
+        self, character_name: str, selector: BestStatSelector
+    ) -> ExtendedStat:
+        """
+        UnionSquad, UnionOccupationStat을 종합하여 제일 좋은 스탯을 반환합니다.
+        """
+        pass
+
 
 class GearLoader(ABC):
     @abstractmethod

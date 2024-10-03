@@ -27,12 +27,25 @@ class UnionInnerStatRow(TypedDict):
     stat_field_effect: str
 
 
+class CharacterUnionRaiderPreset(TypedDict):
+    union_raider_stat: list[str]
+    union_occupied_stat: list[str]
+    union_block: list[CharacterUnionRaiderBlock]
+    union_inner_stat: list[UnionInnerStatRow]
+
+
 class CharacterUnionRaiderResponse(TypedDict):
     date: str
     union_raider_stat: list[str]
     union_occupied_stat: list[str]
     union_block: list[CharacterUnionRaiderBlock]
     union_inner_stat: list[UnionInnerStatRow]
+    use_preset_no: int
+    union_raider_preset_1: CharacterUnionRaiderPreset
+    union_raider_preset_2: CharacterUnionRaiderPreset
+    union_raider_preset_3: CharacterUnionRaiderPreset
+    union_raider_preset_4: CharacterUnionRaiderPreset
+    union_raider_preset_5: CharacterUnionRaiderPreset
 
 
 class _UnionArtifactEffect(TypedDict):
