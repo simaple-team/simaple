@@ -1,0 +1,128 @@
+{
+  "date": "2024-09-19T00:00+09:00",
+  "union_artifact_effect": [
+    {
+      "name": "올스탯 150 증가",
+      "level": 10
+    },
+    {
+      "name": "공격력 30, 마력 30 증가",
+      "level": 10
+    },
+    {
+      "name": "데미지 15.00% 증가",
+      "level": 10
+    },
+    {
+      "name": "보스 몬스터 공격 시 데미지 15.00% 증가",
+      "level": 10
+    },
+    {
+      "name": "몬스터 방어율 무시 20% 증가",
+      "level": 10
+    },
+    {
+      "name": "버프 지속시간 20% 증가",
+      "level": 10
+    },
+    {
+      "name": "재사용 대기시간 미적용 확률 6.00% 증가",
+      "level": 8
+    },
+    {
+      "name": "아이템 드롭률 12% 증가",
+      "level": 10
+    },
+    {
+      "name": "크리티컬 확률 20% 증가",
+      "level": 10
+    },
+    {
+      "name": "크리티컬 데미지 4.00% 증가",
+      "level": 10
+    },
+    {
+      "name": "추가 경험치 획득 9% 증가, 다수 공격 스킬의 최대 공격 가능 대상 수 1 증가",
+      "level": 8
+    },
+    {
+      "name": "파이널 어택류 스킬의 데미지 24% 증가",
+      "level": 8
+    }
+  ],
+  "union_artifact_crystal": [
+    {
+      "name": "크리스탈 : 주황버섯",
+      "validity_flag": "0",
+      "date_expire": "2024-09-20T01:39+09:00",
+      "level": 5,
+      "crystal_option_name_1": "보스 몬스터 공격 시 데미지 증가",
+      "crystal_option_name_2": "데미지 증가",
+      "crystal_option_name_3": "버프 지속시간 증가"
+    },
+    {
+      "name": "크리스탈 : 슬라임",
+      "validity_flag": "0",
+      "date_expire": "2024-09-20T01:39+09:00",
+      "level": 5,
+      "crystal_option_name_1": "보스 몬스터 공격 시 데미지 증가",
+      "crystal_option_name_2": "데미지 증가",
+      "crystal_option_name_3": "버프 지속시간 증가"
+    },
+    {
+      "name": "크리스탈 : 뿔버섯",
+      "validity_flag": "0",
+      "date_expire": "2024-09-20T01:39+09:00",
+      "level": 5,
+      "crystal_option_name_1": "아이템 드롭률 증가",
+      "crystal_option_name_2": "크리티컬 데미지 증가",
+      "crystal_option_name_3": "크리티컬 확률 증가"
+    },
+    {
+      "name": "크리스탈 : 스텀프",
+      "validity_flag": "0",
+      "date_expire": "2024-09-20T01:39+09:00",
+      "level": 5,
+      "crystal_option_name_1": "아이템 드롭률 증가",
+      "crystal_option_name_2": "크리티컬 확률 증가",
+      "crystal_option_name_3": "크리티컬 데미지 증가"
+    },
+    {
+      "name": "크리스탈 : 스톤골렘",
+      "validity_flag": "0",
+      "date_expire": "2024-09-20T01:39+09:00",
+      "level": 5,
+      "crystal_option_name_1": "올스탯 증가",
+      "crystal_option_name_2": "몬스터 방어율 무시 증가",
+      "crystal_option_name_3": "공격력/마력 증가"
+    },
+    {
+      "name": "크리스탈 : 발록",
+      "validity_flag": "0",
+      "date_expire": "2024-09-20T01:39+09:00",
+      "level": 5,
+      "crystal_option_name_1": "올스탯 증가",
+      "crystal_option_name_2": "몬스터 방어율 무시 증가",
+      "crystal_option_name_3": "공격력/마력 증가"
+    },
+    {
+      "name": "크리스탈 : 자쿰",
+      "validity_flag": "0",
+      "date_expire": "2024-09-20T01:39+09:00",
+      "level": 5,
+      "crystal_option_name_1": "재사용 대기시간 미적용 확률 증가",
+      "crystal_option_name_2": "추가 경험치 획득 증가",
+      "crystal_option_name_3": "파이널 어택류 스킬 데미지 증가"
+    },
+    {
+      "name": "크리스탈 : 핑크빈",
+      "validity_flag": "0",
+      "date_expire": "2024-09-20T01:39+09:00",
+      "level": 3,
+      "crystal_option_name_1": "재사용 대기시간 미적용 확률 증가",
+      "crystal_option_name_2": "파이널 어택류 스킬 데미지 증가",
+      "crystal_option_name_3": "추가 경험치 획득 증가"
+    }
+  ],
+  "union_artifact_remain_ap": 2
+}

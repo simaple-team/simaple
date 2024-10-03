@@ -67,7 +67,14 @@ class UnionSquad(BaseModel):
 
     def get_stat(self) -> Stat:
         stat = Stat()
+        unique_stats: dict[JobType, tuple[UnionBlock, int]] = {}
         for block, size in zip(self.blocks, self.block_size):
+            if block.job not in unique_stats:
+                unique_stats[block.job] = (block, size)
+            if size > unique_stats[block.job][1]:
+                unique_stats[block.job] = (block, size)
+
+        for _, (block, size) in unique_stats.items():
             stat += block.get_stat(size)
 
         return stat

@@ -1,0 +1,16 @@
+{
+  "date": "2024-09-10T00:00+09:00",
+  "character_name": "xxxx",
+  "world_name": "크로아",
+  "character_gender": "남",
+  "character_class": "아크메이지(불,독)",
+  "character_class_level": "6",
+  "character_level": 284,
+  "character_exp": 20972633848164,
+  "character_exp_rate": "42.572",
+  "character_guild_name": "Shiny",
+  "character_image": "https://open.api.nexon.com/static/maplestory/Character/GNDIPNLDBIGDCLOJEIHDCMEOFFLHMOOBNJFDOIEFBJKANDDOOEJPODNGPBPBFNGGNHKGHKKOKNNKNMIAEPMAKAGKKAELNADJOJGHCIEHGCMNOHHDOLECBOGEDBBDOFGPJEILKMAKFFMGEOJGKIHHPENEGAODBCGNGGMPNFFKIEKFPBOFCMCDIAEDNNJEDCEPLKIAKODIFGKJHMFEHPBOLOJAFHAIKKBHOLCFGGLPCJEEILKOHEEMKPKBHGJDFPDK.png",
+  "character_date_create": "2010-05-01T00:00+09:00",
+  "access_flag": "true",
+  "liberation_quest_clear_flag": "true"
+}

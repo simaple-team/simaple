@@ -1,10 +1,13 @@
 import re
 
+from loguru import logger
+
 from simaple.core import ExtendedStat, StatProps
 from simaple.request.adapter.translator.asset.stat_provider import (
     AbstractStatProvider,
     ActionStatProvider,
     AllStatProvider,
+    NullStatProvider,
     StatProvider,
 )
 
@@ -50,6 +53,8 @@ def kms_ability_provider_patterns() -> (
             [StatProvider(target=StatProps.magic_attack)],
         ),
         (re.compile(r"^모든 능력치 ([0-9]+) 증가$"), [AllStatProvider()]),
+        (re.compile(r"^아이템 드롭률 ([0-9]+)% 증가$"), [NullStatProvider()]),
+        (re.compile(r"^메소 획득량 ([0-9]+)% 증가$"), [NullStatProvider()]),
     ]
 
     for first_stat in ("INT", "STR", "DEX", "LUK"):
@@ -85,7 +90,9 @@ class AbilityTranslator:
                     ExtendedStat(),
                 )
 
-        raise ValueError(f"No pattern matched: {expression}")
+        logger.warning(f"No pattern matched: {expression}")
+        return ExtendedStat()
+        # raise ValueError(f"No pattern matched: {expression}")
 
 
 _ABILITY_TRANSLATOR = AbilityTranslator()

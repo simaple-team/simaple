@@ -102,7 +102,7 @@ class PresetOptimizer(BaseModel):
         )
         effect_names = [effect.name for effect in effects]
         if self.buff_duration_preempted:
-            effect_names = ["buff_duration"] + effect_names
+            effect_names = ["버프 지속시간 증가"] + effect_names
 
         return get_artifact(
             effect_names,

@@ -11,8 +11,8 @@ from simaple.optimizer import LinkSkillTarget, StepwizeOptimizer
     [
         (3, 21985589.273639064),
         (6, 24803206.28323931),
-        (12, 28930802.18317819),
-        (13, 29456254.7869325),
+        (12, 29116256.043326765),
+        (13, 29734435.577155367),
     ],
 )
 def test_optimizer(maximum_cost: int, expected_reward_value: float):

@@ -28,11 +28,11 @@ class NexonAPIAbilityLoader(AbilityLoader):
     def __init__(self, token_value: str):
         self._token = Token(token_value)
 
-    async def load_stat(self, character_name: str) -> ExtendedStat:
-        character_id = await get_character_id(self._token, character_name)
+    def load_stat(self, character_name: str) -> ExtendedStat:
+        character_id = get_character_id(self._token, character_name)
         uri = f"{HOST}/maplestory/v1/character/ability"
         resp = cast(
             CharacterAbilityResponse,
-            await self._token.request(uri, get_character_id_param(character_id)),
+            self._token.request(uri, get_character_id_param(character_id)),
         )
         return _get_ability_stat(resp)

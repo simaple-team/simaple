@@ -13,6 +13,7 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 class LinkSkill(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="LinkSkill")):
     providing_jobs: List[JobType]
     options: List[Stat]
+    name: str
 
     def get_stat(self, size: int) -> Stat:
         if size == 0:

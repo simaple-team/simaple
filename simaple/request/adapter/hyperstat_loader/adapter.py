@@ -20,12 +20,12 @@ class NexonAPIHyperStatLoader(HyperstatLoader):
     def __init__(self, token_value: str):
         self._token = Token(token_value)
 
-    async def load_hyper_stat(self, character_name: str) -> Hyperstat:
-        character_id = await get_character_id(self._token, character_name)
+    def load_hyper_stat(self, character_name: str) -> Hyperstat:
+        character_id = get_character_id(self._token, character_name)
         uri = f"{HOST}/maplestory/v1/character/hyper-stat"
         resp = cast(
             CharacterHyperStatResponse,
-            await self._token.request(uri, get_character_id_param(character_id)),
+            self._token.request(uri, get_character_id_param(character_id)),
         )
         return get_hyperstat(resp)
 
@@ -46,7 +46,7 @@ _STAT_NAME_TO_BASIS_NAME = {
 
 def get_hyperstat(hyperstat_response: CharacterHyperStatResponse) -> Hyperstat:
     target_preset: list[HyperStatResponseColumnResponse] = hyperstat_response[
-        f"hyper_stat_preset_{hyperstat_response['use_preset_no'] - 1}"  # type: ignore
+        f"hyper_stat_preset_{int(hyperstat_response['use_preset_no']) - 1}"  # type: ignore
     ]
     hyperstat = get_kms_hyperstat()
 

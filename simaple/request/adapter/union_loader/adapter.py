@@ -1,6 +1,7 @@
 from typing import cast
 
 from simaple.core import ExtendedStat, JobType
+from simaple.data.system.artifact import get_artifact_effects
 from simaple.data.system.union_block import get_all_blocks
 from simaple.request.adapter.nexon_api import (
     HOST,
@@ -12,11 +13,16 @@ from simaple.request.adapter.translator.job_name import translate_kms_name
 from simaple.request.adapter.translator.kms.union_raider import (
     kms_union_stat_translator,
 )
+from simaple.request.adapter.union_loader._converter import (
+    get_stat_from_occupation_description,
+)
 from simaple.request.adapter.union_loader._schema import (
     CharacterUnionRaiderBlock,
     CharacterUnionRaiderResponse,
+    UnionArtifactResponse,
 )
 from simaple.request.service.loader import UnionLoader
+from simaple.system.artifact import Artifact, ArtifactCard
 from simaple.system.union import UnionSquad
 
 
@@ -24,23 +30,47 @@ class NexonAPIUnionLoader(UnionLoader):
     def __init__(self, token_value: str):
         self._token = Token(token_value)
 
-    async def load_union_squad(self, character_name: str) -> UnionSquad:
-        character_id = await get_character_id(self._token, character_name)
+    def load_union_squad(self, character_name: str) -> UnionSquad:
+        character_id = get_character_id(self._token, character_name)
         uri = f"{HOST}/maplestory/v1/user/union-raider"
         resp = cast(
             CharacterUnionRaiderResponse,
-            await self._token.request(uri, get_character_id_param(character_id)),
+            self._token.request(uri, get_character_id_param(character_id)),
         )
         return get_union_squad(resp)
 
-    async def load_union_squad_effect(self, character_name: str) -> ExtendedStat:
-        character_id = await get_character_id(self._token, character_name)
+    def load_union_squad_effect(self, character_name: str) -> ExtendedStat:
+        character_id = get_character_id(self._token, character_name)
         uri = f"{HOST}/maplestory/v1/user/union-raider"
         resp = cast(
             CharacterUnionRaiderResponse,
-            await self._token.request(uri, get_character_id_param(character_id)),
+            self._token.request(uri, get_character_id_param(character_id)),
         )
         return get_union_squad_effect(resp)
+
+    def load_union_artifact(self, character_name: str) -> Artifact:
+        character_id = get_character_id(self._token, character_name)
+        uri = f"{HOST}/maplestory/v1/user/union-artifact"
+        resp = cast(
+            UnionArtifactResponse,
+            self._token.request(uri, get_character_id_param(character_id)),
+        )
+        return get_union_artifact(resp)
+
+    def load_union_occupation_stat(self, character_name: str) -> ExtendedStat:
+        character_id = get_character_id(self._token, character_name)
+        uri = f"{HOST}/maplestory/v1/user/union-raider"
+        resp = cast(
+            CharacterUnionRaiderResponse,
+            self._token.request(uri, get_character_id_param(character_id)),
+        )
+        return sum(
+            [
+                get_stat_from_occupation_description(expression)
+                for expression in resp["union_occupied_stat"]
+            ],
+            ExtendedStat(),
+        )
 
 
 def _get_block_size(level: int) -> int:
@@ -73,7 +103,7 @@ def _get_maplestory_m_block_size(level: int) -> int:
 
 def parse_block(block: CharacterUnionRaiderBlock) -> tuple[JobType, int]:
     job_type = translate_kms_name(block["block_class"])
-    level = block["block_level"]
+    level = int(block["block_level"])
 
     if job_type == JobType.virtual_maplestory_m:
         block_size = _get_maplestory_m_block_size(level)
@@ -107,3 +137,28 @@ def get_union_squad_effect(
         stat += translator.translate(expression)
 
     return stat
+
+
+def get_union_artifact(
+    response: UnionArtifactResponse,
+) -> Artifact:
+    effects = get_artifact_effects()
+
+    cards = []
+
+    for crystal in response["union_artifact_crystal"]:
+        if crystal["validity_flag"] != "0":
+            continue
+
+        cards.append(
+            ArtifactCard(
+                effects=(
+                    crystal["crystal_option_name_1"],
+                    crystal["crystal_option_name_2"],
+                    crystal["crystal_option_name_3"],
+                ),
+                level=crystal["level"],
+            )
+        )
+
+    return Artifact(cards=cards, effects=effects)
