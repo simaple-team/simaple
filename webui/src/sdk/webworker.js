@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
-import { SIMAPLE_FILE_NAME } from "./dependency.mjs";
-import "https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js";
+importScripts("/dependency.js");
+importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js");
 
 async function loadPyodideAndPackages() {
   self.pyodide = await loadPyodide();
@@ -13,7 +13,7 @@ async function loadPyodideAndPackages() {
   await micropip.install(["loguru", "lark", "numpy", "pyyaml", "pyfunctional"]);
 
   await micropip.install(
-    `${location.origin}/${SIMAPLE_FILE_NAME}`,
+    `${location.origin}/${globalThis.SIMAPLE_FILE_NAME}`,
     false,
     false,
   );

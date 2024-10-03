@@ -6,9 +6,7 @@ import {
 } from "./models";
 
 // Initialize the Web Worker
-const pyodideWorker = new Worker(new URL("./webworker.mjs", import.meta.url), {
-  type: "module",
-});
+const pyodideWorker = new Worker(new URL("./webworker.js", import.meta.url));
 
 // Store callbacks for resolving promises
 const callbacks: Record<string, (data: unknown) => void> = {};
