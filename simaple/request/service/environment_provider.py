@@ -14,7 +14,7 @@ from simaple.request.service.loader import (
 )
 
 
-class LoadedEnvironmentProvider:
+class LoadedEnvironmentProviderService:
     def __init__(
         self,
         ability_loader: AbilityLoader,
