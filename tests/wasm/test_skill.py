@@ -79,5 +79,5 @@ ELAPSE 0
 
     # every component should have a name and id
     for component in result:
-        assert component.name is not None
-        assert component.id is not None
+        assert component["name"] is not None  # type: ignore
+        assert component["id"] is not None  # type: ignore

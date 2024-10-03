@@ -82,7 +82,7 @@ ELAPSE 10.0
 ELAPSE 10.0
 CAST "체인 라이트닝 VI"
 !debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"
-ELAPSE 30000.0  
+ELAPSE 30000.0
 """
 
 
@@ -120,7 +120,7 @@ provider:
         artifact_level: 40
         passive_skill_level: 0
         combat_orders_level: 1
-        hexa_improvements_levels: 
+        hexa_improvements_levels:
           도트 퍼니셔: 3
 ---
 ELAPSE 10.0
@@ -190,7 +190,7 @@ def test_run_plan_runs_with_environment(fixture_environment_given_plan):
 
 def test_compute_maximum_dealing_interval(fixture_environment_given_plan):
     result = computeMaximumDealingInterval(fixture_environment_given_plan, 30000)
-    assert result.damage > 0
+    assert result["damage"] > 0  # type: ignore
 
 
 def test_get_initial_plan_from_baseline():
