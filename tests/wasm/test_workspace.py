@@ -41,6 +41,7 @@ environment:
     jobtype: archmagetc
     level: 270
     character:
+        active_buffs: {}
         stat:
             STR: 1105
             LUK: 2650

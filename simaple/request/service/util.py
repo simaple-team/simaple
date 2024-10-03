@@ -13,7 +13,7 @@ def get_best_stat_index(stats: list[ExtendedStat], selector: BestStatSelector) -
     Choose best-dealing stat index from given values
     """
     best_index = 0
-    best_damage = 0
+    best_damage = 0.0
     damage_logic, reference_stat = selector["damage_logic"], selector["reference_stat"]
 
     for idx, extended_stat in enumerate(stats):

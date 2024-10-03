@@ -1,6 +1,6 @@
 import json
 from abc import ABCMeta, abstractmethod
-from typing import Any, Type
+from typing import Any
 
 import pydantic
 
@@ -432,13 +432,3 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
             action_stat=total_extend_stat.action_stat,
             active_buffs={},
         )
-
-
-_environment_providers: dict[str, Type[EnvironmentProvider]] = {
-    BaselineEnvironmentProvider.__name__: BaselineEnvironmentProvider,
-    MinimalEnvironmentProvider.__name__: MinimalEnvironmentProvider,
-}
-
-
-def get_environment_provider(name: str, config: dict) -> EnvironmentProvider:
-    return _environment_providers[name].model_validate(config)

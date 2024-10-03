@@ -125,3 +125,13 @@ class CharacterSkillLoader(ABC):
         더불어, 해방 무기 장착 여부도 반환합니다.
         """
         pass
+
+    @abstractmethod
+    def load_hexa_skill_levels(
+        self, character_name: str
+    ) -> tuple[dict[str, int], dict[str, int]]:
+        """
+        헥사스킬 레벨을 반환합니다.
+        각각 헥사스킬, 헥사 강화(5차 스킬 강화) 레벨을 반환합니다.
+        """
+        pass

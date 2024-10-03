@@ -3,7 +3,7 @@ from simaple.core.damage import INTBasedDamageLogic
 from simaple.request.service.util import BestStatSelector, get_best_stat_index
 
 
-def test_best_stat_selection():
+def test_best_stat_selection() -> None:
     selector: BestStatSelector = {
         "reference_stat": ExtendedStat.model_validate(
             {

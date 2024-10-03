@@ -1,6 +1,9 @@
+from typing import TypedDict
+
 from loguru import logger
 
-from simaple.core import ExtendedStat
+from simaple.container.simulation import FinalCharacterStat
+from simaple.core import ExtendedStat, JobType
 from simaple.data.jobs.builtin import get_damage_logic
 from simaple.request.service.loader import (
     AbilityLoader,
@@ -12,6 +15,14 @@ from simaple.request.service.loader import (
     PropensityLoader,
     UnionLoader,
 )
+
+
+class EnvironmentProviderServiceResponse(TypedDict):
+    final_character_stat: FinalCharacterStat
+    level: int
+    job_type: JobType
+    hexa_skill_levels: dict[str, int]
+    hexa_skill_improvements: dict[str, int]
 
 
 class LoadedEnvironmentProviderService:
@@ -35,10 +46,10 @@ class LoadedEnvironmentProviderService:
         self.link_skill_loader = link_skill_loader
         self.character_skill_loader = character_skill_loader
 
-    def compute_character(
+    def compute_character_info(
         self,
         character_name: str,
-    ):
+    ) -> EnvironmentProviderServiceResponse:
         total_extended_stat = ExtendedStat()
         job_type = self.character_basic_loader.load_character_job_type(character_name)
         character_level = self.character_basic_loader.load_character_level(
@@ -148,8 +159,20 @@ class LoadedEnvironmentProviderService:
         total_action_stat = total_extended_stat.action_stat
         total_stat = total_extended_stat.compute_by_level(character_level)
 
+        hexa_skill_levels, hexa_improvements = (
+            self.character_skill_loader.load_hexa_skill_levels(character_name)
+        )
+
         return {
-            "character_name": character_name,
-            "total_stat": total_stat.model_dump(),
-            "total_action_stat": total_action_stat.model_dump(),
+            "final_character_stat": FinalCharacterStat.model_validate(
+                {
+                    "stat": total_stat,
+                    "action_stat": total_action_stat,
+                    "active_buffs": {},
+                }
+            ),
+            "level": character_level,
+            "job_type": job_type,
+            "hexa_skill_levels": hexa_skill_levels,
+            "hexa_skill_improvements": hexa_improvements,
         }

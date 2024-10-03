@@ -1,12 +1,24 @@
-from typing import Any
+from typing import Any, Type
 
 import pydantic
 
+from simaple.container.api_environment_provider import NexonAPIEnvironmentProvider
 from simaple.container.environment_provider import (
+    BaselineEnvironmentProvider,
     EnvironmentProvider,
-    get_environment_provider,
+    MinimalEnvironmentProvider,
 )
 from simaple.container.simulation import SimulationEnvironment
+
+_environment_providers: dict[str, Type[EnvironmentProvider]] = {
+    BaselineEnvironmentProvider.__name__: BaselineEnvironmentProvider,
+    MinimalEnvironmentProvider.__name__: MinimalEnvironmentProvider,
+    NexonAPIEnvironmentProvider.__name__: NexonAPIEnvironmentProvider,
+}
+
+
+def get_environment_provider(name: str, config: dict) -> EnvironmentProvider:
+    return _environment_providers[name].model_validate(config)
 
 
 class _ProviderMetadata(pydantic.BaseModel):

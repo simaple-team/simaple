@@ -9,6 +9,7 @@ author: meson3241
 environment:
   armor: 300
   character:
+    active_buffs: {}
     action_stat:
       buff_duration: 35.0
       cooltime_reduce: 5000.0

@@ -42,7 +42,7 @@ def join_passive_effect_from_skill_levels(
     passive_skill_level: int,
     character_level: int,
     weapon_pure_attack_power: int = 0,
-):
+) -> ExtendedStat:
     """
     Apply passive skill level only for v, vi skills.
     """

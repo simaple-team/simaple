@@ -53,6 +53,31 @@ class NexonAPICharacterSkillLoader(CharacterSkillLoader):
         )
         return get_zero_order_skill_effect(response)
 
+    def load_hexa_skill_levels(
+        self, character_name: str
+    ) -> tuple[dict[str, int], dict[str, int]]:
+        """
+        헥사스킬 레벨을 반환합니다.
+        """
+        uri = f"{HOST}/maplestory/v1/character/skill"
+        response = cast(
+            CharacterSkillResponse,
+            self._token.request(uri, self._get_query_param(character_name, "6")),
+        )
+        hexa_skill_levels = {
+            skill_info["skill_name"]: skill_info["skill_level"]
+            for skill_info in response["character_skill"]
+            if "강화" not in skill_info["skill_name"]
+        }
+        hexa_improvement_levels = {
+            skill_info["skill_name"]
+            .replace("강화", "")
+            .strip(): skill_info["skill_level"]
+            for skill_info in response["character_skill"]
+            if "강화" in skill_info["skill_name"]
+        }
+        return hexa_skill_levels, hexa_improvement_levels
+
     def _get_query_param(self, character_name: str, skill_order: str) -> dict:
         character_id = get_character_id(self._token, character_name)
         return {
