@@ -1,4 +1,3 @@
-import re
 from typing import cast
 
 from simaple.core import ExtendedStat, JobType
@@ -23,7 +22,7 @@ from simaple.request.adapter.union_loader._schema import (
     UnionArtifactResponse,
 )
 from simaple.request.service.loader import UnionLoader
-from simaple.system.artifact import Artifact, ArtifactCard, ArtifactEffect
+from simaple.system.artifact import Artifact, ArtifactCard
 from simaple.system.union import UnionSquad
 
 

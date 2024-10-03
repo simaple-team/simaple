@@ -1,7 +1,6 @@
 import datetime
 from typing import Any, TypedDict, cast
 
-import aiohttp
 import requests
 
 HOST = "https://open.api.nexon.com"

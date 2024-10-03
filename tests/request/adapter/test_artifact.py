@@ -1,4 +1,4 @@
-from simaple.core import ExtendedStat, Stat
+from simaple.core import ExtendedStat
 from simaple.request.adapter.union_loader.adapter import get_union_artifact
 
 

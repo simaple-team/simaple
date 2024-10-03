@@ -1,10 +1,4 @@
-import datetime
-
-from loguru import logger
-
-from simaple.container.simulation import FinalCharacterStat, SimulationEnvironment
-from simaple.core import ExtendedStat, Stat
-from simaple.request.adapter.nexon_api import Token, get_character_id
+from simaple.core import ExtendedStat
 from simaple.request.service.loader import (
     AbilityLoader,
     CharacterBasicLoader,
@@ -34,9 +28,6 @@ class LoadedEnvironmentProvider:
         self.gear_loader = gear_loader
         self.character_basic_loader = character_basic_loader
         self.link_skill_loader = link_skill_loader
-
-    def get_simulation_environment(self) -> SimulationEnvironment:
-        character_stat_without_skill = ()
 
     def compute_character(
         self,

@@ -9,7 +9,7 @@ from simaple.request.adapter.nexon_api import (
     get_character_id_param,
 )
 from simaple.request.service.loader import LinkSkillLoader
-from simaple.system.link import LinkSkill, LinkSkillset
+from simaple.system.link import LinkSkillset
 
 
 class NexonAPILinkSkillLoader(LinkSkillLoader):

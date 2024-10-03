@@ -5,7 +5,7 @@ from simaple.gear.gear import Gear
 from simaple.gear.symbol_gear import SymbolGear
 from simaple.system.artifact import Artifact
 from simaple.system.hyperstat import Hyperstat
-from simaple.system.link import LinkSkill, LinkSkillset
+from simaple.system.link import LinkSkillset
 from simaple.system.propensity import Propensity
 from simaple.system.union import UnionSquad
 
