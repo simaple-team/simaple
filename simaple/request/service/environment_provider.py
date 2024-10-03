@@ -128,7 +128,7 @@ class LoadedEnvironmentProvider:
 
         logger.info(
             "Combat power",
-            temp_damage_logic.get_compat_power(
+            damage_logic.get_compat_power(
                 total_extended_stat.compute_by_level(character_level)
             ),
         )

@@ -1,6 +1,4 @@
-from collections import defaultdict
-
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel
 
 from simaple.core import Stat
 from simaple.spec.loadable import (  # pylint:disable=unused-import

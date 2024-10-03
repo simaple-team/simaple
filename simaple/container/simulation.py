@@ -1,6 +1,6 @@
 import pydantic
 
-from simaple.core import ActionStat, ExtendedStat, JobType, Stat
+from simaple.core import ActionStat, JobType, Stat
 from simaple.data.jobs import get_skill_profile
 from simaple.data.jobs.builtin import build_skills, get_damage_logic
 from simaple.simulate.component.base import Component

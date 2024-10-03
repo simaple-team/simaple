@@ -1,11 +1,6 @@
 from typing import cast
 
-from simaple.core import ExtendedStat, Stat
-from simaple.data.system.hexa_stat import get_all_hexa_stat_cores
-from simaple.request.adapter.character_basic_loader._schema import (
-    CharacterBasicResponse,
-    CharacterStatResponse,
-)
+from simaple.core import ExtendedStat
 from simaple.request.adapter.nexon_api import (
     HOST,
     Token,
@@ -23,7 +18,7 @@ from simaple.request.adapter.skill_loader._schema import (
     HexaStatResponse,
 )
 from simaple.request.service.loader import CharacterSkillLoader
-from simaple.system.hexa_stat import HexaStat, HexaStatCore
+from simaple.system.hexa_stat import HexaStat
 
 
 class NexonAPICharacterSkillLoader(CharacterSkillLoader):
