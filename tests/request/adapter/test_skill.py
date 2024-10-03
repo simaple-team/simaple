@@ -1,4 +1,8 @@
-from simaple.request.adapter.skill_loader._converter import compute_passive_skill_stat
+from simaple.core import Stat
+from simaple.request.adapter.skill_loader._converter import (
+    compute_hexa_stat,
+    compute_passive_skill_stat,
+)
 
 
 def test_passive_fetch(skill_aggregated_response):
@@ -50,3 +54,19 @@ def test_passive_fetch(skill_aggregated_response):
             "magic_attack": 0.0,
         },
     }
+
+
+def test_hexa_stat(hexa_stat_response):
+    assert compute_hexa_stat(hexa_stat_response).get_stat() == Stat(
+        magic_attack=60,
+        critical_damage=5.6,
+        boss_damage_multiplier=17,
+    )
+
+
+def test_hexa_stat_with_main_stat(hexa_stat_response_2):
+    assert compute_hexa_stat(hexa_stat_response_2).get_stat() == Stat(
+        magic_attack=30,
+        critical_damage=1.4,
+        INT_static=1000,
+    )

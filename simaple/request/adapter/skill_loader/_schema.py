@@ -31,7 +31,6 @@ class AggregatedCharacterSkillResponse(TypedDict):
     response_at_6: CharacterSkillResponse
 
 
-
 class _HexaStatCore(TypedDict):
     slot_id: str
     main_stat_name: str

@@ -1,6 +1,7 @@
 from typing import cast
 
 from simaple.core import ExtendedStat, Stat
+from simaple.data.system.hexa_stat import get_all_hexa_stat_cores
 from simaple.request.adapter.character_basic_loader._schema import (
     CharacterBasicResponse,
     CharacterStatResponse,
@@ -11,12 +12,17 @@ from simaple.request.adapter.nexon_api import (
     get_character_id,
     get_character_id_param,
 )
-from simaple.request.adapter.skill_loader._converter import compute_passive_skill_stat
+from simaple.request.adapter.skill_loader._converter import (
+    compute_hexa_stat,
+    compute_passive_skill_stat,
+)
 from simaple.request.adapter.skill_loader._schema import (
     AggregatedCharacterSkillResponse,
     CharacterSkillResponse,
+    HexaStatResponse,
 )
 from simaple.request.service.loader import CharacterSkillLoader
+from simaple.system.hexa_stat import HexaStat, HexaStatCore
 
 
 class NexonAPICharacterSkillLoader(CharacterSkillLoader):
@@ -28,6 +34,18 @@ class NexonAPICharacterSkillLoader(CharacterSkillLoader):
     ) -> ExtendedStat:
         aggregated_response = self._get_aggregated_response(character_name)
         return compute_passive_skill_stat(aggregated_response, character_level)
+
+    def load_character_hexa_stat(
+        self,
+        character_name: str,
+    ) -> HexaStat:
+        uri = f"{HOST}/maplestory/v1/character/hexamatrix-stat"
+        character_id = get_character_id(self._token, character_name)
+        response = cast(
+            HexaStatResponse,
+            self._token.request(uri, get_character_id_param(character_id)),
+        )
+        return compute_hexa_stat(response)
 
     def _get_aggregated_response(
         self, character_name: str

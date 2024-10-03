@@ -3,33 +3,69 @@ kind: HexaStatCoreType
 version: simaple.io/HexaStatCoreType
 metadata:
   label:
-    name: 주스탯
+    name: 주력 스탯 증가(STR)
 data:  
-  name: 주스탯
+  name: 주력 스탯 증가(STR)
   basis: 
-    STR: 100
-    DEX: 100
-    INT: 100
-    LUK: 100
+    STR_static: 100
 ---
 kind: HexaStatCoreType 
 version: simaple.io/HexaStatCoreType
 metadata:
   label:
-    name: 공격력/마력
+    name: 주력 스탯 증가(LUK)
 data:  
-  name: 공격력/마력
+  name: 주력 스탯 증가(LUK)
   basis: 
-    attack_power: 5
+    LUK_static: 100
+---
+kind: HexaStatCoreType 
+version: simaple.io/HexaStatCoreType
+metadata:
+  label:
+    name: 주력 스탯 증가(DEX)
+data:  
+  name: 주력 스탯 증가(DEX)
+  basis: 
+    DEX_static: 100
+---
+kind: HexaStatCoreType 
+version: simaple.io/HexaStatCoreType
+metadata:
+  label:
+    name: 주력 스탯 증가(INT)
+data:  
+  name: 주력 스탯 증가(INT)
+  basis: 
+    INT_static: 100
+---
+kind: HexaStatCoreType 
+version: simaple.io/HexaStatCoreType
+metadata:
+  label:
+    name: 마력 증가
+data:  
+  name: 마력 증가
+  basis: 
     magic_attack: 5
 ---
 kind: HexaStatCoreType 
 version: simaple.io/HexaStatCoreType
 metadata:
   label:
-    name: 데미지
+    name: 공격력 증가
 data:  
-  name: 데미지
+  name: 공격력 증가
+  basis: 
+    attack_power: 5
+---
+kind: HexaStatCoreType 
+version: simaple.io/HexaStatCoreType
+metadata:
+  label:
+    name: 데미지 증가
+data:  
+  name: 데미지 증가
   basis: 
     damage_multiplier: 0.75
 ---
@@ -37,9 +73,9 @@ kind: HexaStatCoreType
 version: simaple.io/HexaStatCoreType
 metadata:
   label:
-    name: 방어율 무시
+    name: 방어율 무시 증가
 data:  
-  name: 방어율 무시
+  name: 방어율 무시 증가
   basis: 
     ignored_defence: 1
 ---
@@ -47,9 +83,9 @@ kind: HexaStatCoreType
 version: simaple.io/HexaStatCoreType
 metadata:
   label:
-    name: 보스 데미지
+    name: 보스 데미지 증가
 data:  
-  name: 보스 데미지
+  name: 보스 데미지 증가
   basis: 
     boss_damage_multiplier: 1
 ---
@@ -57,8 +93,8 @@ kind: HexaStatCoreType
 version: simaple.io/HexaStatCoreType
 metadata:
   label:
-    name: 크리티컬 데미지
+    name: 크리티컬 데미지 증가
 data:  
-  name: 크리티컬 데미지
+  name: 크리티컬 데미지 증가
   basis: 
     critical_damage: 0.35

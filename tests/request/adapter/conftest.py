@@ -138,3 +138,13 @@ def skill_aggregated_response() -> AggregatedCharacterSkillResponse:
             CharacterSkillResponse, _macro_get_response("skill_6.json")
         ),
     }
+
+
+@pytest.fixture
+def hexa_stat_response() -> dict[str, Any]:
+    return _macro_get_response("hexa_stat.json")
+
+
+@pytest.fixture
+def hexa_stat_response_2() -> dict[str, Any]:
+    return _macro_get_response("hexa_stat_2.json")

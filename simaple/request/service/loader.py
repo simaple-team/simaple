@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
 
-from simaple.core import ExtendedStat, Stat, JobType
+from simaple.core import ExtendedStat, JobType, Stat
 from simaple.gear.gear import Gear
 from simaple.gear.symbol_gear import SymbolGear
 from simaple.request.service.util import BestStatSelector
 from simaple.system.artifact import Artifact
+from simaple.system.hexa_stat import HexaStat, HexaStatCore
 from simaple.system.hyperstat import Hyperstat
 from simaple.system.link import LinkSkillset
 from simaple.system.propensity import Propensity
@@ -84,6 +85,7 @@ class CharacterBasicLoader(ABC):
     def load_character_job_type(self, character_name: str) -> JobType:
         pass
 
+
 class LinkSkillLoader(ABC):
     @abstractmethod
     def load_link_skill(self, character_name: str) -> LinkSkillset:
@@ -95,4 +97,11 @@ class CharacterSkillLoader(ABC):
     def load_character_passive_stat(
         self, character_name: str, character_level: int
     ) -> ExtendedStat:
+        pass
+
+    @abstractmethod
+    def load_character_hexa_stat(
+        self,
+        character_name: str,
+    ) -> HexaStat:
         pass

@@ -1,6 +1,6 @@
 from typing import cast
 
-from simaple.core import Stat, JobType
+from simaple.core import JobType, Stat
 from simaple.request.adapter.character_basic_loader._schema import (
     CharacterBasicResponse,
     CharacterStatResponse,
@@ -11,8 +11,9 @@ from simaple.request.adapter.nexon_api import (
     get_character_id,
     get_character_id_param,
 )
-from simaple.request.service.loader import CharacterBasicLoader
 from simaple.request.adapter.translator.job_name import translate_kms_name
+from simaple.request.service.loader import CharacterBasicLoader
+
 
 class NexonAPICharacterBasicLoader(CharacterBasicLoader):
     def __init__(self, token_value: str):

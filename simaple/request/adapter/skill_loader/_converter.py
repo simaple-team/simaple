@@ -14,12 +14,15 @@ Skill 관련 정보는 다음과 같이 처리됩니다.
 """
 
 from simaple.core import ExtendedStat, JobType
-from simaple.data.jobs.builtin import get_passive
+from simaple.data.jobs.builtin import get_damage_logic, get_passive
+from simaple.data.system.hexa_stat import get_all_hexa_stat_cores
 from simaple.request.adapter.skill_loader._schema import (
     AggregatedCharacterSkillResponse,
     CharacterSkillResponse,
+    HexaStatResponse,
 )
 from simaple.request.adapter.translator.job_name import translate_kms_name
+from simaple.system.hexa_stat import HexaStat, HexaStatCore
 
 
 def extract_levels(response: CharacterSkillResponse) -> dict[str, int]:
@@ -77,3 +80,38 @@ def compute_passive_skill_stat(
     )
 
     return passive_stat
+
+
+def _translate_if_main_stat_core(core_name: str, job_type: JobType):
+    if core_name != "주력 스탯 증가":
+        return core_name
+
+    damage_logic = get_damage_logic(job_type, 0)
+    base_stat_type = damage_logic.get_base_stat_type()
+    return f"주력 스탯 증가({base_stat_type.value})"
+
+
+def compute_hexa_stat(resp: HexaStatResponse) -> HexaStat:
+    job_type = translate_kms_name(resp["character_class"])
+    return HexaStat(
+        core_types=get_all_hexa_stat_cores(),
+        cores=[
+            HexaStatCore(
+                main_stat_name=_translate_if_main_stat_core(
+                    core["main_stat_name"], job_type
+                ),
+                sub_stat_name_1=_translate_if_main_stat_core(
+                    core["sub_stat_name_1"], job_type
+                ),
+                sub_stat_name_2=_translate_if_main_stat_core(
+                    core["sub_stat_name_2"], job_type
+                ),
+                main_stat_level=core["main_stat_level"],
+                sub_stat_level_1=core["sub_stat_level_1"],
+                sub_stat_level_2=core["sub_stat_level_2"],
+            )
+            for core in (
+                resp["character_hexa_stat_core"] + resp["character_hexa_stat_core_2"]
+            )
+        ],
+    )

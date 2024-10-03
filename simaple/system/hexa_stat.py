@@ -9,7 +9,7 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 
 
 class HexaStatCoreType(
-    BaseModel, metaclass=TaggedNamespacedABCMeta(kind="HexaStatCore")
+    BaseModel, metaclass=TaggedNamespacedABCMeta(kind="HexaStatCoreType")
 ):
     name: str
     basis: dict[str, float]

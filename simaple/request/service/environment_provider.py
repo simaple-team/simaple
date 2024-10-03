@@ -1,4 +1,5 @@
 from simaple.core import ExtendedStat
+from simaple.data.jobs.builtin import get_damage_logic
 from simaple.request.service.loader import (
     AbilityLoader,
     CharacterBasicLoader,
@@ -9,7 +10,6 @@ from simaple.request.service.loader import (
     PropensityLoader,
     UnionLoader,
 )
-from simaple.data.jobs.builtin import get_damage_logic
 
 
 class LoadedEnvironmentProvider:
@@ -39,17 +39,19 @@ class LoadedEnvironmentProvider:
     ):
         total_extended_stat = ExtendedStat()
         job_type = self.character_basic_loader.load_character_job_type(character_name)
-        damage_logic = get_damage_logic(job_type, True)  # Force combat orders on; since this is just weak reference
+        damage_logic = get_damage_logic(
+            job_type, True
+        )  # Force combat orders on; since this is just weak reference
 
         gear_related_extended_stat = self.gear_loader.load_gear_related_stat(
             character_name
         )
         total_extended_stat += gear_related_extended_stat
 
-        ability_extended_stat = self.ability_loader.load_best_stat(character_name, {
-            "reference_stat": total_extended_stat,
-            "damage_logic": damage_logic
-        })
+        ability_extended_stat = self.ability_loader.load_best_stat(
+            character_name,
+            {"reference_stat": total_extended_stat, "damage_logic": damage_logic},
+        )
         total_extended_stat += ability_extended_stat
 
         propensity = self.propensity_loader.load_propensity(character_name)
