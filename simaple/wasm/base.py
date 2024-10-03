@@ -50,6 +50,9 @@ def pyodide_reveal_base_model(obj: MaybePyodide, model: Type[BaseModelT]) -> Bas
     if isinstance(obj, model):
         return obj
 
+    if isinstance(obj, dict):
+        return model.model_validate(obj)
+
     # assume given object is pyodide object
     dict_obj = cast(dict, obj.to_py())  # type: ignore
     return model.model_validate(dict_obj)
@@ -60,6 +63,9 @@ def pyodide_reveal_base_model_list(
 ) -> list[BaseModelT]:
     if isinstance(obj_list[0], model):
         return obj_list  # type: ignore
+
+    if isinstance(obj_list[0], dict):
+        return [model.model_validate(obj) for obj in obj_list]
 
     # assume given object is pyodide object
     return [model.model_validate(cast(dict, obj.to_py())) for obj in obj_list]  # type: ignore
