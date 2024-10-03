@@ -1,4 +1,4 @@
-import simaple.simulate.component.skill  # noqa: F401
+import simaple.simulate.component.common  # noqa: F401
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.simulation import get_operation_engine
@@ -47,7 +47,7 @@ ELAPSE 78000
 
 CAST "메이플월드 여신의 축복"
 
-CAST "포이즌 리전" 
+CAST "포이즌 리전"
 CAST "플레임 헤이즈 VI"
 
 CAST "에픽 어드벤쳐"
@@ -61,7 +61,7 @@ CAST "도트 퍼니셔"
 CAST "포이즌 체인"
 CAST "미스트 이럽션 VI"
 CAST "플레임 헤이즈 VI"
-CAST "크레스트 오브 더 솔라" 
+CAST "크레스트 오브 더 솔라"
 CAST "플레임 스윕 VI"
 CAST "플레임 스윕 VI"
 !debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"

@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from inline_snapshot import snapshot
 
-import simaple.simulate.component.skill  # noqa: F401
+import simaple.simulate.component.common  # noqa: F401
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.simulation import get_damage_calculator, get_operation_engine
