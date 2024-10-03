@@ -78,3 +78,9 @@ class LinkSkillLoader(ABC):
     @abstractmethod
     def load_link_skill(self, character_name: str) -> LinkSkillset:
         pass
+
+
+class CharacterSkillLoader(ABC):
+    @abstractmethod
+    def load_character_passive_stat(self, character_name: str, character_level: int) -> ExtendedStat:
+        pass

@@ -7,6 +7,7 @@ from simaple.request.service.loader import (
     LinkSkillLoader,
     PropensityLoader,
     UnionLoader,
+    CharacterSkillLoader,
 )
 
 
@@ -20,6 +21,7 @@ class LoadedEnvironmentProvider:
         gear_loader: GearLoader,
         character_basic_loader: CharacterBasicLoader,
         link_skill_loader: LinkSkillLoader,
+        character_skill_loader: CharacterSkillLoader,
     ):
         self.ability_loader = ability_loader
         self.propensity_loader = propensity_loader
@@ -28,6 +30,7 @@ class LoadedEnvironmentProvider:
         self.gear_loader = gear_loader
         self.character_basic_loader = character_basic_loader
         self.link_skill_loader = link_skill_loader
+        self.character_skill_loader = character_skill_loader
 
     def compute_character(
         self,
@@ -76,6 +79,11 @@ class LoadedEnvironmentProvider:
         character_level = self.character_basic_loader.load_character_level(
             character_name
         )
+
+        character_passive_stat = self.character_skill_loader.load_character_passive_stat(
+            character_name, character_level
+        )
+        total_extended_stat += character_passive_stat
 
         total_action_stat = total_extended_stat.action_stat
         total_stat = total_extended_stat.compute_by_level(character_level)

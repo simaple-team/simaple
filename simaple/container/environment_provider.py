@@ -369,6 +369,7 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
             combat_orders_level=self.combat_orders_level,
             passive_skill_level=self.passive_skill_level,
             character_level=self.level,
+            skill_levels={},
             weapon_pure_attack_power=self.weapon_pure_attack_power,
         )
 

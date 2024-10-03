@@ -18,6 +18,10 @@ from simaple.request.adapter.link_skill_loader._schema import LinkSkillResponse
 from simaple.request.adapter.propensity_loader._schema import (
     CharacterPropensityResponse,
 )
+from simaple.request.adapter.skill_loader._schema import (
+    AggregatedCharacterSkillResponse,
+    CharacterSkillResponse,
+)
 from simaple.request.adapter.union_loader._schema import CharacterUnionRaiderResponse
 
 
@@ -95,3 +99,42 @@ def character_stat_response() -> CharacterStatResponse:
 @pytest.fixture
 def link_skill_response() -> LinkSkillResponse:
     return cast(LinkSkillResponse, _macro_get_response("link_skill.json"))
+
+
+@pytest.fixture
+def skill_aggregated_response() -> AggregatedCharacterSkillResponse:
+    return {
+        "response_at_0": cast(
+            CharacterSkillResponse, _macro_get_response("skill_0.json")
+        ),
+        "response_at_1": cast(
+            CharacterSkillResponse, _macro_get_response("skill_0.json")
+        ),
+        "response_at_1_and_half": cast(
+            CharacterSkillResponse, _macro_get_response("skill_1_and_half.json")
+        ),
+        "response_at_2": cast(
+            CharacterSkillResponse, _macro_get_response("skill_2.json")
+        ),
+        "response_at_2_and_half": cast(
+            CharacterSkillResponse, _macro_get_response("skill_2_and_half.json")
+        ),
+        "response_at_3": cast(
+            CharacterSkillResponse, _macro_get_response("skill_3.json")
+        ),
+        "response_at_4": cast(
+            CharacterSkillResponse, _macro_get_response("skill_4.json")
+        ),
+        "response_at_hyper_passive": cast(
+            CharacterSkillResponse, _macro_get_response("skill_hyperpassive.json")
+        ),
+        "response_at_hyper_active": cast(
+            CharacterSkillResponse, _macro_get_response("skill_hyperactive.json")
+        ),
+        "response_at_5": cast(
+            CharacterSkillResponse, _macro_get_response("skill_5.json")
+        ),
+        "response_at_6": cast(
+            CharacterSkillResponse, _macro_get_response("skill_6.json")
+        ),
+    }
