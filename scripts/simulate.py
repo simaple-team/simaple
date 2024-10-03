@@ -2,7 +2,7 @@ from enum import Enum
 
 import fire
 
-import simaple.simulate.component.skill  # noqa: F401
+import simaple.simulate.component.common  # noqa: F401
 from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.plan_metadata import PlanMetadata
 from simaple.container.simulation import SimulationContainer

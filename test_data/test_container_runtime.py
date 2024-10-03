@@ -2,7 +2,7 @@ import os
 
 from inline_snapshot import snapshot
 
-import simaple.simulate.component.skill  # pylint: disable=W0611
+import simaple.simulate.component.common  # pylint: disable=W0611
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.simulation import get_damage_calculator, get_operation_engine

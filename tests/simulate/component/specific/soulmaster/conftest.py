@@ -1,6 +1,6 @@
 import pytest
 
-import simaple.simulate.component.skill  # noqa: F401
+import simaple.simulate.component.common  # noqa: F401
 import simaple.simulate.component.specific  # noqa: F401
 from simaple.core.base import ActionStat
 from simaple.simulate.global_property import Dynamics
