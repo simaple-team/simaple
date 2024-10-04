@@ -13,26 +13,45 @@ class ProgrammedPeriodic(Entity):
     time_left: float = 0.0
     count: int = 0
 
-    def set_time_left(self, time: float):
-        self.time_left = time
-        self.count = 0
-
     def enabled(self):
         return self.time_left > 0
 
-    def resolving(self, time: float):
-        self.interval_counter -= time
+    def set_time_left(self, time: float):
+        return self.model_copy(
+            update={
+                "time_left": time,
+                "count": 0,
+            }
+        )
 
-        # pylint:disable=chained-comparison
-        while self.interval_counter <= 0 and self.time_left > 0:
-            interval = self.intervals[self.count % len(self.intervals)]
-            self.interval_counter += interval
-            self.time_left -= interval
-            yield 1
-            self.count += 1
+    def elapse(self, time: float):
+        if self.time_left <= 0:
+            return self, 0
+
+        interval_counter = self.interval_counter - time
+        time_left_counter = self.time_left
+        lapse_count = 0
+
+        while interval_counter <= 0 and time_left_counter > 0:
+            interval = self.intervals[(self.count + lapse_count) % len(self.intervals)]
+            interval_counter += interval
+            time_left_counter -= interval
+            lapse_count += 1
+
+        return self.model_copy(
+            update={
+                "interval_counter": interval_counter,
+                "time_left": self.time_left - time,
+                "count": self.count + lapse_count,
+            }
+        ), lapse_count
 
     def disable(self):
-        self.time_left = 0
+        return self.model_copy(
+            update={
+                "time_left": 0,
+            }
+        )
 
 
 class ProgrammedPeriodicState(ReducerState):
@@ -65,31 +84,35 @@ class ProgrammedPeriodicComponent(SkillComponent, InvalidatableCooldownTrait):
 
     @reducer_method
     def elapse(self, time: float, state: ProgrammedPeriodicState):
-        state = state.deepcopy()
-        state.cooldown.elapse(time)
+        cooldown = state.cooldown.elapse(time)
 
-        lapse_count = 0
-        for _ in state.programmed_periodic.resolving(time):
-            lapse_count += 1
+        programmed_periodic, lapse_count = state.programmed_periodic.elapse(time)
 
-        return state, [self.event_provider.elapsed(time)] + [
+        return state.copy(
+            {
+                "cooldown": cooldown,
+                "programmed_periodic": programmed_periodic,
+            }
+        ), [self.event_provider.elapsed(time)] + [
             self.event_provider.dealt(self.periodic_damage, self.periodic_hit)
             for _ in range(lapse_count)
         ]
 
     @reducer_method
     def use(self, _: None, state: ProgrammedPeriodicState):
-        state = state.deepcopy()
-
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
+        cooldown = state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        state.programmed_periodic.set_time_left(self.lasting_duration)
+        programmed_periodic = state.programmed_periodic.set_time_left(
+            self.lasting_duration
+        )
 
-        return state, [
+        return state.copy(
+            {"cooldown": cooldown, "programmed_periodic": programmed_periodic}
+        ), [
             self.event_provider.dealt(self.damage, self.hit),
             self.event_provider.delayed(self._get_delay()),
         ]

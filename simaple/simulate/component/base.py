@@ -30,8 +30,8 @@ T = TypeVar("T", bound=BaseModel)
 
 
 class ReducerState(BaseModel):
-    def copy(self) -> NoReturn:  # type: ignore
-        raise NotImplementedError("copy() is disabled in ReducerState")
+    def copy(self: T, update: dict[str, Any]) -> T:  # type: ignore
+        return super().model_copy(deep=False, update=update)  # type: ignore
 
     def deepcopy(self: T) -> T:
         return super().model_copy(deep=True)  # type: ignore
@@ -373,7 +373,8 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @abstractmethod
-    def get_default_state(self) -> dict[str, Entity]: ...
+    def get_default_state(self) -> dict[str, Entity]:
+        ...
 
     @property
     def event_provider(self) -> EventProvider:

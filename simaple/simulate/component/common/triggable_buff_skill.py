@@ -50,13 +50,13 @@ class TriggableBuffSkillComponent(
         time: float,
         state: TriggableBuffState,
     ):
-        state = state.deepcopy()
-
-        state.cooldown.elapse(time)
-        state.lasting.elapse(time)
-        state.trigger_cooldown.elapse(time)
-
-        return state, [
+        return state.copy(
+            {
+                "cooldown": state.cooldown.elapse(time),
+                "lasting": state.lasting.elapse(time),
+                "trigger_cooldown": state.trigger_cooldown.elapse(time),
+            }
+        ), [
             self.event_provider.elapsed(time),
         ]
 
@@ -69,11 +69,12 @@ class TriggableBuffSkillComponent(
         if not (state.lasting.enabled() and state.trigger_cooldown.available):
             return state, []
 
-        state = state.deepcopy()
-        state.trigger_cooldown.set_time_left(self.trigger_cooldown_duration)
+        trigger_cooldown = state.trigger_cooldown.set_time_left(
+            self.trigger_cooldown_duration
+        )
 
         return (
-            state,
+            state.copy({"trigger_cooldown": trigger_cooldown}),
             [self.event_provider.dealt(self.trigger_damage, self.trigger_hit)],
         )
 

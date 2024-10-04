@@ -72,19 +72,21 @@ class UseSimpleAttackTrait(
     def use_simple_attack(
         self, state: CooldownDynamicsGeneric
     ) -> tuple[CooldownDynamicsGeneric, list[Event]]:
-        state = state.deepcopy()
-
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
+        cooldown = state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
 
         damage, hit = self._get_simple_damage_hit()
         delay = self._get_delay()
 
-        return state, [
+        return state.copy(
+            update={
+                "cooldown": cooldown,
+            }
+        ), [
             self.event_provider.dealt(damage, hit),
             self.event_provider.delayed(delay),
         ]
@@ -92,28 +94,33 @@ class UseSimpleAttackTrait(
     def elapse_simple_attack(
         self, time: float, state: CooldownGeneric
     ) -> tuple[CooldownGeneric, list[Event]]:
-        state = state.deepcopy()
-        state.cooldown.elapse(time)
-        return state, [self.event_provider.elapsed(time)]
+        cooldown = state.cooldown.elapse(time)
+        return state.copy(
+            {
+                "cooldown": cooldown,
+            }
+        ), [self.event_provider.elapsed(time)]
 
     def use_multiple_damage(
         self, state: CooldownDynamicsGeneric, multiple: int
     ) -> tuple[CooldownDynamicsGeneric, list[Event]]:
-        state = state.deepcopy()
-
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
+        cooldown = state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
 
         damage, hit = self._get_simple_damage_hit()
         delay = self._get_delay()
 
-        return state, [
-            self.event_provider.dealt(damage, hit) for _ in range(multiple)
-        ] + [self.event_provider.delayed(delay)]
+        return state.copy(
+            update={
+                "cooldown": cooldown,
+            }
+        ), [self.event_provider.dealt(damage, hit) for _ in range(multiple)] + [
+            self.event_provider.delayed(delay)
+        ]
 
 
 class BuffTrait(
@@ -124,16 +131,14 @@ class BuffTrait(
         state: CooldownDynamicsLastingGeneric,
         apply_buff_duration: bool,
     ) -> tuple[CooldownDynamicsLastingGeneric, list[Event]]:
-        state = state.deepcopy()
-
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
+        cooldown = state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
 
-        state.lasting.set_time_left(
+        lasting = state.lasting.set_time_left(
             state.dynamics.stat.calculate_buff_duration(
                 self._get_lasting_duration(state)
             )
@@ -141,19 +146,27 @@ class BuffTrait(
             else self._get_lasting_duration(state)
         )
 
-        return state, [self.event_provider.delayed(self._get_delay())]
+        return state.copy(
+            update={
+                "cooldown": cooldown,
+                "lasting": lasting,
+            }
+        ), [self.event_provider.delayed(self._get_delay())]
 
     def elapse_buff_trait(
         self,
         time: float,
         state: CooldownDynamicsLastingGeneric,
     ) -> tuple[CooldownDynamicsLastingGeneric, list[Event]]:
-        state = state.deepcopy()
+        cooldown = state.cooldown.elapse(time)
+        lasting = state.lasting.elapse(time)
 
-        state.cooldown.elapse(time)
-        state.lasting.elapse(time)
-
-        return state, [
+        return state.copy(
+            update={
+                "cooldown": cooldown,
+                "lasting": lasting,
+            }
+        ), [
             self.event_provider.elapsed(time),
         ]
 
@@ -170,14 +183,12 @@ class ConsumableBuffTrait(LastingTrait, EventProviderTrait, DelayTrait):
     def use_consumable_buff_trait(
         self, state: ConsumableDynamicsLastingGeneric, apply_buff_duration: bool
     ) -> tuple[ConsumableDynamicsLastingGeneric, list[Event]]:
-        state = state.deepcopy()
-
         if not state.consumable.available:
             return state, [self.event_provider.rejected()]
 
-        state.consumable.consume()
+        consumable = state.consumable.consume()
 
-        state.lasting.set_time_left(
+        lasting = state.lasting.set_time_left(
             state.dynamics.stat.calculate_buff_duration(
                 self._get_lasting_duration(state)
             )
@@ -185,17 +196,25 @@ class ConsumableBuffTrait(LastingTrait, EventProviderTrait, DelayTrait):
             else self._get_lasting_duration(state)
         )
 
-        return state, [self.event_provider.delayed(self._get_delay())]
+        return state.copy(
+            {
+                "consumable": consumable,
+                "lasting": lasting,
+            }
+        ), [self.event_provider.delayed(self._get_delay())]
 
     def elapse_consumable_buff_trait(
         self, time: float, state: ConsumableDynamicsLastingGeneric
     ) -> tuple[ConsumableDynamicsLastingGeneric, list[Event]]:
-        state = state.deepcopy()
+        consumable = state.consumable.elapse(time)
+        lasting = state.lasting.elapse(time)
 
-        state.consumable.elapse(time)
-        state.lasting.elapse(time)
-
-        return state, [self.event_provider.elapsed(time)]
+        return state.copy(
+            update={
+                "consumable": consumable,
+                "lasting": lasting,
+            }
+        ), [self.event_provider.elapsed(time)]
 
 
 class PeriodicElapseTrait(
@@ -212,14 +231,17 @@ class PeriodicElapseTrait(
         time: float,
         state: CooldownPeriodicGeneric,
     ) -> tuple[CooldownPeriodicGeneric, list[Event]]:
-        state = state.deepcopy()
-
-        state.cooldown.elapse(time)
-        lapse_count = state.periodic.elapse(time)
+        cooldown = state.cooldown.elapse(time)
+        periodic, lapse_count = state.periodic.elapse(time)
 
         periodic_damage, periodic_hit = self._get_periodic_damage_hit(state)
 
-        return state, [self.event_provider.elapsed(time)] + [
+        return state.copy(
+            update={
+                "cooldown": cooldown,
+                "periodic": periodic,
+            }
+        ), [self.event_provider.elapsed(time)] + [
             self.event_provider.dealt(periodic_damage, periodic_hit)
             for _ in range(lapse_count)
         ]
@@ -247,17 +269,20 @@ class PeriodicWithSimpleDamageTrait(
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state = state.deepcopy()
-
         damage, hit = self._get_simple_damage_hit()
         delay = self._get_delay()
 
-        state.cooldown.set_time_left(
+        cooldown = state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        state.periodic.set_time_left(self._get_lasting_duration(state))
+        periodic = state.periodic.set_time_left(self._get_lasting_duration(state))
 
-        return state, [
+        return state.copy(
+            update={
+                "cooldown": cooldown,
+                "periodic": periodic,
+            }
+        ), [
             self.event_provider.dealt(damage, hit),
             self.event_provider.delayed(delay),
         ]
@@ -279,19 +304,22 @@ class UsePeriodicDamageTrait(
         self,
         state: CooldownDynamicsPeriodicGeneric,
     ) -> tuple[CooldownDynamicsPeriodicGeneric, list[Event]]:
-        state = state.deepcopy()
-
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
         delay = self._get_delay()
 
-        state.cooldown.set_time_left(
+        cooldown = state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        state.periodic.set_time_left(self._get_lasting_duration(state))
+        periodic = state.periodic.set_time_left(self._get_lasting_duration(state))
 
-        return state, [
+        return state.copy(
+            update={
+                "cooldown": cooldown,
+                "periodic": periodic,
+            }
+        ), [
             self.event_provider.delayed(delay),
         ]
 
@@ -306,36 +334,40 @@ class KeydownSkillTrait(
         self,
         state: CooldownDynamicsKeydownGeneric,
     ) -> tuple[CooldownDynamicsKeydownGeneric, list[Event]]:
-        state = state.deepcopy()
+        if not state.cooldown.available or state.keydown.running:
+            return state, [self.event_provider.rejected()]
+
         (
             maximum_keydown_time,
             keydown_prepare_delay,
         ) = self._get_maximum_keydown_time_prepare_delay()
 
-        if not state.cooldown.available or state.keydown.running:
-            return state, [self.event_provider.rejected()]
-
-        state.cooldown.set_time_left(
+        cooldown = state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        state.keydown.start(maximum_keydown_time, keydown_prepare_delay)
+        keydown = state.keydown.start(maximum_keydown_time, keydown_prepare_delay)
 
-        return state, [self.event_provider.delayed(keydown_prepare_delay)]
+        return state.copy(
+            update={
+                "cooldown": cooldown,
+                "keydown": keydown,
+            }
+        ), [self.event_provider.delayed(keydown_prepare_delay)]
 
     def elapse_keydown_trait(
         self, time: float, state: CooldownDynamicsKeydownGeneric
     ) -> tuple[CooldownDynamicsKeydownGeneric, list[Event]]:
-        state = state.deepcopy()
-        state.cooldown.elapse(time)
+        cooldown = state.cooldown.elapse(time)
 
         damage, hit = self._get_keydown_damage_hit()
         damage_hits: list[tuple[float, float]] = []
 
         was_running = state.keydown.running
-        for _ in state.keydown.resolving(time):
+        keydown, elapse_count = state.keydown.elapse(time)
+        for _ in range(elapse_count):
             damage_hits += [(damage, hit)]
 
-        keydown_end = was_running and not state.keydown.running
+        keydown_end = was_running and not keydown.running
         if keydown_end:
             (
                 finish_damage,
@@ -344,12 +376,17 @@ class KeydownSkillTrait(
             ) = self._get_keydown_end_damage_hit_delay()
             damage_hits += [(finish_damage, finish_hit)]
             # time_left is negative value here, represents time exceeded after actual keydown end.
-            delay = max(finish_delay + state.keydown.time_left, 0)
+            delay = max(finish_delay + keydown.time_left, 0)
         else:
-            delay = state.keydown.get_next_delay()
+            delay = keydown.get_next_delay()
 
         return (
-            state,
+            state.copy(
+                update={
+                    "cooldown": cooldown,
+                    "keydown": keydown,
+                }
+            ),
             [self.event_provider.dealt(damage, hit) for damage, hit in damage_hits]
             + [self.event_provider.delayed(delay), self.event_provider.elapsed(time)]
             + ([self.event_provider.keydown_end()] if keydown_end else []),
@@ -358,20 +395,23 @@ class KeydownSkillTrait(
     def stop_keydown_trait(
         self, state: CooldownDynamicsKeydownGeneric
     ) -> tuple[CooldownDynamicsKeydownGeneric, list[Event]]:
-        state = state.deepcopy()
+        if not state.keydown.running:
+            return state, [self.event_provider.rejected()]
+
         (
             finish_damage,
             finish_hit,
             finish_delay,
         ) = self._get_keydown_end_damage_hit_delay()
 
-        if not state.keydown.running:
-            return state, [self.event_provider.rejected()]
-
-        state.keydown.stop()
+        keydown = state.keydown.stop()
 
         return (
-            state,
+            state.copy(
+                update={
+                    "keydown": keydown,
+                }
+            ),
             [
                 self.event_provider.dealt(finish_damage, finish_hit),
                 self.event_provider.delayed(finish_delay),

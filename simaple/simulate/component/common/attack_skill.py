@@ -47,9 +47,10 @@ class AttackSkillComponent(
 
     @reducer_method
     def reset_cooldown(self, _: None, state: AttackSkillState):
-        state = state.deepcopy()
-        state.cooldown.set_time_left(0)
-        return state, None
+        cooldown = state.cooldown.set_time_left(0)
+        return state.model_copy(
+            update={"cooldown": cooldown},
+        ), None
 
     @view_method
     def validity(self, state: AttackSkillState):

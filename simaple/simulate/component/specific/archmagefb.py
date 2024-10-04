@@ -205,29 +205,28 @@ class PoisonChainComponent(
 
     @reducer_method
     def elapse(self, time: float, state: PoisonChainState):
-        state = state.deepcopy()
-
-        state.cooldown.elapse(time)
+        cooldown = state.cooldown.elapse(time)
+        periodic, elapse_count = state.periodic.elapse(time)
+        stack = state.stack
 
         dealing_events = []
-
-        for _ in state.periodic.resolving(time):
+        for _ in range(elapse_count):
             dealing_events.append(
                 self.event_provider.dealt(
                     self.get_periodic_damage(state), self.periodic_hit
                 )
             )
-            state.stack.increase(1)
+            stack = stack.increase(1)
 
-        return state, [self.event_provider.elapsed(time)] + dealing_events
+        return state.copy(
+            update={"cooldown": cooldown, "periodic": periodic, "stack": stack}
+        ), [self.event_provider.elapsed(time)] + dealing_events
 
     @reducer_method
     def use(self, _: None, state: PoisonChainState):
-        state = state.deepcopy()
-
         state, events = self.use_periodic_damage_trait(state)
         if not is_rejected(events):
-            state.stack.reset(1)
+            return state.copy({"stack": state.stack.increase(1)}), events
 
         return state, events
 

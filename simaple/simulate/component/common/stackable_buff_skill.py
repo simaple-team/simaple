@@ -40,12 +40,19 @@ class StackableBuffSkillComponent(
         _: None,
         state: StackableBuffSkillState,
     ):
-        state = state.deepcopy()
+        stack = state.stack
         if state.lasting.time_left <= 0:
-            state.stack.reset()
-        state.stack.increase()
+            stack = state.stack.reset()
+        stack = stack.increase()
 
-        return self.use_buff_trait(state, apply_buff_duration=self.apply_buff_duration)
+        return self.use_buff_trait(
+            state.copy(
+                {
+                    "stack": stack,
+                }
+            ),
+            apply_buff_duration=self.apply_buff_duration,
+        )
 
     @reducer_method
     def elapse(

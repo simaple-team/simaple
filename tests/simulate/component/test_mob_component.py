@@ -33,8 +33,8 @@ def fixture_mob_state():
 )
 def test_dot(elapse_time, count):
     dot = DOT()
-    dot.new("dot0", 300, 5000)
-    emits = dot.elapse(elapse_time)
+    dot = dot.new("dot0", 300, 5000)
+    dot, emits = dot.elapse(elapse_time)
 
     if count == 0:
         assert not emits
@@ -54,9 +54,9 @@ def test_dot(elapse_time, count):
 )
 def test_multiple_dot(elapse_time, count_0, count_1):
     dot = DOT()
-    dot.new("dot0", 300, 5000)
-    dot.new("dot1", 400, 8000)
-    emits = dot.elapse(elapse_time)
+    dot = dot.new("dot0", 300, 5000)
+    dot = dot.new("dot1", 400, 8000)
+    dot, emits = dot.elapse(elapse_time)
 
     assert emits == {
         ("dot0", 300): count_0,

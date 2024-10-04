@@ -53,18 +53,18 @@ class PeriodicDamageConfiguratedHexaSkillComponent(
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state = state.deepcopy()
-
         delay = self._get_delay()
 
-        state.cooldown.set_time_left(
+        cooldown = state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        state.periodic.set_time_left(
+        periodic = state.periodic.set_time_left(
             self._get_lasting_duration(state), initial_counter=delay
         )
 
-        return state, [
+        return state.model_copy(
+            update={"cooldown": cooldown, "periodic": periodic},
+        ), [
             self.event_provider.dealt(entry.damage, entry.hit)
             for entry in self.damage_and_hits
         ] + [

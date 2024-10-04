@@ -39,14 +39,13 @@ class TemporalEnhancingAttackSkill(
         _: None,
         state: TemporalEnhancingAttackSkillState,
     ):
-        state = state.deepcopy()
-
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
+        cooldown = state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
         )
+        reforged_cooldown = state.reforged_cooldown
 
         damage_events = [self.event_provider.dealt(self.damage, self.hit)]
 
@@ -55,20 +54,29 @@ class TemporalEnhancingAttackSkill(
                 self.event_provider.dealt(self.reforged_damage, self.reforged_hit)
                 for _ in range(self.reforged_multiple)
             ]
-            state.reforged_cooldown.set_time_left(
+            reforged_cooldown = state.reforged_cooldown.set_time_left(
                 state.dynamics.stat.calculate_cooldown(self.reforge_cooldown_duration)
             )
 
-        return state, damage_events + [
+        return state.copy(
+            {
+                "cooldown": cooldown,
+                "reforged_cooldown": reforged_cooldown,
+            }
+        ), damage_events + [
             self.event_provider.delayed(self.delay),
         ]
 
     @reducer_method
     def elapse(self, time: float, state: TemporalEnhancingAttackSkillState):
-        state = state.deepcopy()
-        state.cooldown.elapse(time)
-        state.reforged_cooldown.elapse(time)
-        return state, [self.event_provider.elapsed(time)]
+        cooldown = state.cooldown.elapse(time)
+        reforged_cooldown = state.reforged_cooldown.elapse(time)
+        return state.copy(
+            {
+                "cooldown": cooldown,
+                "reforged_cooldown": reforged_cooldown,
+            }
+        ), [self.event_provider.elapsed(time)]
 
     @view_method
     def validity(self, state: TemporalEnhancingAttackSkillState):
