@@ -1,8 +1,8 @@
-from simaple.wasm.skill import getAllComponent
+from simaple.api.base import get_all_component
 
 
 def test_get_all_component():
-    result = getAllComponent(
+    result = get_all_component(
         """
 ---
 author: meson3241

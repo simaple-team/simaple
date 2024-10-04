@@ -22,6 +22,8 @@ with open("webui/public/dependency.js", 'w') as f:
 interpreter = "python"
 
 [tool.poe.tasks]
+dev = "uvicorn simaple.api.dev:app --reload"
+
 _black-check = "black --check simaple tests"
 _isort-check = "isort --check-only simaple tests"
 formatting-check = ["_black-check", "_isort-check"]
@@ -45,7 +47,7 @@ coverage = "pytest --cov=simaple"
 coverage-report = "pytest --cov=simaple --cov-report=xml"
 
 unittest = "pytest -vv -x tests/"
-test_wasm = "pytest -vv -x tests/wasm"
+test_api = "pytest -vv -x tests/api"
 test_data = "pytest -vv -x test_data/"
 test_data_review = "pytest -vv -x test_data/ tests/simulate/policy/test_dsl_runtime.py --inline-snapshot=review"
 test_data_watch = "ptw . --patterns '*.py,*.yaml' test_data/ tests/simulate/policy/test_dsl_runtime.py --inline-snapshot=review"
@@ -120,6 +122,8 @@ scipy = "^1.11.2"
 pydantic-settings = "^2.0.3"
 lark = "^1.1.7"
 pyfunctional = "^1.5.0"
+fastapi = "^0.115.0"
+uvicorn = { extras = ["standard"], version = "^0.31.0" }
 
 [tool.poetry.group.dev.dependencies]
 poethepoet = "^0.28.0"

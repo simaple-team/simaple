@@ -1,17 +1,17 @@
 import pytest
 import yaml
 
+from simaple.api.base import (
+    compute_maximum_dealing_interval,
+    get_initial_plan_from_baseline,
+    has_environment,
+    provide_environment_augmented_plan,
+    run_plan,
+    run_plan_with_hint,
+)
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.simulation import SimulationEnvironment
 from simaple.core import JobType
-from simaple.wasm.workspace import (
-    computeMaximumDealingInterval,
-    getInitialPlanFromBaseline,
-    hasEnvironment,
-    provideEnvironmentAugmentedPlan,
-    runPlan,
-    runPlanWithHint,
-)
 
 
 @pytest.fixture
@@ -82,7 +82,7 @@ ELAPSE 10.0
 ELAPSE 10.0
 CAST "체인 라이트닝 VI"
 !debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"
-ELAPSE 30000.0  
+ELAPSE 30000.0
 """
 
 
@@ -105,7 +105,7 @@ ELAPSE 10.0
 ELAPSE 10.0
     """
 
-    assert not hasEnvironment(plan)
+    assert not has_environment(plan)
 
 
 def test_retreives_skill_level_with_unicode():
@@ -120,7 +120,7 @@ provider:
         artifact_level: 40
         passive_skill_level: 0
         combat_orders_level: 1
-        hexa_improvements_levels: 
+        hexa_improvements_levels:
           도트 퍼니셔: 3
 ---
 ELAPSE 10.0
@@ -129,12 +129,12 @@ ELAPSE 10.0
 ELAPSE 10.0
     """
 
-    new_plan = provideEnvironmentAugmentedPlan(plan)
+    new_plan = provide_environment_augmented_plan(plan)
     assert "도트 퍼니셔" in new_plan
 
 
 def test_has_environment_returns_true_with_environment(fixture_environment_given_plan):
-    assert hasEnvironment(fixture_environment_given_plan)
+    assert has_environment(fixture_environment_given_plan)
 
 
 def test_provide_environment_augmented_plan():
@@ -154,7 +154,7 @@ ELAPSE 10.0
 ELAPSE 10.0
     """
 
-    augmented_plan = provideEnvironmentAugmentedPlan(plan)
+    augmented_plan = provide_environment_augmented_plan(plan)
     result = yaml.safe_load(augmented_plan.split("\n---")[0])
 
     SimulationEnvironment.model_validate(result["environment"])
@@ -179,17 +179,17 @@ ELAPSE 10.0
 ELAPSE 10.0
 """
     with pytest.raises(Exception):
-        runPlan(plan)
+        run_plan(plan)
 
 
 def test_run_plan_runs_with_environment(fixture_environment_given_plan):
-    result = runPlan(fixture_environment_given_plan)
+    result = run_plan(fixture_environment_given_plan)
 
     assert len(result) > 0
 
 
 def test_compute_maximum_dealing_interval(fixture_environment_given_plan):
-    result = computeMaximumDealingInterval(fixture_environment_given_plan, 30000)
+    result = compute_maximum_dealing_interval(fixture_environment_given_plan, 30000)
     assert result.damage > 0
 
 
@@ -203,9 +203,9 @@ def test_get_initial_plan_from_baseline():
         combat_orders_level=1,
     )
 
-    output = getInitialPlanFromBaseline(given_environment)
+    output = get_initial_plan_from_baseline(given_environment)
     assert output.find("CAST")
-    assert not hasEnvironment(output)
+    assert not has_environment(output)
 
 
 @pytest.mark.parametrize(
@@ -248,10 +248,10 @@ def test_run_with_hint(fixture_environment_given_plan, given, change):
 {change}
 """
 
-    first_result = runPlan(previous_plan)
-    second_result = runPlan(new_plan)
+    first_result = run_plan(previous_plan)
+    second_result = run_plan(new_plan)
 
-    second_result_with_hint = runPlanWithHint(
+    second_result_with_hint = run_plan_with_hint(
         previous_plan,
         first_result,
         new_plan,
