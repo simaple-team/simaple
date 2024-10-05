@@ -52,6 +52,8 @@ def _parse_each_option(option_string: str) -> Stat:
             return Stat(INT=option_value)
         case ("LUK", False):
             return Stat(LUK=option_value)
+        case ("크리티컬 데미지", True):
+            return Stat(critical_damage=option_value)
         case _:
             return Stat()
 

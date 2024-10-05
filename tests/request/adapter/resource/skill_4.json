@@ -1,0 +1,95 @@
+{
+  "date": "2024-09-19T00:00+09:00",
+  "character_class": "아크메이지(불,독)",
+  "character_skill_grade": "4",
+  "character_skill": [
+    {
+      "skill_name": "플레임 스윕",
+      "skill_description": "[마스터 레벨 : 30]\r\n전방을 강력한 화염으로 휩쓴다. 화염에 휩쓸린 적은 화상을 입어 지속적으로 도트 데미지를 입는다. 일부 몬스터는 저항하여 화상을 입지 않는다. 불 속성 공격이다.",
+      "skill_level": 31,
+      "skill_effect": "MP 40 소비, 최대 8명의 적에게 223% 데미지로 7번 공격\n공격당한 적은 5초 동안 화상을 입으며 1초당 244%의 도트 데미지",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKFPBMG.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "미스트 이럽션",
+      "skill_description": "[마스터 레벨 : 30]\r\n영구적으로 포이즌 미스트의 도트 데미지를 증가시킬 수 있으며 스킬 사용 시 주변에 설치된 포이즌 미스트들을 폭발시켜 적에게 치명적인 독 속성 데미지를 준다. 대상에게 적용된 도트의 수가 많을수록 더 큰 피해를 줄 수 있으며 다른 사람이 설치한 미스트는 폭발시킬 수 없다.\n재사용 대기시간 초기화의 효과를 받지 않고 미스트 폭발에 성공하면 플레임 헤이즈의 재사용 대기시간이 초기화된다.\n필요 스킬 : 포이즌 미스트 20레벨 이상",
+      "skill_level": 31,
+      "skill_effect": "MP 100 소비, 최대 12명의 적에게 126% 데미지로 10번 공격하는 폭발 2번 발생, 몬스터의 방어율을 41% 무시\n대상에게 적용된 도트의 개수가 2개 일 때 20%, 3개 일 때 45%, 4개 일 때 80%, 5개 일 때 125% 만큼 폭발의 최종 데미지 증가\n최대 6개의 미스트 동시 폭발 가능\n재사용 대기시간 10초\n도트가 5개 이상 적용된 적에게 미스트 이럽션을 적중시키면 미스트 이럽션의 재사용 대기시간 2초 감소, 도트 5중첩으로 인한 재사용 대기시간 감소는 다른 재사용 대기시간 감소 기능보다 먼저 적용\n[패시브 효과 : 영구적으로 포이즌 미스트의 도트 데미지 301%로 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKFPBMD.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "퍼번트 드레인",
+      "skill_description": "[마스터 레벨 : 1]\r\n엘리멘탈 드레인의 효과를 증가시킨다.",
+      "skill_level": 1,
+      "skill_effect": "자신의 스킬로 입히고 있는 도트 데미지당 최종 데미지 5%로 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKFOBNE.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "메테오",
+      "skill_description": "[마스터 레벨 : 30]\r\n하늘로부터 운석을 소환하여 다수의 적에게 강력한 화염 공격을 가한다. 또한 영구히 파이어 오라를 제외한 스킬로 공격 시 일정 확률로 단일 적에게 운석이 떨어져 피해를 입힌다.",
+      "skill_level": 31,
+      "skill_effect": "MP 298 소비, 최대 15명의 적에게 318% 데미지로 12번 공격, 재사용 대기시간 45초\n[패시브 효과 : [파이널 어택류 스킬] 직접 공격하는 공격 스킬 사용 시 62% 확률로 단일 적에게 224%의 데미지로 공격하는 메테오를 떨어뜨림]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKFPBMH.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "플레임 헤이즈",
+      "skill_description": "[마스터 레벨 : 30]\r\n적을 타오르는 독안개로 감싸 부딪히지 않는 상태로 만들고 도트 데미지를 입히며 느려지게 만든다. 추가로, 적에게 명중하면 해당 위치에 포이즌 미스트가 생성되며, 적을 맞추지 못하면 현재 자신이 서 있는 위치에 포이즌 미스트가 생성된다.",
+      "skill_level": 31,
+      "skill_effect": "MP 73 소비, 단일 적 205% 데미지로 15번 공격, 100% 확률로 10초 동안 203% 도트 데미지를 주며 부딪히지 않는 상태 지속 및 -51% 감속, 적 명중 시 포이즌 미스트 적 위치 생성, 맞은 적이 없을 경우 자신 위치에 포이즌 미스트 생성\n재사용 대기시간 10초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKFPBNB.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "인피니티",
+      "skill_description": "[마스터 레벨 : 30]\r\n정신을 집중하여 무한한 마나를 이끌어내 일정 시간 동안 MP 소비없이 스킬을 사용할 수 있게 된다. 또한 지속적으로 자신의 HP와 MP가 회복되고 모든 공격 마법의 피해가 증가한다. \n재사용 대기시간 초기화의 효과를 받지 않는다.",
+      "skill_level": 31,
+      "skill_effect": "MP 80 소비, 41초 동안 지속, 일정 시간마다 순수 HP와 MP 11%씩 회복\n버프 지속 중 최종 데미지 71% 증가, 일정 시간마다 최종 데미지 3% 추가 증가, 최대 115%까지 증가 가능\n인피니티로 증가하는 최종 데미지는 합 적용\n버프 지속 시간 증가량을 반영한 지속 시간 기준 지속 시간이 30% 남았을 때 캐릭터 주위로 마나가 휘몰아침\n재사용 대기시간 180초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKFPBME.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "이프리트",
+      "skill_description": "[마스터 레벨 : 30]\r\n일정 시간 동안 불 속성을 지닌 이프리트를 소환한다. 이프리트는 다수의 적을 동시에 공격할 수 있으며 이프리트 스킬을 배우면 영구적으로 숙련도가 증가한다. 이프리트의 공격은 공격 반사 상태의 적을 공격해도 피해를 입지 않는다.\n5차 스킬 \"퓨리 오브 이프리트\"를 익히기 위해 30레벨 이상 필요",
+      "skill_level": 31,
+      "skill_effect": "MP 123 소비, 265초 동안 이프리트 소환\n이프리트는 152% 데미지로 최대 3명의 적을 3번 공격하며 2초 동안 1초 간격으로 143%의 도트 데미지\n[패시브 효과 : 영구적으로 숙련도 증가량 71%로 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKFPBMF.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "메이플 용사",
+      "skill_description": "[마스터 레벨 : 30]\r\n메이플 월드의 여신의 가호로 인해 자신의 모든 능력치가 일정 퍼센트만큼 증가한다. 스킬을 사용하면 메이플 월드의 여신이 잠시 현신한다.",
+      "skill_level": 31,
+      "skill_effect": "MP 70 소비, 메이플 월드의 여신 현신\n[패시브 효과 : AP를 직접 투자한 모든 능력치 16% 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKFPBMA.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "용사의 의지",
+      "skill_description": "[마스터 레벨 : 5]\r\n정신을 집중하여 상태 이상으로부터 벗어난다. 사용 후 3초 동안 상태 이상 면역. 단, 일부 상태 이상 효과에는 적용되지 않고 컴뱃 오더스가 적용되지 않는다.",
+      "skill_level": 5,
+      "skill_effect": "MP 30 소비, 재사용 대기시간 300초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKFPBMI.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "아케인 에임",
+      "skill_description": "[마스터 레벨 : 30]\r\n공격 시 몬스터의 방어율을 일정 수준 무시할 수 있게 되며, 지속적으로 공격할 경우 모든 공격의 데미지가 증가한다. 데미지 증가 효과는 확률적으로 적용되며, 최대 5번까지 누적될 수 있다.",
+      "skill_level": 31,
+      "skill_effect": "공격 시 몬스터의 방어율 21% 무시, 소환수의 공격을 제외한 공격 적중 시 100% 확률로 5초 동안 데미지 8% 증가\n데미지 증가 효과는 최대 5번까지 효과 누적 가능",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKFOBNA.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "마스터 매직",
+      "skill_description": "[마스터 레벨 : 10]\r\n영구적으로 마력이 증가하고 자신에게 적용되는 모든 버프의 지속시간이 증가한다. 추가로 영구히 스탠스를 증가시킨다.",
+      "skill_level": 11,
+      "skill_effect": "영구적으로 마력 33 증가, 버프 지속시간 55% 증가, 스탠스 66% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKFOBNC.png",
+      "skill_effect_next": null
+    }
+  ]
+}

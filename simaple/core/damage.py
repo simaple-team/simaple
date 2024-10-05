@@ -12,6 +12,20 @@ class DamageLogic(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="DamageLogic
     attack_range_constant: float
     mastery: float
 
+    def get_base_stat_type(self) -> BaseStatType:
+        sample_stat = Stat(STR=1, DEX=2, INT=3, LUK=4)
+        match self.get_major_stat(sample_stat):
+            case 1.0:
+                return BaseStatType.STR
+            case 2.0:
+                return BaseStatType.DEX
+            case 3.0:
+                return BaseStatType.INT
+            case 4.0:
+                return BaseStatType.LUK
+
+        raise ValueError("Invalid BaseStatType")
+
     @abstractmethod
     def get_base_stat_factor(self, stat: Stat) -> float: ...
 

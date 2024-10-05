@@ -1,0 +1,72 @@
+{
+  "date": "2024-09-19T00:00+09:00",
+  "character_class": "아크메이지(불,독)",
+  "character_hexa_stat_core": [
+    {
+      "slot_id": "0",
+      "main_stat_name": "마력 증가",
+      "sub_stat_name_1": "크리티컬 데미지 증가",
+      "sub_stat_name_2": "보스 데미지 증가",
+      "main_stat_level": 6,
+      "sub_stat_level_1": 7,
+      "sub_stat_level_2": 7,
+      "stat_grade": 20
+    }
+  ],
+  "character_hexa_stat_core_2": [
+    {
+      "slot_id": "0",
+      "main_stat_name": "보스 데미지 증가",
+      "sub_stat_name_1": "크리티컬 데미지 증가",
+      "sub_stat_name_2": "마력 증가",
+      "main_stat_level": 7,
+      "sub_stat_level_1": 9,
+      "sub_stat_level_2": 4,
+      "stat_grade": 20
+    }
+  ],
+  "preset_hexa_stat_core": [
+    {
+      "slot_id": "0",
+      "main_stat_name": "마력 증가",
+      "sub_stat_name_1": "크리티컬 데미지 증가",
+      "sub_stat_name_2": "보스 데미지 증가",
+      "main_stat_level": 6,
+      "sub_stat_level_1": 7,
+      "sub_stat_level_2": 7,
+      "stat_grade": 20
+    },
+    {
+      "slot_id": "1",
+      "main_stat_name": "마력 증가",
+      "sub_stat_name_1": "크리티컬 데미지 증가",
+      "sub_stat_name_2": "보스 데미지 증가",
+      "main_stat_level": 6,
+      "sub_stat_level_1": 7,
+      "sub_stat_level_2": 7,
+      "stat_grade": 20
+    }
+  ],
+  "preset_hexa_stat_core_2": [
+    {
+      "slot_id": "0",
+      "main_stat_name": "보스 데미지 증가",
+      "sub_stat_name_1": "크리티컬 데미지 증가",
+      "sub_stat_name_2": "마력 증가",
+      "main_stat_level": 7,
+      "sub_stat_level_1": 9,
+      "sub_stat_level_2": 4,
+      "stat_grade": 20
+    },
+    {
+      "slot_id": "1",
+      "main_stat_name": "보스 데미지 증가",
+      "sub_stat_name_1": "크리티컬 데미지 증가",
+      "sub_stat_name_2": "마력 증가",
+      "main_stat_level": 7,
+      "sub_stat_level_1": 9,
+      "sub_stat_level_2": 4,
+      "stat_grade": 20
+    }
+  ]
+}

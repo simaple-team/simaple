@@ -1,6 +1,6 @@
 import json
 from abc import ABCMeta, abstractmethod
-from typing import Any, Type
+from typing import Any
 
 import pydantic
 
@@ -170,6 +170,7 @@ class MinimalEnvironmentProvider(MemoizableEnvironmentProvider):
         return FinalCharacterStat(
             stat=self.stat,
             action_stat=self.action_stat,
+            active_buffs={},
         )
 
     def get_memoization_independent_environment(
@@ -368,6 +369,7 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
             combat_orders_level=self.combat_orders_level,
             passive_skill_level=self.passive_skill_level,
             character_level=self.level,
+            skill_levels={},
             weapon_pure_attack_power=self.weapon_pure_attack_power,
         )
 
@@ -428,14 +430,5 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
         return FinalCharacterStat(
             stat=total_extend_stat.compute_by_level(self.level),
             action_stat=total_extend_stat.action_stat,
+            active_buffs={},
         )
-
-
-_environment_providers: dict[str, Type[EnvironmentProvider]] = {
-    BaselineEnvironmentProvider.__name__: BaselineEnvironmentProvider,
-    MinimalEnvironmentProvider.__name__: MinimalEnvironmentProvider,
-}
-
-
-def get_environment_provider(name: str, config: dict) -> EnvironmentProvider:
-    return _environment_providers[name].model_validate(config)

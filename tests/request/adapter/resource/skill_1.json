@@ -1,0 +1,55 @@
+{
+  "date": "2024-09-19T00:00+09:00",
+  "character_class": "아크메이지(불,독)",
+  "character_skill_grade": "1",
+  "character_skill": [
+    {
+      "skill_name": "에너지 볼트",
+      "skill_description": "[마스터 레벨 : 20]\r\n적에게 닿으면 폭발하는 에너지 응집체를 발사한다.",
+      "skill_level": 20,
+      "skill_effect": "MP 24 소비, 최대 4명의 적에게 78%의 데미지로 4번 공격",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPALHPBMI.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "매직 가드",
+      "skill_description": "[마스터 레벨 : 10]\r\n마법의 힘으로 받는 데미지를 감소시키고 일부를 MP로 대신한다. 단, 최대 HP의 일정 비율로 피해를 입히는 공격에는 적용되지 않는다.\n활성화 된 상태에서 MP가 0 초과일 경우 자동으로 발동되며 MP가 0 이하일 경우에는 그대로 HP를 소비하게 된다. 사용 시 효과가 활성화되고 재사용 시 비활성화되는 온오프 스킬",
+      "skill_level": 10,
+      "skill_effect": "MP 13 소비, 활성화 되어있는 동안 받는 데미지의 85%를 MP로 대신함",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPALHPBMC.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "텔레포트",
+      "skill_description": "[마스터 레벨 : 5]\r\n일정 거리만큼 순간 이동한다. 상, 하, 좌, 우 방향키와 함께 누르면 해당 방향으로 이동할 수 있다. 추가로 이동속도, 최대 이동속도가 영구적으로 증가한다.\n3차 스킬 \"텔레포트 마스터리\", \"텔레포트 부스트\"를 익히기 위해 5레벨 이상 필요",
+      "skill_level": 5,
+      "skill_effect": "MP 20 소비, 좌우 190만큼, 상하 295만큼 순간이동\n[패시브 효과 : 이동속도 22, 최대 이동속도 20 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPALHPBMJ.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "마나 웨이브",
+      "skill_description": "[마스터 레벨 : 1]\r\n마나의 파동을 바닥으로 뿜어 위로 도약한다. 위 방향키와 점프키를 함께 사용하여 발동할 수 있고 사용 후 점프키를 키다운하면 일정 시간동안 느리게 하강할 수 있다.",
+      "skill_level": 1,
+      "skill_effect": "MP 10 소비, 일정 거리 점프\n스킬 사용 후 점프키를 키다운하면 MP 20을 소모하여 느리게 하강할 수 있고 최대 5초까지 하강",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPALHPBNB.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "매직 아머",
+      "skill_description": "[마스터 레벨 : 9]\r\n갑옷에 마력을 응집시켜 방어력을 증가시킨다.\n필요 스킬 : 매직 가드 3레벨 이상",
+      "skill_level": 9,
+      "skill_effect": "방어력 90 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPALHOBNA.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "MP 증가",
+      "skill_description": "[마스터 레벨 : 20]\r\n최대 MP와 공격 속도가 증가하고 레벨에 따라 MP가 추가로 증가한다.",
+      "skill_level": 20,
+      "skill_effect": "최대 MP 20% 증가, 공격 속도 1단계 증가, 레벨당 MP 120만큼 증가\n완드 착용 시 크리티컬 확률 5% 추가 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPALHOBMG.png",
+      "skill_effect_next": null
+    }
+  ]
+}

@@ -69,16 +69,18 @@ def get_damage_logic(jobtype: JobType, combat_orders_level: int) -> DamageLogic:
     )
 
 
-def _get_patches(
+def _get_patches_for_passive_skills(
     combat_orders_level: int,
     passive_skill_level: int,
     character_level: int,
+    skill_levels: dict[str, int] = {},
     weapon_pure_attack_power: Optional[int] = None,
 ) -> list[Patch]:
     return [
         SkillLevelPatch(
             combat_orders_level=combat_orders_level,
             passive_skill_level=passive_skill_level,
+            default_skill_levels=skill_levels,
         ),
         ArithmeticPatch(
             variables={
@@ -94,14 +96,16 @@ def get_passive(
     combat_orders_level: int,
     passive_skill_level: int,
     character_level: int,
+    skill_levels: dict[str, int],
     weapon_pure_attack_power: Optional[int] = None,
 ) -> ExtendedStat:
     skill_profile = get_skill_profile(jobtype)
     loader = get_kms_skill_loader()
-    patches = _get_patches(
+    patches = _get_patches_for_passive_skills(
         combat_orders_level,
         passive_skill_level,
         character_level,
+        skill_levels,
         weapon_pure_attack_power=weapon_pure_attack_power,
     )
     passive_skills: list[PassiveSkill] = list(

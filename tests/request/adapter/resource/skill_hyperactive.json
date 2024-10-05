@@ -1,0 +1,31 @@
+{
+  "date": "2024-09-19T00:00+09:00",
+  "character_class": "아크메이지(불,독)",
+  "character_skill_grade": "hyperactive",
+  "character_skill": [
+    {
+      "skill_name": "메기도 플레임",
+      "skill_description": "[마스터 레벨 : 1]\r\n상대의 영혼까지 태워버리는 푸른 불꽃을 날려 적을 소멸시킨다. 푸른 불꽃은 적을 태운 후 일정 횟수까지 재생성된다. 불꽃은 범위 내의 보스 몬스터를 우선하여 추적하며, 보스 몬스터가 여럿일 경우 최대 HP가 가장 높은 보스 몬스터를 우선하여 추적한다. 공격 무시 및 공격 반사 상태의 적에게도 피해를 입힌다.",
+      "skill_level": 1,
+      "skill_effect": "MP 500 소비, 푸른 불꽃 3개 생성\n불꽃은 380% 데미지로 4번 공격하며 적에게 적중 후 분열하여 자신 외에 1개의 불꽃을 추가로 생성, 처음 생성된 불꽃을 포함하여 최대 11개까지 생성될 수 있으며 최대 개수까지 생성되면 더 이상 재생성되지 않음\n여러 개의 불꽃이 하나의 적을 공격하면 2번째 불꽃부터 최종 데미지 55% 감소\n불꽃이 태운 적은 30초 동안 1초 마다 700%의 도트 데미지\n재사용 대기시간 50초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKFPBJC.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "에픽 어드벤쳐",
+      "skill_description": "[마스터 레벨 : 1]\r\n메이플 월드 곳곳을 누빈 전설의 모험가들만이 사용할 수 있는 버프로, 데미지를 증가시킨다.",
+      "skill_level": 1,
+      "skill_effect": "MP 100 소비, 60초 동안 데미지 10% 증가\n파티원 중 모험가 직업군에만 효과\n재사용 대기시간 120초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKFPBJD.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "파이어 오라",
+      "skill_description": "[마스터 레벨 : 1]\r\n주변을 불태우는 오라를 발동시킨다. 공격 무시 및 공격 반사 상태의 적에게도 피해를 입힐 수 있다.\n스킬 사용 시 효과가 활성화되고 재사용 시 비활성화되는 온오프 스킬",
+      "skill_level": 1,
+      "skill_effect": "초당 MP 100 소비, 3초 마다 최대 10명의 적을 400%의 데미지로 2번 공격\n공격 당한 적은 30초 동안 1초 마다 500%의 도트 데미지",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKFPBJE.png",
+      "skill_effect_next": null
+    }
+  ]
+}

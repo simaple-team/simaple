@@ -46,7 +46,7 @@ _STAT_NAME_TO_BASIS_NAME = {
 
 def get_hyperstat(hyperstat_response: CharacterHyperStatResponse) -> Hyperstat:
     target_preset: list[HyperStatResponseColumnResponse] = hyperstat_response[
-        f"hyper_stat_preset_{int(hyperstat_response['use_preset_no']) - 1}"  # type: ignore
+        f"hyper_stat_preset_{int(hyperstat_response['use_preset_no'])}"  # type: ignore
     ]
     hyperstat = get_kms_hyperstat()
 

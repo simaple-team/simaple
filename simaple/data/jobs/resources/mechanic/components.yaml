@@ -296,7 +296,7 @@ version: simaple.io/MultipleOptionComponent
 metadata:
   label:
     group: mechanic
-    name: "멀티플 옵션: M-FL"
+    name: "멀티플 옵션 : M-FL"
     id: 400051009-0
 patch:
   - SkillLevelPatch
@@ -304,7 +304,7 @@ patch:
   - HexaSkillImprovementPatch
 data:
   id: 400051009-0
-  name: "멀티플 옵션: M-FL"
+  name: "멀티플 옵션 : M-FL"
   cooldown_duration: 180_000
   delay: 780
 

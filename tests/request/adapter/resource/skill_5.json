@@ -1,0 +1,255 @@
+{
+  "date": "2024-09-19T00:00+09:00",
+  "character_class": "아크메이지(불,독)",
+  "character_skill_grade": "5",
+  "character_skill": [
+    {
+      "skill_name": "로프 커넥트",
+      "skill_description": "[마스터 레벨 : 25]\r\n하늘 높이 로프를 던져 빠르게 이동한다.",
+      "skill_level": 26,
+      "skill_effect": "올라가는 도중에 스킬키를 다시 누르면 캔슬가능\n재사용 대기시간 3초\n[패시브 효과 : 올스탯 26 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBMA.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "쓸만한 샤프 아이즈",
+      "skill_description": "[마스터 레벨 : 25]\r\n적의 약점을 찾아 치명상을 입힐 수 있는 능력을 자신에게 부여한다. 샤프 아이즈와 중복 사용되지 않는다.",
+      "skill_level": 6,
+      "skill_effect": "최대 HP의 5% 소비, 198초 동안 크리티컬 확률 10%, 크리티컬 데미지 8% 증가\n재사용 대기시간 180초\n[패시브 효과 : 올스탯 2 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBMC.png",
+      "skill_effect_next": "최대 HP의 5% 소비, 201초 동안 크리티컬 확률 10%, 크리티컬 데미지 8% 증가\n재사용 대기시간 180초\n[패시브 효과 : 올스탯 2 증가]"
+    },
+    {
+      "skill_name": "쓸만한 하이퍼 바디",
+      "skill_description": "[마스터 레벨 : 25]\r\n최대 HP와 최대 MP의 양이 증가한다. 하이퍼 바디와 중복 사용되지 않는다.",
+      "skill_level": 1,
+      "skill_effect": "최대 HP의 5% 소비, 183초 동안 최대 HP 40%, 최대 MP 40% 증가\n재사용 대기시간 180초\n[패시브 효과 : 올스탯 1 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBMD.png",
+      "skill_effect_next": "최대 HP의 5% 소비, 186초 동안 최대 HP 40%, 최대 MP 40% 증가\n재사용 대기시간 180초\n[패시브 효과 : 올스탯 1 증가]"
+    },
+    {
+      "skill_name": "쓸만한 컴뱃 오더스",
+      "skill_description": "[마스터 레벨 : 25]\r\n일정 시간 동안 자신의 모든 스킬 레벨을 증가시켜준다. 4차 스킬에 한해 마스터 레벨 이상으로 증가시킬 수 있으며 그 외 스킬은 마스터 레벨까지만 올려줄 수 있다.\n예외적으로 일부 특별한 스킬과 초보자 스킬, 컴뱃 오더스, 쓸만한 컴뱃 오더스, 하이퍼 스킬, 5차 스킬, 6차 스킬의 스킬 레벨은 올려줄 수 없다.\n컴뱃 오더스와 중복 사용되지 않는다.",
+      "skill_level": 9,
+      "skill_effect": "최대 HP의 5% 소비, 207초 동안 모든 스킬 레벨 1 증가\n재사용 대기시간 180초\n[패시브 효과 : 상태 이상 내성 2 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBME.png",
+      "skill_effect_next": "최대 HP의 5% 소비, 210초 동안 모든 스킬 레벨 1 증가\n재사용 대기시간 180초\n[패시브 효과 : 상태 이상 내성 2 증가]"
+    },
+    {
+      "skill_name": "쓸만한 어드밴스드 블레스",
+      "skill_description": "[마스터 레벨 : 25]\r\n공격력, 마력, 방어력, 최대 HP, 최대 MP를 증가시킨다. \n 블레스, 어드밴스드 블레스와 쓸만한 어드밴스드 블레스 중 더 높은 수치의 효과만 적용된다.",
+      "skill_level": 6,
+      "skill_effect": "공격력 20, 마력 20, 방어력 425, 최대 HP 475, 최대 MP 475 증가\n[패시브 효과 : 올스탯 2 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHOBMF.png",
+      "skill_effect_next": "공격력 20, 마력 20, 방어력 425, 최대 HP 475, 최대 MP 475 증가\n[패시브 효과 : 올스탯 2 증가]"
+    },
+    {
+      "skill_name": "쓸만한 윈드 부스터",
+      "skill_description": "[마스터 레벨 : 25]\r\n자신의 공격 속도를 1단계 추가 증가시킨다. 윈드 부스터와 쓸만한 윈드 부스터 중 더 높은 수치의 효과만 적용된다.",
+      "skill_level": 1,
+      "skill_effect": "공격 속도 1단계 증가\n[패시브 효과 : 올스탯 1 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHOBMG.png",
+      "skill_effect_next": "공격 속도 1단계 증가\n[패시브 효과 : 올스탯 1 증가]"
+    },
+    {
+      "skill_name": "블링크",
+      "skill_description": "[마스터 레벨 : 25]\r\n맵 상의 랜덤한 위치로 순간이동한다. 공중에서 키다운으로 사용하면 순간이동 대신 일정시간 부유하며 느린 속도로 이동할 수 있다.",
+      "skill_level": 30,
+      "skill_effect": "최대 HP의 3% 소비\n맵 상의 랜덤한 위치로 순간이동\n공중에서 키다운 시 최대 5.0초 동안 부유\n재사용 대기시간 20초\n[패시브 효과 : 공격력, 마력 30 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBMH.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "에르다 노바",
+      "skill_description": "[마스터 레벨 : 25]\r\n자신과 주변의 에르다를 모은 후 폭발시켜 적을 공격한다. 공격을 받은 적은 체내의 에르다가 흐트러져 행동 불가 상태가 된다. 공격 무시 및 공격 반사 상태의 적에게도 피해를 입힐 수 있다.",
+      "skill_level": 30,
+      "skill_effect": "최대 HP의 15% 소비, 최대 10명의 적을 330% 데미지로 5번 공격하고 10초 동안 행동 불가 상태\n에르다 노바로 적에게 준 데미지에 따라 행동 불가 지속시간 최대 100% 증가\n재사용 대기시간 100초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBMI.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "에르다의 의지",
+      "skill_description": "[마스터 레벨 : 25]\r\n정신을 집중하여 상태 이상으로부터 벗어난다. 사용 후 3초 동안 상태 이상 면역. 단, 일부 상태 이상 효과에는 적용되지 않는다.",
+      "skill_level": 21,
+      "skill_effect": "최대 HP의 5% 소비, 재사용 대기시간 375초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBMJ.png",
+      "skill_effect_next": "최대 HP의 5% 소비, 재사용 대기시간 370초"
+    },
+    {
+      "skill_name": "쓸만한 홀리 심볼",
+      "skill_description": "[마스터 레벨 : 25]\r\n일정 시간 동안 몬스터를 사냥할 때 더 많은 경험치와 아이템을 획득할 수 있다. 홀리 심볼과 중복 사용되지 않는다.",
+      "skill_level": 30,
+      "skill_effect": "HP 3400 소비, 270초 동안 획득 경험치 35%, 드롭률 24% 증가\n재사용 대기시간 180초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBOA.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "에르다 샤워",
+      "skill_description": "[마스터 레벨 : 25]\r\n응축되어 있는 에르다를 뿜어내어 주변 적을 공격한다.\n아래 방향키와 함께 스킬 사용 시 순수한 에르다가 고여있는 오브제인 에르다 파운틴을 소환할 수 있다.\n커스텀 커맨드를 사용하면 방향키 입력 없이 스킬 키만으로 에르다 파운틴을 소환할 수 있다.\n커스텀 커맨드 온오프 : 마우스 우클릭",
+      "skill_level": 9,
+      "skill_effect": "HP 3000 소비\n에르다 샤워\n최대 15명의 적을 585%의 데미지로 6번 공격, 공격 후 에르다를 흡수하여 공격한 적마다 에르다 샤워의 재사용 대기시간 2초 감소\n재사용 대기시간 40초\n에르다 파운틴\n60초 동안 오브제 소환, 오브제가 소환된 맵에서 적을 처치할 때마다 적에서 방출된 에르다가 오브제 주위로 응집\n12명 이상 처치 시 모인 에르다가 방출되어 최대 10명의 적을 585%의 데미지로 4번 공격\n재사용 대기시간 60초\n에르다 샤워와 에르다 파운틴은 재사용 대기시간을 공유",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBPG.png",
+      "skill_effect_next": "HP 3000 소비\n에르다 샤워\n최대 15명의 적을 600%의 데미지로 6번 공격, 공격 후 에르다를 흡수하여 공격한 적마다 에르다 샤워의 재사용 대기시간 2초 감소\n재사용 대기시간 40초\n에르다 파운틴\n60초 동안 오브제 소환, 오브제가 소환된 맵에서 적을 처치할 때마다 적에서 방출된 에르다가 오브제 주위로 응집\n12명 이상 처치 시 모인 에르다가 방출되어 최대 10명의 적을 600%의 데미지로 4번 공격\n재사용 대기시간 60초\n에르다 샤워와 에르다 파운틴은 재사용 대기시간을 공유"
+    },
+    {
+      "skill_name": "언스태이블 메모라이즈",
+      "skill_description": "[마스터 레벨 : 25]\r\n메모리 초이스로 기억해 둔 마법을 사용한다. 기억에 의존하기에 불안정하다.",
+      "skill_level": 30,
+      "skill_effect": "MP 80 소비, 기억해 둔 스킬 사용\n선택된 스킬의 MP 소비 및 재사용 대기시간을 무시하나 사용 후 언스태이블 메모라이즈의 재사용 대기시간이 각 확률에 따라 지정된 비율로 감소\n재사용 대기시간 340초\n[패시브 효과 : 지력 30 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBOB.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "메모리 초이스",
+      "skill_description": "[마스터 레벨 : 25]\r\n사용했던 마법에 대한 기억을 더듬어 다음에 사용할 마법을 기억한다. 스킬 사용 후 숫자 키를 사용해 특정한 3~4차 스킬 중 하나를 지정한다. 지정된 스킬은 언스태이블 메모라이즈 사용 시 발동된다. 배우지 않은 스킬은 지정할 수 없다.",
+      "skill_level": 30,
+      "skill_effect": "MP 130 소비, 숫자 키를 입력하여 언스태이블 메모라이즈로 발동할 스킬 지정, 5초 내에 숫자 키를 입력하지 않거나 숫자 키가 아닌 다른 키 입력 시 스킬 취소\n재사용 대기시간 4초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBKD.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "스파이더 인 미러",
+      "skill_description": "[마스터 레벨 : 25]\r\n윌의 에르다로 공간을 붕괴시켜 거울 세계와 현실을 연결한 후 거울 속의 거미를 일정 시간 현실에 구현한다. 거울 속의 거미는 공격 반사 상태의 적을 공격해도 피해를 입지 않는다.",
+      "skill_level": 30,
+      "skill_effect": "최대 HP의 15% 소비\n공간 붕괴 : 최대 15명의 적에게 990%의 데미지로 15번 공격한 후 거울 속의 거미를 소환\n거울 속의 거미 : 50초 동안 지속되며 일정 시간마다 공격 상태에 돌입, 공격 상태 동안 385%의 데미지로 8번 공격하는 거미 다리를 10회 사용, 거미 다리가 한명의 적을 5번 연속 공격할 경우 공격 상태 즉시 종료, 공격 상태 종료 후 재돌입 대기시간 3초\n재사용 대기시간 : 250초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBPJ.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "메이플월드 여신의 축복",
+      "skill_description": "[마스터 레벨 : 25]\r\n메이플월드 여신의 축복이 깃들어 모든 스탯과 데미지가 증가한다. 메이플 용사를 습득한 상태에서만 사용 가능하다. 재사용 대기시간 감소 효과를 받는다.",
+      "skill_level": 30,
+      "skill_effect": "MP 500 소비, 60초 동안 메이플 용사로 증가된 모든 능력치의 400% 추가 증가, 데미지 20% 증가\n재사용 대기시간 120초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBIC.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "크레스트 오브 더 솔라",
+      "skill_description": "[마스터 레벨 : 25]\r\n미트라의 힘으로 태양의 열기를 방출한 후 불꽃의 분노를 현실에 구현한다. 불꽃의 문양은 공격 반사 상태의 적을 공격해도 피해를 입지 않는다.",
+      "skill_level": 30,
+      "skill_effect": "최대 HP의 15% 소비\n미트라의 불꽃 : 최대 15명의 적에게 1650%의 데미지로 12번 공격한 후 불꽃의 문양을 소환\n불꽃의 문양 : 51초 동안 유지되며 2.1초 마다 최대 2명의 적을 440%로 6번 공격, 1명을 공격할 경우 605%로 공격\n재사용 대기시간 : 250초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHPBJJ.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "이그나이트 강화",
+      "skill_description": "[마스터 레벨 : 50]\r\n이그나이트를 강화한다.\n\n20레벨 : 크리티컬 확률 5% 증가\n40레벨 : 몬스터 방어율 무시 20% 증가",
+      "skill_level": 60,
+      "skill_effect": "이그나이트의 최종 데미지 240% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHKBIC.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "텔레포트 마스터리/포이즌 리젼 강화",
+      "skill_description": "[마스터 레벨 : 50]\r\n텔레포트 마스터리/포이즌 리젼을 강화한다.\n\n20레벨 : 최대 공격 가능 대상 1 증가\n40레벨 : 몬스터 방어율 무시 20% 증가",
+      "skill_level": 60,
+      "skill_effect": "텔레포트 마스터리/포이즌 리젼의 최종 데미지 180% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHKBIF.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "플레임 헤이즈 강화",
+      "skill_description": "[마스터 레벨 : 50]\r\n플레임 헤이즈를 강화한다.\n\n20레벨 : 크리티컬 확률 5% 증가\n40레벨 : 몬스터 방어율 무시 20% 증가",
+      "skill_level": 60,
+      "skill_effect": "도트 데미지를 제외한 플레임 헤이즈의 최종 데미지 120% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHKBIG.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "미스트 이럽션 강화",
+      "skill_description": "[마스터 레벨 : 50]\r\n미스트 이럽션을 강화한다.\n\n20레벨 : 최대 공격 가능 대상 1 증가\n40레벨 : 몬스터 방어율 무시 20% 증가",
+      "skill_level": 60,
+      "skill_effect": "미스트 이럽션의 최종 데미지 120% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHKBIH.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "이프리트 강화",
+      "skill_description": "[마스터 레벨 : 50]\r\n이프리트를 강화한다.\n\n20레벨 : 크리티컬 확률 5% 증가\n40레벨 : 몬스터 방어율 무시 20% 증가",
+      "skill_level": 60,
+      "skill_effect": "이프리트의 최종 데미지 120% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHKBII.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "플레임 스윕 강화",
+      "skill_description": "[마스터 레벨 : 50]\r\n플레임 스윕를 강화한다.\n\n20레벨 : 최대 공격 가능 대상 1 증가\n40레벨 : 몬스터 방어율 무시 20% 증가",
+      "skill_level": 60,
+      "skill_effect": "플레임 스윕의 최종 데미지 120% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHKBIJ.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "메테오 강화",
+      "skill_description": "[마스터 레벨 : 50]\r\n메테오를 강화한다.\n\n20레벨 : 크리티컬 확률 5% 증가\n40레벨 : 몬스터 방어율 무시 20% 증가",
+      "skill_level": 60,
+      "skill_effect": "메테오의 최종 데미지 120% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHKBJA.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "파이어 오라 강화",
+      "skill_description": "[마스터 레벨 : 50]\r\n파이어 오라를 강화한다.\n\n20레벨 : 크리티컬 확률 5% 증가\n40레벨 : 몬스터 방어율 무시 20% 증가",
+      "skill_level": 60,
+      "skill_effect": "파이어 오라의 최종 데미지 120% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHKBJB.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "메기도 플레임 강화",
+      "skill_description": "[마스터 레벨 : 50]\r\n메기도 플레임을 강화한다.\n\n20레벨 : 크리티컬 확률 5% 증가\n40레벨 : 몬스터 방어율 무시 20% 증가",
+      "skill_level": 60,
+      "skill_effect": "메기도 플레임의 최종 데미지 120% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLHKAEA.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "오버로드 마나",
+      "skill_description": "[마스터 레벨 : 25]\r\n몸 속을 흐르는 마나를 과부하시켜 공격의 위력을 증가시킨다.\n발동 이펙트 잠금 : 마우스 우클릭",
+      "skill_level": 30,
+      "skill_effect": "일부 스킬을 제외한 자신의 공격 스킬 사용 시 최대 MP의 2%를 추가로 사용하여 최종 데미지 8% 증가\nMP가 없는 직업의 경우 최대 HP의 0.3% 사용\n스킬 사용 시 효과가 활성화되고 재사용 시 비활성화되는 온오프 스킬\n재사용 대기시간 30초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLFPBMA.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "에테리얼 폼",
+      "skill_description": "[마스터 레벨 : 25]\r\n잠시 다른 차원으로 이동하여 피해를 줄인다. 에테리얼 폼 상태에서 스킬을 다시 사용하면 원래 차원으로 돌아올 수 있다. 에테리얼 폼 상태에서는 다른 스킬을 사용할 수 없다.",
+      "skill_level": 17,
+      "skill_effect": "HP 1000 소비, 3초 동안 적의 공격을 받았다면 적의 어떠한 공격에도 밀려나지 않고 해당 공격의 피해 대신 MP 8470 소비, MP가 없는 직업군의 경우 HP 1990 소비\n재사용 대기시간 60초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLFPBKA.png",
+      "skill_effect_next": "HP 1000 소비, 3초 동안 적의 공격을 받았다면 적의 어떠한 공격에도 밀려나지 않고 해당 공격의 피해 대신 MP 8380 소비, MP가 없는 직업군의 경우 HP 1960 소비\n재사용 대기시간 60초"
+    },
+    {
+      "skill_name": "도트 퍼니셔",
+      "skill_description": "[마스터 레벨 : 25]\r\n차원의 저편에서 적을 추적하는 화염구를 소환한다. 화염구는 최대 HP가 가장 높은 보스 몬스터를 우선 추적한다. 소환되는 화염구의 수는 도트 데미지 중첩에 비례해 증가하고 공격 반사 상태의 적을 공격해도 피해를 입지 않는다.",
+      "skill_level": 30,
+      "skill_effect": "MP 500 소비, 20초 동안 적을 찾아 850% 데미지로 5번 공격하는 화염구 15개 생성\n일정 범위 내에 적이 입고 있는 지속 피해 중첩 1당 1개 추가 소환, 화염구는 최대 25개까지 소환 가능\n여러 개의 화염구가 하나의 몬스터를 공격하면 2번째 화염구부터 최종 데미지 45% 감소\n화염구에 공격당한 적은 8초 동안 1초 당 290%의 지속 피해\n재사용 대기시간 : 25초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLFPBMB.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "포이즌 노바",
+      "skill_description": "[마스터 레벨 : 25]\r\n독구름을 전방위로 날려 주변 적들을 공격한다. 독구름을 폭파시켜 추가 공격을 할 수 있으며 공격 반사 상태의 적을 공격해도 피해를 입지 않는다.",
+      "skill_level": 30,
+      "skill_effect": "MP 500 소비, 독구름 수개 생성, 독구름은 닿은 적에게 550%의 데미지로 12번 공격 후 10초 동안 1초 간격으로 660%의 지속 데미지를 줌\n하나의 독구름에게 피해를 받은 적은 다른 독구름에 닿더라도 피해를 받지 않음\n독구름이 생성된 후 2초가 지나면 미스트 이럽션을 사용하여 독구름을 폭발시킬 수 있고 폭파 시 최대 12명의 적에게 495%의 데미지로 12번 공격, 폭파 데미지는 여러 개의 독구름이 중첩되어 적용될 수 있으나 하나의 적에게 3개를 초과하여 적용될 경우 초과한 폭파의 최종 데미지 50% 감소\n재사용 대기시간 25초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLFPBOI.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "퓨리 오브 이프리트",
+      "skill_description": "[마스터 레벨 : 25]\r\n이프리트의 분노를 표출 시켜 진정한 모습을 해방시킨다. 이프리트가 소환 된 상태에서만 사용할 수 있고 공격 반사 상태의 적을 공격해도 피해를 입지 않는다.\n필요 스킬 : 이프리트 30레벨 이상",
+      "skill_level": 30,
+      "skill_effect": "MP 1000 소비, 3초 동안 최대 12명의 적을 440%의 데미지로 6번 지속 공격\n적용 중인 퍼번트 드레인 1개 당 지속시간 0.6초 증가\n재사용 대기시간 75초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLFPBKG.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "포이즌 체인",
+      "skill_description": "[마스터 레벨 : 25]\r\n적을 연쇄적으로 전염시키는 치명적인 독을 발산한다. 중독된 적은 일정 시간마다 폭발하여 피해를 받고 주변 적에게 독을 전염시킨다.\n폭발에서 살아남더라도 독이 축적되어 점차 폭발의 위력이 강해진다. 폭발 발생 전에 적이 죽거나 사라졌다면 즉시 주변의 적에게 전염되고 전염시킬 적이 없다면 일정 시간 동안 결정으로 남아 주변의 적을 전염시키고 사라진다. 최대 폭발할 수 있는 제한을 초과하면 중독되었던 모든 적에게 걸린 독이 제거된다.\n포이즌 체인은 엘리멘탈 드레인을 활성화시키지 않고 전염된 독은 공격 반사 상태의 적을 공격해도 피해를 입지 않는다.",
+      "skill_level": 30,
+      "skill_effect": "MP 1000 소비, 2명의 적을 550%의 데미지로 4번 공격한 후 최대 20초간 지속되는 독에 중독시킴, 중독된 적에게서 일정 시간마다 330%의 데미지로 5번 공격하는 폭발 발생 후 주변의 중독되지 않은 적 3명에게 전염\n주변에 전염시킬 적이 없다면 5초 동안 지속되는 독 결정 생성\n독 결정은 주변의 적 1명을 전염시킨 후 소멸되나 지속시간이 다 되면 전염시키지 않아도 자연 소멸, 맵 내에 최대 3개 생성 가능\n독은 최대 5번까지 축적 가능, 축적된 독에 비례해 폭발의 데미지 60%p씩 증가\n1명의 적에게 최대 9번, 모든 적을 합하여 최대 17번까지 폭발 발동 가능\n폭발 발동 가능 횟수 소모로 인해 종료되었다면 모든 독이 제거되며 폭발 1회 추가 발생\n재사용 대기시간 25초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KBPCLFPAMB.png",
+      "skill_effect_next": null
+    }
+  ]
+}

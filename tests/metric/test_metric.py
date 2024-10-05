@@ -12,6 +12,7 @@ def test_metric():
         combat_orders_level=1,
         passive_skill_level=0,
         character_level=260,
+        skill_levels={},
     ).stat
 
     metric = RegressionMetric(

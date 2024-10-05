@@ -55,6 +55,8 @@ def _line_to_stat(line: str) -> Stat:
             return Stat(attack_power=option_value, magic_attack=option_value)
         case ("최대 HP/최대 MP", False):
             return Stat(MHP=option_value, MMP=option_value)
+        case ("크리티컬 데미지", True):
+            return Stat(critical_damage=option_value)
         case _:
             return Stat()
 

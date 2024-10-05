@@ -1,0 +1,40 @@
+{
+  "date": "2024-09-19T00:00+09:00",
+  "character_class": "비숍",
+  "character_hexa_stat_core": [
+    {
+      "slot_id": "0",
+      "main_stat_name": "크리티컬 데미지 증가",
+      "sub_stat_name_1": "마력 증가",
+      "sub_stat_name_2": "주력 스탯 증가",
+      "main_stat_level": 4,
+      "sub_stat_level_1": 6,
+      "sub_stat_level_2": 10,
+      "stat_grade": 20
+    }
+  ],
+  "character_hexa_stat_core_2": [],
+  "preset_hexa_stat_core": [
+    {
+      "slot_id": "0",
+      "main_stat_name": "크리티컬 데미지 증가",
+      "sub_stat_name_1": "마력 증가",
+      "sub_stat_name_2": "주력 스탯 증가",
+      "main_stat_level": 4,
+      "sub_stat_level_1": 6,
+      "sub_stat_level_2": 10,
+      "stat_grade": 20
+    },
+    {
+      "slot_id": "1",
+      "main_stat_name": "크리티컬 데미지 증가",
+      "sub_stat_name_1": "마력 증가",
+      "sub_stat_name_2": "주력 스탯 증가",
+      "main_stat_level": 4,
+      "sub_stat_level_1": 6,
+      "sub_stat_level_2": 10,
+      "stat_grade": 20
+    }
+  ],
+  "preset_hexa_stat_core_2": []
+}
