@@ -1,8 +1,8 @@
 import os
 import tempfile
 
-import tests.wasm.exporter.sample_module as some_test_module
-from simaple.wasm.exporter.generate import (
+import tests.api.exporter.sample_module as some_test_module
+from simaple.api.exporter.generate import (
     export_json_schemas,
     get_every_methods_in_module,
     get_pydantic_annotations,

@@ -1,5 +1,5 @@
+from simaple.api.examples import get_example_plan
 from simaple.core import JobType
-from simaple.wasm.examples import get_example_plan
 
 
 def test_get_example_plans():

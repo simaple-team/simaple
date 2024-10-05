@@ -5,7 +5,7 @@ import fire
 import simaple.simulate.component.common  # noqa: F401
 from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.plan_metadata import PlanMetadata
-from simaple.container.simulation import SimulationContainer
+from simaple.container.simulation import get_damage_calculator, get_operation_engine
 from simaple.simulate.base import PlayLog
 from simaple.simulate.policy.parser import parse_simaple_runtime
 from simaple.simulate.report.base import SimulationEntry
@@ -62,10 +62,9 @@ def run(plan_file: str):
     environment = _simulation_environment_memoizer.compute_environment(
         plan_metadata.get_environment_provider_config()  # type: ignore
     )
-    simulation_container = SimulationContainer(environment)
 
-    engine = simulation_container.operation_engine()
-    damage_calculator = simulation_container.damage_calculator()
+    engine = get_operation_engine(environment)
+    damage_calculator = get_damage_calculator(environment)
     damage_share = DamageShareFeature(damage_calculator)
 
     for command in commands:
@@ -95,7 +94,7 @@ def run(plan_file: str):
     )
 
     print(
-        f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {simulation_container.environment.jobtype}"
+        f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {environment.jobtype}"
     )
 
 

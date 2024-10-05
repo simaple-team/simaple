@@ -3,27 +3,26 @@ import json
 import pydantic
 import yaml
 
-from simaple.container.environment_provider import BaselineEnvironmentProvider
-from simaple.container.plan_metadata import PlanMetadata
-from simaple.container.simulation import get_damage_calculator, get_operation_engine
-from simaple.simulate.engine import OperationEngine
-from simaple.simulate.policy.parser import parse_simaple_runtime
-from simaple.simulate.report.base import DamageLog
-from simaple.simulate.report.dpm import DamageCalculator
-from simaple.simulate.report.feature import MaximumDealingIntervalFeature
-from simaple.wasm.base import (
-    pyodide_reveal_base_model,
-    pyodide_reveal_base_model_list,
-    return_js_object_from_pydantic_list,
-    return_js_object_from_pydantic_object,
-)
-from simaple.wasm.examples import get_example_plan
-from simaple.wasm.models.simulation import (
+from simaple.api.examples import get_example_plan
+from simaple.api.models.simulation import (
     DamageRecord,
     OperationLogResponse,
     PlayLogResponse,
     _Report,
 )
+from simaple.container.environment_provider import BaselineEnvironmentProvider
+from simaple.container.plan_metadata import PlanMetadata
+from simaple.container.simulation import (
+    get_damage_calculator,
+    get_operation_engine,
+    get_skill_components,
+)
+from simaple.simulate.component.base import Component
+from simaple.simulate.engine import OperationEngine
+from simaple.simulate.policy.parser import parse_simaple_runtime
+from simaple.simulate.report.base import DamageLog
+from simaple.simulate.report.dpm import DamageCalculator
+from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 
 
 def _extract_engine_history_as_response(
@@ -88,8 +87,7 @@ def _extract_engine_history_as_response(
     return responses
 
 
-@return_js_object_from_pydantic_list
-def runPlan(
+def run_plan(
     plan: str,
 ) -> list[OperationLogResponse]:
     """
@@ -112,7 +110,7 @@ def runPlan(
     )
 
 
-def hasEnvironment(plan: str) -> bool:
+def has_environment(plan: str) -> bool:
     """plan이 environment 필드를 가지고 있는지 확인합니다."""
     plan_metadata_dict, _ = parse_simaple_runtime(plan.strip())
     plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
@@ -120,7 +118,7 @@ def hasEnvironment(plan: str) -> bool:
     return plan_metadata.environment is not None and plan_metadata.environment != {}
 
 
-def provideEnvironmentAugmentedPlan(plan: str) -> str:
+def provide_environment_augmented_plan(plan: str) -> str:
     """plan을 받아서 environment 필드를 새로 쓴 plan을 반환합니다."""
     metadata_dict, _ = parse_simaple_runtime(plan.strip())
     metadata = PlanMetadata.model_validate(metadata_dict)
@@ -151,8 +149,7 @@ class MaximumDealingIntervalResult(pydantic.BaseModel):
     end: int
 
 
-@return_js_object_from_pydantic_object
-def computeMaximumDealingInterval(
+def compute_maximum_dealing_interval(
     plan: str,
     interval: int,
 ) -> MaximumDealingIntervalResult:
@@ -179,15 +176,12 @@ def computeMaximumDealingInterval(
     return MaximumDealingIntervalResult(damage=damage, start=_start, end=_end)
 
 
-def getInitialPlanFromBaseline(
+def get_initial_plan_from_baseline(
     environment_provider: BaselineEnvironmentProvider,
 ) -> str:
     """
     baseline environment provider를 받아서 example plan을 생성합니다.
     """
-    environment_provider = pyodide_reveal_base_model(
-        environment_provider, BaselineEnvironmentProvider
-    )
     base_plan = get_example_plan(environment_provider.jobtype)
     metadata_dict, _ = parse_simaple_runtime(base_plan.strip())
 
@@ -208,13 +202,9 @@ def getInitialPlanFromBaseline(
     return f"---\n{augmented_metadata}\n---\n{original_operations}"
 
 
-@return_js_object_from_pydantic_list
-def runPlanWithHint(
+def run_plan_with_hint(
     previous_plan: str, previous_history: list[OperationLogResponse], plan: str
 ) -> list[OperationLogResponse]:
-    previous_history = pyodide_reveal_base_model_list(
-        previous_history, OperationLogResponse
-    )
     previous_plan_metadata_dict, previous_commands = parse_simaple_runtime(
         previous_plan.strip()
     )
@@ -272,3 +262,18 @@ def runPlanWithHint(
     )
 
     return previous_history[: cache_count + 1] + new_operation_logs
+
+
+def get_all_component(
+    plan: str,
+) -> list[Component]:
+    plan_metadata_dict, _ = parse_simaple_runtime(plan.strip())
+
+    plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
+    if plan_metadata.environment is None or plan_metadata.environment == {}:
+        raise ValueError("Environment field is not provided")
+
+    environment = plan_metadata.get_environment()
+    skills = get_skill_components(environment)
+
+    return skills

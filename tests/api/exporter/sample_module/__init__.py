@@ -1,4 +1,4 @@
-from tests.wasm.exporter.sample_module._sample_method import (
+from tests.api.exporter.sample_module._sample_method import (
     func_str_and_dict_to_pydantic,
     func_str_to_none,
     func_str_to_pydantic,

@@ -75,7 +75,9 @@ function useWorkspaceState() {
       .andThen((hasEnv) => {
         return match(hasEnv)
           .with(true, () => ok(plan))
-          .with(false, () => pySimaple.provideEnvironmentAugmentedPlan(plan))
+          .with(false, () =>
+            pySimaple.provideEnvironmentAugmentedPlan(plan).andTee(setPlan),
+          )
           .exhaustive();
       })
       .andThen((augmentedPlan) =>
@@ -90,15 +92,7 @@ function useWorkspaceState() {
           )
           .andTee(() => setSubmittedPlan(augmentedPlan)),
       )
-      .match(
-        (result) => {
-          console.log(result);
-          setOperationLogs(result);
-        },
-        (err) => {
-          setErrorMessage(err);
-        },
-      );
+      .match(setOperationLogs, setErrorMessage);
   }, [plan]);
 
   const clearErrorMessage = React.useCallback(() => {
