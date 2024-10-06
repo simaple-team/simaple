@@ -137,7 +137,7 @@ def test_windbreaker_actor():
     dpm = run_actor(environment_provider, JobType.windbreaker)
 
     # then
-    assert int(dpm) == snapshot(11178296867273)
+    assert int(dpm) == snapshot(12760203808785)
 
 
 def test_soulmaster_actor():

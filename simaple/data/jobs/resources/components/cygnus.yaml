@@ -1,3 +1,21 @@
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: cygnus
+    name: 글로리 오브 가디언즈
+    id: 13121053-0
+data:
+  id: 13121053-0
+  name: 글로리 오브 가디언즈
+  cooldown_duration: 120_000
+  delay: 0
+  apply_buff_duration: false
+  lasting_duration: 60_000
+  stat:
+    damage_multiplier: 10
+---
 kind: Component
 version: simaple.io/HitLimitedPeriodicDamageComponent
 metadata:
@@ -33,7 +51,7 @@ patch:
 data:
   id: 400001044-0
   name: 초월자 시그너스의 축복
-  cooldown_duration: 240_000
+  cooldown_duration: 120_000
   delay: 480
   lasting_duration: 45_000
   apply_buff_duration: False
@@ -42,4 +60,3 @@ data:
   increase_interval: 5_000
   default_damage: "{{ skill_level }}"
   maximum_damage: 120
-  maximum_stack: 2

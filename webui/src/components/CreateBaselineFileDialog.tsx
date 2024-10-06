@@ -109,6 +109,7 @@ const CreateBaselineFileDialog: React.FC<{
                   <SelectItem value="adele">아델</SelectItem>
                   <SelectItem value="dualblade">듀블</SelectItem>
                   <SelectItem value="soulmaster">소마</SelectItem>
+                  <SelectItem value="windbreaker">윈브</SelectItem>
                 </SelectContent>
               </Select>
             )}

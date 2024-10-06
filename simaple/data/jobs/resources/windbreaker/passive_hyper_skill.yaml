@@ -48,7 +48,7 @@ kind: PassiveHyperskill
 version: simaple.io/StatIncreasePassiveHyperskill
 metadata:
   label:
-    group: windbreaker_unused  # unused
+    group: windbreaker_unused # unused
 data:
   name: 천공의 노래-이그노어 가드
   target: 천공의 노래

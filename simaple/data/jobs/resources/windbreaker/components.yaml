@@ -119,19 +119,19 @@ data:
   name: 천공의 노래
   maximum_keydown_time: 999_999_999
 
-  damage: "{{ 300 + 3 * skill_level }}"
+  damage: "{{ 320 + 5 * skill_level }}"
   hit: 1
   delay: 120
   cooldown_duration: 0
 
-  keydown_prepare_delay: 300
+  keydown_prepare_delay: 210
   keydown_end_delay: 0
 
   finish_damage: 0
   finish_hit: 0
 
   combat_orders_enabled: true
-  default_skill_level: 15
+  default_skill_level: 30
   v_improvement: 2
 ---
 kind: Component
@@ -158,8 +158,8 @@ data:
   id: 13121054-0
   name: 스톰 브링어
   trigger_cooldown_duration: 0
-  trigger_damage: "{{ 305 + 5 * skill_level }}"
-  trigger_hit: 0.3
+  trigger_damage: "{{ 320 + 20 * skill_level }}"
+  trigger_hit: 0.45
 
   cooldown_duration: 0
   delay: 0
@@ -236,27 +236,8 @@ data:
   lasting_duration: 30_000
 
   apply_buff_duration: false
-  combat_orders_enabled: true
-  default_skill_level: 30
+  default_skill_level: 1
   v_improvement: 2
----
-kind: Component
-version: simaple.io/BuffSkillComponent
-metadata:
-  label:
-    group: windbreaker
-    name: 글로리 오브 가디언즈
-    id: 13121053-0
-data:
-  id: 13121053-0
-  name: 글로리 오브 가디언즈
-  cooldown_duration: 120_000
-  delay: 0
-  red: false
-  apply_buff_duration: true
-  lasting_duration: 60_000
-  stat:
-    damage_multiplier: 10
 ---
 kind: Component
 version: simaple.io/HowlingGaleComponent
@@ -302,10 +283,10 @@ patch:
 data:
   id: 400031022-0
   name: 아이들 윔
-  damage: "{{ (550 + 22 * skill_level) * (1 + 0.85 * 9) / 10 }}"
-  hit: 30
+  damage: "{{ (415 + 17 * skill_level) * (1 + 0.85 * 9) / 10 }}"
+  hit: "{{ 5 * 10 }}"
   cooldown_duration: 10_000
-  delay: 450
+  delay: "{{ apply_attack_speed(600) }}"
 
   dot_damage: "{{ 500 + 20 * skill_level }}"
   dot_lasting_duration: 9
@@ -359,7 +340,7 @@ data:
   delay: 420 # approximate
 
   periodic_interval: 180
-  periodic_damage: "{{ 400 + 16 * skill_level }}"
+  periodic_damage: "{{ 450 + 17 * skill_level }}"
   periodic_hit: 6
   lasting_duration: 11_250
 
@@ -405,12 +386,12 @@ data:
   representative_name: 천공의 노래
   maximum_keydown_time: 999_999_999
 
-  damage: "{{ 540 + 14 * skill_level }}"
+  damage: "{{ 555 + 20 * skill_level }}"
   hit: 1
   delay: 120
   cooldown_duration: 0
 
-  keydown_prepare_delay: 300
+  keydown_prepare_delay: 210
   keydown_end_delay: 0
 
   finish_damage: 0
@@ -464,7 +445,7 @@ patch:
   - ArithmeticPatch
 data:
   id: 13141500-0
-  name: 미스트랄 스프링
+  name: 미스트랄 스프링 # TODO: 데미지 스킬과 소환 스킬 3개로 분리
 
   damage_and_hits:
     - damage: "{{ 830 + skill_level * 28 }}"
