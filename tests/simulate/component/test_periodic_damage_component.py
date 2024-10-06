@@ -73,7 +73,7 @@ def test_periodic_damage_component_emit_after(
 
     # then
     dealing_count = sum([e["tag"] == Tag.DAMAGE for e in events])
-    assert dealing_count == 8 - 1
+    assert dealing_count == 8
 
 
 def test_periodic_damage_component_partial_emit(

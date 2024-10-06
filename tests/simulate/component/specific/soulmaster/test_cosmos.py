@@ -38,7 +38,7 @@ def fixture_cosmos_state(
 @pytest.mark.parametrize(
     "orb_count, count_expected",
     [
-        (1, 25),
+        (1, 24),
         (5, 31),
         (10, 45),
     ],

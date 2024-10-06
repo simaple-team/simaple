@@ -97,7 +97,9 @@ class Periodic(Entity):
     time_left: float = 0.0
     count: int = 0
 
-    def set_time_left(self, time: float, initial_counter: Optional[float] = None) -> int:
+    def set_time_left(
+        self, time: float, initial_counter: Optional[float] = None
+    ) -> int:
         if time <= 0:
             self.time_left = 0
             return 0
@@ -110,7 +112,7 @@ class Periodic(Entity):
         if self.interval_counter == 0:
             self.interval_counter += self.interval  # interval count = 0 is not allowed.
             count = 1
-        
+
         self.count = count
 
         return count
@@ -126,12 +128,12 @@ class Periodic(Entity):
         Wrapper for resolving method.
         """
         count = 0
-        for _ in self.resolving(time):
+        for _ in self._resolving(time):
             count += 1
 
         return count
 
-    def resolving(self, time: float):
+    def _resolving(self, time: float):
         if self.time_left <= 0:
             return 0
 
@@ -151,9 +153,9 @@ class Periodic(Entity):
 
             if self.interval_counter <= 0:
                 self.interval_counter += self.interval
+                self.count += 1
                 yield 1
                 continue
-
 
     def disable(self):
         self.time_left = 0

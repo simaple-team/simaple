@@ -118,7 +118,7 @@ class JupyterThunder(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
         state.cooldown.elapse(time)
         dealing_events = []
 
-        for _ in state.periodic.resolving(time):
+        for _ in state.periodic._resolving(time):
             if state.periodic.count >= self.max_count:
                 break
 
@@ -241,12 +241,12 @@ class CurrentField(Entity):
         return False
 
     def create_new_current(self):
-        self.field_periodics.append(
-            Periodic(
-                interval=self.field_interval,
-                time_left=self.field_duration,
-            )
+        periodic = Periodic(
+            interval=self.field_interval,
         )
+        periodic.set_time_left(self.field_duration)
+
+        self.field_periodics.append(periodic)
         self.field_periodics = self.field_periodics[-self.max_count :]
 
     def elapse(self, time: float) -> int:
@@ -255,8 +255,7 @@ class CurrentField(Entity):
 
         # current fields.
         for periodic in self.field_periodics:
-            for _ in periodic.resolving(time):
-                tick_count += 1
+            tick_count += periodic.elapse(time)
 
             if periodic.enabled():
                 new_perdiodics.append(periodic)
@@ -401,8 +400,8 @@ class ThunderBreak(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait
         state.cooldown.elapse(time)
         dealing_events = []
 
-        for _ in state.periodic.resolving(time):
-            if state.periodic.count >= self.max_count:
+        for _ in state.periodic._resolving(time):
+            if state.periodic.count > self.max_count:
                 break
 
             frost_stack, modifier = use_frost_stack(state.frost_stack)

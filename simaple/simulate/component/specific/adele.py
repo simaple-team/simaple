@@ -68,7 +68,9 @@ class AdeleEtherComponent(Component):
                 order_consume=self.order_consume,
             ),
             "periodic": Periodic(
-                interval=self.periodic_interval, time_left=999_999_999
+                interval=self.periodic_interval,
+                time_left=999_999_999,
+                interval_counter=self.periodic_interval,
             ),
         }
 
@@ -511,11 +513,15 @@ class AdeleRuinComponent(
         state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        state.interval_state_first.set_time_left(time=self.lasting_duration_first)
-        state.interval_state_second.set_time_left(
+        first_emitting_count = state.interval_state_first.set_time_left(
+            time=self.lasting_duration_first,
+            initial_counter=self.periodic_interval_first,
+        )
+        second_emitting_count = state.interval_state_second.set_time_left(
             time=self.lasting_duration_first + self.lasting_duration_second,
             initial_counter=self.lasting_duration_first,
         )
+        assert first_emitting_count == second_emitting_count == 0
 
         return state, [
             self.event_provider.delayed(delay),
