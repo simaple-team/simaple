@@ -45,7 +45,7 @@ class HitLimitedPeriodicDamageComponent(
         state.cooldown.elapse(time)
         dealing_events = []
 
-        for _ in state.periodic._resolving(time):
+        for _ in state.periodic.resolving(time):
             if state.periodic.count >= self.max_count:
                 break
 

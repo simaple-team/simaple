@@ -128,12 +128,12 @@ class Periodic(Entity):
         Wrapper for resolving method.
         """
         count = 0
-        for _ in self._resolving(time):
+        for _ in self.resolving(time):
             count += 1
 
         return count
 
-    def _resolving(self, time: float):
+    def resolving(self, time: float):
         if self.time_left <= 0:
             return 0
 

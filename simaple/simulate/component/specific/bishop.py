@@ -131,7 +131,7 @@ class DivineMinion(
         state.cooldown.elapse(time)
         dealing_events = []
 
-        for _ in state.periodic._resolving(time):
+        for _ in state.periodic.resolving(time):
             state.divine_mark.mark(self.mark_advantage)
             dealing_events.append(
                 self.event_provider.dealt(

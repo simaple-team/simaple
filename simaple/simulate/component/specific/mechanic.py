@@ -417,7 +417,7 @@ class MultipleOptionComponent(SkillComponent, CooldownValidityTrait):
         state.cooldown.elapse(time)
         dealing_events = []
 
-        for _ in state.periodic._resolving(time):
+        for _ in state.periodic.resolving(time):
             dealing_events.append(self.get_damage_event(state))
             state.cycle.step()
 

@@ -17,7 +17,7 @@ def test_periodic_iterator(time, interval, expected_count):
     count = periodic.set_time_left(1200, initial_counter=0)
 
     # when
-    for _ in periodic._resolving(time):
+    for _ in periodic.resolving(time):
         count += 1
 
     # then
@@ -50,7 +50,7 @@ def test_periodic_iterator_partial():
 
     times = []
     for time in range(50, 1050, 50):  # 50, ..., 1000
-        for _ in periodic._resolving(50):
+        for _ in periodic.resolving(50):
             count += 1
             times.append(time)
 
@@ -78,7 +78,7 @@ def test_periodic_initial_counter(time_left, initial_counter, time, expected):
     periodic = Periodic(interval=100)
     count = periodic.set_time_left(time_left, initial_counter)
 
-    for _ in periodic._resolving(time):
+    for _ in periodic.resolving(time):
         count += 1
 
     assert count == expected
