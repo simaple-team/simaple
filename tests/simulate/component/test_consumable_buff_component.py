@@ -93,6 +93,7 @@ def test_use_consumable_buff_component_long_elapse(
     state, _ = consumable_buff_component.use(None, consumable_buff_state)
     state, _ = consumable_buff_component.use(None, state)
     state, _ = consumable_buff_component.elapse(60_000, state)
+    print(state)
     state, _ = consumable_buff_component.use(None, state)
     state, events = consumable_buff_component.use(None, state)
 

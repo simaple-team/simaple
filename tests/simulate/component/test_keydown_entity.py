@@ -13,13 +13,10 @@ from simaple.simulate.component.common.keydown_skill import Keydown
 )
 def test_keydown_simple_count(time, expected):
     # given
-    keydown = Keydown(interval=100)
-    keydown.start(maximum_keydown_time=1200, prepare_delay=0)
+    keydown = Keydown(interval=100).start(maximum_keydown_time=1200, prepare_delay=0)
 
     # when
-    count = 0
-    for _ in keydown.resolving(time):
-        count += 1
+    keydown, count = keydown.elapse(time)
 
     # then
     assert count == expected
@@ -47,13 +44,12 @@ def test_keydown_complex_count(
     expected: tuple[float],
 ):
     # given
-    keydown = Keydown(interval=interval)
-    keydown.start(
+    keydown = Keydown(interval=interval).start(
         maximum_keydown_time=maximum_keydown_time, prepare_delay=prepare_delay
     )
 
     # when
-    resolved_count = len(list(keydown.resolving(elapse_time)))
+    keydown, resolved_count = keydown.elapse(elapse_time)
 
     # then
     assert resolved_count == expected
@@ -76,15 +72,15 @@ def test_keydown_multiple_elapse(
     expected: tuple[float],
 ):
     # given
-    keydown = Keydown(interval=interval)
-    keydown.start(
+    keydown = Keydown(interval=interval).start(
         maximum_keydown_time=maximum_keydown_time, prepare_delay=prepare_delay
     )
 
     # when
     resolved_count = 0
     for elapse_time in schedule:
-        resolved_count += len(list(keydown.resolving(elapse_time)))
+        keydown, count = keydown.elapse(elapse_time)
+        resolved_count += count
 
     # then
     assert resolved_count == expected

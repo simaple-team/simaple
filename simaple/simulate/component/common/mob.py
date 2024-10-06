@@ -12,39 +12,40 @@ class DOT(Entity):
     period_time_left: float = 1_000.0
     period: float = 1_000.0
 
-    def new(self, name: str, damage: float, lasting_time: float) -> None:
-        self.current[name] = (damage, lasting_time)
+    def new(self, name: str, damage: float, lasting_time: float):
+        current = self.current.copy()
+        current[name] = (damage, lasting_time)
+        return self.model_copy(
+            update={
+                "current": current,
+            }
+        )
 
-    def elapse(self, time: float) -> dict[tuple[str, float], int]:
+    def elapse(self, time: float):
         emits: dict[tuple[str, float], int] = {}  # (name, damage): count
+        period_time_left = self.period_time_left - time
+        current = self.current
 
-        elapse_time_left = time
-        while elapse_time_left > 0:
-            elapse_time_left, events = self.step(elapse_time_left)
-            for k in events:
-                emits[k] = emits.get(k, 0) + 1
+        while period_time_left <= 0:
+            period_time_left += self.period
+            for name, (damage, _) in current.items():
+                emits[(name, damage)] = emits.get((name, damage), 0) + 1
 
-        return emits
+            current = {
+                name: (damage, lasting_time - self.period)
+                for name, (damage, lasting_time) in current.items()
+                if lasting_time - self.period > 0
+            }
 
-    def step(self, time: float) -> tuple[float, list[tuple[str, float]]]:
-        if self.period_time_left > time:
-            self.period_time_left -= time
-            return 0, []
-
-        left_time = time - self.period_time_left
-        lapse_time = self.period_time_left
-
-        new_current = {
-            name: (damage, lasting_time - lapse_time)
-            for name, (damage, lasting_time) in self.current.items()
-            if lasting_time - lapse_time >= 0
-        }
-        events = [(name, damage) for name, (damage, _) in new_current.items()]
-
-        self.current = new_current
-        self.period_time_left = self.period
-
-        return left_time, events
+        return (
+            self.model_copy(
+                update={
+                    "current": current,
+                    "period_time_left": period_time_left,
+                },
+            ),
+            emits,
+        )
 
 
 class MobState(ReducerState):
@@ -63,19 +64,17 @@ class MobComponent(Component):
 
     @reducer_method
     def add_dot(self, payload: DOTRequestPayload, state: MobState):
-        state = state.deepcopy()
-        state.dot.new(payload.name, payload.damage, payload.lasting_time)
-
-        return state, []
+        return state.copy(
+            {"dot": state.dot.new(payload.name, payload.damage, payload.lasting_time)}
+        ), []
 
     @reducer_method
     def elapse(self, time: float, state: MobState):
-        state = state.deepcopy()
-        emits = state.dot.elapse(time)
+        dot, emits = state.dot.elapse(time)
 
         events = [
             {"name": name, "tag": Tag.DOT, "payload": {"damage": damage, "hit": hit}}
             for ((name, damage), hit) in emits.items()
         ]
 
-        return state, events
+        return state.copy({"dot": dot}), events

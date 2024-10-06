@@ -33,18 +33,22 @@ class SynergySkillComponent(SkillComponent, BuffTrait, InvalidatableCooldownTrai
 
     @reducer_method
     def use(self, _: None, state: SynergyState):
-        state = state.deepcopy()
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state.cooldown.set_time_left(
+        cooldown = state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
         )
-        state.lasting.set_time_left(
+        lasting = state.lasting.set_time_left(
             self.lasting_duration
         )  # note that synergy do not works with dynamic duration.
 
-        return state, [
+        return state.copy(
+            {
+                "cooldown": cooldown,
+                "lasting": lasting,
+            }
+        ), [
             self.event_provider.dealt(self.damage, self.hit),
             self.event_provider.delayed(self.delay),
         ]

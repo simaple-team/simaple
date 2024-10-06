@@ -54,36 +54,57 @@ class TriplePeriodicDamageHexaComponent(SkillComponent, InvalidatableCooldownTra
 
     @reducer_method
     def elapse(self, time: float, state: TriplePeriodicDamageHexaComponentState):
-        state = state.deepcopy()
-        state.cooldown.elapse(time)
-
         damage_events: list[Event] = []
 
-        for periodic, feature in self._get_all_periodics(state):
-            lapse_count = periodic.elapse(time)
-            damage_events.extend(
-                self.event_provider.dealt(feature.damage, feature.hit)
-                for _ in range(lapse_count)
-            )
+        cooldown = state.cooldown.elapse(time)
+        periodic_01, lapse_count_01 = state.periodic_01.elapse(time)
+        periodic_02, lapse_count_02 = state.periodic_02.elapse(time)
+        periodic_03, lapse_count_03 = state.periodic_03.elapse(time)
 
-        return state, [self.event_provider.elapsed(time)] + damage_events
+        damage_events.extend(
+            self.event_provider.dealt(self.periodic_01.damage, self.periodic_01.hit)
+            for _ in range(lapse_count_01)
+        )
+        damage_events.extend(
+            self.event_provider.dealt(self.periodic_02.damage, self.periodic_02.hit)
+            for _ in range(lapse_count_02)
+        )
+        damage_events.extend(
+            self.event_provider.dealt(self.periodic_03.damage, self.periodic_03.hit)
+            for _ in range(lapse_count_03)
+        )
+
+        return state.copy(
+            {
+                "cooldown": cooldown,
+                "periodic_01": periodic_01,
+                "periodic_02": periodic_02,
+                "periodic_03": periodic_03,
+            }
+        ), [self.event_provider.elapsed(time)] + damage_events
 
     @reducer_method
     def use(self, _: None, state: TriplePeriodicDamageHexaComponentState):
         if not state.cooldown.available:
             return state, [self.event_provider.rejected()]
 
-        state = state.deepcopy()
-
         delay = self._get_delay()
 
-        state.cooldown.set_time_left(
+        cooldown = state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        for periodic, _feature in self._get_all_periodics(state):
-            periodic.set_time_left(self._get_lasting_duration(state))
+        periodic_01 = state.periodic_01.set_time_left(self._get_lasting_duration(state))
+        periodic_02 = state.periodic_02.set_time_left(self._get_lasting_duration(state))
+        periodic_03 = state.periodic_03.set_time_left(self._get_lasting_duration(state))
 
-        return state, [
+        return state.copy(
+            {
+                "cooldown": cooldown,
+                "periodic_01": periodic_01,
+                "periodic_02": periodic_02,
+                "periodic_03": periodic_03,
+            }
+        ), [
             self.event_provider.dealt(entry.damage, entry.hit)
             for entry in self.damage_and_hits
         ] + [
@@ -111,12 +132,3 @@ class TriplePeriodicDamageHexaComponent(SkillComponent, InvalidatableCooldownTra
         self, state: TriplePeriodicDamageHexaComponentState
     ) -> float:
         return self.lasting_duration
-
-    def _get_all_periodics(
-        self, state: TriplePeriodicDamageHexaComponentState
-    ) -> list[tuple[Periodic, PeriodicFeature]]:
-        return [
-            (state.periodic_01, self.periodic_01),
-            (state.periodic_02, self.periodic_02),
-            (state.periodic_03, self.periodic_03),
-        ]

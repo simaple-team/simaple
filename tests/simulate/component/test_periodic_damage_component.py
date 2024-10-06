@@ -72,8 +72,9 @@ def test_periodic_damage_component_emit_after(
     state, events = periodic_damage_component.elapse(120 * 8, state)
 
     # then
+    # 1000 - [880] - [760] - [640] - [520] - [400] - [280] - [160] - [40] - 0
     dealing_count = sum([e["tag"] == Tag.DAMAGE for e in events])
-    assert dealing_count == 8 - 1
+    assert dealing_count == 8
 
 
 def test_periodic_damage_component_partial_emit(
@@ -98,5 +99,6 @@ def test_periodic_damage_component_full_emit(
     state, events = periodic_damage_component.elapse(120 * 30, state)
 
     # then
+    # 1000 - [880] - [760] - [640] - [520] - [400] - [280] - [160] - [40] - 0
     dealing_count = sum([e["tag"] == Tag.DAMAGE for e in events])
     assert dealing_count == 8

@@ -15,7 +15,8 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 )
 
 
-class Entity(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="Entity")): ...
+class Entity(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="Entity")):
+    model_config = ConfigDict(frozen=True)
 
 
 class Action(TypedDict):
@@ -67,19 +68,24 @@ class Store(metaclass=ABCMeta):
         return self.read_entity(name, default=default), entity_setter
 
     @abstractmethod
-    def read_entity(self, name: str, default: Optional[Entity]): ...
+    def read_entity(self, name: str, default: Optional[Entity]):
+        ...
 
     @abstractmethod
-    def set_entity(self, name: str, entity: Entity): ...
+    def set_entity(self, name: str, entity: Entity):
+        ...
 
     @abstractmethod
-    def local(self, address: str) -> Store: ...
+    def local(self, address: str) -> Store:
+        ...
 
     @abstractmethod
-    def save(self) -> Any: ...
+    def save(self) -> Any:
+        ...
 
     @abstractmethod
-    def load(self, saved_store) -> None: ...
+    def load(self, saved_store) -> None:
+        ...
 
 
 class ConcreteStore(Store):
@@ -155,13 +161,16 @@ class AddressedStore(Store):
 
 class Dispatcher(metaclass=ABCMeta):
     @abstractmethod
-    def __call__(self, action: Action, store: Store) -> list[Event]: ...
+    def __call__(self, action: Action, store: Store) -> list[Event]:
+        ...
 
     @abstractmethod
-    def includes(self, signature: str) -> bool: ...
+    def includes(self, signature: str) -> bool:
+        ...
 
     @abstractmethod
-    def init_store(self, store: Store) -> None: ...
+    def init_store(self, store: Store) -> None:
+        ...
 
 
 class TandemDispatcher(Dispatcher):
@@ -316,7 +325,8 @@ class PostActionCallback:
 
     def __call__(
         self, event: Event, viewer: ViewerType, all_events: list[Event]
-    ) -> None: ...
+    ) -> None:
+        ...
 
 
 class PreviousCallback(Entity):

@@ -1,4 +1,4 @@
-from typing import Protocol, TypeVar
+from typing import Any, Protocol, TypeVar
 
 from simaple.simulate.component.entity import (
     Consumable,
@@ -13,7 +13,7 @@ T = TypeVar("T")
 
 
 class DeepcopyProtocol(Protocol[T]):
-    def deepcopy(self: T) -> T:
+    def copy(self: T, update: dict[str, Any]) -> T:
         pass
 
 

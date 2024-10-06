@@ -11,28 +11,25 @@ from simaple.simulate.component.entity import Periodic
         (750, 7),
     ],
 )
-def test_periodic_iterator(time, expected):
+def test_periodic_elapse(time, expected):
     # given
-    periodic = Periodic(interval=100)
-    periodic.set_time_left(1200)
+    periodic = Periodic(interval=100).set_time_left(1200)
 
     # when
-    count = 0
-    for _ in periodic.resolving(time):
-        count += 1
+    periodic, count = periodic.elapse(time)
 
     # then
     assert count == expected
 
 
-def test_periodic_iterator_partial():
-    periodic = Periodic(interval=100)
-    periodic.set_time_left(1000)
+def test_periodic_elapse_partial():
+    periodic = Periodic(interval=100).set_time_left(1000)
 
     count = 0
     times = []
     for time in range(50, 1050, 50):  # 50, ..., 1000
-        for _ in periodic.resolving(50):
+        periodic, lapse_count = periodic.elapse(50)
+        for _ in range(lapse_count):
             count += 1
             times.append(time)
 
@@ -55,11 +52,8 @@ def test_periodic_iterator_partial():
     ],
 )
 def test_periodic_initial_counter(time_left, initial_counter, time, expected):
-    periodic = Periodic(interval=100)
-    periodic.set_time_left(time_left, initial_counter)
+    periodic = Periodic(interval=100).set_time_left(time_left, initial_counter)
 
-    count = 0
-    for _ in periodic.resolving(time):
-        count += 1
+    periodic, count = periodic.elapse(time)
 
     assert count == expected

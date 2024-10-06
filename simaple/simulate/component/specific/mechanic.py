@@ -139,12 +139,12 @@ class RobotSummonSkill(
 
     @reducer_method
     def elapse(self, time: float, state: RobotSummonState):
-        state = state.deepcopy()
+        cooldown = state.cooldown.elapse(time)
+        periodic, lapse_count = state.periodic.elapse(time)
 
-        state.cooldown.elapse(time)
-        lapse_count = state.periodic.elapse(time)
-
-        return state, [self.event_provider.elapsed(time)] + [
+        return state.model_copy(
+            update={"cooldown": cooldown, "periodic": periodic},
+        ), [self.event_provider.elapsed(time)] + [
             self.event_provider.dealt(
                 self.periodic_damage,
                 self.periodic_hit,
@@ -222,12 +222,12 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
         time: float,
         state: HommingMissileState,
     ):
-        state = state.deepcopy()
+        cooldown = state.cooldown.elapse(time)
+        periodic, lapse_count = state.periodic.elapse(time)
 
-        state.cooldown.elapse(time)
-        lapse_count = state.periodic.elapse(time)
-
-        return state, [self.event_provider.elapsed(time)] + [
+        return state.model_copy(
+            update={"cooldown": cooldown, "periodic": periodic},
+        ), [self.event_provider.elapsed(time)] + [
             self.event_provider.dealt(
                 self.periodic_damage,
                 self.get_homming_missile_hit(state),
@@ -244,11 +244,11 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
 
     @reducer_method
     def pause(self, payload: DelayPayload, state: HommingMissileState):
-        state = state.deepcopy()
+        periodic = state.periodic.set_interval_counter(payload.time)
 
-        state.periodic.set_interval_counter(payload.time)
-
-        return state, []
+        return state.model_copy(
+            update={"periodic": periodic},
+        ), []
 
     def get_homming_missile_hit(self, state: HommingMissileState) -> int:
         hit = int(self.periodic_hit)
@@ -325,20 +325,26 @@ class FullMetalBarrageComponent(
 
     @reducer_method
     def elapse(self, time: float, state: FullMetalBarrageState):
-        state.penalty_lasting.elapse(time)
+        penalty_lasting = state.penalty_lasting.elapse(time)
         state, event = self.elapse_keydown_trait(time, state)
 
         if is_keydown_ended(event):
-            state.penalty_lasting.set_time_left(self.homing_penalty_duration)
+            penalty_lasting = penalty_lasting.set_time_left(
+                self.homing_penalty_duration
+            )
 
-        return state, event
+        return state.model_copy(
+            update={"penalty_lasting": penalty_lasting},
+        ), event
 
     @reducer_method
     def stop(self, _, state: FullMetalBarrageState):
         state, event = self.stop_keydown_trait(state)
 
         if is_keydown_ended(event):
-            state.penalty_lasting.set_time_left(self.homing_penalty_duration)
+            return state.model_copy(
+                update={"penalty_lasting": state.penalty_lasting.set_time_left(0)},
+            ), event
 
         return state, event
 
@@ -412,31 +418,34 @@ class MultipleOptionComponent(SkillComponent, CooldownValidityTrait):
 
     @reducer_method
     def elapse(self, time: float, state: MultipleOptionState):
-        state = state.deepcopy()
-
-        state.cooldown.elapse(time)
+        cooldown = state.cooldown.elapse(time)
+        periodic = state.periodic
+        cycle = state.cycle
         dealing_events = []
 
-        for _ in state.periodic.resolving(time):
+        periodic, elapse_count = periodic.elapse(time)
+        for _ in range(elapse_count):
             dealing_events.append(self.get_damage_event(state))
-            state.cycle.step()
+            cycle = cycle.step()
 
-        return state, [self.event_provider.elapsed(time)] + dealing_events
+        return state.model_copy(
+            update={"cooldown": cooldown, "periodic": periodic, "cycle": cycle},
+        ), [self.event_provider.elapsed(time)] + dealing_events
 
     @reducer_method
     def use(self, _: None, state: MultipleOptionState):
-        state = state.deepcopy()
-
         if not state.cooldown.available:
             return state, self.event_provider.rejected()
 
-        state.cooldown.set_time_left(
+        cooldown = state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
         )
-        state.periodic.set_time_left(self.lasting_duration)
-        state.cycle.clear()
+        periodic = state.periodic.set_time_left(self.lasting_duration)
+        cycle = state.cycle.clear()
 
-        return state, [
+        return state.model_copy(
+            update={"cooldown": cooldown, "periodic": periodic, "cycle": cycle},
+        ), [
             self.event_provider.delayed(self.delay),
         ]
 
@@ -465,30 +474,39 @@ class DynamicIntervalPeriodic(Entity):
     count_interval_penalty: float
     max_count: int
 
-    def set_time_left(self, time: float, count: int):
-        self.time_left = time
-        self.interval_counter = 0
-        self.count = count
-
     def enabled(self):
         return self.time_left > 0
 
-    def resolving(self, time: float):
-        self.interval_counter -= min(time, self.time_left)
-        self.time_left -= time
-        elapse_count = 0
+    def set_time_left(self, time: float, count: int):
+        return self.model_copy(
+            update={"time_left": time, "interval_counter": 0, "count": count}
+        )
 
-        while self.interval_counter <= 0:
-            self.interval_counter += (
-                self.interval + self.count * self.count_interval_penalty
-            )
+    def elapse(self, time: float):
+        interval_counter = self.interval_counter - time
+        time_left_counter = self.time_left - time
+        elapse_count = 0
+        intercepter_counts = []
+
+        while interval_counter <= 0 and time_left_counter > 0:
+            intercepter_counts.append(min(self.max_count, self.count + elapse_count))
+            counter = self.interval + self.count * self.count_interval_penalty
+            interval_counter += counter
+            time_left_counter -= counter
             elapse_count += 1
-            yield self.count
-            self.count += 1
-            self.count = min(self.max_count, self.count)
+
+        return self.model_copy(
+            update={
+                "time_left": self.time_left - time,
+                "interval_counter": interval_counter,
+                "count": min(self.max_count, self.count + elapse_count),
+            },
+        ), intercepter_counts
 
     def disable(self):
-        self.time_left = 0
+        return self.model_copy(
+            update={"time_left": 0},
+        )
 
 
 class MecaCarrierState(ReducerState):
@@ -532,12 +550,13 @@ class MecaCarrier(SkillComponent, CooldownValidityTrait):
         time: float,
         state: MecaCarrierState,
     ):
-        state = state.deepcopy()
-        state.cooldown.elapse(time)
+        cooldown = state.cooldown.elapse(time)
+        periodic = state.periodic
 
         dealing_events = []
 
-        for intercepter_count in state.periodic.resolving(time):
+        periodic, intercepter_counts = periodic.elapse(time)
+        for intercepter_count in intercepter_counts:
             for _ in range(intercepter_count):
                 dealing_events.append(
                     self.event_provider.dealt(
@@ -547,22 +566,25 @@ class MecaCarrier(SkillComponent, CooldownValidityTrait):
                     )
                 )
 
-        return state, [self.event_provider.elapsed(time)] + dealing_events
+        return state.model_copy(
+            update={"cooldown": cooldown, "periodic": periodic},
+        ), [self.event_provider.elapsed(time)] + dealing_events
 
     @reducer_method
     def use(self, _: None, state: MecaCarrierState):
-        state = state.deepcopy()
-
         if not state.cooldown.available:
             return state, self.event_provider.rejected()
 
-        state.cooldown.set_time_left(
+        cooldown = state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
         )
+        periodic = state.periodic.set_time_left(
+            self.lasting_duration, self.start_intercepter
+        )
 
-        state.periodic.set_time_left(self.lasting_duration, self.start_intercepter)
-
-        return state, [
+        return state.model_copy(
+            update={"cooldown": cooldown, "periodic": periodic},
+        ), [
             self.event_provider.delayed(self.delay),
         ]
 
