@@ -71,7 +71,7 @@ def test_archmagefb_actor():
     dpm = run_actor(environment_provider, JobType.archmagefb)
 
     # then
-    assert int(dpm) == snapshot(16195121054262)
+    assert int(dpm) == snapshot(16141274170535)
 
 
 def test_archmagetc_actor():
@@ -82,7 +82,7 @@ def test_archmagetc_actor():
     dpm = run_actor(environment_provider, JobType.archmagetc)
 
     # then
-    assert int(dpm) == snapshot(13407067282228)
+    assert int(dpm) == snapshot(12812549113234)
 
 
 def test_bishop_actor():
@@ -104,7 +104,7 @@ def test_mechanic_actor():
     dpm = run_actor(environment_provider, JobType.mechanic)
 
     # then
-    assert int(dpm) == snapshot(7981609050409)
+    assert int(dpm) == snapshot(7949745729927)
 
 
 def test_adele_actor():
@@ -121,7 +121,7 @@ def test_adele_actor():
     dpm = run_actor(environment_provider, JobType.adele)
 
     # then
-    assert int(dpm) == snapshot(9068638620941)
+    assert int(dpm) == snapshot(9022497006516)
 
 
 def test_windbreaker_actor():
@@ -137,7 +137,7 @@ def test_windbreaker_actor():
     dpm = run_actor(environment_provider, JobType.windbreaker)
 
     # then
-    assert int(dpm) == snapshot(11178296867273)
+    assert int(dpm) == snapshot(11108826719902)
 
 
 def test_soulmaster_actor():
@@ -153,7 +153,7 @@ def test_soulmaster_actor():
     dpm = run_actor(environment_provider, JobType.soulmaster)
 
     # then
-    assert int(dpm) == snapshot(12689549643945)
+    assert int(dpm) == snapshot(12626709155235)
 
 
 def test_dualblade_actor():

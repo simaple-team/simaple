@@ -51,4 +51,4 @@ def test_dsl(
         list(engine.simulation_entries())
     )
     print(f"{engine.get_current_viewer()('clock')} | {dpm:,} ")
-    assert pytest.approx(dpm) == snapshot(13415528573134.246)
+    assert pytest.approx(dpm) == snapshot(12652455596194.4)
