@@ -1,10 +1,11 @@
+import os
+
 import simaple.simulate.component.common  # noqa: F401
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.simulation import get_operation_engine
 from simaple.core.jobtype import JobType
 from simaple.simulate.policy.parser import parse_simaple_runtime
-import os
 
 
 def test_run_engine():

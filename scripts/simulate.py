@@ -1,3 +1,4 @@
+import os
 from enum import Enum
 
 import fire
@@ -13,7 +14,6 @@ from simaple.simulate.report.feature import (
     DamageShareFeature,
     MaximumDealingIntervalFeature,
 )
-import os
 
 
 class PlayStatus(Enum):
