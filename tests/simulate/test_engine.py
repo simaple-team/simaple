@@ -68,7 +68,7 @@ CAST "플레임 헤이즈 VI"
 CAST "크레스트 오브 더 솔라"
 CAST "플레임 스윕 VI"
 CAST "플레임 스윕 VI"
-!debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"
+!debug "list(filter(has_cooldown, filter(available, viewer('validity'))))"
 
 CAST "메테오"
 
@@ -84,7 +84,7 @@ CAST "미스트 이럽션 VI"
 CAST "플레임 헤이즈 VI"
 x4 CAST "플레임 스윕 VI"
 
-!debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"
+!debug "list(filter(has_cooldown, filter(available, viewer('validity'))))"
 """
     )
 
