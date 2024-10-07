@@ -1,3 +1,5 @@
+import os
+
 import simaple.simulate.component.common  # noqa: F401
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
@@ -18,7 +20,9 @@ def test_run_engine():
         v_improvements_level=60,
         hexa_improvements_level=10,
     )
-    _simulation_environment_memoizer = PersistentStorageMemoizer()
+    _simulation_environment_memoizer = PersistentStorageMemoizer(
+        os.path.join(os.path.dirname(__file__), ".memo.simaple.json")
+    )
     environment = _simulation_environment_memoizer.compute_environment(
         _environment_provider
     )

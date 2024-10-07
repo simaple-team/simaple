@@ -1,3 +1,4 @@
+import os
 from enum import Enum
 
 import fire
@@ -56,7 +57,9 @@ def run(plan_file: str):
     with open(plan_file, "r") as f:
         plan_metadata_dict, commands = parse_simaple_runtime(f.read())
 
-    _simulation_environment_memoizer = PersistentStorageMemoizer()
+    _simulation_environment_memoizer = PersistentStorageMemoizer(
+        os.path.join(os.path.dirname(__file__), ".simaple.memo")
+    )
 
     plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
     environment = _simulation_environment_memoizer.compute_environment(
