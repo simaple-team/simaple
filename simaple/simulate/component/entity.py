@@ -97,25 +97,40 @@ class Periodic(Entity):
     time_left: float = 0.0
     count: int = 0
 
+    def set_time_left_without_delay(self, time: float) -> int:
+        """
+        Implement 0-delay periodic behavior. 
+        since 0-delay behavior always emit signal immediately; you may handle
+        returned event as periodic event.
+        """
+
+        self.time_left = time
+        self.interval_counter = self.interval  # interval count = 0 is not allowed. emit event and increase interval counter.
+        self.count = 1
+
+        return 1
+
+
     def set_time_left(
         self, time: float, initial_counter: Optional[float] = None
     ) -> int:
+        """
+        Set left time, with initial counter value.
+        If initial counter not specified, default initial counter is `interval`.
+        given initial counter may larger than 0; if initial counter is 0, this raises error.
+        To use behavior with 0-initial counter, use `set_time_left_without_delay` with proper method handling.
+        """
         if time <= 0:
-            self.time_left = 0
-            return 0
+            raise ValueError("Given time may greater than 0")
+
+        if initial_counter is not None and initial_counter <= 0:
+            raise ValueError("Initial counter may greater than 0. Maybe you intended `set_time_left_without_delay`?")
 
         self.time_left = time
         self.interval_counter = (
             initial_counter if initial_counter is not None else self.interval
         )
-        count = 0
-        if self.interval_counter == 0:
-            self.interval_counter += self.interval  # interval count = 0 is not allowed.
-            count = 1
-
-        self.count = count
-
-        return count
+        self.count = 0
 
     def set_interval_counter(self, counter: float):
         self.interval_counter = counter

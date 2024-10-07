@@ -60,10 +60,9 @@ class PeriodicDamageConfiguratedHexaSkillComponent(
         state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        periodic_damage_count = state.periodic.set_time_left(
+        state.periodic.set_time_left(
             self._get_lasting_duration(state), initial_counter=delay
         )
-        assert periodic_damage_count == 0
 
         return state, [
             self.event_provider.dealt(entry.damage, entry.hit)
