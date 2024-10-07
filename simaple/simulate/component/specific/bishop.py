@@ -131,7 +131,17 @@ class DivineMinion(
         state.cooldown.elapse(time)
         dealing_events = []
 
-        for _ in state.periodic.resolving(time):
+        time_to_resolve = time
+        periodic_state = state.periodic
+        previous_count = periodic_state.count
+
+        while time_to_resolve > 0:
+            time_to_resolve, periodic_state = periodic_state.resolve_step(
+                periodic_state, time_to_resolve
+            )
+            if previous_count == periodic_state.count:
+                continue
+
             state.divine_mark.mark(self.mark_advantage)
             dealing_events.append(
                 self.event_provider.dealt(
@@ -139,6 +149,9 @@ class DivineMinion(
                     self.periodic_hit,
                 )
             )
+            previous_count = periodic_state.count
+
+        state.periodic = periodic_state
 
         return state, [self.event_provider.elapsed(time)] + dealing_events
 

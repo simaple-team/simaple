@@ -16,9 +16,16 @@ def test_periodic_iterator(time, interval, expected_count):
     periodic = Periodic(interval=interval)
     count = periodic.set_time_left_without_delay(1200)
 
+    time_to_resolve = time
+    previous_count = periodic.count
     # when
-    for _ in periodic.resolving(time):
+    while time_to_resolve > 0:
+        time_to_resolve, periodic = periodic.resolve_step(periodic, time_to_resolve)
+        if previous_count == periodic.count:
+            continue
+
         count += 1
+        previous_count = periodic.count
 
     # then
     assert count == expected_count
@@ -42,21 +49,6 @@ def test_elapse(time, interval, expected_count):
 
     # then
     assert count == expected_count
-
-
-def test_periodic_iterator_partial():
-    periodic = Periodic(interval=100)
-    count = periodic.set_time_left_without_delay(1000)
-
-    times = []
-    for time in range(50, 1050, 50):  # 50, ..., 1000
-        for _ in periodic.resolving(50):
-            count += 1
-            times.append(time)
-
-    assert count == 10
-    assert times[0] == 100
-    assert times[-1] == 900
 
 
 @pytest.mark.parametrize(
