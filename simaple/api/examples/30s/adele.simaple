@@ -45,7 +45,7 @@ CAST "소울 컨트랙트"
 CAST "리스트레인트 링"
 CAST "마에스트로" # origin
 
-!debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"
+!debug "list(filter(has_cooldown, filter(available, viewer('validity'))))"
 
 CAST "루인"
 CAST "마커"

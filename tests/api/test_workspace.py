@@ -81,7 +81,7 @@ ELAPSE 10.0
 ELAPSE 10.0
 ELAPSE 10.0
 CAST "체인 라이트닝 VI"
-!debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"
+!debug "list(filter(has_cooldown, filter(available, viewer('validity'))))"
 ELAPSE 30000.0
 """
 
