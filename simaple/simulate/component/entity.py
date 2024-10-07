@@ -97,12 +97,25 @@ class Periodic(Entity):
     time_left: float = 0.0
     count: int = 0
 
-    def set_time_left(self, time: float, initial_counter: Optional[float] = None):
+    def set_time_left(
+        self, time: float, initial_counter: Optional[float] = None
+    ) -> int:
+        if time <= 0:
+            self.time_left = 0
+            return 0
+
         self.time_left = time
         self.interval_counter = (
             initial_counter if initial_counter is not None else self.interval
         )
-        self.count = 0
+        count = 0
+        if self.interval_counter == 0:
+            self.interval_counter += self.interval  # interval count = 0 is not allowed.
+            count = 1
+
+        self.count = count
+
+        return count
 
     def set_interval_counter(self, counter: float):
         self.interval_counter = counter
@@ -111,41 +124,38 @@ class Periodic(Entity):
         return self.time_left > 0
 
     def elapse(self, time: float) -> int:
-        if self.time_left <= 0:
-            return 0
+        """
+        Wrapper for resolving method.
+        """
+        count = 0
+        for _ in self.resolving(time):
+            count += 1
 
-        maximum_elapsed = max(
-            0, int((self.time_left - self.interval_counter) // self.interval) + 1
-        )
-        self.time_left -= time
-        self.interval_counter -= time
-
-        if self.interval_counter < 0:
-            lapse_count = int(self.interval_counter // self.interval)
-            self.interval_counter = self.interval_counter % self.interval
-            count = min(maximum_elapsed, lapse_count * -1)
-            self.count += count
-            return count
-
-        return 0
+        return count
 
     def resolving(self, time: float):
         if self.time_left <= 0:
             return 0
 
-        maximum_elapsed = max(
-            0, int((self.time_left - self.interval_counter) // self.interval) + 1
-        )
+        time_to_resolve = time
 
-        self.time_left -= time
-        self.interval_counter -= time
-        elapse_count = 0
+        while time_to_resolve > 0:
+            min_interval_for_next_change = min(
+                self.interval_counter, self.time_left, time_to_resolve
+            )
 
-        while self.interval_counter <= 0 and elapse_count < maximum_elapsed:
-            self.interval_counter += self.interval
-            elapse_count += 1
-            yield 1
-            self.count += 1
+            time_to_resolve -= min_interval_for_next_change
+            self.interval_counter -= min_interval_for_next_change
+            self.time_left -= min_interval_for_next_change
+
+            if self.time_left <= 0:
+                break
+
+            if self.interval_counter <= 0:
+                self.interval_counter += self.interval
+                self.count += 1
+                yield 1
+                continue
 
     def disable(self):
         self.time_left = 0
