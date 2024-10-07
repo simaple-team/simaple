@@ -73,7 +73,7 @@ def jobtype_patches(job_type: JobType) -> list[Patch]:
 def get_baseline_gearset(name: str, job_type: JobType) -> Gearset:
     patches = jobtype_patches(job_type)
 
-    repository = DirectorySpecRepository(str(Path(__file__).parent / "spec"))
+    repository = DirectorySpecRepository(str(Path(__file__).parent / "blueprints"))
     loader = SpecBasedLoader(repository)
     set_item_repository = KMSSetItemRepository()
 
