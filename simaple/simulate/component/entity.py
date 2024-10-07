@@ -116,7 +116,7 @@ class Periodic(Entity):
 
     def set_time_left(
         self, time: float, initial_counter: Optional[float] = None
-    ) -> int:
+    ) -> None:
         """
         Set left time, with initial counter value.
         If initial counter not specified, default initial counter is `interval`.
@@ -167,7 +167,7 @@ class Periodic(Entity):
         """
         state = state.model_copy(deep=True)
         if state.time_left <= 0:
-            return 0, state
+            return state, 0
 
         time_to_resolve = time
 
@@ -181,7 +181,7 @@ class Periodic(Entity):
         state.time_left -= min_interval_for_next_change
 
         if state.time_left == 0:
-            return 0, state
+            return state, 0
 
         if _dynamic_interval_counter == 0:
             _dynamic_interval_counter += state.interval
