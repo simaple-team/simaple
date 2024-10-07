@@ -50,7 +50,7 @@ class HitLimitedPeriodicDamageComponent(
         previous_count = periodic_state.count
 
         while time_to_resolve > 0:
-            time_to_resolve, periodic_state = periodic_state.resolve_step(
+            periodic_state, time_to_resolve = periodic_state.resolve_step(
                 periodic_state, time_to_resolve
             )
 

@@ -151,7 +151,7 @@ class Periodic(Entity):
 
         periodic_state = self.model_copy(deep=True)
         while time > 0:
-            time, periodic_state = self.resolve_step(periodic_state, time)
+            periodic_state, time = self.resolve_step(periodic_state, time)
 
         self.time_left = periodic_state.time_left
         self.interval = periodic_state.interval
@@ -161,7 +161,7 @@ class Periodic(Entity):
         return periodic_state.count - initial_count
 
     @classmethod
-    def resolve_step(cls, state: "Periodic", time: float) -> tuple[float, "Periodic"]:
+    def resolve_step(cls, state: "Periodic", time: float) -> tuple["Periodic", float]:
         """Resolve given time with minimal time step.
         Returns: time left, changed entity state.
         """
@@ -195,7 +195,7 @@ class Periodic(Entity):
 
         state.interval_counter = _dynamic_interval_counter
 
-        return time_to_resolve, state
+        return state, time_to_resolve
 
     def disable(self):
         self.time_left = 0

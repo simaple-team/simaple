@@ -20,7 +20,7 @@ def test_periodic_iterator(time, interval, expected_count):
     previous_count = periodic.count
     # when
     while time_to_resolve > 0:
-        time_to_resolve, periodic = periodic.resolve_step(periodic, time_to_resolve)
+        periodic, time_to_resolve = periodic.resolve_step(periodic, time_to_resolve)
         if previous_count == periodic.count:
             continue
 
