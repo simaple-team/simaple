@@ -211,36 +211,14 @@ class PoisonChainComponent(
 
         dealing_events = []
 
-        periodic_state = state.periodic.model_copy(deep=True)
-        time_to_resolve = time
-        previous_count = periodic_state.count
-
-        while time_to_resolve > 0:
-            time_to_resolve, periodic_state = periodic_state.resolve_step(
-                periodic_state, time_to_resolve
-            )
-            if previous_count < periodic_state.count:
-                dealing_events.append(
-                    self.event_provider.dealt(
-                        self.get_periodic_damage(state), self.periodic_hit
-                    )
-                )
-                state.stack.increase(1)
-
-                previous_count = periodic_state.count
-
-        state.periodic = periodic_state
-
-        """
-        for _ in state.periodic.resolving(time):
-            print('s')
+        for _ in range(state.periodic.elapse(time)):
             dealing_events.append(
                 self.event_provider.dealt(
                     self.get_periodic_damage(state), self.periodic_hit
                 )
             )
             state.stack.increase(1)
-        """
+
         return state, [self.event_provider.elapsed(time)] + dealing_events
 
     @reducer_method
