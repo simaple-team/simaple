@@ -1,6 +1,7 @@
 from typing import Optional
 
 from simaple.simulate.base import Entity
+import pydantic
 
 
 class Lasting(Entity):
@@ -92,7 +93,7 @@ class Cycle(Entity):
 
 
 class Periodic(Entity):
-    interval_counter: float = 0.0
+    interval_counter: float = pydantic.Field(gt=0, default=999_999_999)
     interval: float
     time_left: float = 0.0
     count: int = 0
@@ -154,23 +155,27 @@ class Periodic(Entity):
 
         time_to_resolve = time
 
+        _dynamic_interval_counter = self.interval_counter
+
         while time_to_resolve > 0:
             min_interval_for_next_change = min(
-                self.interval_counter, self.time_left, time_to_resolve
+                _dynamic_interval_counter, self.time_left, time_to_resolve
             )
 
             time_to_resolve -= min_interval_for_next_change
-            self.interval_counter -= min_interval_for_next_change
+            _dynamic_interval_counter -= min_interval_for_next_change
             self.time_left -= min_interval_for_next_change
 
             if self.time_left <= 0:
                 break
 
-            if self.interval_counter <= 0:
-                self.interval_counter += self.interval
+            if _dynamic_interval_counter <= 0:
+                _dynamic_interval_counter += self.interval
                 self.count += 1
                 yield 1
                 continue
+
+        self.interval_counter = _dynamic_interval_counter
 
     def disable(self):
         self.time_left = 0
