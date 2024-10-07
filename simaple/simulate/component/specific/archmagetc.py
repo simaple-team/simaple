@@ -414,9 +414,20 @@ class ThunderBreak(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait
         state.cooldown.elapse(time)
         dealing_events = []
 
-        for _ in state.periodic.resolving(time):
-            if state.periodic.count > self.max_count:
+        time_to_resolve = time
+        periodic_state = state.periodic
+        previous_count = periodic_state.count
+
+        while time_to_resolve > 0:
+            time_to_resolve, periodic_state = periodic_state.resolve_step(
+                periodic_state, time_to_resolve
+            )
+
+            if periodic_state.count > self.max_count:
                 break
+
+            if previous_count == periodic_state.count:
+                continue
 
             frost_stack, modifier = use_frost_stack(state.frost_stack)
             state.frost_stack = frost_stack
@@ -425,19 +436,22 @@ class ThunderBreak(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait
 
             dealing_events.append(
                 self.event_provider.dealt(
-                    self.periodic_damage * self._get_decay_factor(state),
+                    self.periodic_damage * self._get_decay_factor(periodic_state),
                     self.periodic_hit,
                     modifier=modifier,
                 )
             )
+            previous_count = periodic_state.count
 
-        if state.periodic.count >= self.max_count:
-            state.periodic.disable()
+        if periodic_state.count >= self.max_count:
+            periodic_state.disable()
+
+        state.periodic = periodic_state
 
         return state, [self.event_provider.elapsed(time)] + dealing_events
 
-    def _get_decay_factor(self, state: ThunderBreakState):
-        return self.decay_rate**state.periodic.count
+    def _get_decay_factor(self, periodic: Periodic):
+        return self.decay_rate**periodic.count
 
     @reducer_method
     def use(self, _: None, state: ThunderBreakState):
