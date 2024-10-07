@@ -121,7 +121,6 @@ SQLAlchemy = "^1.4.45"
 scipy = "^1.11.2"
 pydantic-settings = "^2.0.3"
 lark = "^1.1.7"
-pyfunctional = "^1.5.0"
 
 [tool.poetry.group.dev.dependencies]
 poethepoet = "^0.28.0"
