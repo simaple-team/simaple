@@ -211,7 +211,7 @@ class PoisonChainComponent(
 
         dealing_events = []
 
-        for _ in state.periodic.resolving(time):
+        for _ in range(state.periodic.elapse(time)):
             dealing_events.append(
                 self.event_provider.dealt(
                     self.get_periodic_damage(state), self.periodic_hit

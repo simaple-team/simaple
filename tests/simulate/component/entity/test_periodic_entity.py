@@ -14,11 +14,18 @@ from simaple.simulate.component.entity import Periodic
 def test_periodic_iterator(time, interval, expected_count):
     # given
     periodic = Periodic(interval=interval)
-    count = periodic.set_time_left(1200, initial_counter=0)
+    count = periodic.set_time_left_without_delay(1200)
 
+    time_to_resolve = time
+    previous_count = periodic.count
     # when
-    for _ in periodic.resolving(time):
+    while time_to_resolve > 0:
+        periodic, time_to_resolve = periodic.resolve_step(periodic, time_to_resolve)
+        if previous_count == periodic.count:
+            continue
+
         count += 1
+        previous_count = periodic.count
 
     # then
     assert count == expected_count
@@ -35,7 +42,7 @@ def test_periodic_iterator(time, interval, expected_count):
 def test_elapse(time, interval, expected_count):
     # given
     periodic = Periodic(interval=interval)
-    count = periodic.set_time_left(1200, initial_counter=0)
+    count = periodic.set_time_left_without_delay(1200)
 
     # when
     count += periodic.elapse(time)
@@ -44,26 +51,10 @@ def test_elapse(time, interval, expected_count):
     assert count == expected_count
 
 
-def test_periodic_iterator_partial():
-    periodic = Periodic(interval=100)
-    count = periodic.set_time_left(1000, initial_counter=0)
-
-    times = []
-    for time in range(50, 1050, 50):  # 50, ..., 1000
-        for _ in periodic.resolving(50):
-            count += 1
-            times.append(time)
-
-    assert count == 10
-    assert times[0] == 100
-    assert times[-1] == 900
-
-
 @pytest.mark.parametrize(
     "time_left, initial_counter, time, expected",
     [
-        (0, 0, 70, 0),
-        (0, 20, 70, 0),
+        (1, 20, 70, 0),
         (150, 50, 70, 1),
         (200, 300, 500, 0),
         (300, 300, 500, 0),
@@ -76,9 +67,7 @@ def test_periodic_iterator_partial():
 )
 def test_periodic_initial_counter(time_left, initial_counter, time, expected):
     periodic = Periodic(interval=100)
-    count = periodic.set_time_left(time_left, initial_counter)
-
-    for _ in periodic.resolving(time):
-        count += 1
+    periodic.set_time_left(time_left, initial_counter)
+    count = periodic.elapse(time)
 
     assert count == expected
