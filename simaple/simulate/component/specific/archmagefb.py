@@ -229,10 +229,9 @@ class PoisonChainComponent(
 
                 previous_count = periodic_state.count
 
-
         state.periodic = periodic_state
 
-        '''
+        """
         for _ in state.periodic.resolving(time):
             print('s')
             dealing_events.append(
@@ -241,7 +240,7 @@ class PoisonChainComponent(
                 )
             )
             state.stack.increase(1)
-        '''
+        """
         return state, [self.event_provider.elapsed(time)] + dealing_events
 
     @reducer_method

@@ -51,8 +51,7 @@ class HitLimitedPeriodicDamageComponent(
 
         while time_to_resolve > 0:
             time_to_resolve, periodic_state = periodic_state.resolve_step(
-                periodic_state,
-                time_to_resolve
+                periodic_state, time_to_resolve
             )
 
             if periodic_state.count >= self.max_count:
@@ -70,7 +69,7 @@ class HitLimitedPeriodicDamageComponent(
 
         if periodic_state.count >= self.max_count:
             periodic_state.disable()
-        
+
         state.periodic = periodic_state
 
         return state, [self.event_provider.elapsed(time)] + dealing_events

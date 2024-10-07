@@ -118,11 +118,22 @@ class JupyterThunder(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
         state.cooldown.elapse(time)
         dealing_events = []
 
-        for _ in state.periodic.resolving(time):
-            if state.periodic.count >= self.max_count:
+        time_to_resolve = time
+        periodic_state = state.periodic
+        previous_count = periodic_state.count
+
+        while time_to_resolve > 0:
+            time_to_resolve, periodic_state = periodic_state.resolve_step(
+                periodic_state, time_to_resolve
+            )
+
+            if periodic_state.count >= self.max_count:
                 break
 
-            if (state.periodic.count + 1) % 5 == 0:
+            if periodic_state.count == previous_count:
+                continue
+
+            if (periodic_state.count + 1) % 5 == 0:
                 _, modifier = use_frost_stack(state.frost_stack)
             else:
                 modifier = get_frost_modifier(state.frost_stack)
@@ -134,9 +145,12 @@ class JupyterThunder(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
                     modifier=modifier,
                 )
             )
+            previous_count = periodic_state.count
 
-        if state.periodic.count >= self.max_count:
-            state.periodic.disable()
+        if periodic_state.count >= self.max_count:
+            periodic_state.disable()
+
+        state.periodic = periodic_state
 
         return state, [self.event_provider.elapsed(time)] + dealing_events
 

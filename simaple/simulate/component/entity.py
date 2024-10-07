@@ -1,7 +1,8 @@
 from typing import Optional
 
-from simaple.simulate.base import Entity
 import pydantic
+
+from simaple.simulate.base import Entity
 
 
 class Lasting(Entity):
@@ -100,17 +101,18 @@ class Periodic(Entity):
 
     def set_time_left_without_delay(self, time: float) -> int:
         """
-        Implement 0-delay periodic behavior. 
+        Implement 0-delay periodic behavior.
         since 0-delay behavior always emit signal immediately; you may handle
         returned event as periodic event.
         """
 
         self.time_left = time
-        self.interval_counter = self.interval  # interval count = 0 is not allowed. emit event and increase interval counter.
+        self.interval_counter = (
+            self.interval
+        )  # interval count = 0 is not allowed. emit event and increase interval counter.
         self.count = 1
 
         return 1
-
 
     def set_time_left(
         self, time: float, initial_counter: Optional[float] = None
@@ -125,7 +127,9 @@ class Periodic(Entity):
             raise ValueError("Given time may greater than 0")
 
         if initial_counter is not None and initial_counter <= 0:
-            raise ValueError("Initial counter may greater than 0. Maybe you intended `set_time_left_without_delay`?")
+            raise ValueError(
+                "Initial counter may greater than 0. Maybe you intended `set_time_left_without_delay`?"
+            )
 
         self.time_left = time
         self.interval_counter = (
@@ -178,7 +182,7 @@ class Periodic(Entity):
         if _dynamic_interval_counter == 0:
             if self.time_left > 0:
                 raise ValueError("Unexpected error")
-            
+
             _dynamic_interval_counter = self.interval
 
         self.interval_counter = _dynamic_interval_counter
@@ -213,7 +217,7 @@ class Periodic(Entity):
         if _dynamic_interval_counter == 0:
             if state.time_left > 0:
                 raise ValueError("Unexpected error")
-            
+
             _dynamic_interval_counter = state.interval
 
         state.interval_counter = _dynamic_interval_counter

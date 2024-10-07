@@ -82,9 +82,7 @@ class TriplePeriodicDamageHexaComponent(SkillComponent, InvalidatableCooldownTra
         )
 
         for periodic, _feature in self._get_all_periodics(state):
-            periodic.set_time_left(
-                self._get_lasting_duration(state)
-            )
+            periodic.set_time_left(self._get_lasting_duration(state))
 
         return state, [
             self.event_provider.dealt(entry.damage, entry.hit)
