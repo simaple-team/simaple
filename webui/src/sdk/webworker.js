@@ -5,12 +5,12 @@ importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js");
 
 async function loadPyodideAndPackages() {
   self.pyodide = await loadPyodide();
-  await self.pyodide.loadPackage(["pydantic", "micropip", "sqlite3", "lzma"], {
+  await self.pyodide.loadPackage(["pydantic", "micropip"], {
     checkIntegrity: false,
   });
 
   const micropip = self.pyodide.pyimport("micropip");
-  await micropip.install(["loguru", "lark", "numpy", "pyyaml", "pyfunctional"]);
+  await micropip.install(["loguru", "lark", "numpy", "pyyaml"]);
 
   await micropip.install(
     `${location.origin}/${globalThis.SIMAPLE_FILE_NAME}`,
