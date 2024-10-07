@@ -11,4 +11,4 @@ report.tsv
 *.log
 .workspace/
 .simaple
-.simaple.cache
+.simaple.memo
