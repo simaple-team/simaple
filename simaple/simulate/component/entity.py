@@ -147,45 +147,18 @@ class Periodic(Entity):
         """
         Wrapper for resolving method.
         """
-        count = 0
-        for _ in self.resolving(time):
-            count += 1
+        initial_count = self.count
 
-        return count
+        periodic_state = self.model_copy(deep=True)
+        while time > 0:
+            time, periodic_state = self.resolve_step(periodic_state, time)
 
-    def resolving(self, time: float):
-        if self.time_left <= 0:
-            return 0
+        self.time_left = periodic_state.time_left
+        self.interval = periodic_state.interval
+        self.interval_counter = periodic_state.interval_counter
+        self.count = periodic_state.count
 
-        time_to_resolve = time
-
-        _dynamic_interval_counter = self.interval_counter
-
-        while time_to_resolve > 0:
-            min_interval_for_next_change = min(
-                _dynamic_interval_counter, self.time_left, time_to_resolve
-            )
-
-            time_to_resolve -= min_interval_for_next_change
-            _dynamic_interval_counter -= min_interval_for_next_change
-            self.time_left -= min_interval_for_next_change
-
-            if self.time_left <= 0:
-                break
-
-            if _dynamic_interval_counter <= 0:
-                _dynamic_interval_counter += self.interval
-                self.count += 1
-                yield 1
-                continue
-
-        if _dynamic_interval_counter == 0:
-            if self.time_left > 0:
-                raise ValueError("Unexpected error")
-
-            _dynamic_interval_counter = self.interval
-
-        self.interval_counter = _dynamic_interval_counter
+        return periodic_state.count - initial_count
 
     @classmethod
     def resolve_step(cls, state: "Periodic", time: float) -> tuple[float, "Periodic"]:
