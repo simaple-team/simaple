@@ -4,6 +4,7 @@ from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.simulation import get_operation_engine
 from simaple.core.jobtype import JobType
 from simaple.simulate.policy.parser import parse_simaple_runtime
+import os
 
 
 def test_run_engine():
@@ -18,7 +19,9 @@ def test_run_engine():
         v_improvements_level=60,
         hexa_improvements_level=10,
     )
-    _simulation_environment_memoizer = PersistentStorageMemoizer()
+    _simulation_environment_memoizer = PersistentStorageMemoizer(
+        os.path.join(os.path.dirname(__file__), ".memo.simaple.json")
+    )
     environment = _simulation_environment_memoizer.compute_environment(
         _environment_provider
     )
