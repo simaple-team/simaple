@@ -94,7 +94,7 @@ class Cycle(Entity):
 
 class Periodic(Entity):
     interval_counter: float = pydantic.Field(gt=0, default=999_999_999)
-    interval: float
+    interval: float = pydantic.Field(gt=0)
     time_left: float = 0.0
     count: int = 0
 
@@ -175,7 +175,50 @@ class Periodic(Entity):
                 yield 1
                 continue
 
+        if _dynamic_interval_counter == 0:
+            if self.time_left > 0:
+                raise ValueError("Unexpected error")
+            
+            _dynamic_interval_counter = self.interval
+
         self.interval_counter = _dynamic_interval_counter
+
+    @classmethod
+    def resolve_step(cls, state: "Periodic", time: float) -> tuple[float, "Periodic"]:
+        """Resolve given time with minimal time step.
+        Returns: time left, changed entity state.
+        """
+        state = state.model_copy(deep=True)
+        if state.time_left <= 0:
+            return 0, state
+
+        time_to_resolve = time
+
+        _dynamic_interval_counter = state.interval_counter
+        min_interval_for_next_change = min(
+            _dynamic_interval_counter, state.time_left, time_to_resolve
+        )
+
+        time_to_resolve -= min_interval_for_next_change
+        _dynamic_interval_counter -= min_interval_for_next_change
+        state.time_left -= min_interval_for_next_change
+
+        if state.time_left == 0:
+            return 0, state
+
+        if _dynamic_interval_counter == 0:
+            _dynamic_interval_counter += state.interval
+            state.count += 1
+
+        if _dynamic_interval_counter == 0:
+            if state.time_left > 0:
+                raise ValueError("Unexpected error")
+            
+            _dynamic_interval_counter = state.interval
+
+        state.interval_counter = _dynamic_interval_counter
+
+        return time_to_resolve, state
 
     def disable(self):
         self.time_left = 0
