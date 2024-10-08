@@ -126,6 +126,7 @@ class RobotSummonSkill(
     cooldown_duration: float
     delay: float
 
+    periodic_initial_delay: float
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
@@ -134,7 +135,11 @@ class RobotSummonSkill(
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+            "periodic": Periodic(
+                interval=self.periodic_interval,
+                initial_counter=self.periodic_initial_delay,
+                time_left=0,
+            ),
         }
 
     @reducer_method
@@ -199,6 +204,7 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
     cooldown_duration: float
     delay: float
 
+    periodic_initial_delay: float
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
@@ -209,7 +215,11 @@ class HommingMissile(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+            "periodic": Periodic(
+                interval=self.periodic_interval,
+                initial_counter=self.periodic_initial_delay,
+                time_left=0,
+            ),
         }
 
     @reducer_method
@@ -373,6 +383,7 @@ class MultipleOptionComponent(SkillComponent, CooldownValidityTrait):
     cooldown_duration: float
     delay: float
 
+    periodic_initial_delay: float
     periodic_interval: float
     lasting_duration: float
 
@@ -389,7 +400,11 @@ class MultipleOptionComponent(SkillComponent, CooldownValidityTrait):
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+            "periodic": Periodic(
+                interval=self.periodic_interval,
+                initial_counter=self.periodic_initial_delay,
+                time_left=0,
+            ),
             "cycle": Cycle(tick=0, period=self.missile_count + self.gatling_count),
         }
 

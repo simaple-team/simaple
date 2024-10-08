@@ -1,3 +1,5 @@
+from typing import Optional
+
 from simaple.core.base import Stat
 from simaple.simulate.base import Entity
 from simaple.simulate.component.base import (
@@ -92,6 +94,7 @@ class JupyterThunder(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
     cooldown_duration: float
     delay: float
 
+    periodic_initial_delay: Optional[float] = None
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
@@ -104,7 +107,11 @@ class JupyterThunder(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTra
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+            "periodic": Periodic(
+                interval=self.periodic_interval,
+                initial_counter=self.periodic_initial_delay,
+                time_left=0,
+            ),
         }
 
     @reducer_method
@@ -256,7 +263,7 @@ class CurrentField(Entity):
 
     def create_new_current(self):
         periodic = Periodic(
-            interval=self.field_interval,
+            interval=self.field_interval, initial_counter=self.field_interval
         )
         periodic.set_time_left(self.field_duration)
 
@@ -384,6 +391,7 @@ class ThunderBreak(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait
     cooldown_duration: float
     delay: float
 
+    periodic_initial_delay: Optional[float] = None
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
@@ -400,7 +408,11 @@ class ThunderBreak(SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+            "periodic": Periodic(
+                interval=self.periodic_interval,
+                initial_counter=self.periodic_initial_delay,
+                time_left=0,
+            ),
         }
 
     @reducer_method

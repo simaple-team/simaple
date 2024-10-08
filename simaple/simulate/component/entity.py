@@ -94,8 +94,9 @@ class Cycle(Entity):
 
 
 class Periodic(Entity):
-    interval_counter: float = pydantic.Field(gt=0, default=999_999_999)
     interval: float = pydantic.Field(gt=0)
+    initial_counter: Optional[float] = pydantic.Field(gt=0)
+    interval_counter: float = pydantic.Field(gt=0, default=999_999_999)
     time_left: float = 0.0
     count: int = 0
 
@@ -107,9 +108,7 @@ class Periodic(Entity):
         """
 
         self.time_left = time
-        self.interval_counter = (
-            self.interval
-        )  # interval count = 0 is not allowed. emit event and increase interval counter.
+        self.interval_counter = self.interval  # interval count = 0 is not allowed. emit event and increase interval counter.
         self.count = 1
 
         return 1
@@ -125,6 +124,10 @@ class Periodic(Entity):
         """
         if time <= 0:
             raise ValueError("Given time may greater than 0")
+
+        initial_counter = (
+            initial_counter if initial_counter is not None else self.initial_counter
+        )
 
         if initial_counter is not None and initial_counter <= 0:
             raise ValueError(

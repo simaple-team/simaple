@@ -29,6 +29,7 @@ class MagicCurcuitFullDriveComponent(
 
     max_damage_multiplier: float
 
+    periodic_initial_delay: Optional[float] = None
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
@@ -36,7 +37,11 @@ class MagicCurcuitFullDriveComponent(
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.periodic_interval),
+            "periodic": Periodic(
+                interval=self.periodic_interval,
+                initial_counter=self.periodic_initial_delay,
+                time_left=0,
+            ),
         }
 
     @reducer_method

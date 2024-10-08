@@ -1,3 +1,5 @@
+from typing import Optional
+
 from simaple.core import Stat
 from simaple.simulate.base import Entity
 from simaple.simulate.component.base import (
@@ -183,6 +185,7 @@ class PoisonChainComponent(
     cooldown_duration: float
     delay: float
 
+    periodic_initial_delay: Optional[float] = None
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
@@ -193,7 +196,11 @@ class PoisonChainComponent(
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+            "periodic": Periodic(
+                interval=self.periodic_interval,
+                initial_counter=self.periodic_initial_delay,
+                time_left=0,
+            ),
             "stack": Stack(maximum_stack=5),
         }
 
@@ -331,6 +338,7 @@ class IfrittComponent(
 
     cooldown_duration: float
 
+    periodic_initial_delay: Optional[float] = None
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
@@ -343,7 +351,11 @@ class IfrittComponent(
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+            "periodic": Periodic(
+                interval=self.periodic_interval,
+                initial_counter=self.periodic_initial_delay,
+                time_left=0,
+            ),
         }
 
     @reducer_method

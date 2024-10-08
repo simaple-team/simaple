@@ -1,3 +1,5 @@
+from typing import Optional
+
 from simaple.core import Stat
 from simaple.simulate.base import Entity
 from simaple.simulate.component.base import (
@@ -70,6 +72,7 @@ class AdeleEtherComponent(Component):
             "periodic": Periodic(
                 interval=self.periodic_interval,
                 time_left=999_999_999,
+                initial_counter=self.periodic_interval,
                 interval_counter=self.periodic_interval,
             ),
         }
@@ -469,8 +472,14 @@ class AdeleRuinComponent(
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "interval_state_first": Periodic(interval=self.periodic_interval_first),
-            "interval_state_second": Periodic(interval=self.periodic_interval_second),
+            "interval_state_first": Periodic(
+                interval=self.periodic_interval_first,
+                initial_counter=None,
+            ),
+            "interval_state_second": Periodic(
+                interval=self.periodic_interval_second,
+                initial_counter=self.lasting_duration_first,
+            ),
         }
 
     @reducer_method
@@ -513,13 +522,9 @@ class AdeleRuinComponent(
         state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        state.interval_state_first.set_time_left(
-            time=self.lasting_duration_first,
-            initial_counter=self.periodic_interval_first,
-        )
+        state.interval_state_first.set_time_left(time=self.lasting_duration_first)
         state.interval_state_second.set_time_left(
-            time=self.lasting_duration_first + self.lasting_duration_second,
-            initial_counter=self.lasting_duration_first,
+            time=self.lasting_duration_first + self.lasting_duration_second
         )
 
         return state, [
@@ -605,6 +610,7 @@ class AdeleStormState(ReducerState):
 class AdeleStormComponent(
     SkillComponent, PeriodicWithSimpleDamageTrait, CooldownValidityTrait
 ):
+    periodic_initial_delay: Optional[float] = None
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
@@ -616,7 +622,11 @@ class AdeleStormComponent(
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+            "periodic": Periodic(
+                interval=self.periodic_interval,
+                initial_counter=self.periodic_initial_delay,
+                time_left=0,
+            ),
             "stack": Stack(maximum_stack=self.maximum_stack),
         }
 

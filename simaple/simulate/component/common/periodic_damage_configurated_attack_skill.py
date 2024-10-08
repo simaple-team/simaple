@@ -1,3 +1,5 @@
+from typing import Optional
+
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic
 from simaple.simulate.component.skill import SkillComponent
@@ -25,6 +27,7 @@ class PeriodicDamageConfiguratedAttackSkillComponent(
 
     cooldown_duration: float
 
+    periodic_initial_delay: Optional[float] = None
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
@@ -34,7 +37,11 @@ class PeriodicDamageConfiguratedAttackSkillComponent(
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+            "periodic": Periodic(
+                interval=self.periodic_interval,
+                initial_counter=self.periodic_initial_delay,
+                time_left=0,
+            ),
         }
 
     @reducer_method
