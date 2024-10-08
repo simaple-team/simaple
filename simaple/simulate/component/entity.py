@@ -125,10 +125,6 @@ class Periodic(Entity):
         if time <= 0:
             raise ValueError("Given time may greater than 0")
 
-        initial_counter = (
-            initial_counter if initial_counter is not None else self.initial_counter
-        )
-
         if initial_counter is not None and initial_counter <= 0:
             raise ValueError(
                 "Initial counter may greater than 0. Maybe you intended `set_time_left_without_delay`?"
