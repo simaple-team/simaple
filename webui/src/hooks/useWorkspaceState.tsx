@@ -81,19 +81,23 @@ function useWorkspaceState() {
           .exhaustive();
       })
       .andThen((augmentedPlan) =>
-        match(submittedPlan)
-          .with("", () => pySimaple.runPlan(augmentedPlan))
-          .otherwise(() =>
-            pySimaple.runPlanWithHint(
-              submittedPlan,
-              operationLogs,
-              augmentedPlan,
-            ),
-          )
-          .andTee(() => setSubmittedPlan(augmentedPlan)),
+        import.meta.env.DEV
+          ? pySimaple
+              .runPlan(augmentedPlan)
+              .andTee(() => setSubmittedPlan(augmentedPlan))
+          : match(submittedPlan)
+              .with("", () => pySimaple.runPlan(augmentedPlan))
+              .otherwise(() =>
+                pySimaple.runPlanWithHint(
+                  submittedPlan,
+                  operationLogs,
+                  augmentedPlan,
+                ),
+              )
+              .andTee(() => setSubmittedPlan(augmentedPlan)),
       )
       .match(setOperationLogs, setErrorMessage);
-  }, [plan]);
+  }, [plan, submittedPlan, operationLogs]);
 
   const clearErrorMessage = React.useCallback(() => {
     setErrorMessage("");
