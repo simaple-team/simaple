@@ -71,7 +71,7 @@ def test_archmagefb_actor():
     dpm = run_actor(environment_provider, JobType.archmagefb)
 
     # then
-    assert int(dpm) == snapshot(16141274170535)
+    assert int(dpm) == snapshot(16156481373708)
 
 
 def test_archmagetc_actor():
@@ -104,7 +104,7 @@ def test_mechanic_actor():
     dpm = run_actor(environment_provider, JobType.mechanic)
 
     # then
-    assert int(dpm) == snapshot(7949745729927)
+    assert int(dpm) == snapshot(7978670689416)
 
 
 def test_adele_actor():

@@ -24,6 +24,7 @@ def test_store_save_load():
         "y.interval",
         Periodic(
             interval_counter=3.0,
+            initial_counter=None,
             interval=8.5,
             time_left=2.0,
             count=13,
