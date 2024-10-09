@@ -22,6 +22,7 @@ from simaple.simulate.component.trait.base import (
     LastingTrait,
     NamedTrait,
     PeriodicDamageTrait,
+    PeriodicTrait,
     SimpleDamageTrait,
 )
 from simaple.simulate.component.view import KeydownView, Running, Validity
@@ -200,6 +201,7 @@ class ConsumableBuffTrait(LastingTrait, EventProviderTrait, DelayTrait):
 
 class PeriodicElapseTrait(
     CooldownTrait,
+    PeriodicTrait,
     PeriodicDamageTrait,
     EventProviderTrait,
 ):
@@ -215,7 +217,7 @@ class PeriodicElapseTrait(
         state = state.deepcopy()
 
         state.cooldown.elapse(time)
-        lapse_count = state.periodic.elapse(time)
+        lapse_count = state.periodic.elapse(time, self._get_periodic_interval())
 
         periodic_damage, periodic_hit = self._get_periodic_damage_hit(state)
 
@@ -255,7 +257,11 @@ class PeriodicWithSimpleDamageTrait(
         state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        state.periodic.set_time_left(self._get_lasting_duration(state))
+        state.periodic.set_time_left(
+            self._get_lasting_duration(state),
+            self._get_periodic_interval(),
+            self._get_periodic_initial_counter(),
+        )
 
         return state, [
             self.event_provider.dealt(damage, hit),
@@ -264,6 +270,7 @@ class PeriodicWithSimpleDamageTrait(
 
 
 class UsePeriodicDamageTrait(
+    PeriodicTrait,
     CooldownTrait,
     LastingTrait,
     EventProviderTrait,
@@ -289,7 +296,11 @@ class UsePeriodicDamageTrait(
         state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        state.periodic.set_time_left(self._get_lasting_duration(state))
+        state.periodic.set_time_left(
+            self._get_lasting_duration(state),
+            self._get_periodic_interval(),
+            self._get_periodic_initial_counter(),
+        )
 
         return state, [
             self.event_provider.delayed(delay),

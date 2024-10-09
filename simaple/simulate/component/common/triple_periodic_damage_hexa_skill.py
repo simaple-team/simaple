@@ -72,7 +72,7 @@ class TriplePeriodicDamageHexaComponent(SkillComponent, InvalidatableCooldownTra
         damage_events: list[Event] = []
 
         for periodic, feature in self._get_all_periodics(state):
-            lapse_count = periodic.elapse(time)
+            lapse_count = periodic.elapse(time, feature.interval)
             damage_events.extend(
                 self.event_provider.dealt(feature.damage, feature.hit)
                 for _ in range(lapse_count)
@@ -93,8 +93,11 @@ class TriplePeriodicDamageHexaComponent(SkillComponent, InvalidatableCooldownTra
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
 
-        for periodic, _feature in self._get_all_periodics(state):
-            periodic.set_time_left(self._get_lasting_duration(state))
+        for periodic, feature in self._get_all_periodics(state):
+            periodic.set_time_left(
+                self._get_lasting_duration(state),
+                feature.initial_delay,
+            )
 
         return state, [
             self.event_provider.dealt(entry.damage, entry.hit)

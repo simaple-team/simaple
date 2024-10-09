@@ -94,14 +94,11 @@ class Cycle(Entity):
 
 
 class Periodic(Entity):
-    interval: float = pydantic.Field(gt=0)
-    initial_counter: Optional[float] = pydantic.Field(gt=0)
-
     interval_counter: float = pydantic.Field(gt=0, default=999_999_999)
     time_left: float = 0.0
     count: int = 0
 
-    def set_time_left_without_delay(self, time: float) -> int:
+    def set_time_left_without_delay(self, time: float, interval: float) -> int:
         """
         Implement 0-delay periodic behavior.
         since 0-delay behavior always emit signal immediately; you may handle
@@ -109,12 +106,12 @@ class Periodic(Entity):
         """
 
         self.time_left = time
-        self.interval_counter = self.interval  # interval count = 0 is not allowed. emit event and increase interval counter.
+        self.interval_counter = interval  # interval count = 0 is not allowed. emit event and increase interval counter.
         self.count = 1
 
         return 1
 
-    def set_time_left(self, time: float) -> None:
+    def set_time_left(self, time: float, initial_counter: float) -> None:
         """
         Set left time, with initial counter value.
         If initial counter not specified, default initial counter is `interval`.
@@ -124,15 +121,13 @@ class Periodic(Entity):
         if time <= 0:
             raise ValueError("Given time may greater than 0")
 
-        if self.initial_counter is not None and self.initial_counter <= 0:
+        if initial_counter is not None and initial_counter <= 0:
             raise ValueError(
                 "Initial counter may greater than 0. Maybe you intended `set_time_left_without_delay`?"
             )
 
         self.time_left = time
-        self.interval_counter = (
-            self.initial_counter if self.initial_counter is not None else self.interval
-        )
+        self.interval_counter = initial_counter
         self.count = 0
 
     def set_interval_counter(self, counter: float):
@@ -141,7 +136,7 @@ class Periodic(Entity):
     def enabled(self):
         return self.time_left > 0
 
-    def elapse(self, time: float) -> int:
+    def elapse(self, time: float, interval: float) -> int:
         """
         Wrapper for resolving method.
         """
@@ -149,17 +144,18 @@ class Periodic(Entity):
 
         periodic_state = self.model_copy(deep=True)
         while time > 0:
-            periodic_state, time = self.resolve_step(periodic_state, time)
+            periodic_state, time = self.resolve_step(periodic_state, time, interval)
 
         self.time_left = periodic_state.time_left
-        self.interval = periodic_state.interval
         self.interval_counter = periodic_state.interval_counter
         self.count = periodic_state.count
 
         return periodic_state.count - initial_count
 
     @classmethod
-    def resolve_step(cls, state: "Periodic", time: float) -> tuple["Periodic", float]:
+    def resolve_step(
+        cls, state: "Periodic", time: float, interval: float
+    ) -> tuple["Periodic", float]:
         """Resolve given time with minimal time step.
         Returns: time left, changed entity state.
         """
@@ -182,14 +178,14 @@ class Periodic(Entity):
             return state, 0
 
         if _dynamic_interval_counter == 0:
-            _dynamic_interval_counter += state.interval
+            _dynamic_interval_counter += interval
             state.count += 1
 
         if _dynamic_interval_counter == 0:
             if state.time_left > 0:
                 raise ValueError("Unexpected error")
 
-            _dynamic_interval_counter = state.interval
+            _dynamic_interval_counter = interval
 
         state.interval_counter = _dynamic_interval_counter
 

@@ -75,3 +75,12 @@ class PeriodicDamageConfiguratedAttackSkillComponent(
         self, state: PeriodicDamageState
     ) -> tuple[float, float]:
         return self.periodic_damage, self.periodic_hit
+
+    def _get_periodic_interval(self) -> float:
+        return self.periodic_interval
+
+    def _get_periodic_initial_counter(self) -> float:
+        if self.periodic_initial_delay is not None:
+            return self.periodic_initial_delay
+
+        return self.periodic_interval

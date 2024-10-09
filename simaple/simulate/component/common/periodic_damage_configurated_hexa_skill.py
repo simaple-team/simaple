@@ -67,7 +67,10 @@ class PeriodicDamageConfiguratedHexaSkillComponent(
         state.cooldown.set_time_left(
             state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
         )
-        state.periodic.set_time_left(self._get_lasting_duration(state))
+        state.periodic.set_time_left(
+            self._get_lasting_duration(state),
+            self._get_periodic_initial_counter(),
+        )
 
         return state, [
             self.event_provider.dealt(entry.damage, entry.hit)
@@ -96,3 +99,12 @@ class PeriodicDamageConfiguratedHexaSkillComponent(
         self, state: PeriodicDamageHexaState
     ) -> tuple[float, float]:
         return self.periodic_damage, self.periodic_hit
+
+    def _get_periodic_initial_counter(self) -> float:
+        if self.periodic_initial_delay is not None:
+            return self.periodic_initial_delay
+
+        return self.delay
+
+    def _get_periodic_interval(self) -> float:
+        return self.periodic_interval
