@@ -112,15 +112,47 @@ def test_addon():
     assert simulation_runtime.resolve(
         {"name": "*", "method": "elapse", "payload": 2000}
     ) == [
-        {'name': 'component_a', 'method': 'elapse', 'tag': 'global.accept', 'payload': {}, 'handler': None},
-        {'name': 'component_b', 'method': 'elapse', 'tag': 'global.accept', 'payload': {}, 'handler': None},
-        {'name': 'component_c', 'method': 'elapse', 'tag': 'global.accept', 'payload': {}, 'handler': None},
+        {
+            "name": "component_a",
+            "method": "elapse",
+            "tag": "global.accept",
+            "payload": {},
+            "handler": None,
+        },
+        {
+            "name": "component_b",
+            "method": "elapse",
+            "tag": "global.accept",
+            "payload": {},
+            "handler": None,
+        },
+        {
+            "name": "component_c",
+            "method": "elapse",
+            "tag": "global.accept",
+            "payload": {},
+            "handler": None,
+        },
     ]
 
     assert simulation_runtime.resolve(
         {"name": "component_c", "method": "use", "payload": None}
-    ) == [{'name': 'component_c', 'payload': {}, 'method': 'use', 'tag': 'use', 'handler': None}, 
-          {'name': 'component_c', 'method': 'use', 'tag': 'global.accept', 'payload': {}, 'handler': None}]
+    ) == [
+        {
+            "name": "component_c",
+            "payload": {},
+            "method": "use",
+            "tag": "use",
+            "handler": None,
+        },
+        {
+            "name": "component_c",
+            "method": "use",
+            "tag": "global.accept",
+            "payload": {},
+            "handler": None,
+        },
+    ]
 
     assert simulation_runtime.resolve(
         {"name": "component_b", "method": "some_reducer", "payload": {"value": 100}}
