@@ -17,6 +17,7 @@ def fixture_howling_gale():
         maximum_stack=3,
         cooldown_duration=20_000,
         periodic_interval=150,
+        periodic_initial_delay=630,
         periodic_damage=[[500], [1000], [1000, 700]],
         periodic_hit=[[3], [3], [3, 3]],
         lasting_duration=9_850,
