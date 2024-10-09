@@ -2,6 +2,50 @@ import re
 
 from simaple.core import ActionStat, ExtendedStat, Stat
 
+from typing import TypedDict
+from typing import Callable 
+
+
+class BuilderCase(TypedDict):
+    case: str
+    builder: Callable[[list[str]], ExtendedStat]
+
+
+class TextMatch(TypedDict):
+    pattern: str
+    match_count: int
+    builder: Callable[[list[str]], ExtendedStat]
+
+
+def get_matched_stat(
+    line: str,
+    matchers: list[TextMatch],
+) -> ExtendedStat:
+    for matcher in matchers:
+        pattern = re.compile(matcher["pattern"])
+        match = pattern.search(line)
+        if match and len(match.groups()) == matcher["match_count"]:
+            return matcher["builder"](list(match.groups()))
+
+    raise ValueError(f"Invalid occupation description: {line}")
+
+
+class SingleStatProvider():
+    def __init__(self, stat_name: str):
+        self.stat_name = stat_name
+
+    def __call__(self, values: list[int]) -> ExtendedStat:
+        assert len(values) == 1
+        return ExtendedStat(stat=Stat(**{self.stat_name: values[0]}))
+
+
+_UNION_OCCUPATION_MATCHERS = [
+    {
+        "pattern": r"([A-Z/가-힣a-z\s]+)([\d\.]+)% 증가",
+        "match_count": 2,
+    }
+]
+
 
 def get_stat_from_occupation_description(
     line: str,
