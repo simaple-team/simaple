@@ -94,8 +94,10 @@ class Cycle(Entity):
 
 
 class Periodic(Entity):
-    interval_counter: float = pydantic.Field(gt=0, default=999_999_999)
     interval: float = pydantic.Field(gt=0)
+    initial_counter: Optional[float] = pydantic.Field(gt=0, default=None)
+
+    interval_counter: float = pydantic.Field(gt=0, default=999_999_999)
     time_left: float = 0.0
     count: int = 0
 
@@ -114,9 +116,7 @@ class Periodic(Entity):
 
         return 1
 
-    def set_time_left(
-        self, time: float, initial_counter: Optional[float] = None
-    ) -> None:
+    def set_time_left(self, time: float) -> None:
         """
         Set left time, with initial counter value.
         If initial counter not specified, default initial counter is `interval`.
@@ -126,14 +126,14 @@ class Periodic(Entity):
         if time <= 0:
             raise ValueError("Given time may greater than 0")
 
-        if initial_counter is not None and initial_counter <= 0:
+        if self.initial_counter is not None and self.initial_counter <= 0:
             raise ValueError(
                 "Initial counter may greater than 0. Maybe you intended `set_time_left_without_delay`?"
             )
 
         self.time_left = time
         self.interval_counter = (
-            initial_counter if initial_counter is not None else self.interval
+            self.initial_counter if self.initial_counter is not None else self.interval
         )
         self.count = 0
 

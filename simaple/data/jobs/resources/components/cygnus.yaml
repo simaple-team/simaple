@@ -14,6 +14,7 @@ data:
   cooldown_duration: 30_000
   delay: 600
 
+  periodic_initial_delay: 120 # TODO: 위치에 따라 다름, 적절한 값 설정해야 함
   periodic_interval: 120
   periodic_damage: "{{ 450 + 18 * skill_level }}"
   periodic_hit: 1

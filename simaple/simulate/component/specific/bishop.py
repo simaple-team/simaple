@@ -103,6 +103,7 @@ class DivineMinion(
     cooldown_duration: float
     delay: float
 
+    periodic_initial_delay: Optional[float] = None
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
@@ -116,12 +117,20 @@ class DivineMinion(
             return {
                 "divine_mark": DivineMark(),
                 "cooldown": Cooldown(time_left=0),
-                "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+                "periodic": Periodic(
+                    interval=self.periodic_interval,
+                    initial_counter=self.periodic_initial_delay,
+                    time_left=0,
+                ),
             }
 
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+            "periodic": Periodic(
+                interval=self.periodic_interval,
+                initial_counter=self.periodic_initial_delay,
+                time_left=0,
+            ),
         }
 
     @reducer_method

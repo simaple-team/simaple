@@ -109,6 +109,7 @@ data:
   hit: 0
   cooldown_duration: 0
 
+  periodic_initial_delay: 1410 # summon.summoned 딜레이 합
   periodic_interval: 1_000
   periodic_damage: 385 # Need to apply passive skill level only
   periodic_hit: 1
@@ -136,6 +137,7 @@ data:
   hit: 0
   cooldown_duration: 0
 
+  periodic_initial_delay: 1860 # summon.summoned 딜레이 합
   periodic_interval: 990
   periodic_damage: 200
   periodic_hit: 1
@@ -162,6 +164,7 @@ data:
   hit: 0
   cooldown_duration: 0
 
+  periodic_initial_delay: 2820 # summon.summoned 딜레이 합
   periodic_interval: 3_000
   periodic_damage: "{{ 350 + skill_level * 5 }}"
   periodic_hit: 3
@@ -239,6 +242,7 @@ data:
   delay: 0
   cooldown_duration: 0
 
+  periodic_initial_delay: 540
   periodic_interval: 540
   periodic_damage: 300
   periodic_hit: 9
@@ -284,10 +288,11 @@ data:
   hit: 0
   cooldown_duration: 8_000
 
+  periodic_initial_delay: 690
   periodic_interval: 250
   periodic_damage: 350
   periodic_hit: 2
-  lasting_duration: 4_000
+  lasting_duration: 4_690 # 4000(지속시간) + 690(선딜)
 
   v_improvement: 2
 ---
@@ -308,6 +313,7 @@ data:
   cooldown_duration: 180_000
   delay: 780
 
+  periodic_initial_delay: 1590 # summon.summoned 딜레이 합 (840) + summon.attack2.attackAfter (750)
   periodic_interval: 1530
   lasting_duration: "{{ (75 + 2 * skill_level) * 1000 }}"
 
@@ -473,6 +479,7 @@ data:
   delay: 0
   cooldown_duration: 0
 
+  periodic_initial_delay: 540
   periodic_interval: 540
   periodic_damage: "{{ 400 + 5 * skill_level }}"
   periodic_hit: 12
@@ -504,6 +511,7 @@ data:
   delay: 4_860
   cooldown_duration: 360_000
 
+  periodic_initial_delay: 1_200
   periodic_interval: 1_200
   periodic_damage: "{{ 1440 + skill_level * 48 }}" # 툴팁 상으로는 1448 + skill_level * 48이나, 실제 반영되는 값이 다름
   periodic_hit: 15

@@ -22,6 +22,7 @@ class TestMultipleOption:
             name="test-multiple-option",
             cooldown_duration=40_000,
             delay=690,
+            periodic_initial_delay=690,
             periodic_interval=1000,
             lasting_duration=120_000,
             missile_count=3,

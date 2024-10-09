@@ -277,6 +277,7 @@ data:
 
   cooldown_duration: 20_000
 
+  periodic_initial_delay: 630
   periodic_interval: 150
   periodic_damage:
     - ["{{ 325 + 13 * skill_level }}"]

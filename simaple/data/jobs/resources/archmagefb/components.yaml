@@ -282,6 +282,7 @@ data:
   cooldown_duration: 0
   hit: 0
 
+  periodic_initial_delay: 1_890 # TODO: check summon.summoned / summon.summoned(810?) + summon.attack1.attackAfter(1080)
   periodic_interval: 3_030
   periodic_damage: "{{ 90 + skill_level * 2 }}"
   periodic_hit: 3

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
 from simaple.simulate.component.entity import Consumable, Integer, Periodic
 from simaple.simulate.component.skill import SkillComponent
@@ -31,6 +33,7 @@ class HowlingGaleComponent(
 
     cooldown_duration: float
 
+    periodic_initial_delay: Optional[float] = None
     periodic_interval: float
     periodic_damage: list[list[float]]
     periodic_hit: list[list[float]]
@@ -46,7 +49,11 @@ class HowlingGaleComponent(
                 time_left=self.cooldown_duration,
             ),
             "consumed": Integer(stack=0),
-            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+            "periodic": Periodic(
+                interval=self.periodic_interval,
+                initial_counter=self.periodic_initial_delay,
+                time_left=0,
+            ),
         }
 
     @reducer_method
@@ -80,7 +87,7 @@ class HowlingGaleComponent(
         state.consumed.set_value(consumed)
         state.consumable.stack -= consumed
 
-        state.periodic.set_time_left(self._get_lasting_duration(state), self.delay)
+        state.periodic.set_time_left(self._get_lasting_duration(state))
 
         return state, [
             self.event_provider.delayed(delay),

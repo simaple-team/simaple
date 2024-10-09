@@ -33,7 +33,8 @@ data:
   hit: 0
   cooldown_duration: 25_000
 
-  periodic_interval: 1_000
+  periodic_initial_delay: 1_770 # 1350(summon.summoned) + 420(summon.attack1.attackAfter)
+  periodic_interval: 900
   periodic_damage: "{{ 215 + skill_level * 8 }}"
   periodic_hit: 9
   lasting_duration: 10_000

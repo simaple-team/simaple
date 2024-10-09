@@ -82,6 +82,7 @@ data:
 
   cooldown_duration: 250_000
 
+  periodic_initial_delay: 2160 # summon.summoned
   periodic_interval: 2100
   periodic_damage: "{{ 275 + 11 * skill_level }}"
   periodic_hit: 6

@@ -47,9 +47,21 @@ class TriplePeriodicDamageHexaComponent(SkillComponent, InvalidatableCooldownTra
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic_01": Periodic(interval=self.periodic_01.interval, time_left=0),
-            "periodic_02": Periodic(interval=self.periodic_02.interval, time_left=0),
-            "periodic_03": Periodic(interval=self.periodic_03.interval, time_left=0),
+            "periodic_01": Periodic(
+                interval=self.periodic_01.interval,
+                initial_counter=self.periodic_01.initial_delay,
+                time_left=0,
+            ),
+            "periodic_02": Periodic(
+                interval=self.periodic_02.interval,
+                initial_counter=self.periodic_02.initial_delay,
+                time_left=0,
+            ),
+            "periodic_03": Periodic(
+                interval=self.periodic_03.interval,
+                initial_counter=self.periodic_03.initial_delay,
+                time_left=0,
+            ),
         }
 
     @reducer_method
