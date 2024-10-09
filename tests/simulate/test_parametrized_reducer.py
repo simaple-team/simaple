@@ -35,6 +35,10 @@ class ViewTestComponent(Component):
     def use(self, _: None, state: SomeTestState):
         return state, [{"name": self.name, "payload": {}, "tag": "use"}]
 
+    @reducer_method
+    def elapse(self, payload: int, state: SomeTestState):
+        return state, []
+
 
 def test_paramterizd_reducer():
     store = AddressedStore(ConcreteStore())
@@ -94,10 +98,62 @@ def test_addon():
         name="component_b",
     )
 
+    component_c = ViewTestComponent(
+        id="dummy",
+        name="component_c",
+    )
+
     engine_builder.add_component(component_a)
     engine_builder.add_component(component_b)
+    engine_builder.add_component(component_c)
 
     simulation_runtime = engine_builder.build_simulation_runtime()
+
+    assert simulation_runtime.resolve(
+        {"name": "*", "method": "elapse", "payload": 2000}
+    ) == [
+        {
+            "name": "component_a",
+            "method": "elapse",
+            "tag": "global.accept",
+            "payload": {},
+            "handler": None,
+        },
+        {
+            "name": "component_b",
+            "method": "elapse",
+            "tag": "global.accept",
+            "payload": {},
+            "handler": None,
+        },
+        {
+            "name": "component_c",
+            "method": "elapse",
+            "tag": "global.accept",
+            "payload": {},
+            "handler": None,
+        },
+    ]
+
+    assert simulation_runtime.resolve(
+        {"name": "component_c", "method": "use", "payload": None}
+    ) == [
+        {
+            "name": "component_c",
+            "payload": {},
+            "method": "use",
+            "tag": "use",
+            "handler": None,
+        },
+        {
+            "name": "component_c",
+            "method": "use",
+            "tag": "global.accept",
+            "payload": {},
+            "handler": None,
+        },
+    ]
+
     assert simulation_runtime.resolve(
         {"name": "component_b", "method": "some_reducer", "payload": {"value": 100}}
     )[0] == {
