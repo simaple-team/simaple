@@ -145,12 +145,19 @@ class ContextDispatcher(Dispatcher):
     Context Dispatcher triggers another dispatcher with defined action.
     """
 
-    def __init__(self, defined_action: Action, context: Dispatcher):
+    def __init__(self, origin_name, origin_method, defined_action: Action, context: Dispatcher):
         self._defined_action = defined_action
         self._context = context
-        self._signature = message_signature(self._defined_action)
+        self._signature = message_signature({
+            "name": origin_name,
+            "method": origin_method,
+            "payload": None
+        })
 
-    def __call__(self, _: Action, store: Store) -> list[Event]:
+    def __call__(self, action: Action, store: Store) -> list[Event]:
+        if message_signature(action) != self._signature:
+            return []
+
         return self._context(self._defined_action, store)
 
     def includes(self, signature: str) -> bool:
@@ -163,8 +170,10 @@ class ContextDispatcher(Dispatcher):
         pass
 
 
-def addon_to_dispatcher(addon: _ComponentAddon, context_dispatcher: Dispatcher):
+def addon_to_dispatcher(origin_name: str, addon: _ComponentAddon, context_dispatcher: Dispatcher):
     return ContextDispatcher(
+        origin_name,
+        addon.when,
         {
             "name": addon.destination,
             "method": addon.method,
@@ -194,7 +203,9 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
     def get_context_synced_dispatcher(self, context_dispatcher: Dispatcher):
         return TandemDispatcher(
             self,
-            [addon_to_dispatcher(addon, context_dispatcher) for addon in self._addons],
+            [addon_to_dispatcher(
+                self._name,
+                addon, context_dispatcher) for addon in self._addons],
         )
 
     def includes(self, signature: str) -> bool:
