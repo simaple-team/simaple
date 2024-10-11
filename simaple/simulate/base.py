@@ -67,6 +67,9 @@ class Store(metaclass=ABCMeta):
         return self.read_entity(name, default=default), entity_setter
 
     @abstractmethod
+    def read(self, name: str) -> dict[str, Entity]: ...
+
+    @abstractmethod
     def read_entity(self, name: str, default: Optional[Entity]): ...
 
     @abstractmethod
@@ -85,9 +88,20 @@ class Store(metaclass=ABCMeta):
 class ConcreteStore(Store):
     def __init__(self) -> None:
         self._entities: dict[str, Entity] = {}
+        self._owned_entities: dict[str, list[str]] = defaultdict(list)
 
     def set_entity(self, name: str, entity: Entity) -> None:
         self._entities[name] = entity
+
+        if len(name.split(".")) == 2:
+            owner, entity_name = name.split(".")
+            self._owned_entities[owner, entity_name].append(entity_name)
+
+    def read(self, owner: str) -> dict[str, Entity]:
+        return {
+            self.read_entity(f"{owner}.{entity_name}", default=None)
+            for entity_name in self._owned_entities[owner]
+        }
 
     def read_entity(self, name: str, default: Optional[Entity]):
         if default is None:
@@ -126,6 +140,9 @@ class AddressedStore(Store):
         self._current_address = current_address
         self._concrete_store = concrete_store
 
+    def read(self, owner: str) -> dict[str, Entity]:
+        return self._concrete_store.read(owner)
+
     def set_entity(self, name: str, entity: Entity):
         address = self._resolve_address(name)
         return self._concrete_store.set_entity(address, entity)
@@ -158,9 +175,6 @@ class Dispatcher(metaclass=ABCMeta):
     def __call__(self, action: Action, store: Store) -> list[Event]: ...
 
     @abstractmethod
-    def includes(self, signature: str) -> bool: ...
-
-    @abstractmethod
     def init_store(self, store: Store) -> None: ...
 
 
@@ -172,14 +186,17 @@ class TandemDispatcher(Dispatcher):
         self._next_dispatchers = next_dispatchers
 
     def __call__(self, action: Action, store: Store) -> list[Event]:
+        if not self._includes(message_signature(action)):
+            return []
+
         events = self._base_dispatcher(action, store)
         for dispatcher in self._next_dispatchers:
             events += dispatcher(action, store)
 
         return events
 
-    def includes(self, signature: str) -> bool:
-        return self._base_dispatcher.includes(signature)
+    def _includes(self, signature: str) -> bool:
+        return self._base_dispatcher._includes(signature)
 
     def init_store(self, store: Store) -> None:
         self._base_dispatcher.init_store(store)
@@ -187,13 +204,9 @@ class TandemDispatcher(Dispatcher):
 
 def named_dispatcher(direction: str):
     def decorator(dispatcher: Dispatcher):
-        def _includes(signature: str) -> bool:
-            return signature == direction
-
         def _init_store(store: Store) -> None:
             return
 
-        setattr(dispatcher, "includes", _includes)
         setattr(dispatcher, "init_store", _init_store)
         return dispatcher
 
@@ -208,7 +221,7 @@ class RouterDispatcher(Dispatcher):
     def install(self, dispatcher: Dispatcher):
         self._dispatchers.append(dispatcher)
 
-    def includes(self, signature: str) -> bool:
+    def _includes(self, signature: str) -> bool:
         return signature in self._route_cache.keys()
 
     def __call__(self, action: Action, store: Store) -> list[Event]:
@@ -223,9 +236,8 @@ class RouterDispatcher(Dispatcher):
         cache = []
 
         for dispatcher in self._dispatchers:
-            if dispatcher.includes(signature):
-                cache.append(dispatcher)
-                events += dispatcher(action, store)
+            cache.append(dispatcher)
+            events += dispatcher(action, store)
 
         self._route_cache[signature] = cache
         return events

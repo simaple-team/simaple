@@ -160,7 +160,7 @@ class ContextDispatcher(Dispatcher):
 
         return self._context(self._defined_action, store)
 
-    def includes(self, signature: str) -> bool:
+    def _includes(self, signature: str) -> bool:
         return signature == self._signature
 
     def init_store(self, store: Store):
@@ -183,6 +183,46 @@ def addon_to_dispatcher(
         },
         context_dispatcher,
     )
+
+
+def regularize_returned_event(
+    maybe_events: Optional[Union[Event, list[Event]]]
+) -> list[Event]:
+    if maybe_events is None:
+        return []
+
+    if not isinstance(maybe_events, list):
+        return [maybe_events]
+
+    return maybe_events
+
+
+def tag_events_by_method_name(
+    owner_name, method_name: str, events: list[Event]
+) -> list[Event]:
+    tagged_events: list[Event] = []
+    for event in events:
+        tagged_event: Event = {
+            "name": event["name"],
+            "payload": event["payload"],
+            "method": method_name,
+            "tag": event["tag"] or method_name,
+            "handler": event.get("handler", None),
+        }
+        tagged_events.append(tagged_event)
+
+    if all(event["tag"] not in (Tag.REJECT, Tag.ACCEPT) for event in events):
+        return tagged_events + [
+            {
+                "name": owner_name,
+                "method": method_name,
+                "tag": Tag.ACCEPT,
+                "payload": {},
+                "handler": None,
+            }
+        ]
+
+    return tagged_events
 
 
 class ReducerMethodWrappingDispatcher(Dispatcher):
@@ -211,7 +251,7 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
             ],
         )
 
-    def includes(self, signature: str) -> bool:
+    def _includes(self, signature: str) -> bool:
         return self._find_mapping_name(signature) is not None
 
     def init_store(self, store: Store):
@@ -220,6 +260,9 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
             local_store.read_entity(name, default=self._default_state[name])
 
     def __call__(self, action: Action, store: Store) -> list[Event]:
+        if not self._includes(message_signature(action)):
+            return []
+
         mapping_name = self._find_mapping_name(message_signature(action))
 
         if not mapping_name:
@@ -245,47 +288,9 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
             output_state,
         )
 
-        events = self.regularize_returned_event(maybe_events)
+        events = regularize_returned_event(maybe_events)
 
-        return self.tag_events_by_method_name(method_name, events)
-
-    def regularize_returned_event(
-        self, maybe_events: Optional[Union[Event, list[Event]]]
-    ) -> list[Event]:
-        if maybe_events is None:
-            return []
-
-        if not isinstance(maybe_events, list):
-            return [maybe_events]
-
-        return maybe_events
-
-    def tag_events_by_method_name(
-        self, method_name: str, events: list[Event]
-    ) -> list[Event]:
-        tagged_events: list[Event] = []
-        for event in events:
-            tagged_event: Event = {
-                "name": event["name"],
-                "payload": event["payload"],
-                "method": method_name,
-                "tag": event["tag"] or method_name,
-                "handler": event.get("handler", None),
-            }
-            tagged_events.append(tagged_event)
-
-        if all(event["tag"] not in (Tag.REJECT, Tag.ACCEPT) for event in events):
-            return tagged_events + [
-                {
-                    "name": self._name,
-                    "method": method_name,
-                    "tag": Tag.ACCEPT,
-                    "payload": {},
-                    "handler": None,
-                }
-            ]
-
-        return tagged_events
+        return tag_events_by_method_name(self._name, method_name, events)
 
     def _find_mapping_name(self, target: str) -> Optional[str]:
         if target in self.reducer_mappings:
@@ -296,6 +301,48 @@ class ReducerMethodWrappingDispatcher(Dispatcher):
                 return cast(str, mapping_name)
 
         return None
+
+from functools import wraps
+
+def use_store(store_name, bounded_stores: dict[str, str]):
+    def wrapper(reducer):
+        assert "state" in reducer.__annotations__
+        assert "payload" in reducer.__annotations__
+
+        @wraps(reducer)
+        def wrapped(global_store: Store, payload) -> list[Event]:
+            state_type = reducer.__annotations__["state"]
+            payload_type = reducer.__annotations__["payload"]
+
+            local_store = global_store.local(store_name)
+
+            my_entities = local_store.read(store_name)
+            my_entity_keys = my_entities.keys()
+
+            for name, address in bounded_stores.items():
+                my_entities[name] = local_store.read_entity(address)
+
+            state = state_type(**my_entities)
+
+            if payload_type is not None:
+                payload = payload_type(**payload)
+
+            output_state, maybe_events = reducer(
+                payload, state
+            )
+
+            for name, address in bounded_stores.items():
+                local_store.set_entity(address, output_state[name])
+
+            for name in my_entity_keys:
+                local_store.set_entity(name, output_state[name])
+
+            return regularize_returned_event(maybe_events)
+
+        return wrapped
+
+    return wrapper
+
 
 
 class WrappedView:
@@ -392,6 +439,26 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     @property
     def event_provider(self) -> EventProvider:
         return NamedEventProvider(self.name)
+
+    def get_reducers(self) -> dict[str, Callable[..., list[Event]]]:
+        return {
+            method_name: use_store(
+                self.name,
+                bounded_stores=self.binds,
+            )(getattr(self, method_name)) 
+            for method_name in getattr(self, "__reducers__")
+        }
+
+    def get_views(self):
+        return {
+            method_name: WrappedView(
+                self.name,
+                ComponentMethodWrapper(getattr(self, method_name), skip_count=0),
+                self.get_default_state(),
+                binds=self.binds,
+            )
+            for method_name in getattr(self, "__views__")
+        }
 
     def get_method_mappings(
         self,
