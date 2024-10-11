@@ -93,13 +93,13 @@ class ConcreteStore(Store):
     def set_entity(self, name: str, entity: Entity) -> None:
         self._entities[name] = entity
 
-        if len(name.split(".")) == 2:
-            owner, entity_name = name.split(".")
-            self._owned_entities[owner, entity_name].append(entity_name)
+        if len(name.split(".")) == 3:
+            _, owner, entity_name = name.split(".")
+            self._owned_entities[owner].append(entity_name)
 
     def read(self, owner: str) -> dict[str, Entity]:
         return {
-            self.read_entity(f"{owner}.{entity_name}", default=None)
+            entity_name: self.read_entity(f".{owner}.{entity_name}", None)
             for entity_name in self._owned_entities[owner]
         }
 
@@ -121,7 +121,8 @@ class ConcreteStore(Store):
         return {k: self._save_entity(v) for k, v in self._entities.items()}
 
     def load(self, saved_store: dict[str, dict]) -> None:
-        self._entities = {k: self._load_entity(v) for k, v in saved_store.items()}
+        for k, v in saved_store.items():
+            self.set_entity(k, self._load_entity(v))        
 
     def _save_entity(self, entity: Entity) -> dict:
         entity_clsname = entity.__class__.__name__
