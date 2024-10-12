@@ -9,7 +9,7 @@ from simaple.simulate.base import (
     View,
     ViewSet,
 )
-from simaple.simulate.component.base import Component
+from simaple.simulate.component.base import Component, init_component_store
 from simaple.simulate.engine import BasicOperationEngine, OperationEngine
 from simaple.simulate.policy import get_operation_handlers
 from simaple.simulate.view import AggregationView
@@ -45,9 +45,20 @@ class EngineBuilder:
 
         return self
 
-    def add_component(self, component: Component) -> "EngineBuilder":
+    def _add_component(self, component: Component) -> "EngineBuilder":
         dispatcher = component.export_dispatcher()
         self.add_dispatcher(dispatcher.get_context_synced_dispatcher(self._router))
+
+        for view_name, view in component.get_views().items():
+            self._viewset.add_view(f"{component.name}.{view_name}", view)
+
+        return self
+
+    def add_component(self, component: Component) -> "EngineBuilder":
+        reducer = component.get_reducer()
+        init_component_store(component.name, component.get_default_state(), self._store)
+
+        self._router.install(reducer)
 
         for view_name, view in component.get_views().items():
             self._viewset.add_view(f"{component.name}.{view_name}", view)
