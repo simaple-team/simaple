@@ -46,15 +46,6 @@ class EngineBuilder:
 
         return self
 
-    def _add_component(self, component: Component) -> "EngineBuilder":
-        dispatcher = component.export_dispatcher()
-        self.add_dispatcher(dispatcher.get_context_synced_dispatcher(self._router))
-
-        for view_name, view in component.get_views().items():
-            self._viewset.add_view(f"{component.name}.{view_name}", view)
-
-        return self
-
     def add_component(self, component: Component) -> "EngineBuilder":
         reducer = component.get_reducer()
         init_component_store(component.name, component.get_default_state(), self._store)
