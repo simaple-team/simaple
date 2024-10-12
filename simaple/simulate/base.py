@@ -171,6 +171,8 @@ class AddressedStore(Store):
         return self._concrete_store.load(saved_store)
 
 
+ReducerType = Callable[[Action, Store], list[Event]]
+
 class Dispatcher(metaclass=ABCMeta):
     @abstractmethod
     def __call__(self, action: Action, store: Store) -> list[Event]: ...

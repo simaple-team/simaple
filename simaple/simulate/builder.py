@@ -13,6 +13,7 @@ from simaple.simulate.component.base import Component, init_component_store
 from simaple.simulate.engine import BasicOperationEngine, OperationEngine
 from simaple.simulate.policy import get_operation_handlers
 from simaple.simulate.view import AggregationView
+from simaple.simulate.reducer import wildcard_and_listening_action_reducer
 
 
 class EngineBuilder:
@@ -58,6 +59,7 @@ class EngineBuilder:
         reducer = component.get_reducer()
         init_component_store(component.name, component.get_default_state(), self._store)
 
+        reducer = wildcard_and_listening_action_reducer(component.name, component.listening_actions)(reducer)
         self._router.install(reducer)
 
         for view_name, view in component.get_views().items():

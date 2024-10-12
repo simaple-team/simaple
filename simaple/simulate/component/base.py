@@ -198,7 +198,7 @@ def regularize_returned_event(
 
 
 def tag_events_by_method_name(
-    owner_name, method_name: str, events: list[Event]
+    owner_name: str, method_name: str, events: list[Event]
 ) -> list[Event]:
     tagged_events: list[Event] = []
     for event in events:
@@ -312,15 +312,17 @@ def init_component_store(owner_name, default_state, store: Store):
 
 def use_store(store_name, bounded_stores: dict[str, str]):
     def wrapper(reducer):
+        payload_type = list(inspect.signature(reducer).parameters.values())[
+            0
+        ].annotation
+        state_type = list(inspect.signature(reducer).parameters.values())[
+            1
+        ].annotation
 
         @wraps(reducer)
         def wrapped(action: Action, global_store: Store) -> list[Event]:
-            payload_type = list(inspect.signature(reducer).parameters.values())[
-                0
-            ].annotation
-            state_type = list(inspect.signature(reducer).parameters.values())[
-                1
-            ].annotation
+            # if no-op, return []
+            ...
 
             local_store = global_store.local(store_name)
 
@@ -334,8 +336,9 @@ def use_store(store_name, bounded_stores: dict[str, str]):
 
             state = state_type(**my_entities)
 
-            payload = None
-            if payload_type is not None:
+            payload = action["payload"]
+
+            if payload_type not in (int, str, float, None):
                 payload = payload_type(**action["payload"])
 
             output_state, maybe_events = reducer(
@@ -343,10 +346,10 @@ def use_store(store_name, bounded_stores: dict[str, str]):
             )
             output_state_dict = dict(output_state)
 
-            for name, address in bounded_stores.items():
-                local_store.set_entity(address, output_state_dict[name])
+            for name in set(output_state_dict.keys()) & set(bounded_stores.keys()):
+                local_store.set_entity(bounded_stores[name], output_state_dict[name])
 
-            for name in my_entity_keys:
+            for name in (set(output_state_dict.keys()) & set(my_entity_keys)) - set(bounded_stores.keys()):
                 local_store.set_entity(name, output_state_dict[name])
 
             return regularize_returned_event(maybe_events)
@@ -453,10 +456,13 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         return NamedEventProvider(self.name)
 
     def get_reducer(self) -> Callable[[Action, Store], list[Event]]:
+        bounded_stores = GlobalProperty.get_default_binds()
+        bounded_stores.update(self.binds)
+
         reducers = {
             method_name: use_store(
                 self.name,
-                bounded_stores=self.binds,
+                bounded_stores=bounded_stores,
             )(getattr(self, method_name)) 
             for method_name in getattr(self, "__reducers__")
         }
@@ -467,7 +473,8 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
             if action["method"] not in reducers:
                 return []
 
-            return reducers[action["method"]](action, store)
+            events = reducers[action["method"]](action, store)
+            return tag_events_by_method_name(self.name, action["method"], events)
 
         return aggregated_reducer
 
