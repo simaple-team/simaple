@@ -37,47 +37,6 @@ class ReducerState(BaseModel):
         return super().model_copy(deep=True)  # type: ignore
 
 
-class ComponentMethodWrapper:
-    def __init__(
-        self, func: ReducerType, skip_count=1, static_payload: Optional[dict] = None
-    ):
-        self._func = func
-        self._has_payload = skip_count == 1
-        self._static_payload = static_payload
-
-        self._payload_type: Optional[Type[BaseModel]] = None
-        if len(inspect.signature(func).parameters.values()) > 0:
-            self._payload_type = list(inspect.signature(func).parameters.values())[
-                0
-            ].annotation
-
-        try:
-            self._state_type = list(inspect.signature(func).parameters.values())[
-                skip_count
-            ].annotation
-        except IndexError as e:
-            logger.info(f"Wrapped method doesn't have state parameter: {func}.")
-            raise e
-
-    def __call__(self, *args) -> tuple[Union[tuple[Entity], Entity], Any]:
-        return self._func(*args)
-
-    def translate_payload(self, payload: Optional[Union[int, str, float, dict]]):
-        if not self._has_payload:
-            raise ValueError("no skip_count do not support payload translation")
-
-        if self._static_payload and payload is None:
-            payload = copy.deepcopy(self._static_payload)
-
-        if not isinstance(payload, dict) or self._payload_type is None:
-            return payload
-
-        return self._payload_type.model_validate(payload)
-
-    def get_state_type(self):
-        return self._state_type
-
-
 def reducer_method(func):
     func.__isreducer__ = True
 
@@ -88,41 +47,6 @@ def view_method(func):
     func.__isview__ = True
 
     return func
-
-
-class StoreAdapter:
-    def __init__(
-        self,
-        default_state: dict[str, Entity],
-        binds=None,
-    ):
-        self._default_state = default_state
-        if binds is None:
-            binds = {}
-        binds.update(GlobalProperty.get_default_binds())
-
-        self._binds = binds
-
-    def get_state(self, store: Store, state_type):
-        entities = {
-            name: store.read_entity(address, default=self._default_state.get(name))
-            for name, address in self._get_bound_names().items()
-        }
-
-        return state_type(**entities)
-
-    def set_state(self, store: Store, state):
-        bounded_names = self._get_bound_names()
-
-        for name, entity in dict(state).items():
-            if name in bounded_names:
-                store.set_entity(bounded_names[name], entity)
-
-    def _get_bound_names(self) -> dict[str, str]:
-        names = {name: name for name in self._default_state}
-        names.update(self._binds)
-
-        return names
 
 
 class _ComponentAddon(
@@ -188,6 +112,33 @@ def init_component_store(owner_name, default_state, store: Store):
         local_store.set_entity(name, default_state[name])
 
 
+def view_use_store(store_name, bounded_stores: dict[str, str]):
+    def wrapper(viewer):
+        state_type = list(inspect.signature(viewer).parameters.values())[
+            0
+        ].annotation
+
+        @wraps(viewer)
+        def wrapped(global_store: Store):
+            local_store = global_store.local(store_name)
+
+            my_entities = local_store.read(store_name)
+            
+            for name, address in bounded_stores.items():
+                entity = local_store.read_entity(address, None)
+                assert entity is not None
+                my_entities[name] = entity
+
+            state = state_type(**my_entities)
+
+            view = viewer(state)
+            return view
+
+        return wrapped
+
+    return wrapper
+
+
 def use_store(store_name, bounded_stores: dict[str, str]):
     def wrapper(reducer):
         payload_type = list(inspect.signature(reducer).parameters.values())[
@@ -235,33 +186,6 @@ def use_store(store_name, bounded_stores: dict[str, str]):
         return wrapped
 
     return wrapper
-
-
-
-class WrappedView:
-    def __init__(
-        self,
-        name: str,
-        wrapped_view_method: ComponentMethodWrapper,
-        default_state: dict[str, Entity],
-        binds=None,
-    ):
-        self._name = name
-        self._default_state = default_state
-        self._wrapped_view_method = wrapped_view_method
-        self._store_adapter = StoreAdapter(self._default_state, binds)
-
-    def __call__(self, store: Store):
-        local_store = store.local(self._name)
-        try:
-            input_state = self._store_adapter.get_state(
-                local_store, self._wrapped_view_method.get_state_type()
-            )
-            view = self._wrapped_view_method(input_state)
-
-            return view
-        except ValidationError as e:
-            raise ValueError(f"Error raised from {self._name}\n{e}") from e
 
 
 class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
@@ -357,12 +281,13 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         return aggregated_reducer
 
     def get_views(self):
+        bounded_stores = GlobalProperty.get_default_binds()
+        bounded_stores.update(self.binds)
+
         return {
-            method_name: WrappedView(
+            method_name: view_use_store(
                 self.name,
-                ComponentMethodWrapper(getattr(self, method_name), skip_count=0),
-                self.get_default_state(),
-                binds=self.binds,
-            )
+                bounded_stores=bounded_stores,
+            )(getattr(self, method_name))
             for method_name in getattr(self, "__views__")
         }
