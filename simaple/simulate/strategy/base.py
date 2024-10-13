@@ -1,6 +1,7 @@
 from typing import Callable, Generator, Optional
 
-from simaple.simulate.core.base import Event, ViewerType
+from simaple.simulate.core.base import Event
+from simaple.simulate.core.view import ViewerType
 from simaple.simulate.engine import OperationEngine
 from simaple.simulate.policy.base import Operation
 

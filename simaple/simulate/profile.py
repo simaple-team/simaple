@@ -1,5 +1,5 @@
 from simaple.simulate.component.view import Validity
-from simaple.simulate.core.base import ViewerType
+from simaple.simulate.core.view import ViewerType
 
 
 def available(validity: Validity) -> bool:

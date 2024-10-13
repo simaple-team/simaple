@@ -1,16 +1,9 @@
 from typing import Callable, Generator, Protocol, runtime_checkable
 
-from simaple.simulate.core.base import (
-    AddressedStore,
-    Checkpoint,
-    Event,
-    PlayLog,
-    PostActionCallback,
-    ReducerType,
-    ViewerType,
-    ViewSet,
-    play,
-)
+from simaple.simulate.core.base import Event
+from simaple.simulate.core.runtime import PlayLog, PostActionCallback, play
+from simaple.simulate.core.store import AddressedStore, Checkpoint, ReducerType
+from simaple.simulate.core.view import ViewerType, ViewSet
 from simaple.simulate.policy.base import (
     Command,
     ConsoleText,

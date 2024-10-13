@@ -1,14 +1,9 @@
 from typing import Optional, Type
 
 from simaple.simulate.component.base import Component, init_component_store
-from simaple.simulate.core.base import (
-    AddressedStore,
-    ConcreteStore,
-    ReducerType,
-    View,
-    ViewSet,
-)
 from simaple.simulate.core.runtime import SimulationRuntime
+from simaple.simulate.core.store import AddressedStore, ConcreteStore, ReducerType
+from simaple.simulate.core.view import View, ViewSet
 from simaple.simulate.engine import BasicOperationEngine, OperationEngine
 from simaple.simulate.policy import get_operation_handlers
 from simaple.simulate.reducer import root_reducer, wildcard_and_listening_action_reducer

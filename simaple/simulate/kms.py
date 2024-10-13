@@ -10,7 +10,7 @@ from simaple.simulate.component.view import (
     RunningParentView,
     ValidityParentView,
 )
-from simaple.simulate.core.base import AddressedStore, ConcreteStore
+from simaple.simulate.core.store import AddressedStore, ConcreteStore
 from simaple.simulate.global_property import GlobalProperty
 from simaple.simulate.timer import clock_view, timer_delay_dispatcher
 

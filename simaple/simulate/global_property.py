@@ -1,5 +1,6 @@
 from simaple.core.base import ActionStat
-from simaple.simulate.core.base import Entity, Store
+from simaple.simulate.core.base import Entity
+from simaple.simulate.core.store import Store
 
 
 class Dynamics(Entity):

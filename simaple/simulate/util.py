@@ -1,11 +1,8 @@
 from loguru import logger
 
-from simaple.simulate.core.base import (
-    Event,
-    PostActionCallback,
-    ViewerType,
-    message_signature,
-)
+from simaple.simulate.core.base import Event, message_signature
+from simaple.simulate.core.runtime import PostActionCallback
+from simaple.simulate.core.view import ViewerType
 from simaple.simulate.reserved_names import Tag
 
 

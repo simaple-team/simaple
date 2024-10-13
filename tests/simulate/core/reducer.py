@@ -1,6 +1,7 @@
 import pytest
 
-from simaple.simulate.core.base import Action, ConcreteStore, Event, Store
+from simaple.simulate.core.base import Action, Event
+from simaple.simulate.core.store import ConcreteStore, Store
 from simaple.simulate.reducer import wildcard_and_listening_action_reducer
 
 

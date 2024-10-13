@@ -2,13 +2,8 @@ from functools import wraps
 from typing import Callable
 
 from simaple.simulate.component.base import WILD_CARD, StaticPayloadReducerInfo
-from simaple.simulate.core.base import (
-    Action,
-    Event,
-    ReducerType,
-    Store,
-    message_signature,
-)
+from simaple.simulate.core.base import Action, Event, message_signature
+from simaple.simulate.core.store import ReducerType, Store
 
 
 def compute_listening_action(
