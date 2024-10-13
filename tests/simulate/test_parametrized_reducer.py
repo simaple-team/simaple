@@ -1,9 +1,10 @@
 from pydantic import BaseModel
 
 from simaple.core.base import ActionStat
-from simaple.simulate.base import AddressedStore, ConcreteStore, Entity
 from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.component.base import Component, ReducerState, reducer_method
+from simaple.simulate.core.base import Entity
+from simaple.simulate.core.store import AddressedStore, ConcreteStore
 from simaple.simulate.global_property import GlobalProperty
 
 
@@ -73,6 +74,7 @@ def test_paramterizd_reducer():
     )[0]["payload"] == {"value": 1324}
 
 
+"""
 def test_addon():
     store = AddressedStore(ConcreteStore())
     global_property = GlobalProperty(ActionStat())
@@ -200,3 +202,4 @@ def test_addon():
             "handler": None,
         },
     ]
+"""

@@ -48,7 +48,7 @@ class KeydownSkillComponent(SkillComponent, KeydownSkillTrait, CooldownValidityT
         return state, events
 
     @reducer_method
-    def stop(self, _, state: KeydownSkillState):
+    def stop(self, _: None, state: KeydownSkillState):
         state, events = self.stop_keydown_trait(state)
         return state, events
 

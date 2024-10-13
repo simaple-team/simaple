@@ -1,7 +1,7 @@
 import pydantic
 
-from simaple.simulate.base import Entity
 from simaple.simulate.component.base import Component, ReducerState, reducer_method
+from simaple.simulate.core.base import Entity
 from simaple.simulate.reserved_names import Tag
 
 

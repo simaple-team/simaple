@@ -1,8 +1,8 @@
-from simaple.simulate.base import Action, Event, Store, named_dispatcher
+from simaple.simulate.core import Action, Event
+from simaple.simulate.core.store import Store
 from simaple.simulate.global_property import Clock
 
 
-@named_dispatcher("*.elapse")
 def timer_delay_dispatcher(action: Action, store: Store) -> list[Event]:
     """A time-summation dispatcher, which calculates total passed time."""
     if action["method"] != "elapse" and action["name"] != "*":

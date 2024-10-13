@@ -1,7 +1,6 @@
 from typing import Optional
 
 from simaple.core import Stat
-from simaple.simulate.base import Entity
 from simaple.simulate.component.base import (
     Component,
     ReducerState,
@@ -18,6 +17,7 @@ from simaple.simulate.component.trait.impl import (
 )
 from simaple.simulate.component.util import ignore_rejected, is_rejected
 from simaple.simulate.component.view import Running, Validity
+from simaple.simulate.core.base import Entity
 from simaple.simulate.global_property import Dynamics
 
 
