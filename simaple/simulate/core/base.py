@@ -8,6 +8,7 @@ from typing import Any, Callable, Optional, TypeVar, Union, cast
 from pydantic import BaseModel, ConfigDict
 from typing_extensions import TypedDict
 
+from simaple.simulate.core.action import Action
 from simaple.simulate.reserved_names import Tag
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
@@ -16,20 +17,6 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 
 
 class Entity(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="Entity")): ...
-
-
-class Action(TypedDict):
-    """
-    Action is primitive value-object which indicated
-    what `Component` and Which `method` will be triggerd.
-    """
-
-    name: str
-    method: str
-    payload: Union[int, str, float, dict, None]
-
-
-setattr(Action, "__pydantic_config__", ConfigDict(extra="forbid"))
 
 
 class Event(TypedDict):
