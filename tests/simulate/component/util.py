@@ -1,7 +1,7 @@
 from typing import Callable, TypeVar, Union, cast
 
-from simaple.simulate.base import Event
 from simaple.simulate.component.base import ReducerState
+from simaple.simulate.core.base import Event
 from simaple.simulate.reserved_names import Tag
 
 

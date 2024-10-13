@@ -1,6 +1,6 @@
 from typing import Callable, Generator, Protocol, runtime_checkable
 
-from simaple.simulate.base import (
+from simaple.simulate.core.base import (
     AddressedStore,
     Checkpoint,
     Event,

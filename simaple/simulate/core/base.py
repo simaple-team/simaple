@@ -122,7 +122,7 @@ class ConcreteStore(Store):
 
     def load(self, saved_store: dict[str, dict]) -> None:
         for k, v in saved_store.items():
-            self.set_entity(k, self._load_entity(v))        
+            self.set_entity(k, self._load_entity(v))
 
     def _save_entity(self, entity: Entity) -> dict:
         entity_clsname = entity.__class__.__name__
@@ -172,6 +172,7 @@ class AddressedStore(Store):
 
 
 ReducerType = Callable[[Action, Store], list[Event]]
+
 
 class Dispatcher(metaclass=ABCMeta):
     @abstractmethod

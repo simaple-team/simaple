@@ -2,7 +2,7 @@ from typing import Optional
 
 import pydantic
 
-from simaple.simulate.base import Entity
+from simaple.simulate.core.base import Entity
 
 
 class Lasting(Entity):

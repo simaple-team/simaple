@@ -1,4 +1,3 @@
-from simaple.simulate.base import Event
 from simaple.simulate.component.state_protocol import (
     ConsumableDynamicsLastingGeneric,
     ConsumableProtocol,
@@ -25,6 +24,7 @@ from simaple.simulate.component.trait.base import (
     SimpleDamageTrait,
 )
 from simaple.simulate.component.view import KeydownView, Running, Validity
+from simaple.simulate.core.base import Event
 from simaple.simulate.reserved_names import Tag
 
 

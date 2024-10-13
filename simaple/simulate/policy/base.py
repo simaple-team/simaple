@@ -3,7 +3,7 @@ from typing import Any, Generator, Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, PrivateAttr
 
-from simaple.simulate.base import AddressedStore, Checkpoint, PlayLog
+from simaple.simulate.core.base import AddressedStore, Checkpoint, PlayLog
 
 
 class Operation(BaseModel):

@@ -6,7 +6,7 @@ from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union, cast
 from loguru import logger
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
-from simaple.simulate.base import (
+from simaple.simulate.core.base import (
     Action,
     Dispatcher,
     Entity,
@@ -106,6 +106,7 @@ def tag_events_by_method_name(
 
 from functools import wraps
 
+
 def init_component_store(owner_name, default_state, store: Store):
     local_store = store.local(owner_name)
     for name in default_state:
@@ -114,16 +115,14 @@ def init_component_store(owner_name, default_state, store: Store):
 
 def view_use_store(store_name, bounded_stores: dict[str, str]):
     def wrapper(viewer):
-        state_type = list(inspect.signature(viewer).parameters.values())[
-            0
-        ].annotation
+        state_type = list(inspect.signature(viewer).parameters.values())[0].annotation
 
         @wraps(viewer)
         def wrapped(global_store: Store):
             local_store = global_store.local(store_name)
 
             my_entities = local_store.read(store_name)
-            
+
             for name, address in bounded_stores.items():
                 entity = local_store.read_entity(address, None)
                 assert entity is not None
@@ -144,9 +143,7 @@ def use_store(store_name, bounded_stores: dict[str, str]):
         payload_type = list(inspect.signature(reducer).parameters.values())[
             0
         ].annotation
-        state_type = list(inspect.signature(reducer).parameters.values())[
-            1
-        ].annotation
+        state_type = list(inspect.signature(reducer).parameters.values())[1].annotation
 
         @wraps(reducer)
         def wrapped(action: Action, global_store: Store) -> list[Event]:
@@ -157,7 +154,7 @@ def use_store(store_name, bounded_stores: dict[str, str]):
 
             my_entities = local_store.read(store_name)
             my_entity_keys = my_entities.keys()
-            
+
             for name, address in bounded_stores.items():
                 entity = local_store.read_entity(address, None)
                 assert entity is not None
@@ -170,15 +167,15 @@ def use_store(store_name, bounded_stores: dict[str, str]):
             if payload_type not in (int, str, float, None):
                 payload = payload_type(**action["payload"])
 
-            output_state, maybe_events = reducer(
-                payload, state
-            )
+            output_state, maybe_events = reducer(payload, state)
             output_state_dict = dict(output_state)
 
             for name in set(output_state_dict.keys()) & set(bounded_stores.keys()):
                 local_store.set_entity(bounded_stores[name], output_state_dict[name])
 
-            for name in (set(output_state_dict.keys()) & set(my_entity_keys)) - set(bounded_stores.keys()):
+            for name in (set(output_state_dict.keys()) & set(my_entity_keys)) - set(
+                bounded_stores.keys()
+            ):
                 local_store.set_entity(name, output_state_dict[name])
 
             return regularize_returned_event(maybe_events)
@@ -265,7 +262,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
             method_name: use_store(
                 self.name,
                 bounded_stores=bounded_stores,
-            )(getattr(self, method_name)) 
+            )(getattr(self, method_name))
             for method_name in getattr(self, "__reducers__")
         }
 

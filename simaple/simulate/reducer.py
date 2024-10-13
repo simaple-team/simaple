@@ -1,26 +1,31 @@
-from simaple.simulate.component.base import StaticPayloadReducerInfo, WILD_CARD
-from typing import Callable
-from simaple.simulate.base import message_signature, Action, ReducerType, Store, Event
-
-
 from functools import wraps
+from typing import Callable
 
-def compute_listening_action(owner_name: str, reserved_action_info: str | StaticPayloadReducerInfo) -> Action:
+from simaple.simulate.component.base import WILD_CARD, StaticPayloadReducerInfo
+from simaple.simulate.core.base import (
+    Action,
+    Event,
+    ReducerType,
+    Store,
+    message_signature,
+)
+
+
+def compute_listening_action(
+    owner_name: str, reserved_action_info: str | StaticPayloadReducerInfo
+) -> Action:
     if isinstance(reserved_action_info, StaticPayloadReducerInfo):
         return {
             "method": reserved_action_info.name,
             "payload": reserved_action_info.payload,
-            "name": owner_name
+            "name": owner_name,
         }
-    return {
-        "method": reserved_action_info,
-        "name": owner_name,
-        "payload": None
-    }
+    return {"method": reserved_action_info, "name": owner_name, "payload": None}
 
 
-
-def wildcard_and_listening_action_reducer(owner_name: str, listening_actions: dict[str, str | StaticPayloadReducerInfo]) -> Callable[[ReducerType], ReducerType]:
+def wildcard_and_listening_action_reducer(
+    owner_name: str, listening_actions: dict[str, str | StaticPayloadReducerInfo]
+) -> Callable[[ReducerType], ReducerType]:
     mapped_actions = {
         listener_name: compute_listening_action(owner_name, target)
         for listener_name, target in listening_actions.items()
@@ -40,13 +45,19 @@ def wildcard_and_listening_action_reducer(owner_name: str, listening_actions: di
             _action_signature = message_signature(action)
 
             if anonymous_listeners:
-                for anonymous_listeners_name, anonymous_listeners_action in anonymous_listeners.items():
+                for (
+                    anonymous_listeners_name,
+                    anonymous_listeners_action,
+                ) in anonymous_listeners.items():
                     if anonymous_listeners_name in _action_signature:
                         print(anonymous_listeners_action, owner_name)
-                        anonymous_listeners_action: Action = {**anonymous_listeners_action, "payload": action["payload"]}
+                        anonymous_listeners_action: Action = {
+                            **anonymous_listeners_action,
+                            "payload": action["payload"],
+                        }
                         return base_reducer(anonymous_listeners_action, store)
 
-            if _action_signature in mapped_actions:  
+            if _action_signature in mapped_actions:
                 action = mapped_actions[_action_signature]
             return base_reducer(action, store)
 

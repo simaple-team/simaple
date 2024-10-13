@@ -1,6 +1,6 @@
 from functools import wraps
 
-from simaple.simulate.base import Event
+from simaple.simulate.core.base import Event
 from simaple.simulate.reserved_names import Tag
 
 

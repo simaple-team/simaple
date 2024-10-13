@@ -1,5 +1,5 @@
 from simaple.core.base import ActionStat
-from simaple.simulate.base import Entity, Store
+from simaple.simulate.core.base import Entity, Store
 
 
 class Dynamics(Entity):

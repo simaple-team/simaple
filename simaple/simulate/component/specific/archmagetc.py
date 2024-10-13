@@ -1,7 +1,6 @@
 from typing import Optional
 
 from simaple.core.base import Stat
-from simaple.simulate.base import Entity
 from simaple.simulate.component.base import (
     Component,
     ReducerState,
@@ -16,6 +15,7 @@ from simaple.simulate.component.trait.impl import (
     UseSimpleAttackTrait,
 )
 from simaple.simulate.component.view import Running
+from simaple.simulate.core.base import Entity
 from simaple.simulate.global_property import Dynamics
 
 
