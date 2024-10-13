@@ -5,7 +5,8 @@ from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from simaple.simulate.core import Action, Entity, Event
+from simaple.simulate.core import Action, ActionSignature, Entity, Event
+from simaple.simulate.core.reducer import Listener, ReducerPrecursor
 from simaple.simulate.core.store import Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import GlobalProperty
@@ -96,6 +97,18 @@ def tag_events_by_method_name(
     return tagged_events
 
 
+def event_tagged_reducer(owner_name: str, method_name: str):
+    def wrapper(reducer):
+        @wraps(reducer)
+        def wrapped(action: Action, store: Store) -> list[Event]:
+            events = reducer(action, store)
+            return tag_events_by_method_name(owner_name, method_name, events)
+
+        return wrapped
+
+    return wrapper
+
+
 def init_component_store(owner_name, default_state, store: Store):
     local_store = store.local(owner_name)
     for name in default_state:
@@ -144,7 +157,7 @@ def _create_binding_with_store(
     return property_address
 
 
-def compile_as_unsafe_reducer(property_address: dict[str, str]):
+def compile_into_unsafe_reducer(property_address: dict[str, str]):
     """
     address: mapping about {address: property_name}
 
@@ -229,6 +242,50 @@ class StaticPayloadReducerInfo(BaseModel):
     payload: dict
 
 
+def _old_signature_to_new_signature(old_signature: str) -> ActionSignature:
+    split = old_signature.split(".")
+
+    return split[0], ".".join(split[1:])
+
+
+def listening_actions_to_listeners(
+    owner_name: str, listening_actions: dict[str, Union[str, StaticPayloadReducerInfo]]
+) -> list[Listener]:
+    listeners: list[Listener] = []
+
+    for (
+        listening_old_signature,
+        target_method_name_or_static_payload,
+    ) in listening_actions.items():
+        action_signature = _old_signature_to_new_signature(listening_old_signature)
+        if isinstance(target_method_name_or_static_payload, str):
+            listeners.append(
+                {
+                    "action_name_or_reserved_values": action_signature[0],
+                    "action_method": action_signature[1],
+                    "target_reducer_name": (
+                        owner_name,
+                        target_method_name_or_static_payload,
+                    ),
+                    "payload": None,
+                }
+            )
+        else:
+            listeners.append(
+                {
+                    "action_name_or_reserved_values": action_signature[0],
+                    "action_method": action_signature[1],
+                    "target_reducer_name": (
+                        owner_name,
+                        target_method_name_or_static_payload.name,
+                    ),
+                    "payload": target_method_name_or_static_payload.payload,
+                }
+            )
+
+    return listeners
+
+
 class Component(BaseModel, metaclass=ComponentMetaclass):
     """
     Component is compact bundle of state-action.
@@ -249,7 +306,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     name: str
     listening_actions: dict[str, Union[str, StaticPayloadReducerInfo]] = Field(
         default_factory=dict
-    )
+    )  # Access by external only
     binds: dict[str, str] = Field(default_factory=dict)
     addons: list[_ComponentAddon] = Field(default_factory=list)
 
@@ -262,9 +319,9 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     def event_provider(self) -> EventProvider:
         return NamedEventProvider(self.name)
 
-    def get_reducer(self) -> Callable[[Action, Store], list[Event]]:
+    def get_reducer_precursors(self) -> list[ReducerPrecursor]:
         if len(getattr(self, "__reducers__")) == 0:
-            return no_op_reducer
+            return []
 
         bounded_stores = GlobalProperty.get_default_binds()
         bounded_stores.update(self.binds)
@@ -281,11 +338,28 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
             bounded_stores,
         )
 
-        reducers = {
-            method_name: compile_as_unsafe_reducer(property_address)(
-                getattr(self, method_name)
-            )
+        return [
+            {
+                "unsafe_reducer": event_tagged_reducer(self.name, method_name)(
+                    compile_into_unsafe_reducer(property_address)(
+                        getattr(self, method_name)
+                    )
+                ),
+                "name": (self.name, method_name),
+                "target_action_signature": [
+                    (self.name, method_name),
+                    (WILD_CARD, method_name),
+                ],
+            }
             for method_name in getattr(self, "__reducers__")
+        ]
+
+    def get_reducer(self) -> Callable[[Action, Store], list[Event]]:
+        reducer_precursors = self.get_reducer_precursors()
+
+        reducers = {
+            precursor["name"][1]: precursor["unsafe_reducer"]
+            for precursor in reducer_precursors
         }
 
         def aggregated_reducer(action: Action, store: Store) -> list[Event]:

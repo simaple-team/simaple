@@ -1,13 +1,24 @@
 from typing import Optional, Type
 
-from simaple.simulate.component.base import Component, init_component_store
-from simaple.simulate.core.reducer import ReducerType
+from simaple.simulate.component.base import (
+    Component,
+    init_component_store,
+    listening_actions_to_listeners,
+)
+from simaple.simulate.core.reducer import (
+    Listener,
+    ReducerPrecursor,
+    ReducerType,
+    create_safe_reducer,
+    listener_to_reducer_precursor,
+    sum_reducers,
+)
 from simaple.simulate.core.runtime import SimulationRuntime
 from simaple.simulate.core.store import AddressedStore, ConcreteStore
 from simaple.simulate.core.view import View, ViewSet
 from simaple.simulate.engine import BasicOperationEngine, OperationEngine
 from simaple.simulate.policy import get_operation_handlers
-from simaple.simulate.reducer import root_reducer, wildcard_and_listening_action_reducer
+from simaple.simulate.reducer import wildcard_and_listening_action_reducer
 from simaple.simulate.view import AggregationView
 
 
@@ -16,6 +27,9 @@ class EngineBuilder:
         self._viewset: ViewSet = ViewSet()
 
         self._reducers = []
+
+        self._reducer_precursors: list[ReducerPrecursor] = []
+        self._listeners: list[Listener] = []
 
         if store is None:
             self._store: AddressedStore = AddressedStore(ConcreteStore())
@@ -38,7 +52,18 @@ class EngineBuilder:
         )
 
     def build_root_reducer(self) -> ReducerType:
-        return root_reducer(self._reducers)
+        reducer_precursor_from_listeners = [
+            listener_to_reducer_precursor(listener, self._reducer_precursors)
+            for listener in self._listeners
+        ]
+        return sum_reducers(
+            [
+                create_safe_reducer(
+                    self._reducer_precursors + reducer_precursor_from_listeners
+                )
+            ]
+            + self._reducers
+        )
 
     def add_reducer(self, reducer, store_initializer=None) -> "EngineBuilder":
         self._reducers.append(reducer)
@@ -50,11 +75,13 @@ class EngineBuilder:
     def add_component(self, component: Component) -> "EngineBuilder":
         init_component_store(component.name, component.get_default_state(), self._store)
 
-        reducer = component.get_reducer()
-        reducer = wildcard_and_listening_action_reducer(
+        precursors = component.get_reducer_precursors()
+        listeners = listening_actions_to_listeners(
             component.name, component.listening_actions
-        )(reducer)
-        self._reducers.append(reducer)
+        )
+
+        self._reducer_precursors += precursors
+        self._listeners += listeners
 
         for view_name, view in component.get_views().items():
             self._viewset.add_view(f"{component.name}.{view_name}", view)
