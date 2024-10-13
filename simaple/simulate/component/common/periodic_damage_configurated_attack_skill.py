@@ -1,24 +1,22 @@
-from typing import Optional
+from typing import Optional, TypedDict
 
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.common.periodic_trait as periodic_trait
+from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    InvalidatableCooldownTrait,
-    PeriodicWithSimpleDamageTrait,
-)
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
 
-class PeriodicDamageState(ReducerState):
+class PeriodicDamageState(TypedDict):
     cooldown: Cooldown
     periodic: Periodic
     dynamics: Dynamics
 
 
 class PeriodicDamageConfiguratedAttackSkillComponent(
-    SkillComponent, PeriodicWithSimpleDamageTrait, InvalidatableCooldownTrait
+    SkillComponent,
 ):
     name: str
     damage: float
@@ -34,7 +32,7 @@ class PeriodicDamageConfiguratedAttackSkillComponent(
 
     lasting_duration: float
 
-    def get_default_state(self):
+    def get_default_state(self) -> PeriodicDamageState:
         return {
             "cooldown": Cooldown(time_left=0),
             "periodic": Periodic(
@@ -42,36 +40,37 @@ class PeriodicDamageConfiguratedAttackSkillComponent(
                 initial_counter=self.periodic_initial_delay,
                 time_left=0,
             ),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
     @reducer_method
     def elapse(self, time: float, state: PeriodicDamageState):
-        return self.elapse_periodic_damage_trait(time, state)
+        return periodic_trait.elapse_periodic_with_cooldown(
+            state, time, self.periodic_damage, self.periodic_hit
+        )
 
     @reducer_method
     def use(self, _: None, state: PeriodicDamageState):
-        return self.use_periodic_damage_trait(state)
+        return periodic_trait.start_periodic_with_cooldown(
+            state,
+            damage=self.damage,
+            hit=self.hit,
+            delay=self.delay,
+            cooldown_duration=self.cooldown_duration,
+            lasting_duration=self.lasting_duration,
+        )
 
     @view_method
     def validity(self, state: PeriodicDamageState):
-        return self.validity_in_invalidatable_cooldown_trait(state)
+        return cooldown_trait.validity_view(
+            state,
+            self.id,
+            self.name,
+            self.cooldown_duration,
+        )
 
     @view_method
     def running(self, state: PeriodicDamageState) -> Running:
-        return Running(
-            id=self.id,
-            name=self.name,
-            time_left=state.periodic.time_left,
-            lasting_duration=self._get_lasting_duration(state),
+        return periodic_trait.running_view(
+            state, self.id, self.name, self.lasting_duration
         )
-
-    def _get_lasting_duration(self, state: PeriodicDamageState) -> float:
-        return self.lasting_duration
-
-    def _get_simple_damage_hit(self) -> tuple[float, float]:
-        return self.damage, self.hit
-
-    def _get_periodic_damage_hit(
-        self, state: PeriodicDamageState
-    ) -> tuple[float, float]:
-        return self.periodic_damage, self.periodic_hit

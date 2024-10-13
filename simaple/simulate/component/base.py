@@ -6,7 +6,7 @@ from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union
 from pydantic import BaseModel, ConfigDict, Field
 
 from simaple.simulate.core import Action, ActionSignature, Entity, Event
-from simaple.simulate.core.reducer import Listener, ReducerPrecursor
+from simaple.simulate.core.reducer import Listener, UnsafeReducer
 from simaple.simulate.core.store import Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import GlobalProperty
@@ -15,9 +15,10 @@ from simaple.spec.loadable import TaggedNamespacedABCMeta
 
 WILD_CARD = "*"
 
+StateT = TypeVar("StateT")
 
 ReducerType = Callable[..., tuple[Union[tuple[Entity], Entity], Any]]
-
+ReducerPrecursorType = Callable[[Any, Any, StateT], tuple[StateT, list[Event]]]
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -30,7 +31,7 @@ class ReducerState(BaseModel):
         return super().model_copy(deep=True)  # type: ignore
 
 
-def reducer_method(func):
+def reducer_method(func: ReducerPrecursorType) -> ReducerPrecursorType:
     func.__isreducer__ = True
 
     return func
@@ -97,11 +98,18 @@ def tag_events_by_method_name(
     return tagged_events
 
 
-def event_tagged_reducer(owner_name: str, method_name: str):
+def event_tagged_reducer(
+    owner_name: str, method_name: str, event_provider: EventProvider
+):
     def wrapper(reducer):
         @wraps(reducer)
         def wrapped(action: Action, store: Store) -> list[Event]:
             events = reducer(action, store)
+            if len(events) == 0:
+                return []
+
+            if events[0]["name"] != owner_name:
+                events = [event_provider.wrap_with_modifier(event) for event in events]
             return tag_events_by_method_name(owner_name, method_name, events)
 
         return wrapped
@@ -182,7 +190,10 @@ def compile_into_unsafe_reducer(property_address: dict[str, str]):
                 entity = global_store.read_entity(address, None)
                 my_entities[name] = entity
 
-            state = state_type(**my_entities)
+            if issubclass(state_type, ReducerState):
+                state = state_type(**my_entities)
+            else:
+                state = my_entities
 
             payload = action["payload"]
 
@@ -319,7 +330,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     def event_provider(self) -> EventProvider:
         return NamedEventProvider(self.name)
 
-    def get_reducer_precursors(self) -> list[ReducerPrecursor]:
+    def get_unsafe_reducers(self) -> list[UnsafeReducer]:
         if len(getattr(self, "__reducers__")) == 0:
             return []
 
@@ -332,15 +343,22 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
             inspect.signature(any_reducer).parameters.values()
         )[1].annotation
 
+        if issubclass(state_type, ReducerState):
+            model_fields = list(state_type.model_fields)
+        else:
+            model_fields = list(self.get_default_state().keys())
+
         property_address = _create_binding_with_store(
             self.name,
-            list(state_type.model_fields),
+            model_fields,
             bounded_stores,
         )
 
         return [
             {
-                "unsafe_reducer": event_tagged_reducer(self.name, method_name)(
+                "reducer": event_tagged_reducer(
+                    self.name, method_name, self.event_provider
+                )(
                     compile_into_unsafe_reducer(property_address)(
                         getattr(self, method_name)
                     )

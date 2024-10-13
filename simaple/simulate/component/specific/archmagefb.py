@@ -153,7 +153,7 @@ class PoisonNovaComponent(SkillComponent, AddDOTDamageTrait):
                 ),
             ]
 
-        return state, None
+        return state, []
 
     @view_method
     def validity(self, state: PoisonNovaState):

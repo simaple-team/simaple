@@ -23,9 +23,7 @@ def buff_component():
 
 @pytest.fixture
 def buff_state(buff_component: BuffSkillComponent, dynamics: Dynamics):
-    return BuffSkillState.model_validate(
-        {**buff_component.get_default_state(), "dynamics": dynamics}
-    )
+    return {**buff_component.get_default_state(), "dynamics": dynamics}
 
 
 def test_use_buff_component(

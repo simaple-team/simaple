@@ -14,7 +14,7 @@ class SkillComponent(Component):
     id: str
 
     @property
-    def event_provider(self) -> EventProvider:
+    def event_provider(self) -> NamedEventProvider:
         return NamedEventProvider(self.name, self.modifier)
 
     def invalidate_if_disabled(self, validity: Validity):
