@@ -31,7 +31,8 @@ def get_builder(
     for component in components:
         engine_builder.add_component(component)
 
-    engine_builder.add_dispatcher(timer_delay_dispatcher)
+    engine_builder.add_reducer(timer_delay_dispatcher)
+
     engine_builder.add_aggregation_view(InformationParentView, "info")
     engine_builder.add_aggregation_view(ValidityParentView, "validity")
     engine_builder.add_aggregation_view(BuffParentView, "buff")

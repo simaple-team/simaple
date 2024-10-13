@@ -5,7 +5,7 @@ from simaple.simulate.core.base import (
     Event,
     EventCallback,
     PostActionCallback,
-    RouterDispatcher,
+    ReducerType,
     ViewerType,
     ViewSet,
     play,
@@ -17,10 +17,8 @@ class SimulationRuntime:
     Runtime is a simple environment that handles action.
     """
 
-    def __init__(
-        self, store: AddressedStore, router: RouterDispatcher, viewset: ViewSet
-    ):
-        self._router: RouterDispatcher = router
+    def __init__(self, store: AddressedStore, reducer: ReducerType, viewset: ViewSet):
+        self._reducer: ReducerType = reducer
         self._store = store
         self._viewset = viewset
         self._previous_callbacks: list[EventCallback] = []
@@ -33,10 +31,10 @@ class SimulationRuntime:
         return self._show
 
     def resolve(self, action: Action) -> list[Event]:
-        return self._router(action, self._store)
+        return self._reducer(action, self._store)
 
     def play(self, action: Action) -> list[Event]:
-        self._store, events = play(self._store, action, self._router)
+        self._store, events = play(self._store, action, self._reducer)
 
         for event in events:
             for handler in self._callbacks:

@@ -64,3 +64,15 @@ def wildcard_and_listening_action_reducer(
         return reducer
 
     return wrapper
+
+
+def root_reducer(reducers: list[ReducerType]) -> ReducerType:
+    def reducer(action: Action, store: Store) -> list[Event]:
+        events = []
+
+        for reducer in reducers:
+            events += reducer(action, store)
+
+        return events
+
+    return reducer

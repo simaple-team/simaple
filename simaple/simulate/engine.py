@@ -6,7 +6,7 @@ from simaple.simulate.core.base import (
     Event,
     PlayLog,
     PostActionCallback,
-    RouterDispatcher,
+    ReducerType,
     ViewerType,
     ViewSet,
     play,
@@ -51,12 +51,12 @@ class BasicOperationEngine:
 
     def __init__(
         self,
-        router: RouterDispatcher,
+        reducer: ReducerType,
         store: AddressedStore,
         viewset: ViewSet,
         handlers: dict[str, Callable[[Operation], BehaviorGenerator]],
     ):
-        self._router = router
+        self._reducer = reducer
         self._viewset = viewset
         self._handlers = handlers
 
@@ -131,7 +131,7 @@ class BasicOperationEngine:
             if action is None:
                 break
 
-            store, self._buffered_events = play(store, action, self._router)
+            store, self._buffered_events = play(store, action, self._reducer)
 
             playlogs.append(
                 PlayLog(

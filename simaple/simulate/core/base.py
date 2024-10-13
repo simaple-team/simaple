@@ -161,81 +161,19 @@ class AddressedStore(Store):
 ReducerType = Callable[[Action, Store], list[Event]]
 
 
-class Dispatcher(metaclass=ABCMeta):
-    @abstractmethod
-    def __call__(self, action: Action, store: Store) -> list[Event]: ...
-
-    @abstractmethod
-    def init_store(self, store: Store) -> None: ...
-
-
-class TandemDispatcher(Dispatcher):
+class TandemReducer:
     def __init__(
-        self, base_dispatcher: Dispatcher, next_dispatchers: list[Dispatcher]
+        self, base_reducer: ReducerType, next_reducers: list[ReducerType]
     ) -> None:
-        self._base_dispatcher = base_dispatcher
-        self._next_dispatchers = next_dispatchers
+        self._base_reducer = base_reducer
+        self._next_reducers = next_reducers
 
     def __call__(self, action: Action, store: Store) -> list[Event]:
-        if not self._includes(message_signature(action)):
-            return []
-
-        events = self._base_dispatcher(action, store)
-        for dispatcher in self._next_dispatchers:
+        events = self._base_reducer(action, store)
+        for dispatcher in self._next_reducers:
             events += dispatcher(action, store)
 
         return events
-
-    def _includes(self, signature: str) -> bool:
-        return self._base_dispatcher._includes(signature)
-
-    def init_store(self, store: Store) -> None:
-        self._base_dispatcher.init_store(store)
-
-
-def named_dispatcher(direction: str):
-    def decorator(dispatcher: Dispatcher):
-        def _init_store(store: Store) -> None:
-            return
-
-        setattr(dispatcher, "init_store", _init_store)
-        return dispatcher
-
-    return decorator
-
-
-class RouterDispatcher(Dispatcher):
-    def __init__(self) -> None:
-        self._dispatchers: list[Dispatcher] = []
-        self._route_cache: dict[str, list[Dispatcher]] = defaultdict(list)
-
-    def install(self, dispatcher: Dispatcher):
-        self._dispatchers.append(dispatcher)
-
-    def _includes(self, signature: str) -> bool:
-        return signature in self._route_cache.keys()
-
-    def __call__(self, action: Action, store: Store) -> list[Event]:
-        events = []
-        signature = message_signature(action)
-        if signature in self._route_cache:
-            for dispatcher in self._route_cache[signature]:
-                events += dispatcher(action, store)
-
-            return events
-
-        cache = []
-
-        for dispatcher in self._dispatchers:
-            cache.append(dispatcher)
-            events += dispatcher(action, store)
-
-        self._route_cache[signature] = cache
-        return events
-
-    def init_store(self, store: Store) -> None:
-        for dispatcher in self._dispatchers:
-            dispatcher.init_store(store)
 
 
 View = Callable[[Store], Any]
@@ -329,7 +267,7 @@ class PreviousCallback(Entity):
 S = TypeVar("S", bound=Store)
 
 
-def play(store: S, action: Action, router: RouterDispatcher) -> tuple[S, list[Event]]:
+def play(store: S, action: Action, reducer: ReducerType) -> tuple[S, list[Event]]:
     events: list[Event] = []
     action_queue = [action]
 
@@ -342,7 +280,7 @@ def play(store: S, action: Action, router: RouterDispatcher) -> tuple[S, list[Ev
         action_queue = [emitted_callback] + action_queue + [done_callback]
 
     for target_action in action_queue:
-        resolved_events = router(target_action, store)
+        resolved_events = reducer(target_action, store)
         events += resolved_events
 
     # Save untriggered callbacks
