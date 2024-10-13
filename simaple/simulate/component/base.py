@@ -1,7 +1,7 @@
 import inspect
 from abc import abstractmethod
 from functools import wraps
-from typing import Any, Callable, NoReturn, Optional, TypeVar, Union
+from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -127,26 +127,46 @@ def view_use_store(store_name, bounded_stores: dict[str, str]):
     return wrapper
 
 
-def use_store(store_name, bounded_stores: dict[str, str]):
-    def wrapper(reducer):
-        payload_type = list(inspect.signature(reducer).parameters.values())[
+def _create_binding_with_store(
+    owner_name: str,
+    properties: list[str],
+    bindings: dict[str, str],
+):
+
+    property_address = {}
+
+    for property_name in properties:
+        if property_name in bindings:
+            property_address[property_name] = bindings[property_name]
+        else:
+            property_address[property_name] = f".{owner_name}.{property_name}"
+
+    return property_address
+
+
+def compile_as_unsafe_reducer(property_address: dict[str, str]):
+    """
+    address: mapping about {address: property_name}
+
+    Returning reducer does not ensure no-op for invalid action.
+    Create proper relation between action and reducer is responsible to caller.
+    """
+
+    def wrapper(component_method):
+        payload_type = list(inspect.signature(component_method).parameters.values())[
             0
         ].annotation
-        state_type = list(inspect.signature(reducer).parameters.values())[1].annotation
+        state_type = list(inspect.signature(component_method).parameters.values())[
+            1
+        ].annotation
 
-        @wraps(reducer)
+        @wraps(component_method)
         def wrapped(action: Action, global_store: Store) -> list[Event]:
             # if no-op, return []
-            ...
+            my_entities = {}
 
-            local_store = global_store.local(store_name)
-
-            my_entities = local_store.read(store_name)
-            my_entity_keys = my_entities.keys()
-
-            for name, address in bounded_stores.items():
-                entity = local_store.read_entity(address, None)
-                assert entity is not None
+            for name, address in property_address.items():
+                entity = global_store.read_entity(address, None)
                 my_entities[name] = entity
 
             state = state_type(**my_entities)
@@ -156,22 +176,21 @@ def use_store(store_name, bounded_stores: dict[str, str]):
             if payload_type not in (int, str, float, None):
                 payload = payload_type(**action["payload"])
 
-            output_state, maybe_events = reducer(payload, state)
+            output_state, maybe_events = component_method(payload, state)
             output_state_dict = dict(output_state)
 
-            for name in set(output_state_dict.keys()) & set(bounded_stores.keys()):
-                local_store.set_entity(bounded_stores[name], output_state_dict[name])
-
-            for name in (set(output_state_dict.keys()) & set(my_entity_keys)) - set(
-                bounded_stores.keys()
-            ):
-                local_store.set_entity(name, output_state_dict[name])
+            for name, address in property_address.items():
+                global_store.set_entity(address, output_state_dict[name])
 
             return regularize_returned_event(maybe_events)
 
         return wrapped
 
     return wrapper
+
+
+def no_op_reducer(action: Action, store: Store) -> list[Event]:
+    return []
 
 
 class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
@@ -244,14 +263,28 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         return NamedEventProvider(self.name)
 
     def get_reducer(self) -> Callable[[Action, Store], list[Event]]:
+        if len(getattr(self, "__reducers__")) == 0:
+            return no_op_reducer
+
         bounded_stores = GlobalProperty.get_default_binds()
         bounded_stores.update(self.binds)
 
+        # TODO: remove these lines with explicit state passing
+        any_reducer = getattr(self, list(getattr(self, "__reducers__"))[0])
+        state_type: Type[BaseModel] = list(
+            inspect.signature(any_reducer).parameters.values()
+        )[1].annotation
+
+        property_address = _create_binding_with_store(
+            self.name,
+            list(state_type.model_fields),
+            bounded_stores,
+        )
+
         reducers = {
-            method_name: use_store(
-                self.name,
-                bounded_stores=bounded_stores,
-            )(getattr(self, method_name))
+            method_name: compile_as_unsafe_reducer(property_address)(
+                getattr(self, method_name)
+            )
             for method_name in getattr(self, "__reducers__")
         }
 
