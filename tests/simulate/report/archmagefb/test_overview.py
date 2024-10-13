@@ -1,6 +1,7 @@
 import simaple.simulate.component.common  # noqa: F401
 from simaple.core.base import Stat
-from simaple.simulate.core.base import Action, SimulationRuntime, message_signature
+from simaple.simulate.core.base import Action, message_signature
+from simaple.simulate.core.runtime import SimulationRuntime
 from simaple.simulate.reserved_names import Tag
 
 
