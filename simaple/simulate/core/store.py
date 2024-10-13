@@ -122,9 +122,6 @@ class AddressedStore(Store):
         return self._concrete_store.load(saved_store)
 
 
-ReducerType = Callable[[Action, Store], list[Event]]
-
-
 class Checkpoint(BaseModel):
     model_config = ConfigDict(extra="forbid")
 

@@ -3,7 +3,8 @@ from typing import TypeVar
 from pydantic import BaseModel
 
 from simaple.simulate.core.base import Action, Entity, Event, EventCallback
-from simaple.simulate.core.store import AddressedStore, Checkpoint, ReducerType, Store
+from simaple.simulate.core.reducer import ReducerType
+from simaple.simulate.core.store import AddressedStore, Checkpoint, Store
 from simaple.simulate.core.view import ViewerType, ViewSet
 from simaple.simulate.reserved_names import Tag
 
