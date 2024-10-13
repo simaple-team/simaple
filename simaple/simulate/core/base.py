@@ -5,7 +5,7 @@ from typing import Optional, Union
 from pydantic import BaseModel, ConfigDict
 from typing_extensions import TypedDict
 
-from simaple.simulate.core.action import Action
+# from simaple.simulate.core.action import Action
 from simaple.spec.loadable import (  # pylint:disable=unused-import
     TaggedNamespacedABCMeta,
 )
@@ -32,13 +32,3 @@ class Event(TypedDict):
 
 
 setattr(Event, "__pydantic_config__", ConfigDict(extra="forbid"))
-
-
-def message_signature(message: Union[Action, Event]) -> str:
-    if len(message["method"]) == 0:
-        return message["name"]
-
-    return f"{message['name']}.{message['method']}"
-
-
-EventCallback = tuple[Action, Action]

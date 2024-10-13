@@ -5,7 +5,7 @@ from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from simaple.simulate.core.base import Action, Entity, Event
+from simaple.simulate.core import Action, Entity, Event
 from simaple.simulate.core.store import Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import GlobalProperty

@@ -1,7 +1,7 @@
 import functools
 from typing import Callable, Generator, Optional, cast
 
-from simaple.simulate.core.base import Action, Event
+from simaple.simulate.core import Action, Event
 from simaple.simulate.policy.base import Operation
 from simaple.simulate.reserved_names import Tag
 

@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
-from typing import Any, Callable, Optional, cast
+from typing import Any, Optional, cast
 
 from pydantic import BaseModel, ConfigDict
 
-from simaple.simulate.core.base import Action, Entity, Event
+from simaple.simulate.core import Entity
 from simaple.spec.loadable import get_class  # pylint:disable=unused-import
 
 

@@ -1,7 +1,7 @@
 import pytest
 
 from simaple.simulate.component.base import StaticPayloadReducerInfo
-from simaple.simulate.core.base import Action, Event
+from simaple.simulate.core import Action, Event
 from simaple.simulate.core.store import ConcreteStore, Store
 from simaple.simulate.reducer import wildcard_and_listening_action_reducer
 

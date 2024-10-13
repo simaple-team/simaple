@@ -6,7 +6,7 @@ import pydantic
 
 from simaple.core.base import Stat
 from simaple.simulate.component.view import Running, Validity
-from simaple.simulate.core.base import Action, Event
+from simaple.simulate.core import Action, Event
 from simaple.simulate.core.runtime import PlayLog
 from simaple.simulate.core.store import AddressedStore, Checkpoint
 from simaple.simulate.policy.base import Command, OperationLog
