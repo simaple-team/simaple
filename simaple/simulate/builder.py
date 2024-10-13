@@ -18,7 +18,6 @@ from simaple.simulate.core.store import AddressedStore, ConcreteStore
 from simaple.simulate.core.view import View, ViewSet
 from simaple.simulate.engine import BasicOperationEngine, OperationEngine
 from simaple.simulate.policy import get_operation_handlers
-from simaple.simulate.reducer import wildcard_and_listening_action_reducer
 from simaple.simulate.view import AggregationView
 
 
@@ -26,7 +25,7 @@ class EngineBuilder:
     def __init__(self, store: Optional[AddressedStore] = None) -> None:
         self._viewset: ViewSet = ViewSet()
 
-        self._reducers = []
+        self._reducers: list[ReducerType] = []
 
         self._reducer_precursors: list[ReducerPrecursor] = []
         self._listeners: list[Listener] = []

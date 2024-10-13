@@ -53,6 +53,7 @@ def play(store: S, action: Action, reducer: ReducerType) -> tuple[S, list[Event]
     previous_callbacks = store.read_entity(
         "previous_callbacks", default=PreviousCallback(events=[])
     )
+    assert previous_callbacks is not None
 
     # Join proposed action with previous event's callback
     for emitted_callback, done_callback in previous_callbacks.events:

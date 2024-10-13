@@ -354,25 +354,6 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
             for method_name in getattr(self, "__reducers__")
         ]
 
-    def get_reducer(self) -> Callable[[Action, Store], list[Event]]:
-        reducer_precursors = self.get_reducer_precursors()
-
-        reducers = {
-            precursor["name"][1]: precursor["unsafe_reducer"]
-            for precursor in reducer_precursors
-        }
-
-        def aggregated_reducer(action: Action, store: Store) -> list[Event]:
-            if action["name"] != self.name:
-                return []
-            if action["method"] not in reducers:
-                return []
-
-            events = reducers[action["method"]](action, store)
-            return tag_events_by_method_name(self.name, action["method"], events)
-
-        return aggregated_reducer
-
     def get_views(self):
         bounded_stores = GlobalProperty.get_default_binds()
         bounded_stores.update(self.binds)

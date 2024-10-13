@@ -1,9 +1,4 @@
-from simaple.simulate.core.action import (
-    Action,
-    ActionSignature,
-    EventCallback,
-    message_signature,
-)
+from simaple.simulate.core.action import Action, ActionSignature, EventCallback
 from simaple.simulate.core.base import Entity, Event
 
 __all__ = [
@@ -11,6 +6,5 @@ __all__ = [
     "Event",
     "Entity",
     "EventCallback",
-    "message_signature",
     "ActionSignature",
 ]

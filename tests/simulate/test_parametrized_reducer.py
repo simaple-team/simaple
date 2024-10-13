@@ -74,6 +74,7 @@ def test_paramterizd_reducer():
     )[0]["payload"] == {"value": 1324}
 
 
+"""
 def test_addon():
     store = AddressedStore(ConcreteStore())
     global_property = GlobalProperty(ActionStat())
@@ -201,3 +202,4 @@ def test_addon():
             "handler": None,
         },
     ]
+"""

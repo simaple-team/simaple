@@ -1,8 +1,6 @@
 from pydantic import ConfigDict
 from typing_extensions import TypedDict
 
-from simaple.simulate.core.base import Event
-
 
 class Action(TypedDict):
     """
@@ -22,13 +20,6 @@ ActionSignature = tuple[str, str]
 
 def get_action_signature(action: Action) -> ActionSignature:
     return action["name"], action["method"]
-
-
-def message_signature(message: Action | Event) -> str:
-    if len(message["method"]) == 0:
-        return message["name"]
-
-    return f"{message['name']}.{message['method']}"
 
 
 EventCallback = tuple[Action, Action]

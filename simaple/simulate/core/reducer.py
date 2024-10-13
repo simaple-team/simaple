@@ -1,11 +1,7 @@
 from typing import Callable, Final, TypedDict
 
-from simaple.simulate.core.action import (
-    Action,
-    ActionSignature,
-    Event,
-    get_action_signature,
-)
+from simaple.simulate.core.action import Action, ActionSignature, get_action_signature
+from simaple.simulate.core.base import Event
 from simaple.simulate.core.store import Store
 
 ReducerType = Callable[[Action, Store], list[Event]]
