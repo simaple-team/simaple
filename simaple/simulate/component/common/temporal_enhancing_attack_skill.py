@@ -1,11 +1,15 @@
+from typing import TypedDict
+
+import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
 from simaple.simulate.component.base import ReducerState, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import InvalidatableCooldownTrait
+from simaple.simulate.event import EmptyEvent
 from simaple.simulate.global_property import Dynamics
 
 
-class TemporalEnhancingAttackSkillState(ReducerState):
+class TemporalEnhancingAttackSkillState(TypedDict):
     cooldown: Cooldown
     reforged_cooldown: Cooldown
     dynamics: Dynamics
@@ -27,10 +31,11 @@ class TemporalEnhancingAttackSkill(
 
     reforge_cooldown_duration: float
 
-    def get_default_state(self):
+    def get_default_state(self) -> TemporalEnhancingAttackSkillState:
         return {
             "cooldown": Cooldown(time_left=0),
             "reforged_cooldown": Cooldown(time_left=0),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
     @reducer_method
@@ -39,37 +44,54 @@ class TemporalEnhancingAttackSkill(
         _: None,
         state: TemporalEnhancingAttackSkillState,
     ):
-        state = state.deepcopy()
+        if not state["cooldown"].available:
+            return state, [EmptyEvent.rejected()]
 
-        if not state.cooldown.available:
-            return state, [self.event_provider.rejected()]
-
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
+        cooldown, reforged_cooldown = (
+            state["cooldown"].model_copy(),
+            state["reforged_cooldown"].model_copy(),
         )
 
-        damage_events = [self.event_provider.dealt(self.damage, self.hit)]
+        cooldown.set_time_left(
+            state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
+        )
 
-        if state.reforged_cooldown.available:
+        damage_events = [EmptyEvent.dealt(self.damage, self.hit)]
+
+        if reforged_cooldown.available:
             damage_events = [
-                self.event_provider.dealt(self.reforged_damage, self.reforged_hit)
+                EmptyEvent.dealt(self.reforged_damage, self.reforged_hit)
                 for _ in range(self.reforged_multiple)
             ]
-            state.reforged_cooldown.set_time_left(
-                state.dynamics.stat.calculate_cooldown(self.reforge_cooldown_duration)
+            reforged_cooldown.set_time_left(
+                state["dynamics"].stat.calculate_cooldown(
+                    self.reforge_cooldown_duration
+                )
             )
 
+        state["cooldown"] = cooldown
+        state["reforged_cooldown"] = reforged_cooldown
+
         return state, damage_events + [
-            self.event_provider.delayed(self.delay),
+            EmptyEvent.delayed(self.delay),
         ]
 
     @reducer_method
     def elapse(self, time: float, state: TemporalEnhancingAttackSkillState):
-        state = state.deepcopy()
-        state.cooldown.elapse(time)
-        state.reforged_cooldown.elapse(time)
-        return state, [self.event_provider.elapsed(time)]
+        cooldown, reforged_cooldown = (
+            state["cooldown"].model_copy(),
+            state["reforged_cooldown"].model_copy(),
+        )
+        cooldown.elapse(time)
+        reforged_cooldown.elapse(time)
+
+        state["cooldown"] = cooldown
+        state["reforged_cooldown"] = reforged_cooldown
+
+        return state, [EmptyEvent.elapsed(time)]
 
     @view_method
     def validity(self, state: TemporalEnhancingAttackSkillState):
-        return self.validity_in_invalidatable_cooldown_trait(state)
+        return cooldown_trait.validity_view(
+            state, self.id, self.name, self.cooldown_duration
+        )

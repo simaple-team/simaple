@@ -59,8 +59,13 @@ def elapse_consumable_buff(
     return state, [EmptyEvent.elapsed(time)]
 
 
+class _StateWithoutLasting(TypedDict):
+    consumable: Consumable
+    dynamics: Dynamics
+
+
 def consumable_validity(
-    state: _State, id: str, name: str, cooldown_duration: float
+    state: _StateWithoutLasting, id: str, name: str, cooldown_duration: float
 ) -> Validity:
     return Validity(
         id=id,

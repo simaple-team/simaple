@@ -5,10 +5,9 @@ from pydantic import Field
 import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
 import simaple.simulate.component.trait.common.lasting_trait as lasting_trait
 from simaple.core.base import Stat
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Lasting
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import BuffTrait, InvalidatableCooldownTrait
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 

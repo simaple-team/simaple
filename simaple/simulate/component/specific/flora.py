@@ -1,18 +1,16 @@
-from typing import Optional
+from typing import Optional, TypedDict
 
+import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.common.periodic_trait as periodic_trait
 from simaple.core.base import Stat
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    CooldownValidityTrait,
-    PeriodicWithSimpleDamageTrait,
-)
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
 
-class MagicCurcuitFullDriveState(ReducerState):
+class MagicCurcuitFullDriveState(TypedDict):
     cooldown: Cooldown
     periodic: Periodic
     dynamics: Dynamics
@@ -21,7 +19,7 @@ class MagicCurcuitFullDriveState(ReducerState):
 # TODO: vary damage multiplier from MP rate
 # TODO: trigger on attack skills, not tick
 class MagicCurcuitFullDriveComponent(
-    SkillComponent, CooldownValidityTrait, PeriodicWithSimpleDamageTrait
+    SkillComponent,
 ):
     delay: float
     cooldown_duration: float
@@ -34,7 +32,7 @@ class MagicCurcuitFullDriveComponent(
     periodic_damage: float
     periodic_hit: float
 
-    def get_default_state(self):
+    def get_default_state(self) -> MagicCurcuitFullDriveState:
         return {
             "cooldown": Cooldown(time_left=0),
             "periodic": Periodic(
@@ -42,42 +40,44 @@ class MagicCurcuitFullDriveComponent(
                 initial_counter=self.periodic_initial_delay,
                 time_left=0,
             ),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
     @reducer_method
     def use(self, _: None, state: MagicCurcuitFullDriveState):
-        return self.use_periodic_damage_trait(state)
+        return periodic_trait.start_periodic_with_cooldown(
+            state,
+            damage=0,
+            hit=0,
+            delay=self.delay,
+            cooldown_duration=self.cooldown_duration,
+            lasting_duration=self.lasting_duration,
+        )
 
     @reducer_method
     def elapse(self, time: float, state: MagicCurcuitFullDriveState):
-        return self.elapse_periodic_damage_trait(time, state)
+        return periodic_trait.elapse_periodic_with_cooldown(
+            state, time, self.periodic_damage, self.periodic_hit
+        )
 
     @view_method
     def validity(self, state: MagicCurcuitFullDriveState):
-        return self.validity_in_cooldown_trait(state)
+        return cooldown_trait.validity_view(
+            state,
+            self.id,
+            self.name,
+            self.cooldown_duration,
+        )
 
     @view_method
     def buff(self, state: MagicCurcuitFullDriveState) -> Optional[Stat]:
-        if state.periodic.enabled():
+        if state["periodic"].enabled():
             return Stat(damage_multiplier=self.max_damage_multiplier)
 
         return None
 
     @view_method
     def running(self, state: MagicCurcuitFullDriveState) -> Running:
-        return Running(
-            id=self.id,
-            name=self.name,
-            time_left=state.periodic.time_left,
-            lasting_duration=self.lasting_duration,
+        return periodic_trait.running_view(
+            state, self.id, self.name, self.lasting_duration
         )
-
-    def _get_simple_damage_hit(self) -> tuple[float, float]:
-        # TODO: TickEmittingTrait should not extend SimpleDamageTrait. Remove this method
-        return 0, 0
-
-    def _get_periodic_damage_hit(self, state) -> tuple[float, float]:
-        return self.periodic_damage, self.periodic_hit
-
-    def _get_lasting_duration(self, state) -> float:
-        return self.lasting_duration

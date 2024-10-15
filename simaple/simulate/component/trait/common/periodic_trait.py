@@ -70,8 +70,13 @@ def elapse_periodic_with_cooldown(
     ]
 
 
+class _PeriodicOnlyState(TypedDict):
+    periodic: Periodic
+    dynamics: Dynamics
+
+
 def running_view(
-    state: _State,
+    state: _PeriodicOnlyState,
     id: str,
     name: str,
     lasting_duration: float,

@@ -29,9 +29,7 @@ def fixture_cygnus_blessing_component():
 def fixture_cygnus_blessing_state(
     cygnus_blessing_component: TranscendentCygnusBlessing, dynamics: Dynamics
 ):
-    return TranscendentCygnusBlessingState.model_validate(
-        {**cygnus_blessing_component.get_default_state(), "dynamics": dynamics}
-    )
+    return {**cygnus_blessing_component.get_default_state(), "dynamics": dynamics}
 
 
 def test_cygnus_blessing_increment(

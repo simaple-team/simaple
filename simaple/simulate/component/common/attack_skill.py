@@ -46,7 +46,7 @@ class AttackSkillComponent(
     def use(
         self, _: None, state: AttackSkillState
     ) -> tuple[AttackSkillState, list[Event]]:
-        return simple_attack.use(
+        return simple_attack.use_cooldown_attack(
             state, self.cooldown_duration, self.damage, self.hit, self.delay
         )
 
@@ -57,7 +57,7 @@ class AttackSkillComponent(
         This method is used to ignore the rejected event.
         Useful when automatic triggering is needed.
         """
-        return simple_attack.use(
+        return simple_attack.use_cooldown_attack(
             state, self.cooldown_duration, self.damage, self.hit, self.delay
         )
 

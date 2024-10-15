@@ -115,7 +115,7 @@ def holy_advent_component():
             "damage": 50,
             "hit": 3,
         },
-        lasting_duration=1_000,
+        lasting_duration=1000_000,
         cooldown_duration=30_000,
         synergy={},
     )
@@ -127,12 +127,10 @@ def holy_advent_state(
     holy_advent_component: TriplePeriodicDamageHexaComponent,
     dynamics: Dynamics,
 ):
-    return TriplePeriodicDamageHexaComponentState.model_validate(
-        {
-            **holy_advent_component.get_default_state(),
-            "dynamics": dynamics,
-        }
-    )
+    return {
+        **holy_advent_component.get_default_state(),
+        "dynamics": dynamics,
+    }
 
 
 def test_holy_advent_component_emit_initial_damage(
