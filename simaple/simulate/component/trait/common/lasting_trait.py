@@ -1,7 +1,7 @@
 from typing import TypedDict, TypeVar
 
 from simaple.simulate.component.entity import Cooldown, Lasting
-from simaple.simulate.component.view import KeydownView, Running, Validity
+from simaple.simulate.component.view import Running
 from simaple.simulate.core import Event
 from simaple.simulate.event import EmptyEvent
 from simaple.simulate.global_property import Dynamics
@@ -69,7 +69,7 @@ class _StateWithoutCooldown(TypedDict):
     dynamics: Dynamics
 
 
-def running_view(state: _StateWithoutCooldown, id: str, name: str):
+def running_view(state: _StateWithoutCooldown, id: str, name: str) -> Running:
     """
     New version for `running_in_buff_trait`
     """

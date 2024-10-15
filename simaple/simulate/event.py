@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from functools import wraps
-from typing import Any, Callable, Optional, TypeVar
+from typing import Optional, TypeVar
 
 from pydantic import BaseModel
 

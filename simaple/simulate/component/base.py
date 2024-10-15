@@ -1,7 +1,7 @@
 import inspect
 from abc import abstractmethod
 from functools import wraps
-from typing import Any, Callable, Optional, Type, TypeVar, Union
+from typing import Any, Callable, Optional, TypeVar, Union
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -20,11 +20,12 @@ StateT = TypeVar("StateT")
 ReducerType = Callable[..., tuple[Union[tuple[Entity], Entity], Any]]
 ReducerPrecursorType = Callable[[Any, Any, StateT], tuple[StateT, list[Event]]]
 
+ReducerPrecursorTypeT = TypeVar("ReducerPrecursorTypeT", bound=ReducerPrecursorType)
 T = TypeVar("T", bound=BaseModel)
 
 
-def reducer_method(func: ReducerPrecursorType) -> ReducerPrecursorType:
-    func.__isreducer__ = True
+def reducer_method(func: ReducerPrecursorTypeT) -> ReducerPrecursorTypeT:
+    func.__isreducer__ = True  # type: ignore
 
     return func
 
@@ -169,9 +170,6 @@ def compile_into_unsafe_reducer(property_address: dict[str, str]):
         payload_type = list(inspect.signature(component_method).parameters.values())[
             0
         ].annotation
-        state_type = list(inspect.signature(component_method).parameters.values())[
-            1
-        ].annotation
 
         @wraps(component_method)
         def wrapped(action: Action, global_store: Store) -> list[Event]:
@@ -311,7 +309,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @abstractmethod
-    def get_default_state(self) -> dict[str, Entity]: ...
+    def get_default_state(self) -> Any: ...
 
     @property
     def event_provider(self) -> EventProvider:
@@ -325,11 +323,6 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         bounded_stores.update(self.binds)
 
         # TODO: remove these lines with explicit state passing
-        any_reducer = getattr(self, list(getattr(self, "__reducers__"))[0])
-        state_type: Type[BaseModel] = list(
-            inspect.signature(any_reducer).parameters.values()
-        )[1].annotation
-
         model_fields = list(self.get_default_state().keys())
 
         property_address = _create_binding_with_store(

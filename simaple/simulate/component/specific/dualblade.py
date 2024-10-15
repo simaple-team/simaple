@@ -80,7 +80,7 @@ class BladeStormComponent(SkillComponent):
     def get_default_state(self) -> BladeStormState:
         return {
             "cooldown": Cooldown(time_left=0),
-            "keydown": Keydown(interval=self.delay, running=False),
+            "keydown": Keydown(interval=self.delay),
             "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 

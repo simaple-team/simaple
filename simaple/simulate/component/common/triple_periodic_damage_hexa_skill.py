@@ -83,7 +83,7 @@ class TriplePeriodicDamageHexaComponent(SkillComponent):
                 self.event_provider.dealt(feature.damage, feature.hit)
                 for _ in range(lapse_count)
             )
-            state[f"periodic_0{idx + 1}"] = periodic
+            state[f"periodic_0{idx + 1}"] = periodic  # type: ignore
 
         return state, [self.event_provider.elapsed(time)] + damage_events
 
@@ -102,7 +102,7 @@ class TriplePeriodicDamageHexaComponent(SkillComponent):
         for idx, (periodic, _feature) in enumerate(self._get_all_periodics(state)):
             periodic = periodic.model_copy()
             periodic.set_time_left(self.lasting_duration)
-            state[f"periodic_0{idx + 1}"] = periodic
+            state[f"periodic_0{idx + 1}"] = periodic  # type: ignore
 
         return state, [
             self.event_provider.dealt(entry.damage, entry.hit)

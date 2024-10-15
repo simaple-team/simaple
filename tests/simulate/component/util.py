@@ -36,7 +36,7 @@ def is_rejected(events: list[Event]) -> bool:
     return events[0]["tag"] == Tag.REJECT
 
 
-S = TypeVar("S", bound=dict)
+S = TypeVar("S")
 
 
 def pipe(

@@ -5,12 +5,6 @@ import simaple.simulate.component.trait.common.periodic_trait as periodic_trait
 from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.entity import Consumable, Integer, Periodic
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.base import (
-    DelayTrait,
-    EventProviderTrait,
-    LastingTrait,
-)
-from simaple.simulate.component.trait.impl import ConsumableValidityTrait
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
@@ -24,10 +18,6 @@ class HowlingGaleState(TypedDict):
 
 class HowlingGaleComponent(
     SkillComponent,
-    ConsumableValidityTrait,
-    DelayTrait,
-    EventProviderTrait,
-    LastingTrait,
 ):
     name: str
     delay: float
@@ -50,7 +40,7 @@ class HowlingGaleComponent(
                 cooldown_duration=self.cooldown_duration,
                 time_left=self.cooldown_duration,
             ),
-            "consumed": Integer(stack=0),
+            "consumed": Integer(value=0),
             "periodic": Periodic(
                 interval=self.periodic_interval,
                 initial_counter=self.periodic_initial_delay,

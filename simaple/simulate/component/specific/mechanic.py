@@ -1,6 +1,5 @@
 from typing import Optional, TypedDict
 
-import simaple.simulate.component.trait.common.consumable_trait as consumable_trait
 import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
 import simaple.simulate.component.trait.common.keydown_trait as keydown_trait
 import simaple.simulate.component.trait.common.lasting_trait as lasting_trait
@@ -229,6 +228,10 @@ class HommingMissile(SkillComponent):
                 initial_counter=self.periodic_initial_delay,
                 time_left=0,
             ),
+            "bomber_time": Lasting(time_left=0),
+            "full_barrage_keydown": Keydown(interval=0),
+            "full_barrage_penalty_lasting": Lasting(time_left=0),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
     @reducer_method
@@ -334,7 +337,7 @@ class FullMetalBarrageComponent(
     def get_default_state(self) -> FullMetalBarrageState:
         return {
             "cooldown": Cooldown(time_left=0),
-            "keydown": Keydown(interval=self.delay, running=False),
+            "keydown": Keydown(interval=self.delay),
             "penalty_lasting": Lasting(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
         }

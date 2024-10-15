@@ -6,10 +6,6 @@ from simaple.core.base import Stat
 from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.entity import Consumable, Lasting
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    ConsumableBuffTrait,
-    ConsumableValidityTrait,
-)
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 

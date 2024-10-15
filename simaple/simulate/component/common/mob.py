@@ -79,7 +79,13 @@ class MobComponent(Component):
         emits = dot.elapse(time)
 
         events: list[Event] = [
-            {"name": name, "tag": Tag.DOT, "payload": {"damage": damage, "hit": hit}}
+            {
+                "name": name,
+                "tag": Tag.DOT,
+                "payload": {"damage": damage, "hit": hit},
+                "method": "elapse",
+                "handler": None,
+            }
             for ((name, damage), hit) in emits.items()
         ]
         state["dot"] = dot

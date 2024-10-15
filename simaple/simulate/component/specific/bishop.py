@@ -9,7 +9,7 @@ from simaple.simulate.component.entity import Cooldown, Periodic, Stack
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.view import Running
 from simaple.simulate.core.base import Entity
-from simaple.simulate.event import DelayPayload, EmptyEvent
+from simaple.simulate.event import EmptyEvent
 from simaple.simulate.global_property import Dynamics
 
 

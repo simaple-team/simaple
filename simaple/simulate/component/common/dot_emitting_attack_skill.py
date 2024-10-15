@@ -1,10 +1,11 @@
+from typing import TypedDict
+
+import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.common.simple_attack as simple_attack
 from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.global_property import Dynamics
-from typing import TypedDict
-import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
-import simaple.simulate.component.trait.common.simple_attack as simple_attack
 
 
 class DOTEmittingState(TypedDict):
@@ -27,7 +28,7 @@ class DOTEmittingAttackSkillComponent(
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "dynamics": Dynamics.model_validate({"stat":{}}),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
     @reducer_method
@@ -36,8 +37,14 @@ class DOTEmittingAttackSkillComponent(
 
     @reducer_method
     def use(self, _: None, state: DOTEmittingState):
-        state, event = simple_attack.use_cooldown_attack(state, self.cooldown_duration, self.damage,self.hit, self.delay)
-        event += [simple_attack.get_dot_event(self.name, self.dot_damage, self.dot_lasting_duration)]
+        state, event = simple_attack.use_cooldown_attack(
+            state, self.cooldown_duration, self.damage, self.hit, self.delay
+        )
+        event += [
+            simple_attack.get_dot_event(
+                self.name, self.dot_damage, self.dot_lasting_duration
+            )
+        ]
         return state, event
 
     @reducer_method
@@ -50,4 +57,6 @@ class DOTEmittingAttackSkillComponent(
 
     @view_method
     def validity(self, state: DOTEmittingState):
-        return cooldown_trait.validity_view(state, self.id, self.name, self.cooldown_duration)
+        return cooldown_trait.validity_view(
+            state, self.id, self.name, self.cooldown_duration
+        )

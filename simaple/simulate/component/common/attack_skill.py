@@ -2,17 +2,9 @@ from typing import TypedDict
 
 import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
 import simaple.simulate.component.trait.common.simple_attack as simple_attack
-from simaple.simulate.component.base import (
-    ReducerPrecursorType,
-    reducer_method,
-    view_method,
-)
-from simaple.simulate.component.entity import Cooldown, Periodic
+from simaple.simulate.component.base import reducer_method, view_method
+from simaple.simulate.component.entity import Cooldown
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    InvalidatableCooldownTrait,
-    UseSimpleAttackTrait,
-)
 from simaple.simulate.component.util import ignore_rejected
 from simaple.simulate.core import Event
 from simaple.simulate.global_property import Dynamics
