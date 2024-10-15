@@ -1,7 +1,7 @@
 from typing import Optional, TypedDict
 
-import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
-import simaple.simulate.component.trait.common.periodic_trait as periodic_trait
+import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.periodic_trait as periodic_trait
 from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic
 from simaple.simulate.component.skill import SkillComponent

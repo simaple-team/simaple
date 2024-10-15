@@ -1,16 +1,12 @@
 from typing import Optional, TypedDict
 
-import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
-import simaple.simulate.component.trait.common.periodic_trait as periodic_trait
-import simaple.simulate.component.trait.common.simple_attack as simple_attack
+import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.periodic_trait as periodic_trait
+import simaple.simulate.component.trait.simple_attack as simple_attack
 from simaple.core.base import Stat
 from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic, Stack
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    CooldownValidityTrait,
-    UseSimpleAttackTrait,
-)
 from simaple.simulate.component.view import Running
 from simaple.simulate.core.base import Entity
 from simaple.simulate.event import EmptyEvent
@@ -197,7 +193,7 @@ class ThunderAttackSkillState(TypedDict):
 
 
 class ThunderAttackSkillComponent(
-    SkillComponent, UseSimpleAttackTrait, CooldownValidityTrait
+    SkillComponent,
 ):
     binds: dict[str, str] = {
         "frost_stack": ".프로스트 이펙트.frost_stack",
@@ -257,9 +253,6 @@ class ThunderAttackSkillComponent(
         return cooldown_trait.validity_view(
             state, self.id, self.name, self.cooldown_duration
         )
-
-    def _get_simple_damage_hit(self) -> tuple[float, float]:
-        return self.damage, self.hit
 
 
 class CurrentField(Entity):

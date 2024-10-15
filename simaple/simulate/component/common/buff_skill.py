@@ -1,7 +1,7 @@
 from typing import Optional, TypedDict
 
-import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
-import simaple.simulate.component.trait.common.lasting_trait as lasting_trait
+import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.lasting_trait as lasting_trait
 from simaple.core.base import Stat
 from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Lasting

@@ -1,7 +1,7 @@
 from typing import TypedDict
 
-import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
-import simaple.simulate.component.trait.common.simple_attack as simple_attack
+import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.simple_attack as simple_attack
 from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown
 from simaple.simulate.component.skill import SkillComponent
