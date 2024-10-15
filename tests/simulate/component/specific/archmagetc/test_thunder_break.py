@@ -34,14 +34,12 @@ def thunder_break_state(
     jupyter_thunder_periodic: Periodic,
     dynamics: Dynamics,
 ):
-    return ThunderBreakState.model_validate(
-        {
-            **thunder_break.get_default_state(),
-            "frost_stack": frost_effect_state.frost_stack,
-            "jupyter_thunder_shock": jupyter_thunder_periodic,
-            "dynamics": dynamics,
-        }
-    )
+    return {
+        **thunder_break.get_default_state(),
+        "frost_stack": frost_effect_state["frost_stack"],
+        "jupyter_thunder_shock": jupyter_thunder_periodic,
+        "dynamics": dynamics,
+    }
 
 
 def test_thunder_break_max_use(

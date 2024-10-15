@@ -1,9 +1,9 @@
-from typing import Optional, cast
+from typing import Any, Optional, cast
 
 from simaple.core.base import Stat
-from simaple.simulate.component.base import Component, ReducerState, view_method
+from simaple.simulate.component.base import Component, view_method
 from simaple.simulate.component.view import ComponentInformation, Validity
-from simaple.simulate.event import EventProvider, NamedEventProvider
+from simaple.simulate.event import NamedEventProvider
 
 
 class SkillComponent(Component):
@@ -26,7 +26,7 @@ class SkillComponent(Component):
         return validity
 
     @view_method
-    def info(self, _: ReducerState) -> ComponentInformation:
+    def info(self, _: Any) -> ComponentInformation:
         return cast(ComponentInformation, self.model_dump())
 
     def _get_cooldown_duration(self) -> float:
