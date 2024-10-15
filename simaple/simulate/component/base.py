@@ -1,7 +1,7 @@
 import inspect
 from abc import abstractmethod
 from functools import wraps
-from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union
+from typing import Any, Callable, Optional, Type, TypeVar, Union
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -21,14 +21,6 @@ ReducerType = Callable[..., tuple[Union[tuple[Entity], Entity], Any]]
 ReducerPrecursorType = Callable[[Any, Any, StateT], tuple[StateT, list[Event]]]
 
 T = TypeVar("T", bound=BaseModel)
-
-
-class ReducerState(BaseModel):
-    def copy(self) -> NoReturn:  # type: ignore
-        raise NotImplementedError("copy() is disabled in ReducerState")
-
-    def deepcopy(self: T) -> T:
-        return super().model_copy(deep=True)  # type: ignore
 
 
 def reducer_method(func: ReducerPrecursorType) -> ReducerPrecursorType:
@@ -184,16 +176,11 @@ def compile_into_unsafe_reducer(property_address: dict[str, str]):
         @wraps(component_method)
         def wrapped(action: Action, global_store: Store) -> list[Event]:
             # if no-op, return []
-            my_entities = {}
+            state = {}
 
             for name, address in property_address.items():
                 entity = global_store.read_entity(address, None)
-                my_entities[name] = entity
-
-            if issubclass(state_type, ReducerState):
-                state = state_type(**my_entities)
-            else:
-                state = my_entities
+                state[name] = entity
 
             payload = action["payload"]
 
@@ -343,10 +330,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
             inspect.signature(any_reducer).parameters.values()
         )[1].annotation
 
-        if issubclass(state_type, ReducerState):
-            model_fields = list(state_type.model_fields)
-        else:
-            model_fields = list(self.get_default_state().keys())
+        model_fields = list(self.get_default_state().keys())
 
         property_address = _create_binding_with_store(
             self.name,

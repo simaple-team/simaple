@@ -1,6 +1,5 @@
 from typing import Callable, TypeVar, Union, cast
 
-from simaple.simulate.component.base import ReducerState
 from simaple.simulate.core.base import Event
 from simaple.simulate.reserved_names import Tag
 
@@ -37,7 +36,7 @@ def is_rejected(events: list[Event]) -> bool:
     return events[0]["tag"] == Tag.REJECT
 
 
-S = TypeVar("S", bound=ReducerState)
+S = TypeVar("S", bound=dict)
 
 
 def pipe(
