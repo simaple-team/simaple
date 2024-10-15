@@ -7,11 +7,7 @@ import simaple.simulate.component.trait.common.lasting_trait as lasting_trait
 import simaple.simulate.component.trait.common.periodic_trait as periodic_trait
 import simaple.simulate.component.trait.common.simple_attack as simple_attack
 from simaple.core import Stat
-from simaple.simulate.component.base import (
-    Component,
-    reducer_method,
-    view_method,
-)
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Lasting, Periodic, Stack
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.util import ignore_rejected, is_rejected

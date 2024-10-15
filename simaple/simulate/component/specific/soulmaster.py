@@ -1,26 +1,26 @@
-from typing import Optional
+from typing import Optional, TypedDict
 
+import simaple.simulate.component.trait.common.consumable_trait as consumable_trait
+import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.common.keydown_trait as keydown_trait
+import simaple.simulate.component.trait.common.lasting_trait as lasting_trait
+import simaple.simulate.component.trait.common.periodic_trait as periodic_trait
+import simaple.simulate.component.trait.common.simple_attack as simple_attack
 from simaple.core.base import Stat
 from simaple.simulate.component.base import (
     Component,
-    ReducerState,
     reducer_method,
     view_method,
 )
 from simaple.simulate.component.entity import Cooldown, Lasting, LastingStack, Periodic
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    BuffTrait,
-    CooldownValidityTrait,
-    PeriodicElapseTrait,
-    UseSimpleAttackTrait,
-)
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.core.base import Entity
+from simaple.simulate.event import DelayPayload, EmptyEvent
 from simaple.simulate.global_property import Dynamics
 
 
-class CosmicOrbState(ReducerState):
+class CosmicOrbState(TypedDict):
     orb: LastingStack
     cosmic_forge_lasting: Lasting
 
@@ -37,44 +37,50 @@ class CosmicOrb(Component):
             "orb": LastingStack(
                 maximum_stack=self.cosmic_forge_stack,
                 duration=self.orb_lasting_duration,
-            )
+            ),
+            "cosmic_forge_lasting": Lasting(time_left=0),
         }
 
     @reducer_method
     def increase(self, _: None, state: CosmicOrbState):
-        state = state.deepcopy()
-        state.orb.increase(1)
-        if not state.cosmic_forge_lasting.enabled():
-            state.orb.increase(1)
+        orb = state["orb"].model_copy()
+
+        orb.increase(1)
+        if not state["cosmic_forge_lasting"].enabled():
+            orb.increase(1)
+        state["orb"] = orb
 
         state = self._regulate_if_no_cosmic_forge(state)
         return state, []
 
     @reducer_method
     def maximize(self, _: None, state: CosmicOrbState):
-        state = state.deepcopy()
-        state.orb.increase(10)
+        orb = state["orb"].model_copy()
+        orb.increase(10)
+        state["orb"] = orb
+
         state = self._regulate_if_no_cosmic_forge(state)
         return state, []
 
     @view_method
     def buff(self, state: CosmicOrbState):
-        if state.orb.stack > 0:
+        if state["orb"].stack > 0:
             return self.stat
 
         return None
 
     def _regulate_if_no_cosmic_forge(self, state: CosmicOrbState) -> CosmicOrbState:
-        if state.cosmic_forge_lasting.enabled():
+        if state["cosmic_forge_lasting"].enabled():
             return state
 
-        state = state.deepcopy()
-        state.orb.regulate(self.default_max_stack)
+        orb = state["orb"].model_copy()
+        orb.regulate(self.default_max_stack)
+        state["orb"] = orb
 
         return state
 
 
-class ElysionState(ReducerState):
+class ElysionState(TypedDict):
     cooldown: Cooldown
     lasting: Lasting
     dynamics: Dynamics
@@ -82,7 +88,7 @@ class ElysionState(ReducerState):
     crack_cooldown: Cooldown
 
 
-class Elysion(SkillComponent, BuffTrait, CooldownValidityTrait):
+class Elysion(SkillComponent):
     cooldown_duration: float
     delay: float
     lasting_duration: float
@@ -93,7 +99,7 @@ class Elysion(SkillComponent, BuffTrait, CooldownValidityTrait):
     crack_duration: float
     maximum_crack_count: int
 
-    def get_default_state(self) -> dict[str, Entity]:
+    def get_default_state(self) -> ElysionState:
         return {
             "cooldown": Cooldown(time_left=0),
             "lasting": Lasting(time_left=0),
@@ -101,52 +107,75 @@ class Elysion(SkillComponent, BuffTrait, CooldownValidityTrait):
                 maximum_stack=self.maximum_crack_count, duration=self.crack_duration
             ),
             "crack_cooldown": Cooldown(time_left=0),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
     @reducer_method
     def crack(self, _: None, state: ElysionState):
-        if not state.lasting.enabled() or not state.crack_cooldown.available:
+        if not state["lasting"].enabled() or not state["crack_cooldown"].available:
             return state, []
 
-        state = state.deepcopy()
-        state.stack.increase()
-        if state.stack.is_maximum():
-            state.stack.reset()
-            state.crack_cooldown.set_time_left(self.crack_cooldown)
-            return state, [self.event_provider.dealt(self.crack_damage, self.crack_hit)]
+        stack, crack_cooldown = (
+            state["stack"].model_copy(),
+            state["crack_cooldown"].model_copy(),
+        )
+
+        stack.increase()
+        if stack.is_maximum():
+            stack.reset()
+            crack_cooldown.set_time_left(self.crack_cooldown)
+
+            state["stack"] = stack
+            state["crack_cooldown"] = crack_cooldown
+
+            return state, [EmptyEvent.dealt(self.crack_damage, self.crack_hit)]
+
+        state["stack"] = stack
+        state["crack_cooldown"] = crack_cooldown
 
         return state, []
 
     @reducer_method
     def elapse(self, time: float, state: ElysionState):
-        state = state.deepcopy()
+        cooldown, lasting, crack_cooldown, stack = (
+            state["cooldown"].model_copy(),
+            state["lasting"].model_copy(),
+            state["crack_cooldown"].model_copy(),
+            state["stack"].model_copy(),
+        )
 
-        state.cooldown.elapse(time)
-        state.lasting.elapse(time)
-        state.crack_cooldown.elapse(time)
-        state.stack.elapse(time)
+        cooldown.elapse(time)
+        lasting.elapse(time)
+        crack_cooldown.elapse(time)
+        stack.elapse(time)
+
+        state["cooldown"] = cooldown
+        state["lasting"] = lasting
+        state["crack_cooldown"] = crack_cooldown
+        state["stack"] = stack
 
         return state, [
-            self.event_provider.elapsed(time),
+            EmptyEvent.elapsed(time),
         ]
 
     @reducer_method
     def use(self, _: None, state: ElysionState):
-        return self.use_buff_trait(state, False)
+        return lasting_trait.start_lasting_with_cooldown(
+            state, self.cooldown_duration, self.lasting_duration, self.delay, False
+        )
 
     @view_method
     def validity(self, state: ElysionState) -> Validity:
-        return self.validity_in_cooldown_trait(state)
+        return cooldown_trait.validity_view(
+            state, self.id, self.name, self.cooldown_duration
+        )
 
     @view_method
     def running(self, state: ElysionState) -> Running:
-        return self.running_in_buff_trait(state)
-
-    def _get_lasting_duration(self, state: ElysionState) -> float:
-        return self.lasting_duration
+        return lasting_trait.running_view(state, self.name, self.id)
 
 
-class CrossTheStyxState(ReducerState):
+class CrossTheStyxState(TypedDict):
     elysion_lasting: Lasting
 
 
@@ -157,17 +186,19 @@ class CrossTheStyx(SkillComponent):
     delay: float
     cooldown_duration: float = 0.0
 
-    def get_default_state(self):
-        return {}
+    def get_default_state(self) -> CrossTheStyxState:
+        return {
+            "elysion_lasting": Lasting(time_left=0),
+        }
 
     @reducer_method
     def use(self, _: None, state: CrossTheStyxState):
-        if not state.elysion_lasting.enabled():
-            return state, [self.event_provider.rejected()]
+        if not state["elysion_lasting"].enabled():
+            return state, [EmptyEvent.rejected()]
 
         return state, [
-            self.event_provider.dealt(self.damage, self.hit),
-            self.event_provider.delayed(self.delay),
+            EmptyEvent.dealt(self.damage, self.hit),
+            EmptyEvent.delayed(self.delay),
         ]
 
     @view_method
@@ -176,12 +207,12 @@ class CrossTheStyx(SkillComponent):
             id=self.id,
             name=self.name,
             time_left=0.0,
-            valid=state.elysion_lasting.enabled(),
+            valid=state["elysion_lasting"].enabled(),
             cooldown_duration=0.0,
         )
 
 
-class CosmicBurstState(ReducerState):
+class CosmicBurstState(TypedDict):
     cooldown: Cooldown
     dynamics: Dynamics
     orb: LastingStack
@@ -196,48 +227,57 @@ class CosmicBurst(SkillComponent):
     damage_decrement_after_2nd_hit: float  # 같은 대상 2번째 히트부터 70% 최종뎀 적용
     cooltime_reduce_per_orb: float  # 소비한 오브 1개당 재사용 1초 감소
 
-    def get_default_state(self) -> dict[str, Entity]:
-        return {"cooldown": Cooldown(time_left=0.0)}
+    def get_default_state(self) -> CosmicBurstState:
+        return {
+            "cooldown": Cooldown(time_left=0.0),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
+            "orb": LastingStack(maximum_stack=5, duration=0.0),
+        }
 
     @reducer_method
     def elapse(self, time: float, state: CosmicBurstState):
-        state = state.deepcopy()
-        state.cooldown.elapse(time)
+        cooldown = state["cooldown"].model_copy()
+        cooldown.elapse(time)
+        state["cooldown"] = cooldown
 
-        return state, [self.event_provider.elapsed(time)]
+        return state, [EmptyEvent.elapsed(time)]
 
     @reducer_method
     def trigger(self, _: None, state: CosmicBurstState):
-        if not state.cooldown.available or state.orb.stack == 0:
-            return state, [self.event_provider.rejected()]
+        if not state["cooldown"].available or state["orb"].stack == 0:
+            return state, [EmptyEvent.rejected()]
 
-        state = state.deepcopy()
-        orbs = state.orb.stack
+        orb, cooldown = state["orb"], state["cooldown"].model_copy()
+        orbs_stack_count = orb.stack
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
-            - orbs * self.cooltime_reduce_per_orb
+        cooldown.set_time_left(
+            state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
+            - orbs_stack_count * self.cooltime_reduce_per_orb
         )
-        state.orb.reset()
+        orb.reset()
 
-        damages = [self.event_provider.dealt(self.damage, self.hit)]
+        damages = [EmptyEvent.dealt(self.damage, self.hit)]
         damages.append(
-            self.event_provider.dealt(
-                self.damage * self.damage_decrement_after_2nd_hit, self.hit * (orbs - 1)
+            EmptyEvent.dealt(
+                self.damage * self.damage_decrement_after_2nd_hit,
+                self.hit * (orbs_stack_count - 1),
             )
         )
+
+        state["cooldown"] = cooldown
+        state["orb"] = orb
 
         return state, damages
 
 
-class CosmicShowerState(ReducerState):
+class CosmicShowerState(TypedDict):
     cooldown: Cooldown
     periodic: Periodic
     dynamics: Dynamics
     orb: LastingStack
 
 
-class CosmicShower(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
+class CosmicShower(SkillComponent):
     name: str
     delay: float
 
@@ -251,7 +291,7 @@ class CosmicShower(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
     lasting_duration: float
     duration_increase_per_orb: float
 
-    def get_default_state(self):
+    def get_default_state(self) -> CosmicShowerState:
         return {
             "cooldown": Cooldown(time_left=0),
             "periodic": Periodic(
@@ -259,39 +299,54 @@ class CosmicShower(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
                 initial_counter=self.periodic_initial_delay,
                 time_left=0,
             ),
+            "orb": LastingStack(maximum_stack=5, duration=0.0),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
     @reducer_method
     def elapse(self, time: float, state: CosmicShowerState):
-        return self.elapse_periodic_damage_trait(time, state)
+        return periodic_trait.elapse_periodic_with_cooldown(
+            state,
+            time,
+            self.periodic_damage,
+            self.periodic_hit,
+        )
 
     @reducer_method
     def use(self, _: None, state: CosmicShowerState):
-        state = state.deepcopy()
-        if not state.cooldown.available or state.orb.stack == 0:
-            return state, [self.event_provider.rejected()]
+        if not state["cooldown"].available or state["orb"].stack == 0:
+            return state, [EmptyEvent.rejected()]
 
-        orbs = state.orb.stack
-        delay = self._get_delay()
-
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
+        orb, periodic, cooldown = (
+            state["orb"].model_copy(),
+            state["periodic"].model_copy(),
+            state["cooldown"].model_copy(),
         )
-        state.periodic.set_time_left(
-            self._get_lasting_duration(state) + orbs * self.duration_increase_per_orb
-        )
-        state.orb.reset()
 
-        return state, [self.event_provider.delayed(delay)]
+        orbs_stack_count = orb.stack
+
+        cooldown.set_time_left(
+            state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
+        )
+        periodic.set_time_left(
+            self.lasting_duration + orbs_stack_count * self.duration_increase_per_orb
+        )
+        orb.reset()
+
+        state["cooldown"] = cooldown
+        state["periodic"] = periodic
+        state["orb"] = orb
+
+        return state, [EmptyEvent.delayed(self.delay)]
 
     @view_method
     def validity(self, state: CosmicShowerState):
         return Validity(
             id=self.id,
             name=self._get_name(),
-            time_left=state.cooldown.minimum_time_to_available(),
-            valid=state.cooldown.available and state.orb.stack > 0,
-            cooldown_duration=self._get_cooldown_duration(),
+            time_left=state["cooldown"].minimum_time_to_available(),
+            valid=state["cooldown"].available and state["orb"].stack > 0,
+            cooldown_duration=self.cooldown_duration,
         )
 
     @view_method
@@ -299,25 +354,19 @@ class CosmicShower(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
         return Running(
             id=self.id,
             name=self.name,
-            time_left=state.periodic.time_left,
-            lasting_duration=self._get_lasting_duration(state),
+            time_left=state["periodic"].time_left,
+            lasting_duration=self.lasting_duration,
         )
 
-    def _get_lasting_duration(self, state: CosmicShowerState) -> float:
-        return self.lasting_duration
 
-    def _get_periodic_damage_hit(self, state: CosmicShowerState) -> tuple[float, float]:
-        return self.periodic_damage, self.periodic_hit
-
-
-class CosmosState(ReducerState):
+class CosmosState(TypedDict):
     cooldown: Cooldown
     periodic: Periodic
     dynamics: Dynamics
     orb: LastingStack
 
 
-class Cosmos(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
+class Cosmos(SkillComponent):
     name: str
     delay: float
 
@@ -331,7 +380,7 @@ class Cosmos(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
 
     lasting_duration: float
 
-    def get_default_state(self):
+    def get_default_state(self) -> CosmosState:
         return {
             "cooldown": Cooldown(time_left=0),
             "periodic": Periodic(
@@ -339,39 +388,56 @@ class Cosmos(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
                 initial_counter=self.periodic_initial_delay,
                 time_left=0,
             ),
+            "orb": LastingStack(maximum_stack=5, duration=0.0),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
     @reducer_method
     def elapse(self, time: float, state: CosmosState):
-        return self.elapse_periodic_damage_trait(time, state)
+        return periodic_trait.elapse_periodic_with_cooldown(
+            state,
+            time,
+            self.periodic_damage,
+            self.periodic_hit,
+        )
 
     @reducer_method
     def use(self, _: None, state: CosmosState):
-        state = state.deepcopy()
-        if not state.cooldown.available or state.orb.stack == 0:
-            return state, [self.event_provider.rejected()]
 
-        orbs = state.orb.stack
-        delay = self._get_delay()
-
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
+        orb, periodic, cooldown = (
+            state["orb"].model_copy(),
+            state["periodic"].model_copy(),
+            state["cooldown"].model_copy(),
         )
-        state.periodic.interval = (
-            self.periodic_interval - orbs * self.periodic_interval_decrement_per_orb
-        )
-        state.periodic.set_time_left(self._get_lasting_duration(state))
-        state.orb.reset()
 
-        return state, [self.event_provider.delayed(delay)]
+        if not cooldown.available or orb.stack == 0:
+            return state, [EmptyEvent.rejected()]
+
+        orbs_stack_count = orb.stack
+
+        cooldown.set_time_left(
+            state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
+        )
+        periodic.interval = (
+            self.periodic_interval
+            - orbs_stack_count * self.periodic_interval_decrement_per_orb
+        )
+        periodic.set_time_left(self.lasting_duration)
+        orb.reset()
+
+        state["cooldown"] = cooldown
+        state["periodic"] = periodic
+        state["orb"] = orb
+
+        return state, [EmptyEvent.delayed(self.delay)]
 
     @view_method
     def validity(self, state: CosmosState):
         return Validity(
             id=self.id,
             name=self._get_name(),
-            time_left=state.cooldown.minimum_time_to_available(),
-            valid=state.cooldown.available and state.orb.stack > 0,
+            time_left=state["cooldown"].minimum_time_to_available(),
+            valid=state["cooldown"].available and state["orb"].stack > 0,
             cooldown_duration=self._get_cooldown_duration(),
         )
 
@@ -380,23 +446,17 @@ class Cosmos(SkillComponent, PeriodicElapseTrait, CooldownValidityTrait):
         return Running(
             id=self.id,
             name=self.name,
-            time_left=state.periodic.time_left,
-            lasting_duration=self._get_lasting_duration(state),
+            time_left=state["periodic"].time_left,
+            lasting_duration=self.lasting_duration,
         )
 
-    def _get_lasting_duration(self, state: CosmosState) -> float:
-        return self.lasting_duration
 
-    def _get_periodic_damage_hit(self, state: CosmosState) -> tuple[float, float]:
-        return self.periodic_damage, self.periodic_hit
-
-
-class FlareSlashState(ReducerState):
+class FlareSlashState(TypedDict):
     cooldown: Cooldown
     dynamics: Dynamics
 
 
-class FlareSlash(SkillComponent, UseSimpleAttackTrait):
+class FlareSlash(SkillComponent):
     name: str
     damage: float
     hit: float
@@ -406,36 +466,41 @@ class FlareSlash(SkillComponent, UseSimpleAttackTrait):
     cooldown_reduece_when_stance_changed: float
     cooldown_reduce_when_cross_the_styx_hit: float
 
-    def get_default_state(self):
+    def get_default_state(self) -> FlareSlashState:
         return {
             "cooldown": Cooldown(time_left=0),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
     @reducer_method
     def elapse(self, time: float, state: FlareSlashState):
-        return self.elapse_simple_attack(time, state)
+        return simple_attack.elapse(state, time)
 
     @reducer_method
     def change_stance_trigger(self, _: None, state: FlareSlashState):
-        state = state.deepcopy()
-        state.cooldown.reduce_by_value(self.cooldown_reduece_when_stance_changed)
-        return self.use_simple_attack(state)
+        cooldown = state["cooldown"].model_copy()
+        cooldown.reduce_by_value(self.cooldown_reduece_when_stance_changed)
+        state["cooldown"] = cooldown
+
+        return simple_attack.use_cooldown_attack(
+            state, self.cooldown_duration, self.damage, self.hit, self.delay
+        )
 
     @reducer_method
     def styx_trigger(self, _: None, state: FlareSlashState):
-        state = state.deepcopy()
-        state.cooldown.reduce_by_value(self.cooldown_reduce_when_cross_the_styx_hit)
-        return self.use_simple_attack(state)
+        cooldown = state["cooldown"].model_copy()
+        cooldown.reduce_by_value(self.cooldown_reduce_when_cross_the_styx_hit)
+        state["cooldown"] = cooldown
+        return simple_attack.use_cooldown_attack(
+            state, self.cooldown_duration, self.damage, self.hit, self.delay
+        )
 
     @view_method
     def validity(self, state: FlareSlashState):
         return Validity(
             id=self.id,
             name=self._get_name(),
-            time_left=state.cooldown.minimum_time_to_available(),
+            time_left=state["cooldown"].minimum_time_to_available(),
             valid=False,
             cooldown_duration=self._get_cooldown_duration(),
         )
-
-    def _get_simple_damage_hit(self) -> tuple[float, float]:
-        return self.damage, self.hit
