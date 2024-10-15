@@ -1,19 +1,20 @@
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from typing import TypedDict
+
+import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
+from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown
 from simaple.simulate.component.feature import DamageAndHit
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import InvalidatableCooldownTrait
 from simaple.simulate.global_property import Dynamics
 
 
-class MultipleHitHexaSkillState(ReducerState):
+class MultipleHitHexaSkillState(TypedDict):
     cooldown: Cooldown
     dynamics: Dynamics
 
 
 class MultipleHitHexaSkillComponent(
     SkillComponent,
-    InvalidatableCooldownTrait,
 ):
     """
     MultipleHitHexaSkillComponent
@@ -27,37 +28,39 @@ class MultipleHitHexaSkillComponent(
 
     cooldown_duration: float
 
-    def get_default_state(self):
+    def get_default_state(self) -> MultipleHitHexaSkillState:
         return {
             "cooldown": Cooldown(time_left=0),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
     @reducer_method
     def elapse(self, time: float, state: MultipleHitHexaSkillState):
-        state = state.deepcopy()
-        state.cooldown.elapse(time)
-        return state, [self.event_provider.elapsed(time)]
+        return cooldown_trait.elapse_cooldown_only(state, time)
 
     @reducer_method
     def use(self, _: None, state: MultipleHitHexaSkillState):
-        if not state.cooldown.available:
+        if not state["cooldown"].available:
             return state, [self.event_provider.rejected()]
 
-        state = state.deepcopy()
-
-        delay = self._get_delay()
-
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
+        cooldown = state["cooldown"].model_copy()
+        cooldown.set_time_left(
+            state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
         )
+        state["cooldown"] = cooldown
 
         return state, [
             self.event_provider.dealt(entry.damage, entry.hit)
             for entry in self.damage_and_hits
         ] + [
-            self.event_provider.delayed(delay),
+            self.event_provider.delayed(self.delay),
         ]
 
     @view_method
     def validity(self, state: MultipleHitHexaSkillState):
-        return self.validity_in_invalidatable_cooldown_trait(state)
+        return cooldown_trait.validity_view(
+            state,
+            self.id,
+            self.name,
+            self.cooldown_duration,
+        )

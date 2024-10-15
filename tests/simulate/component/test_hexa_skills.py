@@ -33,12 +33,10 @@ def multiple_hit_skill_state(
     multiple_hit_skill: MultipleHitHexaSkillComponent,
     dynamics: Dynamics,
 ):
-    return MultipleHitHexaSkillState.model_validate(
-        {
-            **multiple_hit_skill.get_default_state(),
-            "dynamics": dynamics,
-        }
-    )
+    return {
+        **multiple_hit_skill.get_default_state(),
+        "dynamics": dynamics,
+    }
 
 
 def test_multiple_hit_skill(

@@ -23,6 +23,15 @@ def reset_cooldown(state: StateT) -> tuple[StateT, list[Event]]:
     return state, []
 
 
+def elapse_cooldown_only(state: StateT, time: float) -> tuple[StateT, list[Event]]:
+    cooldown = state["cooldown"].model_copy()
+    cooldown.elapse(time)
+
+    state["cooldown"] = cooldown
+
+    return state, [EmptyEvent.elapsed(time)]
+
+
 def validity_view(
     state: _State, id: str, name: str, cooldown_duration: float
 ) -> Validity:
