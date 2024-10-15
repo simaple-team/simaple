@@ -1,18 +1,18 @@
-from typing import Optional
+from typing import Optional, TypedDict
 
 from simaple.core.base import Stat
-from simaple.simulate.component.base import Component, ReducerState, view_method
+from simaple.simulate.component.base import Component, view_method
 from simaple.simulate.component.view import Running
 
 
-class NoState(ReducerState): ...
+class NoState(TypedDict): ...
 
 
 class AlwaysEnabledComponent(Component):
     id: str
     stat: Stat
 
-    def get_default_state(self):
+    def get_default_state(self) -> NoState:
         return {}
 
     @view_method

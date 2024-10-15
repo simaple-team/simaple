@@ -73,12 +73,10 @@ def periodic_damage_state(
     periodic_damage_component: PeriodicDamageConfiguratedHexaSkillComponent,
     dynamics: Dynamics,
 ):
-    return PeriodicDamageHexaState.model_validate(
-        {
-            **periodic_damage_component.get_default_state(),
-            "dynamics": dynamics,
-        }
-    )
+    return {
+        **periodic_damage_component.get_default_state(),
+        "dynamics": dynamics,
+    }
 
 
 def test_periodic_damage_component_emit_initial_damage(
@@ -91,7 +89,8 @@ def test_periodic_damage_component_emit_initial_damage(
     # then
     assert events[0]["payload"] == {"damage": 100, "hit": 1.0, "modifier": None}
     assert events[1]["payload"] == {"damage": 200, "hit": 3.0, "modifier": None}
-    assert events[2]["payload"] == {"time": 30.0}
+    assert events[2]["payload"] == {"damage": 0, "hit": 0.0, "modifier": None}
+    assert events[3]["payload"] == {"time": 30.0}
 
 
 @pytest.fixture

@@ -1,23 +1,21 @@
-from typing import Optional
+from typing import Optional, TypedDict
 
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.common.periodic_trait as periodic_trait
+from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    CooldownValidityTrait,
-    UsePeriodicDamageTrait,
-)
 from simaple.simulate.global_property import Dynamics
 
 
-class HitLimitedPeriodicDamageState(ReducerState):
+class HitLimitedPeriodicDamageState(TypedDict):
     cooldown: Cooldown
     periodic: Periodic
     dynamics: Dynamics
 
 
 class HitLimitedPeriodicDamageComponent(
-    SkillComponent, UsePeriodicDamageTrait, CooldownValidityTrait
+    SkillComponent,
 ):
     name: str
     cooldown_duration: float
@@ -31,7 +29,7 @@ class HitLimitedPeriodicDamageComponent(
 
     max_count: int
 
-    def get_default_state(self):
+    def get_default_state(self) -> HitLimitedPeriodicDamageState:
         return {
             "cooldown": Cooldown(time_left=0),
             "periodic": Periodic(
@@ -39,6 +37,7 @@ class HitLimitedPeriodicDamageComponent(
                 initial_counter=self.periodic_initial_delay,
                 time_left=0,
             ),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
     @reducer_method
@@ -47,13 +46,16 @@ class HitLimitedPeriodicDamageComponent(
         time: float,
         state: HitLimitedPeriodicDamageState,
     ):
-        state = state.deepcopy()
+        periodic, cooldown = (
+            state["periodic"].model_copy(),
+            state["cooldown"].model_copy(),
+        )
 
-        state.cooldown.elapse(time)
+        cooldown.elapse(time)
         dealing_events = []
 
         time_to_resolve = time
-        periodic_state = state.periodic
+        periodic_state = periodic
         previous_count = periodic_state.count
 
         while time_to_resolve > 0:
@@ -77,17 +79,27 @@ class HitLimitedPeriodicDamageComponent(
         if periodic_state.count >= self.max_count:
             periodic_state.disable()
 
-        state.periodic = periodic_state
+        state["periodic"] = periodic_state
+        state["cooldown"] = cooldown
 
         return state, [self.event_provider.elapsed(time)] + dealing_events
 
     @reducer_method
     def use(self, _: None, state: HitLimitedPeriodicDamageState):
-        return self.use_periodic_damage_trait(state)
+        return periodic_trait.start_periodic_with_cooldown(
+            state,
+            damage=0,
+            hit=0,
+            delay=self.delay,
+            cooldown_duration=self.cooldown_duration,
+            lasting_duration=self.lasting_duration,
+        )
 
     @view_method
     def validity(self, state: HitLimitedPeriodicDamageState):
-        return self.validity_in_cooldown_trait(state)
-
-    def _get_lasting_duration(self, state: HitLimitedPeriodicDamageState) -> float:
-        return self.lasting_duration
+        return cooldown_trait.validity_view(
+            state,
+            self.id,
+            self.name,
+            self.cooldown_duration,
+        )

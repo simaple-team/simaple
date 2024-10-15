@@ -1,25 +1,25 @@
-from typing import Optional
+from typing import Optional, TypedDict
 
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.common.periodic_trait as periodic_trait
+from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic
 from simaple.simulate.component.feature import DamageAndHit
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    InvalidatableCooldownTrait,
-    PeriodicElapseTrait,
-)
+from simaple.simulate.component.util import is_rejected
 from simaple.simulate.component.view import Running
+from simaple.simulate.event import EmptyEvent
 from simaple.simulate.global_property import Dynamics
 
 
-class PeriodicDamageHexaState(ReducerState):
+class PeriodicDamageHexaState(TypedDict):
     cooldown: Cooldown
     periodic: Periodic
     dynamics: Dynamics
 
 
 class PeriodicDamageConfiguratedHexaSkillComponent(
-    SkillComponent, PeriodicElapseTrait, InvalidatableCooldownTrait
+    SkillComponent,
 ):
     """
     PeriodicDamageConfiguratedHexaSkillComponent
@@ -49,50 +49,49 @@ class PeriodicDamageConfiguratedHexaSkillComponent(
                 initial_counter=self.delay,
                 time_left=0,
             ),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
     @reducer_method
     def elapse(self, time: float, state: PeriodicDamageHexaState):
-        return self.elapse_periodic_damage_trait(time, state)
+        return periodic_trait.elapse_periodic_with_cooldown(
+            state, time, self.periodic_damage, self.periodic_hit
+        )
 
     @reducer_method
     def use(self, _: None, state: PeriodicDamageHexaState):
-        if not state.cooldown.available:
-            return state, [self.event_provider.rejected()]
-
-        state = state.deepcopy()
-
-        delay = self._get_delay()
-
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
+        state, events = periodic_trait.start_periodic_with_cooldown(
+            state,
+            0,
+            0,
+            self.delay,
+            self.cooldown_duration,
+            self.lasting_duration,
         )
-        state.periodic.set_time_left(self._get_lasting_duration(state))
 
-        return state, [
-            self.event_provider.dealt(entry.damage, entry.hit)
-            for entry in self.damage_and_hits
-        ] + [
-            self.event_provider.delayed(delay),
-        ]
+        if is_rejected(events):
+            return state, events
+
+        return (
+            state,
+            [
+                EmptyEvent.dealt(entry.damage, entry.hit)
+                for entry in self.damage_and_hits
+            ]
+            + events,
+        )
 
     @view_method
     def validity(self, state: PeriodicDamageHexaState):
-        return self.validity_in_invalidatable_cooldown_trait(state)
+        return cooldown_trait.validity_view(
+            state,
+            self.id,
+            self.name,
+            self.cooldown_duration,
+        )
 
     @view_method
     def running(self, state: PeriodicDamageHexaState) -> Running:
-        return Running(
-            id=self.id,
-            name=self.name,
-            time_left=state.periodic.time_left,
-            lasting_duration=self._get_lasting_duration(state),
+        return periodic_trait.running_view(
+            state, self.id, self.name, self.lasting_duration
         )
-
-    def _get_lasting_duration(self, state: PeriodicDamageHexaState) -> float:
-        return self.lasting_duration
-
-    def _get_periodic_damage_hit(
-        self, state: PeriodicDamageHexaState
-    ) -> tuple[float, float]:
-        return self.periodic_damage, self.periodic_hit

@@ -29,9 +29,7 @@ def fixture_triggable_buff_skill():
 def triggable_buff_state(
     triggable_buff_skill: TriggableBuffSkillComponent, dynamics: Dynamics
 ):
-    return TriggableBuffState.model_validate(
-        {**triggable_buff_skill.get_default_state(), "dynamics": dynamics}
-    )
+    return {**triggable_buff_skill.get_default_state(), "dynamics": dynamics}
 
 
 def test_trigger_emit_damage(
