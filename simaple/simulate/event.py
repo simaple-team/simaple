@@ -87,7 +87,7 @@ class NamedEventProvider(EventProvider):
             "name": self._name,
             "payload": {
                 **event["payload"],
-                "modifier": total_modifier.model_dump() if total_modifier else None,
+                "modifier": total_modifier if total_modifier else None,
             },
         }
 

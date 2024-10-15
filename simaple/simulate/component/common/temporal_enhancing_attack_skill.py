@@ -1,7 +1,7 @@
 from typing import TypedDict
 
 import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown
 from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.trait.impl import InvalidatableCooldownTrait
