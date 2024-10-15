@@ -39,23 +39,21 @@ def test_infernal_venom(dynamics: Dynamics) -> None:
         lasting_duration=20_000,
     )
 
-    state = InfernalVenomState.model_validate(
-        {
-            **infernal_venom.get_default_state(),
-            "dynamics": dynamics,
-            "drain_stack": FerventDrainStack(max_count=10, count=10),
-        }
-    )
+    state: InfernalVenomState = {
+        **infernal_venom.get_default_state(),
+        "dynamics": dynamics,
+        "drain_stack": FerventDrainStack(max_count=10, count=10),
+    }
 
     state, events = infernal_venom.use(None, state)
 
-    assert state.drain_stack.get_buff() == Stat(final_damage_multiplier=50)
+    assert state["drain_stack"].get_buff() == Stat(final_damage_multiplier=50)
 
     state, events = infernal_venom.elapse(10_000, state)
-    assert state.drain_stack.get_buff() == Stat(final_damage_multiplier=50)
+    assert state["drain_stack"].get_buff() == Stat(final_damage_multiplier=50)
 
     state, events = infernal_venom.elapse(15_000, state)
-    assert state.drain_stack.get_buff() == Stat(final_damage_multiplier=25)
+    assert state["drain_stack"].get_buff() == Stat(final_damage_multiplier=25)
 
 
 def test_flame_swip_vi(dynamics: Dynamics) -> None:
@@ -71,12 +69,10 @@ def test_flame_swip_vi(dynamics: Dynamics) -> None:
         dot_lasting_duration=10_000,
         cooldown_duration=0,
     )
-    state = FlameSwipVIState.model_validate(
-        {
-            **flame_swip_vi.get_default_state(),
-            "dynamics": dynamics,
-        }
-    )
+    state: FlameSwipVIState = {
+        **flame_swip_vi.get_default_state(),
+        "dynamics": dynamics,
+    }
 
     state, events = flame_swip_vi.use(None, state)
     assert count_damage_skill(events) == 1

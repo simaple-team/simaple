@@ -29,7 +29,7 @@ def fixture_state(
     component: ProgrammedPeriodicComponent,
     dynamics: Dynamics,
 ):
-    return ProgrammedPeriodicState(**component.get_default_state(), dynamics=dynamics)
+    return {**component.get_default_state(), "dynamics": dynamics}
 
 
 def test_component_reject(

@@ -33,13 +33,11 @@ def hexa_angle_ray_state(
     hexa_angle_ray_component: HexaAngelRayComponent,
     dynamics: Dynamics,
 ) -> HexaAngelRayState:
-    return HexaAngelRayState.model_validate(
-        {
-            **hexa_angle_ray_component.get_default_state(),
-            "dynamics": dynamics,
-            "divine_mark": DivineMark(advantage=None),
-        }
-    )
+    return {
+        **hexa_angle_ray_component.get_default_state(),
+        "dynamics": dynamics,
+        "divine_mark": DivineMark(advantage=None),
+    }
 
 
 def test_hexa_angle_ray(
@@ -99,13 +97,11 @@ def divine_minion_state(
     divine_minion_component: DivineMinion,
     dynamics: Dynamics,
 ) -> DivineMinionState:
-    return DivineMinionState.model_validate(
-        {
-            **divine_minion_component.get_default_state(),
-            "dynamics": dynamics,
-            "divine_mark": DivineMark(),
-        }
-    )
+    return {
+        **divine_minion_component.get_default_state(),
+        "dynamics": dynamics,
+        "divine_mark": DivineMark(),
+    }
 
 
 def test_divine_mark(

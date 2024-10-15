@@ -95,7 +95,6 @@ module = [
     "sklearn.linear_model",
     "sklearn.pipeline",
     "sklearn.preprocessing",
-    "functional",
 ]
 
 [tool.poetry]

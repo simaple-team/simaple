@@ -28,9 +28,7 @@ def fixture_karma_blade_trigger():
 def fixture_karma_blade_trigger_state(
     karma_blade_trigger: KarmaBladeTriggerComponent, dynamics: Dynamics
 ):
-    return KarmaBladeTriggerState.model_validate(
-        {**karma_blade_trigger.get_default_state(), "dynamics": dynamics}
-    )
+    return {**karma_blade_trigger.get_default_state(), "dynamics": dynamics}
 
 
 def test_triggable_count(

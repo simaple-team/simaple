@@ -26,12 +26,10 @@ def fixture_elysion_state(
     elysion: Elysion,
     dynamics: Dynamics,
 ):
-    return ElysionState.model_validate(
-        {
-            **elysion.get_default_state(),
-            "dynamics": dynamics,
-        }
-    )
+    return {
+        **elysion.get_default_state(),
+        "dynamics": dynamics,
+    }
 
 
 def test_elysion_scenario(elysion: Elysion, elysion_state: ElysionState):

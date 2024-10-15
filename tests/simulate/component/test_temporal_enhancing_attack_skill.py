@@ -31,12 +31,10 @@ def temporal_enhancing_attack_skill_state(
     temporal_enhancing_attack_skill: TemporalEnhancingAttackSkill,
     dynamics: Dynamics,
 ):
-    return TemporalEnhancingAttackSkillState.model_validate(
-        {
-            **temporal_enhancing_attack_skill.get_default_state(),
-            "dynamics": dynamics,
-        }
-    )
+    return {
+        **temporal_enhancing_attack_skill.get_default_state(),
+        "dynamics": dynamics,
+    }
 
 
 def test_temporal_enhancing_attack_skill(

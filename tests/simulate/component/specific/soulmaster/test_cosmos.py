@@ -26,13 +26,11 @@ def fixture_cosmos_state(
     cosmos: Cosmos,
     dynamics: Dynamics,
 ):
-    return CosmosState.model_validate(
-        {
-            **cosmos.get_default_state(),
-            "dynamics": dynamics,
-            "orb": LastingStack(maximum_stack=5, duration=30_000),
-        }
-    )
+    return {
+        **cosmos.get_default_state(),
+        "dynamics": dynamics,
+        "orb": LastingStack(maximum_stack=5, duration=30_000),
+    }
 
 
 @pytest.mark.parametrize(
@@ -49,7 +47,7 @@ def test_cosmos_cooldown(
     orb_count: int,
     count_expected: int,
 ):
-    cosmos_state.orb.stack = orb_count
+    cosmos_state["orb"].stack = orb_count
     cosmos_state, _ = cosmos.use(None, cosmos_state)
     cosmos_state, events = cosmos.elapse(18_000, cosmos_state)
 

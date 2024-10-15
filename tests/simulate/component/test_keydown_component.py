@@ -26,12 +26,10 @@ def keydown_fixture(request, dynamics: Dynamics):
         finish_damage=500,
         finish_hit=15,
     )
-    state = KeydownSkillState.model_validate(
-        {
-            **component.get_default_state(),
-            "dynamics": dynamics,
-        }
-    )
+    state = {
+        **component.get_default_state(),
+        "dynamics": dynamics,
+    }
     return (component, state, delay)
 
 
@@ -71,7 +69,7 @@ def test_use(keydown_fixture: tuple[KeydownSkillComponent, KeydownSkillState, fl
     state, _ = component.use(None, state)
 
     # then
-    assert state.keydown.running is True
+    assert state["keydown"].running is True
 
 
 def test_use_and_stop(
@@ -89,7 +87,7 @@ def test_use_and_stop(
     assert damage_events[-1]["payload"]["damage"] == component.finish_damage
     assert damage_events[-1]["payload"]["hit"] == component.finish_hit
     assert total_delay(events) == component.keydown_end_delay
-    assert state.keydown.running is False
+    assert state["keydown"].running is False
 
 
 def test_use_and_elapse_lesser_than_prepare_delay(
@@ -155,7 +153,7 @@ def test_elapse_until_finish(
     assert damage_events[-1]["payload"]["damage"] == component.finish_damage
     assert damage_events[-1]["payload"]["hit"] == component.finish_hit
     assert total_delay(elapse_events) == component.keydown_end_delay
-    assert state.keydown.running is False
+    assert state["keydown"].running is False
 
 
 def test_elapse_during_finish_delay(
@@ -173,7 +171,7 @@ def test_elapse_during_finish_delay(
     assert damage_events[-1]["payload"]["damage"] == component.finish_damage
     assert damage_events[-1]["payload"]["hit"] == component.finish_hit
     assert total_delay(elapse_events) == component.keydown_end_delay - 10
-    assert state.keydown.running is False
+    assert state["keydown"].running is False
 
 
 def test_elapse_just_before_finish(
@@ -187,7 +185,7 @@ def test_elapse_just_before_finish(
     state, _ = component.elapse(delay * 10 - 10, state)
 
     # then
-    assert state.keydown.running is True
+    assert state["keydown"].running is True
 
 
 def test_elapse_very_long(
@@ -205,4 +203,4 @@ def test_elapse_very_long(
     assert damage_events[-1]["payload"]["damage"] == component.finish_damage
     assert damage_events[-1]["payload"]["hit"] == component.finish_hit
     assert total_delay(elapse_events) == 0
-    assert state.keydown.running is False
+    assert state["keydown"].running is False

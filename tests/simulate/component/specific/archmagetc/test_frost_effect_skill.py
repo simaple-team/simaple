@@ -32,14 +32,12 @@ def thunder_attack_skill_state(
     frost_effect_state: FrostEffectState,
     jupyter_thunder_periodic: Periodic,
 ):
-    return ThunderAttackSkillState.model_validate(
-        {
-            **thunder_attack_skill.get_default_state(),
-            "dynamics": dynamics,
-            "frost_stack": frost_effect_state.frost_stack,
-            "jupyter_thunder_shock": jupyter_thunder_periodic,
-        }
-    )
+    return {
+        **thunder_attack_skill.get_default_state(),
+        "dynamics": dynamics,
+        "frost_stack": frost_effect_state["frost_stack"],
+        "jupyter_thunder_shock": jupyter_thunder_periodic,
+    }
 
 
 def test_frost_effect_reducer(
@@ -69,7 +67,7 @@ def test_with_some_stack(
     thunder_attack_skill_state: ThunderAttackSkillState,
 ):
     # given
-    thunder_attack_skill_state.frost_stack = Stack(
+    thunder_attack_skill_state["frost_stack"] = Stack(
         maximum_stack=5,
         stack=3,
     )

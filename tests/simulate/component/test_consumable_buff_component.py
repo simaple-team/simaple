@@ -27,12 +27,10 @@ def consumable_buff_component():
 def consumable_buff_state(
     consumable_buff_component: ConsumableBuffSkillComponent, dynamics: Dynamics
 ):
-    return ConsumableBuffSkillState.model_validate(
-        {
-            **consumable_buff_component.get_default_state(),
-            "dynamics": dynamics,
-        }
-    )
+    return {
+        **consumable_buff_component.get_default_state(),
+        "dynamics": dynamics,
+    }
 
 
 def test_use_consumable_buff_component(

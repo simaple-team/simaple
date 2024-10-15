@@ -40,13 +40,11 @@ class TestMultipleOption:
         dynamics: Dynamics,
         robot_mastery: RobotMastery,
     ):
-        return MultipleOptionState.model_validate(
-            {
-                **multiple_option.get_default_state(),
-                "dynamics": dynamics,
-                "robot_mastery": robot_mastery,
-            }
-        )
+        return {
+            **multiple_option.get_default_state(),
+            "dynamics": dynamics,
+            "robot_mastery": robot_mastery,
+        }
 
     def test_multiple_option_little_use(
         self,

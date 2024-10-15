@@ -25,18 +25,18 @@ _ANONYMOUS_REDUCER_SIGNATURE: Final[ActionSignature] = (
 )
 
 
-class ReducerPrecursor(TypedDict):
+class UnsafeReducer(TypedDict):
     """
     If the target_action_signature is empty, then this is dynamic-target reducer;
     """
 
-    unsafe_reducer: ReducerType
+    reducer: ReducerType
     name: ActionSignature
     target_action_signature: list[ActionSignature]
 
 
-def is_dynamic_target_reducer_precursor(reducer_precursor: ReducerPrecursor) -> bool:
-    return len(reducer_precursor["target_action_signature"]) == 0
+def is_dynamic_target_unsafe_reducers(unsafe_reducer: UnsafeReducer) -> bool:
+    return len(unsafe_reducer["target_action_signature"]) == 0
 
 
 class Listener(TypedDict):
@@ -79,28 +79,28 @@ def anonymous_reducer(reducer: ReducerType, method_postfix: str) -> ReducerType:
     return _reducer
 
 
-def listener_to_reducer_precursor(
+def listener_to_unsafe_reducer(
     listener: Listener,
-    reducer_precursors: list[ReducerPrecursor],
-) -> ReducerPrecursor:
-    target_reducer_precursor = None
-    for reducer_precursor in reducer_precursors:
-        if listener["target_reducer_name"] == reducer_precursor["name"]:
-            target_reducer_precursor = reducer_precursor
+    unsafe_reducers: list[UnsafeReducer],
+) -> UnsafeReducer:
+    target_unsafe_reducer = None
+    for unsafe_reducer in unsafe_reducers:
+        if listener["target_reducer_name"] == unsafe_reducer["name"]:
+            target_unsafe_reducer = unsafe_reducer
 
-    if target_reducer_precursor is None:
+    if target_unsafe_reducer is None:
         raise ValueError("Target reducer not found")
 
     reducer = _as_static_payload_reducer(
         listener["target_reducer_name"][0],
         listener["target_reducer_name"][1],
         listener["payload"],
-        target_reducer_precursor["unsafe_reducer"],
+        target_unsafe_reducer["reducer"],
     )
 
     if listener["action_name_or_reserved_values"] == "$":
         return {
-            "unsafe_reducer": anonymous_reducer(reducer, listener["action_method"]),
+            "reducer": anonymous_reducer(reducer, listener["action_method"]),
             "name": _ANONYMOUS_REDUCER_SIGNATURE,
             "target_action_signature": [],
         }  # dynamic-target reducer
@@ -111,32 +111,36 @@ def listener_to_reducer_precursor(
     )
 
     return {
-        "unsafe_reducer": reducer,
+        "reducer": reducer,
         "name": _ANONYMOUS_REDUCER_SIGNATURE,
         "target_action_signature": [target_action],
     }
 
 
 def create_safe_reducer(
-    reducer_precursors: list[ReducerPrecursor],
+    unsafe_reducers: list[UnsafeReducer],
 ):
     full_action_signature_set = sum(
-        (precursor["target_action_signature"] for precursor in reducer_precursors), []
+        (
+            unsafe_reducer["target_action_signature"]
+            for unsafe_reducer in unsafe_reducers
+        ),
+        [],
     )
 
     action_signature_to_unsafe_reducers = {
         action_signature: [
-            precursor["unsafe_reducer"]
-            for precursor in reducer_precursors
-            if action_signature in precursor["target_action_signature"]
+            unsafe_reducer["reducer"]
+            for unsafe_reducer in unsafe_reducers
+            if action_signature in unsafe_reducer["target_action_signature"]
         ]
         for action_signature in full_action_signature_set
     }
 
     dynamic_target_reducers = [
-        precursor["unsafe_reducer"]
-        for precursor in reducer_precursors
-        if is_dynamic_target_reducer_precursor(precursor)
+        unsafe_reducer["reducer"]
+        for unsafe_reducer in unsafe_reducers
+        if is_dynamic_target_unsafe_reducers(unsafe_reducer)
     ]
 
     for k, v in action_signature_to_unsafe_reducers.items():

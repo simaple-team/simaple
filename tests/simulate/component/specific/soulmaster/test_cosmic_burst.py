@@ -25,13 +25,11 @@ def fixture_cosmic_burst_state(
     cosmic_burst: CosmicBurst,
     dynamics: Dynamics,
 ):
-    return CosmicBurstState.model_validate(
-        {
-            **cosmic_burst.get_default_state(),
-            "dynamics": dynamics,
-            "orb": LastingStack(maximum_stack=5, duration=30_000),
-        }
-    )
+    return {
+        **cosmic_burst.get_default_state(),
+        "dynamics": dynamics,
+        "orb": LastingStack(maximum_stack=5, duration=30_000),
+    }
 
 
 @pytest.mark.parametrize(
@@ -47,16 +45,16 @@ def test_cosmic_burst_cooldown(
     orb_count: int,
     cooldown_expected: float,
 ):
-    cosmic_burst_state.orb.stack = orb_count
+    cosmic_burst_state["orb"].stack = orb_count
     cosmic_burst_state, _ = cosmic_burst.trigger(None, cosmic_burst_state)
 
-    assert cosmic_burst_state.cooldown.time_left == cooldown_expected
+    assert cosmic_burst_state["cooldown"].time_left == cooldown_expected
 
 
 def test_cosmic_burst_prevent_multiple_trigger(
     cosmic_burst: CosmicBurst, cosmic_burst_state: CosmicBurstState
 ):
-    cosmic_burst_state.orb.stack = 5
+    cosmic_burst_state["orb"].stack = 5
     cosmic_burst_state, _ = cosmic_burst.trigger(None, cosmic_burst_state)
     cosmic_burst_state, events = cosmic_burst.trigger(None, cosmic_burst_state)
 

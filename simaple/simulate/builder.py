@@ -7,10 +7,10 @@ from simaple.simulate.component.base import (
 )
 from simaple.simulate.core.reducer import (
     Listener,
-    ReducerPrecursor,
     ReducerType,
+    UnsafeReducer,
     create_safe_reducer,
-    listener_to_reducer_precursor,
+    listener_to_unsafe_reducer,
     sum_reducers,
 )
 from simaple.simulate.core.runtime import SimulationRuntime
@@ -27,7 +27,7 @@ class EngineBuilder:
 
         self._reducers: list[ReducerType] = []
 
-        self._reducer_precursors: list[ReducerPrecursor] = []
+        self._unsafe_reducers: list[UnsafeReducer] = []
         self._listeners: list[Listener] = []
 
         if store is None:
@@ -51,16 +51,12 @@ class EngineBuilder:
         )
 
     def build_root_reducer(self) -> ReducerType:
-        reducer_precursor_from_listeners = [
-            listener_to_reducer_precursor(listener, self._reducer_precursors)
+        unsafe_reducer_from_listeners = [
+            listener_to_unsafe_reducer(listener, self._unsafe_reducers)
             for listener in self._listeners
         ]
         return sum_reducers(
-            [
-                create_safe_reducer(
-                    self._reducer_precursors + reducer_precursor_from_listeners
-                )
-            ]
+            [create_safe_reducer(self._unsafe_reducers + unsafe_reducer_from_listeners)]
             + self._reducers
         )
 
@@ -74,12 +70,12 @@ class EngineBuilder:
     def add_component(self, component: Component) -> "EngineBuilder":
         init_component_store(component.name, component.get_default_state(), self._store)
 
-        precursors = component.get_reducer_precursors()
+        unsafe_reducers = component.get_unsafe_reducers()
         listeners = listening_actions_to_listeners(
             component.name, component.listening_actions
         )
 
-        self._reducer_precursors += precursors
+        self._unsafe_reducers += unsafe_reducers
         self._listeners += listeners
 
         for view_name, view in component.get_views().items():

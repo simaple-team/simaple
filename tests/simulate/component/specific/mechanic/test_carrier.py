@@ -31,13 +31,11 @@ def fixture_meca_carrier():
 def meca_carrier_state(
     meca_carrier: MecaCarrier, dynamics: Dynamics, robot_mastery: RobotMastery
 ):
-    return MecaCarrierState.model_validate(
-        {
-            **meca_carrier.get_default_state(),
-            "dynamics": dynamics,
-            "robot_mastery": robot_mastery,
-        }
-    )
+    return {
+        **meca_carrier.get_default_state(),
+        "dynamics": dynamics,
+        "robot_mastery": robot_mastery,
+    }
 
 
 def test_meca_carrier_usage_count(

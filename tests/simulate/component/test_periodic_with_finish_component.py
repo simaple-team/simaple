@@ -31,12 +31,10 @@ def periodic_damage_state(
     periodic_damage_component: PeriodicWithFinishSkillComponent,
     dynamics: Dynamics,
 ):
-    return PeriodicWithFinishState.model_validate(
-        {
-            **periodic_damage_component.get_default_state(),
-            "dynamics": dynamics,
-        }
-    )
+    return {
+        **periodic_damage_component.get_default_state(),
+        "dynamics": dynamics,
+    }
 
 
 def test_periodic_damage_component_reject(
