@@ -24,6 +24,7 @@ def start_periodic_with_cooldown(
     cooldown_duration: float,
     lasting_duration: float,
 ) -> tuple[_StateT, list[Event]]:
+    """use_periodic_damage_trait"""
     cooldown, periodic = (
         state["cooldown"].model_copy(),
         state["periodic"].model_copy(),
@@ -50,6 +51,9 @@ def elapse_periodic_with_cooldown(
     periodic_damage: float,
     periodic_hit: float,
 ) -> tuple[_StateT, list[Event]]:
+    """
+    elapse_periodic_damage_trait
+    """
     cooldown, periodic = (
         state["cooldown"].model_copy(),
         state["periodic"].model_copy(),
