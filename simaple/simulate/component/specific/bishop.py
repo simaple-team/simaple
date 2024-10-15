@@ -1,20 +1,12 @@
 from typing import Optional, TypedDict
 
 import simaple.simulate.component.trait.common.cooldown_trait as cooldown_trait
-import simaple.simulate.component.trait.common.keydown_trait as keydown_trait
-import simaple.simulate.component.trait.common.lasting_trait as lasting_trait
 import simaple.simulate.component.trait.common.periodic_trait as periodic_trait
 import simaple.simulate.component.trait.common.simple_attack as simple_attack
 from simaple.core.base import Stat
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from simaple.simulate.component.base import reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic, Stack
 from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    CooldownValidityTrait,
-    InvalidatableCooldownTrait,
-    PeriodicWithSimpleDamageTrait,
-    UseSimpleAttackTrait,
-)
 from simaple.simulate.component.view import Running
 from simaple.simulate.core.base import Entity
 from simaple.simulate.event import DelayPayload, EmptyEvent
@@ -214,7 +206,7 @@ class HexaAngelRayState(TypedDict):
 
 
 class HexaAngelRayComponent(
-    SkillComponent, CooldownValidityTrait, UseSimpleAttackTrait
+    SkillComponent,
 ):
     binds: dict[str, str] = {
         "divine_mark": ".바하뮤트.divine_mark",
@@ -306,6 +298,3 @@ class HexaAngelRayComponent(
     @view_method
     def buff(self, _: HexaAngelRayState):
         return self.synergy
-
-    def _get_simple_damage_hit(self) -> tuple[float, float]:
-        return self.damage, self.hit
