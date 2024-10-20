@@ -280,6 +280,8 @@ class AdeleOrderComponent(SkillComponent):
     lasting_duration: float
     maximum_stack: int
     restore_maximum_stack: int
+    delay: float
+    cooldown_duration: float
 
     binds: dict[str, str] = {
         "ether_gauge": ".에테르.ether_gauge",
@@ -392,6 +394,8 @@ class AdeleOrderUsingState(TypedDict):
 class AdeleGatheringComponent(SkillComponent):
     damage: float
     hit_per_sword: float
+    cooldown_duration: float
+    delay: float
 
     binds: dict[str, str] = {"order_sword": ".오더 VI.order_sword"}
 
@@ -446,6 +450,8 @@ class AdeleBlossomComponent(SkillComponent):
     damage: float
     hit_per_sword: float
     exceeded_stat: Stat
+    delay: float
+    cooldown_duration: float
 
     binds: dict[str, str] = {"order_sword": ".오더 VI.order_sword"}
 
@@ -547,6 +553,9 @@ class AdeleRuinComponent(
     periodic_damage_second: float
     periodic_hit_second: float
     lasting_duration_second: float
+
+    cooldown_duration: float
+    delay: float
 
     def get_default_state(self):
         return {
@@ -668,6 +677,8 @@ class AdeleRestoreBuffComponent(SkillComponent):
     ether_multiplier: float
     stat: Stat
 
+    delay: float
+
     def get_default_state(self):
         return {
             "lasting": RestoreLasting(
@@ -741,6 +752,8 @@ class AdeleStormComponent(
     periodic_hit: float
     lasting_duration: float
     maximum_stack: int
+    delay: float
+    cooldown_duration: float
 
     binds: dict[str, str] = {"order_sword": ".오더 VI.order_sword"}
 

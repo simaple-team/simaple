@@ -119,6 +119,9 @@ class PoisonNovaComponent(SkillComponent):
     dot_damage: float
     dot_lasting_duration: float
 
+    delay: float
+    cooldown_duration: float
+
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),

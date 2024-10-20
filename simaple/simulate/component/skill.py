@@ -7,11 +7,8 @@ from simaple.simulate.event import NamedEventProvider
 
 
 class SkillComponent(Component):
-    disable_validity: bool = False
     modifier: Optional[Stat] = None
     cooldown_duration: float
-    delay: float
-    id: str
 
     @property
     def event_provider(self) -> NamedEventProvider:

@@ -2,9 +2,9 @@ import inspect
 from abc import abstractmethod
 from functools import wraps
 from typing import Any, Callable, Optional, TypeVar, Union
-from typing_extensions import TypedDict
 
 from pydantic import BaseModel, ConfigDict, Field
+from typing_extensions import TypedDict
 
 from simaple.simulate.core import Action, ActionSignature, Entity, Event
 from simaple.simulate.core.reducer import Listener, UnsafeReducer

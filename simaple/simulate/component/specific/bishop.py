@@ -282,6 +282,7 @@ class HexaAngelRayComponent(
     stack_resolve_amount: int
 
     synergy: Stat
+    cooldown_duration: float
 
     def get_default_state(self) -> HexaAngelRayState:
         return {
