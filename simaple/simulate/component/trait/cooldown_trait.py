@@ -26,9 +26,10 @@ def reset_cooldown(state: StateT, _: Any) -> tuple[StateT, list[Event]]:
 
 
 def elapse_cooldown_only(
-    state: StateT, props: ElapseActionPayload
+    state: StateT,
+    payload: ElapseActionPayload,
 ) -> tuple[StateT, list[Event]]:
-    time = props["time"]
+    time = payload["time"]
 
     cooldown = state["cooldown"].model_copy()
     cooldown.elapse(time)

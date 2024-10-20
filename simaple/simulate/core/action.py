@@ -37,5 +37,8 @@ class ElapseActionPayload(TypedDict):
 class UseActionPayload(TypedDict): ...
 
 
-def use_action_payload() -> UseActionPayload:
+class StopActionPayload(TypedDict): ...
+
+
+def empty_payload() -> UseActionPayload:
     return {}

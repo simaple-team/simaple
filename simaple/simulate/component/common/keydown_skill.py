@@ -73,27 +73,27 @@ class KeydownSkillComponent(SkillComponent):
     ):
         return keydown_trait.use_keydown(
             state,
-            self.maximum_keydown_time,
-            self.keydown_prepare_delay,
-            self.cooldown_duration,
+            {},
+            **self.get_props(),
         )
 
     @reducer_method
     def elapse(self, time: float, state: KeydownSkillState):
         return keydown_trait.elapse_keydown(
             state,
-            time,
-            self.damage,
-            self.hit,
-            self.finish_damage,
-            self.finish_hit,
-            self.keydown_end_delay,
+            {"time": time},
+            **self.get_props(),
+            finish_delay=self.keydown_end_delay,
         )
 
     @reducer_method
     def stop(self, _: None, state: KeydownSkillState):
         return keydown_trait.stop_keydown(
-            state, self.finish_damage, self.finish_hit, self.keydown_end_delay
+            state,
+            {},
+            finish_damage=self.finish_damage,
+            finish_hit=self.finish_hit,
+            finish_delay=self.keydown_end_delay,
         )
 
     @view_method
@@ -102,4 +102,4 @@ class KeydownSkillComponent(SkillComponent):
 
     @view_method
     def keydown(self, state: KeydownSkillState):
-        return keydown_trait.keydown_view(state, self.name)
+        return keydown_trait.keydown_view(state, **self.get_props())

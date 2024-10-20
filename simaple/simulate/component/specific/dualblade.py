@@ -140,9 +140,8 @@ class BladeStormComponent(SkillComponent):
     ):
         state, events = keydown_trait.use_keydown(
             state,
-            self.maximum_keydown_time,
-            self.keydown_prepare_delay,
-            self.cooldown_duration,
+            {},
+            **self.get_props(),
         )
 
         if not is_rejected(events):
@@ -153,12 +152,24 @@ class BladeStormComponent(SkillComponent):
     @reducer_method
     def elapse(self, time: float, state: BladeStormState):
         return keydown_trait.elapse_keydown(
-            state, time, self.damage, self.hit, 0, 0, self.keydown_end_delay
+            state,
+            {"time": time},
+            damage=self.damage,
+            hit=self.hit,
+            finish_damage=0,
+            finish_hit=0,
+            finish_delay=self.keydown_end_delay,
         )
 
     @reducer_method
     def stop(self, _, state: BladeStormState):
-        return keydown_trait.stop_keydown(state, 0, 0, self.keydown_end_delay)
+        return keydown_trait.stop_keydown(
+            state,
+            {},
+            finish_damage=0,
+            finish_hit=0,
+            finish_delay=self.keydown_end_delay,
+        )
 
     @view_method
     def validity(self, state: BladeStormState):
@@ -166,7 +177,7 @@ class BladeStormComponent(SkillComponent):
 
     @view_method
     def keydown(self, state: BladeStormState):
-        return keydown_trait.keydown_view(state, self.name)
+        return keydown_trait.keydown_view(state, **self.get_props())
 
 
 class KarmaBladeTriggerState(TypedDict):

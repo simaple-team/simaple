@@ -1,8 +1,15 @@
 from typing import TypedDict, TypeVar
 
+from typing_extensions import Unpack
+
 from simaple.simulate.component.entity import Cooldown, Keydown
 from simaple.simulate.component.view import KeydownView
-from simaple.simulate.core import Event
+from simaple.simulate.core import (
+    ElapseActionPayload,
+    Event,
+    StopActionPayload,
+    UseActionPayload,
+)
 from simaple.simulate.event import EmptyEvent
 from simaple.simulate.global_property import Dynamics
 
@@ -16,12 +23,23 @@ class _State(TypedDict):
 _StateT = TypeVar("_StateT", bound=_State)
 
 
+class UseKeydownProps(TypedDict):
+    maximum_keydown_time: float
+    keydown_prepare_delay: float
+    cooldown_duration: float
+
+
 def use_keydown(
     state: _StateT,
-    maximum_keydown_time: float,
-    keydown_prepare_delay: float,
-    cooldown_duration: float,
+    _payload: UseActionPayload,
+    **props: Unpack[UseKeydownProps],
 ) -> tuple[_StateT, list[Event]]:
+    maximum_keydown_time, keydown_prepare_delay, cooldown_duration = (
+        props["maximum_keydown_time"],
+        props["keydown_prepare_delay"],
+        props["cooldown_duration"],
+    )
+
     if not state["cooldown"].available or state["keydown"].running:
         return state, [EmptyEvent.rejected()]
 
@@ -39,15 +57,28 @@ def use_keydown(
     return state, [EmptyEvent.delayed(keydown_prepare_delay)]
 
 
+class ElapseKeydownProps(TypedDict):
+    damage: float
+    hit: float
+    finish_damage: float
+    finish_hit: float
+    finish_delay: float
+
+
 def elapse_keydown(
     state: _StateT,
-    time: float,
-    damage: float,
-    hit: float,
-    finish_damage: float,
-    finish_hit: float,
-    finish_delay: float,
+    payload: ElapseActionPayload,
+    **props: Unpack[ElapseKeydownProps],
 ) -> tuple[_StateT, list[Event]]:
+    time = payload["time"]
+    damage, hit, finish_damage, finish_hit, finish_delay = (
+        props["damage"],
+        props["hit"],
+        props["finish_damage"],
+        props["finish_hit"],
+        props["finish_delay"],
+    )
+
     keydown, cooldown = (
         state["keydown"].model_copy(),
         state["cooldown"].model_copy(),
@@ -79,12 +110,23 @@ def elapse_keydown(
     )
 
 
+class StopKeydownProps(TypedDict):
+    finish_damage: float
+    finish_hit: float
+    finish_delay: float
+
+
 def stop_keydown(
     state: _StateT,
-    finish_damage: float,
-    finish_hit: float,
-    finish_delay: float,
+    _: StopActionPayload,
+    **props: Unpack[StopKeydownProps],
 ) -> tuple[_StateT, list[Event]]:
+    finish_damage, finish_hit, finish_delay = (
+        props["finish_damage"],
+        props["finish_hit"],
+        props["finish_delay"],
+    )
+
     keydown = state["keydown"].model_copy()
 
     if not keydown.running:
@@ -104,9 +146,13 @@ def stop_keydown(
     )
 
 
-def keydown_view(state: _State, name: str) -> KeydownView:
+class ValidityViewProps(TypedDict):
+    name: str
+
+
+def keydown_view(state: _State, **props: Unpack[ValidityViewProps]) -> KeydownView:
     return KeydownView(
-        name=name,
+        name=props["name"],
         time_left=state["keydown"].time_left,
         running=state["keydown"].running,
     )

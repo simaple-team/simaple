@@ -3,8 +3,9 @@ from simaple.simulate.core.action import (
     ActionSignature,
     ElapseActionPayload,
     EventCallback,
+    StopActionPayload,
     UseActionPayload,
-    use_action_payload,
+    empty_payload,
 )
 from simaple.simulate.core.base import Entity, Event
 
@@ -16,5 +17,6 @@ __all__ = [
     "ActionSignature",
     "ElapseActionPayload",
     "UseActionPayload",
-    "use_action_payload",
+    "empty_payload",
+    "StopActionPayload",
 ]

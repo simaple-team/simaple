@@ -451,16 +451,21 @@ class FullMetalBarrageComponent(
     ):
         return keydown_trait.use_keydown(
             state,
-            self.maximum_keydown_time,
-            self.keydown_prepare_delay,
-            self.cooldown_duration,
+            {},
+            **self.get_props(),
         )
 
     @reducer_method
     def elapse(self, time: float, state: FullMetalBarrageState):
 
         state, event = keydown_trait.elapse_keydown(
-            state, time, self.damage, self.hit, 0, 0, self.keydown_end_delay
+            state,
+            {"time": time},
+            damage=self.damage,
+            hit=self.hit,
+            finish_damage=0,
+            finish_hit=0,
+            finish_delay=self.keydown_end_delay,
         )
 
         penalty_lasting = state["penalty_lasting"].model_copy()
@@ -475,7 +480,13 @@ class FullMetalBarrageComponent(
 
     @reducer_method
     def stop(self, _, state: FullMetalBarrageState):
-        state, event = keydown_trait.stop_keydown(state, 0, 0, self.keydown_end_delay)
+        state, event = keydown_trait.stop_keydown(
+            state,
+            {},
+            finish_damage=0,
+            finish_hit=0,
+            finish_delay=self.keydown_end_delay,
+        )
 
         penalty_lasting = state["penalty_lasting"].model_copy()
         if is_keydown_ended(event):
@@ -491,7 +502,7 @@ class FullMetalBarrageComponent(
 
     @view_method
     def keydown(self, state: FullMetalBarrageState):
-        return keydown_trait.keydown_view(state, self.name)
+        return keydown_trait.keydown_view(state, **self.get_props())
 
 
 class MultipleOptionState(TypedDict):
