@@ -1,23 +1,34 @@
-from typing import Optional
+from typing import Optional, TypedDict
 
+import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.lasting_trait as lasting_trait
 from simaple.core.base import Stat
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Lasting, Stack
-from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import BuffTrait, InvalidatableCooldownTrait
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
 
-class StackableBuffSkillState(ReducerState):
+class StackableBuffSkillState(TypedDict):
     cooldown: Cooldown
     lasting: Lasting
     stack: Stack
     dynamics: Dynamics
 
 
+class StackableBuffSkillComponentProps(TypedDict):
+    id: str
+    name: str
+    stat: Stat
+    cooldown_duration: float
+    delay: float
+    lasting_duration: float
+    maximum_stack: int
+    apply_buff_duration: bool
+
+
 class StackableBuffSkillComponent(
-    SkillComponent, BuffTrait, InvalidatableCooldownTrait
+    Component,
 ):
     stat: Stat
     cooldown_duration: float
@@ -32,6 +43,19 @@ class StackableBuffSkillComponent(
             "cooldown": Cooldown(time_left=0),
             "lasting": Lasting(time_left=0),
             "stack": Stack(maximum_stack=self.maximum_stack),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> StackableBuffSkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "stat": self.stat,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "lasting_duration": self.lasting_duration,
+            "maximum_stack": self.maximum_stack,
+            "apply_buff_duration": self.apply_buff_duration,
         }
 
     @reducer_method
@@ -40,12 +64,18 @@ class StackableBuffSkillComponent(
         _: None,
         state: StackableBuffSkillState,
     ):
-        state = state.deepcopy()
-        if state.lasting.time_left <= 0:
-            state.stack.reset()
-        state.stack.increase()
+        stack = state["stack"].model_copy()
+        if state["lasting"].time_left <= 0:
+            stack.reset()
+        stack.increase()
 
-        return self.use_buff_trait(state, apply_buff_duration=self.apply_buff_duration)
+        state["stack"] = stack
+
+        return lasting_trait.start_lasting_with_cooldown(
+            state,
+            {},
+            **self.get_props(),
+        )
 
     @reducer_method
     def elapse(
@@ -53,16 +83,18 @@ class StackableBuffSkillComponent(
         time: float,
         state: StackableBuffSkillState,
     ):
-        return self.elapse_buff_trait(time, state)
+        return lasting_trait.elapse_lasting_with_cooldown(
+            state, {"time": time}, **self.get_props()
+        )
 
     @view_method
     def validity(self, state: StackableBuffSkillState):
-        return self.validity_in_invalidatable_cooldown_trait(state)
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def buff(self, state: StackableBuffSkillState) -> Optional[Stat]:
-        if state.lasting.enabled():
-            return self.stat.stack(state.stack.stack)
+        if state["lasting"].enabled():
+            return self.stat.stack(state["stack"].stack)
 
         return None
 
@@ -71,10 +103,7 @@ class StackableBuffSkillComponent(
         return Running(
             id=self.id,
             name=self.name,
-            time_left=state.lasting.time_left,
-            lasting_duration=state.lasting.assigned_duration,
-            stack=state.stack.stack if state.lasting.time_left > 0 else 0,
+            time_left=state["lasting"].time_left,
+            lasting_duration=state["lasting"].assigned_duration,
+            stack=state["stack"].stack if state["lasting"].time_left > 0 else 0,
         )
-
-    def _get_lasting_duration(self, state: StackableBuffSkillState) -> float:
-        return self.lasting_duration

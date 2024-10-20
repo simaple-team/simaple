@@ -30,13 +30,11 @@ def ether_state(
     ether: AdeleEtherComponent,
     dynamics: Dynamics,
 ):
-    return EtherState.model_validate(
-        {
-            **ether.get_default_state(),
-            "restore_lasting": RestoreLasting(time_left=0, ether_multiplier=80),
-            "dynamics": dynamics,
-        }
-    )
+    return {
+        **ether.get_default_state(),
+        "restore_lasting": RestoreLasting(time_left=0, ether_multiplier=80),
+        "dynamics": dynamics,
+    }
 
 
 def test_ether_elapse(ether: AdeleEtherComponent, ether_state: EtherState):
@@ -65,8 +63,7 @@ def test_ether_resonance(ether: AdeleEtherComponent, ether_state: EtherState):
 
 def test_ether_order_consume(ether: AdeleEtherComponent, ether_state: EtherState):
     # given
-    state = ether_state.deepcopy()
-    state.ether_gauge = EtherGauge(
+    ether_state["ether_gauge"] = EtherGauge(
         stack=100,
         maximum_stack=400,
         creation_step=100,
@@ -74,19 +71,18 @@ def test_ether_order_consume(ether: AdeleEtherComponent, ether_state: EtherState
     )
 
     # when
-    state, _ = ether.order(None, state)
+    ether_state, _ = ether.order(None, ether_state)
 
     # then
-    assert ether.running(state).stack == 0
+    assert ether.running(ether_state).stack == 0
 
 
 def test_ether_restore_buff(ether: AdeleEtherComponent, ether_state: EtherState):
     # given
-    state = ether_state.deepcopy()
-    state.restore_lasting.set_time_left(1000)
+    ether_state["restore_lasting"].set_time_left(1000)
 
     # when
-    state, _ = ether.trigger(None, state)
+    ether_state, _ = ether.trigger(None, ether_state)
 
     # then
-    assert ether.running(state).stack == 21
+    assert ether.running(ether_state).stack == 21

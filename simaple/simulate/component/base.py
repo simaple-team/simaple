@@ -1,12 +1,14 @@
 import inspect
 from abc import abstractmethod
 from functools import wraps
-from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union
+from typing import Any, Callable, Optional, TypeVar, Union, cast
 
 from pydantic import BaseModel, ConfigDict, Field
+from typing_extensions import TypedDict
 
+from simaple.core import Stat
 from simaple.simulate.core import Action, ActionSignature, Entity, Event
-from simaple.simulate.core.reducer import Listener, ReducerPrecursor
+from simaple.simulate.core.reducer import Listener, UnsafeReducer
 from simaple.simulate.core.store import Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import GlobalProperty
@@ -15,23 +17,17 @@ from simaple.spec.loadable import TaggedNamespacedABCMeta
 
 WILD_CARD = "*"
 
+StateT = TypeVar("StateT")
 
 ReducerType = Callable[..., tuple[Union[tuple[Entity], Entity], Any]]
+ReducerPrecursorType = Callable[[Any, Any, StateT], tuple[StateT, list[Event]]]
 
-
+ReducerPrecursorTypeT = TypeVar("ReducerPrecursorTypeT", bound=ReducerPrecursorType)
 T = TypeVar("T", bound=BaseModel)
 
 
-class ReducerState(BaseModel):
-    def copy(self) -> NoReturn:  # type: ignore
-        raise NotImplementedError("copy() is disabled in ReducerState")
-
-    def deepcopy(self: T) -> T:
-        return super().model_copy(deep=True)  # type: ignore
-
-
-def reducer_method(func):
-    func.__isreducer__ = True
+def reducer_method(func: ReducerPrecursorTypeT) -> ReducerPrecursorTypeT:
+    func.__isreducer__ = True  # type: ignore
 
     return func
 
@@ -97,11 +93,18 @@ def tag_events_by_method_name(
     return tagged_events
 
 
-def event_tagged_reducer(owner_name: str, method_name: str):
+def event_tagged_reducer(
+    owner_name: str, method_name: str, event_provider: EventProvider
+):
     def wrapper(reducer):
         @wraps(reducer)
         def wrapped(action: Action, store: Store) -> list[Event]:
             events = reducer(action, store)
+            if len(events) == 0:
+                return []
+
+            if events[0]["name"] != owner_name:
+                events = [event_provider.wrap_with_modifier(event) for event in events]
             return tag_events_by_method_name(owner_name, method_name, events)
 
         return wrapped
@@ -169,20 +172,15 @@ def compile_into_unsafe_reducer(property_address: dict[str, str]):
         payload_type = list(inspect.signature(component_method).parameters.values())[
             0
         ].annotation
-        state_type = list(inspect.signature(component_method).parameters.values())[
-            1
-        ].annotation
 
         @wraps(component_method)
         def wrapped(action: Action, global_store: Store) -> list[Event]:
             # if no-op, return []
-            my_entities = {}
+            state = {}
 
             for name, address in property_address.items():
                 entity = global_store.read_entity(address, None)
-                my_entities[name] = entity
-
-            state = state_type(**my_entities)
+                state[name] = entity
 
             payload = action["payload"]
 
@@ -286,6 +284,11 @@ def listening_actions_to_listeners(
     return listeners
 
 
+class ComponentInformation(TypedDict):
+    id: int
+    name: str
+
+
 class Component(BaseModel, metaclass=ComponentMetaclass):
     """
     Component is compact bundle of state-action.
@@ -304,6 +307,8 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
 
     id: str
     name: str
+    modifier: Optional[Stat] = None
+
     listening_actions: dict[str, Union[str, StaticPayloadReducerInfo]] = Field(
         default_factory=dict
     )  # Access by external only
@@ -313,13 +318,13 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @abstractmethod
-    def get_default_state(self) -> dict[str, Entity]: ...
+    def get_default_state(self) -> Any: ...
 
     @property
     def event_provider(self) -> EventProvider:
-        return NamedEventProvider(self.name)
+        return NamedEventProvider(self.name, self.modifier)
 
-    def get_reducer_precursors(self) -> list[ReducerPrecursor]:
+    def get_unsafe_reducers(self) -> list[UnsafeReducer]:
         if len(getattr(self, "__reducers__")) == 0:
             return []
 
@@ -327,20 +332,19 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         bounded_stores.update(self.binds)
 
         # TODO: remove these lines with explicit state passing
-        any_reducer = getattr(self, list(getattr(self, "__reducers__"))[0])
-        state_type: Type[BaseModel] = list(
-            inspect.signature(any_reducer).parameters.values()
-        )[1].annotation
+        model_fields = list(self.get_default_state().keys())
 
         property_address = _create_binding_with_store(
             self.name,
-            list(state_type.model_fields),
+            model_fields,
             bounded_stores,
         )
 
         return [
             {
-                "unsafe_reducer": event_tagged_reducer(self.name, method_name)(
+                "reducer": event_tagged_reducer(
+                    self.name, method_name, self.event_provider
+                )(
                     compile_into_unsafe_reducer(property_address)(
                         getattr(self, method_name)
                     )
@@ -365,3 +369,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
             )(getattr(self, method_name))
             for method_name in getattr(self, "__views__")
         }
+
+    @view_method
+    def info(self, _: Any) -> ComponentInformation:
+        return cast(ComponentInformation, self.model_dump())

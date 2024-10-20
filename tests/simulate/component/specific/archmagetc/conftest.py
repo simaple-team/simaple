@@ -5,7 +5,7 @@ import simaple.simulate.component.common  # noqa: F401
 import simaple.simulate.component.specific  # noqa: F401
 from simaple.core.base import ActionStat
 from simaple.simulate.component.entity import Periodic
-from simaple.simulate.component.specific.archmagetc import FrostEffect, FrostEffectState
+from simaple.simulate.component.specific.archmagetc import FrostEffect
 from simaple.simulate.global_property import Dynamics, GlobalProperty
 
 
@@ -50,4 +50,4 @@ def frost_effect():
 
 @pytest.fixture
 def frost_effect_state(frost_effect: FrostEffect):
-    return FrostEffectState.model_validate(frost_effect.get_default_state())
+    return frost_effect.get_default_state()

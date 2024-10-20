@@ -1,21 +1,30 @@
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from typing import TypedDict
+
+import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.simple_attack as simple_attack
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown
-from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    AddDOTDamageTrait,
-    InvalidatableCooldownTrait,
-    UseSimpleAttackTrait,
-)
 from simaple.simulate.global_property import Dynamics
 
 
-class DOTEmittingState(ReducerState):
+class DOTEmittingState(TypedDict):
     cooldown: Cooldown
     dynamics: Dynamics
 
 
+class DOTEmittingAttackSkillComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
+    dot_damage: float
+    dot_lasting_duration: float
+
+
 class DOTEmittingAttackSkillComponent(
-    SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait, AddDOTDamageTrait
+    Component,
 ):
     name: str
     damage: float
@@ -29,30 +38,48 @@ class DOTEmittingAttackSkillComponent(
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> DOTEmittingAttackSkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "dot_damage": self.dot_damage,
+            "dot_lasting_duration": self.dot_lasting_duration,
         }
 
     @reducer_method
     def elapse(self, time: float, state: DOTEmittingState):
-        return self.elapse_simple_attack(time, state)
+        return simple_attack.elapse(state, {"time": time})
 
     @reducer_method
     def use(self, _: None, state: DOTEmittingState):
-        state, event = self.use_simple_attack(state)
-        event += [self.get_dot_add_event()]
+        state, event = simple_attack.use_cooldown_attack(
+            state,
+            {},
+            **self.get_props(),
+        )
+
+        event += [
+            simple_attack.get_dot_event(
+                self.name, self.dot_damage, self.dot_lasting_duration
+            )
+        ]
         return state, event
 
     @reducer_method
     def reset_cooldown(self, _: None, state: DOTEmittingState):
-        state = state.deepcopy()
-        state.cooldown.set_time_left(0)
-        return state, None
+        cooldown = state["cooldown"].model_copy()
+        cooldown.set_time_left(0)
+        state["cooldown"] = cooldown
+
+        return state, []
 
     @view_method
     def validity(self, state: DOTEmittingState):
-        return self.validity_in_invalidatable_cooldown_trait(state)
-
-    def _get_simple_damage_hit(self) -> tuple[float, float]:
-        return self.damage, self.hit
-
-    def _get_dot_damage_and_lasting(self) -> tuple[float, float]:
-        return self.dot_damage, self.dot_lasting_duration
+        return cooldown_trait.validity_view(state, **self.get_props())

@@ -30,12 +30,10 @@ def ruin_state(
     ruin: AdeleRuinComponent,
     dynamics: Dynamics,
 ):
-    return AdeleRuinState.model_validate(
-        {
-            **ruin.get_default_state(),
-            "dynamics": dynamics,
-        }
-    )
+    return {
+        **ruin.get_default_state(),
+        "dynamics": dynamics,
+    }
 
 
 def test_ruin_first(ruin: AdeleRuinComponent, ruin_state: AdeleRuinState):

@@ -1,23 +1,15 @@
-from typing import Optional
+from typing import Optional, TypedDict
 
+import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.periodic_trait as periodic_trait
+import simaple.simulate.component.trait.simple_attack as simple_attack
 from simaple.core import Stat
-from simaple.simulate.component.base import (
-    Component,
-    ReducerState,
-    reducer_method,
-    view_method,
-)
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Lasting, Periodic, Stack
-from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    CooldownValidityTrait,
-    InvalidatableCooldownTrait,
-    PeriodicWithSimpleDamageTrait,
-    UseSimpleAttackTrait,
-)
 from simaple.simulate.component.util import ignore_rejected, is_rejected
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.core.base import Entity
+from simaple.simulate.event import EmptyEvent
 from simaple.simulate.global_property import Dynamics
 
 
@@ -44,7 +36,7 @@ class RestoreLasting(Lasting):
         return 1
 
 
-class EtherState(ReducerState):
+class EtherState(TypedDict):
     ether_gauge: EtherGauge
     periodic: Periodic
     restore_lasting: RestoreLasting
@@ -75,6 +67,7 @@ class AdeleEtherComponent(Component):
                 initial_counter=self.periodic_interval,
                 interval_counter=self.periodic_interval,
             ),
+            "restore_lasting": RestoreLasting(time_left=0, ether_multiplier=0),
         }
 
     @reducer_method
@@ -83,12 +76,18 @@ class AdeleEtherComponent(Component):
         time: float,
         state: EtherState,
     ):
-        state = state.deepcopy()
+        periodic, ether_gauge = (
+            state["periodic"].model_copy(),
+            state["ether_gauge"].model_copy(),
+        )
 
-        lapse_count = state.periodic.elapse(time)
-        state.ether_gauge.increase(lapse_count * self.stack_per_period)
+        lapse_count = periodic.elapse(time)
+        ether_gauge.increase(lapse_count * self.stack_per_period)
 
-        return state, [self.event_provider.elapsed(time)]
+        state["periodic"] = periodic
+        state["ether_gauge"] = ether_gauge
+
+        return state, [EmptyEvent.elapsed(time)]
 
     @reducer_method
     def trigger(
@@ -96,11 +95,13 @@ class AdeleEtherComponent(Component):
         _: None,
         state: EtherState,
     ):
-        state = state.deepcopy()
+        ether_gauge = state["ether_gauge"].model_copy()
 
-        state.ether_gauge.increase(
-            int(self.stack_per_trigger * state.restore_lasting.get_gain_rate())
+        ether_gauge.increase(
+            int(self.stack_per_trigger * state["restore_lasting"].get_gain_rate())
         )
+
+        state["ether_gauge"] = ether_gauge
 
         return state, []
 
@@ -110,9 +111,9 @@ class AdeleEtherComponent(Component):
         _: None,
         state: EtherState,
     ):
-        state = state.deepcopy()
-
-        state.ether_gauge.increase(self.stack_per_resonance)
+        ether_gauge = state["ether_gauge"].model_copy()
+        ether_gauge.increase(self.stack_per_resonance)
+        state["ether_gauge"] = ether_gauge
 
         return state, []
 
@@ -122,9 +123,9 @@ class AdeleEtherComponent(Component):
         _: None,
         state: EtherState,
     ):
-        state = state.deepcopy()
-
-        state.ether_gauge.decrease_order()
+        ether_gauge = state["ether_gauge"].model_copy()
+        ether_gauge.decrease_order()
+        state["ether_gauge"] = ether_gauge
 
         return (state), []
 
@@ -138,18 +139,27 @@ class AdeleEtherComponent(Component):
             name=self.name,
             time_left=999_999_999,
             lasting_duration=999_999_999,
-            stack=state.ether_gauge.get_stack(),
+            stack=state["ether_gauge"].get_stack(),
         )
 
 
-class CreationState(ReducerState):
+class CreationState(TypedDict):
     ether_gauge: EtherGauge
     cooldown: Cooldown
     dynamics: Dynamics
 
 
+class AdeleCreationComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit_per_sword: float
+    cooldown_duration: float
+    delay: float
+
+
 class AdeleCreationComponent(
-    SkillComponent, InvalidatableCooldownTrait, UseSimpleAttackTrait
+    Component,
 ):
     name: str
     damage: float
@@ -159,26 +169,47 @@ class AdeleCreationComponent(
 
     binds: dict[str, str] = {"ether_gauge": ".에테르.ether_gauge"}
 
-    def get_default_state(self):
+    def get_default_state(self) -> CreationState:
         return {
             "cooldown": Cooldown(time_left=0),
+            "ether_gauge": EtherGauge(
+                maximum_stack=6, creation_step=2, order_consume=2
+            ),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> AdeleCreationComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit_per_sword": self.hit_per_sword,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
         }
 
     @reducer_method
     def elapse(self, time: float, state: CreationState):
-        return self.elapse_simple_attack(time, state)
+        return simple_attack.elapse(state, {"time": time})
 
     @reducer_method
     @ignore_rejected
     def trigger(self, _: None, state: CreationState):
-        return self.use_multiple_damage(state, state.ether_gauge.get_creation_count())
+        if not state["cooldown"].available:
+            return state, []
+
+        state["cooldown"].set_time_left(
+            state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
+        )
+
+        return state, [
+            self.event_provider.dealt(self.damage, self.hit_per_sword)
+            for _ in range(state["ether_gauge"].get_creation_count())
+        ] + [self.event_provider.delayed(self.delay)]
 
     @view_method
     def validity(self, state: CreationState):
-        return self.validity_in_invalidatable_cooldown_trait(state)
-
-    def _get_simple_damage_hit(self) -> tuple[float, float]:
-        return self.damage, self.hit_per_sword
+        return cooldown_trait.validity_view(state, **self.get_props())
 
 
 class OrderSword(Entity):
@@ -232,7 +263,7 @@ class OrderSword(Entity):
         return len(self.running_swords) * 2
 
 
-class AdeleOrderState(ReducerState):
+class AdeleOrderState(TypedDict):
     ether_gauge: EtherGauge
     restore_lasting: RestoreLasting
     cooldown: Cooldown
@@ -241,13 +272,15 @@ class AdeleOrderState(ReducerState):
 
 
 # TODO: 게더링-블로섬 도중 타격 미발생 및 지속시간 정지
-class AdeleOrderComponent(SkillComponent):
+class AdeleOrderComponent(Component):
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
     lasting_duration: float
     maximum_stack: int
     restore_maximum_stack: int
+    delay: float
+    cooldown_duration: float
 
     binds: dict[str, str] = {
         "ether_gauge": ".에테르.ether_gauge",
@@ -258,6 +291,11 @@ class AdeleOrderComponent(SkillComponent):
         return {
             "cooldown": Cooldown(time_left=0),
             "order_sword": OrderSword(interval=self.periodic_interval),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
+            "restore_lasting": RestoreLasting(time_left=0, ether_multiplier=0),
+            "ether_gauge": EtherGauge(
+                maximum_stack=6, creation_step=2, order_consume=2
+            ),
         }
 
     @reducer_method
@@ -266,18 +304,26 @@ class AdeleOrderComponent(SkillComponent):
         time: float,
         state: AdeleOrderState,
     ):
-        state = state.deepcopy()
+        ether_gauge, cooldown, order_sword = (
+            state["ether_gauge"].model_copy(),
+            state["cooldown"].model_copy(),
+            state["order_sword"].model_copy(),
+        )
 
-        state.cooldown.elapse(time)
+        cooldown.elapse(time)
 
         dealing_events = []
 
-        for _ in state.order_sword.resolving(time, self._max_sword_count(state)):
+        for _ in order_sword.resolving(time, self._max_sword_count(state)):
             dealing_events.append(
-                self.event_provider.dealt(self.periodic_damage, self.periodic_hit)
+                EmptyEvent.dealt(self.periodic_damage, self.periodic_hit)
             )
 
-        return state, [self.event_provider.elapsed(time)] + dealing_events
+        state["ether_gauge"] = ether_gauge
+        state["cooldown"] = cooldown
+        state["order_sword"] = order_sword
+
+        return state, [EmptyEvent.elapsed(time)] + dealing_events
 
     @reducer_method
     def use(
@@ -285,35 +331,40 @@ class AdeleOrderComponent(SkillComponent):
         _: None,
         state: AdeleOrderState,
     ):
-        state = state.deepcopy()
+        ether_gauge, cooldown, order_sword = (
+            state["ether_gauge"].model_copy(),
+            state["cooldown"].model_copy(),
+            state["order_sword"].model_copy(),
+        )
 
-        if not (state.ether_gauge.is_order_valid() and state.cooldown.available):
-            return state, [self.event_provider.rejected()]
+        if not (ether_gauge.is_order_valid() and cooldown.available):
+            return state, [EmptyEvent.rejected()]
 
         damage, hit = self.periodic_damage, self.periodic_hit
-        delay = self._get_delay()
+        delay = self.delay
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
+        cooldown.set_time_left(
+            state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
         )
 
-        state.order_sword.add_running(
-            0, self.lasting_duration, self._max_sword_count(state)
-        )
+        order_sword.add_running(0, self.lasting_duration, self._max_sword_count(state))
+        state["ether_gauge"] = ether_gauge
+        state["cooldown"] = cooldown
+        state["order_sword"] = order_sword
 
         return state, [
-            self.event_provider.dealt(damage, hit),
-            self.event_provider.delayed(delay),
+            EmptyEvent.dealt(damage, hit),
+            EmptyEvent.delayed(delay),
         ]
 
     @view_method
     def validity(self, state: AdeleOrderState):
         return Validity(
             id=self.id,
-            name=self._get_name(),
-            time_left=state.cooldown.minimum_time_to_available(),
-            valid=state.cooldown.available and state.ether_gauge.is_order_valid(),
-            cooldown_duration=self._get_cooldown_duration(),
+            name=self.name,
+            time_left=state["cooldown"].minimum_time_to_available(),
+            valid=state["cooldown"].available and state["ether_gauge"].is_order_valid(),
+            cooldown_duration=self.cooldown_duration,
         )
 
     @view_method
@@ -321,33 +372,37 @@ class AdeleOrderComponent(SkillComponent):
         return Running(
             id=self.id,
             name=self.name,
-            time_left=state.order_sword.get_time_left(),
+            time_left=state["order_sword"].get_time_left(),
             lasting_duration=self.lasting_duration,
-            stack=state.order_sword.get_sword_count(),
+            stack=state["order_sword"].get_sword_count(),
         )
 
     def _max_sword_count(self, state: AdeleOrderState):
-        if state.restore_lasting.enabled():
+        if state["restore_lasting"].enabled():
             return self.restore_maximum_stack
 
         return self.maximum_stack
 
 
-class AdeleOrderUsingState(ReducerState):
+class AdeleOrderUsingState(TypedDict):
     order_sword: OrderSword
     cooldown: Cooldown
     dynamics: Dynamics
 
 
-class AdeleGatheringComponent(SkillComponent, UseSimpleAttackTrait):
+class AdeleGatheringComponent(Component):
     damage: float
     hit_per_sword: float
+    cooldown_duration: float
+    delay: float
 
     binds: dict[str, str] = {"order_sword": ".오더 VI.order_sword"}
 
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
+            "order_sword": OrderSword(interval=1),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
     @reducer_method
@@ -356,36 +411,54 @@ class AdeleGatheringComponent(SkillComponent, UseSimpleAttackTrait):
         _: None,
         state: AdeleOrderUsingState,
     ):
-        return self.use_multiple_damage(state, state.order_sword.get_sword_count())
+        cooldown = state["cooldown"].model_copy()
+
+        if not cooldown.available:
+            return state, [self.event_provider.rejected()]
+
+        cooldown.set_time_left(
+            state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
+        )
+        state["cooldown"] = cooldown
+
+        return state, [
+            self.event_provider.dealt(self.damage, self.hit_per_sword)
+            for _ in range(state["order_sword"].get_sword_count())
+        ] + [self.event_provider.delayed(self.delay)]
 
     @reducer_method
     def elapse(self, time: float, state: AdeleOrderUsingState):
-        return self.elapse_simple_attack(time, state)
+        return simple_attack.elapse(state, {"time": time})
 
     @view_method
     def validity(self, state: AdeleOrderUsingState):
         return Validity(
             id=self.id,
             name=self.name,
-            time_left=state.cooldown.minimum_time_to_available(),
-            valid=state.cooldown.available and state.order_sword.get_sword_count() > 0,
-            cooldown_duration=self._get_cooldown_duration(),
+            time_left=state["cooldown"].minimum_time_to_available(),
+            valid=state["cooldown"].available
+            and state["order_sword"].get_sword_count() > 0,
+            cooldown_duration=self.cooldown_duration,
         )
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit_per_sword
 
 
-class AdeleBlossomComponent(SkillComponent, UseSimpleAttackTrait):
+class AdeleBlossomComponent(Component):
     damage: float
     hit_per_sword: float
     exceeded_stat: Stat
+    delay: float
+    cooldown_duration: float
 
     binds: dict[str, str] = {"order_sword": ".오더 VI.order_sword"}
 
-    def get_default_state(self):
+    def get_default_state(self) -> AdeleOrderUsingState:
         return {
             "cooldown": Cooldown(time_left=0),
+            "order_sword": OrderSword(interval=1),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
     @reducer_method
@@ -394,30 +467,28 @@ class AdeleBlossomComponent(SkillComponent, UseSimpleAttackTrait):
         _: None,
         state: AdeleOrderUsingState,
     ):
-        state = state.deepcopy()
+        cooldown = state["cooldown"].model_copy()
 
         if not self._is_valid(state):
-            return state, [self.event_provider.rejected()]
+            return state, [EmptyEvent.rejected()]
 
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
+        cooldown.set_time_left(
+            state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
         )
-
-        damage, hit = self._get_simple_damage_hit()
-        delay = self._get_delay()
+        state["cooldown"] = cooldown
 
         return (
             state,
-            [self.event_provider.dealt(damage, hit)]
+            [EmptyEvent.dealt(self.damage, self.hit_per_sword)]
             + [
-                self.event_provider.dealt(
-                    damage,
-                    hit,
+                EmptyEvent.dealt(
+                    self.damage,
+                    self.hit_per_sword,
                     modifier=self.exceeded_stat,
                 )
-                for _ in range(state.order_sword.get_sword_count() - 1)
+                for _ in range(state["order_sword"].get_sword_count() - 1)
             ]
-            + [self.event_provider.delayed(delay)],
+            + [EmptyEvent.delayed(self.delay)],
         )
 
     @reducer_method
@@ -426,7 +497,7 @@ class AdeleBlossomComponent(SkillComponent, UseSimpleAttackTrait):
         time: float,
         state: AdeleOrderUsingState,
     ):
-        return self.elapse_simple_attack(time, state)
+        return simple_attack.elapse(state, {"time": time})
 
     @view_method
     def validity(
@@ -436,28 +507,41 @@ class AdeleBlossomComponent(SkillComponent, UseSimpleAttackTrait):
         return Validity(
             id=self.id,
             name=self.name,
-            time_left=state.cooldown.minimum_time_to_available(),
-            valid=state.cooldown.available and state.order_sword.get_sword_count() > 0,
+            time_left=state["cooldown"].minimum_time_to_available(),
+            valid=state["cooldown"].available
+            and state["order_sword"].get_sword_count() > 0,
             cooldown_duration=self._is_valid(state),
         )
 
-    def _get_simple_damage_hit(self) -> tuple[float, float]:
-        return self.damage, self.hit_per_sword
-
     def _is_valid(self, state: AdeleOrderUsingState):
-        return state.cooldown.available and state.order_sword.get_sword_count() > 0
+        return (
+            state["cooldown"].available and state["order_sword"].get_sword_count() > 0
+        )
 
 
-class AdeleRuinState(ReducerState):
+class AdeleRuinState(TypedDict):
     cooldown: Cooldown
     interval_state_first: Periodic
     interval_state_second: Periodic
     dynamics: Dynamics
 
 
+class AdeleRuinComponentProps(TypedDict):
+    id: str
+    name: str
+    periodic_interval_first: float
+    periodic_damage_first: float
+    periodic_hit_first: float
+    lasting_duration_first: float
+    periodic_interval_second: float
+    periodic_damage_second: float
+    periodic_hit_second: float
+    lasting_duration_second: float
+    cooldown_duration: float
+
+
 class AdeleRuinComponent(
-    SkillComponent,
-    CooldownValidityTrait,
+    Component,
 ):
     periodic_interval_first: float
     periodic_damage_first: float
@@ -468,6 +552,9 @@ class AdeleRuinComponent(
     periodic_damage_second: float
     periodic_hit_second: float
     lasting_duration_second: float
+
+    cooldown_duration: float
+    delay: float
 
     def get_default_state(self):
         return {
@@ -480,6 +567,22 @@ class AdeleRuinComponent(
                 interval=self.periodic_interval_second,
                 initial_counter=self.lasting_duration_first,
             ),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> AdeleRuinComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "cooldown_duration": self.cooldown_duration,
+            "periodic_interval_first": self.periodic_interval_first,
+            "periodic_damage_first": self.periodic_damage_first,
+            "periodic_hit_first": self.periodic_hit_first,
+            "lasting_duration_first": self.lasting_duration_first,
+            "periodic_interval_second": self.periodic_interval_second,
+            "periodic_damage_second": self.periodic_damage_second,
+            "periodic_hit_second": self.periodic_hit_second,
+            "lasting_duration_second": self.lasting_duration_second,
         }
 
     @reducer_method
@@ -488,21 +591,25 @@ class AdeleRuinComponent(
         time: float,
         state: AdeleRuinState,
     ):
-        state = state.deepcopy()
+        cooldown, interval_state_first, interval_state_second = (
+            state["cooldown"].model_copy(),
+            state["interval_state_first"].model_copy(),
+            state["interval_state_second"].model_copy(),
+        )
 
-        state.cooldown.elapse(time)
-        lapse_count_first = state.interval_state_first.elapse(time)
-        lapse_count_second = state.interval_state_second.elapse(time)
+        cooldown.elapse(time)
+        lapse_count_first = interval_state_first.elapse(time)
+        lapse_count_second = interval_state_second.elapse(time)
 
-        return state, [self.event_provider.elapsed(time)] + [
-            self.event_provider.dealt(
-                self.periodic_damage_first, self.periodic_hit_first
-            )
+        state["cooldown"] = cooldown
+        state["interval_state_first"] = interval_state_first
+        state["interval_state_second"] = interval_state_second
+
+        return state, [EmptyEvent.elapsed(time)] + [
+            EmptyEvent.dealt(self.periodic_damage_first, self.periodic_hit_first)
             for _ in range(lapse_count_first)
         ] + [
-            self.event_provider.dealt(
-                self.periodic_damage_second, self.periodic_hit_second
-            )
+            EmptyEvent.dealt(self.periodic_damage_second, self.periodic_hit_second)
             for _ in range(lapse_count_second)
         ]
 
@@ -512,23 +619,31 @@ class AdeleRuinComponent(
         _: None,
         state: AdeleRuinState,
     ):
-        state = state.deepcopy()
-
-        if not state.cooldown.available:
-            return state, [self.event_provider.rejected()]
-
-        delay = self._get_delay()
-
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
+        cooldown, interval_state_first, interval_state_second = (
+            state["cooldown"].model_copy(),
+            state["interval_state_first"].model_copy(),
+            state["interval_state_second"].model_copy(),
         )
-        state.interval_state_first.set_time_left(time=self.lasting_duration_first)
-        state.interval_state_second.set_time_left(
+
+        if not cooldown.available:
+            return state, [EmptyEvent.rejected()]
+
+        delay = self.delay
+
+        cooldown.set_time_left(
+            state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
+        )
+        interval_state_first.set_time_left(time=self.lasting_duration_first)
+        interval_state_second.set_time_left(
             time=self.lasting_duration_first + self.lasting_duration_second
         )
 
+        state["cooldown"] = cooldown
+        state["interval_state_first"] = interval_state_first
+        state["interval_state_second"] = interval_state_second
+
         return state, [
-            self.event_provider.delayed(delay),
+            EmptyEvent.delayed(delay),
         ]
 
     @view_method
@@ -536,7 +651,7 @@ class AdeleRuinComponent(
         self,
         state: AdeleRuinState,
     ):
-        return self.validity_in_cooldown_trait(state)
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(
@@ -546,45 +661,53 @@ class AdeleRuinComponent(
         return Running(
             id=self.id,
             name=self.name,
-            time_left=state.interval_state_second.time_left,
+            time_left=state["interval_state_second"].time_left,
             lasting_duration=self.lasting_duration_first + self.lasting_duration_second,
         )
 
 
-class AdeleRestoreState(ReducerState):
+class AdeleRestoreState(TypedDict):
     lasting: RestoreLasting
     dynamics: Dynamics
 
 
-class AdeleRestoreBuffComponent(SkillComponent):
+class AdeleRestoreBuffComponent(Component):
     lasting_duration: float
     ether_multiplier: float
     stat: Stat
+
+    delay: float
 
     def get_default_state(self):
         return {
             "lasting": RestoreLasting(
                 time_left=0, ether_multiplier=self.ether_multiplier
-            )
+            ),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
     @reducer_method
     def use(self, _: None, state: AdeleRestoreState):
-        state = state.deepcopy()
-        state.lasting.set_time_left(
-            state.dynamics.stat.calculate_buff_duration(self.lasting_duration)
+        lasting = state["lasting"].model_copy()
+
+        lasting.set_time_left(
+            state["dynamics"].stat.calculate_buff_duration(self.lasting_duration)
         )
-        return state, [self.event_provider.delayed(self.delay)]
+        state["lasting"] = lasting
+
+        return state, [EmptyEvent.delayed(self.delay)]
 
     @reducer_method
     def elapse(self, time: float, state: AdeleRestoreState):
-        state = state.deepcopy()
-        state.lasting.elapse(time)
-        return state, [self.event_provider.elapsed(time)]
+        lasting = state["lasting"].model_copy()
+        lasting.elapse(time)
+        state["lasting"] = lasting
+
+        return state, [EmptyEvent.elapsed(time)]
 
     @view_method
     def buff(self, state: AdeleRestoreState):
-        if state.lasting.enabled():
+        if state["lasting"].enabled():
             return self.stat
 
         return None
@@ -594,12 +717,12 @@ class AdeleRestoreBuffComponent(SkillComponent):
         return Running(
             id=self.id,
             name=self.name,
-            time_left=state.lasting.time_left,
-            lasting_duration=state.lasting.assigned_duration,
+            time_left=state["lasting"].time_left,
+            lasting_duration=state["lasting"].assigned_duration,
         )
 
 
-class AdeleStormState(ReducerState):
+class AdeleStormState(TypedDict):
     cooldown: Cooldown
     periodic: Periodic
     stack: Stack
@@ -607,8 +730,20 @@ class AdeleStormState(ReducerState):
     order_sword: OrderSword
 
 
+class AdeleStormComponentProps(TypedDict):
+    id: str
+    name: str
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+    lasting_duration: float
+    maximum_stack: int
+    delay: float
+    cooldown_duration: float
+
+
 class AdeleStormComponent(
-    SkillComponent, PeriodicWithSimpleDamageTrait, CooldownValidityTrait
+    Component,
 ):
     periodic_initial_delay: Optional[float] = None
     periodic_interval: float
@@ -616,6 +751,8 @@ class AdeleStormComponent(
     periodic_hit: float
     lasting_duration: float
     maximum_stack: int
+    delay: float
+    cooldown_duration: float
 
     binds: dict[str, str] = {"order_sword": ".오더 VI.order_sword"}
 
@@ -628,6 +765,21 @@ class AdeleStormComponent(
                 time_left=0,
             ),
             "stack": Stack(maximum_stack=self.maximum_stack),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
+            "order_sword": OrderSword(interval=self.periodic_interval),
+        }
+
+    def get_props(self) -> AdeleStormComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "lasting_duration": self.lasting_duration,
+            "maximum_stack": self.maximum_stack,
+            "delay": self.delay,
+            "cooldown_duration": self.cooldown_duration,
         }
 
     @reducer_method
@@ -636,18 +788,27 @@ class AdeleStormComponent(
         time: float,
         state: AdeleStormState,
     ):
-        return self.elapse_periodic_damage_trait(time, state)
+        return periodic_trait.elapse_periodic_with_cooldown(
+            state,
+            {"time": time},
+            periodic_damage=self.periodic_damage,
+            periodic_hit=self.periodic_hit * state["stack"].get_stack(),
+        )
 
     @reducer_method
     def use(self, _: None, state: AdeleStormState):
-        sword_count = state.order_sword.get_sword_count()
+        sword_count = state["order_sword"].get_sword_count()
 
         if sword_count <= 0:
-            return state, [self.event_provider.rejected()]
+            return state, [EmptyEvent.rejected()]
 
-        state, events = self.use_periodic_damage_trait(state)
+        state, events = periodic_trait.start_periodic_with_cooldown(
+            state, {}, **self.get_props(), damage=0, hit=0
+        )
         if not is_rejected(events):
-            state.stack.reset(sword_count)
+            stack = state["stack"].model_copy()
+            stack.reset(sword_count)
+            state["stack"] = stack
 
         return state, events
 
@@ -655,10 +816,11 @@ class AdeleStormComponent(
     def validity(self, state: AdeleStormState):
         return Validity(
             id=self.id,
-            name=self._get_name(),
-            time_left=state.cooldown.minimum_time_to_available(),
-            valid=state.cooldown.available and state.order_sword.get_sword_count() > 0,
-            cooldown_duration=self._get_cooldown_duration(),
+            name=self.name,
+            time_left=state["cooldown"].minimum_time_to_available(),
+            valid=state["cooldown"].available
+            and state["order_sword"].get_sword_count() > 0,
+            cooldown_duration=self.cooldown_duration,
         )
 
     @view_method
@@ -666,17 +828,7 @@ class AdeleStormComponent(
         return Running(
             id=self.id,
             name=self.name,
-            time_left=state.periodic.time_left,
-            lasting_duration=self._get_lasting_duration(state),
-            stack=state.stack.stack,
+            time_left=state["periodic"].time_left,
+            lasting_duration=self.lasting_duration,
+            stack=state["stack"].stack,
         )
-
-    def _get_lasting_duration(self, state: AdeleStormState) -> float:
-        return self.lasting_duration
-
-    def _get_simple_damage_hit(self) -> tuple[float, float]:
-        # TODO: TickEmittingTrait should not extend SimpleDamageTrait. Remove this method
-        return 0, 0
-
-    def _get_periodic_damage_hit(self, state: AdeleStormState) -> tuple[float, float]:
-        return self.periodic_damage, self.periodic_hit * state.stack.stack
