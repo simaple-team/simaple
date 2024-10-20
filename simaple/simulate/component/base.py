@@ -2,6 +2,7 @@ import inspect
 from abc import abstractmethod
 from functools import wraps
 from typing import Any, Callable, Optional, TypeVar, Union
+from typing_extensions import TypedDict
 
 from pydantic import BaseModel, ConfigDict, Field
 

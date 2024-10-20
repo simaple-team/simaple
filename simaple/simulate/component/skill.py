@@ -17,14 +17,6 @@ class SkillComponent(Component):
     def event_provider(self) -> NamedEventProvider:
         return NamedEventProvider(self.name, self.modifier)
 
-    def invalidate_if_disabled(self, validity: Validity):
-        if self.disable_validity:
-            validity = validity.model_copy()
-            validity.valid = False
-            return validity
-
-        return validity
-
     @view_method
     def info(self, _: Any) -> ComponentInformation:
         return cast(ComponentInformation, self.model_dump())
