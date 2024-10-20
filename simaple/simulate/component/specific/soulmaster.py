@@ -525,6 +525,17 @@ class FlareSlashState(TypedDict):
     dynamics: Dynamics
 
 
+class FlareSlashProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
+    cooldown_reduece_when_stance_changed: float
+    cooldown_reduce_when_cross_the_styx_hit: float
+
+
 class FlareSlash(SkillComponent):
     name: str
     damage: float
@@ -541,9 +552,21 @@ class FlareSlash(SkillComponent):
             "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
+    def get_props(self) -> FlareSlashProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "cooldown_reduece_when_stance_changed": self.cooldown_reduece_when_stance_changed,
+            "cooldown_reduce_when_cross_the_styx_hit": self.cooldown_reduce_when_cross_the_styx_hit,
+        }
+
     @reducer_method
     def elapse(self, time: float, state: FlareSlashState):
-        return simple_attack.elapse(state, time)
+        return simple_attack.elapse(state, {"time": time})
 
     @reducer_method
     def change_stance_trigger(self, _: None, state: FlareSlashState):
@@ -552,7 +575,9 @@ class FlareSlash(SkillComponent):
         state["cooldown"] = cooldown
 
         return simple_attack.use_cooldown_attack(
-            state, self.cooldown_duration, self.damage, self.hit, self.delay
+            state,
+            {},
+            **self.get_props(),
         )
 
     @reducer_method
@@ -561,7 +586,9 @@ class FlareSlash(SkillComponent):
         cooldown.reduce_by_value(self.cooldown_reduce_when_cross_the_styx_hit)
         state["cooldown"] = cooldown
         return simple_attack.use_cooldown_attack(
-            state, self.cooldown_duration, self.damage, self.hit, self.delay
+            state,
+            {},
+            **self.get_props(),
         )
 
     @view_method

@@ -56,13 +56,16 @@ class DOTEmittingAttackSkillComponent(
 
     @reducer_method
     def elapse(self, time: float, state: DOTEmittingState):
-        return simple_attack.elapse(state, time)
+        return simple_attack.elapse(state, {"time": time})
 
     @reducer_method
     def use(self, _: None, state: DOTEmittingState):
         state, event = simple_attack.use_cooldown_attack(
-            state, self.cooldown_duration, self.damage, self.hit, self.delay
+            state,
+            {},
+            **self.get_props(),
         )
+
         event += [
             simple_attack.get_dot_event(
                 self.name, self.dot_damage, self.dot_lasting_duration

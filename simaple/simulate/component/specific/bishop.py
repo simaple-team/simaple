@@ -100,7 +100,7 @@ class DivineAttackSkillComponent(
 
     @reducer_method
     def elapse(self, time: float, state: DivineAttackSkillState):
-        return simple_attack.elapse(state, time)
+        return simple_attack.elapse(state, {"time": time})
 
     @view_method
     def validity(self, state: DivineAttackSkillState):
@@ -362,7 +362,7 @@ class HexaAngelRayComponent(
 
     @reducer_method
     def elapse(self, time: float, state: HexaAngelRayState):
-        return simple_attack.elapse(state, time)
+        return simple_attack.elapse(state, {"time": time})
 
     @view_method
     def validity(self, state: HexaAngelRayState):

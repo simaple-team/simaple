@@ -51,14 +51,16 @@ class AttackSkillComponent(
 
     @reducer_method
     def elapse(self, time: float, state: AttackSkillState):
-        return simple_attack.elapse(state, time)
+        return simple_attack.elapse(state, {"time": time})
 
     @reducer_method
     def use(
         self, _: None, state: AttackSkillState
     ) -> tuple[AttackSkillState, list[Event]]:
         return simple_attack.use_cooldown_attack(
-            state, self.cooldown_duration, self.damage, self.hit, self.delay
+            state,
+            {},
+            **self.get_props(),
         )
 
     @reducer_method
@@ -69,7 +71,9 @@ class AttackSkillComponent(
         Useful when automatic triggering is needed.
         """
         return simple_attack.use_cooldown_attack(
-            state, self.cooldown_duration, self.damage, self.hit, self.delay
+            state,
+            {},
+            **self.get_props(),
         )
 
     @reducer_method

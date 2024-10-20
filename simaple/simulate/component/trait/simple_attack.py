@@ -1,7 +1,9 @@
 from typing import TypedDict, TypeVar
 
+from typing_extensions import Unpack
+
 from simaple.simulate.component.entity import Cooldown
-from simaple.simulate.core import Event
+from simaple.simulate.core import ElapseActionPayload, Event, UseActionPayload
 from simaple.simulate.event import EmptyEvent
 from simaple.simulate.global_property import Dynamics
 from simaple.simulate.reserved_names import Tag
@@ -15,7 +17,7 @@ class CoolDownState(TypedDict):
 CoolDownStateT = TypeVar("CoolDownStateT", bound=CoolDownState)
 
 
-class UseSimpleAttackPayload(TypedDict):
+class UseCooldownAttackProps(TypedDict):
     cooldown_duration: float
     damage: float
     hit: float
@@ -24,13 +26,18 @@ class UseSimpleAttackPayload(TypedDict):
 
 def use_cooldown_attack(
     state: CoolDownStateT,
-    cooldown_duration: float,
-    damage: float,
-    hit: float,
-    delay: float,
+    _payload: UseActionPayload,
+    **props: Unpack[UseCooldownAttackProps],
 ) -> tuple[CoolDownStateT, list[Event]]:
     if not state["cooldown"].available:
         return state, [EmptyEvent.rejected()]
+
+    cooldown_duration, damage, hit, delay = (
+        props["cooldown_duration"],
+        props["damage"],
+        props["hit"],
+        props["delay"],
+    )
 
     cooldown = state["cooldown"].model_copy()
     cooldown.set_time_left(state["dynamics"].stat.calculate_cooldown(cooldown_duration))
@@ -42,7 +49,11 @@ def use_cooldown_attack(
     ]
 
 
-def elapse(state: CoolDownStateT, time: float) -> tuple[CoolDownStateT, list[Event]]:
+def elapse(
+    state: CoolDownStateT, payload: ElapseActionPayload
+) -> tuple[CoolDownStateT, list[Event]]:
+    time = payload["time"]
+
     cooldown = state["cooldown"].model_copy()
     cooldown.elapse(time)
     state["cooldown"] = cooldown

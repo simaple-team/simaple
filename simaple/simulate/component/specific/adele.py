@@ -191,7 +191,7 @@ class AdeleCreationComponent(
 
     @reducer_method
     def elapse(self, time: float, state: CreationState):
-        return simple_attack.elapse(state, time)
+        return simple_attack.elapse(state, {"time": time})
 
     @reducer_method
     @ignore_rejected
@@ -425,7 +425,7 @@ class AdeleGatheringComponent(SkillComponent):
 
     @reducer_method
     def elapse(self, time: float, state: AdeleOrderUsingState):
-        return simple_attack.elapse(state, time)
+        return simple_attack.elapse(state, {"time": time})
 
     @view_method
     def validity(self, state: AdeleOrderUsingState):
@@ -492,7 +492,7 @@ class AdeleBlossomComponent(SkillComponent):
         time: float,
         state: AdeleOrderUsingState,
     ):
-        return simple_attack.elapse(state, time)
+        return simple_attack.elapse(state, {"time": time})
 
     @view_method
     def validity(

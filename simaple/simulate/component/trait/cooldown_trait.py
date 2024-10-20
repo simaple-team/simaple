@@ -5,7 +5,7 @@ from typing_extensions import Unpack
 from simaple.simulate.component.entity import Cooldown
 from simaple.simulate.component.view import Validity
 from simaple.simulate.core import Event
-from simaple.simulate.core.action import ElapseActionPayload
+from simaple.simulate.core.action import ElapseActionPayload, ResetCooldownPayload
 from simaple.simulate.event import EmptyEvent
 
 
@@ -16,7 +16,9 @@ class _State(TypedDict):
 StateT = TypeVar("StateT", bound=_State)
 
 
-def reset_cooldown(state: StateT, _: Any) -> tuple[StateT, list[Event]]:
+def reset_cooldown(
+    state: StateT, _payload: ResetCooldownPayload
+) -> tuple[StateT, list[Event]]:
     cooldown = state["cooldown"].model_copy()
     cooldown.set_time_left(0)
 

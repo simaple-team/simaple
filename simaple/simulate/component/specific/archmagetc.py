@@ -289,7 +289,7 @@ class ThunderAttackSkillComponent(
 
     @reducer_method
     def elapse(self, time: float, state: ThunderAttackSkillState):
-        return simple_attack.elapse(state, time)
+        return simple_attack.elapse(state, {"time": time})
 
     @view_method
     def validity(self, state: ThunderAttackSkillState):
@@ -466,7 +466,7 @@ class ChainLightningVIComponent(
 
     @reducer_method
     def elapse(self, time: float, state: ChainLightningVISkillState):
-        state, events = simple_attack.elapse(state, time)
+        state, events = simple_attack.elapse(state, {"time": time})
 
         current_fields = state["current_fields"].model_copy(deep=True)
         electric_current_hits = current_fields.elapse(time)

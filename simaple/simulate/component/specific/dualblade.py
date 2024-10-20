@@ -55,12 +55,14 @@ class FinalCutComponent(SkillComponent):
 
     @reducer_method
     def elapse(self, time: float, state: FinalCutState):
-        return simple_attack.elapse(state, time)
+        return simple_attack.elapse(state, {"time": time})
 
     @reducer_method
     def use(self, _: None, state: FinalCutState):
         return simple_attack.use_cooldown_attack(
-            state, self.cooldown_duration, self.damage, self.hit, self.delay
+            state,
+            {},
+            **self.get_props(),
         )
 
     @reducer_method
