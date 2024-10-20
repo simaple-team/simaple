@@ -5,8 +5,9 @@ from typing_extensions import Unpack
 from simaple.simulate.component.entity import Cooldown
 from simaple.simulate.component.view import Validity
 from simaple.simulate.core import Event
-from simaple.simulate.event import EmptyEvent
 from simaple.simulate.core.action import ElapseActionPayload
+from simaple.simulate.event import EmptyEvent
+
 
 class _State(TypedDict):
     cooldown: Cooldown

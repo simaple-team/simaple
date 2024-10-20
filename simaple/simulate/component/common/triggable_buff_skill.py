@@ -73,10 +73,8 @@ class TriggableBuffSkillComponent(
     def use(self, _: None, state: TriggableBuffState):
         return lasting_trait.start_lasting_with_cooldown(
             state,
-            self.cooldown_duration,
-            self.lasting_duration,
-            self.delay,
-            apply_buff_duration=self.apply_buff_duration,
+            {},
+            **self.get_props(),
         )
 
     @reducer_method
@@ -128,7 +126,7 @@ class TriggableBuffSkillComponent(
 
     @view_method
     def running(self, state: TriggableBuffState) -> Running:
-        return lasting_trait.running_view(state, self.id, self.name)
+        return lasting_trait.running_view(state, **self.get_props())
 
     @view_method
     def buff(self, state: TriggableBuffState) -> Optional[Stat]:

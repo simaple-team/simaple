@@ -16,6 +16,19 @@ class TranscendentCygnusBlessingState(TypedDict):
     consumable: Consumable
 
 
+class TranscendentCygnusBlessingComponentProps(TypedDict):
+    id: str
+    name: str
+    cooldown_duration: float
+    delay: float
+    lasting_duration: float
+    damage_increment: float
+    increase_interval: float
+    default_damage: float
+    maximum_damage: float
+    maximum_stack: int
+
+
 class TranscendentCygnusBlessing(
     SkillComponent,
 ):
@@ -39,6 +52,20 @@ class TranscendentCygnusBlessing(
             ),
             "lasting": Lasting(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> TranscendentCygnusBlessingComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "lasting_duration": self.lasting_duration,
+            "damage_increment": self.damage_increment,
+            "increase_interval": self.increase_interval,
+            "default_damage": self.default_damage,
+            "maximum_damage": self.maximum_damage,
+            "maximum_stack": self.maximum_stack,
         }
 
     @reducer_method
@@ -69,7 +96,7 @@ class TranscendentCygnusBlessing(
 
     @view_method
     def running(self, state: TranscendentCygnusBlessingState) -> Running:
-        return lasting_trait.running_view(state, self.id, self.name)
+        return lasting_trait.running_view(state, **self.get_props())
 
     def get_cygnus_buff_effect(self, state: TranscendentCygnusBlessingState) -> Stat:
         elapsed = state["lasting"].get_elapsed_time()

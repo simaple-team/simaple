@@ -60,11 +60,7 @@ class SynergySkillComponent(SkillComponent):
     @reducer_method
     def use(self, _: None, state: SynergyState):
         state, events = lasting_trait.start_lasting_with_cooldown(
-            state,
-            self.cooldown_duration,
-            self.lasting_duration,
-            self.delay,
-            apply_buff_duration=False,
+            state, {}, **self.get_props(), apply_buff_duration=False
         )
 
         if is_rejected(events):
@@ -80,7 +76,9 @@ class SynergySkillComponent(SkillComponent):
 
     @reducer_method
     def elapse(self, time: float, state: SynergyState):
-        return lasting_trait.elapse_lasting_with_cooldown(state, time)
+        return lasting_trait.elapse_lasting_with_cooldown(
+            state, {"time": time}, **self.get_props()
+        )
 
     @view_method
     def validity(self, state: SynergyState):
@@ -95,4 +93,4 @@ class SynergySkillComponent(SkillComponent):
 
     @view_method
     def running(self, state: SynergyState) -> Running:
-        return lasting_trait.running_view(state, self.id, self.name)
+        return lasting_trait.running_view(state, **self.get_props())

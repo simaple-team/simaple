@@ -66,15 +66,15 @@ class Infinity(SkillComponent):
     def use(self, _: None, state: InfinityState):
         return lasting_trait.start_lasting_with_cooldown(
             state,
-            self.cooldown_duration,
-            self.lasting_duration,
-            self.delay,
-            apply_buff_duration=self.apply_buff_duration,
+            {},
+            **self.get_props(),
         )
 
     @reducer_method
     def elapse(self, time: float, state: InfinityState):
-        return lasting_trait.elapse_lasting_with_cooldown(state, time)
+        return lasting_trait.elapse_lasting_with_cooldown(
+            state, {"time": time}, **self.get_props()
+        )
 
     @view_method
     def validity(self, state: InfinityState):

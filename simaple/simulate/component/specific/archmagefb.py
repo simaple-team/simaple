@@ -642,7 +642,7 @@ class InfernalVenom(
 
     @view_method
     def running(self, state: InfernalVenomState) -> Running:
-        return lasting_trait.running_view(state, self.id, self.name)
+        return lasting_trait.running_view(state, **self.get_props())
 
 
 class FlameSwipVIState(TypedDict):

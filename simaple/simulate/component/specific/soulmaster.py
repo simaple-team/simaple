@@ -181,7 +181,10 @@ class Elysion(SkillComponent):
     @reducer_method
     def use(self, _: None, state: ElysionState):
         return lasting_trait.start_lasting_with_cooldown(
-            state, self.cooldown_duration, self.lasting_duration, self.delay, False
+            state,
+            {},
+            **self.get_props(),
+            apply_buff_duration=False,
         )
 
     @view_method
@@ -190,7 +193,7 @@ class Elysion(SkillComponent):
 
     @view_method
     def running(self, state: ElysionState) -> Running:
-        return lasting_trait.running_view(state, self.name, self.id)
+        return lasting_trait.running_view(state, **self.get_props())
 
 
 class CrossTheStyxState(TypedDict):

@@ -56,15 +56,15 @@ class BuffSkillComponent(SkillComponent):
     def use(self, _: None, state: BuffSkillState):
         return lasting_trait.start_lasting_with_cooldown(
             state,
-            self.cooldown_duration,
-            self.lasting_duration,
-            self.delay,
-            apply_buff_duration=self.apply_buff_duration,
+            {},
+            **self.get_props(),
         )
 
     @reducer_method
     def elapse(self, time: float, state: BuffSkillState):
-        return lasting_trait.elapse_lasting_with_cooldown(state, time)
+        return lasting_trait.elapse_lasting_with_cooldown(
+            state, {"time": time}, **self.get_props()
+        )
 
     @view_method
     def validity(self, state: BuffSkillState):
@@ -79,4 +79,4 @@ class BuffSkillComponent(SkillComponent):
 
     @view_method
     def running(self, state: BuffSkillState) -> Running:
-        return lasting_trait.running_view(state, self.id, self.name)
+        return lasting_trait.running_view(state, **self.get_props())

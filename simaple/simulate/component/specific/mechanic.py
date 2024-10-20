@@ -94,10 +94,9 @@ class RobotSetupBuff(SkillComponent):
     ):
         return lasting_trait.start_lasting_with_cooldown(
             state,
-            self.cooldown_duration,
-            self._get_lasting_duration(state),
-            self.delay,
-            False,
+            {},
+            **self.get_props(),
+            apply_buff_duration=False,
         )
 
     @view_method
@@ -109,7 +108,9 @@ class RobotSetupBuff(SkillComponent):
 
     @reducer_method
     def elapse(self, time: float, state: RobotSetupBuffState):
-        return lasting_trait.elapse_lasting_with_cooldown(state, time)
+        return lasting_trait.elapse_lasting_with_cooldown(
+            state, {"time": time}, **self.get_props()
+        )
 
     @view_method
     def validity(self, state: RobotSetupBuffState):
@@ -117,7 +118,7 @@ class RobotSetupBuff(SkillComponent):
 
     @view_method
     def running(self, state: RobotSetupBuffState) -> Running:
-        return lasting_trait.running_view(state, self.id, self.name)
+        return lasting_trait.running_view(state, **self.get_props())
 
     def _get_lasting_duration(self, state: RobotSetupBuffState) -> float:
         return self.lasting_duration * state["robot_mastery"].get_summon_multiplier()

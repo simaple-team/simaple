@@ -24,6 +24,7 @@ def get_action_signature(action: Action) -> ActionSignature:
 
 EventCallback = tuple[Action, Action]
 
+
 class ElapseActionPayload(TypedDict):
     """
     ElapseAction is a primitive value-object which indicated
@@ -33,5 +34,8 @@ class ElapseActionPayload(TypedDict):
     time: float
 
 
-class UseActionPayload(TypedDict):
-    ...
+class UseActionPayload(TypedDict): ...
+
+
+def use_action_payload() -> UseActionPayload:
+    return {}

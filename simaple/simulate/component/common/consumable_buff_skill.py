@@ -16,6 +16,17 @@ class ConsumableBuffSkillState(TypedDict):
     dynamics: Dynamics
 
 
+class ConsumableBuffSkillComponentProps(TypedDict):
+    id: str
+    name: str
+    stat: Stat
+    cooldown_duration: float
+    delay: float
+    lasting_duration: float
+    maximum_stack: int
+    apply_buff_duration: bool
+
+
 class ConsumableBuffSkillComponent(
     SkillComponent,
 ):
@@ -36,6 +47,18 @@ class ConsumableBuffSkillComponent(
             ),
             "lasting": Lasting(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> ConsumableBuffSkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "stat": self.stat,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "lasting_duration": self.lasting_duration,
+            "maximum_stack": self.maximum_stack,
+            "apply_buff_duration": self.apply_buff_duration,
         }
 
     @reducer_method
@@ -66,8 +89,4 @@ class ConsumableBuffSkillComponent(
 
     @view_method
     def running(self, state: ConsumableBuffSkillState) -> Running:
-        return lasting_trait.running_view(
-            state,
-            id=self.id,
-            name=self.name,
-        )
+        return lasting_trait.running_view(state, **self.get_props())

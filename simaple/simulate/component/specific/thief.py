@@ -56,15 +56,16 @@ class UltimateDarkSightComponent(SkillComponent):
     def use(self, _: None, state: UltimateDarkSightState):
         return lasting_trait.start_lasting_with_cooldown(
             state,
-            self.cooldown_duration,
-            self.lasting_duration,
-            self.delay,
+            {},
+            **self.get_props(),
             apply_buff_duration=False,
         )
 
     @reducer_method
     def elapse(self, time: float, state: UltimateDarkSightState):
-        return lasting_trait.elapse_lasting_with_cooldown(state, time)
+        return lasting_trait.elapse_lasting_with_cooldown(
+            state, {"time": time}, **self.get_props()
+        )
 
     @view_method
     def validity(self, state: UltimateDarkSightState):
@@ -82,8 +83,4 @@ class UltimateDarkSightComponent(SkillComponent):
 
     @view_method
     def running(self, state: UltimateDarkSightState) -> Running:
-        return lasting_trait.running_view(
-            state,
-            self.id,
-            self.name,
-        )
+        return lasting_trait.running_view(state, **self.get_props())
