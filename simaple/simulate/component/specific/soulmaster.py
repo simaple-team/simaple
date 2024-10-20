@@ -298,6 +298,19 @@ class CosmicShowerState(TypedDict):
     orb: LastingStack
 
 
+class CosmicShowerProps(TypedDict):
+    id: str
+    name: str
+    delay: float
+    cooldown_duration: float
+    periodic_initial_delay: Optional[float]
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+    lasting_duration: float
+    duration_increase_per_orb: float
+
+
 class CosmicShower(SkillComponent):
     name: str
     delay: float
@@ -324,13 +337,24 @@ class CosmicShower(SkillComponent):
             "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
+    def get_props(self) -> CosmicShowerProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "delay": self.delay,
+            "cooldown_duration": self.cooldown_duration,
+            "periodic_initial_delay": self.periodic_initial_delay,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "lasting_duration": self.lasting_duration,
+            "duration_increase_per_orb": self.duration_increase_per_orb,
+        }
+
     @reducer_method
     def elapse(self, time: float, state: CosmicShowerState):
         return periodic_trait.elapse_periodic_with_cooldown(
-            state,
-            time,
-            self.periodic_damage,
-            self.periodic_hit,
+            state, {"time": time}, **self.get_props()
         )
 
     @reducer_method
@@ -387,6 +411,19 @@ class CosmosState(TypedDict):
     orb: LastingStack
 
 
+class CosmosProps(TypedDict):
+    id: str
+    name: str
+    delay: float
+    cooldown_duration: float
+    periodic_initial_delay: Optional[float]
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+    periodic_interval_decrement_per_orb: float
+    lasting_duration: float
+
+
 class Cosmos(SkillComponent):
     name: str
     delay: float
@@ -413,13 +450,24 @@ class Cosmos(SkillComponent):
             "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
+    def get_props(self) -> CosmosProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "delay": self.delay,
+            "cooldown_duration": self.cooldown_duration,
+            "periodic_initial_delay": self.periodic_initial_delay,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "periodic_interval_decrement_per_orb": self.periodic_interval_decrement_per_orb,
+            "lasting_duration": self.lasting_duration,
+        }
+
     @reducer_method
     def elapse(self, time: float, state: CosmosState):
         return periodic_trait.elapse_periodic_with_cooldown(
-            state,
-            time,
-            self.periodic_damage,
-            self.periodic_hit,
+            state, {"time": time}, **self.get_props()
         )
 
     @reducer_method

@@ -78,7 +78,9 @@ class PeriodicWithFinishSkillComponent(
     def elapse(self, time: float, state: PeriodicWithFinishState):
         was_running = state["periodic"].enabled()
         state, events = periodic_trait.elapse_periodic_with_cooldown(
-            state, time, self.periodic_damage, self.periodic_hit
+            state,
+            {"time": time},
+            **self.get_props(),
         )
 
         if not state["periodic"].enabled() and was_running:
@@ -90,11 +92,10 @@ class PeriodicWithFinishSkillComponent(
     def use(self, _: None, state: PeriodicWithFinishState):
         return periodic_trait.start_periodic_with_cooldown(
             state,
+            {},
+            **self.get_props(),
             damage=0,
             hit=0,
-            delay=self.delay,
-            cooldown_duration=self.cooldown_duration,
-            lasting_duration=self.lasting_duration,
         )
 
     @view_method
@@ -104,5 +105,6 @@ class PeriodicWithFinishSkillComponent(
     @view_method
     def running(self, state: PeriodicWithFinishState) -> Running:
         return periodic_trait.running_view(
-            state, self.id, self.name, self.lasting_duration
+            state,
+            **self.get_props(),
         )

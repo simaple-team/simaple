@@ -1,8 +1,10 @@
 from typing import TypedDict, TypeVar
 
+from typing_extensions import Unpack
+
 from simaple.simulate.component.entity import Cooldown, Periodic
 from simaple.simulate.component.view import Running
-from simaple.simulate.core import Event
+from simaple.simulate.core import ElapseActionPayload, Event, UseActionPayload
 from simaple.simulate.event import EmptyEvent
 from simaple.simulate.global_property import Dynamics
 
@@ -16,15 +18,28 @@ class _State(TypedDict):
 _StateT = TypeVar("_StateT", bound=_State)
 
 
+class StartPeriodicWithCooldownProps(TypedDict):
+    damage: float
+    hit: float
+    delay: float
+    cooldown_duration: float
+    lasting_duration: float
+
+
 def start_periodic_with_cooldown(
     state: _StateT,
-    damage: float,
-    hit: float,
-    delay: float,
-    cooldown_duration: float,
-    lasting_duration: float,
+    _payload: UseActionPayload,
+    **props: Unpack[StartPeriodicWithCooldownProps],
 ) -> tuple[_StateT, list[Event]]:
     """use_periodic_damage_trait"""
+    damage, hit, delay, cooldown_duration, lasting_duration = (
+        props["damage"],
+        props["hit"],
+        props["delay"],
+        props["cooldown_duration"],
+        props["lasting_duration"],
+    )
+
     cooldown, periodic = (
         state["cooldown"].model_copy(),
         state["periodic"].model_copy(),
@@ -45,15 +60,24 @@ def start_periodic_with_cooldown(
     ]
 
 
+class ElapsePeriodicWithCooldownProps(TypedDict):
+    periodic_damage: float
+    periodic_hit: float
+
+
 def elapse_periodic_with_cooldown(
     state: _StateT,
-    time: float,
-    periodic_damage: float,
-    periodic_hit: float,
+    payload: ElapseActionPayload,
+    **props: Unpack[ElapsePeriodicWithCooldownProps],
 ) -> tuple[_StateT, list[Event]]:
     """
     elapse_periodic_damage_trait
     """
+    time = payload["time"]
+    periodic_damage, periodic_hit = (
+        props["periodic_damage"],
+        props["periodic_hit"],
+    )
     cooldown, periodic = (
         state["cooldown"].model_copy(),
         state["periodic"].model_copy(),
@@ -75,15 +99,19 @@ class _PeriodicOnlyState(TypedDict):
     dynamics: Dynamics
 
 
+class PeriodicValidityProps(TypedDict):
+    id: str
+    name: str
+    lasting_duration: float
+
+
 def running_view(
     state: _PeriodicOnlyState,
-    id: str,
-    name: str,
-    lasting_duration: float,
+    **props: Unpack[PeriodicValidityProps],
 ) -> Running:
     return Running(
-        id=id,
-        name=name,
+        id=props["id"],
+        name=props["name"],
         time_left=state["periodic"].time_left,
-        lasting_duration=lasting_duration,
+        lasting_duration=props["lasting_duration"],
     )

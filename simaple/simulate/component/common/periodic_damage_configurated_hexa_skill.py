@@ -82,18 +82,19 @@ class PeriodicDamageConfiguratedHexaSkillComponent(
     @reducer_method
     def elapse(self, time: float, state: PeriodicDamageHexaState):
         return periodic_trait.elapse_periodic_with_cooldown(
-            state, time, self.periodic_damage, self.periodic_hit
+            state,
+            {"time": time},
+            **self.get_props(),
         )
 
     @reducer_method
     def use(self, _: None, state: PeriodicDamageHexaState):
         state, events = periodic_trait.start_periodic_with_cooldown(
             state,
-            0,
-            0,
-            self.delay,
-            self.cooldown_duration,
-            self.lasting_duration,
+            {},
+            **self.get_props(),
+            damage=0,
+            hit=0,
         )
 
         if is_rejected(events):
@@ -115,5 +116,6 @@ class PeriodicDamageConfiguratedHexaSkillComponent(
     @view_method
     def running(self, state: PeriodicDamageHexaState) -> Running:
         return periodic_trait.running_view(
-            state, self.id, self.name, self.lasting_duration
+            state,
+            **self.get_props(),
         )

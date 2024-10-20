@@ -198,11 +198,10 @@ class JupyterThunder(SkillComponent):
     def use(self, _: None, state: JupyterThunderState):
         return periodic_trait.start_periodic_with_cooldown(
             state,
-            0,
-            0,
-            self.delay,
-            self.cooldown_duration,
-            self.lasting_duration,
+            {},
+            **self.get_props(),
+            damage=0,
+            hit=0,
         )
 
     @view_method
@@ -618,11 +617,10 @@ class ThunderBreak(SkillComponent):
     def use(self, _: None, state: ThunderBreakState):
         return periodic_trait.start_periodic_with_cooldown(
             state,
-            0,
-            0,
-            self.delay,
-            self.cooldown_duration,
-            self.lasting_duration,
+            {},
+            **self.get_props(),
+            damage=0,
+            hit=0,
         )
 
     @view_method

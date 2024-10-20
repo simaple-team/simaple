@@ -720,6 +720,18 @@ class AdeleStormState(TypedDict):
     order_sword: OrderSword
 
 
+class AdeleStormComponentProps(TypedDict):
+    id: str
+    name: str
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+    lasting_duration: float
+    maximum_stack: int
+    delay: float
+    cooldown_duration: float
+
+
 class AdeleStormComponent(
     SkillComponent,
 ):
@@ -745,6 +757,19 @@ class AdeleStormComponent(
             "order_sword": OrderSword(interval=self.periodic_interval),
         }
 
+    def get_props(self) -> AdeleStormComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "lasting_duration": self.lasting_duration,
+            "maximum_stack": self.maximum_stack,
+            "delay": self.delay,
+            "cooldown_duration": self.cooldown_duration,
+        }
+
     @reducer_method
     def elapse(
         self,
@@ -753,9 +778,9 @@ class AdeleStormComponent(
     ):
         return periodic_trait.elapse_periodic_with_cooldown(
             state,
-            time,
-            self.periodic_damage,
-            self.periodic_hit * state["stack"].get_stack(),
+            {"time": time},
+            periodic_damage=self.periodic_damage,
+            periodic_hit=self.periodic_hit * state["stack"].get_stack(),
         )
 
     @reducer_method
@@ -766,12 +791,7 @@ class AdeleStormComponent(
             return state, [EmptyEvent.rejected()]
 
         state, events = periodic_trait.start_periodic_with_cooldown(
-            state,
-            0,
-            0,
-            self.delay,
-            self.cooldown_duration,
-            self.lasting_duration,
+            state, {}, **self.get_props(), damage=0, hit=0
         )
         if not is_rejected(events):
             stack = state["stack"].model_copy()

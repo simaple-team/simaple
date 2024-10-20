@@ -212,13 +212,15 @@ class RobotSummonSkill(
 
     @reducer_method
     def use(self, _: None, state: RobotSummonState):
+        props = self.get_props()
         return periodic_trait.start_periodic_with_cooldown(
             state,
-            self.damage,
-            self.hit,
-            self.delay,
-            self.cooldown_duration,
-            self._get_lasting_duration(state),
+            {},
+            damage=props["damage"],
+            hit=props["hit"],
+            delay=props["delay"],
+            cooldown_duration=props["cooldown_duration"],
+            lasting_duration=self._get_lasting_duration(state),
         )
 
     @view_method
@@ -310,11 +312,10 @@ class HommingMissile(SkillComponent):
     def use(self, _: None, state: HommingMissileState):
         return periodic_trait.start_periodic_with_cooldown(
             state,
-            0,
-            0,
-            self.delay,
-            self.cooldown_duration,
-            self.lasting_duration,
+            {},
+            **self.get_props(),
+            damage=0,
+            hit=0,
         )
 
     @reducer_method
@@ -377,7 +378,8 @@ class HommingMissile(SkillComponent):
     @view_method
     def running(self, state: HommingMissileState) -> Running:
         return periodic_trait.running_view(
-            state, self.id, self.name, self.lasting_duration
+            state,
+            **self.get_props(),
         )
 
 
@@ -632,7 +634,8 @@ class MultipleOptionComponent(SkillComponent):
     @view_method
     def running(self, state: MultipleOptionState) -> Running:
         return periodic_trait.running_view(
-            state, self.id, self.name, self.lasting_duration
+            state,
+            **self.get_props(),
         )
 
 

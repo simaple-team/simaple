@@ -74,17 +74,16 @@ class MagicCurcuitFullDriveComponent(
     def use(self, _: None, state: MagicCurcuitFullDriveState):
         return periodic_trait.start_periodic_with_cooldown(
             state,
+            {},
+            **self.get_props(),
             damage=0,
             hit=0,
-            delay=self.delay,
-            cooldown_duration=self.cooldown_duration,
-            lasting_duration=self.lasting_duration,
         )
 
     @reducer_method
     def elapse(self, time: float, state: MagicCurcuitFullDriveState):
         return periodic_trait.elapse_periodic_with_cooldown(
-            state, time, self.periodic_damage, self.periodic_hit
+            state, {"time": time}, **self.get_props()
         )
 
     @view_method
@@ -101,5 +100,6 @@ class MagicCurcuitFullDriveComponent(
     @view_method
     def running(self, state: MagicCurcuitFullDriveState) -> Running:
         return periodic_trait.running_view(
-            state, self.id, self.name, self.lasting_duration
+            state,
+            **self.get_props(),
         )

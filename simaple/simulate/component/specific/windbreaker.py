@@ -16,6 +16,19 @@ class HowlingGaleState(TypedDict):
     dynamics: Dynamics
 
 
+class HowlingGaleComponentProps(TypedDict):
+    id: str
+    name: str
+    delay: float
+    maximum_stack: int
+    cooldown_duration: float
+    periodic_initial_delay: Optional[float]
+    periodic_interval: float
+    periodic_damage: list[list[float]]
+    periodic_hit: list[list[float]]
+    lasting_duration: float
+
+
 class HowlingGaleComponent(
     SkillComponent,
 ):
@@ -47,6 +60,20 @@ class HowlingGaleComponent(
                 time_left=0,
             ),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> HowlingGaleComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "delay": self.delay,
+            "maximum_stack": self.maximum_stack,
+            "cooldown_duration": self.cooldown_duration,
+            "periodic_initial_delay": self.periodic_initial_delay,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "lasting_duration": self.lasting_duration,
         }
 
     @reducer_method
@@ -106,8 +133,12 @@ class HowlingGaleComponent(
 
     @view_method
     def running(self, state: HowlingGaleState) -> Running:
+        props = self.get_props()
         return periodic_trait.running_view(
-            state, self.id, self.name, self._get_lasting_duration()
+            state,
+            id=props["id"],
+            name=props["name"],
+            lasting_duration=self._get_lasting_duration(),
         )
 
     def _get_lasting_duration(self) -> float:

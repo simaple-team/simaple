@@ -115,11 +115,10 @@ class HitLimitedPeriodicDamageComponent(
     def use(self, _: None, state: HitLimitedPeriodicDamageState):
         return periodic_trait.start_periodic_with_cooldown(
             state,
+            {},
+            **self.get_props(),
             damage=0,
             hit=0,
-            delay=self.delay,
-            cooldown_duration=self.cooldown_duration,
-            lasting_duration=self.lasting_duration,
         )
 
     @view_method

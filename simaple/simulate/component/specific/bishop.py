@@ -230,11 +230,8 @@ class DivineMinion(
     def use(self, _: None, state: DivineMinionState):
         return periodic_trait.start_periodic_with_cooldown(
             state,
-            self.damage,
-            self.hit,
-            self.delay,
-            self.cooldown_duration,
-            self.lasting_duration,
+            {},
+            **self.get_props(),
         )
 
     @view_method
@@ -244,7 +241,8 @@ class DivineMinion(
     @view_method
     def running(self, state: DivineMinionState) -> Running:
         return periodic_trait.running_view(
-            state, self.id, self.name, self.lasting_duration
+            state,
+            **self.get_props(),
         )
 
 

@@ -75,18 +75,17 @@ class PeriodicDamageConfiguratedAttackSkillComponent(
     @reducer_method
     def elapse(self, time: float, state: PeriodicDamageState):
         return periodic_trait.elapse_periodic_with_cooldown(
-            state, time, self.periodic_damage, self.periodic_hit
+            state,
+            {"time": time},
+            **self.get_props(),
         )
 
     @reducer_method
     def use(self, _: None, state: PeriodicDamageState):
         return periodic_trait.start_periodic_with_cooldown(
             state,
-            damage=self.damage,
-            hit=self.hit,
-            delay=self.delay,
-            cooldown_duration=self.cooldown_duration,
-            lasting_duration=self.lasting_duration,
+            {},
+            **self.get_props(),
         )
 
     @view_method
@@ -96,5 +95,6 @@ class PeriodicDamageConfiguratedAttackSkillComponent(
     @view_method
     def running(self, state: PeriodicDamageState) -> Running:
         return periodic_trait.running_view(
-            state, self.id, self.name, self.lasting_duration
+            state,
+            **self.get_props(),
         )
