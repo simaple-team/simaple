@@ -75,4 +75,4 @@ class MultipleHitHexaSkillComponent(
 
     @view_method
     def validity(self, state: MultipleHitHexaSkillState):
-        return cooldown_trait.validity_view(state, self.get_props())
+        return cooldown_trait.validity_view(state, **self.get_props())

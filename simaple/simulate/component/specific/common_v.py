@@ -140,10 +140,7 @@ class ProgrammedPeriodicComponent(SkillComponent):
 
     @view_method
     def validity(self, state: ProgrammedPeriodicState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: ProgrammedPeriodicState) -> Running:

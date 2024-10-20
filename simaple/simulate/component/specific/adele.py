@@ -210,10 +210,7 @@ class AdeleCreationComponent(
 
     @view_method
     def validity(self, state: CreationState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
 
 class OrderSword(Entity):
@@ -646,10 +643,7 @@ class AdeleRuinComponent(
         self,
         state: AdeleRuinState,
     ):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(

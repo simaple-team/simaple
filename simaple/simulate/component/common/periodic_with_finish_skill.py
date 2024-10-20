@@ -99,10 +99,7 @@ class PeriodicWithFinishSkillComponent(
 
     @view_method
     def validity(self, state: PeriodicWithFinishState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: PeriodicWithFinishState) -> Running:

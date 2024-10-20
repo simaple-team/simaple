@@ -73,10 +73,7 @@ class FinalCutComponent(SkillComponent):
 
     @view_method
     def validity(self, state: FinalCutState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
 
 class BladeStormState(TypedDict):
@@ -165,10 +162,7 @@ class BladeStormComponent(SkillComponent):
 
     @view_method
     def validity(self, state: BladeStormState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def keydown(self, state: BladeStormState):
@@ -292,10 +286,7 @@ class KarmaBladeTriggerComponent(SkillComponent):
 
     @view_method
     def validity(self, state: KarmaBladeTriggerState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: KarmaBladeTriggerState):

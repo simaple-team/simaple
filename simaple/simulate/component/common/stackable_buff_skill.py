@@ -90,10 +90,7 @@ class StackableBuffSkillComponent(
 
     @view_method
     def validity(self, state: StackableBuffSkillState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def buff(self, state: StackableBuffSkillState) -> Optional[Stat]:

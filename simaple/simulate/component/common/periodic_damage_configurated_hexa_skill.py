@@ -110,10 +110,7 @@ class PeriodicDamageConfiguratedHexaSkillComponent(
 
     @view_method
     def validity(self, state: PeriodicDamageHexaState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: PeriodicDamageHexaState) -> Running:

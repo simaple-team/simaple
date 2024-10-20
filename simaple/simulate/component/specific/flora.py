@@ -89,10 +89,7 @@ class MagicCurcuitFullDriveComponent(
 
     @view_method
     def validity(self, state: MagicCurcuitFullDriveState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def buff(self, state: MagicCurcuitFullDriveState) -> Optional[Stat]:

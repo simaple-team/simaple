@@ -117,7 +117,4 @@ class TemporalEnhancingAttackSkill(
 
     @view_method
     def validity(self, state: TemporalEnhancingAttackSkillState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())

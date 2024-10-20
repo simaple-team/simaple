@@ -68,10 +68,7 @@ class UltimateDarkSightComponent(SkillComponent):
 
     @view_method
     def validity(self, state: UltimateDarkSightState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def buff(self, state: UltimateDarkSightState) -> Optional[Stat]:

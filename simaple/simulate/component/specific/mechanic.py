@@ -113,10 +113,7 @@ class RobotSetupBuff(SkillComponent):
 
     @view_method
     def validity(self, state: RobotSetupBuffState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: RobotSetupBuffState) -> Running:
@@ -225,10 +222,7 @@ class RobotSummonSkill(
 
     @view_method
     def validity(self, state: RobotSummonState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: RobotSummonState) -> Running:
@@ -377,10 +371,7 @@ class HommingMissile(SkillComponent):
 
     @view_method
     def validity(self, state: HommingMissileState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: HommingMissileState) -> Running:
@@ -493,10 +484,7 @@ class FullMetalBarrageComponent(
 
     @view_method
     def validity(self, state: FullMetalBarrageState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def keydown(self, state: FullMetalBarrageState):
@@ -638,10 +626,7 @@ class MultipleOptionComponent(SkillComponent):
 
     @view_method
     def validity(self, state: MultipleOptionState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: MultipleOptionState) -> Running:
@@ -801,10 +786,7 @@ class MecaCarrier(SkillComponent):
 
     @view_method
     def validity(self, state: MecaCarrierState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: MecaCarrierState) -> Running:

@@ -1,10 +1,12 @@
 from typing import Any, TypedDict, TypeVar
 
+from typing_extensions import Unpack
+
 from simaple.simulate.component.entity import Cooldown
 from simaple.simulate.component.view import Validity
 from simaple.simulate.core import Event
 from simaple.simulate.event import EmptyEvent
-
+from simaple.simulate.core.action import ElapseActionPayload
 
 class _State(TypedDict):
     cooldown: Cooldown
@@ -22,12 +24,8 @@ def reset_cooldown(state: StateT, _: Any) -> tuple[StateT, list[Event]]:
     return state, []
 
 
-class ElapseCooldownOnlyProps(TypedDict):
-    time: float
-
-
 def elapse_cooldown_only(
-    state: StateT, props: ElapseCooldownOnlyProps
+    state: StateT, props: ElapseActionPayload
 ) -> tuple[StateT, list[Event]]:
     time = props["time"]
 
@@ -45,7 +43,7 @@ class ValidityViewProps(TypedDict):
     cooldown_duration: float
 
 
-def validity_view(state: _State, props: ValidityViewProps) -> Validity:
+def validity_view(state: _State, **props: Unpack[ValidityViewProps]) -> Validity:
     """
     Renewal for `validity_in_invalidatable_cooldown_trait`.
     """

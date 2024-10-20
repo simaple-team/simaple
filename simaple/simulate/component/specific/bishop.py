@@ -104,10 +104,7 @@ class DivineAttackSkillComponent(
 
     @view_method
     def validity(self, state: DivineAttackSkillState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def buff(self, _: DivineAttackSkillState):
@@ -242,10 +239,7 @@ class DivineMinion(
 
     @view_method
     def validity(self, state: DivineMinionState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: DivineMinionState) -> Running:
@@ -374,10 +368,7 @@ class HexaAngelRayComponent(
 
     @view_method
     def validity(self, state: HexaAngelRayState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def buff(self, _: HexaAngelRayState):

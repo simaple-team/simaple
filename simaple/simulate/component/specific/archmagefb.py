@@ -204,10 +204,7 @@ class PoisonNovaComponent(SkillComponent):
 
     @view_method
     def validity(self, state: PoisonNovaState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
 
 class PoisonChainState(TypedDict):
@@ -324,10 +321,7 @@ class PoisonChainComponent(
 
     @view_method
     def validity(self, state: PoisonChainState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: PoisonChainState) -> Running:
@@ -420,10 +414,7 @@ class DotPunisherComponent(SkillComponent):
 
     @view_method
     def validity(self, state: DotPunisherState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
 
 class IfrittState(TypedDict):
@@ -524,10 +515,7 @@ class IfrittComponent(
 
     @view_method
     def validity(self, state: IfrittState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: IfrittState) -> Running:
@@ -650,10 +638,7 @@ class InfernalVenom(
 
     @view_method
     def validity(self, state: InfernalVenomState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: InfernalVenomState) -> Running:
@@ -751,7 +736,4 @@ class FlameSwipVI(
 
     @view_method
     def validity(self, state: FlameSwipVIState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())

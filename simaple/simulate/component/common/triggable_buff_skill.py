@@ -124,10 +124,7 @@ class TriggableBuffSkillComponent(
 
     @view_method
     def validity(self, state: TriggableBuffState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: TriggableBuffState) -> Running:

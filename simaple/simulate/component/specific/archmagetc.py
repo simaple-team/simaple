@@ -207,10 +207,7 @@ class JupyterThunder(SkillComponent):
 
     @view_method
     def validity(self, state: JupyterThunderState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
 
 class ThunderAttackSkillState(TypedDict):
@@ -297,10 +294,7 @@ class ThunderAttackSkillComponent(
 
     @view_method
     def validity(self, state: ThunderAttackSkillState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
 
 class CurrentField(Entity):
@@ -491,10 +485,7 @@ class ChainLightningVIComponent(
 
     @view_method
     def validity(self, state: ChainLightningVISkillState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
         return self.damage, self.hit
@@ -636,7 +627,4 @@ class ThunderBreak(SkillComponent):
 
     @view_method
     def validity(self, state: ThunderBreakState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())

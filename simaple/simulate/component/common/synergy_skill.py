@@ -84,10 +84,7 @@ class SynergySkillComponent(SkillComponent):
 
     @view_method
     def validity(self, state: SynergyState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def buff(self, state: SynergyState) -> Optional[Stat]:

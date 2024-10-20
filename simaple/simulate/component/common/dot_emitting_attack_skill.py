@@ -80,7 +80,4 @@ class DOTEmittingAttackSkillComponent(
 
     @view_method
     def validity(self, state: DOTEmittingState):
-        return cooldown_trait.validity_view(
-            state,
-            self.get_props(),
-        )
+        return cooldown_trait.validity_view(state, **self.get_props())
