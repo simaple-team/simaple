@@ -65,20 +65,17 @@ class ConsumableBuffSkillComponent(
     def use(self, _: None, state: ConsumableBuffSkillState):
         return consumable_trait.start_consumable_buff(
             state,
-            lasting_duration=self.lasting_duration,
-            delay=self.delay,
-            apply_buff_duration=self.apply_buff_duration,
+            {},
+            **self.get_props(),
         )
 
     @reducer_method
     def elapse(self, time: float, state: ConsumableBuffSkillState):
-        return consumable_trait.elapse_consumable_buff(state, time)
+        return consumable_trait.elapse_consumable_buff(state, {"time": time})
 
     @view_method
     def validity(self, state: ConsumableBuffSkillState):
-        return consumable_trait.consumable_validity(
-            state, self.id, self.name, self.cooldown_duration
-        )
+        return consumable_trait.consumable_validity(state, **self.get_props())
 
     @view_method
     def buff(self, state: ConsumableBuffSkillState) -> Optional[Stat]:

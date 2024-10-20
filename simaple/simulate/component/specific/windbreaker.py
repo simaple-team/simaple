@@ -127,9 +127,7 @@ class HowlingGaleComponent(
 
     @view_method
     def validity(self, state: HowlingGaleState):
-        return consumable_trait.consumable_validity(
-            state, self.id, self.name, self.cooldown_duration
-        )
+        return consumable_trait.consumable_validity(state, **self.get_props())
 
     @view_method
     def running(self, state: HowlingGaleState) -> Running:

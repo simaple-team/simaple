@@ -1,8 +1,10 @@
 from typing import TypedDict, TypeVar
 
+from typing_extensions import Unpack
+
 from simaple.simulate.component.entity import Consumable, Lasting
 from simaple.simulate.component.view import Validity
-from simaple.simulate.core import Event
+from simaple.simulate.core import ElapseActionPayload, Event, UseActionPayload
 from simaple.simulate.event import EmptyEvent
 from simaple.simulate.global_property import Dynamics
 
@@ -16,9 +18,23 @@ class _State(TypedDict):
 _StateT = TypeVar("_StateT", bound=_State)
 
 
+class StartConsumableBuffProps(TypedDict):
+    lasting_duration: float
+    delay: float
+    apply_buff_duration: bool
+
+
 def start_consumable_buff(
-    state: _StateT, lasting_duration: float, delay: float, apply_buff_duration: bool
+    state: _StateT,
+    _: UseActionPayload,
+    **props: Unpack[StartConsumableBuffProps],
 ) -> tuple[_StateT, list[Event]]:
+    lasting_duration, delay, apply_buff_duration = (
+        props["lasting_duration"],
+        props["delay"],
+        props["apply_buff_duration"],
+    )
+
     consumable, lasting = (
         state["consumable"].model_copy(),
         state["lasting"].model_copy(),
@@ -43,8 +59,10 @@ def start_consumable_buff(
 
 def elapse_consumable_buff(
     state: _StateT,
-    time: float,
+    payload: ElapseActionPayload,
 ) -> tuple[_StateT, list[Event]]:
+    time = payload["time"]
+
     consumable, lasting = (
         state["consumable"].model_copy(),
         state["lasting"].model_copy(),
@@ -64,14 +82,20 @@ class _StateWithoutLasting(TypedDict):
     dynamics: Dynamics
 
 
+class ConsumableValidityProps(TypedDict):
+    id: str
+    name: str
+    cooldown_duration: float
+
+
 def consumable_validity(
-    state: _StateWithoutLasting, id: str, name: str, cooldown_duration: float
+    state: _StateWithoutLasting, **props: Unpack[ConsumableValidityProps]
 ) -> Validity:
     return Validity(
-        id=id,
-        name=name,
+        id=props["id"],
+        name=props["name"],
         time_left=max(0, state["consumable"].time_left),
         valid=state["consumable"].available,
-        cooldown_duration=cooldown_duration,
+        cooldown_duration=props["cooldown_duration"],
         stack=state["consumable"].stack,
     )

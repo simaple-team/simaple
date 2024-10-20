@@ -71,21 +71,19 @@ class TranscendentCygnusBlessing(
     @reducer_method
     def use(self, _: None, state: TranscendentCygnusBlessingState):
         return consumable_trait.start_consumable_buff(
-            state, self.lasting_duration, self.delay, False
+            state,
+            {},
+            **self.get_props(),
+            apply_buff_duration=False,
         )
 
     @reducer_method
     def elapse(self, time: float, state: TranscendentCygnusBlessingState):
-        return consumable_trait.elapse_consumable_buff(state, time)
+        return consumable_trait.elapse_consumable_buff(state, {"time": time})
 
     @view_method
     def validity(self, state: TranscendentCygnusBlessingState):
-        return consumable_trait.consumable_validity(
-            state,
-            self.id,
-            self.name,
-            self.cooldown_duration,
-        )
+        return consumable_trait.consumable_validity(state, **self.get_props())
 
     @view_method
     def buff(self, state: TranscendentCygnusBlessingState) -> Optional[Stat]:
