@@ -1,10 +1,9 @@
 from typing import TypedDict
 
 import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
-from simaple.simulate.component.base import reducer_method, view_method
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown
 from simaple.simulate.component.feature import DamageAndHit
-from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.global_property import Dynamics
 
 
@@ -22,7 +21,7 @@ class MultipleHitHexaSkillComponentProps(TypedDict):
 
 
 class MultipleHitHexaSkillComponent(
-    SkillComponent,
+    Component,
 ):
     """
     MultipleHitHexaSkillComponent

@@ -3,9 +3,8 @@ from typing import Optional, TypedDict
 import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
 import simaple.simulate.component.trait.lasting_trait as lasting_trait
 from simaple.core.base import Stat
-from simaple.simulate.component.base import reducer_method, view_method
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Lasting
-from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.util import is_rejected
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
@@ -28,7 +27,7 @@ class SynergySkillComponentProps(TypedDict):
     lasting_duration: float
 
 
-class SynergySkillComponent(SkillComponent):
+class SynergySkillComponent(Component):
     name: str
     damage: float
     hit: float

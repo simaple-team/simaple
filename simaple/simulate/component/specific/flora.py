@@ -3,9 +3,8 @@ from typing import Optional, TypedDict
 import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
 import simaple.simulate.component.trait.periodic_trait as periodic_trait
 from simaple.core.base import Stat
-from simaple.simulate.component.base import reducer_method, view_method
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic
-from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
@@ -32,7 +31,7 @@ class MagicCurcuitFullDriveComponentProps(TypedDict):
 # TODO: vary damage multiplier from MP rate
 # TODO: trigger on attack skills, not tick
 class MagicCurcuitFullDriveComponent(
-    SkillComponent,
+    Component,
 ):
     delay: float
     cooldown_duration: float

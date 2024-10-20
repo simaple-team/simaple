@@ -1,9 +1,8 @@
 from typing import TypedDict
 
 import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
-from simaple.simulate.component.base import reducer_method, view_method
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown
-from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.view import Running
 from simaple.simulate.core.base import Entity
 from simaple.simulate.event import EmptyEvent
@@ -57,7 +56,7 @@ class ProgrammedPeriodicComponentProps(TypedDict):
     lasting_duration: float
 
 
-class ProgrammedPeriodicComponent(SkillComponent):
+class ProgrammedPeriodicComponent(Component):
     name: str
     damage: float
     hit: float

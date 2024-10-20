@@ -2,9 +2,8 @@ from typing import TypedDict
 
 import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
 import simaple.simulate.component.trait.simple_attack as simple_attack
-from simaple.simulate.component.base import reducer_method, view_method
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown
-from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.global_property import Dynamics
 
 
@@ -25,7 +24,7 @@ class DOTEmittingAttackSkillComponentProps(TypedDict):
 
 
 class DOTEmittingAttackSkillComponent(
-    SkillComponent,
+    Component,
 ):
     name: str
     damage: float

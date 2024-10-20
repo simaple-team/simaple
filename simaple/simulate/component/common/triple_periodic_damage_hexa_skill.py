@@ -2,10 +2,9 @@ from typing import TypedDict
 
 import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
 from simaple.core.base import Stat
-from simaple.simulate.component.base import reducer_method, view_method
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic
 from simaple.simulate.component.feature import DamageAndHit, PeriodicFeature
-from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.view import Running
 from simaple.simulate.core.base import Event
 from simaple.simulate.global_property import Dynamics
@@ -37,7 +36,7 @@ class TriplePeriodicDamageHexaComponentProps(TypedDict):
     synergy: Stat
 
 
-class TriplePeriodicDamageHexaComponent(SkillComponent):
+class TriplePeriodicDamageHexaComponent(Component):
     """
     TriplePeriodicDamageConfiguratedHexaSkillComponent
     This describes skill that act like:

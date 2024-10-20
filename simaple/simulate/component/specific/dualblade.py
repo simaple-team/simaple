@@ -3,9 +3,8 @@ from typing import TypedDict
 import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
 import simaple.simulate.component.trait.keydown_trait as keydown_trait
 import simaple.simulate.component.trait.simple_attack as simple_attack
-from simaple.simulate.component.base import reducer_method, view_method
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Keydown, LastingStack
-from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.util import is_rejected
 from simaple.simulate.component.view import Running
 from simaple.simulate.event import EmptyEvent
@@ -27,7 +26,7 @@ class FinalCutComponentProps(TypedDict):
     sudden_raid_cooltime_reduce: float
 
 
-class FinalCutComponent(SkillComponent):
+class FinalCutComponent(Component):
     name: str
     damage: float
     hit: float
@@ -98,7 +97,7 @@ class BladeStormComponentProps(TypedDict):
     prepare_hit: float
 
 
-class BladeStormComponent(SkillComponent):
+class BladeStormComponent(Component):
     maximum_keydown_time: float
 
     damage: float
@@ -202,7 +201,7 @@ class KarmaBladeTriggerComponentProps(TypedDict):
     finish_hit: float
 
 
-class KarmaBladeTriggerComponent(SkillComponent):
+class KarmaBladeTriggerComponent(Component):
     name: str
     damage: float
     hit: float

@@ -13,7 +13,6 @@ from simaple.simulate.component.entity import (
     Lasting,
     Periodic,
 )
-from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.util import is_keydown_ended
 from simaple.simulate.component.view import Running
 from simaple.simulate.core.base import Entity, Event
@@ -61,7 +60,7 @@ class RobotSetupBuffProps(TypedDict):
     stat: Stat
 
 
-class RobotSetupBuff(SkillComponent):
+class RobotSetupBuff(Component):
     stat: Stat
     cooldown_duration: float
     delay: float
@@ -146,7 +145,7 @@ class RobotSummonProps(TypedDict):
 
 
 class RobotSummonSkill(
-    SkillComponent,
+    Component,
 ):
     binds: dict[str, str] = {"robot_mastery": ".로봇 마스터리.robot_mastery"}
     name: str
@@ -262,7 +261,7 @@ class HommingMissileProps(TypedDict):
     final_damage_multiplier_during_barrage: float
 
 
-class HommingMissile(SkillComponent):
+class HommingMissile(Component):
     binds: dict[str, str] = {
         "bomber_time": ".봄버 타임.lasting",
         "full_barrage_keydown": ".메탈아머 전탄발사.keydown",
@@ -405,7 +404,7 @@ class FullMetalBarrageProps(TypedDict):
 
 
 class FullMetalBarrageComponent(
-    SkillComponent,
+    Component,
 ):
     maximum_keydown_time: float
 
@@ -529,7 +528,7 @@ class MultipleOptionProps(TypedDict):
     gatling_hit: int
 
 
-class MultipleOptionComponent(SkillComponent):
+class MultipleOptionComponent(Component):
     name: str
     cooldown_duration: float
     delay: float
@@ -705,7 +704,7 @@ class MecaCarrierProps(TypedDict):
     intercepter_penalty: float
 
 
-class MecaCarrier(SkillComponent):
+class MecaCarrier(Component):
     name: str
     cooldown_duration: float
     delay: float

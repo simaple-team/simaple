@@ -7,7 +7,6 @@ import simaple.simulate.component.trait.simple_attack as simple_attack
 from simaple.core.base import Stat
 from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Lasting, LastingStack, Periodic
-from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.event import EmptyEvent
 from simaple.simulate.global_property import Dynamics
@@ -94,7 +93,7 @@ class ElysionProps(TypedDict):
     maximum_crack_count: int
 
 
-class Elysion(SkillComponent):
+class Elysion(Component):
     cooldown_duration: float
     delay: float
     lasting_duration: float
@@ -200,7 +199,7 @@ class CrossTheStyxState(TypedDict):
     elysion_lasting: Lasting
 
 
-class CrossTheStyx(SkillComponent):
+class CrossTheStyx(Component):
     name: str
     damage: float
     hit: float
@@ -239,7 +238,7 @@ class CosmicBurstState(TypedDict):
     orb: LastingStack
 
 
-class CosmicBurst(SkillComponent):
+class CosmicBurst(Component):
     damage: float
     hit: int
     delay: float
@@ -311,7 +310,7 @@ class CosmicShowerProps(TypedDict):
     duration_increase_per_orb: float
 
 
-class CosmicShower(SkillComponent):
+class CosmicShower(Component):
     name: str
     delay: float
 
@@ -424,7 +423,7 @@ class CosmosProps(TypedDict):
     lasting_duration: float
 
 
-class Cosmos(SkillComponent):
+class Cosmos(Component):
     name: str
     delay: float
 
@@ -536,7 +535,7 @@ class FlareSlashProps(TypedDict):
     cooldown_reduce_when_cross_the_styx_hit: float
 
 
-class FlareSlash(SkillComponent):
+class FlareSlash(Component):
     name: str
     damage: float
     hit: float

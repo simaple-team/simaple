@@ -12,7 +12,6 @@ from simaple.simulate.component.base import (
     view_method,
 )
 from simaple.simulate.component.entity import Cooldown, Lasting, Periodic, Stack
-from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.util import is_rejected
 from simaple.simulate.component.view import Running
 from simaple.simulate.core.base import Entity
@@ -106,7 +105,7 @@ class PoisonNovaComponentProps(TypedDict):
     delay: float
 
 
-class PoisonNovaComponent(SkillComponent):
+class PoisonNovaComponent(Component):
     name: str
     damage: float
     hit: float
@@ -235,7 +234,7 @@ class PoisonChainComponentProps(TypedDict):
 
 
 class PoisonChainComponent(
-    SkillComponent,
+    Component,
 ):
     name: str
     damage: float
@@ -350,7 +349,7 @@ class DotPunisherComponentProps(TypedDict):
     dot_lasting_duration: float
 
 
-class DotPunisherComponent(SkillComponent):
+class DotPunisherComponent(Component):
     name: str
     damage: float
     hit: float
@@ -445,7 +444,7 @@ class IfrittComponentProps(TypedDict):
 
 
 class IfrittComponent(
-    SkillComponent,
+    Component,
 ):
     name: str
     damage: float
@@ -543,7 +542,7 @@ class InfernalVenomComponentProps(TypedDict):
 
 
 class InfernalVenom(
-    SkillComponent,
+    Component,
 ):
     first_damage: float
     first_hit: float
@@ -664,7 +663,7 @@ class FlameSwipVIComponentProps(TypedDict):
 
 
 class FlameSwipVI(
-    SkillComponent,
+    Component,
 ):
     delay: float
     damage: float

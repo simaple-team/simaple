@@ -1,11 +1,12 @@
 import inspect
 from abc import abstractmethod
 from functools import wraps
-from typing import Any, Callable, Optional, TypeVar, Union
+from typing import Any, Callable, Optional, TypeVar, Union, cast
 
 from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import TypedDict
 
+from simaple.core import Stat
 from simaple.simulate.core import Action, ActionSignature, Entity, Event
 from simaple.simulate.core.reducer import Listener, UnsafeReducer
 from simaple.simulate.core.store import Store
@@ -283,6 +284,11 @@ def listening_actions_to_listeners(
     return listeners
 
 
+class ComponentInformation(TypedDict):
+    id: int
+    name: str
+
+
 class Component(BaseModel, metaclass=ComponentMetaclass):
     """
     Component is compact bundle of state-action.
@@ -301,6 +307,8 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
 
     id: str
     name: str
+    modifier: Optional[Stat] = None
+
     listening_actions: dict[str, Union[str, StaticPayloadReducerInfo]] = Field(
         default_factory=dict
     )  # Access by external only
@@ -314,7 +322,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
 
     @property
     def event_provider(self) -> EventProvider:
-        return NamedEventProvider(self.name)
+        return NamedEventProvider(self.name, self.modifier)
 
     def get_unsafe_reducers(self) -> list[UnsafeReducer]:
         if len(getattr(self, "__reducers__")) == 0:
@@ -361,3 +369,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
             )(getattr(self, method_name))
             for method_name in getattr(self, "__views__")
         }
+
+    @view_method
+    def info(self, _: Any) -> ComponentInformation:
+        return cast(ComponentInformation, self.model_dump())

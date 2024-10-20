@@ -4,9 +4,8 @@ import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
 import simaple.simulate.component.trait.periodic_trait as periodic_trait
 import simaple.simulate.component.trait.simple_attack as simple_attack
 from simaple.core.base import Stat
-from simaple.simulate.component.base import reducer_method, view_method
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic, Stack
-from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.view import Running
 from simaple.simulate.core.base import Entity
 from simaple.simulate.event import EmptyEvent
@@ -44,7 +43,7 @@ class DivineAttackSkillComponentProps(TypedDict):
 
 
 class DivineAttackSkillComponent(
-    SkillComponent,
+    Component,
 ):
     binds: dict[str, str] = {
         "divine_mark": ".바하뮤트.divine_mark",
@@ -135,7 +134,7 @@ class DivineMinionComponentProps(TypedDict):
 
 
 class DivineMinion(
-    SkillComponent,
+    Component,
 ):
     name: str
     damage: float
@@ -267,7 +266,7 @@ class HexaAngelRayComponentProps(TypedDict):
 
 
 class HexaAngelRayComponent(
-    SkillComponent,
+    Component,
 ):
     binds: dict[str, str] = {
         "divine_mark": ".바하뮤트.divine_mark",

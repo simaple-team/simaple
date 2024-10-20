@@ -6,7 +6,6 @@ import simaple.simulate.component.trait.simple_attack as simple_attack
 from simaple.core.base import Stat
 from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic, Stack
-from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.view import Running
 from simaple.simulate.core.base import Entity
 from simaple.simulate.event import EmptyEvent
@@ -100,7 +99,7 @@ class JupyterThunderComponentProps(TypedDict):
     max_count: int
 
 
-class JupyterThunder(SkillComponent):
+class JupyterThunder(Component):
     name: str
     cooldown_duration: float
     delay: float
@@ -226,7 +225,7 @@ class ThunderAttackSkillComponentProps(TypedDict):
 
 
 class ThunderAttackSkillComponent(
-    SkillComponent,
+    Component,
 ):
     binds: dict[str, str] = {
         "frost_stack": ".프로스트 이펙트.frost_stack",
@@ -377,7 +376,7 @@ class ChainLightningVIComponentProps(TypedDict):
 
 
 class ChainLightningVIComponent(
-    SkillComponent,
+    Component,
 ):
     binds: dict[str, str] = {
         "frost_stack": ".프로스트 이펙트.frost_stack",
@@ -512,7 +511,7 @@ class ThunderBreakComponentProps(TypedDict):
     max_count: int
 
 
-class ThunderBreak(SkillComponent):
+class ThunderBreak(Component):
     name: str
     cooldown_duration: float
     delay: float

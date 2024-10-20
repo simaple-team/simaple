@@ -5,9 +5,8 @@ from pydantic import Field
 import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
 import simaple.simulate.component.trait.lasting_trait as lasting_trait
 from simaple.core.base import Stat
-from simaple.simulate.component.base import reducer_method, view_method
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Lasting
-from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
@@ -33,7 +32,7 @@ class TriggableBuffSkillComponentProps(TypedDict):
 
 
 class TriggableBuffSkillComponent(
-    SkillComponent,
+    Component,
 ):
     trigger_cooldown_duration: float
     trigger_damage: float

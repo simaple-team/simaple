@@ -6,7 +6,6 @@ import simaple.simulate.component.trait.simple_attack as simple_attack
 from simaple.core import Stat
 from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Lasting, Periodic, Stack
-from simaple.simulate.component.skill import SkillComponent
 from simaple.simulate.component.util import ignore_rejected, is_rejected
 from simaple.simulate.component.view import Running, Validity
 from simaple.simulate.core.base import Entity
@@ -160,7 +159,7 @@ class AdeleCreationComponentProps(TypedDict):
 
 
 class AdeleCreationComponent(
-    SkillComponent,
+    Component,
 ):
     name: str
     damage: float
@@ -273,7 +272,7 @@ class AdeleOrderState(TypedDict):
 
 
 # TODO: 게더링-블로섬 도중 타격 미발생 및 지속시간 정지
-class AdeleOrderComponent(SkillComponent):
+class AdeleOrderComponent(Component):
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
@@ -391,7 +390,7 @@ class AdeleOrderUsingState(TypedDict):
     dynamics: Dynamics
 
 
-class AdeleGatheringComponent(SkillComponent):
+class AdeleGatheringComponent(Component):
     damage: float
     hit_per_sword: float
     cooldown_duration: float
@@ -446,7 +445,7 @@ class AdeleGatheringComponent(SkillComponent):
         return self.damage, self.hit_per_sword
 
 
-class AdeleBlossomComponent(SkillComponent):
+class AdeleBlossomComponent(Component):
     damage: float
     hit_per_sword: float
     exceeded_stat: Stat
@@ -542,7 +541,7 @@ class AdeleRuinComponentProps(TypedDict):
 
 
 class AdeleRuinComponent(
-    SkillComponent,
+    Component,
 ):
     periodic_interval_first: float
     periodic_damage_first: float
@@ -672,7 +671,7 @@ class AdeleRestoreState(TypedDict):
     dynamics: Dynamics
 
 
-class AdeleRestoreBuffComponent(SkillComponent):
+class AdeleRestoreBuffComponent(Component):
     lasting_duration: float
     ether_multiplier: float
     stat: Stat
@@ -744,7 +743,7 @@ class AdeleStormComponentProps(TypedDict):
 
 
 class AdeleStormComponent(
-    SkillComponent,
+    Component,
 ):
     periodic_initial_delay: Optional[float] = None
     periodic_interval: float
