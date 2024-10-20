@@ -135,7 +135,7 @@ class ProgrammedPeriodicComponent(SkillComponent):
 
         return state, [
             EmptyEvent.dealt(self.damage, self.hit),
-            EmptyEvent.delayed(self._get_delay()),
+            EmptyEvent.delayed(self.delay),
         ]
 
     @view_method

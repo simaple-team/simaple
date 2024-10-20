@@ -340,10 +340,10 @@ class AdeleOrderComponent(SkillComponent):
             return state, [EmptyEvent.rejected()]
 
         damage, hit = self.periodic_damage, self.periodic_hit
-        delay = self._get_delay()
+        delay = self.delay
 
         cooldown.set_time_left(
-            state["dynamics"].stat.calculate_cooldown(self._get_cooldown_duration())
+            state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
         )
 
         order_sword.add_running(0, self.lasting_duration, self._max_sword_count(state))
@@ -360,10 +360,10 @@ class AdeleOrderComponent(SkillComponent):
     def validity(self, state: AdeleOrderState):
         return Validity(
             id=self.id,
-            name=self._get_name(),
+            name=self.name,
             time_left=state["cooldown"].minimum_time_to_available(),
             valid=state["cooldown"].available and state["ether_gauge"].is_order_valid(),
-            cooldown_duration=self._get_cooldown_duration(),
+            cooldown_duration=self.cooldown_duration,
         )
 
     @view_method
@@ -435,7 +435,7 @@ class AdeleGatheringComponent(SkillComponent):
             time_left=state["cooldown"].minimum_time_to_available(),
             valid=state["cooldown"].available
             and state["order_sword"].get_sword_count() > 0,
-            cooldown_duration=self._get_cooldown_duration(),
+            cooldown_duration=self.cooldown_duration,
         )
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
@@ -620,7 +620,7 @@ class AdeleRuinComponent(
         if not cooldown.available:
             return state, [EmptyEvent.rejected()]
 
-        delay = self._get_delay()
+        delay = self.delay
 
         cooldown.set_time_left(
             state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
@@ -804,11 +804,11 @@ class AdeleStormComponent(
     def validity(self, state: AdeleStormState):
         return Validity(
             id=self.id,
-            name=self._get_name(),
+            name=self.name,
             time_left=state["cooldown"].minimum_time_to_available(),
             valid=state["cooldown"].available
             and state["order_sword"].get_sword_count() > 0,
-            cooldown_duration=self._get_cooldown_duration(),
+            cooldown_duration=self.cooldown_duration,
         )
 
     @view_method

@@ -28,15 +28,3 @@ class SkillComponent(Component):
     @view_method
     def info(self, _: Any) -> ComponentInformation:
         return cast(ComponentInformation, self.model_dump())
-
-    def _get_cooldown_duration(self) -> float:
-        return self.cooldown_duration
-
-    def _get_delay(self) -> float:
-        return self.delay
-
-    def _get_name(self) -> str:
-        return self.name
-
-    def _get_id(self) -> str:
-        return self.id

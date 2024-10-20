@@ -388,7 +388,7 @@ class CosmicShower(SkillComponent):
     def validity(self, state: CosmicShowerState):
         return Validity(
             id=self.id,
-            name=self._get_name(),
+            name=self.name,
             time_left=state["cooldown"].minimum_time_to_available(),
             valid=state["cooldown"].available and state["orb"].stack > 0,
             cooldown_duration=self.cooldown_duration,
@@ -504,10 +504,10 @@ class Cosmos(SkillComponent):
     def validity(self, state: CosmosState):
         return Validity(
             id=self.id,
-            name=self._get_name(),
+            name=self.name,
             time_left=state["cooldown"].minimum_time_to_available(),
             valid=state["cooldown"].available and state["orb"].stack > 0,
-            cooldown_duration=self._get_cooldown_duration(),
+            cooldown_duration=self.cooldown_duration,
         )
 
     @view_method
@@ -595,8 +595,8 @@ class FlareSlash(SkillComponent):
     def validity(self, state: FlareSlashState):
         return Validity(
             id=self.id,
-            name=self._get_name(),
+            name=self.name,
             time_left=state["cooldown"].minimum_time_to_available(),
             valid=False,
-            cooldown_duration=self._get_cooldown_duration(),
+            cooldown_duration=self.cooldown_duration,
         )
