@@ -13,6 +13,17 @@ class DOTEmittingState(TypedDict):
     dynamics: Dynamics
 
 
+class DOTEmittingAttackSkillComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
+    dot_damage: float
+    dot_lasting_duration: float
+
+
 class DOTEmittingAttackSkillComponent(
     SkillComponent,
 ):
@@ -29,6 +40,18 @@ class DOTEmittingAttackSkillComponent(
         return {
             "cooldown": Cooldown(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> DOTEmittingAttackSkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "dot_damage": self.dot_damage,
+            "dot_lasting_duration": self.dot_lasting_duration,
         }
 
     @reducer_method
@@ -58,5 +81,6 @@ class DOTEmittingAttackSkillComponent(
     @view_method
     def validity(self, state: DOTEmittingState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )

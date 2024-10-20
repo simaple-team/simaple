@@ -21,6 +21,22 @@ class TriplePeriodicDamageHexaComponentState(TypedDict):
     dynamics: Dynamics
 
 
+class TriplePeriodicDamageHexaComponentProps(TypedDict):
+    id: str
+    name: str
+    damage_and_hits: list[DamageAndHit]
+    cooldown_duration: float
+    delay: float
+
+    periodic_01: PeriodicFeature
+    periodic_02: PeriodicFeature
+    periodic_03: PeriodicFeature
+
+    lasting_duration: float
+
+    synergy: Stat
+
+
 class TriplePeriodicDamageHexaComponent(SkillComponent):
     """
     TriplePeriodicDamageConfiguratedHexaSkillComponent
@@ -69,6 +85,20 @@ class TriplePeriodicDamageHexaComponent(SkillComponent):
             ),
         }
 
+    def get_props(self) -> TriplePeriodicDamageHexaComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage_and_hits": self.damage_and_hits,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "periodic_01": self.periodic_01,
+            "periodic_02": self.periodic_02,
+            "periodic_03": self.periodic_03,
+            "lasting_duration": self.lasting_duration,
+            "synergy": self.synergy,
+        }
+
     @reducer_method
     def elapse(self, time: float, state: TriplePeriodicDamageHexaComponentState):
         cooldown = state["cooldown"].model_copy()
@@ -114,7 +144,8 @@ class TriplePeriodicDamageHexaComponent(SkillComponent):
     @view_method
     def validity(self, state: TriplePeriodicDamageHexaComponentState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
     @view_method

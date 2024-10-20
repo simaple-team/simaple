@@ -14,6 +14,19 @@ class TemporalEnhancingAttackSkillState(TypedDict):
     dynamics: Dynamics
 
 
+class TemporalEnhancingAttackSkillComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
+    reforged_damage: float
+    reforged_hit: float
+    reforged_multiple: int
+    reforge_cooldown_duration: float
+
+
 class TemporalEnhancingAttackSkill(
     SkillComponent,
 ):
@@ -34,6 +47,20 @@ class TemporalEnhancingAttackSkill(
             "cooldown": Cooldown(time_left=0),
             "reforged_cooldown": Cooldown(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> TemporalEnhancingAttackSkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "reforged_damage": self.reforged_damage,
+            "reforged_hit": self.reforged_hit,
+            "reforged_multiple": self.reforged_multiple,
+            "reforge_cooldown_duration": self.reforge_cooldown_duration,
         }
 
     @reducer_method
@@ -91,5 +118,6 @@ class TemporalEnhancingAttackSkill(
     @view_method
     def validity(self, state: TemporalEnhancingAttackSkillState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )

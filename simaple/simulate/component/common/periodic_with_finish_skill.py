@@ -16,6 +16,20 @@ class PeriodicWithFinishState(TypedDict):
     dynamics: Dynamics
 
 
+class PeriodicWithFinishSkillComponentProps(TypedDict):
+    id: str
+    name: str
+    delay: float
+    cooldown_duration: float
+    periodic_initial_delay: Optional[float]
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+    finish_damage: float
+    finish_hit: float
+    lasting_duration: float
+
+
 class PeriodicWithFinishSkillComponent(
     SkillComponent,
 ):
@@ -45,6 +59,21 @@ class PeriodicWithFinishSkillComponent(
             "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
+    def get_props(self) -> PeriodicWithFinishSkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "delay": self.delay,
+            "cooldown_duration": self.cooldown_duration,
+            "periodic_initial_delay": self.periodic_initial_delay,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "finish_damage": self.finish_damage,
+            "finish_hit": self.finish_hit,
+            "lasting_duration": self.lasting_duration,
+        }
+
     @reducer_method
     def elapse(self, time: float, state: PeriodicWithFinishState):
         was_running = state["periodic"].enabled()
@@ -72,9 +101,7 @@ class PeriodicWithFinishSkillComponent(
     def validity(self, state: PeriodicWithFinishState):
         return cooldown_trait.validity_view(
             state,
-            self.id,
-            self.name,
-            self.cooldown_duration,
+            self.get_props(),
         )
 
     @view_method

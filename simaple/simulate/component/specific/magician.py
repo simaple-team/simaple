@@ -16,6 +16,19 @@ class InfinityState(TypedDict):
     dynamics: Dynamics
 
 
+class InfinityProps(TypedDict):
+    id: str
+    name: str
+    cooldown_duration: float
+    delay: float
+    lasting_duration: float
+    final_damage_increment: float
+    increase_interval: float
+    default_final_damage: float
+    maximum_final_damage: float
+    apply_buff_duration: bool
+
+
 class Infinity(SkillComponent):
     cooldown_duration: float
     delay: float
@@ -33,6 +46,20 @@ class Infinity(SkillComponent):
             "cooldown": Cooldown(time_left=0),
             "lasting": Lasting(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> InfinityProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "lasting_duration": self.lasting_duration,
+            "final_damage_increment": self.final_damage_increment,
+            "increase_interval": self.increase_interval,
+            "default_final_damage": self.default_final_damage,
+            "maximum_final_damage": self.maximum_final_damage,
+            "apply_buff_duration": self.apply_buff_duration,
         }
 
     @reducer_method
@@ -53,9 +80,7 @@ class Infinity(SkillComponent):
     def validity(self, state: InfinityState):
         return cooldown_trait.validity_view(
             state,
-            self.id,
-            self.name,
-            self.cooldown_duration,
+            self.get_props(),
         )
 
     @view_method

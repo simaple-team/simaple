@@ -15,6 +15,15 @@ class AttackSkillState(TypedDict):
     dynamics: Dynamics
 
 
+class AttackSkillComponentProps(TypedDict):
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
+    id: str
+    name: str
+
+
 class AttackSkillComponent(
     SkillComponent,
 ):
@@ -28,6 +37,16 @@ class AttackSkillComponent(
         return {
             "cooldown": Cooldown(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> AttackSkillComponentProps:
+        return {
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "id": self.id,
+            "name": self.name,
         }
 
     @reducer_method
@@ -55,10 +74,8 @@ class AttackSkillComponent(
 
     @reducer_method
     def reset_cooldown(self, _: None, state: AttackSkillState):
-        return cooldown_trait.reset_cooldown(state)
+        return cooldown_trait.reset_cooldown(state, {})
 
     @view_method
     def validity(self, state: AttackSkillState):
-        return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
-        )
+        return cooldown_trait.validity_view(state, self.get_props())

@@ -17,6 +17,16 @@ class FinalCutState(TypedDict):
     dynamics: Dynamics
 
 
+class FinalCutComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
+    sudden_raid_cooltime_reduce: float
+
+
 class FinalCutComponent(SkillComponent):
     name: str
     damage: float
@@ -30,6 +40,17 @@ class FinalCutComponent(SkillComponent):
         return {
             "cooldown": Cooldown(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> FinalCutComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "sudden_raid_cooltime_reduce": self.sudden_raid_cooltime_reduce,
         }
 
     @reducer_method
@@ -53,7 +74,8 @@ class FinalCutComponent(SkillComponent):
     @view_method
     def validity(self, state: FinalCutState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
 
@@ -61,6 +83,20 @@ class BladeStormState(TypedDict):
     cooldown: Cooldown
     keydown: Keydown
     dynamics: Dynamics
+
+
+class BladeStormComponentProps(TypedDict):
+    id: str
+    name: str
+    maximum_keydown_time: float
+    damage: float
+    hit: float
+    delay: float
+    cooldown_duration: float
+    keydown_prepare_delay: float
+    keydown_end_delay: float
+    prepare_damage: float
+    prepare_hit: float
 
 
 class BladeStormComponent(SkillComponent):
@@ -82,6 +118,21 @@ class BladeStormComponent(SkillComponent):
             "cooldown": Cooldown(time_left=0),
             "keydown": Keydown(interval=self.delay),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> BladeStormComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "maximum_keydown_time": self.maximum_keydown_time,
+            "damage": self.damage,
+            "hit": self.hit,
+            "delay": self.delay,
+            "cooldown_duration": self.cooldown_duration,
+            "keydown_prepare_delay": self.keydown_prepare_delay,
+            "keydown_end_delay": self.keydown_end_delay,
+            "prepare_damage": self.prepare_damage,
+            "prepare_hit": self.prepare_hit,
         }
 
     @reducer_method
@@ -115,7 +166,8 @@ class BladeStormComponent(SkillComponent):
     @view_method
     def validity(self, state: BladeStormState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
     @view_method
@@ -127,6 +179,20 @@ class KarmaBladeTriggerState(TypedDict):
     cooldown: Cooldown
     lasting_stack: LastingStack
     dynamics: Dynamics
+
+
+class KarmaBladeTriggerComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    delay: float
+    triggable_count: int
+    lasting_duration: float
+    cooldown_duration: float
+
+    finish_damage: float
+    finish_hit: float
 
 
 class KarmaBladeTriggerComponent(SkillComponent):
@@ -150,6 +216,20 @@ class KarmaBladeTriggerComponent(SkillComponent):
                 duration=self.lasting_duration,
             ),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> KarmaBladeTriggerComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "delay": self.delay,
+            "triggable_count": self.triggable_count,
+            "lasting_duration": self.lasting_duration,
+            "cooldown_duration": self.cooldown_duration,
+            "finish_damage": self.finish_damage,
+            "finish_hit": self.finish_hit,
         }
 
     @reducer_method
@@ -213,7 +293,8 @@ class KarmaBladeTriggerComponent(SkillComponent):
     @view_method
     def validity(self, state: KarmaBladeTriggerState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
     @view_method

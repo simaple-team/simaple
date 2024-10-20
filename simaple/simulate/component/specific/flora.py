@@ -16,6 +16,19 @@ class MagicCurcuitFullDriveState(TypedDict):
     dynamics: Dynamics
 
 
+class MagicCurcuitFullDriveComponentProps(TypedDict):
+    id: str
+    name: str
+    delay: float
+    cooldown_duration: float
+    lasting_duration: float
+    max_damage_multiplier: float
+    periodic_initial_delay: Optional[float]
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+
+
 # TODO: vary damage multiplier from MP rate
 # TODO: trigger on attack skills, not tick
 class MagicCurcuitFullDriveComponent(
@@ -43,6 +56,20 @@ class MagicCurcuitFullDriveComponent(
             "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
+    def get_props(self) -> MagicCurcuitFullDriveComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "delay": self.delay,
+            "cooldown_duration": self.cooldown_duration,
+            "lasting_duration": self.lasting_duration,
+            "max_damage_multiplier": self.max_damage_multiplier,
+            "periodic_initial_delay": self.periodic_initial_delay,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+        }
+
     @reducer_method
     def use(self, _: None, state: MagicCurcuitFullDriveState):
         return periodic_trait.start_periodic_with_cooldown(
@@ -64,9 +91,7 @@ class MagicCurcuitFullDriveComponent(
     def validity(self, state: MagicCurcuitFullDriveState):
         return cooldown_trait.validity_view(
             state,
-            self.id,
-            self.name,
-            self.cooldown_duration,
+            self.get_props(),
         )
 
     @view_method

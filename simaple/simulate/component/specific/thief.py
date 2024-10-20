@@ -16,6 +16,16 @@ class UltimateDarkSightState(TypedDict):
     dynamics: Dynamics
 
 
+class UltimateDarkSightComponentProps(TypedDict):
+    id: str
+    name: str
+    cooldown_duration: float
+    delay: float
+    lasting_duration: float
+    final_damage_multiplier: float
+    advanced_dark_sight_final_damage_multiplier: float
+
+
 class UltimateDarkSightComponent(SkillComponent):
     cooldown_duration: float
     delay: float
@@ -29,6 +39,17 @@ class UltimateDarkSightComponent(SkillComponent):
             "cooldown": Cooldown(time_left=0),
             "lasting": Lasting(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> UltimateDarkSightComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "lasting_duration": self.lasting_duration,
+            "final_damage_multiplier": self.final_damage_multiplier,
+            "advanced_dark_sight_final_damage_multiplier": self.advanced_dark_sight_final_damage_multiplier,
         }
 
     @reducer_method
@@ -48,7 +69,8 @@ class UltimateDarkSightComponent(SkillComponent):
     @view_method
     def validity(self, state: UltimateDarkSightState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
     @view_method

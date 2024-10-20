@@ -17,6 +17,17 @@ class SynergyState(TypedDict):
     dynamics: Dynamics
 
 
+class SynergySkillComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
+    synergy: Stat
+    lasting_duration: float
+
+
 class SynergySkillComponent(SkillComponent):
     name: str
     damage: float
@@ -32,6 +43,18 @@ class SynergySkillComponent(SkillComponent):
             "cooldown": Cooldown(time_left=0),
             "lasting": Lasting(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> SynergySkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "synergy": self.synergy,
+            "lasting_duration": self.lasting_duration,
         }
 
     @reducer_method
@@ -63,9 +86,7 @@ class SynergySkillComponent(SkillComponent):
     def validity(self, state: SynergyState):
         return cooldown_trait.validity_view(
             state,
-            self.id,
-            self.name,
-            self.cooldown_duration,
+            self.get_props(),
         )
 
     @view_method

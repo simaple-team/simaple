@@ -16,6 +16,17 @@ class PenalizedBuffSkillState(TypedDict):
     dynamics: Dynamics
 
 
+class PenalizedBuffSkillComponentProps(TypedDict):
+    id: str
+    name: str
+    advantage: Stat
+    disadvantage: Stat
+    cooldown_duration: float
+    delay: float
+    lasting_duration: float
+    apply_buff_duration: bool
+
+
 class PenalizedBuffSkill(SkillComponent):
     advantage: Stat
     disadvantage: Stat
@@ -29,6 +40,18 @@ class PenalizedBuffSkill(SkillComponent):
             "cooldown": Cooldown(time_left=0),
             "lasting": Lasting(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> PenalizedBuffSkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "advantage": self.advantage,
+            "disadvantage": self.disadvantage,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "lasting_duration": self.lasting_duration,
+            "apply_buff_duration": self.apply_buff_duration,
         }
 
     @reducer_method
@@ -49,9 +72,7 @@ class PenalizedBuffSkill(SkillComponent):
     def validity(self, state: PenalizedBuffSkillState):
         return cooldown_trait.validity_view(
             state,
-            self.id,
-            self.name,
-            self.cooldown_duration,
+            self.get_props(),
         )
 
     @view_method

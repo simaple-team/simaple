@@ -14,6 +14,19 @@ class HitLimitedPeriodicDamageState(TypedDict):
     dynamics: Dynamics
 
 
+class HitLimitedPeriodicDamageComponentProps(TypedDict):
+    id: str
+    name: str
+    cooldown_duration: float
+    delay: float
+    periodic_initial_delay: Optional[float]
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+    lasting_duration: float
+    max_count: int
+
+
 class HitLimitedPeriodicDamageComponent(
     SkillComponent,
 ):
@@ -38,6 +51,20 @@ class HitLimitedPeriodicDamageComponent(
                 time_left=0,
             ),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> HitLimitedPeriodicDamageComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "periodic_initial_delay": self.periodic_initial_delay,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "lasting_duration": self.lasting_duration,
+            "max_count": self.max_count,
         }
 
     @reducer_method
@@ -99,7 +126,5 @@ class HitLimitedPeriodicDamageComponent(
     def validity(self, state: HitLimitedPeriodicDamageState):
         return cooldown_trait.validity_view(
             state,
-            self.id,
-            self.name,
-            self.cooldown_duration,
+            self.get_props(),
         )

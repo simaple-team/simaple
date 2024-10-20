@@ -44,6 +44,19 @@ class ProgrammedPeriodicState(TypedDict):
     dynamics: Dynamics
 
 
+class ProgrammedPeriodicComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    delay: float
+    cooldown_duration: float
+    periodic_intervals: list[float]
+    periodic_damage: float
+    periodic_hit: float
+    lasting_duration: float
+
+
 class ProgrammedPeriodicComponent(SkillComponent):
     name: str
     damage: float
@@ -65,6 +78,20 @@ class ProgrammedPeriodicComponent(SkillComponent):
                 intervals=self.periodic_intervals, time_left=0
             ),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> ProgrammedPeriodicComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "delay": self.delay,
+            "cooldown_duration": self.cooldown_duration,
+            "periodic_intervals": self.periodic_intervals,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "lasting_duration": self.lasting_duration,
         }
 
     @reducer_method
@@ -115,9 +142,7 @@ class ProgrammedPeriodicComponent(SkillComponent):
     def validity(self, state: ProgrammedPeriodicState):
         return cooldown_trait.validity_view(
             state,
-            self.id,
-            self.name,
-            self.cooldown_duration,
+            self.get_props(),
         )
 
     @view_method

@@ -14,6 +14,21 @@ class KeydownSkillState(TypedDict):
     dynamics: Dynamics
 
 
+class KeydownSkillComponentProps(TypedDict):
+    name: str
+    id: str
+
+    maximum_keydown_time: float
+    damage: float
+    hit: float
+    delay: float
+    cooldown_duration: float
+    keydown_prepare_delay: float
+    keydown_end_delay: float
+    finish_damage: float
+    finish_hit: float
+
+
 class KeydownSkillComponent(SkillComponent):
     maximum_keydown_time: float
 
@@ -33,6 +48,21 @@ class KeydownSkillComponent(SkillComponent):
             "cooldown": Cooldown(time_left=0),
             "keydown": Keydown(interval=self.delay),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> KeydownSkillComponentProps:
+        return {
+            "name": self.name,
+            "id": self.id,
+            "maximum_keydown_time": self.maximum_keydown_time,
+            "damage": self.damage,
+            "hit": self.hit,
+            "delay": self.delay,
+            "cooldown_duration": self.cooldown_duration,
+            "keydown_prepare_delay": self.keydown_prepare_delay,
+            "keydown_end_delay": self.keydown_end_delay,
+            "finish_damage": self.finish_damage,
+            "finish_hit": self.finish_hit,
         }
 
     @reducer_method
@@ -68,9 +98,7 @@ class KeydownSkillComponent(SkillComponent):
 
     @view_method
     def validity(self, state: KeydownSkillState):
-        return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
-        )
+        return cooldown_trait.validity_view(state, self.get_props())
 
     @view_method
     def keydown(self, state: KeydownSkillState):

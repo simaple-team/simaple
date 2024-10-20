@@ -16,6 +16,16 @@ class BuffSkillState(TypedDict):
     dynamics: Dynamics
 
 
+class BuffSkillComponentProps(TypedDict):
+    id: str
+    name: str
+    stat: Stat
+    cooldown_duration: float
+    delay: float
+    lasting_duration: float
+    apply_buff_duration: bool
+
+
 class BuffSkillComponent(SkillComponent):
     stat: Stat
     cooldown_duration: float
@@ -29,6 +39,17 @@ class BuffSkillComponent(SkillComponent):
             "cooldown": Cooldown(time_left=0),
             "lasting": Lasting(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> BuffSkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "stat": self.stat,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "lasting_duration": self.lasting_duration,
+            "apply_buff_duration": self.apply_buff_duration,
         }
 
     @reducer_method
@@ -49,9 +70,7 @@ class BuffSkillComponent(SkillComponent):
     def validity(self, state: BuffSkillState):
         return cooldown_trait.validity_view(
             state,
-            self.id,
-            self.name,
-            self.cooldown_duration,
+            self.get_props(),
         )
 
     @view_method

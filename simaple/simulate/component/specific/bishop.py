@@ -33,6 +33,16 @@ class DivineAttackSkillState(TypedDict):
     dynamics: Dynamics
 
 
+class DivineAttackSkillComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
+    synergy: Optional[Stat]
+
+
 class DivineAttackSkillComponent(
     SkillComponent,
 ):
@@ -51,6 +61,17 @@ class DivineAttackSkillComponent(
             "cooldown": Cooldown(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
             "divine_mark": DivineMark(),
+        }
+
+    def get_props(self) -> DivineAttackSkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "synergy": self.synergy,
         }
 
     @reducer_method
@@ -84,7 +105,8 @@ class DivineAttackSkillComponent(
     @view_method
     def validity(self, state: DivineAttackSkillState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
     @view_method
@@ -97,6 +119,22 @@ class DivineMinionState(TypedDict):
     cooldown: Cooldown
     periodic: Periodic
     dynamics: Dynamics
+
+
+class DivineMinionComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
+    periodic_initial_delay: Optional[float]
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+    lasting_duration: float
+    mark_advantage: Stat
+    stat: Optional[Stat]
 
 
 class DivineMinion(
@@ -139,6 +177,23 @@ class DivineMinion(
             ),
             "dynamics": Dynamics.model_validate({"stat": {}}),
             "divine_mark": DivineMark(),
+        }
+
+    def get_props(self) -> DivineMinionComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "periodic_initial_delay": self.periodic_initial_delay,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "lasting_duration": self.lasting_duration,
+            "mark_advantage": self.mark_advantage,
+            "stat": self.stat,
         }
 
     @reducer_method
@@ -188,7 +243,8 @@ class DivineMinion(
     @view_method
     def validity(self, state: DivineMinionState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
     @view_method
@@ -203,6 +259,19 @@ class HexaAngelRayState(TypedDict):
     cooldown: Cooldown
     dynamics: Dynamics
     punishing_stack: Stack
+
+
+class HexaAngelRayComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    delay: float
+    punishing_damage: float
+    punishing_hit: float
+    stack_resolve_amount: int
+    synergy: Stat
+    cooldown_duration: float
 
 
 class HexaAngelRayComponent(
@@ -230,6 +299,20 @@ class HexaAngelRayComponent(
             ),  # one-buffer
             "dynamics": Dynamics.model_validate({"stat": {}}),
             "divine_mark": DivineMark(),
+        }
+
+    def get_props(self) -> HexaAngelRayComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "delay": self.delay,
+            "punishing_damage": self.punishing_damage,
+            "punishing_hit": self.punishing_hit,
+            "stack_resolve_amount": self.stack_resolve_amount,
+            "synergy": self.synergy,
+            "cooldown_duration": self.cooldown_duration,
         }
 
     @reducer_method
@@ -292,7 +375,8 @@ class HexaAngelRayComponent(
     @view_method
     def validity(self, state: HexaAngelRayState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
     @view_method

@@ -81,6 +81,19 @@ class ElysionState(TypedDict):
     crack_cooldown: Cooldown
 
 
+class ElysionProps(TypedDict):
+    id: str
+    name: str
+    cooldown_duration: float
+    delay: float
+    lasting_duration: float
+    crack_damage: float
+    crack_hit: int
+    crack_cooldown: float
+    crack_duration: float
+    maximum_crack_count: int
+
+
 class Elysion(SkillComponent):
     cooldown_duration: float
     delay: float
@@ -101,6 +114,20 @@ class Elysion(SkillComponent):
             ),
             "crack_cooldown": Cooldown(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> ElysionProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "lasting_duration": self.lasting_duration,
+            "crack_damage": self.crack_damage,
+            "crack_hit": self.crack_hit,
+            "crack_cooldown": self.crack_cooldown,
+            "crack_duration": self.crack_duration,
+            "maximum_crack_count": self.maximum_crack_count,
         }
 
     @reducer_method
@@ -160,7 +187,8 @@ class Elysion(SkillComponent):
     @view_method
     def validity(self, state: ElysionState) -> Validity:
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
     @view_method

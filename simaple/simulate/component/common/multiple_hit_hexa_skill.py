@@ -13,6 +13,14 @@ class MultipleHitHexaSkillState(TypedDict):
     dynamics: Dynamics
 
 
+class MultipleHitHexaSkillComponentProps(TypedDict):
+    id: str
+    name: str
+    damage_and_hits: list[DamageAndHit]
+    delay: float
+    cooldown_duration: float
+
+
 class MultipleHitHexaSkillComponent(
     SkillComponent,
 ):
@@ -34,9 +42,18 @@ class MultipleHitHexaSkillComponent(
             "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
+    def get_props(self) -> MultipleHitHexaSkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage_and_hits": self.damage_and_hits,
+            "delay": self.delay,
+            "cooldown_duration": self.cooldown_duration,
+        }
+
     @reducer_method
     def elapse(self, time: float, state: MultipleHitHexaSkillState):
-        return cooldown_trait.elapse_cooldown_only(state, time)
+        return cooldown_trait.elapse_cooldown_only(state, {"time": time})
 
     @reducer_method
     def use(self, _: None, state: MultipleHitHexaSkillState):
@@ -58,9 +75,4 @@ class MultipleHitHexaSkillComponent(
 
     @view_method
     def validity(self, state: MultipleHitHexaSkillState):
-        return cooldown_trait.validity_view(
-            state,
-            self.id,
-            self.name,
-            self.cooldown_duration,
-        )
+        return cooldown_trait.validity_view(state, self.get_props())

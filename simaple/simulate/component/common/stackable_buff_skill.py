@@ -17,6 +17,17 @@ class StackableBuffSkillState(TypedDict):
     dynamics: Dynamics
 
 
+class StackableBuffSkillComponentProps(TypedDict):
+    id: str
+    name: str
+    stat: Stat
+    cooldown_duration: float
+    delay: float
+    lasting_duration: float
+    maximum_stack: int
+    apply_buff_duration: bool
+
+
 class StackableBuffSkillComponent(
     SkillComponent,
 ):
@@ -34,6 +45,18 @@ class StackableBuffSkillComponent(
             "lasting": Lasting(time_left=0),
             "stack": Stack(maximum_stack=self.maximum_stack),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> StackableBuffSkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "stat": self.stat,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "lasting_duration": self.lasting_duration,
+            "maximum_stack": self.maximum_stack,
+            "apply_buff_duration": self.apply_buff_duration,
         }
 
     @reducer_method
@@ -68,7 +91,8 @@ class StackableBuffSkillComponent(
     @view_method
     def validity(self, state: StackableBuffSkillState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
     @view_method

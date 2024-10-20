@@ -1,4 +1,4 @@
-from typing import TypedDict, TypeVar
+from typing import Any, TypedDict, TypeVar
 
 from simaple.simulate.component.entity import Cooldown
 from simaple.simulate.component.view import Validity
@@ -13,7 +13,7 @@ class _State(TypedDict):
 StateT = TypeVar("StateT", bound=_State)
 
 
-def reset_cooldown(state: StateT) -> tuple[StateT, list[Event]]:
+def reset_cooldown(state: StateT, _: Any) -> tuple[StateT, list[Event]]:
     cooldown = state["cooldown"].model_copy()
     cooldown.set_time_left(0)
 
@@ -22,7 +22,15 @@ def reset_cooldown(state: StateT) -> tuple[StateT, list[Event]]:
     return state, []
 
 
-def elapse_cooldown_only(state: StateT, time: float) -> tuple[StateT, list[Event]]:
+class ElapseCooldownOnlyProps(TypedDict):
+    time: float
+
+
+def elapse_cooldown_only(
+    state: StateT, props: ElapseCooldownOnlyProps
+) -> tuple[StateT, list[Event]]:
+    time = props["time"]
+
     cooldown = state["cooldown"].model_copy()
     cooldown.elapse(time)
 
@@ -31,12 +39,22 @@ def elapse_cooldown_only(state: StateT, time: float) -> tuple[StateT, list[Event
     return state, [EmptyEvent.elapsed(time)]
 
 
-def validity_view(
-    state: _State, id: str, name: str, cooldown_duration: float
-) -> Validity:
+class ValidityViewProps(TypedDict):
+    id: str
+    name: str
+    cooldown_duration: float
+
+
+def validity_view(state: _State, props: ValidityViewProps) -> Validity:
     """
     Renewal for `validity_in_invalidatable_cooldown_trait`.
     """
+    id, name, cooldown_duration = (
+        props["id"],
+        props["name"],
+        props["cooldown_duration"],
+    )
+
     return Validity(
         id=id,
         name=name,

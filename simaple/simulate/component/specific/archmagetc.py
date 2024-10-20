@@ -87,6 +87,19 @@ class JupyterThunderState(TypedDict):
     dynamics: Dynamics
 
 
+class JupyterThunderComponentProps(TypedDict):
+    id: str
+    name: str
+    cooldown_duration: float
+    delay: float
+    periodic_initial_delay: Optional[float]
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+    lasting_duration: float
+    max_count: int
+
+
 class JupyterThunder(SkillComponent):
     name: str
     cooldown_duration: float
@@ -112,6 +125,20 @@ class JupyterThunder(SkillComponent):
             ),
             "dynamics": Dynamics.model_validate({"stat": {}}),
             "frost_stack": Stack(maximum_stack=5),
+        }
+
+    def get_props(self) -> JupyterThunderComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "periodic_initial_delay": self.periodic_initial_delay,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "lasting_duration": self.lasting_duration,
+            "max_count": self.max_count,
         }
 
     @reducer_method
@@ -181,7 +208,8 @@ class JupyterThunder(SkillComponent):
     @view_method
     def validity(self, state: JupyterThunderState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
 
@@ -190,6 +218,15 @@ class ThunderAttackSkillState(TypedDict):
     jupyter_thunder_shock: Periodic
     cooldown: Cooldown
     dynamics: Dynamics
+
+
+class ThunderAttackSkillComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
 
 
 class ThunderAttackSkillComponent(
@@ -213,6 +250,16 @@ class ThunderAttackSkillComponent(
             "jupyter_thunder_shock": Periodic(
                 interval=1, initial_counter=1, time_left=0
             ),
+        }
+
+    def get_props(self) -> ThunderAttackSkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
         }
 
     @reducer_method
@@ -251,7 +298,8 @@ class ThunderAttackSkillComponent(
     @view_method
     def validity(self, state: ThunderAttackSkillState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
 
@@ -317,6 +365,24 @@ class ChainLightningVISkillState(TypedDict):
     current_fields: CurrentField
 
 
+class ChainLightningVIComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
+
+    electric_current_prob: float
+    electric_current_damage: float
+    electric_current_hit: float
+
+    electric_current_max_count: int
+    electric_current_interval: float
+    electric_current_duration: float
+    electric_current_force_trigger_interval: float
+
+
 class ChainLightningVIComponent(
     SkillComponent,
 ):
@@ -353,6 +419,23 @@ class ChainLightningVIComponent(
             "jupyter_thunder_shock": Periodic(
                 interval=1, initial_counter=1, time_left=0
             ),
+        }
+
+    def get_props(self) -> ChainLightningVIComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "electric_current_prob": self.electric_current_prob,
+            "electric_current_damage": self.electric_current_damage,
+            "electric_current_hit": self.electric_current_hit,
+            "electric_current_max_count": self.electric_current_max_count,
+            "electric_current_interval": self.electric_current_interval,
+            "electric_current_duration": self.electric_current_duration,
+            "electric_current_force_trigger_interval": self.electric_current_force_trigger_interval,
         }
 
     @reducer_method
@@ -409,7 +492,8 @@ class ChainLightningVIComponent(
     @view_method
     def validity(self, state: ChainLightningVISkillState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
     def _get_simple_damage_hit(self) -> tuple[float, float]:
@@ -422,6 +506,20 @@ class ThunderBreakState(TypedDict):
     cooldown: Cooldown
     dynamics: Dynamics
     periodic: Periodic
+
+
+class ThunderBreakComponentProps(TypedDict):
+    id: str
+    name: str
+    cooldown_duration: float
+    delay: float
+    periodic_initial_delay: Optional[float]
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+    lasting_duration: float
+    decay_rate: float
+    max_count: int
 
 
 class ThunderBreak(SkillComponent):
@@ -456,6 +554,21 @@ class ThunderBreak(SkillComponent):
             "jupyter_thunder_shock": Periodic(
                 interval=1, initial_counter=1, time_left=0
             ),
+        }
+
+    def get_props(self) -> ThunderBreakComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "periodic_initial_delay": self.periodic_initial_delay,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "lasting_duration": self.lasting_duration,
+            "decay_rate": self.decay_rate,
+            "max_count": self.max_count,
         }
 
     @reducer_method
@@ -524,5 +637,6 @@ class ThunderBreak(SkillComponent):
     @view_method
     def validity(self, state: ThunderBreakState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )

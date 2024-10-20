@@ -88,6 +88,24 @@ class PoisonNovaState(TypedDict):
     dynamics: Dynamics
 
 
+class PoisonNovaComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+
+    nova_remaining_time: float
+    nova_damage: float
+    nova_single_hit: int
+    nova_hit_count: int
+
+    dot_damage: float
+    dot_lasting_duration: float
+
+    cooldown_duration: float
+    delay: float
+
+
 class PoisonNovaComponent(SkillComponent):
     name: str
     damage: float
@@ -108,6 +126,22 @@ class PoisonNovaComponent(SkillComponent):
                 time_left=0, maximum_time_left=100 * 1000.0
             ),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> PoisonNovaComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "nova_remaining_time": self.nova_remaining_time,
+            "nova_damage": self.nova_damage,
+            "nova_single_hit": self.nova_single_hit,
+            "nova_hit_count": self.nova_hit_count,
+            "dot_damage": self.dot_damage,
+            "dot_lasting_duration": self.dot_lasting_duration,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
         }
 
     @reducer_method
@@ -171,7 +205,8 @@ class PoisonNovaComponent(SkillComponent):
     @view_method
     def validity(self, state: PoisonNovaState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
 
@@ -180,6 +215,23 @@ class PoisonChainState(TypedDict):
     periodic: Periodic
     stack: Stack
     dynamics: Dynamics
+
+
+class PoisonChainComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
+
+    periodic_initial_delay: Optional[float]
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+    lasting_duration: float
+
+    periodic_damage_increment: float
 
 
 class PoisonChainComponent(
@@ -209,6 +261,22 @@ class PoisonChainComponent(
             ),
             "stack": Stack(maximum_stack=5),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> PoisonChainComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "periodic_initial_delay": self.periodic_initial_delay,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "lasting_duration": self.lasting_duration,
+            "periodic_damage_increment": self.periodic_damage_increment,
         }
 
     def get_periodic_damage(self, stack: Stack):
@@ -257,7 +325,8 @@ class PoisonChainComponent(
     @view_method
     def validity(self, state: PoisonChainState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
     @view_method
@@ -270,6 +339,20 @@ class PoisonChainComponent(
 class DotPunisherState(TypedDict):
     cooldown: Cooldown
     dynamics: Dynamics
+
+
+class DotPunisherComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
+
+    multiple: int
+
+    dot_damage: float
+    dot_lasting_duration: float
 
 
 class DotPunisherComponent(SkillComponent):
@@ -288,6 +371,19 @@ class DotPunisherComponent(SkillComponent):
         return {
             "cooldown": Cooldown(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> DotPunisherComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "multiple": self.multiple,
+            "dot_damage": self.dot_damage,
+            "dot_lasting_duration": self.dot_lasting_duration,
         }
 
     @reducer_method
@@ -312,7 +408,7 @@ class DotPunisherComponent(SkillComponent):
 
     @reducer_method
     def elapse(self, time: float, state: DotPunisherState):
-        return cooldown_trait.elapse_cooldown_only(state, time)
+        return cooldown_trait.elapse_cooldown_only(state, {"time": time})
 
     @reducer_method
     def reset_cooldown(self, _: None, state: DotPunisherState):
@@ -325,7 +421,8 @@ class DotPunisherComponent(SkillComponent):
     @view_method
     def validity(self, state: DotPunisherState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
 
@@ -333,6 +430,26 @@ class IfrittState(TypedDict):
     cooldown: Cooldown
     periodic: Periodic
     dynamics: Dynamics
+
+
+class IfrittComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit: float
+    delay: float
+
+    cooldown_duration: float
+
+    periodic_initial_delay: Optional[float]
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+
+    lasting_duration: float
+
+    dot_damage: float
+    dot_lasting_duration: float
 
 
 class IfrittComponent(
@@ -366,6 +483,23 @@ class IfrittComponent(
             "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
+    def get_props(self) -> IfrittComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "delay": self.delay,
+            "cooldown_duration": self.cooldown_duration,
+            "periodic_initial_delay": self.periodic_initial_delay,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "lasting_duration": self.lasting_duration,
+            "dot_damage": self.dot_damage,
+            "dot_lasting_duration": self.dot_lasting_duration,
+        }
+
     @reducer_method
     def elapse(self, time: float, state: IfrittState):
         return periodic_trait.elapse_periodic_with_cooldown(
@@ -391,7 +525,8 @@ class IfrittComponent(
     @view_method
     def validity(self, state: IfrittState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
     @view_method
@@ -406,6 +541,18 @@ class InfernalVenomState(TypedDict):
     cooldown: Cooldown
     dynamics: Dynamics
     lasting: Lasting
+
+
+class InfernalVenomComponentProps(TypedDict):
+    id: str
+    name: str
+    first_damage: float
+    first_hit: float
+    second_damage: float
+    second_hit: float
+    cooldown_duration: float
+    delay: float
+    lasting_duration: float
 
 
 class InfernalVenom(
@@ -427,6 +574,19 @@ class InfernalVenom(
             "lasting": Lasting(time_left=0),
             "drain_stack": FerventDrainStack(count=5, max_count=5),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> InfernalVenomComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "first_damage": self.first_damage,
+            "first_hit": self.first_hit,
+            "second_damage": self.second_damage,
+            "second_hit": self.second_hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "lasting_duration": self.lasting_duration,
         }
 
     @reducer_method
@@ -491,7 +651,8 @@ class InfernalVenom(
     @view_method
     def validity(self, state: InfernalVenomState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
     @view_method
@@ -503,6 +664,19 @@ class FlameSwipVIState(TypedDict):
     cooldown: Cooldown
     dynamics: Dynamics
     stack: Stack
+
+
+class FlameSwipVIComponentProps(TypedDict):
+    id: str
+    name: str
+    delay: float
+    damage: float
+    hit: int
+    cooldown_duration: float
+    explode_damage: float
+    explode_hit: int
+    dot_damage: float
+    dot_lasting_duration: float
 
 
 class FlameSwipVI(
@@ -524,6 +698,20 @@ class FlameSwipVI(
             "cooldown": Cooldown(time_left=0),
             "stack": Stack(maximum_stack=3),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> FlameSwipVIComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "delay": self.delay,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "explode_damage": self.explode_damage,
+            "explode_hit": self.explode_hit,
+            "dot_damage": self.dot_damage,
+            "dot_lasting_duration": self.dot_lasting_duration,
         }
 
     @reducer_method
@@ -564,5 +752,6 @@ class FlameSwipVI(
     @view_method
     def validity(self, state: FlameSwipVIState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )

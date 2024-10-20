@@ -19,6 +19,19 @@ class TriggableBuffState(TypedDict):
     dynamics: Dynamics
 
 
+class TriggableBuffSkillComponentProps(TypedDict):
+    id: str
+    name: str
+    stat: Stat
+    trigger_cooldown_duration: float
+    trigger_damage: float
+    trigger_hit: float
+    cooldown_duration: float
+    delay: float
+    lasting_duration: float
+    apply_buff_duration: bool
+
+
 class TriggableBuffSkillComponent(
     SkillComponent,
 ):
@@ -40,6 +53,20 @@ class TriggableBuffSkillComponent(
             "lasting": Lasting(time_left=0),
             "trigger_cooldown": Cooldown(time_left=0),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> TriggableBuffSkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "stat": self.stat,
+            "trigger_cooldown_duration": self.trigger_cooldown_duration,
+            "trigger_damage": self.trigger_damage,
+            "trigger_hit": self.trigger_hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "lasting_duration": self.lasting_duration,
+            "apply_buff_duration": self.apply_buff_duration,
         }
 
     @reducer_method
@@ -99,9 +126,7 @@ class TriggableBuffSkillComponent(
     def validity(self, state: TriggableBuffState):
         return cooldown_trait.validity_view(
             state,
-            self.id,
-            self.name,
-            self.cooldown_duration,
+            self.get_props(),
         )
 
     @view_method

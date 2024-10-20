@@ -150,6 +150,15 @@ class CreationState(TypedDict):
     dynamics: Dynamics
 
 
+class AdeleCreationComponentProps(TypedDict):
+    id: str
+    name: str
+    damage: float
+    hit_per_sword: float
+    cooldown_duration: float
+    delay: float
+
+
 class AdeleCreationComponent(
     SkillComponent,
 ):
@@ -168,6 +177,16 @@ class AdeleCreationComponent(
                 maximum_stack=6, creation_step=2, order_consume=2
             ),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> AdeleCreationComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit_per_sword": self.hit_per_sword,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
         }
 
     @reducer_method
@@ -192,7 +211,8 @@ class AdeleCreationComponent(
     @view_method
     def validity(self, state: CreationState):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self.cooldown_duration
+            state,
+            self.get_props(),
         )
 
 
@@ -504,6 +524,20 @@ class AdeleRuinState(TypedDict):
     dynamics: Dynamics
 
 
+class AdeleRuinComponentProps(TypedDict):
+    id: str
+    name: str
+    periodic_interval_first: float
+    periodic_damage_first: float
+    periodic_hit_first: float
+    lasting_duration_first: float
+    periodic_interval_second: float
+    periodic_damage_second: float
+    periodic_hit_second: float
+    lasting_duration_second: float
+    cooldown_duration: float
+
+
 class AdeleRuinComponent(
     SkillComponent,
 ):
@@ -529,6 +563,21 @@ class AdeleRuinComponent(
                 initial_counter=self.lasting_duration_first,
             ),
             "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> AdeleRuinComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "cooldown_duration": self.cooldown_duration,
+            "periodic_interval_first": self.periodic_interval_first,
+            "periodic_damage_first": self.periodic_damage_first,
+            "periodic_hit_first": self.periodic_hit_first,
+            "lasting_duration_first": self.lasting_duration_first,
+            "periodic_interval_second": self.periodic_interval_second,
+            "periodic_damage_second": self.periodic_damage_second,
+            "periodic_hit_second": self.periodic_hit_second,
+            "lasting_duration_second": self.lasting_duration_second,
         }
 
     @reducer_method
@@ -598,7 +647,8 @@ class AdeleRuinComponent(
         state: AdeleRuinState,
     ):
         return cooldown_trait.validity_view(
-            state, self.id, self.name, self._get_cooldown_duration()
+            state,
+            self.get_props(),
         )
 
     @view_method
