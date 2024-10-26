@@ -5,11 +5,9 @@ from inline_snapshot import snapshot
 import simaple.simulate.component.common  # pylint: disable=W0611
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
-from simaple.container.simulation import get_damage_calculator, get_operation_engine
+from simaple.container.simulation import get_damage_calculator
 from simaple.core.jobtype import JobType
-from simaple.data.jobs.builtin import get_builtin_strategy
 from simaple.simulate.report.base import SimulationEntry
-from simaple.simulate.strategy.base import exec_by_strategy
 from simaple.container.usecase.builtin import get_engine
 from simaple.simulate.policy.parser import parse_simaple_runtime
 
@@ -42,43 +40,17 @@ def run_actor(environment_provider: BaselineEnvironmentProvider, jobtype: JobTyp
         os.path.join(os.path.dirname(__file__), ".memo.simaple.json")
     ).compute_environment(environment_provider)
     
-    if environment.jobtype in (
-        JobType.mechanic, 
-        JobType.archmagefb,
-        JobType.archmagetc,
-        JobType.bishop,
-        JobType.adele,
-        JobType.windbreaker,
-        JobType.soulmaster,
-        JobType.dualblade,
-    ):
-        engine = get_engine(environment)
-    else:
-        engine = get_operation_engine(environment)
+    engine = get_engine(environment)
 
-    if environment.jobtype in (
-        JobType.mechanic, 
-        JobType.archmagefb,
-        JobType.archmagetc,
-        JobType.bishop,
-        JobType.adele,
-        JobType.windbreaker,
-        JobType.soulmaster,
-        JobType.dualblade,
-    ):
-        with open(os.path.join(os.path.dirname(__file__), "asset", f"{environment.jobtype.value}.simaple"), "r") as f:
-            _, commands = parse_simaple_runtime(f.read())
+    with open(os.path.join(os.path.dirname(__file__), "asset", f"{environment.jobtype.value}.simaple"), "r") as f:
+        _, commands = parse_simaple_runtime(f.read())
 
-        for command in commands:
-            engine.exec(command)
-    else:
-        policy = get_builtin_strategy(environment.jobtype).get_priority_based_policy()
-
-        while engine.get_current_viewer()("clock") < 50_000:
-            exec_by_strategy(engine, policy)
+    for command in commands:
+        engine.exec(command)
 
     report = list(engine.simulation_entries())
 
+    """
     with open("operation.log", "w") as f:
         for op in engine.operation_logs():
             f.write(op.command.expr +'\n')
@@ -87,6 +59,7 @@ def run_actor(environment_provider: BaselineEnvironmentProvider, jobtype: JobTyp
         for op in engine.operation_logs():
             for playlog in op.playlogs:
                 f.write(f"{playlog.clock} | {playlog.action} | {playlog.events} \n")
+    """
 
     damage_calculator = get_damage_calculator(environment)
 
