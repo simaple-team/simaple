@@ -50,6 +50,7 @@ def run_actor(environment_provider: BaselineEnvironmentProvider, jobtype: JobTyp
         JobType.adele,
         JobType.windbreaker,
         JobType.soulmaster,
+        JobType.dualblade,
     ):
         engine = get_engine(environment)
     else:
@@ -63,6 +64,7 @@ def run_actor(environment_provider: BaselineEnvironmentProvider, jobtype: JobTyp
         JobType.adele,
         JobType.windbreaker,
         JobType.soulmaster,
+        JobType.dualblade,
     ):
         with open(os.path.join(os.path.dirname(__file__), "asset", f"{environment.jobtype.value}.simaple"), "r") as f:
             _, commands = parse_simaple_runtime(f.read())

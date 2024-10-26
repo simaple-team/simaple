@@ -5,6 +5,7 @@ from simaple.container.usecase.builtin import (
     archmagefb,
     archmagetc,
     bishop,
+    dualblade,
     mechanic,
     soulmaster,
     windbreaker,
@@ -37,6 +38,8 @@ def get_usecase(environment: SimulationEnvironment) -> Usecase:
             return windbreaker.windbreaker_usecase(environment)
         case JobType.soulmaster:
             return soulmaster.soulmaster_usecase(environment)
+        case JobType.dualblade:
+            return dualblade.dualblade_usecase(environment)
         case _:
             raise ValueError(f"Unsupported job type: {environment.jobtype}")
 
