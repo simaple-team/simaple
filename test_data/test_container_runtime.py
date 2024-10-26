@@ -46,6 +46,7 @@ def run_actor(environment_provider: BaselineEnvironmentProvider, jobtype: JobTyp
         JobType.mechanic, 
         JobType.archmagefb,
         JobType.archmagetc,
+        JobType.bishop,
     ):
         engine = get_engine(environment)
     else:
@@ -55,6 +56,7 @@ def run_actor(environment_provider: BaselineEnvironmentProvider, jobtype: JobTyp
         JobType.mechanic, 
         JobType.archmagefb,
         JobType.archmagetc,
+        JobType.bishop,
     ):
         with open(os.path.join(os.path.dirname(__file__), "asset", f"{environment.jobtype.value}.simaple"), "r") as f:
             _, commands = parse_simaple_runtime(f.read())

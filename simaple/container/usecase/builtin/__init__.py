@@ -1,8 +1,7 @@
 from simaple.container.simulation import SimulationEnvironment
-from simaple.container.usecase.builtin import archmagefb, mechanic, archmagetc
-from simaple.core import ActionStat, ExtendedStat, JobType, Stat
 from simaple.container.usecase.base import Usecase
-from simaple.simulate.kms import bare_store, get_builder
+from simaple.container.usecase.builtin import archmagefb, archmagetc, bishop, mechanic
+from simaple.core import ActionStat, ExtendedStat, JobType, Stat
 from simaple.simulate.component.view import (
     BuffParentView,
     InformationParentView,
@@ -10,6 +9,7 @@ from simaple.simulate.component.view import (
     RunningParentView,
     ValidityParentView,
 )
+from simaple.simulate.kms import bare_store, get_builder
 from simaple.simulate.timer import clock_view, timer_delay_dispatcher
 
 
@@ -21,6 +21,8 @@ def get_usecase(environment: SimulationEnvironment) -> Usecase:
             return archmagefb.archmagefb_usecase(environment)
         case JobType.archmagetc:
             return archmagetc.archmagetc_usecase(environment)
+        case JobType.bishop:
+            return bishop.bishop_usecase(environment)
         case _:
             raise ValueError(f"Unsupported job type: {environment.jobtype}")
 
@@ -36,7 +38,6 @@ def get_engine(environment: SimulationEnvironment):
     usecase.add_view("buff", BuffParentView.build(usecase.build_viewset()))
     usecase.add_view("running", RunningParentView.build(usecase.build_viewset()))
     usecase.add_view("keydown", KeydownParentView.build(usecase.build_viewset()))
-
 
     store = bare_store(environment.character.action_stat)
     return usecase.create_engine(store)
