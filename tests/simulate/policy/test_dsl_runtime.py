@@ -7,7 +7,8 @@ from inline_snapshot import snapshot
 import simaple.simulate.component.common  # noqa: F401
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
-from simaple.container.simulation import get_damage_calculator, get_operation_engine
+from simaple.container.simulation import get_damage_calculator
+from simaple.container.usecase.builtin import get_engine
 from simaple.core.jobtype import JobType
 from simaple.simulate.policy.parser import parse_dsl_to_operations
 
@@ -40,7 +41,7 @@ def test_dsl(
     ).compute_environment(
         dsl_test_setting,
     )
-    engine = get_operation_engine(environment)
+    engine = get_engine(environment)
 
     for dsl in dsl_list:
         operations = parse_dsl_to_operations(dsl)

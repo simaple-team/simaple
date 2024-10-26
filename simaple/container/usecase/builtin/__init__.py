@@ -1,5 +1,6 @@
+import simaple.simulate.component.common  # noqa: F401
+import simaple.simulate.component.specific  # noqa: F401
 from simaple.container.simulation import SimulationEnvironment
-from simaple.container.usecase.base import Usecase
 from simaple.container.usecase.builtin import (
     adele,
     archmagefb,
@@ -11,6 +12,7 @@ from simaple.container.usecase.builtin import (
     windbreaker,
 )
 from simaple.core import JobType
+from simaple.core.base import ActionStat
 from simaple.simulate.component.view import (
     BuffParentView,
     InformationParentView,
@@ -18,8 +20,16 @@ from simaple.simulate.component.view import (
     RunningParentView,
     ValidityParentView,
 )
-from simaple.simulate.kms import bare_store
+from simaple.simulate.core.store import AddressedStore, ConcreteStore
+from simaple.simulate.global_property import GlobalProperty
 from simaple.simulate.timer import clock_view, timer_delay_dispatcher
+from simaple.simulate.usecase import Usecase
+
+
+def bare_store(action_stat: ActionStat) -> AddressedStore:
+    store = AddressedStore(ConcreteStore())
+    GlobalProperty(action_stat).install_global_properties(store)
+    return store
 
 
 def get_usecase(environment: SimulationEnvironment) -> Usecase:

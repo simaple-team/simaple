@@ -4,8 +4,6 @@ from simaple.core import ActionStat, ExtendedStat, JobType, Stat
 from simaple.data.jobs import get_skill_profile
 from simaple.data.jobs.builtin import build_skills, get_damage_logic
 from simaple.simulate.component.base import Component
-from simaple.simulate.engine import OperationEngine
-from simaple.simulate.kms import get_builder
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 
 
@@ -104,12 +102,3 @@ improvement name passed to level: {hexa_improvement_name} is not in {skill_profi
             "combat_orders_level": environment.combat_orders_level,
         },
     )
-
-
-def get_operation_engine(environment: SimulationEnvironment) -> OperationEngine:
-    skills = get_skill_components(environment)
-    for skill in skills:
-        print(skill.name)
-
-    builder = get_builder(skills, environment.character.action_stat)
-    return builder.build_operation_engine()

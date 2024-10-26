@@ -1,6 +1,6 @@
 from simaple.container.simulation import SimulationEnvironment
-from simaple.container.usecase.base import Usecase
 from simaple.container.usecase.builtin.util import get_component_loader
+from simaple.simulate.usecase import Usecase
 
 
 def mechanic_usecase(environment: SimulationEnvironment) -> Usecase:

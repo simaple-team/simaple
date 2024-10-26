@@ -8,7 +8,7 @@ from typing_extensions import TypedDict
 
 from simaple.core import Stat
 from simaple.simulate.core import Action, ActionSignature, Event
-from simaple.simulate.core.reducer import Listener, ReducerType, UnsafeReducer
+from simaple.simulate.core.reducer import ReducerType, UnsafeReducer
 from simaple.simulate.core.store import Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import GlobalProperty
@@ -245,44 +245,6 @@ def _old_signature_to_new_signature(old_signature: str) -> ActionSignature:
     return split[0], ".".join(split[1:])
 
 
-def listening_actions_to_listeners(
-    owner_name: str, listening_actions: dict[str, Union[str, StaticPayloadReducerInfo]]
-) -> list[Listener]:
-    listeners: list[Listener] = []
-
-    for (
-        listening_old_signature,
-        target_method_name_or_static_payload,
-    ) in listening_actions.items():
-        action_signature = _old_signature_to_new_signature(listening_old_signature)
-        if isinstance(target_method_name_or_static_payload, str):
-            listeners.append(
-                {
-                    "action_name_or_reserved_values": action_signature[0],
-                    "action_method": action_signature[1],
-                    "target_reducer_name": (
-                        owner_name,
-                        target_method_name_or_static_payload,
-                    ),
-                    "payload": None,
-                }
-            )
-        else:
-            listeners.append(
-                {
-                    "action_name_or_reserved_values": action_signature[0],
-                    "action_method": action_signature[1],
-                    "target_reducer_name": (
-                        owner_name,
-                        target_method_name_or_static_payload.name,
-                    ),
-                    "payload": target_method_name_or_static_payload.payload,
-                }
-            )
-
-    return listeners
-
-
 class ComponentInformation(TypedDict):
     id: int
     name: str
@@ -308,9 +270,6 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     name: str
     modifier: Optional[Stat] = None
 
-    listening_actions: dict[str, Union[str, StaticPayloadReducerInfo]] = Field(
-        default_factory=dict
-    )  # Access by external only
     binds: dict[str, str] = Field(default_factory=dict)
     addons: list[_ComponentAddon] = Field(default_factory=list)
 

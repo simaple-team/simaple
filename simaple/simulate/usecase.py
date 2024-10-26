@@ -3,6 +3,7 @@ from collections import defaultdict
 from simaple.simulate.component.base import Component, init_component_store
 from simaple.simulate.core.action import Action, get_action_signature
 from simaple.simulate.core.reducer import ReducerType
+from simaple.simulate.core.runtime import SimulationRuntime
 from simaple.simulate.core.store import Store
 from simaple.simulate.core.view import View, ViewSet
 from simaple.simulate.engine import BasicOperationEngine, OperationEngine
@@ -67,4 +68,14 @@ class Usecase:
             store,
             self.build_viewset(),
             get_operation_handlers(),
+        )
+
+    def create_simulation_runtime(self, store) -> SimulationRuntime:
+        for initial_state_name, initial_state in self._initial_states.items():
+            init_component_store(initial_state_name, initial_state, store)
+
+        return SimulationRuntime(
+            reducer=self.build_root_reducer(),
+            store=store,
+            viewset=self.build_viewset(),
         )
