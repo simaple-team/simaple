@@ -7,7 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import TypedDict
 
 from simaple.core import Stat
-from simaple.simulate.core import Action, ActionSignature, Entity, Event
+from simaple.simulate.core import Action, ActionSignature, Event
 from simaple.simulate.core.reducer import Listener, ReducerType, UnsafeReducer
 from simaple.simulate.core.store import Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
