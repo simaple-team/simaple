@@ -271,7 +271,14 @@
           "$ref": "#/$defs/Action"
         },
         "checkpoint": {
-          "$ref": "#/$defs/Checkpoint"
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Checkpoint"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "total_damage": {
           "title": "Total Damage",

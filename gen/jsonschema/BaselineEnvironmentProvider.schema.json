@@ -143,6 +143,30 @@
       "title": "Hexa Improvements Level",
       "type": "integer"
     },
+    "hexa_mastery_skill_levels": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "default": {},
+      "title": "Hexa Mastery Skill Levels",
+      "type": "object"
+    },
+    "hexa_skill_levels": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "default": {},
+      "title": "Hexa Skill Levels",
+      "type": "object"
+    },
+    "hexa_improvement_levels": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "default": {},
+      "title": "Hexa Improvement Levels",
+      "type": "object"
+    },
     "weapon_attack_power": {
       "default": 0,
       "title": "Weapon Attack Power",

@@ -1,9 +1,161 @@
 {
   "$defs": {
-    "StaticPayloadReducerInfo": {
+    "Stat": {
+      "additionalProperties": false,
       "properties": {
-        "name": {
-          "title": "Name",
+        "STR": {
+          "default": 0.0,
+          "title": "Str",
+          "type": "number"
+        },
+        "LUK": {
+          "default": 0.0,
+          "title": "Luk",
+          "type": "number"
+        },
+        "INT": {
+          "default": 0.0,
+          "title": "Int",
+          "type": "number"
+        },
+        "DEX": {
+          "default": 0.0,
+          "title": "Dex",
+          "type": "number"
+        },
+        "STR_multiplier": {
+          "default": 0.0,
+          "title": "Str Multiplier",
+          "type": "number"
+        },
+        "LUK_multiplier": {
+          "default": 0.0,
+          "title": "Luk Multiplier",
+          "type": "number"
+        },
+        "INT_multiplier": {
+          "default": 0.0,
+          "title": "Int Multiplier",
+          "type": "number"
+        },
+        "DEX_multiplier": {
+          "default": 0.0,
+          "title": "Dex Multiplier",
+          "type": "number"
+        },
+        "STR_static": {
+          "default": 0.0,
+          "title": "Str Static",
+          "type": "number"
+        },
+        "LUK_static": {
+          "default": 0.0,
+          "title": "Luk Static",
+          "type": "number"
+        },
+        "INT_static": {
+          "default": 0.0,
+          "title": "Int Static",
+          "type": "number"
+        },
+        "DEX_static": {
+          "default": 0.0,
+          "title": "Dex Static",
+          "type": "number"
+        },
+        "attack_power": {
+          "default": 0.0,
+          "title": "Attack Power",
+          "type": "number"
+        },
+        "magic_attack": {
+          "default": 0.0,
+          "title": "Magic Attack",
+          "type": "number"
+        },
+        "attack_power_multiplier": {
+          "default": 0.0,
+          "title": "Attack Power Multiplier",
+          "type": "number"
+        },
+        "magic_attack_multiplier": {
+          "default": 0.0,
+          "title": "Magic Attack Multiplier",
+          "type": "number"
+        },
+        "critical_rate": {
+          "default": 0.0,
+          "title": "Critical Rate",
+          "type": "number"
+        },
+        "critical_damage": {
+          "default": 0.0,
+          "title": "Critical Damage",
+          "type": "number"
+        },
+        "boss_damage_multiplier": {
+          "default": 0.0,
+          "title": "Boss Damage Multiplier",
+          "type": "number"
+        },
+        "damage_multiplier": {
+          "default": 0.0,
+          "title": "Damage Multiplier",
+          "type": "number"
+        },
+        "final_damage_multiplier": {
+          "default": 0.0,
+          "title": "Final Damage Multiplier",
+          "type": "number"
+        },
+        "ignored_defence": {
+          "default": 0.0,
+          "title": "Ignored Defence",
+          "type": "number"
+        },
+        "MHP": {
+          "default": 0.0,
+          "title": "Mhp",
+          "type": "number"
+        },
+        "MMP": {
+          "default": 0.0,
+          "title": "Mmp",
+          "type": "number"
+        },
+        "MHP_multiplier": {
+          "default": 0.0,
+          "title": "Mhp Multiplier",
+          "type": "number"
+        },
+        "MMP_multiplier": {
+          "default": 0.0,
+          "title": "Mmp Multiplier",
+          "type": "number"
+        },
+        "elemental_resistance": {
+          "default": 0.0,
+          "title": "Elemental Resistance",
+          "type": "number"
+        }
+      },
+      "title": "Stat",
+      "type": "object"
+    },
+    "_ComponentAddon": {
+      "additionalProperties": false,
+      "description": "ComponentAddon is plug-and-play definition for inter-component communication.",
+      "properties": {
+        "when": {
+          "title": "When",
+          "type": "string"
+        },
+        "destination": {
+          "title": "Destination",
+          "type": "string"
+        },
+        "method": {
+          "title": "Method",
           "type": "string"
         },
         "payload": {
@@ -12,10 +164,12 @@
         }
       },
       "required": [
-        "name",
+        "when",
+        "destination",
+        "method",
         "payload"
       ],
-      "title": "StaticPayloadReducerInfo",
+      "title": "_ComponentAddon",
       "type": "object"
     }
   },
@@ -29,19 +183,16 @@
       "title": "Name",
       "type": "string"
     },
-    "listening_actions": {
-      "additionalProperties": {
-        "anyOf": [
-          {
-            "type": "string"
-          },
-          {
-            "$ref": "#/$defs/StaticPayloadReducerInfo"
-          }
-        ]
-      },
-      "title": "Listening Actions",
-      "type": "object"
+    "modifier": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Stat"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "binds": {
       "additionalProperties": {
@@ -49,6 +200,13 @@
       },
       "title": "Binds",
       "type": "object"
+    },
+    "addons": {
+      "items": {
+        "$ref": "#/$defs/_ComponentAddon"
+      },
+      "title": "Addons",
+      "type": "array"
     }
   },
   "required": [
