@@ -1,6 +1,9 @@
 from simaple.container.simulation import SimulationEnvironment
 from simaple.container.usecase.base import Usecase
-from simaple.container.usecase.builtin import archmagefb, archmagetc, bishop, mechanic
+from simaple.container.usecase.builtin import (
+    archmagefb, archmagetc, bishop, mechanic,
+    adele
+)
 from simaple.core import ActionStat, ExtendedStat, JobType, Stat
 from simaple.simulate.component.view import (
     BuffParentView,
@@ -23,6 +26,8 @@ def get_usecase(environment: SimulationEnvironment) -> Usecase:
             return archmagetc.archmagetc_usecase(environment)
         case JobType.bishop:
             return bishop.bishop_usecase(environment)
+        case JobType.adele:
+            return adele.adele_usecase(environment)
         case _:
             raise ValueError(f"Unsupported job type: {environment.jobtype}")
 
