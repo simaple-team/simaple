@@ -44,13 +44,18 @@ def run_actor(environment_provider: BaselineEnvironmentProvider, jobtype: JobTyp
     
     if environment.jobtype in (
         JobType.mechanic, 
-        JobType.archmagefb
+        JobType.archmagefb,
+        JobType.archmagetc,
     ):
         engine = get_engine(environment)
     else:
         engine = get_operation_engine(environment)
 
-    if environment.jobtype in (JobType.mechanic, JobType.archmagefb):
+    if environment.jobtype in (
+        JobType.mechanic, 
+        JobType.archmagefb,
+        JobType.archmagetc,
+    ):
         with open(os.path.join(os.path.dirname(__file__), "asset", f"{environment.jobtype.value}.simaple"), "r") as f:
             _, commands = parse_simaple_runtime(f.read())
 

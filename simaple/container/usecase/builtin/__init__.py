@@ -1,13 +1,42 @@
 from simaple.container.simulation import SimulationEnvironment
-from simaple.container.usecase.builtin import archmagefb, mechanic
+from simaple.container.usecase.builtin import archmagefb, mechanic, archmagetc
 from simaple.core import ActionStat, ExtendedStat, JobType, Stat
+from simaple.container.usecase.base import Usecase
+from simaple.simulate.kms import bare_store, get_builder
+from simaple.simulate.component.view import (
+    BuffParentView,
+    InformationParentView,
+    KeydownParentView,
+    RunningParentView,
+    ValidityParentView,
+)
+from simaple.simulate.timer import clock_view, timer_delay_dispatcher
+
+
+def get_usecase(environment: SimulationEnvironment) -> Usecase:
+    match environment.jobtype:
+        case JobType.mechanic:
+            return mechanic.mechanic_usecase(environment)
+        case JobType.archmagefb:
+            return archmagefb.archmagefb_usecase(environment)
+        case JobType.archmagetc:
+            return archmagetc.archmagetc_usecase(environment)
+        case _:
+            raise ValueError(f"Unsupported job type: {environment.jobtype}")
 
 
 def get_engine(environment: SimulationEnvironment):
-    match environment.jobtype:
-        case JobType.mechanic:
-            return mechanic.mechanic_engine(environment)
-        case JobType.archmagefb:
-            return archmagefb.archmagefb_engine(environment)
-        case _:
-            raise ValueError(f"Unsupported job type: {environment.jobtype}")
+    usecase = get_usecase(environment)
+
+    usecase.listen(("*", "elapse"), timer_delay_dispatcher)
+    usecase.add_view("clock", clock_view)
+
+    usecase.add_view("info", InformationParentView.build(usecase.build_viewset()))
+    usecase.add_view("validity", ValidityParentView.build(usecase.build_viewset()))
+    usecase.add_view("buff", BuffParentView.build(usecase.build_viewset()))
+    usecase.add_view("running", RunningParentView.build(usecase.build_viewset()))
+    usecase.add_view("keydown", KeydownParentView.build(usecase.build_viewset()))
+
+
+    store = bare_store(environment.character.action_stat)
+    return usecase.create_engine(store)

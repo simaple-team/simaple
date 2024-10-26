@@ -9,21 +9,13 @@ from simaple.core import ActionStat, ExtendedStat, JobType, Stat
 from simaple.data.jobs import get_skill_profile
 from simaple.data.jobs.builtin import build_skills, get_damage_logic
 from simaple.simulate.component.base import Component
-from simaple.simulate.component.view import (
-    BuffParentView,
-    InformationParentView,
-    KeydownParentView,
-    RunningParentView,
-    ValidityParentView,
-)
 from simaple.simulate.core.store import AddressedStore, ConcreteStore
 from simaple.simulate.engine import OperationEngine
 from simaple.simulate.kms import bare_store, get_builder
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
-from simaple.simulate.timer import clock_view, timer_delay_dispatcher
 
 
-def mechanic_engine(environment: SimulationEnvironment):
+def mechanic_usecase(environment: SimulationEnvironment) -> Usecase:
 
     mechanic_component = get_component_loader(environment)
     usecase = Usecase()
@@ -61,15 +53,6 @@ def mechanic_engine(environment: SimulationEnvironment):
     usecase.use_component(mechanic_component("평범한 몬스터"))
     usecase.use_component(mechanic_component("메이플월드 여신의 축복"))
 
-    usecase.listen(("*", "elapse"), timer_delay_dispatcher)
-    usecase.add_view("clock", clock_view)
-
-    usecase.add_view("info", InformationParentView.build(usecase.build_viewset()))
-    usecase.add_view("validity", ValidityParentView.build(usecase.build_viewset()))
-    usecase.add_view("buff", BuffParentView.build(usecase.build_viewset()))
-    usecase.add_view("running", RunningParentView.build(usecase.build_viewset()))
-    usecase.add_view("keydown", KeydownParentView.build(usecase.build_viewset()))
-
     usecase.listen(
         ("매시브 파이어: IRON-B VI", "use.emitted.global.damage"),
         mechanic_component("매시브 파이어: IRON-B VI (폭발)").reducer("use"),
@@ -79,6 +62,4 @@ def mechanic_engine(environment: SimulationEnvironment):
         mechanic_component("호밍 미사일 VI").reducer("pause"),
     )
 
-    store = bare_store(environment.character.action_stat)
-
-    return usecase.create_engine(store)
+    return usecase

@@ -13,7 +13,7 @@ from simaple.simulate.timer import clock_view, timer_delay_dispatcher
 
 
 # fmt: off
-def archmagefb_engine(environment: SimulationEnvironment):
+def archmagefb_usecase(environment: SimulationEnvironment) -> Usecase:
 
     component = get_component_loader(environment)
     usecase = Usecase()
@@ -53,18 +53,6 @@ def archmagefb_engine(environment: SimulationEnvironment):
     usecase.use_component(component("메이플월드 여신의 축복"))
     usecase.use_component(component("평범한 몬스터"))
 
-
-
-
-    usecase.listen(("*", "elapse"), timer_delay_dispatcher)
-    usecase.add_view("clock", clock_view)
-
-    usecase.add_view("info", InformationParentView.build(usecase.build_viewset()))
-    usecase.add_view("validity", ValidityParentView.build(usecase.build_viewset()))
-    usecase.add_view("buff", BuffParentView.build(usecase.build_viewset()))
-    usecase.add_view("running", RunningParentView.build(usecase.build_viewset()))
-    usecase.add_view("keydown", KeydownParentView.build(usecase.build_viewset()))
-
     usecase.listen(("미스트 이럽션 VI", "use.emitted.global.damage"), component("플레임 헤이즈 VI").reducer("reset_cooldown"))
 
     usecase.listen(("미스트 이럽션 VI", "use"), component("포이즌 노바").reducer("trigger"))
@@ -95,9 +83,5 @@ def archmagefb_engine(environment: SimulationEnvironment):
     usecase.listen(("플레임 헤이즈 VI", "use.emitted.global.mob"), component("평범한 몬스터").reducer("add_dot"))
     usecase.listen(("도트 퍼니셔", "use.emitted.global.mob"), component("평범한 몬스터").reducer("add_dot"))
 
-    store = bare_store(environment.character.action_stat)
-
-
-
-    return usecase.create_engine(store)
+    return usecase
 # fmt: on
