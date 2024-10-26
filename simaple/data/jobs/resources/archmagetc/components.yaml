@@ -10,14 +10,6 @@ metadata:
     id: 2220015-0
 data:
   id: 2220015-0
-  listening_actions:
-    프로즌 오브.elapse.emitted.global.damage: increase_step
-    프로즌 오브 VI.elapse.emitted.global.damage: increase_step
-    블리자드.use.emitted.global.damage: increase_step
-    엘퀴네스.elapse.emitted.global.damage: increase_step
-    아이스 오라.elapse.emitted.global.damage: increase_step
-    아이스 에이지.elapse.emitted.global.damage: increase_step
-    스피릿 오브 스노우.elapse.emitted.global.damage: increase_three
   name: 프로스트 이펙트
   critical_damage_per_stack: 3
   maximum_stack: 5
@@ -125,11 +117,6 @@ patch:
 data:
   id: 2221007-1
   name: 블리자드(패시브)
-  listening_actions:
-    체인 라이트닝.use.emitted.global.damage: use
-    체인 라이트닝 VI.use.emitted.global.damage: use
-    프로즌 오브.elapse.emitted.global.damage: use
-    프로즌 오브 VI.elapse.emitted.global.damage: use
   delay: 0
   cooldown_duration: 0
   damage: "{{ 100 + 4 * skill_level }}"
@@ -468,12 +455,6 @@ data:
   id: 2221007-1-passive-vi
   name: 블리자드 VI(패시브)
   representative_name: 블리자드(패시브)
-
-  listening_actions:
-    체인 라이트닝.use.emitted.global.damage: use
-    체인 라이트닝 VI.use.emitted.global.damage: use
-    프로즌 오브.elapse.emitted.global.damage: use
-    프로즌 오브 VI.elapse.emitted.global.damage: use
   delay: 0
   cooldown_duration: 0
   damage: "{{ 220 + skill_level * 5 }}"

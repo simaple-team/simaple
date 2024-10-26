@@ -146,15 +146,6 @@ patch:
   - ArithmeticPatch
   - VSkillImprovementPatch
 data:
-  listening_actions:
-    핀포인트 피어스.use.emitted.global.damage: trigger
-    천공의 노래.elapse.emitted.global.damage: trigger
-    천공의 노래.stop.emitted.global.damage: trigger
-    천공의 노래 VI.elapse.emitted.global.damage: trigger
-    천공의 노래 VI.stop.emitted.global.damage: trigger
-    하울링 게일.elapse.emitted.global.damage: trigger
-    시그너스 팔랑크스.elapse.emitted.global.damage: trigger
-    볼텍스 스피어.elapse.emitted.global.damage: trigger
   id: 13121054-0
   name: 스톰 브링어
   trigger_cooldown_duration: 0
@@ -181,15 +172,6 @@ patch:
   - ArithmeticPatch
   - VSkillImprovementPatch
 data:
-  listening_actions:
-    핀포인트 피어스.use.emitted.global.damage: trigger
-    천공의 노래.elapse.emitted.global.damage: trigger
-    천공의 노래.stop.emitted.global.damage: trigger
-    천공의 노래 VI.elapse.emitted.global.damage: trigger
-    천공의 노래 VI.stop.emitted.global.damage: trigger
-    하울링 게일.elapse.emitted.global.damage: trigger
-    시그너스 팔랑크스.elapse.emitted.global.damage: trigger
-    볼텍스 스피어.elapse.emitted.global.damage: trigger
   id: 13101022-0
   name: 트라이플링 윔
   trigger_cooldown_duration: 0
@@ -217,15 +199,6 @@ patch:
   - VSkillImprovementPatch
 data:
   id: 13121055-0
-  listening_actions:
-    핀포인트 피어스.use.emitted.global.damage: trigger
-    천공의 노래.elapse.emitted.global.damage: trigger
-    천공의 노래.stop.emitted.global.damage: trigger
-    천공의 노래 VI.elapse.emitted.global.damage: trigger
-    천공의 노래 VI.stop.emitted.global.damage: trigger
-    하울링 게일.elapse.emitted.global.damage: trigger
-    시그너스 팔랑크스.elapse.emitted.global.damage: trigger
-    볼텍스 스피어.elapse.emitted.global.damage: trigger
   name: 스톰 윔
   trigger_cooldown_duration: 0
   trigger_damage: 560
@@ -323,15 +296,6 @@ patch:
   - ArithmeticPatch
   - HexaSkillImprovementPatch
 data:
-  listening_actions:
-    핀포인트 피어스.use.emitted.global.damage: trigger
-    천공의 노래.elapse.emitted.global.damage: trigger
-    천공의 노래.stop.emitted.global.damage: trigger
-    천공의 노래 VI.elapse.emitted.global.damage: trigger
-    천공의 노래 VI.stop.emitted.global.damage: trigger
-    하울링 게일.elapse.emitted.global.damage: trigger
-    시그너스 팔랑크스.elapse.emitted.global.damage: trigger
-    볼텍스 스피어.elapse.emitted.global.damage: trigger
   id: 400031030-0
   name: 윈드 월
   trigger_cooldown_duration: 2_000
@@ -431,15 +395,6 @@ patch:
   - ArithmeticPatch
   - VSkillImprovementPatch
 data:
-  listening_actions:
-    핀포인트 피어스.use.emitted.global.damage: trigger
-    천공의 노래.elapse.emitted.global.damage: trigger
-    천공의 노래.stop.emitted.global.damage: trigger
-    천공의 노래 VI.elapse.emitted.global.damage: trigger
-    천공의 노래 VI.stop.emitted.global.damage: trigger
-    하울링 게일.elapse.emitted.global.damage: trigger
-    시그너스 팔랑크스.elapse.emitted.global.damage: trigger
-    볼텍스 스피어.elapse.emitted.global.damage: trigger
   id: 13101022-0vi
   name: 트라이플링 윔 VI
   representative_name: 트라이플링 윔

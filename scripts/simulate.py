@@ -6,7 +6,8 @@ import fire
 import simaple.simulate.component.common  # noqa: F401
 from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.plan_metadata import PlanMetadata
-from simaple.container.simulation import get_damage_calculator, get_operation_engine
+from simaple.container.simulation import get_damage_calculator
+from simaple.container.usecase.builtin import get_engine
 from simaple.simulate.core.runtime import PlayLog
 from simaple.simulate.policy.parser import parse_simaple_runtime
 from simaple.simulate.report.base import SimulationEntry
@@ -66,7 +67,7 @@ def run(plan_file: str):
         plan_metadata.get_environment_provider_config()  # type: ignore
     )
 
-    engine = get_operation_engine(environment)
+    engine = get_engine(environment)
     damage_calculator = get_damage_calculator(environment)
     damage_share = DamageShareFeature(damage_calculator)
 

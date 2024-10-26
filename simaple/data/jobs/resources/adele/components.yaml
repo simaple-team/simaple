@@ -14,12 +14,6 @@ patch:
 data:
   id: 151100017-0
   name: 에테르
-  listening_actions:
-    "디바이드.use.emitted.global.delay": "trigger"
-    "디바이드 VI.use.emitted.global.damage": "trigger"
-    "레조넌스.use.emitted.global.delay": "resonance"
-    "오더.use.emitted.global.delay": "order"
-    "오더 VI.use.emitted.global.delay": "order"
   periodic_interval: 10020
   maximum_stack: 400
   stack_per_period: 5
@@ -69,10 +63,6 @@ patch:
 data:
   id: 151101013-0
   name: 원더
-  listening_actions:
-    디바이드.use.emitted.global.damage: use_with_ignore_reject
-    "디바이드 VI.use.emitted.global.damage": use_with_ignore_reject
-
   delay: 0
   damage: "{{ 80 + 30 + 115 + 135 + 3 * skill_level }}"
   hit: 15
@@ -120,9 +110,6 @@ metadata:
 data:
   id: 151101004-1
   name: 레조넌스(버프)
-  listening_actions:
-    레조넌스.use.emitted.global.damage: use
-
   delay: 0
   cooldown_duration: 0
   maximum_stack: 2
@@ -149,9 +136,6 @@ patch:
 data:
   id: 151101006-0
   name: 크리에이션
-  listening_actions:
-    "디바이드.use": "trigger"
-    "디바이드 VI.use": "trigger"
   delay: 0
   damage: "{{ 200 + 240 + 180 + 3 * skill_level }}"
   hit_per_sword: 1
@@ -269,9 +253,6 @@ metadata:
 data:
   id: 151111002-1
   name: 게더링(디버프)
-  listening_actions:
-    게더링.use.emitted.global.damage: use
-
   delay: 0
   cooldown_duration: 0
   lasting_duration: 30_000
@@ -376,9 +357,6 @@ metadata:
 data:
   id: 151121001-1
   name: 그레이브(디버프)
-  listening_actions:
-    그레이브.use.emitted.global.damage: use
-
   delay: 0
   cooldown_duration: 0
   lasting_duration: 999_999_999
@@ -519,8 +497,6 @@ patch:
   - SkillLevelPatch
   - ArithmeticPatch
 data:
-  listening_actions:
-    리스토어.use.emitted.global.delay: use
   id: 400011109-1
   name: 리스토어(버프)
 
@@ -655,10 +631,6 @@ data:
   id: 151101013-0vi
   name: 원더 VI
   representative_name: 원더
-  listening_actions:
-    디바이드.use.emitted.global.damage: use_with_ignore_reject
-    "디바이드 VI.use.emitted.global.damage": use_with_ignore_reject
-
   delay: 0
   damage: "{{ 480 + 8 * skill_level }}"
   hit: 15

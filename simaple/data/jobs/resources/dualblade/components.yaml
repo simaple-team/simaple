@@ -66,8 +66,6 @@ patch:
 data:
   id: 4341002-0
   name: 파이널 컷
-  listening_actions:
-    써든레이드.use.emitted.global.delay": sudden_raid
   cooldown_duration: 90000
   red: True
   delay: 450 # 임의 딜레이
@@ -90,8 +88,6 @@ patch:
   - SkillLevelPatch
   - ArithmeticPatch
 data:
-  listening_actions:
-    "파이널 컷.use.emitted.global.delay": use
   id: 4341002-1
   name: 파이널 컷(버프)
   cooldown_duration: 0
@@ -133,8 +129,6 @@ metadata:
     name: 플래시 뱅(버프)
     id: 4321002-1
 data:
-  listening_actions:
-    "플래시 뱅.use.emitted.global.delay": use
   id: 4321002-1
   name: 플래시 뱅(버프)
   cooldown_duration: 0
@@ -158,20 +152,6 @@ patch:
 data:
   id: 4341054-0
   name: 히든 블레이드
-  listening_actions:
-    "아수라.elapse.emitted.global.damage": trigger
-    "아수라 VI.elapse.emitted.global.damage": trigger
-    "팬텀 블로우.use.emitted.global.damage": trigger
-    "팬텀 블로우 VI.use.emitted.global.damage": trigger
-    "써든레이드.use.emitted.global.damage": trigger
-    "플래시 뱅.use.emitted.global.damage": trigger
-    "파이널 컷.use.emitted.global.damage": trigger
-    "블레이드 스톰.use.emitted.global.damage": trigger
-    "블레이드 스톰.elapse.emitted.global.damage": trigger
-    "카르마 퓨리.elapse.emitted.global.damage": trigger
-    "블레이드 토네이도.use.emitted.global.damage": trigger
-    "블레이드 토네이도.elapse.emitted.global.damage": trigger
-    "헌티드 엣지 - 나찰.use.emitted.global.damage": trigger
   delay: 0
   cooldown_duration: 0
   lasting_duration: 90000
@@ -327,10 +307,6 @@ patch:
 data:
   id: 400041075-0
   name: 헌티드 엣지 - 나찰
-  listening_actions:
-    "팬텀 블로우.use.emitted.global.delay": use
-    "팬텀 블로우 VI.use.emitted.global.delay": use
-
   damage: "{{ 435 + skill_level * 17 }}"
   delay: 0
   hit: "{{ 4 * 5 }}"
@@ -482,22 +458,6 @@ patch:
 data:
   id: 4361500-1
   name: 카르마 블레이드 (업보의 칼날)
-  listening_actions:
-    "카르마 블레이드.use.done.global.delay": use
-    "아수라.elapse.emitted.global.damage": trigger
-    "아수라 VI.elapse.emitted.global.damage": trigger
-    "팬텀 블로우.use.emitted.global.damage": trigger
-    "팬텀 블로우 VI.use.emitted.global.damage": trigger
-    "써든레이드.use.emitted.global.damage": trigger
-    "플래시 뱅.use.emitted.global.damage": trigger
-    "파이널 컷.use.emitted.global.damage": trigger
-    "블레이드 스톰.use.emitted.global.damage": trigger
-    "블레이드 스톰.elapse.emitted.global.damage": trigger
-    "카르마 퓨리.elapse.emitted.global.damage": trigger
-    "블레이드 토네이도.use.emitted.global.damage": trigger
-    "블레이드 토네이도.elapse.emitted.global.damage": trigger
-    "헌티드 엣지 - 나찰.use.emitted.global.damage": trigger
-
   damage: "{{ 561 + skill_level * 17 }}"
   hit: 8
   delay: 0
