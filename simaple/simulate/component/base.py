@@ -8,7 +8,7 @@ from typing_extensions import TypedDict
 
 from simaple.core import Stat
 from simaple.simulate.core import Action, ActionSignature, Entity, Event
-from simaple.simulate.core.reducer import Listener, UnsafeReducer
+from simaple.simulate.core.reducer import Listener, ReducerType, UnsafeReducer
 from simaple.simulate.core.store import Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import GlobalProperty
@@ -19,7 +19,6 @@ WILD_CARD = "*"
 
 StateT = TypeVar("StateT")
 
-ReducerType = Callable[..., tuple[Union[tuple[Entity], Entity], Any]]
 ReducerPrecursorType = Callable[[Any, Any, StateT], tuple[StateT, list[Event]]]
 
 ReducerPrecursorTypeT = TypeVar("ReducerPrecursorTypeT", bound=ReducerPrecursorType)
@@ -323,6 +322,26 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     @property
     def event_provider(self) -> EventProvider:
         return NamedEventProvider(self.name, self.modifier)
+
+    def reducer(self, method_name: str) -> ReducerType:
+        if method_name not in getattr(self, "__reducers__"):
+            raise ValueError(f"Reducer {method_name} is not defined in {self.name}")
+
+        bounded_stores = GlobalProperty.get_default_binds()
+        bounded_stores.update(self.binds)
+
+        # TODO: remove these lines with explicit state passing
+        model_fields = list(self.get_default_state().keys())
+
+        property_address = _create_binding_with_store(
+            self.name,
+            model_fields,
+            bounded_stores,
+        )
+
+        return event_tagged_reducer(self.name, method_name, self.event_provider)(
+            compile_into_unsafe_reducer(property_address)(getattr(self, method_name))
+        )
 
     def get_unsafe_reducers(self) -> list[UnsafeReducer]:
         if len(getattr(self, "__reducers__")) == 0:

@@ -108,5 +108,8 @@ improvement name passed to level: {hexa_improvement_name} is not in {skill_profi
 
 def get_operation_engine(environment: SimulationEnvironment) -> OperationEngine:
     skills = get_skill_components(environment)
+    for skill in skills:
+        print(skill.name)
+
     builder = get_builder(skills, environment.character.action_stat)
     return builder.build_operation_engine()

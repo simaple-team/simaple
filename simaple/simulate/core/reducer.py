@@ -63,7 +63,6 @@ def _as_static_payload_reducer(
 
 def identity_reducer(reducer: ReducerType) -> ReducerType:
     def identity(action: Action, store: Store) -> list[Event]:
-        print(action)
         return reducer(action, store)
 
     return identity
@@ -73,7 +72,7 @@ def anonymous_reducer(reducer: ReducerType, method_postfix: str) -> ReducerType:
     def _reducer(action: Action, store: Store) -> list[Event]:
         if not action["method"].endswith(method_postfix):
             return []
-        print("!", action)
+
         return reducer(action, store)
 
     return _reducer
@@ -143,15 +142,11 @@ def create_safe_reducer(
         if is_dynamic_target_unsafe_reducers(unsafe_reducer)
     ]
 
-    for k, v in action_signature_to_unsafe_reducers.items():
-        print(k, ">>", len(v), v)
-
     def root_reducer(action: Action, store: Store) -> list[Event]:
         action_signature = get_action_signature(action)
         events = []
 
         if action_signature not in action_signature_to_unsafe_reducers:
-            # print("No reducer for", action_signature)
             for unsafe_reducer in dynamic_target_reducers:
                 events.extend(unsafe_reducer(action, store))
 
