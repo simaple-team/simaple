@@ -1,4 +1,5 @@
 from collections import defaultdict
+from contextlib import contextmanager
 from typing import Callable, Final, Optional, Type, TypedDict
 
 from simaple.simulate.component.base import (

@@ -10,7 +10,7 @@ from simaple.core.jobtype import JobType
 from simaple.data.jobs.builtin import get_builtin_strategy
 from simaple.simulate.report.base import SimulationEntry
 from simaple.simulate.strategy.base import exec_by_strategy
-from simaple.container.usecase.builtin.mechanic import mechanic_engine
+from simaple.container.usecase.builtin import get_engine
 from simaple.simulate.policy.parser import parse_simaple_runtime
 
 
@@ -42,13 +42,16 @@ def run_actor(environment_provider: BaselineEnvironmentProvider, jobtype: JobTyp
         os.path.join(os.path.dirname(__file__), ".memo.simaple.json")
     ).compute_environment(environment_provider)
     
-    if environment.jobtype == JobType.mechanic:
-        engine = mechanic_engine(environment)
+    if environment.jobtype in (
+        JobType.mechanic, 
+        JobType.archmagefb
+    ):
+        engine = get_engine(environment)
     else:
         engine = get_operation_engine(environment)
 
-    if environment.jobtype == JobType.mechanic:
-        with open(os.path.join(os.path.dirname(__file__), "asset", "mechanic.simaple"), "r") as f:
+    if environment.jobtype in (JobType.mechanic, JobType.archmagefb):
+        with open(os.path.join(os.path.dirname(__file__), "asset", f"{environment.jobtype.value}.simaple"), "r") as f:
             _, commands = parse_simaple_runtime(f.read())
 
         for command in commands:

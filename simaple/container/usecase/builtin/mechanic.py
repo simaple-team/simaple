@@ -4,6 +4,7 @@ import pydantic
 
 from simaple.container.simulation import SimulationEnvironment, get_skill_components
 from simaple.container.usecase.base import Usecase
+from simaple.container.usecase.builtin.util import get_component_loader
 from simaple.core import ActionStat, ExtendedStat, JobType, Stat
 from simaple.data.jobs import get_skill_profile
 from simaple.data.jobs.builtin import build_skills, get_damage_logic
@@ -20,17 +21,6 @@ from simaple.simulate.engine import OperationEngine
 from simaple.simulate.kms import bare_store, get_builder
 from simaple.simulate.report.dpm import DamageCalculator, LevelAdvantage
 from simaple.simulate.timer import clock_view, timer_delay_dispatcher
-
-
-def get_component_loader(
-    environment: SimulationEnvironment,
-) -> Callable[[str], Component]:
-    components = {skill.name: skill for skill in get_skill_components(environment)}
-
-    def get_component(name: str) -> Component:
-        return components[name]
-
-    return get_component
 
 
 def mechanic_engine(environment: SimulationEnvironment):
