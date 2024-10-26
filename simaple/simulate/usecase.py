@@ -11,7 +11,7 @@ from simaple.simulate.policy import get_operation_handlers
 
 
 class Usecase:
-    def __init__(self):
+    def __init__(self) -> None:
         self._listeners: dict[tuple[str, str], list[ReducerType]] = defaultdict(list)
         self._views: dict[str, View] = {}
         self._initial_states: dict[str, dict] = {}

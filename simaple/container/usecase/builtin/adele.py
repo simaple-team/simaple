@@ -4,7 +4,7 @@ from simaple.simulate.usecase import Usecase
 
 
 # fmt: off
-def adele_usecase(environment: SimulationEnvironment):
+def adele_usecase(environment: SimulationEnvironment) -> Usecase:
     component = get_component_loader(environment)
     usecase = Usecase()
 

@@ -94,7 +94,7 @@ def tag_events_by_method_name(
 
 def event_tagged_reducer(
     owner_name: str, method_name: str, event_provider: EventProvider
-):
+) -> Callable[[ReducerType], ReducerType]:
     def wrapper(reducer):
         @wraps(reducer)
         def wrapped(action: Action, store: Store) -> list[Event]:
@@ -217,7 +217,7 @@ class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
             if getattr(value, "__isreducer__", False)
         }
         reducers.update(previous_reducers)
-        cls.__reducers__ = frozenset(reducers)
+        cls.__reducers__ = frozenset(reducers)  # type: ignore
 
         previous_views = set()
         for base in bases:
@@ -229,7 +229,7 @@ class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
             if getattr(value, "__isview__", False)
         }
         views.update(previous_views)
-        cls.__views__ = frozenset(views)
+        cls.__views__ = frozenset(views)  # type: ignore
 
         return cls
 

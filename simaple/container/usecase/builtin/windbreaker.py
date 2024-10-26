@@ -4,7 +4,7 @@ from simaple.simulate.usecase import Usecase
 
 
 # fmt: off
-def windbreaker_usecase(environment: SimulationEnvironment):
+def windbreaker_usecase(environment: SimulationEnvironment) -> Usecase:
     component = get_component_loader(environment)
     usecase = Usecase()
 

@@ -4,7 +4,7 @@ from simaple.simulate.usecase import Usecase
 
 
 # fmt: off
-def bishop_usecase(environment: SimulationEnvironment):
+def bishop_usecase(environment: SimulationEnvironment) -> Usecase:
     component = get_component_loader(environment)
     usecase = Usecase()
 
