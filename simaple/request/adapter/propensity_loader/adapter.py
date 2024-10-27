@@ -6,7 +6,7 @@ from simaple.request.adapter.nexon_api import (
     get_character_id,
     get_character_id_param,
 )
-from simaple.request.adapter.propensity_loader._schema import (
+from simaple.request.external.nexon.schema.character.propensity import (
     CharacterPropensityResponse,
 )
 from simaple.request.service.loader import PropensityLoader

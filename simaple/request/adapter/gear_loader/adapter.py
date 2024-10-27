@@ -11,13 +11,6 @@ from simaple.request.adapter.gear_loader._gearset_converter import get_equipment
 from simaple.request.adapter.gear_loader._pet_converter import (
     get_pet_equip_stat_from_response,
 )
-from simaple.request.adapter.gear_loader._schema import (
-    CashItemResponse,
-    CharacterItemEquipment,
-    CharacterSymbolEquipment,
-    PetResponse,
-    SetEffectResponse,
-)
 from simaple.request.adapter.gear_loader._set_item_converter import get_set_item_stats
 from simaple.request.adapter.nexon_api import (
     HOST,
@@ -25,6 +18,13 @@ from simaple.request.adapter.nexon_api import (
     Token,
     get_character_id,
     get_character_id_param,
+)
+from simaple.request.external.nexon.schema.character.item import (
+    CashItemResponse,
+    CharacterItemEquipment,
+    CharacterSymbolEquipment,
+    PetResponse,
+    SetEffectResponse,
 )
 from simaple.request.service.loader import GearLoader
 

@@ -16,7 +16,7 @@ from simaple.request.adapter.translator.kms.union_raider import (
 from simaple.request.adapter.union_loader._converter import (
     get_stat_from_occupation_description,
 )
-from simaple.request.adapter.union_loader._schema import (
+from simaple.request.external.nexon.schema.character.union import (
     CharacterUnionRaiderBlock,
     CharacterUnionRaiderPreset,
     CharacterUnionRaiderResponse,

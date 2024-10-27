@@ -1,9 +1,7 @@
 import re
+from typing import Callable, TypedDict
 
 from simaple.core import ActionStat, ExtendedStat, Stat
-
-from typing import TypedDict
-from typing import Callable 
 
 
 class BuilderCase(TypedDict):
@@ -30,7 +28,7 @@ def get_matched_stat(
     raise ValueError(f"Invalid occupation description: {line}")
 
 
-class SingleStatProvider():
+class SingleStatProvider:
     def __init__(self, stat_name: str):
         self.stat_name = stat_name
 

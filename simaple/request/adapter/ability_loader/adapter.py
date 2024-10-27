@@ -4,15 +4,15 @@ from simaple.core import ExtendedStat
 from simaple.request.adapter.ability_loader._converter import (
     get_ability_stat_from_ability_text,
 )
-from simaple.request.adapter.ability_loader._schema import (
-    CharacterAbilityResponse,
-    _CharacterAbilityLineResponse,
-)
 from simaple.request.adapter.nexon_api import (
     HOST,
     Token,
     get_character_id,
     get_character_id_param,
+)
+from simaple.request.external.nexon.schema.character.ability import (
+    CharacterAbilityResponse,
+    _CharacterAbilityLineResponse,
 )
 from simaple.request.service.loader import AbilityLoader
 from simaple.request.service.util import BestStatSelector, get_best_stat_index

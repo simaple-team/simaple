@@ -4,7 +4,8 @@ from simaple.core import Stat
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository
 from simaple.gear.symbol_gear import SymbolGear
-from simaple.request.adapter.gear_loader._schema import (
+from simaple.request.adapter.translator.kms.potential import kms_potential_translator
+from simaple.request.external.nexon.schema.character.item import (
     CharacterItemElement,
     CharacterItemElementOption,
     CharacterItemEquipment,
@@ -12,7 +13,6 @@ from simaple.request.adapter.gear_loader._schema import (
     CharacterSymbolEquipment,
     OptionValueAndType,
 )
-from simaple.request.adapter.translator.kms.potential import kms_potential_translator
 
 _potential_translator = kms_potential_translator()
 

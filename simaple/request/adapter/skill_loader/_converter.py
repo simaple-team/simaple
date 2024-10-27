@@ -20,13 +20,13 @@ from loguru import logger
 from simaple.core import ActionStat, ExtendedStat, JobType, Stat
 from simaple.data.jobs.builtin import get_damage_logic, get_passive
 from simaple.data.system.hexa_stat import get_all_hexa_stat_cores
-from simaple.request.adapter.skill_loader._schema import (
+from simaple.request.adapter.translator.job_name import translate_kms_name
+from simaple.request.external.nexon.schema.character.skill import (
     AggregatedCharacterSkillResponse,
     CharacterSkillDescription,
     CharacterSkillResponse,
     HexaStatResponse,
 )
-from simaple.request.adapter.translator.job_name import translate_kms_name
 from simaple.system.hexa_stat import HexaStat, HexaStatCore
 
 

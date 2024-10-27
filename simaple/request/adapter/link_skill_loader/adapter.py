@@ -1,13 +1,13 @@
 from typing import cast
 
 from simaple.data.system.link import get_all_linkskills
-from simaple.request.adapter.link_skill_loader._schema import LinkSkillResponse
 from simaple.request.adapter.nexon_api import (
     HOST,
     Token,
     get_character_id,
     get_character_id_param,
 )
+from simaple.request.external.nexon.schema.character.link_skill import LinkSkillResponse
 from simaple.request.service.loader import LinkSkillLoader
 from simaple.system.link import LinkSkillset
 

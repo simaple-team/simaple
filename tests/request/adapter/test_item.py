@@ -6,14 +6,14 @@ from simaple.request.adapter.gear_loader._gearset_converter import get_equipment
 from simaple.request.adapter.gear_loader._pet_converter import (
     get_pet_equip_stat_from_response,
 )
-from simaple.request.adapter.gear_loader._schema import (
+from simaple.request.adapter.gear_loader._set_item_converter import get_set_item_stats
+from simaple.request.external.nexon.schema.character.item import (
     CashItemResponse,
     CharacterItemEquipment,
     CharacterSymbolEquipment,
     PetResponse,
     SetEffectResponse,
 )
-from simaple.request.adapter.gear_loader._set_item_converter import get_set_item_stats
 
 
 def test_item_equipment(character_item_equipment_response: CharacterItemEquipment):

@@ -2,15 +2,15 @@ from typing import cast
 
 from simaple.core import StatProps
 from simaple.data.system.hyperstat import get_kms_hyperstat
-from simaple.request.adapter.hyperstat_loader._schema import (
-    CharacterHyperStatResponse,
-    HyperStatResponseColumnResponse,
-)
 from simaple.request.adapter.nexon_api import (
     HOST,
     Token,
     get_character_id,
     get_character_id_param,
+)
+from simaple.request.external.nexon.schema.character.hyper_stat import (
+    CharacterHyperStatResponse,
+    HyperStatResponseColumnResponse,
 )
 from simaple.request.service.loader import HyperstatLoader
 from simaple.system.hyperstat import Hyperstat

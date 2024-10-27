@@ -12,7 +12,7 @@ from simaple.request.adapter.skill_loader._converter import (
     compute_passive_skill_stat,
     get_zero_order_skill_effect,
 )
-from simaple.request.adapter.skill_loader._schema import (
+from simaple.request.external.nexon.schema.character.skill import (
     AggregatedCharacterSkillResponse,
     CharacterSkillResponse,
     HexaStatResponse,

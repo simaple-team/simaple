@@ -4,25 +4,31 @@ from typing import Any, cast
 
 import pytest
 
-from simaple.request.adapter.ability_loader._schema import CharacterAbilityResponse
-from simaple.request.adapter.character_basic_loader._schema import CharacterStatResponse
-from simaple.request.adapter.gear_loader._schema import (
+from simaple.request.external.nexon.schema.character.ability import (
+    CharacterAbilityResponse,
+)
+from simaple.request.external.nexon.schema.character.basic import CharacterStatResponse
+from simaple.request.external.nexon.schema.character.hyper_stat import (
+    CharacterHyperStatResponse,
+)
+from simaple.request.external.nexon.schema.character.item import (
     CashItemResponse,
     CharacterItemEquipment,
     CharacterSymbolEquipment,
     PetResponse,
     SetEffectResponse,
 )
-from simaple.request.adapter.hyperstat_loader._schema import CharacterHyperStatResponse
-from simaple.request.adapter.link_skill_loader._schema import LinkSkillResponse
-from simaple.request.adapter.propensity_loader._schema import (
+from simaple.request.external.nexon.schema.character.link_skill import LinkSkillResponse
+from simaple.request.external.nexon.schema.character.propensity import (
     CharacterPropensityResponse,
 )
-from simaple.request.adapter.skill_loader._schema import (
+from simaple.request.external.nexon.schema.character.skill import (
     AggregatedCharacterSkillResponse,
     CharacterSkillResponse,
 )
-from simaple.request.adapter.union_loader._schema import CharacterUnionRaiderResponse
+from simaple.request.external.nexon.schema.character.union import (
+    CharacterUnionRaiderResponse,
+)
 
 
 def _macro_get_response(file_name: str) -> dict[str, Any]:

@@ -3,7 +3,7 @@ import re
 from simaple.core import ExtendedStat, Stat
 from simaple.gear.gear_repository import GearRepository
 from simaple.request.adapter.gear_loader._converter import get_equipments
-from simaple.request.adapter.gear_loader._schema import CharacterItemEquipment
+from simaple.request.external.nexon.schema.character.item import CharacterItemEquipment
 
 
 def _line_to_stat(line: str) -> Stat:
