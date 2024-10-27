@@ -1,12 +1,13 @@
+import datetime
 from typing import cast
 
 from simaple.core import StatProps
 from simaple.data.system.hyperstat import get_kms_hyperstat
-from simaple.request.external.nexon.api.auth import (
-    HOST,
-    Token,
-    get_character_id,
-    get_character_id_param,
+from simaple.request.external.nexon.api.auth import HOST, nexon_today
+from simaple.request.external.nexon.api.character import (
+    as_nexon_datetime,
+    get_character_ocid,
+    get_hyper_stat,
 )
 from simaple.request.external.nexon.schema.character.hyper_stat import (
     CharacterHyperStatResponse,
@@ -17,17 +18,19 @@ from simaple.system.hyperstat import Hyperstat
 
 
 class NexonAPIHyperStatLoader(HyperstatLoader):
-    def __init__(self, token_value: str):
-        self._token = Token(token_value)
+    def __init__(self, host: str, access_token: str, date: datetime.date):
+        self._host = host
+        self._access_token = access_token
+        self._date = date
 
     def load_hyper_stat(self, character_name: str) -> Hyperstat:
-        character_id = get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/character/hyper-stat"
-        resp = cast(
-            CharacterHyperStatResponse,
-            self._token.request(uri, get_character_id_param(character_id)),
+        ocid = get_character_ocid(self._host, self._access_token, character_name)
+        hyperstat_response = get_hyper_stat(
+            self._host,
+            self._access_token,
+            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
         )
-        return get_hyperstat(resp)
+        return get_hyperstat(hyperstat_response)
 
 
 _STAT_NAME_TO_BASIS_NAME = {

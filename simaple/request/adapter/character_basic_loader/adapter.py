@@ -1,50 +1,49 @@
-from typing import cast
+import datetime
 
 from simaple.core import JobType, Stat
 from simaple.request.adapter.translator.job_name import translate_kms_name
-from simaple.request.external.nexon.api.auth import (
-    HOST,
-    Token,
-    get_character_id,
-    get_character_id_param,
+from simaple.request.external.nexon.api.character import (
+    as_nexon_datetime,
+    get_character_basic,
+    get_character_ocid,
+    get_character_stat,
 )
-from simaple.request.external.nexon.schema.character.basic import (
-    CharacterBasicResponse,
-    CharacterStatResponse,
-)
+from simaple.request.external.nexon.schema.character.basic import CharacterStatResponse
 from simaple.request.service.loader import CharacterBasicLoader
 
 
 class NexonAPICharacterBasicLoader(CharacterBasicLoader):
-    def __init__(self, token_value: str):
-        self._token = Token(token_value)
+    def __init__(self, host: str, access_token: str, date: datetime.date):
+        self._host = host
+        self._access_token = access_token
+        self._date = date
 
     def load_character_level(self, character_name: str) -> int:
-        character_id = get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/character/basic"
-        resp = cast(
-            CharacterBasicResponse,
-            self._token.request(uri, get_character_id_param(character_id)),
+        ocid = get_character_ocid(self._host, self._access_token, character_name)
+        character_basic_response = get_character_basic(
+            self._host,
+            self._access_token,
+            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
         )
-        return resp["character_level"]
+        return character_basic_response["character_level"]
 
     def load_character_ap_based_stat(self, character_name: str) -> Stat:
-        character_id = get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/character/stat"
-        resp = cast(
-            CharacterStatResponse,
-            self._token.request(uri, get_character_id_param(character_id)),
+        ocid = get_character_ocid(self._host, self._access_token, character_name)
+        character_stat_response = get_character_stat(
+            self._host,
+            self._access_token,
+            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
         )
-        return extract_character_ap_based_stat(resp)
+        return extract_character_ap_based_stat(character_stat_response)
 
     def load_character_job_type(self, character_name: str) -> JobType:
-        character_id = get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/character/basic"
-        resp = cast(
-            CharacterBasicResponse,
-            self._token.request(uri, get_character_id_param(character_id)),
+        ocid = get_character_ocid(self._host, self._access_token, character_name)
+        character_basic_response = get_character_basic(
+            self._host,
+            self._access_token,
+            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
         )
-        return translate_kms_name(resp["character_class"])
+        return translate_kms_name(character_basic_response["character_class"])
 
 
 def extract_character_ap_based_stat(response: CharacterStatResponse) -> Stat:

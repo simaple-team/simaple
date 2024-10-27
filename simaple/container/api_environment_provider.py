@@ -12,7 +12,7 @@ from simaple.request.adapter.link_skill_loader.adapter import NexonAPILinkSkillL
 from simaple.request.adapter.propensity_loader.adapter import NexonAPIPropensityLoader
 from simaple.request.adapter.skill_loader.adapter import NexonAPICharacterSkillLoader
 from simaple.request.adapter.union_loader.adapter import NexonAPIUnionLoader
-from simaple.request.external.nexon.api.auth import NexonRequestAgent
+from simaple.request.external.nexon.api.auth import HOST, NexonRequestAgent
 from simaple.request.service.environment_provider import (
     LoadedEnvironmentProviderService,
 )
@@ -32,14 +32,20 @@ class NexonAPIEnvironmentProvider(EnvironmentProvider):
     def get_simulation_environment(self) -> SimulationEnvironment:
         service = LoadedEnvironmentProviderService(
             NexonRequestAgent("", self.token),
-            NexonAPIAbilityLoader(self.token),
+            NexonAPIAbilityLoader(
+                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
+            ),
             NexonAPIPropensityLoader(self.token),
-            NexonAPIHyperStatLoader(self.token),
+            NexonAPIHyperStatLoader(
+                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
+            ),
             NexonAPIUnionLoader(self.token),
             NexonAPIGearLoader(
                 self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
             ),
-            NexonAPICharacterBasicLoader(self.token),
+            NexonAPICharacterBasicLoader(
+                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
+            ),
             NexonAPILinkSkillLoader(self.token),
             NexonAPICharacterSkillLoader(self.token),
         )

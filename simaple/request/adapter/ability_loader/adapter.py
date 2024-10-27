@@ -1,22 +1,15 @@
-from typing import cast
+import datetime
 
 from simaple.core import ExtendedStat
 from simaple.request.adapter.ability_loader._converter import (
     get_ability_stat_from_ability_text,
 )
-from simaple.request.external.nexon.api.auth import (
-    HOST,
-    Token,
-    get_character_id,
-    get_character_id_param,
-    nexon_today,
-)
 from simaple.request.external.nexon.api.character import (
+    as_nexon_datetime,
     get_character_ability,
     get_character_ocid,
 )
 from simaple.request.external.nexon.schema.character.ability import (
-    CharacterAbilityResponse,
     _CharacterAbilityLineResponse,
 )
 from simaple.request.service.loader import AbilityLoader
@@ -36,22 +29,28 @@ def _get_ability_stat(
 
 
 class NexonAPIAbilityLoader(AbilityLoader):
-    def __init__(self, access_token: str):
+    def __init__(self, host: str, access_token: str, date: datetime.date):
+        self._host = host
         self._access_token = access_token
+        self._date = date
 
-    def load_stat(self, character_name: str) -> ExtendedStat:
-        ocid = get_character_ocid(HOST, self._access_token, character_name)
+    def load_stat(self, character_name: str, date: datetime.date) -> ExtendedStat:
+        ocid = get_character_ocid(self._host, self._access_token, character_name)
         ability_response = get_character_ability(
-            HOST, self._access_token, {"ocid": ocid, "date": nexon_today()}
+            self._host,
+            self._access_token,
+            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
         )
         return _get_ability_stat(ability_response["ability_info"])
 
     def load_best_stat(
         self, character_name: str, selector: BestStatSelector
     ) -> ExtendedStat:
-        ocid = get_character_ocid(HOST, self._access_token, character_name)
+        ocid = get_character_ocid(self._host, self._access_token, character_name)
         ability_response = get_character_ability(
-            HOST, self._access_token, {"ocid": ocid, "date": nexon_today()}
+            self._host,
+            self._access_token,
+            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
         )
 
         candidates = [
