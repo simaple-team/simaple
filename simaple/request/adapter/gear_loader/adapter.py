@@ -12,7 +12,7 @@ from simaple.request.adapter.gear_loader._pet_converter import (
     get_pet_equip_stat_from_response,
 )
 from simaple.request.adapter.gear_loader._set_item_converter import get_set_item_stats
-from simaple.request.adapter.nexon_api import (
+from simaple.request.external.nexon.api.auth import (
     HOST,
     CharacterID,
     Token,

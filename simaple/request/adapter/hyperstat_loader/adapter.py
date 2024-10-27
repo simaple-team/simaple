@@ -2,7 +2,7 @@ from typing import cast
 
 from simaple.core import StatProps
 from simaple.data.system.hyperstat import get_kms_hyperstat
-from simaple.request.adapter.nexon_api import (
+from simaple.request.external.nexon.api.auth import (
     HOST,
     Token,
     get_character_id,

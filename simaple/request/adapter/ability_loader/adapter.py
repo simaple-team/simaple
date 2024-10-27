@@ -4,7 +4,7 @@ from simaple.core import ExtendedStat
 from simaple.request.adapter.ability_loader._converter import (
     get_ability_stat_from_ability_text,
 )
-from simaple.request.adapter.nexon_api import (
+from simaple.request.external.nexon.api.auth import (
     HOST,
     Token,
     get_character_id,

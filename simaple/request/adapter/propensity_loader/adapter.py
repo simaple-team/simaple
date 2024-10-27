@@ -1,6 +1,6 @@
 from typing import cast
 
-from simaple.request.adapter.nexon_api import (
+from simaple.request.external.nexon.api.auth import (
     HOST,
     Token,
     get_character_id,

@@ -3,7 +3,7 @@ from typing import cast
 from simaple.core import ExtendedStat, JobType
 from simaple.data.system.artifact import get_artifact_effects
 from simaple.data.system.union_block import get_all_blocks
-from simaple.request.adapter.nexon_api import (
+from simaple.request.external.nexon.api.auth import (
     HOST,
     Token,
     get_character_id,
