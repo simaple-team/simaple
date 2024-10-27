@@ -55,7 +55,7 @@ x8 CAST "체인 라이트닝 VI"
 CAST "프로즌 오브 VI"
 x8 CAST "체인 라이트닝 VI"
 
-!debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"
+!debug "list(filter(has_cooldown, filter(available, viewer('validity'))))"
 
 CAST "프로즌 오브 VI"
 x8 CAST "체인 라이트닝 VI"

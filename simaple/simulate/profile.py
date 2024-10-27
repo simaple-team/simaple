@@ -1,7 +1,5 @@
-from functional import seq
-
-from simaple.simulate.base import ViewerType
 from simaple.simulate.component.view import Validity
+from simaple.simulate.core.view import ViewerType
 
 
 def available(validity: Validity) -> bool:
@@ -15,7 +13,6 @@ def has_cooldown(validity: Validity) -> bool:
 _utility_methods = {
     "available": available,
     "has_cooldown": has_cooldown,
-    "seq": seq,
 }
 
 

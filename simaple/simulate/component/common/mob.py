@@ -1,7 +1,9 @@
+from typing import TypedDict
+
 import pydantic
 
-from simaple.simulate.base import Entity
-from simaple.simulate.component.base import Component, ReducerState, reducer_method
+from simaple.simulate.component.base import Component, reducer_method
+from simaple.simulate.core.base import Entity, Event
 from simaple.simulate.reserved_names import Tag
 
 
@@ -47,7 +49,7 @@ class DOT(Entity):
         return left_time, events
 
 
-class MobState(ReducerState):
+class MobState(TypedDict):
     dot: DOT
 
 
@@ -58,24 +60,34 @@ class DOTRequestPayload(pydantic.BaseModel):
 
 
 class MobComponent(Component):
-    def get_default_state(self) -> dict[str, Entity]:
+    def get_default_state(self) -> MobState:
         return {"dot": DOT(current={})}
 
     @reducer_method
     def add_dot(self, payload: DOTRequestPayload, state: MobState):
-        state = state.deepcopy()
-        state.dot.new(payload.name, payload.damage, payload.lasting_time)
+        dot = state["dot"]
+
+        dot.new(payload.name, payload.damage, payload.lasting_time)
+        state["dot"] = dot
 
         return state, []
 
     @reducer_method
     def elapse(self, time: float, state: MobState):
-        state = state.deepcopy()
-        emits = state.dot.elapse(time)
+        dot = state["dot"]
 
-        events = [
-            {"name": name, "tag": Tag.DOT, "payload": {"damage": damage, "hit": hit}}
+        emits = dot.elapse(time)
+
+        events: list[Event] = [
+            {
+                "name": name,
+                "tag": Tag.DOT,
+                "payload": {"damage": damage, "hit": hit},
+                "method": "elapse",
+                "handler": None,
+            }
             for ((name, damage), hit) in emits.items()
         ]
+        state["dot"] = dot
 
         return state, events

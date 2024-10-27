@@ -1,7 +1,10 @@
+from typing import TypedDict
+
 from simaple.core.base import ActionStat
-from simaple.simulate.base import AddressedStore, ConcreteStore, Entity
 from simaple.simulate.builder import EngineBuilder
-from simaple.simulate.component.base import Component, ReducerState, view_method
+from simaple.simulate.component.base import Component, view_method
+from simaple.simulate.core.base import Entity
+from simaple.simulate.core.store import AddressedStore, ConcreteStore
 from simaple.simulate.global_property import GlobalProperty
 
 
@@ -9,19 +12,19 @@ class SomeEntity(Entity):
     obj: int = 3
 
 
-class SomeTestState(ReducerState):
+class SomeTestState(TypedDict):
     some_state: SomeEntity
 
 
 class ViewTestComponent(Component):
     value: int = 5
 
-    def get_default_state(self):
+    def get_default_state(self) -> SomeTestState:
         return {"some_state": SomeEntity()}
 
     @view_method
     def naming(self, state: SomeTestState):
-        return str(state.some_state.obj + self.value)
+        return str(state["some_state"].obj + self.value)
 
 
 def test_view():

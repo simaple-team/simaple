@@ -1,0 +1,117 @@
+---
+title: 새 직업 추가하기
+description: 직업을 추가하기 위해 작성해야 하는 파일들과 구조에 대해 설명합니다.
+---
+
+
+## 구조
+
+어떤 직업의 시뮬레이션은 yaml Spec 들을 통해 정의됩니다. 동작을 위한 Spec 들은
+`simaple/data/jobs/resources` 에 정의되어 있습니다.
+Spec에 대한 설명은 [Spec](/docs/spec) 문서를 참조하세요.
+
+
+### damage_logic.yaml
+
+해당 직업의 피해량을 계산하는 방법을 정의합니다. 데미지 계산 로직, 무기상수, 숙련도가 여기에서 정의됩니다.
+
+```yaml
+kind: DamageLogic
+version: simaple.io/INTBasedDamageLogic
+metadata:
+  label:
+    group: bishop
+patch:
+  - SkillLevelPatch
+  - ArithmeticPatch
+data:
+  attack_range_constant: 1.2
+  mastery: "{{ 0.95 + 0.01 * ((skill_level+1) // 2) }}"
+  default_skill_level: 0
+  combat_orders_enabled: True
+```
+
+
+### passive_skill.yaml
+
+PassiveSkill은 버프 형태로 적용되지 않으면서도 적용되는, 링크 스킬을 제외한 모든 스킬 효과를 정의합니다.
+버프 형태로 적용되는지의 여부는, 인게임 ui 상에서 우상단에 표시되는지로 결정됩니다.
+
+- 다음은 패시브 스킬에 해당합니다.
+  - 정령의축복, 여제의 축복
+  - 5차 쓸만한 스킬에 달려있는 스텟
+  - 1~4차 스킬의 패시브 스킬들
+
+- 다음은 패시브 스킬에 해당하지 않습니다.
+  - 링크 스킬
+  - 이벤트 버프 효과 (소위 보약버프류)
+  - 전투 중에만 발동하는 버프 효과
+  - 몬스터에게 디버프 형태로 적용되는 효과
+
+작성자는 해당 직업이 가질 수 있는 모든 효과를 작성해야 합니다. 이 때, group label에 해당 직업의 명칭을 기입합니다.
+공용 패시브 스킬(ex. 쓸만한 스킬) 의 경우 직업군의 group에 이미 정의되어 있을 수 있습니다. 이 경우 정의하지 않아도 됩니다. 즉, 정령의 축복/여제의 축복은 작성할 필요가 없습니다.
+
+```yaml
+kind: PassiveSkill
+version: simaple.io/PassiveSkill
+metadata:
+  label:
+    group: bishop
+patch:
+  - SkillLevelPatch
+  - ArithmeticPatch
+data:
+  name: 하이 위즈덤
+  stat:
+    INT: 40
+```
+
+### components.yaml
+
+Component는 스킬을 모델링하는 최소 단위입니다. `components.yaml` 에는 각 스킬의 정보와, 해당 스킬의 동작이 명시됩니다.
+Component는 Spec으로 작성되어 있으므로, 명시된 Version에 대응하는 객체가 시뮬레이션 시점에 생성됩니다.
+
+예를 들어, 아래 컴포넌트의 동작은 `TriggableBuffSkillComponent` 클래스에 명시되어 있습니다.
+
+```yaml
+---
+kind: Component
+version: simaple.io/TriggableBuffSkillComponent
+metadata:
+  label:
+    group: bishop
+    name: 트라이엄프 페더
+    id: 2311015-0
+patch:
+  - SkillLevelPatch
+  - ArithmeticPatch
+  - VSkillImprovementPatch
+data:
+  id: 2311015-0
+  listening_actions:
+    엔젤레이.use.emitted.global.damage: trigger
+    제네시스.use.emitted.global.damage: trigger
+  name: 트라이엄프 페더
+  trigger_cooldown_duration: 3_000
+  trigger_damage: 230
+  trigger_hit: "{{ 4 * 4 }}"
+  cooldown_duration: 60_000
+  delay: 0
+  lasting_duration: 120_000
+  v_improvement: 2
+```
+
+
+### skill_profile.yaml
+
+Skill Profile은 해당 직업이 사용할 수 있는 모든 스킬에 대한 명세입니다. 여러분이 특정 직업의 시뮬레이션 환경을 구성할 때,
+이 파일의 정보를 시작점으로 모든 시뮬레이션 환경이 구성됩니다.
+
+각 필드는 다음과 같은 정보가 기입되어야 합니다.
+- `v_skill_names`: 해당 직업군 강화할 수 있는 모든 5차 액티브 스킬이 기입됩니다.
+- `v_improvement_names`: 해당 직업이 5차 코어로 강화할 수 있는 모든 스킬이 기입됩니다.
+- `hexa_skill_names`: 해당 직업이 사용할 수 있는 모든 6차 오리진 스킬이 기입됩니다.
+- `hexa_improvement_names`: 해당 직업이 6차 코어로 강화할 수 있는 모든 5차 스킬이 기입됩니다.
+- `hexa_mastery`: 해당 직업이 사용할 수 있는 모든 헥사-강화 스킬과 그 대응명칭이 기입됩니다.
+
+- `component_groups`: 해당 직업을 구성하기 위해 사용할 모든 Component들의 group을 기입합니다.

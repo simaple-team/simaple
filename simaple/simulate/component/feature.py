@@ -4,6 +4,8 @@ feature.py
 This file contains `common` structs and classes that are used in multiple places.
 """
 
+from typing import Optional
+
 import pydantic
 
 
@@ -25,3 +27,4 @@ class PeriodicFeature(pydantic.BaseModel):
     damage: float
     hit: float
     interval: float
+    initial_delay: Optional[float] = pydantic.Field(default=None)

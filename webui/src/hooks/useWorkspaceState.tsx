@@ -93,7 +93,7 @@ function useWorkspaceState() {
           .andTee(() => setSubmittedPlan(augmentedPlan)),
       )
       .match(setOperationLogs, setErrorMessage);
-  }, [plan]);
+  }, [plan, submittedPlan, operationLogs]);
 
   const clearErrorMessage = React.useCallback(() => {
     setErrorMessage("");

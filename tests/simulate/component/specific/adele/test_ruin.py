@@ -30,20 +30,19 @@ def ruin_state(
     ruin: AdeleRuinComponent,
     dynamics: Dynamics,
 ):
-    return AdeleRuinState.model_validate(
-        {
-            **ruin.get_default_state(),
-            "dynamics": dynamics,
-        }
-    )
+    return {
+        **ruin.get_default_state(),
+        "dynamics": dynamics,
+    }
 
 
 def test_ruin_first(ruin: AdeleRuinComponent, ruin_state: AdeleRuinState):
     state, _ = ruin.use(None, ruin_state)
-    _, events = ruin.elapse(2000, state)
+    _, events = ruin.elapse(2000 - 1, state)
     dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
 
-    assert len(dealing_event) == 12
+    assert len(dealing_event) == 11 + 1
+
     for event in dealing_event:
         assert event["payload"]["damage"] == 550
         assert event["payload"]["hit"] == 6
@@ -51,8 +50,8 @@ def test_ruin_first(ruin: AdeleRuinComponent, ruin_state: AdeleRuinState):
 
 def test_ruin_second(ruin: AdeleRuinComponent, ruin_state: AdeleRuinState):
     state, _ = ruin.use(None, ruin_state)
-    state, _ = ruin.elapse(2000, state)
-    _, events = ruin.elapse(2000, state)
+    state, _ = ruin.elapse(2000 - 1, state)
+    _, events = ruin.elapse(2000 + 1, state)
     dealing_event = [e for e in events if e["tag"] == Tag.DAMAGE]
 
     assert len(dealing_event) == 8

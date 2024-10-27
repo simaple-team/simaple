@@ -1,25 +1,33 @@
-from typing import Optional
+from typing import Optional, TypedDict
 
+import simaple.simulate.component.trait.consumable_trait as consumable_trait
+import simaple.simulate.component.trait.lasting_trait as lasting_trait
 from simaple.core.base import Stat
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Consumable, Lasting
-from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    ConsumableBuffTrait,
-    ConsumableValidityTrait,
-)
 from simaple.simulate.component.view import Running
 from simaple.simulate.global_property import Dynamics
 
 
-class ConsumableBuffSkillState(ReducerState):
+class ConsumableBuffSkillState(TypedDict):
     consumable: Consumable
     lasting: Lasting
     dynamics: Dynamics
 
 
+class ConsumableBuffSkillComponentProps(TypedDict):
+    id: str
+    name: str
+    stat: Stat
+    cooldown_duration: float
+    delay: float
+    lasting_duration: float
+    maximum_stack: int
+    apply_buff_duration: bool
+
+
 class ConsumableBuffSkillComponent(
-    SkillComponent, ConsumableBuffTrait, ConsumableValidityTrait
+    Component,
 ):
     stat: Stat
     cooldown_duration: float
@@ -28,7 +36,7 @@ class ConsumableBuffSkillComponent(
     maximum_stack: int
     apply_buff_duration: bool = True
 
-    def get_default_state(self):
+    def get_default_state(self) -> ConsumableBuffSkillState:
         return {
             "consumable": Consumable(
                 time_left=self.cooldown_duration,
@@ -37,37 +45,44 @@ class ConsumableBuffSkillComponent(
                 stack=self.maximum_stack,
             ),
             "lasting": Lasting(time_left=0),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> ConsumableBuffSkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "stat": self.stat,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "lasting_duration": self.lasting_duration,
+            "maximum_stack": self.maximum_stack,
+            "apply_buff_duration": self.apply_buff_duration,
         }
 
     @reducer_method
     def use(self, _: None, state: ConsumableBuffSkillState):
-        return self.use_consumable_buff_trait(
-            state, apply_buff_duration=self.apply_buff_duration
+        return consumable_trait.start_consumable_buff(
+            state,
+            {},
+            **self.get_props(),
         )
 
     @reducer_method
     def elapse(self, time: float, state: ConsumableBuffSkillState):
-        return self.elapse_consumable_buff_trait(time, state)
+        return consumable_trait.elapse_consumable_buff(state, {"time": time})
 
     @view_method
     def validity(self, state: ConsumableBuffSkillState):
-        return self.validity_in_consumable_trait(state)
+        return consumable_trait.consumable_validity(state, **self.get_props())
 
     @view_method
     def buff(self, state: ConsumableBuffSkillState) -> Optional[Stat]:
-        if state.lasting.enabled():
+        if state["lasting"].enabled():
             return self.stat
 
         return None
 
     @view_method
     def running(self, state: ConsumableBuffSkillState) -> Running:
-        return Running(
-            id=self.id,
-            name=self.name,
-            time_left=state.lasting.time_left,
-            lasting_duration=self._get_lasting_duration(state),
-        )
-
-    def _get_lasting_duration(self, state) -> float:
-        return self.lasting_duration
+        return lasting_trait.running_view(state, **self.get_props())

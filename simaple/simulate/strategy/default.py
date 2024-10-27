@@ -1,7 +1,8 @@
 from typing import Optional
 
-from simaple.simulate.base import Event, ViewerType
 from simaple.simulate.component.view import KeydownView, Running, Validity
+from simaple.simulate.core.base import Event
+from simaple.simulate.core.view import ViewerType
 from simaple.simulate.reserved_names import Tag
 from simaple.simulate.strategy.base import RuntimeContextType
 from simaple.simulate.strategy.dsl import DSLGeneratorProto, interpret_dsl_generator

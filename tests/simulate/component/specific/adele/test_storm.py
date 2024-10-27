@@ -30,13 +30,11 @@ def storm_state_1pair(
     storm: AdeleStormComponent,
     dynamics: Dynamics,
 ):
-    return AdeleStormState.model_validate(
-        {
-            **storm.get_default_state(),
-            "order_sword": OrderSword(interval=1020, running_swords=[(0, 40000)]),
-            "dynamics": dynamics,
-        }
-    )
+    return {
+        **storm.get_default_state(),
+        "order_sword": OrderSword(interval=1020, running_swords=[(0, 40000)]),
+        "dynamics": dynamics,
+    }
 
 
 @pytest.fixture(name="storm_state_3pair")
@@ -44,15 +42,13 @@ def storm_state_3pair(
     storm: AdeleStormComponent,
     dynamics: Dynamics,
 ):
-    return AdeleStormState.model_validate(
-        {
-            **storm.get_default_state(),
-            "order_sword": OrderSword(
-                interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]
-            ),
-            "dynamics": dynamics,
-        }
-    )
+    return {
+        **storm.get_default_state(),
+        "order_sword": OrderSword(
+            interval=1020, running_swords=[(0, 40000), (0, 40000), (0, 40000)]
+        ),
+        "dynamics": dynamics,
+    }
 
 
 def test_storm_order_1pair(

@@ -1,23 +1,37 @@
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from typing import Optional, TypedDict
+
+import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.periodic_trait as periodic_trait
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic
 from simaple.simulate.component.feature import DamageAndHit
-from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    InvalidatableCooldownTrait,
-    PeriodicElapseTrait,
-)
+from simaple.simulate.component.util import is_rejected
 from simaple.simulate.component.view import Running
+from simaple.simulate.event import EmptyEvent
 from simaple.simulate.global_property import Dynamics
 
 
-class PeriodicDamageHexaState(ReducerState):
+class PeriodicDamageHexaState(TypedDict):
     cooldown: Cooldown
     periodic: Periodic
     dynamics: Dynamics
 
 
+class PeriodicDamageConfiguratedHexaSkillComponentProps(TypedDict):
+    id: str
+    name: str
+    damage_and_hits: list[DamageAndHit]
+    delay: float
+    cooldown_duration: float
+    periodic_initial_delay: Optional[float]
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+    lasting_duration: float
+
+
 class PeriodicDamageConfiguratedHexaSkillComponent(
-    SkillComponent, PeriodicElapseTrait, InvalidatableCooldownTrait
+    Component,
 ):
     """
     PeriodicDamageConfiguratedHexaSkillComponent
@@ -32,6 +46,7 @@ class PeriodicDamageConfiguratedHexaSkillComponent(
 
     cooldown_duration: float
 
+    periodic_initial_delay: Optional[float] = None
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
@@ -41,53 +56,65 @@ class PeriodicDamageConfiguratedHexaSkillComponent(
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+            "periodic": Periodic(
+                interval=self.periodic_interval,
+                initial_counter=self.delay,
+                time_left=0,
+            ),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> PeriodicDamageConfiguratedHexaSkillComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage_and_hits": self.damage_and_hits,
+            "delay": self.delay,
+            "cooldown_duration": self.cooldown_duration,
+            "periodic_initial_delay": self.periodic_initial_delay,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "lasting_duration": self.lasting_duration,
         }
 
     @reducer_method
     def elapse(self, time: float, state: PeriodicDamageHexaState):
-        return self.elapse_periodic_damage_trait(time, state)
+        return periodic_trait.elapse_periodic_with_cooldown(
+            state,
+            {"time": time},
+            **self.get_props(),
+        )
 
     @reducer_method
     def use(self, _: None, state: PeriodicDamageHexaState):
-        if not state.cooldown.available:
-            return state, [self.event_provider.rejected()]
-
-        state = state.deepcopy()
-
-        delay = self._get_delay()
-
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self._get_cooldown_duration())
-        )
-        state.periodic.set_time_left(
-            self._get_lasting_duration(state), initial_counter=delay
+        state, events = periodic_trait.start_periodic_with_cooldown(
+            state,
+            {},
+            **self.get_props(),
+            damage=0,
+            hit=0,
         )
 
-        return state, [
-            self.event_provider.dealt(entry.damage, entry.hit)
-            for entry in self.damage_and_hits
-        ] + [
-            self.event_provider.delayed(delay),
-        ]
+        if is_rejected(events):
+            return state, events
+
+        return (
+            state,
+            [
+                EmptyEvent.dealt(entry.damage, entry.hit)
+                for entry in self.damage_and_hits
+            ]
+            + events,
+        )
 
     @view_method
     def validity(self, state: PeriodicDamageHexaState):
-        return self.validity_in_invalidatable_cooldown_trait(state)
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: PeriodicDamageHexaState) -> Running:
-        return Running(
-            id=self.id,
-            name=self.name,
-            time_left=state.periodic.time_left,
-            lasting_duration=self._get_lasting_duration(state),
+        return periodic_trait.running_view(
+            state,
+            **self.get_props(),
         )
-
-    def _get_lasting_duration(self, state: PeriodicDamageHexaState) -> float:
-        return self.lasting_duration
-
-    def _get_periodic_damage_hit(
-        self, state: PeriodicDamageHexaState
-    ) -> tuple[float, float]:
-        return self.periodic_damage, self.periodic_hit

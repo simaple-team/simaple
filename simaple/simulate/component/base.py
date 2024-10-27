@@ -1,20 +1,15 @@
-import copy
 import inspect
 from abc import abstractmethod
-from typing import Any, Callable, NoReturn, Optional, Type, TypeVar, Union, cast
+from functools import wraps
+from typing import Any, Callable, Optional, TypeVar, Union, cast
 
-from loguru import logger
-from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field
+from typing_extensions import TypedDict
 
-from simaple.simulate.base import (
-    Action,
-    Dispatcher,
-    Entity,
-    Event,
-    Store,
-    TandemDispatcher,
-    message_signature,
-)
+from simaple.core import Stat
+from simaple.simulate.core import Action, ActionSignature, Entity, Event
+from simaple.simulate.core.reducer import Listener, UnsafeReducer
+from simaple.simulate.core.store import Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import GlobalProperty
 from simaple.simulate.reserved_names import Tag
@@ -22,64 +17,17 @@ from simaple.spec.loadable import TaggedNamespacedABCMeta
 
 WILD_CARD = "*"
 
+StateT = TypeVar("StateT")
 
 ReducerType = Callable[..., tuple[Union[tuple[Entity], Entity], Any]]
+ReducerPrecursorType = Callable[[Any, Any, StateT], tuple[StateT, list[Event]]]
 
-
+ReducerPrecursorTypeT = TypeVar("ReducerPrecursorTypeT", bound=ReducerPrecursorType)
 T = TypeVar("T", bound=BaseModel)
 
 
-class ReducerState(BaseModel):
-    def copy(self) -> NoReturn:  # type: ignore
-        raise NotImplementedError("copy() is disabled in ReducerState")
-
-    def deepcopy(self: T) -> T:
-        return super().model_copy(deep=True)  # type: ignore
-
-
-class ComponentMethodWrapper:
-    def __init__(
-        self, func: ReducerType, skip_count=1, static_payload: Optional[dict] = None
-    ):
-        self._func = func
-        self._has_payload = skip_count == 1
-        self._static_payload = static_payload
-
-        self._payload_type: Optional[Type[BaseModel]] = None
-        if len(inspect.signature(func).parameters.values()) > 0:
-            self._payload_type = list(inspect.signature(func).parameters.values())[
-                0
-            ].annotation
-
-        try:
-            self._state_type = list(inspect.signature(func).parameters.values())[
-                skip_count
-            ].annotation
-        except IndexError as e:
-            logger.info(f"Wrapped method doesn't have state parameter: {func}.")
-            raise e
-
-    def __call__(self, *args) -> tuple[Union[tuple[Entity], Entity], Any]:
-        return self._func(*args)
-
-    def translate_payload(self, payload: Optional[Union[int, str, float, dict]]):
-        if not self._has_payload:
-            raise ValueError("no skip_count do not support payload translation")
-
-        if self._static_payload and payload is None:
-            payload = copy.deepcopy(self._static_payload)
-
-        if not isinstance(payload, dict) or self._payload_type is None:
-            return payload
-
-        return self._payload_type.model_validate(payload)
-
-    def get_state_type(self):
-        return self._state_type
-
-
-def reducer_method(func):
-    func.__isreducer__ = True
+def reducer_method(func: ReducerPrecursorTypeT) -> ReducerPrecursorTypeT:
+    func.__isreducer__ = True  # type: ignore
 
     return func
 
@@ -88,41 +36,6 @@ def view_method(func):
     func.__isview__ = True
 
     return func
-
-
-class StoreAdapter:
-    def __init__(
-        self,
-        default_state: dict[str, Entity],
-        binds=None,
-    ):
-        self._default_state = default_state
-        if binds is None:
-            binds = {}
-        binds.update(GlobalProperty.get_default_binds())
-
-        self._binds = binds
-
-    def get_state(self, store: Store, state_type):
-        entities = {
-            name: store.read_entity(address, default=self._default_state.get(name))
-            for name, address in self._get_bound_names().items()
-        }
-
-        return state_type(**entities)
-
-    def set_state(self, store: Store, state):
-        bounded_names = self._get_bound_names()
-
-        for name, entity in dict(state).items():
-            if name in bounded_names:
-                store.set_entity(bounded_names[name], entity)
-
-    def _get_bound_names(self) -> dict[str, str]:
-        names = {name: name for name in self._default_state}
-        names.update(self._binds)
-
-        return names
 
 
 class _ComponentAddon(
@@ -140,174 +53,155 @@ class _ComponentAddon(
     payload: dict
 
 
-class ContextDispatcher(Dispatcher):
-    """
-    Context Dispatcher triggers another dispatcher with defined action.
-    """
+def regularize_returned_event(
+    maybe_events: Optional[Union[Event, list[Event]]]
+) -> list[Event]:
+    if maybe_events is None:
+        return []
 
-    def __init__(self, defined_action: Action, context: Dispatcher):
-        self._defined_action = defined_action
-        self._context = context
-        self._signature = message_signature(self._defined_action)
+    if not isinstance(maybe_events, list):
+        return [maybe_events]
 
-    def __call__(self, _: Action, store: Store) -> list[Event]:
-        return self._context(self._defined_action, store)
-
-    def includes(self, signature: str) -> bool:
-        return signature == self._signature
-
-    def init_store(self, store: Store):
-        """
-        Since context dispatcher triggers reducer that already initialized, this method may do nothing.
-        """
-        pass
+    return maybe_events
 
 
-def addon_to_dispatcher(addon: _ComponentAddon, context_dispatcher: Dispatcher):
-    return ContextDispatcher(
-        {
-            "name": addon.destination,
-            "method": addon.method,
-            "payload": addon.payload,
-        },
-        context_dispatcher,
-    )
+def tag_events_by_method_name(
+    owner_name: str, method_name: str, events: list[Event]
+) -> list[Event]:
+    tagged_events: list[Event] = []
+    for event in events:
+        tagged_event: Event = {
+            "name": event["name"],
+            "payload": event["payload"],
+            "method": method_name,
+            "tag": event["tag"] or method_name,
+            "handler": event.get("handler", None),
+        }
+        tagged_events.append(tagged_event)
 
-
-class ReducerMethodWrappingDispatcher(Dispatcher):
-    def __init__(
-        self,
-        name: str,
-        method_mappings: dict[str, str],
-        reducer_mappings: dict[str, ComponentMethodWrapper],
-        default_state: dict[str, Entity],
-        binds=None,
-        addons: list[_ComponentAddon] | None = None,
-    ):
-        self._name = name
-        self._default_state = default_state
-        self.method_mappings = method_mappings
-        self.reducer_mappings = reducer_mappings
-        self._addons = addons or []
-        self._store_adapter = StoreAdapter(self._default_state, binds)
-
-    def get_context_synced_dispatcher(self, context_dispatcher: Dispatcher):
-        return TandemDispatcher(
-            self,
-            [addon_to_dispatcher(addon, context_dispatcher) for addon in self._addons],
-        )
-
-    def includes(self, signature: str) -> bool:
-        return self._find_mapping_name(signature) is not None
-
-    def init_store(self, store: Store):
-        local_store = store.local(self._name)
-        for name in self._default_state:
-            local_store.read_entity(name, default=self._default_state[name])
-
-    def __call__(self, action: Action, store: Store) -> list[Event]:
-        mapping_name = self._find_mapping_name(message_signature(action))
-
-        if not mapping_name:
-            raise ValueError
-
-        local_store = store.local(self._name)
-
-        reducer = self.reducer_mappings[mapping_name]
-        method_name = self.method_mappings[mapping_name]
-
-        if reducer is None or method_name is None:
-            return []
-
-        input_state = self._store_adapter.get_state(
-            local_store, reducer.get_state_type()
-        )
-        output_state, maybe_events = reducer(
-            reducer.translate_payload(action.get("payload")), input_state
-        )
-
-        self._store_adapter.set_state(
-            local_store,
-            output_state,
-        )
-
-        events = self.regularize_returned_event(maybe_events)
-
-        return self.tag_events_by_method_name(method_name, events)
-
-    def regularize_returned_event(
-        self, maybe_events: Optional[Union[Event, list[Event]]]
-    ) -> list[Event]:
-        if maybe_events is None:
-            return []
-
-        if not isinstance(maybe_events, list):
-            return [maybe_events]
-
-        return maybe_events
-
-    def tag_events_by_method_name(
-        self, method_name: str, events: list[Event]
-    ) -> list[Event]:
-        tagged_events: list[Event] = []
-        for event in events:
-            tagged_event: Event = {
-                "name": event["name"],
-                "payload": event["payload"],
+    if all(event["tag"] not in (Tag.REJECT, Tag.ACCEPT) for event in events):
+        return tagged_events + [
+            {
+                "name": owner_name,
                 "method": method_name,
-                "tag": event["tag"] or method_name,
-                "handler": event.get("handler", None),
+                "tag": Tag.ACCEPT,
+                "payload": {},
+                "handler": None,
             }
-            tagged_events.append(tagged_event)
+        ]
 
-        if all(event["tag"] not in (Tag.REJECT, Tag.ACCEPT) for event in events):
-            return tagged_events + [
-                {
-                    "name": self._name,
-                    "method": method_name,
-                    "tag": Tag.ACCEPT,
-                    "payload": {},
-                    "handler": None,
-                }
-            ]
-
-        return tagged_events
-
-    def _find_mapping_name(self, target: str) -> Optional[str]:
-        if target in self.reducer_mappings:
-            return target
-
-        for mapping_name in self.reducer_mappings:
-            if mapping_name[0] == "$" and mapping_name.replace("$", "") in target:
-                return cast(str, mapping_name)
-
-        return None
+    return tagged_events
 
 
-class WrappedView:
-    def __init__(
-        self,
-        name: str,
-        wrapped_view_method: ComponentMethodWrapper,
-        default_state: dict[str, Entity],
-        binds=None,
-    ):
-        self._name = name
-        self._default_state = default_state
-        self._wrapped_view_method = wrapped_view_method
-        self._store_adapter = StoreAdapter(self._default_state, binds)
+def event_tagged_reducer(
+    owner_name: str, method_name: str, event_provider: EventProvider
+):
+    def wrapper(reducer):
+        @wraps(reducer)
+        def wrapped(action: Action, store: Store) -> list[Event]:
+            events = reducer(action, store)
+            if len(events) == 0:
+                return []
 
-    def __call__(self, store: Store):
-        local_store = store.local(self._name)
-        try:
-            input_state = self._store_adapter.get_state(
-                local_store, self._wrapped_view_method.get_state_type()
-            )
-            view = self._wrapped_view_method(input_state)
+            if events[0]["name"] != owner_name:
+                events = [event_provider.wrap_with_modifier(event) for event in events]
+            return tag_events_by_method_name(owner_name, method_name, events)
 
+        return wrapped
+
+    return wrapper
+
+
+def init_component_store(owner_name, default_state, store: Store):
+    local_store = store.local(owner_name)
+    for name in default_state:
+        local_store.set_entity(name, default_state[name])
+
+
+def view_use_store(store_name, bounded_stores: dict[str, str]):
+    def wrapper(viewer):
+        state_type = list(inspect.signature(viewer).parameters.values())[0].annotation
+
+        @wraps(viewer)
+        def wrapped(global_store: Store):
+            local_store = global_store.local(store_name)
+
+            my_entities = local_store.read(store_name)
+
+            for name, address in bounded_stores.items():
+                entity = local_store.read_entity(address, None)
+                assert entity is not None
+                my_entities[name] = entity
+
+            state = state_type(**my_entities)
+
+            view = viewer(state)
             return view
-        except ValidationError as e:
-            raise ValueError(f"Error raised from {self._name}\n{e}") from e
+
+        return wrapped
+
+    return wrapper
+
+
+def _create_binding_with_store(
+    owner_name: str,
+    properties: list[str],
+    bindings: dict[str, str],
+):
+
+    property_address = {}
+
+    for property_name in properties:
+        if property_name in bindings:
+            property_address[property_name] = bindings[property_name]
+        else:
+            property_address[property_name] = f".{owner_name}.{property_name}"
+
+    return property_address
+
+
+def compile_into_unsafe_reducer(property_address: dict[str, str]):
+    """
+    address: mapping about {address: property_name}
+
+    Returning reducer does not ensure no-op for invalid action.
+    Create proper relation between action and reducer is responsible to caller.
+    """
+
+    def wrapper(component_method):
+        payload_type = list(inspect.signature(component_method).parameters.values())[
+            0
+        ].annotation
+
+        @wraps(component_method)
+        def wrapped(action: Action, global_store: Store) -> list[Event]:
+            # if no-op, return []
+            state = {}
+
+            for name, address in property_address.items():
+                entity = global_store.read_entity(address, None)
+                state[name] = entity
+
+            payload = action["payload"]
+
+            if payload_type not in (int, str, float, None):
+                payload = payload_type(**action["payload"])
+
+            output_state, maybe_events = component_method(payload, state)
+            output_state_dict = dict(output_state)
+
+            for name, address in property_address.items():
+                global_store.set_entity(address, output_state_dict[name])
+
+            return regularize_returned_event(maybe_events)
+
+        return wrapped
+
+    return wrapper
+
+
+def no_op_reducer(action: Action, store: Store) -> list[Event]:
+    return []
 
 
 class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
@@ -346,6 +240,55 @@ class StaticPayloadReducerInfo(BaseModel):
     payload: dict
 
 
+def _old_signature_to_new_signature(old_signature: str) -> ActionSignature:
+    split = old_signature.split(".")
+
+    return split[0], ".".join(split[1:])
+
+
+def listening_actions_to_listeners(
+    owner_name: str, listening_actions: dict[str, Union[str, StaticPayloadReducerInfo]]
+) -> list[Listener]:
+    listeners: list[Listener] = []
+
+    for (
+        listening_old_signature,
+        target_method_name_or_static_payload,
+    ) in listening_actions.items():
+        action_signature = _old_signature_to_new_signature(listening_old_signature)
+        if isinstance(target_method_name_or_static_payload, str):
+            listeners.append(
+                {
+                    "action_name_or_reserved_values": action_signature[0],
+                    "action_method": action_signature[1],
+                    "target_reducer_name": (
+                        owner_name,
+                        target_method_name_or_static_payload,
+                    ),
+                    "payload": None,
+                }
+            )
+        else:
+            listeners.append(
+                {
+                    "action_name_or_reserved_values": action_signature[0],
+                    "action_method": action_signature[1],
+                    "target_reducer_name": (
+                        owner_name,
+                        target_method_name_or_static_payload.name,
+                    ),
+                    "payload": target_method_name_or_static_payload.payload,
+                }
+            )
+
+    return listeners
+
+
+class ComponentInformation(TypedDict):
+    id: int
+    name: str
+
+
 class Component(BaseModel, metaclass=ComponentMetaclass):
     """
     Component is compact bundle of state-action.
@@ -364,85 +307,69 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
 
     id: str
     name: str
+    modifier: Optional[Stat] = None
+
     listening_actions: dict[str, Union[str, StaticPayloadReducerInfo]] = Field(
         default_factory=dict
-    )
+    )  # Access by external only
     binds: dict[str, str] = Field(default_factory=dict)
     addons: list[_ComponentAddon] = Field(default_factory=list)
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @abstractmethod
-    def get_default_state(self) -> dict[str, Entity]: ...
+    def get_default_state(self) -> Any: ...
 
     @property
     def event_provider(self) -> EventProvider:
-        return NamedEventProvider(self.name)
+        return NamedEventProvider(self.name, self.modifier)
 
-    def get_method_mappings(
-        self,
-    ) -> tuple[dict[str, str], dict[str, ComponentMethodWrapper]]:
-        reducer_methods = self.get_every_reducer_methods()
+    def get_unsafe_reducers(self) -> list[UnsafeReducer]:
+        if len(getattr(self, "__reducers__")) == 0:
+            return []
 
-        wild_card_mappings = {
-            f"{WILD_CARD}.{method}": method for method in reducer_methods.keys()
-        }
-        default_mappings = {
-            f"{self.name}.{method}": method for method in reducer_methods.keys()
-        }
-        reducer_mappings, method_mappings = {}, {}
-        method_mappings.update(default_mappings)
-        method_mappings.update(wild_card_mappings)
+        bounded_stores = GlobalProperty.get_default_binds()
+        bounded_stores.update(self.binds)
 
-        # str-type reducers
-        for listening_signature, reducer_info in self.listening_actions.items():
-            if isinstance(reducer_info, str):
-                method_mappings[listening_signature] = reducer_info
+        # TODO: remove these lines with explicit state passing
+        model_fields = list(self.get_default_state().keys())
 
-        reducer_mappings.update(
-            {k: reducer_methods[v] for k, v in method_mappings.items()}
-        )
-
-        # StaticPayloadReducerInfo-type reducers
-        for listening_signature, reducer_info in self.listening_actions.items():
-            if isinstance(reducer_info, StaticPayloadReducerInfo):
-                method_mappings[listening_signature] = reducer_info.name
-                reducer_mappings[listening_signature] = self._get_reducer_method(
-                    reducer_info.name,
-                    reducer_info.payload,
-                )
-
-        return method_mappings, reducer_mappings
-
-    def export_dispatcher(self) -> ReducerMethodWrappingDispatcher:
-        method_mappings, reducer_mappings = self.get_method_mappings()
-        return ReducerMethodWrappingDispatcher(
+        property_address = _create_binding_with_store(
             self.name,
-            method_mappings,
-            reducer_mappings,
-            self.get_default_state(),
-            binds=self.binds,
-            addons=self.addons,
+            model_fields,
+            bounded_stores,
         )
 
-    def get_every_reducer_methods(self):
-        return {
-            method_name: self._get_reducer_method(method_name)
+        return [
+            {
+                "reducer": event_tagged_reducer(
+                    self.name, method_name, self.event_provider
+                )(
+                    compile_into_unsafe_reducer(property_address)(
+                        getattr(self, method_name)
+                    )
+                ),
+                "name": (self.name, method_name),
+                "target_action_signature": [
+                    (self.name, method_name),
+                    (WILD_CARD, method_name),
+                ],
+            }
             for method_name in getattr(self, "__reducers__")
-        }
-
-    def _get_reducer_method(self, reducer_name, static_payload: Optional[dict] = None):
-        return ComponentMethodWrapper(
-            getattr(self, reducer_name), static_payload=static_payload
-        )
+        ]
 
     def get_views(self):
+        bounded_stores = GlobalProperty.get_default_binds()
+        bounded_stores.update(self.binds)
+
         return {
-            method_name: WrappedView(
+            method_name: view_use_store(
                 self.name,
-                ComponentMethodWrapper(getattr(self, method_name), skip_count=0),
-                self.get_default_state(),
-                binds=self.binds,
-            )
+                bounded_stores=bounded_stores,
+            )(getattr(self, method_name))
             for method_name in getattr(self, "__views__")
         }
+
+    @view_method
+    def info(self, _: Any) -> ComponentInformation:
+        return cast(ComponentInformation, self.model_dump())

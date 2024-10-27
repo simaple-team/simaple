@@ -1,0 +1,12 @@
+{
+    "title": "Simaple",
+    "root": true,
+    "pages": [
+        "index",
+        "---기여하기---",
+        "contributing",
+        "adding-new-job",
+        "writing-down-component",
+        "spec"
+    ]
+}

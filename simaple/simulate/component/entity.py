@@ -1,6 +1,8 @@
 from typing import Optional
 
-from simaple.simulate.base import Entity
+import pydantic
+
+from simaple.simulate.core.base import Entity
 
 
 class Lasting(Entity):
@@ -92,15 +94,46 @@ class Cycle(Entity):
 
 
 class Periodic(Entity):
-    interval_counter: float = 0.0
-    interval: float
+    interval: float = pydantic.Field(gt=0)
+    initial_counter: Optional[float] = pydantic.Field(gt=0, default=None)
+
+    interval_counter: float = pydantic.Field(gt=0, default=999_999_999)
     time_left: float = 0.0
     count: int = 0
 
-    def set_time_left(self, time: float, initial_counter: Optional[float] = None):
+    def set_time_left_without_delay(self, time: float) -> int:
+        """
+        Implement 0-delay periodic behavior.
+        since 0-delay behavior always emit signal immediately; you may handle
+        returned event as periodic event.
+        """
+
         self.time_left = time
         self.interval_counter = (
-            initial_counter if initial_counter is not None else self.interval
+            self.interval
+        )  # interval count = 0 is not allowed. emit event and increase interval counter.
+        self.count = 1
+
+        return 1
+
+    def set_time_left(self, time: float) -> None:
+        """
+        Set left time, with initial counter value.
+        If initial counter not specified, default initial counter is `interval`.
+        given initial counter may larger than 0; if initial counter is 0, this raises error.
+        To use behavior with 0-initial counter, use `set_time_left_without_delay` with proper method handling.
+        """
+        if time <= 0:
+            raise ValueError("Given time may greater than 0")
+
+        if self.initial_counter is not None and self.initial_counter <= 0:
+            raise ValueError(
+                "Initial counter may greater than 0. Maybe you intended `set_time_left_without_delay`?"
+            )
+
+        self.time_left = time
+        self.interval_counter = (
+            self.initial_counter if self.initial_counter is not None else self.interval
         )
         self.count = 0
 
@@ -111,41 +144,58 @@ class Periodic(Entity):
         return self.time_left > 0
 
     def elapse(self, time: float) -> int:
-        if self.time_left <= 0:
-            return 0
+        """
+        Wrapper for resolving method.
+        """
+        initial_count = self.count
 
-        maximum_elapsed = max(
-            0, int((self.time_left - self.interval_counter) // self.interval) + 1
+        periodic_state = self.model_copy(deep=True)
+        while time > 0:
+            periodic_state, time = self.resolve_step(periodic_state, time)
+
+        self.time_left = periodic_state.time_left
+        self.interval = periodic_state.interval
+        self.interval_counter = periodic_state.interval_counter
+        self.count = periodic_state.count
+
+        return periodic_state.count - initial_count
+
+    @classmethod
+    def resolve_step(cls, state: "Periodic", time: float) -> tuple["Periodic", float]:
+        """Resolve given time with minimal time step.
+        Returns: time left, changed entity state.
+        """
+        state = state.model_copy(deep=True)
+        if state.time_left <= 0:
+            return state, 0
+
+        time_to_resolve = time
+
+        _dynamic_interval_counter = state.interval_counter
+        min_interval_for_next_change = min(
+            _dynamic_interval_counter, state.time_left, time_to_resolve
         )
-        self.time_left -= time
-        self.interval_counter -= time
 
-        if self.interval_counter < 0:
-            lapse_count = int(self.interval_counter // self.interval)
-            self.interval_counter = self.interval_counter % self.interval
-            count = min(maximum_elapsed, lapse_count * -1)
-            self.count += count
-            return count
+        time_to_resolve -= min_interval_for_next_change
+        _dynamic_interval_counter -= min_interval_for_next_change
+        state.time_left -= min_interval_for_next_change
 
-        return 0
+        if state.time_left == 0:
+            return state, 0
 
-    def resolving(self, time: float):
-        if self.time_left <= 0:
-            return 0
+        if _dynamic_interval_counter == 0:
+            _dynamic_interval_counter += state.interval
+            state.count += 1
 
-        maximum_elapsed = max(
-            0, int((self.time_left - self.interval_counter) // self.interval) + 1
-        )
+        if _dynamic_interval_counter == 0:
+            if state.time_left > 0:
+                raise ValueError("Unexpected error")
 
-        self.time_left -= time
-        self.interval_counter -= time
-        elapse_count = 0
+            _dynamic_interval_counter = state.interval
 
-        while self.interval_counter <= 0 and elapse_count < maximum_elapsed:
-            self.interval_counter += self.interval
-            elapse_count += 1
-            yield 1
-            self.count += 1
+        state.interval_counter = _dynamic_interval_counter
+
+        return state, time_to_resolve
 
     def disable(self):
         self.time_left = 0

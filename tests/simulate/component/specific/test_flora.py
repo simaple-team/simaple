@@ -28,9 +28,7 @@ def fixture_magic_curcuit_full_drive():
 def fixture_magic_curcuit_full_drive_state(
     magic_curcuit_full_drive: MagicCurcuitFullDriveComponent, dynamics: Dynamics
 ):
-    return MagicCurcuitFullDriveState.model_validate(
-        {**magic_curcuit_full_drive.get_default_state(), "dynamics": dynamics}
-    )
+    return {**magic_curcuit_full_drive.get_default_state(), "dynamics": dynamics}
 
 
 def test_magic_curcuit_buff(

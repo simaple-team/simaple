@@ -1,3 +1,5 @@
+import os
+
 import simaple.simulate.component.common  # noqa: F401
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
@@ -18,7 +20,9 @@ def test_run_engine():
         v_improvements_level=60,
         hexa_improvements_level=10,
     )
-    _simulation_environment_memoizer = PersistentStorageMemoizer()
+    _simulation_environment_memoizer = PersistentStorageMemoizer(
+        os.path.join(os.path.dirname(__file__), ".memo.simaple.json")
+    )
     environment = _simulation_environment_memoizer.compute_environment(
         _environment_provider
     )
@@ -64,7 +68,7 @@ CAST "플레임 헤이즈 VI"
 CAST "크레스트 오브 더 솔라"
 CAST "플레임 스윕 VI"
 CAST "플레임 스윕 VI"
-!debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"
+!debug "list(filter(has_cooldown, filter(available, viewer('validity'))))"
 
 CAST "메테오"
 
@@ -80,7 +84,7 @@ CAST "미스트 이럽션 VI"
 CAST "플레임 헤이즈 VI"
 x4 CAST "플레임 스윕 VI"
 
-!debug "seq(viewer('validity')).filter(available).filter(has_cooldown).to_list()"
+!debug "list(filter(has_cooldown, filter(available, viewer('validity'))))"
 """
     )
 

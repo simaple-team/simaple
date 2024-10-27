@@ -1,16 +1,10 @@
 from typing import Callable, Generator, Protocol, runtime_checkable
 
-from simaple.simulate.base import (
-    AddressedStore,
-    Checkpoint,
-    Event,
-    PlayLog,
-    PostActionCallback,
-    RouterDispatcher,
-    ViewerType,
-    ViewSet,
-    play,
-)
+from simaple.simulate.core.base import Event
+from simaple.simulate.core.reducer import ReducerType
+from simaple.simulate.core.runtime import PlayLog, PostActionCallback, play
+from simaple.simulate.core.store import AddressedStore, Checkpoint
+from simaple.simulate.core.view import ViewerType, ViewSet
 from simaple.simulate.policy.base import (
     Command,
     ConsoleText,
@@ -51,12 +45,12 @@ class BasicOperationEngine:
 
     def __init__(
         self,
-        router: RouterDispatcher,
+        reducer: ReducerType,
         store: AddressedStore,
         viewset: ViewSet,
         handlers: dict[str, Callable[[Operation], BehaviorGenerator]],
     ):
-        self._router = router
+        self._reducer = reducer
         self._viewset = viewset
         self._handlers = handlers
 
@@ -131,7 +125,7 @@ class BasicOperationEngine:
             if action is None:
                 break
 
-            store, self._buffered_events = play(store, action, self._router)
+            store, self._buffered_events = play(store, action, self._reducer)
 
             playlogs.append(
                 PlayLog(

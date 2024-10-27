@@ -4,7 +4,7 @@ import simaple.simulate.component.common  # noqa: F401
 import simaple.simulate.component.specific  # noqa: F401
 from simaple.core import ActionStat, Stat
 from simaple.data.jobs.builtin import build_skills
-from simaple.simulate.base import SimulationRuntime
+from simaple.simulate.core.runtime import SimulationRuntime
 from simaple.simulate.kms import get_builder
 
 

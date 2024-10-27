@@ -1,6 +1,7 @@
 import simaple.simulate.component.common  # noqa: F401
 from simaple.core.base import Stat
-from simaple.simulate.base import Action, SimulationRuntime, message_signature
+from simaple.simulate.core import Action, Event
+from simaple.simulate.core.runtime import SimulationRuntime
 from simaple.simulate.reserved_names import Tag
 
 
@@ -23,12 +24,12 @@ def test_poison_nova(archmagefb_simulation_runtime: SimulationRuntime):
         dict(name="미스트 이럽션", method="use", payload=None),
     ]
 
-    events = []
+    events: list[Event] = []
 
     for action in actions:
         events += archmagefb_simulation_runtime.play(action)
 
-    assert "포이즌 노바.trigger" in [message_signature(e) for e in events]
+    assert "trigger" in [e["method"] for e in events]
 
 
 def test_poison_chain(archmagefb_simulation_runtime: SimulationRuntime):

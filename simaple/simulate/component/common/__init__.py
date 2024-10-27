@@ -8,7 +8,6 @@ import simaple.simulate.component.common.dot_emitting_attack_skill
 import simaple.simulate.component.common.hit_limited_periodic_damage
 import simaple.simulate.component.common.keydown_skill
 import simaple.simulate.component.common.mob
-import simaple.simulate.component.common.multiple_attack_skill
 import simaple.simulate.component.common.multiple_hit_hexa_skill
 import simaple.simulate.component.common.periodic_damage_configurated_attack_skill
 import simaple.simulate.component.common.periodic_damage_configurated_hexa_skill

@@ -1,14 +1,10 @@
-from typing import Optional, TypedDict
+from typing import Optional
 
 import pydantic
 
 from simaple.core.base import Stat
+from simaple.simulate.component.base import ComponentInformation
 from simaple.simulate.view import AggregationView
-
-
-class ComponentInformation(TypedDict):
-    id: int
-    name: str
 
 
 class Validity(pydantic.BaseModel):

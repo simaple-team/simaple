@@ -22,7 +22,7 @@ with open("webui/public/dependency.js", 'w') as f:
 interpreter = "python"
 
 [tool.poe.tasks]
-dev = "uvicorn simaple.api.dev:app --reload"
+dev = "uvicorn simaple.api.dev:app --reload --reload-dir simaple --reload-include '*.py' --reload-include '*.yaml'"
 
 _black-check = "black --check simaple tests"
 _isort-check = "isort --check-only simaple tests"
@@ -95,7 +95,6 @@ module = [
     "sklearn.linear_model",
     "sklearn.pipeline",
     "sklearn.preprocessing",
-    "functional",
 ]
 
 [tool.poetry]
@@ -121,9 +120,6 @@ SQLAlchemy = "^1.4.45"
 scipy = "^1.11.2"
 pydantic-settings = "^2.0.3"
 lark = "^1.1.7"
-pyfunctional = "^1.5.0"
-fastapi = "^0.115.0"
-uvicorn = { extras = ["standard"], version = "^0.31.0" }
 
 [tool.poetry.group.dev.dependencies]
 poethepoet = "^0.28.0"
@@ -148,6 +144,8 @@ pytest-asyncio = "^0.23.2"
 types-PyYAML = "^6.0.4"
 inline-snapshot = "^0.13.3"
 pytest-watcher = "^0.4.3"
+uvicorn = { extras = ["standard"], version = "^0.31.0" }
+fastapi = "^0.115.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

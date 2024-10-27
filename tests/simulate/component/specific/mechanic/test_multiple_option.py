@@ -22,6 +22,7 @@ class TestMultipleOption:
             name="test-multiple-option",
             cooldown_duration=40_000,
             delay=690,
+            periodic_initial_delay=690,
             periodic_interval=1000,
             lasting_duration=120_000,
             missile_count=3,
@@ -39,13 +40,11 @@ class TestMultipleOption:
         dynamics: Dynamics,
         robot_mastery: RobotMastery,
     ):
-        return MultipleOptionState.model_validate(
-            {
-                **multiple_option.get_default_state(),
-                "dynamics": dynamics,
-                "robot_mastery": robot_mastery,
-            }
-        )
+        return {
+            **multiple_option.get_default_state(),
+            "dynamics": dynamics,
+            "robot_mastery": robot_mastery,
+        }
 
     def test_multiple_option_little_use(
         self,

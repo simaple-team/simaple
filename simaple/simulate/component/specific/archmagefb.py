@@ -1,23 +1,21 @@
+from typing import Optional, TypedDict
+
+import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.lasting_trait as lasting_trait
+import simaple.simulate.component.trait.periodic_trait as periodic_trait
+import simaple.simulate.component.trait.simple_attack as simple_attack
 from simaple.core import Stat
-from simaple.simulate.base import Entity
 from simaple.simulate.component.base import (
     Component,
     Event,
-    ReducerState,
     reducer_method,
     view_method,
 )
 from simaple.simulate.component.entity import Cooldown, Lasting, Periodic, Stack
-from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    AddDOTDamageTrait,
-    BuffTrait,
-    CooldownValidityTrait,
-    PeriodicWithSimpleDamageTrait,
-    UseSimpleAttackTrait,
-)
 from simaple.simulate.component.util import is_rejected
-from simaple.simulate.component.view import Running, Validity
+from simaple.simulate.component.view import Running
+from simaple.simulate.core.base import Entity
+from simaple.simulate.event import EmptyEvent
 from simaple.simulate.global_property import Dynamics
 
 
@@ -38,7 +36,7 @@ class FerventDrainStack(Entity):
         return Stat(final_damage_multiplier=self.get_count() * 5)
 
 
-class FerventDrainState(ReducerState):
+class FerventDrainState(TypedDict):
     drain_stack: FerventDrainStack
 
 
@@ -53,7 +51,7 @@ class FerventDrain(Component):
 
     @view_method
     def buff(self, state: FerventDrainState) -> Stat:
-        return state.drain_stack.get_buff()
+        return state["drain_stack"].get_buff()
 
     @view_method
     def running(self, state: FerventDrainState) -> Running:
@@ -83,13 +81,14 @@ class PoisonNovaEntity(Entity):
         self.time_left -= time
 
 
-class PoisonNovaState(ReducerState):
+class PoisonNovaState(TypedDict):
     cooldown: Cooldown
     poison_nova: PoisonNovaEntity
     dynamics: Dynamics
 
 
-class PoisonNovaComponent(SkillComponent, AddDOTDamageTrait):
+class PoisonNovaComponentProps(TypedDict):
+    id: str
     name: str
     damage: float
     hit: float
@@ -102,87 +101,130 @@ class PoisonNovaComponent(SkillComponent, AddDOTDamageTrait):
     dot_damage: float
     dot_lasting_duration: float
 
+    cooldown_duration: float
+    delay: float
+
+
+class PoisonNovaComponent(Component):
+    name: str
+    damage: float
+    hit: float
+
+    nova_remaining_time: float
+    nova_damage: float
+    nova_single_hit: int
+    nova_hit_count: int
+
+    dot_damage: float
+    dot_lasting_duration: float
+
+    delay: float
+    cooldown_duration: float
+
     def get_default_state(self):
         return {
             "cooldown": Cooldown(time_left=0),
             "poison_nova": PoisonNovaEntity(
                 time_left=0, maximum_time_left=100 * 1000.0
             ),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> PoisonNovaComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "nova_remaining_time": self.nova_remaining_time,
+            "nova_damage": self.nova_damage,
+            "nova_single_hit": self.nova_single_hit,
+            "nova_hit_count": self.nova_hit_count,
+            "dot_damage": self.dot_damage,
+            "dot_lasting_duration": self.dot_lasting_duration,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
         }
 
     @reducer_method
     def elapse(self, time: float, state: PoisonNovaState):
-        state = state.deepcopy()
-        state.cooldown.elapse(time)
-        state.poison_nova.elapse(time)
-        return state, self.event_provider.elapsed(time)
+        cooldown, poison_nova = (
+            state["cooldown"].model_copy(),
+            state["poison_nova"].model_copy(),
+        )
+
+        cooldown.elapse(time)
+        poison_nova.elapse(time)
+        state["cooldown"], state["poison_nova"] = cooldown, poison_nova
+
+        return state, [EmptyEvent.elapsed(time)]
 
     @reducer_method
     def use(self, _: None, state: PoisonNovaState):
-        state = state.deepcopy()
+        if not state["cooldown"].available:
+            return state, [EmptyEvent.rejected()]
 
-        if not state.cooldown.available:
-            return state, self.event_provider.rejected()
-
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
+        cooldown, poison_nova = (
+            state["cooldown"].model_copy(),
+            state["poison_nova"].model_copy(),
         )
-        state.poison_nova.create_nova(self.nova_remaining_time)
+
+        cooldown.set_time_left(
+            state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
+        )
+        poison_nova.create_nova(self.nova_remaining_time)
+
+        state["cooldown"], state["poison_nova"] = cooldown, poison_nova
 
         return state, [
-            self.event_provider.dealt(self.damage, self.hit),
-            self.event_provider.delayed(self.delay),
-            self.get_dot_add_event(),
+            EmptyEvent.dealt(self.damage, self.hit),
+            EmptyEvent.delayed(self.delay),
+            simple_attack.get_dot_event(
+                self.name, self.dot_damage, self.dot_lasting_duration
+            ),
         ]
 
     @reducer_method
     def trigger(self, _: None, state: PoisonNovaState):
-        state = state.deepcopy()
+        poison_nova = state["poison_nova"].model_copy()
 
-        triggered = state.poison_nova.try_trigger_nova()
+        triggered = poison_nova.try_trigger_nova()
+        state["poison_nova"] = poison_nova
+
         if triggered:
             return state, [
-                self.event_provider.dealt(
+                EmptyEvent.dealt(
                     self.nova_damage, self.nova_single_hit * min(self.nova_hit_count, 3)
                 ),
-                self.event_provider.dealt(
+                EmptyEvent.dealt(
                     self.nova_damage * 0.5,
                     self.nova_single_hit * max(self.nova_hit_count - 3, 0),
                 ),
             ]
 
-        return state, None
+        return state, []
 
     @view_method
     def validity(self, state: PoisonNovaState):
-        return Validity(
-            id=self.id,
-            name=self.name,
-            time_left=state.cooldown.minimum_time_to_available(),
-            valid=state.cooldown.available,
-            cooldown_duration=self.cooldown_duration,
-        )
-
-    def _get_dot_damage_and_lasting(self) -> tuple[float, float]:
-        return self.dot_damage, self.dot_lasting_duration
+        return cooldown_trait.validity_view(state, **self.get_props())
 
 
-class PoisonChainState(ReducerState):
+class PoisonChainState(TypedDict):
     cooldown: Cooldown
     periodic: Periodic
     stack: Stack
     dynamics: Dynamics
 
 
-class PoisonChainComponent(
-    SkillComponent, PeriodicWithSimpleDamageTrait, CooldownValidityTrait
-):
+class PoisonChainComponentProps(TypedDict):
+    id: str
     name: str
     damage: float
     hit: float
     cooldown_duration: float
     delay: float
 
+    periodic_initial_delay: Optional[float]
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
@@ -190,76 +232,111 @@ class PoisonChainComponent(
 
     periodic_damage_increment: float
 
-    def get_default_state(self):
+
+class PoisonChainComponent(
+    Component,
+):
+    name: str
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
+
+    periodic_initial_delay: Optional[float] = None
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+    lasting_duration: float
+
+    periodic_damage_increment: float
+
+    def get_default_state(self) -> PoisonChainState:
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+            "periodic": Periodic(
+                interval=self.periodic_interval,
+                initial_counter=self.periodic_initial_delay,
+                time_left=0,
+            ),
             "stack": Stack(maximum_stack=5),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
-    def get_periodic_damage(self, state: PoisonChainState):
-        return (
-            self.periodic_damage
-            + self.periodic_damage_increment * state.stack.get_stack()
-        )
+    def get_props(self) -> PoisonChainComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "periodic_initial_delay": self.periodic_initial_delay,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "lasting_duration": self.lasting_duration,
+            "periodic_damage_increment": self.periodic_damage_increment,
+        }
+
+    def get_periodic_damage(self, stack: Stack):
+        return self.periodic_damage + self.periodic_damage_increment * stack.get_stack()
 
     @reducer_method
     def elapse(self, time: float, state: PoisonChainState):
-        state = state.deepcopy()
+        cooldown, periodic, stack = (
+            state["cooldown"].model_copy(),
+            state["periodic"].model_copy(),
+            state["stack"].model_copy(),
+        )
 
-        state.cooldown.elapse(time)
+        cooldown.elapse(time)
 
         dealing_events = []
 
-        for _ in state.periodic.resolving(time):
+        for _ in range(periodic.elapse(time)):
             dealing_events.append(
-                self.event_provider.dealt(
-                    self.get_periodic_damage(state), self.periodic_hit
-                )
+                EmptyEvent.dealt(self.get_periodic_damage(stack), self.periodic_hit)
             )
-            state.stack.increase(1)
+            stack.increase(1)
 
-        return state, [self.event_provider.elapsed(time)] + dealing_events
+        state["cooldown"], state["periodic"], state["stack"] = cooldown, periodic, stack
+
+        return state, [EmptyEvent.elapsed(time)] + dealing_events
 
     @reducer_method
     def use(self, _: None, state: PoisonChainState):
-        state = state.deepcopy()
+        state, events = periodic_trait.start_periodic_with_cooldown(
+            state,
+            {},
+            **self.get_props(),
+        )
 
-        state, events = self.use_periodic_damage_trait(state)
         if not is_rejected(events):
-            state.stack.reset(1)
+            stack = state["stack"].model_copy()
+            stack.reset(1)
+            state["stack"] = stack
 
         return state, events
 
     @view_method
     def validity(self, state: PoisonChainState):
-        return self.validity_in_cooldown_trait(state)
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: PoisonChainState) -> Running:
-        return Running(
-            id=self.id,
-            name=self.name,
-            time_left=state.periodic.time_left,
-            lasting_duration=self._get_lasting_duration(state),
+        return periodic_trait.running_view(
+            state,
+            **self.get_props(),
         )
 
-    def _get_lasting_duration(self, state: PoisonChainState) -> float:
-        return self.lasting_duration
 
-    def _get_simple_damage_hit(self) -> tuple[float, float]:
-        return self.damage, self.hit
-
-    def _get_periodic_damage_hit(self, state: PoisonChainState) -> tuple[float, float]:
-        return self.periodic_damage, self.periodic_hit
-
-
-class DotPunisherState(ReducerState):
+class DotPunisherState(TypedDict):
     cooldown: Cooldown
     dynamics: Dynamics
 
 
-class DotPunisherComponent(SkillComponent, CooldownValidityTrait, AddDOTDamageTrait):
+class DotPunisherComponentProps(TypedDict):
+    id: str
     name: str
     damage: float
     hit: float
@@ -271,59 +348,83 @@ class DotPunisherComponent(SkillComponent, CooldownValidityTrait, AddDOTDamageTr
     dot_damage: float
     dot_lasting_duration: float
 
-    def get_default_state(self):
+
+class DotPunisherComponent(Component):
+    name: str
+    damage: float
+    hit: float
+    cooldown_duration: float
+    delay: float
+
+    multiple: int
+
+    dot_damage: float
+    dot_lasting_duration: float
+
+    def get_default_state(self) -> DotPunisherState:
         return {
             "cooldown": Cooldown(time_left=0),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> DotPunisherComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "multiple": self.multiple,
+            "dot_damage": self.dot_damage,
+            "dot_lasting_duration": self.dot_lasting_duration,
         }
 
     @reducer_method
     def use(self, _: None, state: DotPunisherState):
-        state = state.deepcopy()
+        if not state["cooldown"].available:
+            return state, [EmptyEvent.rejected()]
 
-        if not state.cooldown.available:
-            return state, self.event_provider.rejected()
-
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
+        cooldown = state["cooldown"].model_copy()
+        cooldown.set_time_left(
+            state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
         )
+        state["cooldown"] = cooldown
 
         return state, [
-            self.event_provider.dealt(self.damage, self.hit)
-            for _ in range(self.multiple)
-        ] + [self.event_provider.delayed(self.delay), self.get_dot_add_event()]
+            EmptyEvent.dealt(self.damage, self.hit) for _ in range(self.multiple)
+        ] + [
+            EmptyEvent.delayed(self.delay),
+            simple_attack.get_dot_event(
+                self.name, self.dot_damage, self.dot_lasting_duration
+            ),
+        ]
 
     @reducer_method
     def elapse(self, time: float, state: DotPunisherState):
-        state = state.deepcopy()
-        state.cooldown.elapse(time)
-        return state, [self.event_provider.elapsed(time)]
+        return cooldown_trait.elapse_cooldown_only(state, {"time": time})
 
     @reducer_method
     def reset_cooldown(self, _: None, state: DotPunisherState):
-        state = state.deepcopy()
-        state.cooldown.set_time_left(0)
-        return state, None
+        cooldown = state["cooldown"].model_copy()
+        cooldown.set_time_left(0)
+        state["cooldown"] = cooldown
+
+        return state, []
 
     @view_method
     def validity(self, state: DotPunisherState):
-        return self.validity_in_cooldown_trait(state)
-
-    def _get_dot_damage_and_lasting(self) -> tuple[float, float]:
-        return self.dot_damage, self.dot_lasting_duration
+        return cooldown_trait.validity_view(state, **self.get_props())
 
 
-class IfrittState(ReducerState):
+class IfrittState(TypedDict):
     cooldown: Cooldown
     periodic: Periodic
     dynamics: Dynamics
 
 
-class IfrittComponent(
-    SkillComponent,
-    PeriodicWithSimpleDamageTrait,
-    CooldownValidityTrait,
-    AddDOTDamageTrait,
-):
+class IfrittComponentProps(TypedDict):
+    id: str
     name: str
     damage: float
     hit: float
@@ -331,6 +432,7 @@ class IfrittComponent(
 
     cooldown_duration: float
 
+    periodic_initial_delay: Optional[float]
     periodic_interval: float
     periodic_damage: float
     periodic_hit: float
@@ -340,58 +442,107 @@ class IfrittComponent(
     dot_damage: float
     dot_lasting_duration: float
 
-    def get_default_state(self):
+
+class IfrittComponent(
+    Component,
+):
+    name: str
+    damage: float
+    hit: float
+    delay: float
+
+    cooldown_duration: float
+
+    periodic_initial_delay: Optional[float] = None
+    periodic_interval: float
+    periodic_damage: float
+    periodic_hit: float
+
+    lasting_duration: float
+
+    dot_damage: float
+    dot_lasting_duration: float
+
+    def get_default_state(self) -> IfrittState:
         return {
             "cooldown": Cooldown(time_left=0),
-            "periodic": Periodic(interval=self.periodic_interval, time_left=0),
+            "periodic": Periodic(
+                interval=self.periodic_interval,
+                initial_counter=self.periodic_initial_delay,
+                time_left=0,
+            ),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> IfrittComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "damage": self.damage,
+            "hit": self.hit,
+            "delay": self.delay,
+            "cooldown_duration": self.cooldown_duration,
+            "periodic_initial_delay": self.periodic_initial_delay,
+            "periodic_interval": self.periodic_interval,
+            "periodic_damage": self.periodic_damage,
+            "periodic_hit": self.periodic_hit,
+            "lasting_duration": self.lasting_duration,
+            "dot_damage": self.dot_damage,
+            "dot_lasting_duration": self.dot_lasting_duration,
         }
 
     @reducer_method
     def elapse(self, time: float, state: IfrittState):
-        return self.elapse_periodic_damage_trait(time, state)
+        return periodic_trait.elapse_periodic_with_cooldown(
+            state, {"time": time}, **self.get_props()
+        )
 
     @reducer_method
     def use(self, _: None, state: IfrittState):
-        state, event = self.use_periodic_damage_trait(state)
-        return state, event + [self.get_dot_add_event()]
+        state, event = periodic_trait.start_periodic_with_cooldown(
+            state,
+            {},
+            **self.get_props(),
+        )
+        return state, event + [
+            simple_attack.get_dot_event(
+                self.name, self.dot_damage, self.dot_lasting_duration
+            )
+        ]
 
     @view_method
     def validity(self, state: IfrittState):
-        return self.validity_in_cooldown_trait(state)
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: IfrittState) -> Running:
-        return Running(
-            id=self.id,
-            name=self.name,
-            time_left=state.periodic.time_left,
-            lasting_duration=self._get_lasting_duration(state),
+        return periodic_trait.running_view(
+            state,
+            **self.get_props(),
         )
 
-    def _get_lasting_duration(self, state: IfrittState) -> float:
-        return self.lasting_duration
 
-    def _get_simple_damage_hit(self) -> tuple[float, float]:
-        return self.damage, self.hit
-
-    def _get_periodic_damage_hit(self, state: IfrittState) -> tuple[float, float]:
-        return self.periodic_damage, self.periodic_hit
-
-    def _get_dot_damage_and_lasting(self) -> tuple[float, float]:
-        return self.dot_damage, self.dot_lasting_duration
-
-
-class InfernalVenomState(ReducerState):
+class InfernalVenomState(TypedDict):
     drain_stack: FerventDrainStack
     cooldown: Cooldown
     dynamics: Dynamics
     lasting: Lasting
 
 
+class InfernalVenomComponentProps(TypedDict):
+    id: str
+    name: str
+    first_damage: float
+    first_hit: float
+    second_damage: float
+    second_hit: float
+    cooldown_duration: float
+    delay: float
+    lasting_duration: float
+
+
 class InfernalVenom(
-    SkillComponent,
-    CooldownValidityTrait,
-    BuffTrait,
+    Component,
 ):
     first_damage: float
     first_hit: float
@@ -403,75 +554,116 @@ class InfernalVenom(
     delay: float
     lasting_duration: float
 
-    def get_default_state(self):
+    def get_default_state(self) -> InfernalVenomState:
         return {
             "cooldown": Cooldown(time_left=0),
             "lasting": Lasting(time_left=0),
+            "drain_stack": FerventDrainStack(count=5, max_count=5),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> InfernalVenomComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "first_damage": self.first_damage,
+            "first_hit": self.first_hit,
+            "second_damage": self.second_damage,
+            "second_hit": self.second_hit,
+            "cooldown_duration": self.cooldown_duration,
+            "delay": self.delay,
+            "lasting_duration": self.lasting_duration,
         }
 
     @reducer_method
     def use(self, _: None, state: InfernalVenomState):
-        state = state.deepcopy()
+        if not state["cooldown"].available:
+            return state, [EmptyEvent.rejected()]
 
-        if not state.cooldown.available:
-            return state, [self.event_provider.rejected()]
-
-        state.cooldown.set_time_left(
-            state.dynamics.stat.calculate_cooldown(self.cooldown_duration)
+        cooldown, lasting, drain_stack = (
+            state["cooldown"].model_copy(),
+            state["lasting"].model_copy(),
+            state["drain_stack"].model_copy(),
+        )
+        cooldown.set_time_left(
+            state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
         )
 
-        state.drain_stack.set_max_count(10)
-        state.drain_stack.set_count(10)
-        state.lasting.set_time_left(self.lasting_duration)
+        drain_stack.set_max_count(10)
+        drain_stack.set_count(10)
+        lasting.set_time_left(self.lasting_duration)
+
+        state["cooldown"], state["lasting"], state["drain_stack"] = (
+            cooldown,
+            lasting,
+            drain_stack,
+        )
 
         return state, [
-            self.event_provider.dealt(self.first_damage, self.first_hit),
-            self.event_provider.dealt(self.second_damage, self.second_hit),
-            self.event_provider.delayed(self.delay),
+            EmptyEvent.dealt(self.first_damage, self.first_hit),
+            EmptyEvent.dealt(self.second_damage, self.second_hit),
+            EmptyEvent.delayed(self.delay),
         ]
 
     @reducer_method
     def elapse(
         self, time: float, state: InfernalVenomState
     ) -> tuple[InfernalVenomState, list[Event]]:
-        state = state.deepcopy()
+        cooldown, lasting, drain_stack = (
+            state["cooldown"].model_copy(),
+            state["lasting"].model_copy(),
+            state["drain_stack"].model_copy(),
+        )
 
-        was_enabled = state.lasting.enabled()
+        was_enabled = lasting.enabled()
 
-        state.cooldown.elapse(time)
-        state.lasting.elapse(time)
+        cooldown.elapse(time)
+        lasting.elapse(time)
 
-        if not state.lasting.enabled() and was_enabled:
-            state.drain_stack.set_max_count(5)
-            state.drain_stack.set_count(5)
+        if not lasting.enabled() and was_enabled:
+            drain_stack.set_max_count(5)
+            drain_stack.set_count(5)
+
+        state["cooldown"], state["lasting"], state["drain_stack"] = (
+            cooldown,
+            lasting,
+            drain_stack,
+        )
 
         return state, [
-            self.event_provider.elapsed(time),
+            EmptyEvent.elapsed(time),
         ]
 
     @view_method
     def validity(self, state: InfernalVenomState):
-        return self.validity_in_cooldown_trait(state)
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def running(self, state: InfernalVenomState) -> Running:
-        return self.running_in_buff_trait(state)
-
-    def _get_lasting_duration(self, state: InfernalVenomState) -> float:
-        return self.lasting_duration
-
-    def _get_cooldown_duration(self) -> float:
-        return self.cooldown_duration
+        return lasting_trait.running_view(state, **self.get_props())
 
 
-class FlameSwipVIState(ReducerState):
+class FlameSwipVIState(TypedDict):
     cooldown: Cooldown
     dynamics: Dynamics
     stack: Stack
 
 
+class FlameSwipVIComponentProps(TypedDict):
+    id: str
+    name: str
+    delay: float
+    damage: float
+    hit: int
+    cooldown_duration: float
+    explode_damage: float
+    explode_hit: int
+    dot_damage: float
+    dot_lasting_duration: float
+
+
 class FlameSwipVI(
-    SkillComponent, UseSimpleAttackTrait, AddDOTDamageTrait, CooldownValidityTrait
+    Component,
 ):
     delay: float
     damage: float
@@ -484,38 +676,61 @@ class FlameSwipVI(
     dot_damage: float
     dot_lasting_duration: float
 
-    def get_default_state(self):
+    def get_default_state(self) -> FlameSwipVIState:
         return {
             "cooldown": Cooldown(time_left=0),
             "stack": Stack(maximum_stack=3),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> FlameSwipVIComponentProps:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "delay": self.delay,
+            "damage": self.damage,
+            "hit": self.hit,
+            "cooldown_duration": self.cooldown_duration,
+            "explode_damage": self.explode_damage,
+            "explode_hit": self.explode_hit,
+            "dot_damage": self.dot_damage,
+            "dot_lasting_duration": self.dot_lasting_duration,
         }
 
     @reducer_method
     def use(self, _: None, state: FlameSwipVIState):
-        state, event = self.use_simple_attack(state)
-        event += [self.get_dot_add_event()]
-        state.stack.increase(1)
+
+        state, event = simple_attack.use_cooldown_attack(
+            state,
+            {},
+            **self.get_props(),
+        )
+
+        event += [
+            simple_attack.get_dot_event(
+                self.name, self.dot_damage, self.dot_lasting_duration
+            )
+        ]
+
+        stack = state["stack"].model_copy()
+        stack.increase(1)
+        state["stack"] = stack
 
         return state, event
 
     @reducer_method
     def explode(self, _: None, state: FlameSwipVIState):
-        if state.stack.get_stack() < 3:
+        if state["stack"].get_stack() < 3:
             return state, []
 
-        state = state.deepcopy()
-        state.stack.reset(0)
+        stack = state["stack"].model_copy()
+        stack.reset(0)
+        state["stack"] = stack
 
         return state, [
-            self.event_provider.dealt(self.explode_damage, self.explode_hit),
+            EmptyEvent.dealt(self.explode_damage, self.explode_hit),
         ]
 
     @view_method
     def validity(self, state: FlameSwipVIState):
-        return self.validity_in_cooldown_trait(state)
-
-    def _get_dot_damage_and_lasting(self) -> tuple[float, float]:
-        return self.dot_damage, self.dot_lasting_duration
-
-    def _get_simple_damage_hit(self) -> tuple[float, float]:
-        return self.damage, self.hit
+        return cooldown_trait.validity_view(state, **self.get_props())

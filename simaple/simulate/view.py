@@ -1,7 +1,8 @@
 from abc import ABCMeta, abstractmethod
 from typing import Any
 
-from simaple.simulate.base import Store, View, ViewSet
+from simaple.simulate.core.store import Store
+from simaple.simulate.core.view import View, ViewSet
 
 
 class AggregationView(metaclass=ABCMeta):

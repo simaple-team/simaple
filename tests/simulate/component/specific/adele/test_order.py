@@ -31,19 +31,17 @@ def order_state(
     order: AdeleOrderComponent,
     dynamics: Dynamics,
 ):
-    return AdeleOrderState.model_validate(
-        {
-            **order.get_default_state(),
-            "ether_gauge": EtherGauge(
-                stack=400,
-                maximum_stack=400,
-                creation_step=100,
-                order_consume=100,
-            ),
-            "restore_lasting": RestoreLasting(time_left=0, ether_multiplier=80),
-            "dynamics": dynamics,
-        }
-    )
+    return {
+        **order.get_default_state(),
+        "ether_gauge": EtherGauge(
+            stack=400,
+            maximum_stack=400,
+            creation_step=100,
+            order_consume=100,
+        ),
+        "restore_lasting": RestoreLasting(time_left=0, ether_multiplier=80),
+        "dynamics": dynamics,
+    }
 
 
 def test_order_count(order: AdeleOrderComponent, order_state: AdeleOrderState):
@@ -57,7 +55,7 @@ def test_order_count(order: AdeleOrderComponent, order_state: AdeleOrderState):
 
 
 def test_order_elapse(order: AdeleOrderComponent, order_state: AdeleOrderState):
-    order_state.order_sword.running_swords = [(0, 20000), (0, 30000), (0, 40000)]
+    order_state["order_sword"].running_swords = [(0, 20000), (0, 30000), (0, 40000)]
 
     state, _ = order.elapse(20000, order_state)
     assert order.running(state).stack == 4

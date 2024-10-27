@@ -1,6 +1,7 @@
 import pytest
 
-from simaple.simulate.base import Checkpoint, PlayLog
+from simaple.simulate.core.runtime import PlayLog
+from simaple.simulate.core.store import Checkpoint
 from simaple.simulate.policy.base import Operation, OperationLog, SimulationHistory
 
 

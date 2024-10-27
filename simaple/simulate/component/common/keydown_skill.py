@@ -1,20 +1,34 @@
-from simaple.simulate.component.base import ReducerState, reducer_method, view_method
+from typing import TypedDict
+
+import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
+import simaple.simulate.component.trait.keydown_trait as keydown_trait
+from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Keydown
-from simaple.simulate.component.skill import SkillComponent
-from simaple.simulate.component.trait.impl import (
-    CooldownValidityTrait,
-    KeydownSkillTrait,
-)
 from simaple.simulate.global_property import Dynamics
 
 
-class KeydownSkillState(ReducerState):
+class KeydownSkillState(TypedDict):
     cooldown: Cooldown
     keydown: Keydown
     dynamics: Dynamics
 
 
-class KeydownSkillComponent(SkillComponent, KeydownSkillTrait, CooldownValidityTrait):
+class KeydownSkillComponentProps(TypedDict):
+    name: str
+    id: str
+
+    maximum_keydown_time: float
+    damage: float
+    hit: float
+    delay: float
+    cooldown_duration: float
+    keydown_prepare_delay: float
+    keydown_end_delay: float
+    finish_damage: float
+    finish_hit: float
+
+
+class KeydownSkillComponent(Component):
     maximum_keydown_time: float
 
     damage: float
@@ -28,10 +42,26 @@ class KeydownSkillComponent(SkillComponent, KeydownSkillTrait, CooldownValidityT
     finish_damage: float
     finish_hit: float
 
-    def get_default_state(self):
+    def get_default_state(self) -> KeydownSkillState:
         return {
             "cooldown": Cooldown(time_left=0),
-            "keydown": Keydown(interval=self.delay, running=False),
+            "keydown": Keydown(interval=self.delay),
+            "dynamics": Dynamics.model_validate({"stat": {}}),
+        }
+
+    def get_props(self) -> KeydownSkillComponentProps:
+        return {
+            "name": self.name,
+            "id": self.id,
+            "maximum_keydown_time": self.maximum_keydown_time,
+            "damage": self.damage,
+            "hit": self.hit,
+            "delay": self.delay,
+            "cooldown_duration": self.cooldown_duration,
+            "keydown_prepare_delay": self.keydown_prepare_delay,
+            "keydown_end_delay": self.keydown_end_delay,
+            "finish_damage": self.finish_damage,
+            "finish_hit": self.finish_hit,
         }
 
     @reducer_method
@@ -40,31 +70,35 @@ class KeydownSkillComponent(SkillComponent, KeydownSkillTrait, CooldownValidityT
         _: None,
         state: KeydownSkillState,
     ):
-        return self.use_keydown_trait(state)
+        return keydown_trait.use_keydown(
+            state,
+            {},
+            **self.get_props(),
+        )
 
     @reducer_method
     def elapse(self, time: float, state: KeydownSkillState):
-        state, events = self.elapse_keydown_trait(time, state)
-        return state, events
+        return keydown_trait.elapse_keydown(
+            state,
+            {"time": time},
+            **self.get_props(),
+            finish_delay=self.keydown_end_delay,
+        )
 
     @reducer_method
-    def stop(self, _, state: KeydownSkillState):
-        state, events = self.stop_keydown_trait(state)
-        return state, events
+    def stop(self, _: None, state: KeydownSkillState):
+        return keydown_trait.stop_keydown(
+            state,
+            {},
+            finish_damage=self.finish_damage,
+            finish_hit=self.finish_hit,
+            finish_delay=self.keydown_end_delay,
+        )
 
     @view_method
     def validity(self, state: KeydownSkillState):
-        return self.validity_in_cooldown_trait(state)
+        return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
     def keydown(self, state: KeydownSkillState):
-        return self.keydown_view_in_keydown_trait(state)
-
-    def _get_maximum_keydown_time_prepare_delay(self) -> tuple[float, float]:
-        return self.maximum_keydown_time, self.keydown_prepare_delay
-
-    def _get_keydown_damage_hit(self) -> tuple[float, float]:
-        return self.damage, self.hit
-
-    def _get_keydown_end_damage_hit_delay(self) -> tuple[float, float, float]:
-        return self.finish_damage, self.finish_hit, self.keydown_end_delay
+        return keydown_trait.keydown_view(state, **self.get_props())

@@ -55,6 +55,4 @@ CAST "디스토션 필드"
 x13 CAST "매시브 파이어: IRON-B VI"
 CAST "디스토션 필드"
 
-# !debug "seq(viewer('마이크로 미사일 컨테이너.validity')).to_list()"
-
 ELAPSE 30000
