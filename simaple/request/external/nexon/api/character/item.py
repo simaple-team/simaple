@@ -1,4 +1,11 @@
-from typing import TypedDict
+from typing import TypedDict, cast
+
+import requests
+
+from simaple.request.external.nexon.api.character.common import (
+    CharacterIDWithDate,
+    get_nexon_api_header,
+)
 
 IntStat = int  # use this since "int" option in included in CharacterItemElementOption
 
@@ -89,6 +96,19 @@ class CharacterItemEquipment(TypedDict):
     mechanic_equipment: list[CharacterItemElement]
 
 
+def get_character_item_equipment_response(
+    host: str, access_token: str, payload: CharacterIDWithDate
+) -> CharacterItemEquipment:
+    return cast(
+        CharacterItemEquipment,
+        requests.get(
+            f"{host}/maplestory/v1/character/item-equipment",
+            headers=get_nexon_api_header(access_token),
+            params=cast(dict, payload),
+        ).json(),
+    )
+
+
 class CharacterSymbolElement(TypedDict):
     symbol_name: str
     symbol_icon: str
@@ -108,6 +128,19 @@ class CharacterSymbolEquipment(TypedDict):
     date: str
     character_class: str
     symbol: list[CharacterSymbolElement]
+
+
+def get_character_symbol_response(
+    host: str, access_token: str, payload: CharacterIDWithDate
+) -> CharacterSymbolEquipment:
+    return cast(
+        CharacterSymbolEquipment,
+        requests.get(
+            f"{host}/maplestory/v1/character/symbol-equipment",
+            headers=get_nexon_api_header(access_token),
+            params=cast(dict, payload),
+        ).json(),
+    )
 
 
 # Pet responses
@@ -175,6 +208,19 @@ class PetResponse(TypedDict):
     pet_3_appearance_icon: str
 
 
+def get_pet_equipment_response(
+    host: str, access_token: str, payload: CharacterIDWithDate
+) -> PetResponse:
+    return cast(
+        PetResponse,
+        requests.get(
+            f"{host}/maplestory/v1/character/pet-equipment",
+            headers=get_nexon_api_header(access_token),
+            params=cast(dict, payload),
+        ).json(),
+    )
+
+
 # Set Item Response
 
 
@@ -193,6 +239,19 @@ class _SetEffect(TypedDict):
 class SetEffectResponse(TypedDict):
     date: str
     set_effect: list[_SetEffect]
+
+
+def get_set_effect_response(
+    host: str, access_token: str, payload: CharacterIDWithDate
+) -> SetEffectResponse:
+    return cast(
+        SetEffectResponse,
+        requests.get(
+            f"{host}/maplestory/v1/character/set-effect",
+            headers=get_nexon_api_header(access_token),
+            params=cast(dict, payload),
+        ).json(),
+    )
 
 
 # Cash Item Response
@@ -226,3 +285,16 @@ class CashItemResponse(TypedDict):
     additional_cash_item_equipment_preset_1: list[_CashItemElement]
     additional_cash_item_equipment_preset_2: list[_CashItemElement]
     additional_cash_item_equipment_preset_3: list[_CashItemElement]
+
+
+def get_cash_item_response(
+    host: str, access_token: str, payload: CharacterIDWithDate
+) -> CashItemResponse:
+    return cast(
+        CashItemResponse,
+        requests.get(
+            f"{host}/maplestory/v1/character/cashitem-equipment",
+            headers=get_nexon_api_header(access_token),
+            params=cast(dict, payload),
+        ).json(),
+    )

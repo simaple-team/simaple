@@ -2,13 +2,15 @@ import datetime
 
 from simaple.core import JobType, Stat
 from simaple.request.adapter.translator.job_name import translate_kms_name
-from simaple.request.external.nexon.api.character import (
-    as_nexon_datetime,
+from simaple.request.external.nexon.api.character.basic import (
+    CharacterStatResponse,
     get_character_basic,
-    get_character_ocid,
     get_character_stat,
 )
-from simaple.request.external.nexon.schema.character.basic import CharacterStatResponse
+from simaple.request.external.nexon.api.ocid import (
+    as_nexon_datetime,
+    get_character_ocid,
+)
 from simaple.request.service.loader import CharacterBasicLoader
 
 

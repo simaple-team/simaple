@@ -1,28 +1,29 @@
-from typing import cast
+import datetime
 
-from simaple.request.external.nexon.api.auth import (
-    HOST,
-    Token,
-    get_character_id,
-    get_character_id_param,
-)
-from simaple.request.external.nexon.schema.character.propensity import (
+from simaple.request.external.nexon.api.character.propensity import (
     CharacterPropensityResponse,
+    get_propensity_response,
+)
+from simaple.request.external.nexon.api.ocid import (
+    as_nexon_datetime,
+    get_character_ocid,
 )
 from simaple.request.service.loader import PropensityLoader
 from simaple.system.propensity import Propensity
 
 
 class NexonAPIPropensityLoader(PropensityLoader):
-    def __init__(self, token_value: str):
-        self._token = Token(token_value)
+    def __init__(self, host: str, access_token: str, date: datetime.date):
+        self._host = host
+        self._access_token = access_token
+        self._date = date
 
     def load_propensity(self, character_name: str) -> Propensity:
-        character_id = get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/character/propensity"
-        resp = cast(
-            CharacterPropensityResponse,
-            self._token.request(uri, get_character_id_param(character_id)),
+        ocid = get_character_ocid(self._host, self._access_token, character_name)
+        resp = get_propensity_response(
+            self._host,
+            self._access_token,
+            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
         )
         return get_propensity(resp)
 

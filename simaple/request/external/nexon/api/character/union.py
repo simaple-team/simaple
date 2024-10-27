@@ -1,4 +1,11 @@
-from typing import TypedDict
+from typing import TypedDict, cast
+
+import requests
+
+from simaple.request.external.nexon.api.character.common import (
+    CharacterIDWithDate,
+    get_nexon_api_header,
+)
 
 
 class CharacterUnionResponse(TypedDict):
@@ -48,6 +55,19 @@ class CharacterUnionRaiderResponse(TypedDict):
     union_raider_preset_5: CharacterUnionRaiderPreset
 
 
+def get_character_union_raider_response(
+    host: str, access_token: str, payload: CharacterIDWithDate
+) -> CharacterUnionRaiderResponse:
+    return cast(
+        CharacterUnionRaiderResponse,
+        requests.get(
+            f"{host}/maplestory/v1/user/union-raider",
+            headers=get_nexon_api_header(access_token),
+            params=cast(dict, payload),
+        ).json(),
+    )
+
+
 class _UnionArtifactEffect(TypedDict):
     name: str
     level: int
@@ -68,3 +88,16 @@ class UnionArtifactResponse(TypedDict):
     union_artifact_effect: list[_UnionArtifactEffect]
     union_artifact_crystal: list[_UnionArtifactCrystal]
     union_artifact_remain_ap: int
+
+
+def get_union_artifact_response(
+    host: str, access_token: str, payload: CharacterIDWithDate
+) -> UnionArtifactResponse:
+    return cast(
+        UnionArtifactResponse,
+        requests.get(
+            f"{host}/maplestory/v1/user/union-artifact",
+            headers=get_nexon_api_header(access_token),
+            params=cast(dict, payload),
+        ).json(),
+    )

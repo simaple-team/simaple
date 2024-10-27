@@ -21,7 +21,7 @@ from simaple.core import ActionStat, ExtendedStat, JobType, Stat
 from simaple.data.jobs.builtin import get_damage_logic, get_passive
 from simaple.data.system.hexa_stat import get_all_hexa_stat_cores
 from simaple.request.adapter.translator.job_name import translate_kms_name
-from simaple.request.external.nexon.schema.character.skill import (
+from simaple.request.external.nexon.api.character.skill import (
     AggregatedCharacterSkillResponse,
     CharacterSkillDescription,
     CharacterSkillResponse,

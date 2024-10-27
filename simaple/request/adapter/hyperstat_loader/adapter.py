@@ -1,17 +1,15 @@
 import datetime
-from typing import cast
 
 from simaple.core import StatProps
 from simaple.data.system.hyperstat import get_kms_hyperstat
-from simaple.request.external.nexon.api.auth import HOST, nexon_today
-from simaple.request.external.nexon.api.character import (
-    as_nexon_datetime,
-    get_character_ocid,
-    get_hyper_stat,
-)
-from simaple.request.external.nexon.schema.character.hyper_stat import (
+from simaple.request.external.nexon.api.character.hyper_stat import (
     CharacterHyperStatResponse,
     HyperStatResponseColumnResponse,
+    get_hyper_stat,
+)
+from simaple.request.external.nexon.api.ocid import (
+    as_nexon_datetime,
+    get_character_ocid,
 )
 from simaple.request.service.loader import HyperstatLoader
 from simaple.system.hyperstat import Hyperstat
@@ -30,7 +28,7 @@ class NexonAPIHyperStatLoader(HyperstatLoader):
             self._access_token,
             {"ocid": ocid, "date": as_nexon_datetime(self._date)},
         )
-        return get_hyperstat(hyperstat_response)
+        return get_hyperstat_from_response(hyperstat_response)
 
 
 _STAT_NAME_TO_BASIS_NAME = {
@@ -47,7 +45,9 @@ _STAT_NAME_TO_BASIS_NAME = {
 }
 
 
-def get_hyperstat(hyperstat_response: CharacterHyperStatResponse) -> Hyperstat:
+def get_hyperstat_from_response(
+    hyperstat_response: CharacterHyperStatResponse,
+) -> Hyperstat:
     target_preset: list[HyperStatResponseColumnResponse] = hyperstat_response[
         f"hyper_stat_preset_{int(hyperstat_response['use_preset_no'])}"  # type: ignore
     ]

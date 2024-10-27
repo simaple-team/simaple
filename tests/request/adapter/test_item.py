@@ -7,7 +7,7 @@ from simaple.request.adapter.gear_loader._pet_converter import (
     get_pet_equip_stat_from_response,
 )
 from simaple.request.adapter.gear_loader._set_item_converter import get_set_item_stats
-from simaple.request.external.nexon.schema.character.item import (
+from simaple.request.external.nexon.api.character.item import (
     CashItemResponse,
     CharacterItemEquipment,
     CharacterSymbolEquipment,

@@ -4,10 +4,7 @@ from simaple.core import Stat
 from simaple.request.adapter.gear_loader._converter import (
     get_stat_from_option_value_and_type,
 )
-from simaple.request.external.nexon.schema.character.item import (
-    PetEquipment,
-    PetResponse,
-)
+from simaple.request.external.nexon.api.character.item import PetEquipment, PetResponse
 
 
 class PetItem(pydantic.BaseModel):

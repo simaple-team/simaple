@@ -1,4 +1,11 @@
-from typing import Any, TypedDict
+from typing import Any, TypedDict, cast
+
+import requests
+
+from simaple.request.external.nexon.api.character.common import (
+    CharacterIDWithDate,
+    get_nexon_api_header,
+)
 
 
 class _LinkSkillDescription(TypedDict):
@@ -21,3 +28,17 @@ class LinkSkillResponse(TypedDict):
     character_owned_link_skill_preset_1: _LinkSkillDescription
     character_owned_link_skill_preset_2: _LinkSkillDescription
     character_owned_link_skill_preset_3: _LinkSkillDescription
+
+
+def get_link_skill(
+    host: str, access_token: str, payload: CharacterIDWithDate
+) -> LinkSkillResponse:
+    return cast(
+        LinkSkillResponse,
+        requests.get(
+            f"{host}/maplestory/v1/character/link-skill",
+            headers=get_nexon_api_header(access_token),
+            params=cast(dict, payload),
+            allow_redirects=True,
+        ).json(),
+    )

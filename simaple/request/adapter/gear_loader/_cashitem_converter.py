@@ -2,7 +2,7 @@ from simaple.core import Stat
 from simaple.request.adapter.gear_loader._converter import (
     get_stat_from_option_value_and_type,
 )
-from simaple.request.external.nexon.schema.character.item import CashItemResponse
+from simaple.request.external.nexon.api.character.item import CashItemResponse
 
 
 def get_cash_item_stat(response: CashItemResponse):

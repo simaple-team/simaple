@@ -1,7 +1,7 @@
 import re
 
 from simaple.core import Stat
-from simaple.request.external.nexon.schema.character.item import SetEffectResponse
+from simaple.request.external.nexon.api.character.item import SetEffectResponse
 
 
 def _parse_each_option(option_string: str) -> Stat:

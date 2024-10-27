@@ -1,4 +1,4 @@
-from typing import cast
+import datetime
 
 from simaple.core import ExtendedStat, JobType
 from simaple.data.system.artifact import get_artifact_effects
@@ -10,17 +10,16 @@ from simaple.request.adapter.translator.kms.union_raider import (
 from simaple.request.adapter.union_loader._converter import (
     get_stat_from_occupation_description,
 )
-from simaple.request.external.nexon.api.auth import (
-    HOST,
-    Token,
-    get_character_id,
-    get_character_id_param,
-)
-from simaple.request.external.nexon.schema.character.union import (
+from simaple.request.external.nexon.api.character.union import (
     CharacterUnionRaiderBlock,
     CharacterUnionRaiderPreset,
-    CharacterUnionRaiderResponse,
     UnionArtifactResponse,
+    get_character_union_raider_response,
+    get_union_artifact_response,
+)
+from simaple.request.external.nexon.api.ocid import (
+    as_nexon_datetime,
+    get_character_ocid,
 )
 from simaple.request.service.loader import UnionLoader
 from simaple.request.service.util import BestStatSelector, get_best_stat_index
@@ -29,53 +28,55 @@ from simaple.system.union import UnionSquad
 
 
 class NexonAPIUnionLoader(UnionLoader):
-    def __init__(self, token_value: str):
-        self._token = Token(token_value)
+    def __init__(self, host: str, access_token: str, date: datetime.date):
+        self._host = host
+        self._access_token = access_token
+        self._date = date
 
     def load_union_squad(self, character_name: str) -> UnionSquad:
-        character_id = get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/user/union-raider"
-        resp = cast(
-            CharacterUnionRaiderResponse,
-            self._token.request(uri, get_character_id_param(character_id)),
+        ocid = get_character_ocid(self._host, self._access_token, character_name)
+        resp = get_character_union_raider_response(
+            self._host,
+            self._access_token,
+            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
         )
         return get_union_squad(resp)
 
     def load_union_squad_effect(self, character_name: str) -> ExtendedStat:
-        character_id = get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/user/union-raider"
-        resp = cast(
-            CharacterUnionRaiderResponse,
-            self._token.request(uri, get_character_id_param(character_id)),
+        ocid = get_character_ocid(self._host, self._access_token, character_name)
+        resp = get_character_union_raider_response(
+            self._host,
+            self._access_token,
+            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
         )
         return get_union_squad_effect(resp)
 
     def load_union_artifact(self, character_name: str) -> Artifact:
-        character_id = get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/user/union-artifact"
-        resp = cast(
-            UnionArtifactResponse,
-            self._token.request(uri, get_character_id_param(character_id)),
+        ocid = get_character_ocid(self._host, self._access_token, character_name)
+        resp = get_union_artifact_response(
+            self._host,
+            self._access_token,
+            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
         )
         return get_union_artifact(resp)
 
     def load_union_occupation_stat(self, character_name: str) -> ExtendedStat:
-        character_id = get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/user/union-raider"
-        resp = cast(
-            CharacterUnionRaiderResponse,
-            self._token.request(uri, get_character_id_param(character_id)),
+        ocid = get_character_ocid(self._host, self._access_token, character_name)
+        resp = get_character_union_raider_response(
+            self._host,
+            self._access_token,
+            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
         )
         return get_occupation_stat(resp)
 
     def load_best_union_stat(
         self, character_name: str, selector: BestStatSelector
     ) -> ExtendedStat:
-        character_id = get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/user/union-raider"
-        resp = cast(
-            CharacterUnionRaiderResponse,
-            self._token.request(uri, get_character_id_param(character_id)),
+        ocid = get_character_ocid(self._host, self._access_token, character_name)
+        resp = get_character_union_raider_response(
+            self._host,
+            self._access_token,
+            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
         )
 
         candidates = [

@@ -4,29 +4,29 @@ from typing import Any, cast
 
 import pytest
 
-from simaple.request.external.nexon.schema.character.ability import (
+from simaple.request.external.nexon.api.character.ability import (
     CharacterAbilityResponse,
 )
-from simaple.request.external.nexon.schema.character.basic import CharacterStatResponse
-from simaple.request.external.nexon.schema.character.hyper_stat import (
+from simaple.request.external.nexon.api.character.basic import CharacterStatResponse
+from simaple.request.external.nexon.api.character.hyper_stat import (
     CharacterHyperStatResponse,
 )
-from simaple.request.external.nexon.schema.character.item import (
+from simaple.request.external.nexon.api.character.item import (
     CashItemResponse,
     CharacterItemEquipment,
     CharacterSymbolEquipment,
     PetResponse,
     SetEffectResponse,
 )
-from simaple.request.external.nexon.schema.character.link_skill import LinkSkillResponse
-from simaple.request.external.nexon.schema.character.propensity import (
+from simaple.request.external.nexon.api.character.link_skill import LinkSkillResponse
+from simaple.request.external.nexon.api.character.propensity import (
     CharacterPropensityResponse,
 )
-from simaple.request.external.nexon.schema.character.skill import (
+from simaple.request.external.nexon.api.character.skill import (
     AggregatedCharacterSkillResponse,
     CharacterSkillResponse,
 )
-from simaple.request.external.nexon.schema.character.union import (
+from simaple.request.external.nexon.api.character.union import (
     CharacterUnionRaiderResponse,
 )
 

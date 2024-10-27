@@ -4,13 +4,13 @@ from simaple.core import ExtendedStat
 from simaple.request.adapter.ability_loader._converter import (
     get_ability_stat_from_ability_text,
 )
-from simaple.request.external.nexon.api.character import (
-    as_nexon_datetime,
-    get_character_ability,
-    get_character_ocid,
-)
-from simaple.request.external.nexon.schema.character.ability import (
+from simaple.request.external.nexon.api.character.ability import (
     _CharacterAbilityLineResponse,
+    get_character_ability,
+)
+from simaple.request.external.nexon.api.ocid import (
+    as_nexon_datetime,
+    get_character_ocid,
 )
 from simaple.request.service.loader import AbilityLoader
 from simaple.request.service.util import BestStatSelector, get_best_stat_index
@@ -34,7 +34,7 @@ class NexonAPIAbilityLoader(AbilityLoader):
         self._access_token = access_token
         self._date = date
 
-    def load_stat(self, character_name: str, date: datetime.date) -> ExtendedStat:
+    def load_stat(self, character_name: str) -> ExtendedStat:
         ocid = get_character_ocid(self._host, self._access_token, character_name)
         ability_response = get_character_ability(
             self._host,

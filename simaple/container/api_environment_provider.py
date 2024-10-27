@@ -12,10 +12,11 @@ from simaple.request.adapter.link_skill_loader.adapter import NexonAPILinkSkillL
 from simaple.request.adapter.propensity_loader.adapter import NexonAPIPropensityLoader
 from simaple.request.adapter.skill_loader.adapter import NexonAPICharacterSkillLoader
 from simaple.request.adapter.union_loader.adapter import NexonAPIUnionLoader
-from simaple.request.external.nexon.api.auth import HOST, NexonRequestAgent
 from simaple.request.service.environment_provider import (
     LoadedEnvironmentProviderService,
 )
+
+HOST = "https://open.api.nexon.com"
 
 
 class NexonAPIEnvironmentProvider(EnvironmentProvider):
@@ -31,23 +32,30 @@ class NexonAPIEnvironmentProvider(EnvironmentProvider):
 
     def get_simulation_environment(self) -> SimulationEnvironment:
         service = LoadedEnvironmentProviderService(
-            NexonRequestAgent("", self.token),
             NexonAPIAbilityLoader(
                 HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
             ),
-            NexonAPIPropensityLoader(self.token),
+            NexonAPIPropensityLoader(
+                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
+            ),
             NexonAPIHyperStatLoader(
                 HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
             ),
-            NexonAPIUnionLoader(self.token),
+            NexonAPIUnionLoader(
+                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
+            ),
             NexonAPIGearLoader(
-                self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
+                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
             ),
             NexonAPICharacterBasicLoader(
                 HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
             ),
-            NexonAPILinkSkillLoader(self.token),
-            NexonAPICharacterSkillLoader(self.token),
+            NexonAPILinkSkillLoader(
+                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
+            ),
+            NexonAPICharacterSkillLoader(
+                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
+            ),
         )
         character_info = service.compute_character_info(self.character_name)
 

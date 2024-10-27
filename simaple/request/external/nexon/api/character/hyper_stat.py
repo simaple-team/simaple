@@ -1,4 +1,11 @@
-from typing import Optional, TypedDict
+from typing import Optional, TypedDict, cast
+
+import requests
+
+from simaple.request.external.nexon.api.character.common import (
+    CharacterIDWithDate,
+    get_nexon_api_header,
+)
 
 
 class HyperStatResponseColumnResponse(TypedDict):
@@ -19,3 +26,17 @@ class CharacterHyperStatResponse(TypedDict):
     hyper_stat_preset_2_remain_point: int
     hyper_stat_preset_3: list[HyperStatResponseColumnResponse]
     hyper_stat_preset_3_remain_point: int
+
+
+def get_hyper_stat(
+    host: str, access_token: str, payload: CharacterIDWithDate
+) -> CharacterHyperStatResponse:
+    return cast(
+        CharacterHyperStatResponse,
+        requests.get(
+            f"{host}/maplestory/v1/character/hyper-stat",
+            headers=get_nexon_api_header(access_token),
+            params=cast(dict, payload),
+            allow_redirects=True,
+        ).json(),
+    )

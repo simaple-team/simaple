@@ -1,27 +1,30 @@
-from typing import cast
+import datetime
 
 from simaple.data.system.link import get_all_linkskills
-from simaple.request.external.nexon.api.auth import (
-    HOST,
-    Token,
-    get_character_id,
-    get_character_id_param,
+from simaple.request.external.nexon.api.character.link_skill import (
+    LinkSkillResponse,
+    get_link_skill,
 )
-from simaple.request.external.nexon.schema.character.link_skill import LinkSkillResponse
+from simaple.request.external.nexon.api.ocid import (
+    as_nexon_datetime,
+    get_character_ocid,
+)
 from simaple.request.service.loader import LinkSkillLoader
 from simaple.system.link import LinkSkillset
 
 
 class NexonAPILinkSkillLoader(LinkSkillLoader):
-    def __init__(self, token_value: str):
-        self._token = Token(token_value)
+    def __init__(self, host: str, access_token: str, date: datetime.date):
+        self._host = host
+        self._access_token = access_token
+        self._date = date
 
     def load_link_skill(self, character_name: str) -> LinkSkillset:
-        character_id = get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/character/link-skill"
-        resp = cast(
-            LinkSkillResponse,
-            self._token.request(uri, get_character_id_param(character_id)),
+        ocid = get_character_ocid(self._host, self._access_token, character_name)
+        resp = get_link_skill(
+            self._host,
+            self._access_token,
+            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
         )
         return get_link_skillset(resp)
 
