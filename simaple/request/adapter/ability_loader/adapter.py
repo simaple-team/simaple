@@ -9,6 +9,11 @@ from simaple.request.external.nexon.api.auth import (
     Token,
     get_character_id,
     get_character_id_param,
+    nexon_today,
+)
+from simaple.request.external.nexon.api.character import (
+    get_character_ability,
+    get_character_ocid,
 )
 from simaple.request.external.nexon.schema.character.ability import (
     CharacterAbilityResponse,
@@ -31,32 +36,28 @@ def _get_ability_stat(
 
 
 class NexonAPIAbilityLoader(AbilityLoader):
-    def __init__(self, token_value: str):
-        self._token = Token(token_value)
+    def __init__(self, access_token: str):
+        self._access_token = access_token
 
     def load_stat(self, character_name: str) -> ExtendedStat:
-        character_id = get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/character/ability"
-        resp = cast(
-            CharacterAbilityResponse,
-            self._token.request(uri, get_character_id_param(character_id)),
+        ocid = get_character_ocid(HOST, self._access_token, character_name)
+        ability_response = get_character_ability(
+            HOST, self._access_token, {"ocid": ocid, "date": nexon_today()}
         )
-        return _get_ability_stat(resp["ability_info"])
+        return _get_ability_stat(ability_response["ability_info"])
 
     def load_best_stat(
         self, character_name: str, selector: BestStatSelector
     ) -> ExtendedStat:
-        character_id = get_character_id(self._token, character_name)
-        uri = f"{HOST}/maplestory/v1/character/ability"
-        resp = cast(
-            CharacterAbilityResponse,
-            self._token.request(uri, get_character_id_param(character_id)),
+        ocid = get_character_ocid(HOST, self._access_token, character_name)
+        ability_response = get_character_ability(
+            HOST, self._access_token, {"ocid": ocid, "date": nexon_today()}
         )
 
         candidates = [
-            _get_ability_stat(resp["ability_preset_1"]["ability_info"]),
-            _get_ability_stat(resp["ability_preset_2"]["ability_info"]),
-            _get_ability_stat(resp["ability_preset_3"]["ability_info"]),
+            _get_ability_stat(ability_response["ability_preset_1"]["ability_info"]),
+            _get_ability_stat(ability_response["ability_preset_2"]["ability_info"]),
+            _get_ability_stat(ability_response["ability_preset_3"]["ability_info"]),
         ]
         best_candidate_index = get_best_stat_index(candidates, selector)
         return candidates[best_candidate_index]

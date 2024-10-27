@@ -11,6 +11,10 @@ class CharacterID(TypedDict):
     date: datetime.date
 
 
+def nexon_today() -> str:
+    return (datetime.date.today() - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+
+
 def get_character_id_param(character_id: CharacterID) -> dict:
     return {
         "ocid": character_id["ocid"],
@@ -20,6 +24,18 @@ def get_character_id_param(character_id: CharacterID) -> dict:
 
 def as_python_datetime(date: str) -> datetime.datetime:
     return datetime.datetime.strptime(date, "%Y-%m-%d%H:%M:%S+09:00")
+
+
+class NexonRequestPayload(TypedDict): ...
+
+
+class NexonRequestAgent:
+    def __init__(self, host: str, token_value: str):
+        self._token = Token(token_value)
+        self._host = host
+
+    def request(self, uri: str, param: NexonRequestPayload) -> dict:
+        return self._token.request(f"{self._host}/{uri}", cast(dict, param))
 
 
 class Token:

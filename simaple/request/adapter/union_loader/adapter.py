@@ -3,18 +3,18 @@ from typing import cast
 from simaple.core import ExtendedStat, JobType
 from simaple.data.system.artifact import get_artifact_effects
 from simaple.data.system.union_block import get_all_blocks
-from simaple.request.external.nexon.api.auth import (
-    HOST,
-    Token,
-    get_character_id,
-    get_character_id_param,
-)
 from simaple.request.adapter.translator.job_name import translate_kms_name
 from simaple.request.adapter.translator.kms.union_raider import (
     kms_union_stat_translator,
 )
 from simaple.request.adapter.union_loader._converter import (
     get_stat_from_occupation_description,
+)
+from simaple.request.external.nexon.api.auth import (
+    HOST,
+    Token,
+    get_character_id,
+    get_character_id_param,
 )
 from simaple.request.external.nexon.schema.character.union import (
     CharacterUnionRaiderBlock,

@@ -5,6 +5,7 @@ from loguru import logger
 from simaple.container.simulation import FinalCharacterStat
 from simaple.core import ExtendedStat, JobType
 from simaple.data.jobs.builtin import get_damage_logic
+from simaple.request.external.nexon.api.auth import NexonRequestAgent
 from simaple.request.service.loader import (
     AbilityLoader,
     CharacterBasicLoader,
@@ -28,6 +29,7 @@ class EnvironmentProviderServiceResponse(TypedDict):
 class LoadedEnvironmentProviderService:
     def __init__(
         self,
+        nexon_request_agent: NexonRequestAgent,
         ability_loader: AbilityLoader,
         propensity_loader: PropensityLoader,
         hyperstat_loader: HyperstatLoader,
@@ -37,6 +39,7 @@ class LoadedEnvironmentProviderService:
         link_skill_loader: LinkSkillLoader,
         character_skill_loader: CharacterSkillLoader,
     ):
+        self.nexon_request_agent = nexon_request_agent
         self.ability_loader = ability_loader
         self.propensity_loader = propensity_loader
         self.hyperstat_loader = hyperstat_loader
