@@ -18,7 +18,7 @@ def mechanic_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(mechanic_component("로봇 팩토리: RM1"))
     usecase.use_component(mechanic_component("봄버 타임"))
     usecase.use_component(mechanic_component("디스토션 필드"))
-    usecase.use_component(mechanic_component("멀티플 옵션: M-FL"))
+    usecase.use_component(mechanic_component("멀티플 옵션 : M-FL"))
     usecase.use_component(mechanic_component("마이크로 미사일 컨테이너"))
     usecase.use_component(mechanic_component("메탈아머 전탄발사"))
     usecase.use_component(mechanic_component("메카 캐리어"))
