@@ -1,13 +1,7 @@
-import datetime
-
 from simaple.data.system.link import get_all_linkskills
 from simaple.request.external.nexon.api.character.link_skill import (
     LinkSkillResponse,
     get_link_skill,
-)
-from simaple.request.external.nexon.api.ocid import (
-    as_nexon_datetime,
-    get_character_ocid,
 )
 from simaple.request.external.nexon.client import NexonAPIClient
 from simaple.request.service.loader import LinkSkillLoader
