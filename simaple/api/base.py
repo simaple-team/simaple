@@ -12,11 +12,8 @@ from simaple.api.models.simulation import (
 )
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.plan_metadata import PlanMetadata
-from simaple.container.simulation import (
-    get_damage_calculator,
-    get_operation_engine,
-    get_skill_components,
-)
+from simaple.container.simulation import get_damage_calculator, get_skill_components
+from simaple.container.usecase.builtin import get_engine
 from simaple.simulate.component.base import Component
 from simaple.simulate.engine import OperationEngine
 from simaple.simulate.policy.parser import parse_simaple_runtime
@@ -100,7 +97,7 @@ def run_plan(
         raise ValueError("Environment field is not provided")
 
     environment = plan_metadata.get_environment()
-    engine = get_operation_engine(environment)
+    engine = get_engine(environment)
 
     for command in commands:
         engine.exec(command)
@@ -163,7 +160,7 @@ def compute_maximum_dealing_interval(
         raise ValueError("Environment field is not provided")
 
     environment = plan_metadata.get_environment()
-    engine = get_operation_engine(environment)
+    engine = get_engine(environment)
 
     for command in commands:
         engine.exec(command)
@@ -212,7 +209,7 @@ def run_plan_with_hint(
     plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
 
     environment = plan_metadata.get_environment()
-    engine = get_operation_engine(environment)
+    engine = get_engine(environment)
 
     if plan_metadata_dict != previous_plan_metadata_dict:
         for command in commands:

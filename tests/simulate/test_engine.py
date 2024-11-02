@@ -3,7 +3,7 @@ import os
 import simaple.simulate.component.common  # noqa: F401
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
-from simaple.container.simulation import get_operation_engine
+from simaple.container.usecase.builtin import get_engine
 from simaple.core.jobtype import JobType
 from simaple.simulate.policy.parser import parse_simaple_runtime
 
@@ -26,7 +26,7 @@ def test_run_engine():
     environment = _simulation_environment_memoizer.compute_environment(
         _environment_provider
     )
-    engine = get_operation_engine(environment)
+    engine = get_engine(environment)
     _, commands = parse_simaple_runtime(
         """
 author: "Alice"

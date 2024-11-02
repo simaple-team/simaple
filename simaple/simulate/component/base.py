@@ -7,8 +7,8 @@ from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import TypedDict
 
 from simaple.core import Stat
-from simaple.simulate.core import Action, ActionSignature, Entity, Event
-from simaple.simulate.core.reducer import Listener, UnsafeReducer
+from simaple.simulate.core import Action, ActionSignature, Event
+from simaple.simulate.core.reducer import ReducerType, UnsafeReducer
 from simaple.simulate.core.store import Store
 from simaple.simulate.event import EventProvider, NamedEventProvider
 from simaple.simulate.global_property import GlobalProperty
@@ -19,7 +19,6 @@ WILD_CARD = "*"
 
 StateT = TypeVar("StateT")
 
-ReducerType = Callable[..., tuple[Union[tuple[Entity], Entity], Any]]
 ReducerPrecursorType = Callable[[Any, Any, StateT], tuple[StateT, list[Event]]]
 
 ReducerPrecursorTypeT = TypeVar("ReducerPrecursorTypeT", bound=ReducerPrecursorType)
@@ -95,7 +94,7 @@ def tag_events_by_method_name(
 
 def event_tagged_reducer(
     owner_name: str, method_name: str, event_provider: EventProvider
-):
+) -> Callable[[ReducerType], ReducerType]:
     def wrapper(reducer):
         @wraps(reducer)
         def wrapped(action: Action, store: Store) -> list[Event]:
@@ -218,7 +217,7 @@ class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
             if getattr(value, "__isreducer__", False)
         }
         reducers.update(previous_reducers)
-        cls.__reducers__ = frozenset(reducers)
+        cls.__reducers__ = frozenset(reducers)  # type: ignore
 
         previous_views = set()
         for base in bases:
@@ -230,7 +229,7 @@ class ComponentMetaclass(TaggedNamespacedABCMeta("Component")):
             if getattr(value, "__isview__", False)
         }
         views.update(previous_views)
-        cls.__views__ = frozenset(views)
+        cls.__views__ = frozenset(views)  # type: ignore
 
         return cls
 
@@ -244,44 +243,6 @@ def _old_signature_to_new_signature(old_signature: str) -> ActionSignature:
     split = old_signature.split(".")
 
     return split[0], ".".join(split[1:])
-
-
-def listening_actions_to_listeners(
-    owner_name: str, listening_actions: dict[str, Union[str, StaticPayloadReducerInfo]]
-) -> list[Listener]:
-    listeners: list[Listener] = []
-
-    for (
-        listening_old_signature,
-        target_method_name_or_static_payload,
-    ) in listening_actions.items():
-        action_signature = _old_signature_to_new_signature(listening_old_signature)
-        if isinstance(target_method_name_or_static_payload, str):
-            listeners.append(
-                {
-                    "action_name_or_reserved_values": action_signature[0],
-                    "action_method": action_signature[1],
-                    "target_reducer_name": (
-                        owner_name,
-                        target_method_name_or_static_payload,
-                    ),
-                    "payload": None,
-                }
-            )
-        else:
-            listeners.append(
-                {
-                    "action_name_or_reserved_values": action_signature[0],
-                    "action_method": action_signature[1],
-                    "target_reducer_name": (
-                        owner_name,
-                        target_method_name_or_static_payload.name,
-                    ),
-                    "payload": target_method_name_or_static_payload.payload,
-                }
-            )
-
-    return listeners
 
 
 class ComponentInformation(TypedDict):
@@ -309,9 +270,6 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     name: str
     modifier: Optional[Stat] = None
 
-    listening_actions: dict[str, Union[str, StaticPayloadReducerInfo]] = Field(
-        default_factory=dict
-    )  # Access by external only
     binds: dict[str, str] = Field(default_factory=dict)
     addons: list[_ComponentAddon] = Field(default_factory=list)
 
@@ -323,6 +281,26 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     @property
     def event_provider(self) -> EventProvider:
         return NamedEventProvider(self.name, self.modifier)
+
+    def reducer(self, method_name: str) -> ReducerType:
+        if method_name not in getattr(self, "__reducers__"):
+            raise ValueError(f"Reducer {method_name} is not defined in {self.name}")
+
+        bounded_stores = GlobalProperty.get_default_binds()
+        bounded_stores.update(self.binds)
+
+        # TODO: remove these lines with explicit state passing
+        model_fields = list(self.get_default_state().keys())
+
+        property_address = _create_binding_with_store(
+            self.name,
+            model_fields,
+            bounded_stores,
+        )
+
+        return event_tagged_reducer(self.name, method_name, self.event_provider)(
+            compile_into_unsafe_reducer(property_address)(getattr(self, method_name))
+        )
 
     def get_unsafe_reducers(self) -> list[UnsafeReducer]:
         if len(getattr(self, "__reducers__")) == 0:

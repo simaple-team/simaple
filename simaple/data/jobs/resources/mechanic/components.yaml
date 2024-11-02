@@ -210,8 +210,6 @@ patch:
 data:
   id: 35121019-1
   name: "매시브 파이어: IRON-B (폭발)"
-  listening_actions:
-    "매시브 파이어: IRON-B.use.emitted.global.damage": use
   delay: 0
   damage: "{{ 50 + 10 * skill_level }}"
   hit: 1
@@ -236,9 +234,6 @@ patch:
 data:
   id: 35101002-0
   name: "호밍 미사일" # 어드밴스드 호밍 미사일 데이터 적용중
-  listening_actions:
-    "그라운드 제로.use.emitted.global.delay": pause
-
   delay: 0
   cooldown_duration: 0
 
@@ -448,8 +443,6 @@ data:
   id: 35141001-1
   name: "매시브 파이어: IRON-B VI (폭발)"
   representative_name: "매시브 파이어: IRON-B (폭발)"
-  listening_actions:
-    "매시브 파이어: IRON-B VI.use.emitted.global.damage": use
   delay: 0
   damage: "{{ 180 + 7 * skill_level }}"
   hit: 3
@@ -473,9 +466,6 @@ data:
   id: 35141003-0
   name: "호밍 미사일 VI"
   representative_name: "호밍 미사일"
-  listening_actions:
-    "그라운드 제로.use.emitted.global.delay": pause
-
   delay: 0
   cooldown_duration: 0
 

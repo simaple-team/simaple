@@ -113,9 +113,6 @@ patch:
   - VSkillImprovementPatch
 data:
   id: 2311015-0
-  listening_actions:
-    엔젤레이.use.emitted.global.damage: trigger
-    제네시스.use.emitted.global.damage: trigger
   name: 트라이엄프 페더
   trigger_cooldown_duration: 3_000
   trigger_damage: 230
@@ -382,8 +379,6 @@ data:
   id: 2321007-0-vi
   name: 엔젤레이 VI
   representative_name: 엔젤레이
-  listening_actions:
-    디바인 퍼니시먼트.use.emitted.global.damage: stack
   delay: 630
   cooldown_duration: 0
   damage: "{{ 235 + 4 * skill_level }}"
@@ -409,10 +404,6 @@ patch:
   - VSkillImprovementPatch
 data:
   id: 2311015-0
-  listening_actions:
-    엔젤레이.use.emitted.global.damage: trigger
-    엔젤레이 VI.use.emitted.global.damage: trigger
-    제네시스.use.emitted.global.damage: trigger
   name: 트라이엄프 페더 VI
   representative_name: 트라이엄프 페더
 

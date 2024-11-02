@@ -162,19 +162,7 @@ Component간의 연계
 ----------------------
 
 때때로, 스킬은 다른 스킬과 상호작용합니다. 이들은 다른 스킬이 발동되었을 때 자신의 이벤트를 발생시키거나, 상태를 변경해야 합니다. 
-simaple 에서, 이러한 연계는 두 가지 방법으로 지원됩니다. ``앱솔루트 킬`` 스킬로 인해 ``빛과 어둠의 세례`` 스택이 증가하는 상황을 상정해 봅시다.
-- 모든 ``Component`` 는 ``listening_actions`` 필드를 가지고 있습니다. ``Component`` 를 생성할 때 ``listening_actions`` 필드에 ``{$target_action_signature: $target_method}`` 형태의 dictionary 값을 전달하면, ``Component.export_dispatcher`` 를 통한 Dispatcher building 시점에서 해당 이벤트를 추가로 listen합니다. 이 경우, 아래와 같이 컴포넌트를 생성하게 될 것입니다. 스킬을 사용하는 것은 보편적으로 ``use`` 메서드에 대응된다는 점을 상기하십시오. ``빛과 어둠의 세례`` 스킬의 스택 수를 하나 증가시키는 메서드가 ``increase_stack`` 으로 정의되었다고 가정합니다.
-
-.. code-block:: python
-
-    component = AttackSkillComponent(
-        name="빛과 어둠의 세례",
-        listening_actions={
-            "앱솔루트 킬.use.emitted.global.damage": "increase_stack"
-        }
-    )
-
-관점을 다르게 볼 수도 있습니다. ``빛과 어둠의 세례`` 스택이 증가하는 것은 ``앱솔루트 킬`` 스킬의 속성이라고 생각할 수도 있습니다. 그렇다면 이 동작은 ``앱솔루트 킬`` 의 동작 과정에 기술되어야 합니다.
+``빛과 어둠의 세례`` 스택이 증가하는 것은 ``앱솔루트 킬`` 스킬의 속성이라고 생각할 수 있습니다. 그렇다면 이 동작은 ``앱솔루트 킬`` 의 동작 과정에 기술되어야 합니다.
 simaple은 Component가 다른 Component의 상태에 직접 접근할 수 있도록 ``binds`` 속성을 지원합니다. ``binds`` 에 명시된 상태는 reducer가 동작할 때 해당되는 address의 상태값을 Store에 조회하여 지정된 값에 할당합니다. 
 
 .. code-block:: python
@@ -191,8 +179,3 @@ simaple은 Component가 다른 Component의 상태에 직접 접근할 수 있�
         @reducer_method
         def use(self, _, cooltime_state, batism_of_light_and_darkness_stack_state):
             ...
-
-이 방법은 필연적으로 새로운 Component class의 작성을 요구하기 때문에 추천되지 않습니다. Reducer의 동작 간의 순서가 보장되어야 하는 경우에만 이같은 방법을 통해 상태를 관리하는 것이 추천됩니다.
-
-**명심하세요: simaple의 핵심 단위는 상태입니다. Component의 작성 기준은 상태여야 합니다. 한 Component의 상태를 다른 Component에서 참조하는 것은 전혀 권장되지 않습니다.**
-

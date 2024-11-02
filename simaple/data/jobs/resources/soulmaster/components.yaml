@@ -11,12 +11,6 @@ data:
   name: "엘리멘트: 소울"
   binds:
     cosmic_forge_lasting: ".코스믹 포지.lasting"
-  listening_actions:
-    "솔라 슬래시.use.emitted.global.delay": increase
-    "루나 디바이드.use.emitted.global.delay": increase
-    "크로스 더 스틱스.use.emitted.global.delay": maximize
-    "코스믹 포지.use.emitted.global.delay": maximize
-
   default_max_stack: 5
   cosmic_forge_stack: 10
   orb_lasting_duration: 30_000
@@ -91,8 +85,6 @@ patch:
 data:
   id: 400011055-0
   name: 엘리시온
-  listening_actions:
-    "크로스 더 스틱스.use.emitted.global.delay": "crack"
   cooldown_duration: 180_000
   delay: 750
   lasting_duration: 40_000
@@ -120,10 +112,6 @@ data:
   name: 코스믹 버스트
   binds:
     orb: ".엘리멘트: 소울.orb"
-  listening_actions:
-    "솔라 슬래시.use.emitted.global.delay": trigger
-    "루나 디바이드.use.emitted.global.delay": trigger
-    "크로스 더 스틱스.use.emitted.global.delay": trigger
   delay: 720
   damage: "{{ 280 + 4 * skill_level }}"
   hit: 4
@@ -292,11 +280,6 @@ patch:
 data:
   id: TBD-TBD
   name: 플레어 슬래시
-  listening_actions:
-    "솔라 슬래시.use.emitted.global.delay": change_stance_trigger
-    "루나 디바이드.use.emitted.global.delay": change_stance_trigger
-    "크로스 더 스틱스.use.emitted.global.delay": styx_trigger
-
   damage: "{{ 550 + skill_level * 22 }}"
   delay: 0
   hit: 7
