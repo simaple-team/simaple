@@ -1,6 +1,6 @@
 from simaple.core import StatProps
 from simaple.data.system.hyperstat import get_kms_hyperstat
-from simaple.request.adapter.hyperstat_loader.adapter import get_hyperstat_from_response
+from simaple.request.adapter.hyperstat_loader import get_hyperstat_from_response
 
 
 def test_hyperstat_adapter(character_hyper_stat_response):
