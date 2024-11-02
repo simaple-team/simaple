@@ -9,23 +9,17 @@ from simaple.request.external.nexon.api.ocid import (
     as_nexon_datetime,
     get_character_ocid,
 )
+from simaple.request.external.nexon.client import NexonAPIClient
 from simaple.request.service.loader import LinkSkillLoader
 from simaple.system.link import LinkSkillset
 
 
 class NexonAPILinkSkillLoader(LinkSkillLoader):
-    def __init__(self, host: str, access_token: str, date: datetime.date):
-        self._host = host
-        self._access_token = access_token
-        self._date = date
+    def __init__(self, client: NexonAPIClient):
+        self._client = client
 
     def load_link_skill(self, character_name: str) -> LinkSkillset:
-        ocid = get_character_ocid(self._host, self._access_token, character_name)
-        resp = get_link_skill(
-            self._host,
-            self._access_token,
-            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
-        )
+        resp = self._client.session(character_name).request(get_link_skill)
         return get_link_skillset(resp)
 
 

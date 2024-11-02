@@ -22,54 +22,37 @@ from simaple.request.external.nexon.api.ocid import (
     as_nexon_datetime,
     get_character_ocid,
 )
+from simaple.request.external.nexon.client import NexonAPIClient
 from simaple.request.service.loader import GearLoader
 
 
 class NexonAPIGearLoader(GearLoader):
-    def __init__(self, host: str, access_token: str, date: datetime.date):
-        self._host = host
-        self._access_token = access_token
-        self._date = date
+    def __init__(self, client: NexonAPIClient):
+        self._client = client
         self._gear_repository = GearRepository()
 
     def load_equipments(self, character_name: str) -> list[tuple[Gear, str]]:
-        ocid = get_character_ocid(self._host, self._access_token, character_name)
-        resp = get_character_item_equipment_response(
-            self._host,
-            self._access_token,
-            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
+        resp = self._client.session(character_name).request(
+            get_character_item_equipment_response
         )
         gears = get_equipments(resp, self._gear_repository)
         return gears
 
     def load_symbols(self, character_name: str) -> list[SymbolGear]:
-        ocid = get_character_ocid(self._host, self._access_token, character_name)
-        resp = get_character_symbol_response(
-            self._host,
-            self._access_token,
-            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
+        resp = self._client.session(character_name).request(
+            get_character_symbol_response
         )
-
         return get_symbols(resp)
 
     def load_pet_equipments_stat(self, character_name: str) -> Stat:
-        ocid = get_character_ocid(self._host, self._access_token, character_name)
-        resp = get_pet_equipment_response(
-            self._host,
-            self._access_token,
-            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
-        )
+        resp = self._client.session(character_name).request(get_pet_equipment_response)
         return get_pet_equip_stat_from_response(resp)
 
     def load_gear_related_stat(self, character_name: str) -> ExtendedStat:
-        ocid = get_character_ocid(self._host, self._access_token, character_name)
+        session = self._client.session(character_name)
 
         equipment_stat = get_equipment_stat(
-            get_character_item_equipment_response(
-                self._host,
-                self._access_token,
-                {"ocid": ocid, "date": as_nexon_datetime(self._date)},
-            ),
+            session.request(get_character_item_equipment_response),
             self._gear_repository,
         )
 
@@ -78,18 +61,10 @@ class NexonAPIGearLoader(GearLoader):
             (symbol.stat for symbol in self.load_symbols(character_name)), Stat()
         )
         set_item_stat = get_set_item_stats(
-            get_set_effect_response(
-                self._host,
-                self._access_token,
-                {"ocid": ocid, "date": as_nexon_datetime(self._date)},
-            )
+            session.request(get_set_effect_response),
         )
         cash_item_stat = get_cash_item_stat(
-            get_cash_item_response(
-                self._host,
-                self._access_token,
-                {"ocid": ocid, "date": as_nexon_datetime(self._date)},
-            )
+            session.request(get_cash_item_response),
         )
 
         return equipment_stat + ExtendedStat(

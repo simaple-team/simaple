@@ -12,6 +12,7 @@ from simaple.request.adapter.link_skill_loader.adapter import NexonAPILinkSkillL
 from simaple.request.adapter.propensity_loader.adapter import NexonAPIPropensityLoader
 from simaple.request.adapter.skill_loader.adapter import NexonAPICharacterSkillLoader
 from simaple.request.adapter.union_loader.adapter import NexonAPIUnionLoader
+from simaple.request.external.nexon.client import NexonAPIClient
 from simaple.request.service.environment_provider import (
     LoadedEnvironmentProviderService,
 )
@@ -31,31 +32,18 @@ class NexonAPIEnvironmentProvider(EnvironmentProvider):
     token: str
 
     def get_simulation_environment(self) -> SimulationEnvironment:
+        client = NexonAPIClient(
+            HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
+        )
         service = LoadedEnvironmentProviderService(
-            NexonAPIAbilityLoader(
-                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
-            ),
-            NexonAPIPropensityLoader(
-                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
-            ),
-            NexonAPIHyperStatLoader(
-                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
-            ),
-            NexonAPIUnionLoader(
-                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
-            ),
-            NexonAPIGearLoader(
-                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
-            ),
-            NexonAPICharacterBasicLoader(
-                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
-            ),
-            NexonAPILinkSkillLoader(
-                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
-            ),
-            NexonAPICharacterSkillLoader(
-                HOST, self.token, date=datetime.strptime(self.date, "%Y-%m-%d").date()
-            ),
+            NexonAPIAbilityLoader(client),
+            NexonAPIPropensityLoader(client),
+            NexonAPIHyperStatLoader(client),
+            NexonAPIUnionLoader(client),
+            NexonAPIGearLoader(client),
+            NexonAPICharacterBasicLoader(client),
+            NexonAPILinkSkillLoader(client),
+            NexonAPICharacterSkillLoader(client),
         )
         character_info = service.compute_character_info(self.character_name)
 

@@ -12,6 +12,7 @@ from simaple.request.external.nexon.api.ocid import (
     as_nexon_datetime,
     get_character_ocid,
 )
+from simaple.request.external.nexon.client import NexonAPIClient
 from simaple.request.service.loader import AbilityLoader
 from simaple.request.service.util import BestStatSelector, get_best_stat_index
 
@@ -29,30 +30,21 @@ def _get_ability_stat(
 
 
 class NexonAPIAbilityLoader(AbilityLoader):
-    def __init__(self, host: str, access_token: str, date: datetime.date):
-        self._host = host
-        self._access_token = access_token
-        self._date = date
+    def __init__(self, client: NexonAPIClient):
+        self._client = client
 
     def load_stat(self, character_name: str) -> ExtendedStat:
-        ocid = get_character_ocid(self._host, self._access_token, character_name)
-        ability_response = get_character_ability(
-            self._host,
-            self._access_token,
-            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
+        ability_response = self._client.session(character_name).request(
+            get_character_ability
         )
         return _get_ability_stat(ability_response["ability_info"])
 
     def load_best_stat(
         self, character_name: str, selector: BestStatSelector
     ) -> ExtendedStat:
-        ocid = get_character_ocid(self._host, self._access_token, character_name)
-        ability_response = get_character_ability(
-            self._host,
-            self._access_token,
-            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
+        ability_response = self._client.session(character_name).request(
+            get_character_ability
         )
-
         candidates = [
             _get_ability_stat(ability_response["ability_preset_1"]["ability_info"]),
             _get_ability_stat(ability_response["ability_preset_2"]["ability_info"]),

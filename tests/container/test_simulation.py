@@ -1,7 +1,4 @@
-from simaple.container.simulation import (
-    FinalCharacterStat,
-    SimulationEnvironment,
-)
+from simaple.container.simulation import FinalCharacterStat, SimulationEnvironment
 from simaple.container.usecase.builtin import get_engine
 from simaple.core import ActionStat, JobType, Stat
 from simaple.simulate.policy.base import Operation

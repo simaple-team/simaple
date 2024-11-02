@@ -11,22 +11,18 @@ from simaple.request.external.nexon.api.ocid import (
     as_nexon_datetime,
     get_character_ocid,
 )
+from simaple.request.external.nexon.client import NexonAPIClient
 from simaple.request.service.loader import HyperstatLoader
 from simaple.system.hyperstat import Hyperstat
 
 
 class NexonAPIHyperStatLoader(HyperstatLoader):
-    def __init__(self, host: str, access_token: str, date: datetime.date):
-        self._host = host
-        self._access_token = access_token
-        self._date = date
+    def __init__(self, client: NexonAPIClient):
+        self._client = client
 
     def load_hyper_stat(self, character_name: str) -> Hyperstat:
-        ocid = get_character_ocid(self._host, self._access_token, character_name)
-        hyperstat_response = get_hyper_stat(
-            self._host,
-            self._access_token,
-            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
+        hyperstat_response = self._client.session(character_name).request(
+            get_hyper_stat
         )
         return get_hyperstat_from_response(hyperstat_response)
 

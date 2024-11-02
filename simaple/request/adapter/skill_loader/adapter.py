@@ -15,24 +15,20 @@ from simaple.request.external.nexon.api.ocid import (
     as_nexon_datetime,
     get_character_ocid,
 )
+from simaple.request.external.nexon.client import NexonAPIClient
 from simaple.request.service.loader import CharacterSkillLoader
 from simaple.system.hexa_stat import HexaStat
 
 
 class NexonAPICharacterSkillLoader(CharacterSkillLoader):
-    def __init__(self, host: str, access_token: str, date: datetime.date):
-        self._host = host
-        self._access_token = access_token
-        self._date = date
+    def __init__(self, client: NexonAPIClient):
+        self._client = client
 
     def load_character_passive_stat(
         self, character_name: str, character_level: int
     ) -> ExtendedStat:
-        ocid = get_character_ocid(self._host, self._access_token, character_name)
-        aggregated_response = get_every_skill_levels(
-            self._host,
-            self._access_token,
-            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
+        aggregated_response = self._client.session(character_name).request(
+            get_every_skill_levels
         )
         return compute_passive_skill_stat(aggregated_response, character_level)
 
@@ -40,24 +36,18 @@ class NexonAPICharacterSkillLoader(CharacterSkillLoader):
         self,
         character_name: str,
     ) -> HexaStat:
-        ocid = get_character_ocid(self._host, self._access_token, character_name)
-        response = get_hexamatrix_stat_response(
-            self._host,
-            self._access_token,
-            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
+        response = self._client.session(character_name).request(
+            get_hexamatrix_stat_response
         )
+
         return compute_hexa_stat(response)
 
     def load_zero_grade_skill_passive_stat(
         self, character_name: str
     ) -> tuple[ExtendedStat, bool]:
-        ocid = get_character_ocid(self._host, self._access_token, character_name)
-        response = get_skill_response(
-            self._host,
-            self._access_token,
+        response = self._client.session(character_name).request(
+            get_skill_response,
             {
-                "ocid": ocid,
-                "date": as_nexon_datetime(self._date),
                 "character_skill_grade": "0",
             },
         )
@@ -69,13 +59,9 @@ class NexonAPICharacterSkillLoader(CharacterSkillLoader):
         """
         헥사스킬 레벨을 반환합니다.
         """
-        ocid = get_character_ocid(self._host, self._access_token, character_name)
-        response = get_skill_response(
-            self._host,
-            self._access_token,
+        response = self._client.session(character_name).request(
+            get_skill_response,
             {
-                "ocid": ocid,
-                "date": as_nexon_datetime(self._date),
                 "character_skill_grade": "6",
             },
         )

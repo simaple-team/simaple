@@ -1,5 +1,3 @@
-import datetime
-
 from simaple.core import JobType, Stat
 from simaple.request.adapter.translator.job_name import translate_kms_name
 from simaple.request.external.nexon.api.character.basic import (
@@ -7,43 +5,29 @@ from simaple.request.external.nexon.api.character.basic import (
     get_character_basic,
     get_character_stat,
 )
-from simaple.request.external.nexon.api.ocid import (
-    as_nexon_datetime,
-    get_character_ocid,
-)
+from simaple.request.external.nexon.client import NexonAPIClient
 from simaple.request.service.loader import CharacterBasicLoader
 
 
 class NexonAPICharacterBasicLoader(CharacterBasicLoader):
-    def __init__(self, host: str, access_token: str, date: datetime.date):
-        self._host = host
-        self._access_token = access_token
-        self._date = date
+    def __init__(self, client: NexonAPIClient):
+        self._client = client
 
     def load_character_level(self, character_name: str) -> int:
-        ocid = get_character_ocid(self._host, self._access_token, character_name)
-        character_basic_response = get_character_basic(
-            self._host,
-            self._access_token,
-            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
+        character_basic_response = self._client.session(character_name).request(
+            get_character_basic
         )
         return character_basic_response["character_level"]
 
     def load_character_ap_based_stat(self, character_name: str) -> Stat:
-        ocid = get_character_ocid(self._host, self._access_token, character_name)
-        character_stat_response = get_character_stat(
-            self._host,
-            self._access_token,
-            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
+        character_stat_response = self._client.session(character_name).request(
+            get_character_stat
         )
         return extract_character_ap_based_stat(character_stat_response)
 
     def load_character_job_type(self, character_name: str) -> JobType:
-        ocid = get_character_ocid(self._host, self._access_token, character_name)
-        character_basic_response = get_character_basic(
-            self._host,
-            self._access_token,
-            {"ocid": ocid, "date": as_nexon_datetime(self._date)},
+        character_basic_response = self._client.session(character_name).request(
+            get_character_basic
         )
         return translate_kms_name(character_basic_response["character_class"])
 
