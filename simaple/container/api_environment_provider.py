@@ -3,9 +3,7 @@ from datetime import datetime
 from simaple.container.environment_provider import EnvironmentProvider
 from simaple.container.simulation import SimulationEnvironment
 from simaple.request.adapter.ability_loader import NexonAPIAbilityLoader
-from simaple.request.adapter.character_basic_loader.adapter import (
-    NexonAPICharacterBasicLoader,
-)
+from simaple.request.adapter.character_basic_loader import NexonAPICharacterBasicLoader
 from simaple.request.adapter.gear_loader.adapter import NexonAPIGearLoader
 from simaple.request.adapter.hyperstat_loader.adapter import NexonAPIHyperStatLoader
 from simaple.request.adapter.link_skill_loader.adapter import NexonAPILinkSkillLoader
