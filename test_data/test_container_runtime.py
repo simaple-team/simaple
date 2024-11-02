@@ -5,11 +5,11 @@ from inline_snapshot import snapshot
 import simaple.simulate.component.common  # pylint: disable=W0611
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
-from simaple.container.simulation import get_damage_calculator, get_operation_engine
+from simaple.container.simulation import get_damage_calculator
 from simaple.core.jobtype import JobType
-from simaple.data.jobs.builtin import get_builtin_strategy
 from simaple.simulate.report.base import SimulationEntry
-from simaple.simulate.strategy.base import exec_by_strategy
+from simaple.container.usecase.builtin import get_engine
+from simaple.simulate.policy.parser import parse_simaple_runtime
 
 
 def container_test_setting(
@@ -39,19 +39,21 @@ def run_actor(environment_provider: BaselineEnvironmentProvider, jobtype: JobTyp
     environment = PersistentStorageMemoizer(
         os.path.join(os.path.dirname(__file__), ".memo.simaple.json")
     ).compute_environment(environment_provider)
-    engine = get_operation_engine(environment)
+    
+    engine = get_engine(environment)
 
-    policy = get_builtin_strategy(environment.jobtype).get_priority_based_policy()
+    with open(os.path.join(os.path.dirname(__file__), "asset", f"{environment.jobtype.value}.simaple"), "r") as f:
+        _, commands = parse_simaple_runtime(f.read())
 
-    while engine.get_current_viewer()("clock") < 50_000:
-        exec_by_strategy(engine, policy)
+    for command in commands:
+        engine.exec(command)
 
     report = list(engine.simulation_entries())
 
     """
     with open("operation.log", "w") as f:
         for op in engine.operation_logs():
-            f.write(op.operation.expr+'\n')
+            f.write(op.command.expr +'\n')
 
     with open("history.log", "w") as f:
         for op in engine.operation_logs():
@@ -175,15 +177,20 @@ def test_mechanic_actor():
     assert (result, dpm) == snapshot(
         (
             {
-                "메카 캐리어": 2352608222783.9346,
-                "로봇 런처: RM7": 103007303509.85805,
-                "마그네틱 필드": 120491046753.91942,
-                "로봇 팩토리: RM1": 293234897173.6744, "멀티플 옵션 : M-FL": 752714065726.3594, "메탈아머 전탄발사": 1588720445348.7322,
-                "마이크로 미사일 컨테이너": 1220290481679.8428,
-                "디스토션 필드": 266098561331.82068,
-                "레지스탕스 라인 인팬트리": 196046032742.0047,
-            },
-            8077981707480.637,
+                "메카 캐리어": 4133977066428.205, 
+                "호밍 미사일 VI": 6272553782771.318, 
+                "로봇 런처: RM7": 189761915488.52603,
+                "마그네틱 필드": 226347764821.21353,
+                "로봇 팩토리: RM1": 555180936708.4706,
+                "멀티플 옵션: M-FL": 1432319488844.4243,
+                "메탈아머 전탄발사": 2947646615584.2705,
+                "마이크로 미사일 컨테이너": 744061195841.6217,
+                "디스토션 필드": 327064720760.19293, 
+                "그라운드 제로": 4452236797317.125, 
+                "레지스탕스 라인 인팬트리": 180965604408.217, 
+                "매시브 파이어: IRON-B VI": 610627243173.8206, 
+                "매시브 파이어: IRON-B VI (폭발)": 142836957130.47012},
+            9069434614932.791,
         )
     )
 

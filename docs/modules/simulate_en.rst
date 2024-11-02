@@ -189,24 +189,6 @@ Component Links
 ----------------------
 
 Sometimes, skills interact with other skills. They will need to either trigger their own events or change their state when other skills are used.
-In simaple, these links are supported in two ways. Let's look at the interaction where Absolute Kill increases the Baptism of Light and Darkness stack before the Odium patch change to Baptism.
-
-Actions to be listened for can be defined as a dict via the ``listening_actions`` parameter when defining a Component.
-Passing a key-value pair of the form ``$target_action_signature:$target_method`` when creating a Component will add the event to be listened for during the Dispatcher building process.
-In this case, the component is created as below.
-Recall that the use of skills generally corresponds to the ``use`` method, and here we assume that the method for increasing the stacks of Baptism is defined as ``increase_stack``.
-
-.. code-block:: python
-
-    component = AttackSkillComponent(
-        name="Baptism of Light and Darkness",
-        listening_actions={
-            "AbsoluteKill.use.emitted.global.damage": "increase_stack"
-        }
-    )
-
-From another perspective, the stack-increasing property of Baptism may be considered an attribute of the Absolute Kill skill.
-If you choose to look at it this way, this interaction should be described in Absolute Kill.
 simaple supports the ``binds`` property so that the Component can directly access the state of other Components.
 The states specified in ``binds`` will query the Store for the state value of the corresponding key when the Reducer is called and assign a specified value to it.
 
@@ -224,14 +206,3 @@ The states specified in ``binds`` will query the Store for the state value of th
         @reducer_method
         def use(self, _, cooltime_state, baptism_of_light_and_darkness_stack_state):
             ...
-
-This method of defining interactions is not recommended because it necessitates the creation of a new Component class.
-This method of managing states is recommended only when the order of a sequence of actions of a Reducer needs to be forced.
-
-**Key takeaways:**
-
-**The key unit of simaple is a State.**
-
-**Components' creation parameters must be States.**
-
-**It is not recommended that the State of one Component be referenced by another Component.**

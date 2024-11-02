@@ -29,6 +29,8 @@ export const pySimaple: PySimaple = {
       // intentionally using runPlan; runPlanWithHint breaks on pySimaple changes
       fetcher(`${API_ENDPOINT}/runPlan`, {
         plan,
+        previous_plan,
+        history,
       }),
       (error: any) => error.message,
     ),

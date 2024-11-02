@@ -81,7 +81,6 @@ function SkillComponentCard(props: { skillComponent: SkillComponentExtra }) {
   const {
     id,
     name,
-    listening_actions,
     binds,
     cooldown_duration,
     delay,
@@ -114,14 +113,6 @@ function SkillComponentCard(props: { skillComponent: SkillComponentExtra }) {
       <CardContent>
         <Table>
           <TableBody>
-            {listening_actions && Object.keys(listening_actions).length > 0 ? (
-              <TableRow>
-                <TableCell>트리거</TableCell>
-                <TableCell className="whitespace-pre-wrap">
-                  {JSON.stringify(listening_actions, null, 2)}
-                </TableCell>
-              </TableRow>
-            ) : null}
             {cooldown_duration ? (
               <TableRow>
                 <TableCell>쿨타임</TableCell>

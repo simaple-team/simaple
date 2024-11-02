@@ -1,8 +1,8 @@
 from simaple.core.base import ActionStat
-from simaple.simulate.builder import EngineBuilder
 from simaple.simulate.component.common.attack_skill import AttackSkillComponent
 from simaple.simulate.core.store import AddressedStore, ConcreteStore
 from simaple.simulate.global_property import GlobalProperty
+from simaple.simulate.usecase import Usecase
 
 
 def test_scenario():
@@ -18,10 +18,11 @@ def test_scenario():
         name="test-B", damage=400, hit=6, cooldown_duration=14.0, delay=0.0, id="test"
     )
 
-    engine_builder = EngineBuilder(store)
+    usecase = Usecase()
+    usecase.use_component(attack_skill_1)
+    usecase.use_component(attack_skill_2)
 
-    engine_builder.add_component(attack_skill_1).add_component(attack_skill_2)
-    simulation_runtime = engine_builder.build_simulation_runtime()
+    simulation_runtime = usecase.create_simulation_runtime(store)
 
     event = simulation_runtime.resolve(
         {

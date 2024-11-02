@@ -478,7 +478,7 @@ class FullMetalBarrageComponent(
         return state, event
 
     @reducer_method
-    def stop(self, _, state: FullMetalBarrageState):
+    def stop(self, _: None, state: FullMetalBarrageState):
         state, event = keydown_trait.stop_keydown(
             state,
             {},

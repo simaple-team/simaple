@@ -1,0 +1,43 @@
+ELAPSE 70000
+
+CAST "로디드 다이스"
+CAST "메이플 용사"
+CAST "호밍 미사일 VI" # Treat as summon skill
+
+
+CAST "서포트 웨이버: H-EX"
+CAST "로봇 런처: RM7"
+CAST "마그네틱 필드"
+CAST "로봇 팩토리: RM1"
+
+CAST "메이플월드 여신의 축복"
+CAST "윌 오브 리버티"
+
+CAST "레지스탕스 라인 인팬트리"
+CAST "멀티플 옵션: M-FL"
+CAST "메카 캐리어"
+
+CAST "오버 드라이브"
+
+CAST "소울 컨트랙트"
+CAST "디스토션 필드"
+CAST "마이크로 미사일 컨테이너"
+CAST "리스트레인트 링" # seed ring
+CAST "그라운드 제로"
+CAST "봄버 타임"
+
+CAST "메탈아머 전탄발사"
+x55 RESOLVE "메탈아머 전탄발사"
+KEYDOWNSTOP "메탈아머 전탄발사"
+
+CAST "디스토션 필드"
+x9 CAST "매시브 파이어: IRON-B VI"
+CAST "마이크로 미사일 컨테이너"
+x3 CAST "매시브 파이어: IRON-B VI"
+CAST "디스토션 필드"
+x13 CAST "매시브 파이어: IRON-B VI"
+CAST "디스토션 필드"
+x13 CAST "매시브 파이어: IRON-B VI"
+CAST "디스토션 필드"
+
+ELAPSE 30000

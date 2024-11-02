@@ -7,6 +7,4 @@ metadata:
     id: 0-0
 data:
   id: 0-0
-  listening_actions:
-    "$.emitted.global.mob": add_dot
   name: 평범한 몬스터

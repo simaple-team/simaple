@@ -26,7 +26,6 @@ export type Name1 = string;
 export interface Component {
   id: Id;
   name: Name;
-  listening_actions?: ListeningActions;
   binds?: Binds;
   [k: string]: unknown;
 }

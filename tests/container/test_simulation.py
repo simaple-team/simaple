@@ -1,8 +1,8 @@
 from simaple.container.simulation import (
     FinalCharacterStat,
     SimulationEnvironment,
-    get_operation_engine,
 )
+from simaple.container.usecase.builtin import get_engine
 from simaple.core import ActionStat, JobType, Stat
 from simaple.simulate.policy.base import Operation
 
@@ -46,8 +46,8 @@ def test_simulation_environment_using_skill_levels():
         },
     )
 
-    engine = get_operation_engine(no_skill_environment)
-    engine_with_skill = get_operation_engine(environment_with_skill_level)
+    engine = get_engine(no_skill_environment)
+    engine_with_skill = get_engine(environment_with_skill_level)
 
     op = Operation(
         command="CAST",
