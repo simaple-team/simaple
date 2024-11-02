@@ -1,9 +1,9 @@
 from simaple.core import ExtendedStat
-from simaple.request.adapter.ability_loader.adapter import _get_ability_stat
+from simaple.request.adapter.ability_loader import get_ability_stat
 
 
 def test_ability_response(character_ability_response):
-    ability = _get_ability_stat(character_ability_response["ability_info"])
+    ability = get_ability_stat(character_ability_response["ability_info"])
 
     assert ability == ExtendedStat.model_validate(
         {
@@ -17,7 +17,7 @@ def test_ability_response(character_ability_response):
 
 
 def test_noisy_ability_response(character_ability_response_2):
-    ability = _get_ability_stat(character_ability_response_2["ability_info"])
+    ability = get_ability_stat(character_ability_response_2["ability_info"])
 
     assert ability == ExtendedStat.model_validate(
         {

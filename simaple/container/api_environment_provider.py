@@ -2,7 +2,7 @@ from datetime import datetime
 
 from simaple.container.environment_provider import EnvironmentProvider
 from simaple.container.simulation import SimulationEnvironment
-from simaple.request.adapter.ability_loader.adapter import NexonAPIAbilityLoader
+from simaple.request.adapter.ability_loader import NexonAPIAbilityLoader
 from simaple.request.adapter.character_basic_loader.adapter import (
     NexonAPICharacterBasicLoader,
 )
