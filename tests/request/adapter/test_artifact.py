@@ -1,9 +1,9 @@
 from simaple.core import ExtendedStat
-from simaple.request.adapter.union_loader.adapter import get_union_artifact
+from simaple.request.adapter.union_loader import _get_union_artifact
 
 
 def test_propensity_response(union_artifact_response):
-    artifact = get_union_artifact(union_artifact_response)
+    artifact = _get_union_artifact(union_artifact_response)
     assert artifact.get_extended_stat() == ExtendedStat.model_validate(
         {
             "stat": {

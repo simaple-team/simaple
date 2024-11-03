@@ -1,12 +1,6 @@
-import datetime
-
 from simaple.request.external.nexon.api.character.propensity import (
     CharacterPropensityResponse,
     get_propensity_response,
-)
-from simaple.request.external.nexon.api.ocid import (
-    as_nexon_datetime,
-    get_character_ocid,
 )
 from simaple.request.external.nexon.client import NexonAPIClient
 from simaple.request.service.loader import PropensityLoader

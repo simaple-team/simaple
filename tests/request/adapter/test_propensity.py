@@ -1,4 +1,4 @@
-from simaple.request.adapter.propensity_loader.adapter import get_propensity
+from simaple.request.adapter.propensity_loader import get_propensity
 from simaple.system.propensity import Propensity
 
 
