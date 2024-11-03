@@ -1,74 +1,7 @@
-import pytest
-
-from simaple.container.simulation import (
-    FinalCharacterStat,
-    SimulationEnvironment,
-    get_skill_components,
-)
+from simaple.container.simulation import FinalCharacterStat, SimulationEnvironment
 from simaple.container.usecase.builtin import get_engine
 from simaple.core import ActionStat, JobType, Stat
 from simaple.simulate.policy.base import Operation
-
-
-@pytest.mark.parametrize(
-    "wrong_envs",
-    [
-        SimulationEnvironment(
-            passive_skill_level=0,
-            combat_orders_level=0,
-            weapon_pure_attack_power=0,
-            jobtype=JobType.archmagefb,
-            level=280,
-            character=FinalCharacterStat(
-                stat=Stat(
-                    INT=1000,
-                    magic_attack=1000,
-                ),
-                action_stat=ActionStat(),
-            ),
-            skill_levels={
-                "undef 인페르날 베놈": 10,
-            },
-        ),
-        SimulationEnvironment(
-            passive_skill_level=0,
-            combat_orders_level=0,
-            weapon_pure_attack_power=0,
-            jobtype=JobType.archmagefb,
-            level=280,
-            character=FinalCharacterStat(
-                stat=Stat(
-                    INT=1000,
-                    magic_attack=1000,
-                ),
-                action_stat=ActionStat(),
-            ),
-            skill_levels={
-                "undef 인페르날 베놈": 10,
-            },
-        ),
-        SimulationEnvironment(
-            passive_skill_level=0,
-            combat_orders_level=0,
-            weapon_pure_attack_power=0,
-            jobtype=JobType.archmagefb,
-            level=280,
-            character=FinalCharacterStat(
-                stat=Stat(
-                    INT=1000,
-                    magic_attack=1000,
-                ),
-                action_stat=ActionStat(),
-            ),
-            hexa_improvement_levels={
-                "undef 인페르날 베놈": 10,
-            },
-        ),
-    ],
-)
-def test_get_skill_components_with_improper_name_may_fail(wrong_envs):
-    with pytest.raises(AssertionError):
-        get_skill_components(wrong_envs)
 
 
 def test_simulation_environment_using_skill_levels():
@@ -85,6 +18,7 @@ def test_simulation_environment_using_skill_levels():
                 magic_attack=1000,
             ),
             action_stat=ActionStat(),
+            active_buffs={},
         ),
         v_improvements_level=60,
     )
@@ -101,6 +35,7 @@ def test_simulation_environment_using_skill_levels():
                 magic_attack=1000,
             ),
             action_stat=ActionStat(),
+            active_buffs={},
         ),
         v_improvements_level=60,
         skill_levels={

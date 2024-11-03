@@ -4,7 +4,11 @@ from simaple.core import Stat
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository
 from simaple.gear.symbol_gear import SymbolGear
-from simaple.request.adapter.gear_loader._schema import (
+from simaple.request.adapter.gear_loader._potential_converter import (
+    get_potential,
+    translate_kms_potential_pattern,
+)
+from simaple.request.external.nexon.api.character.item import (
     CharacterItemElement,
     CharacterItemElementOption,
     CharacterItemEquipment,
@@ -12,9 +16,6 @@ from simaple.request.adapter.gear_loader._schema import (
     CharacterSymbolEquipment,
     OptionValueAndType,
 )
-from simaple.request.adapter.translator.kms.potential import kms_potential_translator
-
-_potential_translator = kms_potential_translator()
 
 
 def _get_stat(item_option: CharacterItemElementOption) -> Stat:
@@ -66,7 +67,7 @@ def _get_gear(
         )
 
     base_gear = base_gear.set_potential(
-        _potential_translator.translate(
+        get_potential(
             [
                 expression
                 for expression in [
@@ -80,7 +81,7 @@ def _get_gear(
     )
 
     base_gear = base_gear.set_additional_potential(
-        _potential_translator.translate(
+        get_potential(
             [
                 expression
                 for expression in [
@@ -96,7 +97,7 @@ def _get_gear(
     # soul option
     if item_element["soul_option"] is not None:
         base_gear = base_gear.add_stat(
-            _potential_translator.translate_expression(item_element["soul_option"]).stat
+            translate_kms_potential_pattern(item_element["soul_option"]).stat
         )
 
     return base_gear

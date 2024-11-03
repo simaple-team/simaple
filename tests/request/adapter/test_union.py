@@ -1,18 +1,16 @@
 import pytest
 
 from simaple.core import ActionStat, ExtendedStat, Stat
-from simaple.request.adapter.union_loader._converter import (
-    get_stat_from_occupation_description,
-)
-from simaple.request.adapter.union_loader.adapter import (
-    get_union_squad,
-    get_union_squad_effect,
+from simaple.request.adapter.union_loader import (
+    _get_stat_from_occupation_description,
+    _get_union_squad,
+    _get_union_squad_effect,
 )
 
 
 def test_union_raiders_response(character_union_raiders_response):
-    union_squad = get_union_squad(character_union_raiders_response)
-    squad_effect = get_union_squad_effect(character_union_raiders_response)
+    union_squad = _get_union_squad(character_union_raiders_response)
+    squad_effect = _get_union_squad_effect(character_union_raiders_response)
 
     assert union_squad.get_stat().short_dict() == squad_effect.stat.short_dict()
 
@@ -37,4 +35,4 @@ def test_union_raiders_response(character_union_raiders_response):
     ],
 )
 def test_union_occupation_parse(expression, expected):
-    assert get_stat_from_occupation_description(expression) == expected
+    assert _get_stat_from_occupation_description(expression) == expected

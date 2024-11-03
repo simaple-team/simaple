@@ -1,5 +1,5 @@
 from simaple.core import Stat
-from simaple.request.adapter.character_basic_loader.adapter import (
+from simaple.request.adapter.character_basic_loader import (
     extract_character_ap_based_stat,
 )
 

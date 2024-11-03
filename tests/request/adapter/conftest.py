@@ -4,21 +4,31 @@ from typing import Any, cast
 
 import pytest
 
-from simaple.request.adapter.ability_loader._schema import CharacterAbilityResponse
-from simaple.request.adapter.character_basic_loader._schema import CharacterStatResponse
-from simaple.request.adapter.gear_loader._schema import (
+from simaple.request.external.nexon.api.character.ability import (
+    CharacterAbilityResponse,
+)
+from simaple.request.external.nexon.api.character.basic import CharacterStatResponse
+from simaple.request.external.nexon.api.character.hyper_stat import (
+    CharacterHyperStatResponse,
+)
+from simaple.request.external.nexon.api.character.item import (
     CashItemResponse,
     CharacterItemEquipment,
     CharacterSymbolEquipment,
     PetResponse,
     SetEffectResponse,
 )
-from simaple.request.adapter.hyperstat_loader._schema import CharacterHyperStatResponse
-from simaple.request.adapter.link_skill_loader._schema import LinkSkillResponse
-from simaple.request.adapter.propensity_loader._schema import (
+from simaple.request.external.nexon.api.character.link_skill import LinkSkillResponse
+from simaple.request.external.nexon.api.character.propensity import (
     CharacterPropensityResponse,
 )
-from simaple.request.adapter.union_loader._schema import CharacterUnionRaiderResponse
+from simaple.request.external.nexon.api.character.skill import (
+    AggregatedCharacterSkillResponse,
+    CharacterSkillResponse,
+)
+from simaple.request.external.nexon.api.character.union import (
+    CharacterUnionRaiderResponse,
+)
 
 
 def _macro_get_response(file_name: str) -> dict[str, Any]:
@@ -95,3 +105,57 @@ def character_stat_response() -> CharacterStatResponse:
 @pytest.fixture
 def link_skill_response() -> LinkSkillResponse:
     return cast(LinkSkillResponse, _macro_get_response("link_skill.json"))
+
+
+@pytest.fixture
+def skill_0_response() -> CharacterSkillResponse:
+    return cast(CharacterSkillResponse, _macro_get_response("skill_0.json"))
+
+
+@pytest.fixture
+def skill_aggregated_response() -> AggregatedCharacterSkillResponse:
+    return {
+        "response_at_0": cast(
+            CharacterSkillResponse, _macro_get_response("skill_0.json")
+        ),
+        "response_at_1": cast(
+            CharacterSkillResponse, _macro_get_response("skill_0.json")
+        ),
+        "response_at_1_and_half": cast(
+            CharacterSkillResponse, _macro_get_response("skill_1_and_half.json")
+        ),
+        "response_at_2": cast(
+            CharacterSkillResponse, _macro_get_response("skill_2.json")
+        ),
+        "response_at_2_and_half": cast(
+            CharacterSkillResponse, _macro_get_response("skill_2_and_half.json")
+        ),
+        "response_at_3": cast(
+            CharacterSkillResponse, _macro_get_response("skill_3.json")
+        ),
+        "response_at_4": cast(
+            CharacterSkillResponse, _macro_get_response("skill_4.json")
+        ),
+        "response_at_hyper_passive": cast(
+            CharacterSkillResponse, _macro_get_response("skill_hyperpassive.json")
+        ),
+        "response_at_hyper_active": cast(
+            CharacterSkillResponse, _macro_get_response("skill_hyperactive.json")
+        ),
+        "response_at_5": cast(
+            CharacterSkillResponse, _macro_get_response("skill_5.json")
+        ),
+        "response_at_6": cast(
+            CharacterSkillResponse, _macro_get_response("skill_6.json")
+        ),
+    }
+
+
+@pytest.fixture
+def hexa_stat_response() -> dict[str, Any]:
+    return _macro_get_response("hexa_stat.json")
+
+
+@pytest.fixture
+def hexa_stat_response_2() -> dict[str, Any]:
+    return _macro_get_response("hexa_stat_2.json")

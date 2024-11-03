@@ -1,0 +1,87 @@
+{
+  "date": "2024-09-19T00:00+09:00",
+  "character_class": "아크메이지(불,독)",
+  "character_skill_grade": "3",
+  "character_skill": [
+    {
+      "skill_name": "익스플로젼",
+      "skill_description": "[마스터 레벨 : 20]\r\n자신의 주변에 화염 폭발을 일으켜 다수의 적을 동시에 공격한다. 불 속성의 공격이다.",
+      "skill_level": 20,
+      "skill_effect": "MP 56 소비, 최대 8명의 적에게 405% 데미지로 2번 공격",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKGPBMC.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "포이즌 미스트",
+      "skill_description": "[마스터 레벨 : 20]\r\n일정 시간 동안 자신의 주변에 치명적인 독 안개를 생성하여 모든 적들을 중독시켜 독 속성으로 공격한다.\n4차 스킬 \"미스트 이럽션\"을 익히기 위해 20레벨 이상 필요",
+      "skill_level": 20,
+      "skill_effect": "MP 55 소비, 15초 동안 270% 데미지의 독 안개 생성, 중독 시 6초 동안 1초 당 240%의 도트 데미지",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKGPBMD.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "포이즌 리젼",
+      "skill_description": "[마스터 레벨 : 14]\r\n주변을 맹독 지대로 만드는 독 마법진을 설치한다. 마법진에서 지속적으로 맹독이 생성되어 점차 맹독 지대가 좌우로 번진다. 맹독 지대는 발판에 끝에 다다르면 더 이상 번지지 않으며, 맹독 지대의 독은 인화성으로 생성 후 일정 시간이 지난 후 맹독 지대 위에서 화염 마법을 사용하거나 화염 마법에 피격되면 강력한 폭발을 일으킨다. 폭발도 주변의 맹독 지대를 폭발시킬 수 있다. 독 속성의 공격이다.",
+      "skill_level": 14,
+      "skill_effect": "MP 54 소비, 60초 동안 지속되는 오브제 설치\n오브제는 일정 시간마다 주변을 맹독 지대로 만들며 맹독 지대 위의 적에게 10초 동안 1초마다 204%의 도트 데미지\n맹독 지대 폭발 : MP 60 소비, 맹독 지대 폭발에 의한 폭발은 MP 소비하지 않음, 생성 후 1.5초 후부터 폭발 가능, 최대 10명의 적을 200%의 데미지로 4번 공격, 폭발에 의해서도 맹독 지대 폭발 가능\n하나의 몬스터가 0.4초 이내에 폭발에 연속으로 맞으면 두번째 폭발부터 최종 데미지 60% 감소\n일반 몬스터 공격 시 데미지 50% 증가\n재사용 대기시간 30초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKGPBND.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "엘리멘탈 어뎁팅(불,독)",
+      "skill_description": "[마스터 레벨 : 20]\r\n불과 독의 장막으로 자신을 뒤덮어 치명적인 상태 이상을 방어한다. 방어 후 재생성되며 일정 횟수 이상 방어에 성공하면 재사용 대기시간이 적용된다. 추가로 영구히 상태 이상 내성과 모든 속성 내성을 증가시킨다.",
+      "skill_level": 20,
+      "skill_effect": "MP 35 소비하여 엘리멘탈 어뎁팅 활성화\n최대 MP의 2%를 소비하여 치명적인 상태이상을 100% 확률로 방어하며 최대 10번까지 보호막 재생성\n재사용 대기시간 240초\n[패시브 효과 : 상태 이상 및 모든 속성 내성 20% 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKGPBNB.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "텔레포트 마스터리",
+      "skill_description": "[마스터 레벨 : 10]\r\n스킬을 활성화하면 MP를 추가 소비하는 대신 텔레포트 지점의 적들에게 데미지와 함께 기절 및 도트 데미지 효과를 적용시킬 수 있다. 추가로 영구히 스탠스를 증가시킨다.\n스킬 사용 시 효과가 활성화되고 재사용 시 비활성화되는 온오프 스킬\n필요 스킬 : 텔레포트 5레벨 이상",
+      "skill_level": 10,
+      "skill_effect": "추가 MP 소비 20, 최대 6명의 적에게 272% 데미지, 80% 확률로 4초 동안 기절, 20초 동안 2초 마다 98% 데미지\n[패시브 효과 : 스탠스 40% 증가]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKGPBMH.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "텔레포트 부스트",
+      "skill_description": "[마스터 레벨 : 1]\r\n텔레포트의 위력을 강화하여 이동 거리가 증가한다.\n스킬 사용 시 효과가 활성화되고 재사용 시 비활성화되는 온오프 스킬\n필요 스킬 : 텔레포트 5레벨 이상",
+      "skill_level": 1,
+      "skill_effect": "MP 20 소비, 텔레포트 이동 거리 좌우 65, 상하 25 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKGPBNG.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "엘리멘탈 리셋",
+      "skill_description": "[마스터 레벨 : 9]\r\n자신이 사용하는 모든 공격 마법의 속성 내성을 감소시킨다. 추가로 영구히 최종 데미지가 증가한다.",
+      "skill_level": 9,
+      "skill_effect": "공격 속성 내성 10% 감소, 최종 데미지 40% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKGOBNF.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "엘리먼트 앰플리피케이션",
+      "skill_description": "[마스터 레벨 : 10]\r\n더 많은 MP를 소비하는 대신 파이어 오라를 제외한 공격 마법의 데미지를 증폭시킨다.",
+      "skill_level": 10,
+      "skill_effect": "소비 MP 50% 증가, 공격 마법의 데미지 50% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKGOBMB.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "매직 크리티컬",
+      "skill_description": "[마스터 레벨 : 10]\r\n영구적으로 크리티컬 확률과 크리티컬 데미지가 증가한다.",
+      "skill_level": 10,
+      "skill_effect": "크리티컬 확률 30%, 크리티컬 데미지 13% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKGOBMJ.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "익스트림 매직(불,독)",
+      "skill_description": "[마스터 레벨 : 10]\r\n자신의 모든 도트 데미지 스킬의 적용 시간이 증가하며, 도트 데미지 상태의 적 또는 기절이나 빙결, 암흑, 마비 상태의 적을 공격할 때 최종 데미지가 증가한다.",
+      "skill_level": 10,
+      "skill_effect": "도트 데미지 적용 시간 100% 증가, 도트 데미지, 기절, 빙결, 암흑, 마비 상태의 적 공격 시 최종 데미지 20% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKGOBMA.png",
+      "skill_effect_next": null
+    }
+  ]
+}

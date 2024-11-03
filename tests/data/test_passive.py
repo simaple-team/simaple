@@ -8,5 +8,6 @@ def test_archmagefb():
         combat_orders_level=1,
         passive_skill_level=0,
         character_level=260,
+        skill_levels={},
     )
     assert isinstance(static_property_stat, ExtendedStat)

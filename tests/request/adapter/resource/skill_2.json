@@ -1,0 +1,79 @@
+{
+  "date": "2024-09-19T00:00+09:00",
+  "character_class": "아크메이지(불,독)",
+  "character_skill_grade": "2",
+  "character_skill": [
+    {
+      "skill_name": "플레임 오브",
+      "skill_description": "[마스터 레벨 : 20]\r\n마법의 힘으로 불타는 오브를 만들어 다수의 적을 향해 발사한다. 불 속성의 공격이다.",
+      "skill_level": 20,
+      "skill_effect": "MP 22 소비, 최대 6명의 적에게 301% 데미지로 2번 공격",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKHPBME.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "엘리멘탈 드레인",
+      "skill_description": "[마스터 레벨 : 1]\r\n일정 범위 내에 자신의 스킬로 도트 데미지를 입히는 수만큼 최종 데미지가 증가한다. 초보자 스킬로 입히는 도트 데미지는 해당되지 않는다.",
+      "skill_level": 1,
+      "skill_effect": "자신의 스킬로 입히고 있는 도트 데미지당 최종 데미지 3% 증가. 최대 5개 적용, 엘리멘탈 드레인간에는 합 적용.",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKHOBMJ.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "포이즌 브레스",
+      "skill_description": "[마스터 레벨 : 10]\r\n주변의 대기를 맹독성으로 바꿔 적에게 치명적인 피해를 입힌다. 공격을 받은 적들은 일정 시간 동안 독에 중독되어 도트 데미지를 입는다. 독 속성 공격이다.",
+      "skill_level": 10,
+      "skill_effect": "MP 17 소비, 최대 6명의 적을 180%의 데미지로 6번 공격\n10초 동안 1초 당 60%의 도트 데미지",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKHPBMF.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "메디테이션",
+      "skill_description": "[마스터 레벨 : 20]\r\n잠시 동안의 명상을 통해 내면의 집중력을 활성화시켜 모든 파티원의 마력을 일시적으로 증가시킨다.\n필요 스킬 : MP 이터 3레벨 이상",
+      "skill_level": 20,
+      "skill_effect": "MP 16 소비, 240초 동안 파티원의 마력 30 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKHPBMB.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "매직 액셀레이션",
+      "skill_description": "[마스터 레벨 : 10]\r\n공격 속도와 지력을 상승시킨다.",
+      "skill_level": 10,
+      "skill_effect": "공격 속도 2단계 상승, 지력 20 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKHOBNB.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "이그나이트",
+      "skill_description": "[마스터 레벨 : 10]\r\n파이어 오라를 제외한 화염 마법으로 적을 공격하면 일정 확률로 맞은 위치에 불의 벽을 생성하여 적들을 불태운다.\n이그나이트는 공격 반사 상태의 적을 공격해도 피해를 입지 않는다.\n스킬 사용 시 효과가 활성화되고 재사용 시 비활성화되는 온오프 스킬",
+      "skill_level": 10,
+      "skill_effect": "화염 마법 시전 시 50% 확률로 불의 벽 생성, 불의 벽은 일정 간격으로 최대 8명의 적에게 40%의 데미지로 3번 공격, 6초 지속",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKHPBNA.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "스펠 마스터리",
+      "skill_description": "[마스터 레벨 : 10]\r\n마법 숙련도, 마력, 크리티컬 확률을 증가시킨다.",
+      "skill_level": 10,
+      "skill_effect": "마법 숙련도 50%, 마력 10, 크리티컬 확률 5% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKHOBMG.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "하이 위즈덤",
+      "skill_description": "[마스터 레벨 : 5]\r\n정신 수양을 통해 영구적으로 지력을 증가시킨다.",
+      "skill_level": 5,
+      "skill_effect": "영구적으로 지력 40 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKHOBMH.png",
+      "skill_effect_next": null
+    },
+    {
+      "skill_name": "MP 이터",
+      "skill_description": "[마스터 레벨 : 9]\r\n마법 공격 시 일정 확률로 적에게서 MP를 흡수한다. 보스 몬스터에게는 흡수 효율이 떨어져 더 적은 양을 흡수한다.\n필요 스킬 : 스펠 마스터리 5레벨 이상",
+      "skill_level": 9,
+      "skill_effect": "마법 공격 시 30% 확률로 최대 MP의 5% 흡수\n보스 몬스터에게는 최대 MP의 3% 흡수",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKHOBMA.png",
+      "skill_effect_next": null
+    }
+  ]
+}

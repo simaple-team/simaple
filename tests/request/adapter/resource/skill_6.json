@@ -1,0 +1,95 @@
+{
+  "date": "2024-09-19T00:00+09:00",
+  "character_class": "아크메이지(불,독)",
+  "character_skill_grade": "6",
+  "character_skill": [
+    {
+      "skill_name": "플레임 스윕 VI",
+      "skill_description": "[마스터 레벨 : 30]\r\n전방을 강력한 화염으로 휩쓴다. 플레임 스윕이 적중할 때마다 열기가 남아 일정량 이상 쌓이면 더 거대한 화염으로 발화한다.\n거대 화염은 적중한 적에 불씨를 남기고, 불씨가 있는 적에게 미스트 이럽션 적중 시 불씨가 독에 반응하여 폭발한다.\n플레임 스윕의 모든 화염에 적중한 적은 화상을 입어 지속적으로 도트 데미지를 입는다. 일부 몬스터는 저항하여 화상을 입지 않는다. 불 속성 공격이다.\n필요 스킬 : 플레임 스윕 30레벨 이상",
+      "skill_level": 10,
+      "skill_effect": "MP 47 소비, 최대 8명의 적을 275%의 데미지로 7번 공격\n플레임 스윕 2회 적중 시 다음 플레임 스윕은 거대 화염 발생\n거대 화염에 적중한 적은 30초 동안 불씨가 남아 미스트 이럽션 적중 시 215%의 데미지로 8번 공격하는 폭발 발생\n플레임 스윕의 모든 화염에 적중한 적은 5초 동안 화상을 입으며 1초당 315%의 도트 데미지",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKDPBMA.png",
+      "skill_effect_next": "MP 47 소비, 최대 8명의 적을 279%의 데미지로 7번 공격\n플레임 스윕 2회 적중 시 다음 플레임 스윕은 거대 화염 발생\n거대 화염에 적중한 적은 30초 동안 불씨가 남아 미스트 이럽션 적중 시 223%의 데미지로 8번 공격하는 폭발 발생\n플레임 스윕의 모든 화염에 적중한 적은 5초 동안 화상을 입으며 1초당 321%의 도트 데미지"
+    },
+    {
+      "skill_name": "플레임 헤이즈 VI",
+      "skill_description": "[마스터 레벨 : 30]\r\n적을 타오르는 독안개로 감싸 부딪히지 않는 상태로 만들고 도트 데미지를 입히며 느려지게 만든다.\n필요 스킬 : 플레임 헤이즈 30레벨 이상",
+      "skill_level": 20,
+      "skill_effect": "MP 79 소비, 295%의 데미지로 15번 공격\n100% 확률로 10초 동안 285% 도트 데미지를 주며 부딪히지 않는 상태 지속 및 -51% 감속\n적중 시 적 위치에 포이즌 미스트 생성, 적중한 적이 없을 경우 자신 위치에 포이즌 미스트 생성\n재사용 대기시간 10초\n[패시브 효과 : 영구적으로 플레임 헤이즈로 생성되는 포이즌 미스트의 도트 데미지 426%로 증가, 직접 사용하는 포이즌 미스트에는 적용되지 않음]",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKDPBMD.png",
+      "skill_effect_next": "MP 80 소비, 299%의 데미지로 15번 공격\n100% 확률로 10초 동안 289% 도트 데미지를 주며 부딪히지 않는 상태 지속 및 -51% 감속\n적중 시 적 위치에 포이즌 미스트 생성, 적중한 적이 없을 경우 자신 위치에 포이즌 미스트 생성\n재사용 대기시간 10초\n[패시브 효과 : 영구적으로 플레임 헤이즈로 생성되는 포이즌 미스트의 도트 데미지 431%로 증가, 직접 사용하는 포이즌 미스트에는 적용되지 않음]"
+    },
+    {
+      "skill_name": "미스트 이럽션 VI",
+      "skill_description": "[마스터 레벨 : 30]\r\n주변에 설치된 포이즌 미스트들을 폭발시켜 적에게 치명적인 독 속성 데미지를 준다. 대상에게 적용된 도트의 수가 많을수록 더 큰 피해를 줄 수 있으며 다른 사람이 설치한 미스트는 폭발시킬 수 없다.\n재사용 대기시간 초기화의 효과를 받지 않고 미스트 폭발에 성공하면 플레임 헤이즈의 재사용 대기시간이 초기화된다.\n필요 스킬 : 미스트 이럽션 30레벨 이상",
+      "skill_level": 20,
+      "skill_effect": "MP 109 소비, 최대 12명의 적을 185%의 데미지로 10번 공격하는 폭발 2번 발생\n몬스터의 방어율을 45% 무시\n대상에게 적용된 도트의 개수가 2개 일 때 20%, 3개 일 때 54%, 4개 일 때 104%, 5개 일 때 170% 만큼 폭발의 최종 데미지 증가\n최대 6개의 미스트 동시 폭발 가능\n재사용 대기시간 10초\n도트가 5개 이상 적용된 적에게 미스트 이럽션을 적중시키면 미스트 이럽션의 재사용 대기시간 2초 감소, 도트 5중첩으로 인한 재사용 대기시간 감소는 다른 재사용 대기시간 감소 기능보다 먼저 적용",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKDPBMF.png",
+      "skill_effect_next": "MP 109 소비, 최대 12명의 적을 188%의 데미지로 10번 공격하는 폭발 2번 발생\n몬스터의 방어율을 45% 무시\n대상에게 적용된 도트의 개수가 2개 일 때 20%, 3개 일 때 54%, 4개 일 때 104%, 5개 일 때 170% 만큼 폭발의 최종 데미지 증가\n최대 6개의 미스트 동시 폭발 가능\n재사용 대기시간 10초\n도트가 5개 이상 적용된 적에게 미스트 이럽션을 적중시키면 미스트 이럽션의 재사용 대기시간 2초 감소, 도트 5중첩으로 인한 재사용 대기시간 감소는 다른 재사용 대기시간 감소 기능보다 먼저 적용"
+    },
+    {
+      "skill_name": "인페르날 베놈",
+      "skill_description": "[마스터 레벨 : 30]\r\n불과 독의 화신이 가진 본래의 힘을 해방시켜 궁극의 융합 마법으로 주위를 초토화시킨다.\n두 화신의 힘으로 일정 시간 동안 퍼번트 드레인의 한계가 확장되며, 최대 스택으로 고정된다. 공격 반사 상태의 적을 공격해도 피해를 입지 않는다.\n\n10레벨 : 몬스터 방어율 무시 20% 증가\n20레벨 : 보스 몬스터 공격 시 데미지 20% 증가\n30레벨 : 몬스터 방어율 무시 30% 증가, 보스 몬스터 공격 시 데미지 30% 증가",
+      "skill_level": 2,
+      "skill_effect": "MP 1500 소비, 시전 동작 중 무적\n20초 동안 퍼번트 드레인의 한계치가 10스택으로 확장\n불과 독의 화신이 해방되어 15명의 적을 288%의 데미지로 12번 공격하는 폭발이 17회 발생\n두 화신의 마력이 융합하여 최대 15명의 적을 278%의 데미지로 15번 공격하는 강력한 폭렬 마법이 42회 발생\n재사용 대기시간 360초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KFPAKDPEMA.png",
+      "skill_effect_next": "MP 1500 소비, 시전 동작 중 무적\n20초 동안 퍼번트 드레인의 한계치가 10스택으로 확장\n불과 독의 화신이 해방되어 15명의 적을 297%의 데미지로 12번 공격하는 폭발이 17회 발생\n두 화신의 마력이 융합하여 최대 15명의 적을 287%의 데미지로 15번 공격하는 강력한 폭렬 마법이 42회 발생\n재사용 대기시간 360초"
+    },
+    {
+      "skill_name": "솔 야누스",
+      "skill_description": "[마스터 레벨 : 30]\r\n솔 에르다가 지닌 근원의 힘을 두 개의 모습으로 끌어낸다.\n스킬 사용 후 방향키를 입력하여 솔 야누스 : 새벽 또는 솔 야누스 : 황혼을 선택할 수 있다.\n보스 전투맵에서는 솔 야누스의 모든 모습을 사용할 수 없다.",
+      "skill_level": 1,
+      "skill_effect": "HP 500 소비, 솔 야누스의 모습을 결정\n재사용 대기시간 3초\n[패시브 효과 : 경험치 획득량 10% 증가] ",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KAPCLHPBMA.png",
+      "skill_effect_next": "HP 500 소비, 솔 야누스의 모습을 결정\n재사용 대기시간 3초\n[패시브 효과 : 경험치 획득량 12% 증가] "
+    },
+    {
+      "skill_name": "솔 야누스 : 새벽",
+      "skill_description": "[마스터 레벨 : 30]\r\n솔 에르다가 끊임없이 창조되고 소멸하는 순환의 고리를 소환한다. 지속적으로 변화하는 솔 에르다의 흐름이 주변의 적을 공격한다.\n순환의 고리를 소환한 개수가 많아질 때마다 고리 하나에서 발생하는 솔 에르다의 흐름은 축소된다. 순환의 고리는 공중에도 소환할 수 있으며 이전에 소환한 순환의 고리와 너무 가깝거나 먼 곳에는 소환할 수 없다.\n순환의 고리는 공격 반사 상태의 적을 공격해도 피해를 입히지 않는다.\n\n30레벨 : 일반 몬스터 데미지 30% 증가",
+      "skill_level": 1,
+      "skill_effect": "최대 HP의 10% 소비\n60초 동안 순환의 고리 소환, 최대 1개까지 소환 가능\n순환의 고리 : 최대 10명의 적을 400%의 데미지로 6번 공격\n재사용 대기시간 60초",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KAPCLHPBMC.png",
+      "skill_effect_next": "최대 HP의 10% 소비\n60초 동안 순환의 고리 소환, 최대 1개까지 소환 가능\n순환의 고리 : 최대 10명의 적을 410%의 데미지로 6번 공격\n재사용 대기시간 60초"
+    },
+    {
+      "skill_name": "도트 퍼니셔 강화",
+      "skill_description": "[마스터 레벨 : 30]\r\n도트 퍼니셔를 강화한다.",
+      "skill_level": 7,
+      "skill_effect": "도트 퍼니셔의 최종 데미지 17% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KAPCLHKBNC.png",
+      "skill_effect_next": "도트 퍼니셔의 최종 데미지 18% 증가"
+    },
+    {
+      "skill_name": "포이즌 노바 강화",
+      "skill_description": "[마스터 레벨 : 30]\r\n포이즌 노바를 강화한다.",
+      "skill_level": 1,
+      "skill_effect": "포이즌 노바의 최종 데미지 11% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KAPCLHKBND.png",
+      "skill_effect_next": "포이즌 노바의 최종 데미지 12% 증가"
+    },
+    {
+      "skill_name": "퓨리 오브 이프리트 강화",
+      "skill_description": "[마스터 레벨 : 30]\r\n퓨리 오브 이프리트를 강화한다.",
+      "skill_level": 1,
+      "skill_effect": "퓨리 오브 이프리트의 최종 데미지 11% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KAPCLHKBNE.png",
+      "skill_effect_next": "퓨리 오브 이프리트의 최종 데미지 12% 증가"
+    },
+    {
+      "skill_name": "포이즌 체인 강화",
+      "skill_description": "[마스터 레벨 : 30]\r\n포이즌 체인을 강화한다.",
+      "skill_level": 1,
+      "skill_effect": "포이즌 체인의 최종 데미지 11% 증가",
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KAPCLHKBNF.png",
+      "skill_effect_next": "포이즌 체인의 최종 데미지 12% 증가"
+    },
+    {
+      "skill_name": "HEXA 스탯",
+      "skill_description": "[마스터 레벨 : 1]\r\n솔 에르다의 힘을 받아들여 능력치가 상승한다.",
+      "skill_level": 1,
+      "skill_effect": null,
+      "skill_icon": "https://open.api.nexon.com/static/maplestory/SkillIcon/KAPCLAPBMA.png",
+      "skill_effect_next": null
+    }
+  ]
+}

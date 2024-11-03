@@ -1,6 +1,3 @@
-import datetime
-from typing import cast
-
 from simaple.core import ExtendedStat, Stat
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository
@@ -11,74 +8,45 @@ from simaple.request.adapter.gear_loader._gearset_converter import get_equipment
 from simaple.request.adapter.gear_loader._pet_converter import (
     get_pet_equip_stat_from_response,
 )
-from simaple.request.adapter.gear_loader._schema import (
-    CashItemResponse,
-    CharacterItemEquipment,
-    CharacterSymbolEquipment,
-    PetResponse,
-    SetEffectResponse,
-)
 from simaple.request.adapter.gear_loader._set_item_converter import get_set_item_stats
-from simaple.request.adapter.nexon_api import (
-    HOST,
-    CharacterID,
-    Token,
-    get_character_id,
-    get_character_id_param,
+from simaple.request.external.nexon.api.character.item import (
+    get_cash_item_response,
+    get_character_item_equipment_response,
+    get_character_symbol_response,
+    get_pet_equipment_response,
+    get_set_effect_response,
 )
+from simaple.request.external.nexon.client import NexonAPIClient
 from simaple.request.service.loader import GearLoader
 
 
 class NexonAPIGearLoader(GearLoader):
-    def __init__(self, token_value: str, date: datetime.date | None = None):
-        self._token = Token(token_value)
+    def __init__(self, client: NexonAPIClient):
+        self._client = client
         self._gear_repository = GearRepository()
-        self.date = date
-
-    def get_character_id(self, character_name: str) -> CharacterID:
-        return get_character_id(self._token, character_name, date=self.date)
 
     def load_equipments(self, character_name: str) -> list[tuple[Gear, str]]:
-        character_id = self.get_character_id(character_name)
-        uri = f"{HOST}/maplestory/v1/character/item-equipment"
-
-        resp = cast(
-            CharacterItemEquipment,
-            self._token.request(uri, get_character_id_param(character_id)),
+        resp = self._client.session(character_name).request(
+            get_character_item_equipment_response
         )
         gears = get_equipments(resp, self._gear_repository)
         return gears
 
     def load_symbols(self, character_name: str) -> list[SymbolGear]:
-        character_id = self.get_character_id(character_name)
-        uri = f"{HOST}/maplestory/v1/character/symbol-equipment"
-
-        resp = cast(
-            CharacterSymbolEquipment,
-            self._token.request(uri, get_character_id_param(character_id)),
+        resp = self._client.session(character_name).request(
+            get_character_symbol_response
         )
         return get_symbols(resp)
 
     def load_pet_equipments_stat(self, character_name: str) -> Stat:
-        character_id = self.get_character_id(character_name)
-        uri = f"{HOST}/maplestory/v1/character/pet-equipment"
-        resp = cast(
-            PetResponse,
-            self._token.request(uri, get_character_id_param(character_id)),
-        )
+        resp = self._client.session(character_name).request(get_pet_equipment_response)
         return get_pet_equip_stat_from_response(resp)
 
     def load_gear_related_stat(self, character_name: str) -> ExtendedStat:
-        character_id = self.get_character_id(character_name)
+        session = self._client.session(character_name)
 
         equipment_stat = get_equipment_stat(
-            cast(
-                CharacterItemEquipment,
-                self._token.request(
-                    f"{HOST}/maplestory/v1/character/item-equipment",
-                    get_character_id_param(character_id),
-                ),
-            ),
+            session.request(get_character_item_equipment_response),
             self._gear_repository,
         )
 
@@ -87,22 +55,10 @@ class NexonAPIGearLoader(GearLoader):
             (symbol.stat for symbol in self.load_symbols(character_name)), Stat()
         )
         set_item_stat = get_set_item_stats(
-            cast(
-                SetEffectResponse,
-                self._token.request(
-                    f"{HOST}/maplestory/v1/character/set-effect",
-                    get_character_id_param(character_id),
-                ),
-            )
+            session.request(get_set_effect_response),
         )
         cash_item_stat = get_cash_item_stat(
-            cast(
-                CashItemResponse,
-                self._token.request(
-                    f"{HOST}/maplestory/v1/character/cashitem-equipment",
-                    get_character_id_param(character_id),
-                ),
-            )
+            session.request(get_cash_item_response),
         )
 
         return equipment_stat + ExtendedStat(

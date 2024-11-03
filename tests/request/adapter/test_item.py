@@ -6,14 +6,14 @@ from simaple.request.adapter.gear_loader._gearset_converter import get_equipment
 from simaple.request.adapter.gear_loader._pet_converter import (
     get_pet_equip_stat_from_response,
 )
-from simaple.request.adapter.gear_loader._schema import (
+from simaple.request.adapter.gear_loader._set_item_converter import get_set_item_stats
+from simaple.request.external.nexon.api.character.item import (
     CashItemResponse,
     CharacterItemEquipment,
     CharacterSymbolEquipment,
     PetResponse,
     SetEffectResponse,
 )
-from simaple.request.adapter.gear_loader._set_item_converter import get_set_item_stats
 
 
 def test_item_equipment(character_item_equipment_response: CharacterItemEquipment):
@@ -71,4 +71,5 @@ def test_get_equipment_stat(character_item_equipment_response: CharacterItemEqui
 
 
 def test_get_set_item_stats(set_effect_response: SetEffectResponse):
-    assert isinstance(get_set_item_stats(set_effect_response), Stat)
+    stat = get_set_item_stats(set_effect_response)
+    assert stat.critical_damage == 5

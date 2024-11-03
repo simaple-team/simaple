@@ -1,5 +1,5 @@
 from simaple.core import Stat
-from simaple.request.adapter.link_skill_loader.adapter import get_link_skillset
+from simaple.request.adapter.link_skill_loader import get_link_skillset
 
 
 def test_link_skill(link_skill_response):
