@@ -76,9 +76,7 @@ class SpellTrace(GearImprovement):
     def get_armor_improvement(self, meta: GearMeta) -> Tuple[int, int, int]:
         stat_basis, additional_mhp, _ = _ARMOR_IMPROVEMENTS_STAT_MHP_PDD[
             self.probability
-        ][
-            self.get_spell_trace_rank(meta)
-        ]  # third value is PDD
+        ][self.get_spell_trace_rank(meta)]  # third value is PDD
         if self.stat_prop_type is StatProps.MHP:
             stat_basis, additional_mhp = 0, additional_mhp + stat_basis * 50
 

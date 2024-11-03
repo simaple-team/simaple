@@ -4,7 +4,6 @@ from simaple.simulate.usecase import Usecase
 
 
 def mechanic_usecase(environment: SimulationEnvironment) -> Usecase:
-
     mechanic_component = get_component_loader(environment)
     usecase = Usecase()
 

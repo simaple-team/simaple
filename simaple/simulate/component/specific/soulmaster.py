@@ -471,7 +471,6 @@ class Cosmos(Component):
 
     @reducer_method
     def use(self, _: None, state: CosmosState):
-
         orb, periodic, cooldown = (
             state["orb"].model_copy(),
             state["periodic"].model_copy(),

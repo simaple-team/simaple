@@ -12,7 +12,8 @@ from simaple.core.damage import DamageLogic
 
 class Metric(metaclass=ABCMeta):
     @abstractmethod
-    def evaluate(self, stat: Stat) -> float: ...
+    def evaluate(self, stat: Stat) -> float:
+        ...
 
 
 class RegressionMetric(Metric):

@@ -149,10 +149,13 @@ class WeaponPotentialOptimizer(BaseModel):
                     )
                     iter_count += 1
                     if reward > maximum_reward:
-                        maximum_reward, optimal_potential = reward, (
-                            weapon_potential,
-                            sub_weapon_potential,
-                            emblem_potential,
+                        maximum_reward, optimal_potential = (
+                            reward,
+                            (
+                                weapon_potential,
+                                sub_weapon_potential,
+                                emblem_potential,
+                            ),
                         )
 
         return optimal_potential

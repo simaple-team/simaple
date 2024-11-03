@@ -50,7 +50,6 @@ class Listener(TypedDict):
 def _as_static_payload_reducer(
     name: str, method: str, payload: dict | None, reducer: ReducerType
 ):
-
     def static_payload_reducer(action: Action, store: Store) -> list[Event]:
         updated_action: Action = {"name": name, "method": method, "payload": payload}
         if payload is None:

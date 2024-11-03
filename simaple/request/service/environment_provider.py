@@ -117,10 +117,11 @@ class LoadedEnvironmentProviderService:
         total_extended_stat += ExtendedStat(stat=hexa_stat.get_stat())
         logger.info("Hexa Stat: {}", hexa_stat.get_stat().short_dict())
 
-        zero_grade_skill_stat, has_liberated = (
-            self.character_skill_loader.load_zero_grade_skill_passive_stat(
-                character_name
-            )
+        (
+            zero_grade_skill_stat,
+            has_liberated,
+        ) = self.character_skill_loader.load_zero_grade_skill_passive_stat(
+            character_name
         )
         total_extended_stat += zero_grade_skill_stat
         logger.info(
@@ -159,9 +160,10 @@ class LoadedEnvironmentProviderService:
         total_action_stat = total_extended_stat.action_stat
         total_stat = total_extended_stat.compute_by_level(character_level)
 
-        hexa_skill_levels, hexa_improvements = (
-            self.character_skill_loader.load_hexa_skill_levels(character_name)
-        )
+        (
+            hexa_skill_levels,
+            hexa_improvements,
+        ) = self.character_skill_loader.load_hexa_skill_levels(character_name)
 
         return {
             "final_character_stat": FinalCharacterStat.model_validate(

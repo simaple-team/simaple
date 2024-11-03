@@ -25,13 +25,16 @@ class PotentialInterface(BaseModel, metaclass=ABCMeta):
         )
 
     @abstractmethod
-    def get_stat(self, level: int = 0) -> Stat: ...
+    def get_stat(self, level: int = 0) -> Stat:
+        ...
 
     @abstractmethod
-    def get_action_stat(self) -> ActionStat: ...
+    def get_action_stat(self) -> ActionStat:
+        ...
 
     @abstractmethod
-    def get_level_stat(self) -> LevelStat: ...
+    def get_level_stat(self) -> LevelStat:
+        ...
 
 
 class Potential(PotentialInterface):

@@ -34,13 +34,16 @@ class ElapseActionPayload(TypedDict):
     time: float
 
 
-class UseActionPayload(TypedDict): ...
+class UseActionPayload(TypedDict):
+    ...
 
 
-class StopActionPayload(TypedDict): ...
+class StopActionPayload(TypedDict):
+    ...
 
 
-class ResetCooldownPayload(TypedDict): ...
+class ResetCooldownPayload(TypedDict):
+    ...
 
 
 def empty_payload() -> UseActionPayload:

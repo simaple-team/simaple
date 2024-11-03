@@ -20,7 +20,7 @@ def single_valued_text_to_stat(text: str) -> ExtendedStat | None:
 
     option_name, option_value = match.group(1).strip(), int(match.group(2))
 
-    match (option_name):
+    match option_name:
         case "버프 스킬의 지속 시간":
             return ExtendedStat(action_stat=ActionStat(buff_duration=option_value))
         case "보스 몬스터 공격 시 데미지":
@@ -65,8 +65,9 @@ def double_valued_text_to_stat(text: str) -> ExtendedStat | None:
         return None
 
     first_option_name, first_option_value = match.group(1).strip(), int(match.group(2))
-    second_option_name, second_option_value = match.group(3).strip(), int(
-        match.group(4)
+    second_option_name, second_option_value = (
+        match.group(3).strip(),
+        int(match.group(4)),
     )
 
     print(

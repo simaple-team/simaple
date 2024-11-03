@@ -73,9 +73,9 @@ class NexonAPICharacterSkillLoader(CharacterSkillLoader):
             }
         }
         hexa_improvement_levels = {
-            skill_info["skill_name"]
-            .replace("강화", "")
-            .strip(): skill_info["skill_level"]
+            skill_info["skill_name"].replace("강화", "").strip(): skill_info[
+                "skill_level"
+            ]
             for skill_info in response["character_skill"]
             if "강화" in skill_info["skill_name"]
         }

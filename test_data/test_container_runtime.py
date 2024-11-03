@@ -2,14 +2,13 @@ import os
 
 from inline_snapshot import snapshot
 
-import simaple.simulate.component.common  # pylint: disable=W0611
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.simulation import get_damage_calculator
-from simaple.core.jobtype import JobType
-from simaple.simulate.report.base import SimulationEntry
 from simaple.container.usecase.builtin import get_engine
+from simaple.core.jobtype import JobType
 from simaple.simulate.policy.parser import parse_simaple_runtime
+from simaple.simulate.report.base import SimulationEntry
 
 
 def container_test_setting(
@@ -39,10 +38,15 @@ def run_actor(environment_provider: BaselineEnvironmentProvider, jobtype: JobTyp
     environment = PersistentStorageMemoizer(
         os.path.join(os.path.dirname(__file__), ".memo.simaple.json")
     ).compute_environment(environment_provider)
-    
+
     engine = get_engine(environment)
 
-    with open(os.path.join(os.path.dirname(__file__), "asset", f"{environment.jobtype.value}.simaple"), "r") as f:
+    with open(
+        os.path.join(
+            os.path.dirname(__file__), "asset", f"{environment.jobtype.value}.simaple"
+        ),
+        "r",
+    ) as f:
         _, commands = parse_simaple_runtime(f.read())
 
     for command in commands:
@@ -177,16 +181,20 @@ def test_mechanic_actor():
     assert (result, dpm) == snapshot(
         (
             {
-                "메카 캐리어": 4133977066428.205, 
-                "호밍 미사일 VI": 6272553782771.318, 
+                "메카 캐리어": 4133977066428.205,
+                "호밍 미사일 VI": 6272553782771.318,
                 "로봇 런처: RM7": 189761915488.52603,
                 "마그네틱 필드": 226347764821.21353,
-                "로봇 팩토리: RM1": 555180936708.4706, "메탈아머 전탄발사": 2947646615584.2705, "멀티플 옵션 : M-FL": 1432319488844.4243, "마이크로 미사일 컨테이너": 744061195841.6217,
-                "디스토션 필드": 327064720760.19293, 
-                "그라운드 제로": 4452236797317.125, 
-                "레지스탕스 라인 인팬트리": 180965604408.217, 
-                "매시브 파이어: IRON-B VI": 610627243173.8206, 
-                "매시브 파이어: IRON-B VI (폭발)": 142836957130.47012},
+                "로봇 팩토리: RM1": 555180936708.4706,
+                "메탈아머 전탄발사": 2947646615584.2705,
+                "멀티플 옵션 : M-FL": 1432319488844.4243,
+                "마이크로 미사일 컨테이너": 744061195841.6217,
+                "디스토션 필드": 327064720760.19293,
+                "그라운드 제로": 4452236797317.125,
+                "레지스탕스 라인 인팬트리": 180965604408.217,
+                "매시브 파이어: IRON-B VI": 610627243173.8206,
+                "매시브 파이어: IRON-B VI (폭발)": 142836957130.47012,
+            },
             9069434614932.791,
         )
     )

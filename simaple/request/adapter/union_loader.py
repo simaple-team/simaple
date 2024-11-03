@@ -233,7 +233,6 @@ def _parse_block(block: CharacterUnionRaiderBlock) -> tuple[JobType, int]:
 
 
 def _get_union_squad(raider_response: CharacterUnionRaiderPreset) -> UnionSquad:
-
     block_candidates = {block.job: block for block in get_all_blocks()}
 
     blocks, block_sizes = [], []

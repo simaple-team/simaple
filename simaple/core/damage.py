@@ -27,19 +27,23 @@ class DamageLogic(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="DamageLogic
         raise ValueError("Invalid BaseStatType")
 
     @abstractmethod
-    def get_base_stat_factor(self, stat: Stat) -> float: ...
+    def get_base_stat_factor(self, stat: Stat) -> float:
+        ...
 
     @abstractmethod
-    def get_major_stat(self, stat: Stat) -> float: ...
+    def get_major_stat(self, stat: Stat) -> float:
+        ...
 
     def get_attack_type_factor(self, stat: Stat) -> float:
         return stat.get_attack_coefficient(self.get_attack_type())
 
     @abstractmethod
-    def get_attack_type(self) -> AttackType: ...
+    def get_attack_type(self) -> AttackType:
+        ...
 
     @abstractmethod
-    def get_best_level_based_stat(self, level: int) -> Stat: ...
+    def get_best_level_based_stat(self, level: int) -> Stat:
+        ...
 
     @abstractmethod
     def get_symbol_stat(self, value: int) -> Stat:

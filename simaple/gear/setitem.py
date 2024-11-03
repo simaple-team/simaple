@@ -76,10 +76,12 @@ class SetItem(BaseModel):
 
 class SetItemRepository(metaclass=ABCMeta):
     @abstractmethod
-    def get(self, set_item_id) -> SetItem: ...
+    def get(self, set_item_id) -> SetItem:
+        ...
 
     @abstractmethod
-    def get_all(self, gears: Iterable[Gear]) -> list[SetItem]: ...
+    def get_all(self, gears: Iterable[Gear]) -> list[SetItem]:
+        ...
 
 
 class WzresourceStatRepresentation(TypedDict, total=False):

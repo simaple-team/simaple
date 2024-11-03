@@ -152,7 +152,8 @@ def get_parser():
     return __PARSER
 
 
-class DSLError(Exception): ...
+class DSLError(Exception):
+    ...
 
 
 def parse_dsl_to_operations(dsl: str) -> list[Operation]:

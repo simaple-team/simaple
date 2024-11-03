@@ -699,7 +699,6 @@ class FlameSwipVI(
 
     @reducer_method
     def use(self, _: None, state: FlameSwipVIState):
-
         state, event = simple_attack.use_cooldown_attack(
             state,
             {},

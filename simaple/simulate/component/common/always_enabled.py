@@ -5,7 +5,8 @@ from simaple.simulate.component.base import Component, view_method
 from simaple.simulate.component.view import Running
 
 
-class NoState(TypedDict): ...
+class NoState(TypedDict):
+    ...
 
 
 class AlwaysEnabledComponent(Component):

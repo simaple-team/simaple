@@ -11,7 +11,8 @@ from simaple.spec.loadable import (  # pylint:disable=unused-import
 )
 
 
-class Entity(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="Entity")): ...
+class Entity(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="Entity")):
+    ...
 
 
 class Event(TypedDict):
