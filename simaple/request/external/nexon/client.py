@@ -3,14 +3,15 @@ from typing import Any, Callable, TypeVar, cast
 
 from simaple.request.external.nexon.api.character.common import (
     CharacterIDWithDate,
-)
-from simaple.request.external.nexon.api.ocid import (
-    as_nexon_datetime,
     get_character_ocid,
 )
 
 T = TypeVar("T")
 PayloadT = TypeVar("PayloadT", bound=CharacterIDWithDate)
+
+
+def as_nexon_datetime(date: datetime.date) -> str:
+    return date.strftime("%Y-%m-%d")
 
 
 class NexonAPIAuthenticatedSession:
