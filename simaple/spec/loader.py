@@ -6,7 +6,8 @@ from simaple.spec.repository import SpecRepository
 from simaple.spec.spec import Spec
 
 
-class SpecNotFoundError(Exception): ...
+class SpecNotFoundError(Exception):
+    ...
 
 
 class SpecBasedLoader:

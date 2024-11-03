@@ -12,10 +12,12 @@ class SkillImprovement(
     pydantic.BaseModel, metaclass=TaggedNamespacedABCMeta(kind="SkillImprovement")
 ):
     @abstractmethod
-    def get_target_names(self) -> list[str]: ...
+    def get_target_names(self) -> list[str]:
+        ...
 
     @abstractmethod
-    def modify(self, origin: dict) -> dict: ...
+    def modify(self, origin: dict) -> dict:
+        ...
 
 
 class _Advantage(pydantic.BaseModel):

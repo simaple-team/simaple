@@ -29,7 +29,7 @@ class StartLastingWithCooldownProps(TypedDict):
 def start_lasting_with_cooldown(
     state: _StateT,
     _payload: UseActionPayload,
-    **props: Unpack[StartLastingWithCooldownProps]
+    **props: Unpack[StartLastingWithCooldownProps],
 ) -> tuple[_StateT, list[Event]]:
     """
     New version for `use_buff_trait`
@@ -61,13 +61,14 @@ def start_lasting_with_cooldown(
     return state, [EmptyEvent.delayed(delay)]
 
 
-class ElapseLastingWithCooldownProps(TypedDict): ...
+class ElapseLastingWithCooldownProps(TypedDict):
+    ...
 
 
 def elapse_lasting_with_cooldown(
     state: _StateT,
     payload: ElapseActionPayload,
-    **_props: Unpack[ElapseLastingWithCooldownProps]
+    **_props: Unpack[ElapseLastingWithCooldownProps],
 ) -> tuple[_StateT, list[Event]]:
     """
     New version for `elapse_buff_trait`

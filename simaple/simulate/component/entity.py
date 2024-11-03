@@ -109,9 +109,7 @@ class Periodic(Entity):
         """
 
         self.time_left = time
-        self.interval_counter = (
-            self.interval
-        )  # interval count = 0 is not allowed. emit event and increase interval counter.
+        self.interval_counter = self.interval  # interval count = 0 is not allowed. emit event and increase interval counter.
         self.count = 1
 
         return 1

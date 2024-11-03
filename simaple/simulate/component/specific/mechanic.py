@@ -456,7 +456,6 @@ class FullMetalBarrageComponent(
 
     @reducer_method
     def elapse(self, time: float, state: FullMetalBarrageState):
-
         state, event = keydown_trait.elapse_keydown(
             state,
             {"time": time},

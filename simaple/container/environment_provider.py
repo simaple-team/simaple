@@ -45,9 +45,7 @@ def _compute_skill_levels(
     )
 
     for hexa_skill_name in hexa_skill_levels:
-        assert (
-            hexa_skill_name in default_skill_levels
-        ), f"Given explicit skill name \
+        assert hexa_skill_name in default_skill_levels, f"Given explicit skill name \
 passed to level: {hexa_skill_name} is not in {default_skill_levels}"
     for hexa_mastery_skill_name in hexa_mastery_skill_levels:
         assert (
@@ -102,7 +100,8 @@ class EnvironmentProvider(pydantic.BaseModel, metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def get_simulation_environment(self) -> SimulationEnvironment: ...
+    def get_simulation_environment(self) -> SimulationEnvironment:
+        ...
 
     @classmethod
     def get_name(cls):
@@ -118,15 +117,18 @@ class MemoizableEnvironmentProvider(EnvironmentProvider):
     @abstractmethod
     def get_memoizable_environment(
         self,
-    ) -> dict[str, Any]: ...
+    ) -> dict[str, Any]:
+        ...
 
     @abstractmethod
     def get_memoization_independent_environment(
         self,
-    ) -> dict[str, Any]: ...
+    ) -> dict[str, Any]:
+        ...
 
     @abstractmethod
-    def get_memoization_key(self) -> str: ...
+    def get_memoization_key(self) -> str:
+        ...
 
     def get_simulation_environment(
         self,
@@ -197,12 +199,12 @@ class MinimalEnvironmentProvider(MemoizableEnvironmentProvider):
             self.hexa_mastery_level,
         )
 
-        configuration_without_skill_levels["hexa_improvement_levels"] = (
-            _compute_hexa_improvement_levels(
-                self.hexa_improvement_levels,
-                self.jobtype,
-                self.hexa_improvements_level,
-            )
+        configuration_without_skill_levels[
+            "hexa_improvement_levels"
+        ] = _compute_hexa_improvement_levels(
+            self.hexa_improvement_levels,
+            self.jobtype,
+            self.hexa_improvements_level,
         )
         return configuration_without_skill_levels
 
@@ -299,12 +301,12 @@ class BaselineEnvironmentProvider(MemoizableEnvironmentProvider):
             self.hexa_mastery_level,
         )
 
-        configuration_without_skill_levels["hexa_improvement_levels"] = (
-            _compute_hexa_improvement_levels(
-                self.hexa_improvement_levels,
-                self.jobtype,
-                self.hexa_improvements_level,
-            )
+        configuration_without_skill_levels[
+            "hexa_improvement_levels"
+        ] = _compute_hexa_improvement_levels(
+            self.hexa_improvement_levels,
+            self.jobtype,
+            self.hexa_improvements_level,
         )
         return configuration_without_skill_levels
 

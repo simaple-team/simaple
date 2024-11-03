@@ -90,12 +90,11 @@ pytest 패키지는 단일 테스트 케이스 동작이나, 여러 테스트 �
 
 
 # Code style
-code style은 black, pylint, mypy를 통해 검사됩니다. 
+code style은 ruff, mypy를 통해 검사됩니다. 
 아래 세 테스트를 통과하면, 코드 스타일을 준수하고 있는 것입니다. 각각의 테스트를 동작시키기 위해서 어래의 명령어를 입력하세요.
 
 ```bash
-poetry run poe format #for black
-poetry run poe lint # for pylint
+poetry run poe formatting-check #for ruff
 poetry run poe typetest # for mypy
 ```
 

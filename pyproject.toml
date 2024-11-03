@@ -24,10 +24,6 @@ interpreter = "python"
 [tool.poe.tasks]
 dev = "uvicorn simaple.api.dev:app --reload --reload-dir simaple --reload-include '*.py' --reload-include '*.yaml'"
 
-_black-check = "black --check simaple tests"
-_isort-check = "isort --check-only simaple tests"
-formatting-check = ["_black-check", "_isort-check"]
-
 _build = "poetry build"
 
 
@@ -36,12 +32,12 @@ export-whl = ["_clean_dist_build", "_build", "setup-webui-whl"]
 gen-schema = "python scripts/build/generate_json_schema_for_wasm.py"
 check-icon = "python scripts/build/check_icon.py"
 
-_black = "black simaple tests scripts"
-_isort = "isort simaple tests scripts"
-format = ["_black", "_isort"]
+_format = "ruff format"
+_lint = "ruff check --fix"
+_lint_check = "ruff check"
 
-_ruff = "ruff simaple tests scripts"
-lint = ["_ruff"]
+format = ["_format", "_lint"]
+formatting-check = ["_format", "_lint_check"]
 
 coverage = "pytest --cov=simaple"
 coverage-report = "pytest --cov=simaple --cov-report=xml"
@@ -55,14 +51,12 @@ rsctest = "pytest -vv -x test_resource/"
 typetest = "mypy simaple tests"
 simulatetest = "pytest -vv -x tests/simulate"
 clean = "rm -rf **/__pycache__ .coverage .mypy_cache .pytest_cache"
-test = ["coverage", "typetest", "lint", "formatting-check"]
+test = ["coverage", "typetest", "formatting-check"]
 
-[tool.black]
 
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-skip = "third_party"
+[tool.ruff.lint]
+select = ["I"]
+
 
 [tool.pytest.ini_options]
 addopts = "-vv -x"
@@ -133,9 +127,7 @@ ruff = "^0.1.9"
 Sphinx = "^5.1.1"
 sphinx-rtd-theme = "^1.0.0"
 readthedocs-sphinx-ext = "^2.2.0"
-isort = "^5.9.3"
 coverage = "^6.0.2"
-black = "^24.4"
 pytest-cov = "^3.0.0"
 build = "^0.8.0"
 twine = "^5.0.1"

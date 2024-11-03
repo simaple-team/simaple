@@ -20,7 +20,8 @@ from simaple.gear.improvements.starforce import Starforce
 
 class AbstractGearBlueprint(BaseModel, metaclass=ABCMeta):
     @abstractmethod
-    def build(self) -> Gear: ...
+    def build(self) -> Gear:
+        ...
 
 
 class BonusSpec(BaseModel):
@@ -146,7 +147,6 @@ class PracticalGearBlueprint(AbstractGearBlueprint):
     def translate_into_generalized_gear_blueprint(
         self,
     ) -> GeneralizedGearBlueprint:
-
         spell_traces = []
         scrolls = []
 

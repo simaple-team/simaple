@@ -53,7 +53,7 @@ class _ComponentAddon(
 
 
 def regularize_returned_event(
-    maybe_events: Optional[Union[Event, list[Event]]]
+    maybe_events: Optional[Union[Event, list[Event]]],
 ) -> list[Event]:
     if maybe_events is None:
         return []
@@ -147,7 +147,6 @@ def _create_binding_with_store(
     properties: list[str],
     bindings: dict[str, str],
 ):
-
     property_address = {}
 
     for property_name in properties:
@@ -276,7 +275,8 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @abstractmethod
-    def get_default_state(self) -> Any: ...
+    def get_default_state(self) -> Any:
+        ...
 
     @property
     def event_provider(self) -> EventProvider:

@@ -9,7 +9,7 @@ DSLGeneratorProto = Callable[[RuntimeContextType], DSLGenerator]
 
 
 def interpret_dsl_generator(
-    func: Callable[..., DSLGeneratorProto]
+    func: Callable[..., DSLGeneratorProto],
 ) -> Callable[..., OperationGeneratorProto]:
     @functools.wraps(func)
     def _gen_proto(*args, **kwargs):

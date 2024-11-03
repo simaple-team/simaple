@@ -10,10 +10,12 @@ from simaple.gear.potential import Potential
 
 class AbstractStatProvider(pydantic.BaseModel, metaclass=ABCMeta):
     @abstractmethod
-    def provide(self, dependency: float) -> ExtendedStat: ...
+    def provide(self, dependency: float) -> ExtendedStat:
+        ...
 
 
-class NoMatchedStringError(Exception): ...
+class NoMatchedStringError(Exception):
+    ...
 
 
 StatProvider_ = Callable[[int], ExtendedStat]

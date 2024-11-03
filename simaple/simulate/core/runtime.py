@@ -36,7 +36,8 @@ class PostActionCallback:
 
     def __call__(
         self, event: Event, viewer: ViewerType, all_events: list[Event]
-    ) -> None: ...
+    ) -> None:
+        ...
 
 
 class PreviousCallback(Entity):

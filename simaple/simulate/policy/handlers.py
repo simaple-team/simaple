@@ -112,10 +112,12 @@ def exec_keydownstop(op: Operation, events: list[Event]) -> ActionGeneratorType:
     _ = yield dict(name=op.name, method="stop", payload=None)
 
 
-def get_operation_handlers() -> dict[
-    str,
-    Callable[[Operation], BehaviorGenerator],
-]:
+def get_operation_handlers() -> (
+    dict[
+        str,
+        Callable[[Operation], BehaviorGenerator],
+    ]
+):
     return {
         "CAST": exec_cast,
         "USE": exec_use,
