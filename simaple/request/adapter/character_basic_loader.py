@@ -1,5 +1,5 @@
 from simaple.core import JobType, Stat
-from simaple.request.adapter.translator.job_name import translate_kms_name
+from simaple.core.jobtype import translate_kms_name
 from simaple.request.external.nexon.api.character.basic import (
     CharacterStatResponse,
     get_character_basic,

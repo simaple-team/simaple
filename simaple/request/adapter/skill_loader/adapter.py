@@ -1,5 +1,3 @@
-import datetime
-
 from simaple.core import ExtendedStat
 from simaple.request.adapter.skill_loader._converter import (
     compute_hexa_stat,
@@ -10,10 +8,6 @@ from simaple.request.external.nexon.api.character.skill import (
     get_every_skill_levels,
     get_hexamatrix_stat_response,
     get_skill_response,
-)
-from simaple.request.external.nexon.api.ocid import (
-    as_nexon_datetime,
-    get_character_ocid,
 )
 from simaple.request.external.nexon.client import NexonAPIClient
 from simaple.request.service.loader import CharacterSkillLoader

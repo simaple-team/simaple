@@ -1,9 +1,9 @@
 import re
 
 from simaple.core import ActionStat, ExtendedStat, JobType, Stat
+from simaple.core.jobtype import translate_kms_name
 from simaple.data.system.artifact import get_artifact_effects
 from simaple.data.system.union_block import get_all_blocks
-from simaple.request.adapter.translator.job_name import translate_kms_name
 from simaple.request.external.nexon.api.character.union import (
     CharacterUnionRaiderBlock,
     CharacterUnionRaiderPreset,
