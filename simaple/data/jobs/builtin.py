@@ -5,7 +5,6 @@ from typing import Any, Optional, TypedDict, cast
 from simaple.core import JobType
 from simaple.core.base import ExtendedStat, Stat
 from simaple.core.damage import DamageLogic
-from simaple.data.jobs.definitions import BuiltinStrategy
 from simaple.data.jobs.definitions.passive import PassiveSkill
 from simaple.data.jobs.definitions.skill_profile import SkillProfile
 from simaple.data.jobs.patch import (
@@ -122,16 +121,6 @@ def get_passive(
     return sum(
         [passive_skill.get_extended_stat() for passive_skill in passive_skills],
         ExtendedStat(),
-    )
-
-
-def get_builtin_strategy(jobtype: JobType) -> BuiltinStrategy:
-    loader = get_kms_skill_loader()
-    return cast(
-        BuiltinStrategy,
-        loader.load(
-            query={"group": jobtype.value, "kind": "BuiltinStrategy"},
-        ),
     )
 
 
