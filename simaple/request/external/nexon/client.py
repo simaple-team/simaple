@@ -1,10 +1,8 @@
 import datetime
-from functools import wraps
 from typing import Any, Callable, TypeVar, cast
 
 from simaple.request.external.nexon.api.character.common import (
     CharacterIDWithDate,
-    get_nexon_api_header,
 )
 from simaple.request.external.nexon.api.ocid import (
     as_nexon_datetime,

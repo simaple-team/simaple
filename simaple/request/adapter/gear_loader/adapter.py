@@ -1,5 +1,3 @@
-import datetime
-
 from simaple.core import ExtendedStat, Stat
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository
@@ -17,10 +15,6 @@ from simaple.request.external.nexon.api.character.item import (
     get_character_symbol_response,
     get_pet_equipment_response,
     get_set_effect_response,
-)
-from simaple.request.external.nexon.api.ocid import (
-    as_nexon_datetime,
-    get_character_ocid,
 )
 from simaple.request.external.nexon.client import NexonAPIClient
 from simaple.request.service.loader import GearLoader
