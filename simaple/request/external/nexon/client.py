@@ -26,7 +26,7 @@ class NexonAPIAuthenticatedSession:
         payload: dict[str, Any] | None = None,
     ) -> T:
         payload = payload or {}
-        _payload: CharacterIDWithDate = {
+        _payload = {
             "ocid": self._ocid,
             "date": as_nexon_datetime(self._date),
         }
