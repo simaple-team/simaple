@@ -1,4 +1,3 @@
-from simaple.data.jobs.definitions.builtin_strategy import BuiltinStrategy
 from simaple.data.jobs.definitions.passive_hyper_skill import (
     MultiplierPassiveHyperskill,
     PassiveHyperskillInterface,
@@ -13,5 +12,4 @@ __all__ = [
     "MultiplierPassiveHyperskill",
     "StatIncreasePassiveHyperskill",
     "ValueIncreasePassiveHyperskill",
-    "BuiltinStrategy",
 ]
