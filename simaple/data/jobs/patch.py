@@ -1,5 +1,5 @@
 import copy
-from typing import Any, Union
+from typing import Any, Union, TypeVar
 
 import pydantic
 
