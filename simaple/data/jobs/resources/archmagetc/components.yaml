@@ -486,7 +486,9 @@ metadata:
     group: archmagetc
     name: 블리자드 VI(패시브)
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 블리자드 VI
   - ArithmeticPatch
 data:
   name: 블리자드 VI(패시브)

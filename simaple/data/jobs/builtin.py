@@ -208,6 +208,10 @@ def build_skills(
         [],
     )
 
+    print(skill_levels)
+    print(hexa_improvements)
+    print(skill_improvements)
+
     component_sets = [
         loader.load_all(
             query={"group": group, "kind": "Component"},
