@@ -1,7 +1,7 @@
 from typing import Any, Optional, Sequence
-from typing_extensions import TypedDict
 
 import pydantic
+from typing_extensions import TypedDict
 
 from simaple.spec.patch import Patch
 
@@ -20,7 +20,7 @@ class PatchSpecificationMatchFailError(Exception):
 
 class PatchArgument(TypedDict):
     name: str
-    payload: dict[str, Any]
+    payload: dict[str, Any] | None
 
 
 class Spec(pydantic.BaseModel):
@@ -28,7 +28,7 @@ class Spec(pydantic.BaseModel):
     version: str
     metadata: SpecMetadata
     data: dict[str, Any]
-    patch: Optional[list[str|PatchArgument]] = None
+    patch: Optional[list[str | PatchArgument]] = None
     ignore_overflowing_patch: bool = True
 
     def get_classname(self):
@@ -39,7 +39,7 @@ class Spec(pydantic.BaseModel):
             return []
 
         return [
-            {"name": arg, "payload": {} } if isinstance(arg, str) else arg
+            {"name": arg, "payload": None} if isinstance(arg, str) else arg
             for arg in self.patch
         ]
 
@@ -58,9 +58,9 @@ class Spec(pydantic.BaseModel):
             for given, expected in zip(patches, self.get_patch_arguments())
         )
 
-    def is_patch_fits_with_overflow(
+    def _is_patch_fits_with_overflow(
         self, patches: Optional[Sequence[Patch]] = None
-    ) -> tuple[bool, list[Patch]]:
+    ) -> tuple[bool, list[tuple[Patch, PatchArgument]]]:
         if self.patch is None:
             return True, []
 
@@ -74,29 +74,36 @@ class Spec(pydantic.BaseModel):
         patch_arguments = self.get_patch_arguments()
 
         while my_patch_ptr < len(patch_arguments) and given_patch_ptr < len(patches):
-            if patches[given_patch_ptr].__class__.__name__ == patch_arguments[my_patch_ptr]["name"]:
-                aligned_patches.append(patches[given_patch_ptr])
+            if (
+                patches[given_patch_ptr].__class__.__name__
+                == patch_arguments[my_patch_ptr]["name"]
+            ):
+                aligned_patches.append(
+                    (patches[given_patch_ptr], patch_arguments[my_patch_ptr])
+                )
                 my_patch_ptr += 1
             given_patch_ptr += 1
 
         return my_patch_ptr == len(patch_arguments), aligned_patches
 
     def interpret(self, patches: Optional[Sequence[Patch]] = None):
-        if self.ignore_overflowing_patch:
-            fits, aligned_patches = self.is_patch_fits_with_overflow(patches)
-            if not fits:
-                raise PatchSpecificationMatchFailError()
-            patches = aligned_patches
-        else:
-            if not self.is_patch_fits(patches):
-                raise PatchSpecificationMatchFailError()
-
         data = self.data.copy()
-
         if patches is None:
             return data
 
-        for patch in patches:
-            data = patch.apply(data)
+        if self.ignore_overflowing_patch:
+            fits, aligned_patches = self._is_patch_fits_with_overflow(patches)
+            if not fits:
+                raise PatchSpecificationMatchFailError()
+        else:
+            if not self.is_patch_fits(patches):
+                raise PatchSpecificationMatchFailError()
+            aligned_patches = [
+                (patch, patch_argument)
+                for patch, patch_argument in zip(patches, self.get_patch_arguments())
+            ]
+
+        for patch, patch_argument in aligned_patches:
+            data = patch.apply(data, patch_argument["payload"])
 
         return data

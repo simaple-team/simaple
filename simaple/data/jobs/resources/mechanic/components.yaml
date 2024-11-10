@@ -414,14 +414,19 @@ metadata:
     name: "매시브 파이어: IRON-B VI"
     id: 35141001-0
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: "매시브 파이어: IRON-B"
   - ArithmeticPatch
-  - VSkillImprovementPatch
-  - PassiveHyperskillPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: "매시브 파이어: IRON-B"
+  - name: PassiveHyperskillPatch
+    payload:
+      level_reference_name: "매시브 파이어: IRON-B"
 data:
   id: 35141001-0
   name: "매시브 파이어: IRON-B VI"
-  representative_name: "매시브 파이어: IRON-B"
   delay: 600
   damage: "{{ 330 + 8 * skill_level }}"
   hit: 6
@@ -436,13 +441,16 @@ metadata:
     name: "매시브 파이어: IRON-B VI (폭발)"
     id: 35141001-1
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: "매시브 파이어: IRON-B"
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: "매시브 파이어: IRON-B"
 data:
   id: 35141001-1
   name: "매시브 파이어: IRON-B VI (폭발)"
-  representative_name: "매시브 파이어: IRON-B (폭발)"
   delay: 0
   damage: "{{ 180 + 7 * skill_level }}"
   hit: 3
@@ -458,14 +466,19 @@ metadata:
     name: "호밍 미사일 VI"
     id: 35141003-0
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: "호밍 미사일"
   - ArithmeticPatch
-  - VSkillImprovementPatch
-  - SkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: "호밍 미사일"
+  - name: SkillImprovementPatch
+    payload:
+      level_reference_name: "호밍 미사일"
 data:
   id: 35141003-0
   name: "호밍 미사일 VI"
-  representative_name: "호밍 미사일"
   delay: 0
   cooldown_duration: 0
 

@@ -572,14 +572,19 @@ metadata:
     name: 디바이드 VI
     id: 151121000-0vi
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 디바이드
   - ArithmeticPatch
-  - VSkillImprovementPatch
-  - PassiveHyperskillPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 디바이드
+  - name: PassiveHyperskillPatch
+    payload:
+      level_reference_name: 디바이드
 data:
   id: 151121000-0vi
   name: 디바이드 VI
-  representative_name: 디바이드
 
   delay: 600
   cooldown_duration: 0
@@ -601,13 +606,16 @@ metadata:
     name: 샤드 VI
     id: 151001001-0vi
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 샤드
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 샤드
 data:
   id: 151001001-0vi
   name: 샤드 VI
-  representative_name: 샤드
   delay: 630
   damage: "{{ 480 + 8 * skill_level }}"
   hit: 15
@@ -624,13 +632,16 @@ metadata:
     name: 원더 VI
     id: 151101013-0vi
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 원더
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 원더
 data:
   id: 151101013-0vi
   name: 원더 VI
-  representative_name: 원더
   delay: 0
   damage: "{{ 480 + 8 * skill_level }}"
   hit: 15
@@ -649,13 +660,16 @@ metadata:
     name: 오더 VI
     id: 151111003-0
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 오더
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 오더
 data:
   id: 151111003-0
   name: 오더 VI
-  representative_name: 오더
 
   delay: 0
   cooldown_duration: 500

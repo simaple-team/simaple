@@ -361,13 +361,16 @@ metadata:
     name: 천공의 노래 VI
     id: 13121001-0vi
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 천공의 노래
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 천공의 노래
 data:
   id: 13121001-0vi
   name: 천공의 노래 VI
-  representative_name: 천공의 노래
   maximum_keydown_time: 999_999_999
 
   damage: "{{ 540 + 14 * skill_level }}"
@@ -391,13 +394,16 @@ metadata:
     name: 트라이플링 윔 VI
     id: 13101022-0vi
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 트라이플링 윔
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 트라이플링 윔
 data:
   id: 13101022-0vi
   name: 트라이플링 윔 VI
-  representative_name: 트라이플링 윔
   trigger_cooldown_duration: 0
   trigger_damage: "{{ (315 + skill_level * 7) * 0.8 + (420 + skill_level * 11) * 0.2 }}"
   trigger_hit: 0.5

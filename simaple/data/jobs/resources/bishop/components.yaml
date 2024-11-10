@@ -372,13 +372,16 @@ metadata:
     name: 엔젤레이
     id: 2321007-0-vi
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 엔젤레이
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 엔젤레이
 data:
   id: 2321007-0-vi
   name: 엔젤레이 VI
-  representative_name: 엔젤레이
   delay: 630
   cooldown_duration: 0
   damage: "{{ 235 + 4 * skill_level }}"
@@ -399,14 +402,16 @@ metadata:
     name: 트라이엄프 페더 VI
     id: 2311015-0
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 트라이엄프 페더
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 트라이엄프 페더
 data:
   id: 2311015-0
   name: 트라이엄프 페더 VI
-  representative_name: 트라이엄프 페더
-
   trigger_cooldown_duration: 3_000
   trigger_damage: "{{390 + 6 * skill_level}}"
   trigger_hit: "{{ 4 * (1 + 5 * 0.5) }}"
