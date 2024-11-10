@@ -16,22 +16,22 @@ class Patch(BaseModel, metaclass=ABCMeta):
 
 class DFSTraversePatch(Patch):
     @abstractmethod
-    def patch_value(self, value, origin: dict):
+    def patch_value(self, value, origin: dict, payload: dict | None = None):
         """Modify gien value in dictionary"""
 
     @abstractmethod
-    def patch_dict(self, k, v, origin: dict):
+    def patch_dict(self, k, v, origin: dict, payload: dict | None = None):
         """Modify partial dictionary"""
 
     def apply(self, raw, payload: dict | None = None) -> dict:
-        return cast(dict, self._apply(raw, raw))
+        return cast(dict, self._apply(raw, raw, payload))
 
-    def _apply(self, raw: Union[list, dict], origin: dict) -> Any:
+    def _apply(self, raw: Union[list, dict], origin: dict, payload: dict | None) -> Any:
         if isinstance(raw, list):
-            return [self._apply(arg, origin) for arg in raw]
+            return [self._apply(arg, origin, payload) for arg in raw]
 
         if isinstance(raw, (int, float, str)):
-            patch = self.patch_value(raw, origin)
+            patch = self.patch_value(raw, origin, payload)
             return patch or raw
 
         interpreted = {}
@@ -41,9 +41,9 @@ class DFSTraversePatch(Patch):
             if k in excluded_keys:
                 continue
             if isinstance(v, (dict, list)):
-                interpreted[k] = self._apply(v, origin)
+                interpreted[k] = self._apply(v, origin, payload)
             else:
-                patch = self.patch_dict(k, v, origin)
+                patch = self.patch_dict(k, v, origin, payload)
                 if patch is None:
                     interpreted[k] = v
                 else:
@@ -62,10 +62,10 @@ class StringPatch(DFSTraversePatch):
             raise ValueError("As-is and To-be must be same length.")
         return self
 
-    def patch_value(self, value, origin: dict):
+    def patch_value(self, value, origin: dict, payload: dict | None = None):
         return self.translate(value)
 
-    def patch_dict(self, k, v, origin: dict):
+    def patch_dict(self, k, v, origin: dict, payload: dict | None = None):
         return {self.translate(k): self.translate(v)}
 
     def translate(
@@ -86,10 +86,10 @@ class KeywordExtendPatch(DFSTraversePatch):
     target_keyword: str
     extends: list[str]
 
-    def patch_value(self, value, origin: dict):
+    def patch_value(self, value, origin: dict, payload: dict | None = None):
         return None
 
-    def patch_dict(self, k, v, origin: dict):
+    def patch_dict(self, k, v, origin: dict, payload: dict | None = None):
         if self.target_keyword in k:
             return {
                 k.replace(self.target_keyword, replacement): v
@@ -103,10 +103,10 @@ class ArithmeticPatch(DFSTraversePatch):
     _match_string: re.Pattern = PrivateAttr(default=re.compile(r"^\s*{{(.+)}}\s*$"))
     variables: dict[str, Any]
 
-    def patch_value(self, value, origin: dict):
+    def patch_value(self, value, origin: dict, payload: dict | None = None):
         return self.evaluate(value)
 
-    def patch_dict(self, k, v, origin: dict):
+    def patch_dict(self, k, v, origin: dict, payload: dict | None = None):
         return {self.evaluate(k): self.evaluate(v)}
 
     def evaluate(self, value):

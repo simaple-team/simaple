@@ -27,6 +27,7 @@ provider:
         artifact_level: 40
         passive_skill_level: 0
         combat_orders_level: 1
+        hexa_improvements_level: 1
 environment:
     use_doping: true
     armor: 300
@@ -37,6 +38,8 @@ environment:
     weapon_attack_power: 0
     passive_skill_level: 0
     combat_orders_level: 1
+    skill_levels: 
+        블리자드 VI: 10
     weapon_pure_attack_power: 0
     jobtype: archmagetc
     level: 270

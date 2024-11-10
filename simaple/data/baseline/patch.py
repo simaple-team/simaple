@@ -67,10 +67,10 @@ class GearIdPatch(Patch):
 
 
 class DoubleBonusRefinePatch(DFSTraversePatch):
-    def patch_value(self, value, origin: dict):
+    def patch_value(self, value, origin: dict, payload: dict | None = None):
         return BonusType.refine_double_key(value)
 
-    def patch_dict(self, k, v, origin: dict):
+    def patch_dict(self, k, v, origin: dict, payload: dict | None = None):
         return {k: BonusType.refine_double_key(v)}
 
 

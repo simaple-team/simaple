@@ -112,6 +112,11 @@ class SkillImprovementPatch(Patch):
         for improvement in self.improvements:
             output = improvement.modify(output)
 
+        if output == raw:
+            raise ValueError(
+                f"At least one improvement should be applied if skill improvement patch defined"
+            )
+
         return output
 
 
@@ -121,29 +126,38 @@ class SkillLevelPatch(DFSTraversePatch):
     skill_level_representation: str = "skill_level"
     default_skill_levels: dict[str, int] = {}
 
-    def patch_value(self, value, origin: dict):
-        return self.translate(value, origin)
+    def patch_value(self, value, origin: dict, payload: dict | None = None):
+        return self.translate(value, origin, payload)
 
-    def patch_dict(self, k, v, origin: dict):
-        return {k: self.translate(v, origin)}
+    def patch_dict(self, k, v, origin: dict, payload: dict | None = None):
+        return {k: self.translate(v, origin, payload)}
 
     def translate(
-        self, maybe_representation: Union[int, str, float], origin: dict
+        self,
+        maybe_representation: Union[int, str, float],
+        origin: dict,
+        payload: dict | None,
     ) -> Union[int, str, float]:
         if not isinstance(maybe_representation, str):
             return maybe_representation
 
         output = maybe_representation.replace(
-            self.skill_level_representation, str(self.get_skill_level(origin))
+            self.skill_level_representation, str(self.get_skill_level(origin, payload))
         )
 
         return output
 
-    def get_skill_level(self, origin: dict):
-        if origin.get("name") and self.default_skill_levels.get(origin["name"]):
-            skill_level: int = self.default_skill_levels[origin["name"]]
+    def get_skill_level(self, origin: dict, payload: dict | None) -> int:
+        if payload is not None and self.default_skill_levels.get(
+            payload["level_reference_name"]
+        ):
+            reference_name = payload["level_reference_name"]
+            skill_level: int = self.default_skill_levels[reference_name]
+        elif origin.get("name") and self.default_skill_levels.get(origin["name"]):
+            skill_level = self.default_skill_levels[origin["name"]]
         else:
             skill_level = origin.get("default_skill_level", 0)
+
         if origin.get("passive_skill_enabled", False):
             skill_level += self.passive_skill_level
         if origin.get("combat_orders_enabled", False):
