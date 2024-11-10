@@ -47,6 +47,15 @@ class OperationEngine(Protocol):
         ...
 
 
+def was_no_op(logs: list[PlayLog]) -> bool:
+    total_events = sum(len(playlog.events) for playlog in logs)
+    return total_events == 0
+
+
+class NoOpError(Exception):
+    ...
+
+
 class BasicOperationEngine:
     """
     OperationEngine is a simulation engine that accepts Operation for input.
@@ -152,6 +161,11 @@ class BasicOperationEngine:
                         self._viewset.get_viewer(store),
                         self._buffered_events,
                     )
+
+        if was_no_op(playlogs):
+            raise NoOpError(
+                f"Request no-op is forbidden. Given Operation {op} was no-op"
+            )
 
         return self._history.commit(
             op,
