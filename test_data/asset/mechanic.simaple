@@ -1,7 +1,6 @@
 ELAPSE 70000
 
 CAST "로디드 다이스"
-CAST "메이플 용사"
 CAST "호밍 미사일 VI" # Treat as summon skill
 
 
