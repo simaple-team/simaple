@@ -111,9 +111,13 @@ metadata:
     name: 블리자드(패시브)
     id: 2221007-1
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 블리자드
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 블리자드
 data:
   id: 2221007-1
   name: 블리자드(패시브)
@@ -362,13 +366,16 @@ metadata:
     name: 체인 라이트닝 VI
     id: 22210066-0
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 체인 라이트닝
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 체인 라이트닝
 data:
   id: 2221006-0
   name: 체인 라이트닝 VI
-  representative_name: 체인 라이트닝
 
   delay: 600
   cooldown_duration: 0
@@ -397,13 +404,16 @@ metadata:
     name: 프로즌 오브 VI
     id: 2221012-1
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 프로즌 오브
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 프로즌 오브
 data:
   id: 2221012-1
   name: 프로즌 오브 VI
-  representative_name: 프로즌 오브
 
   damage: 0
   delay: 690
@@ -426,13 +436,16 @@ metadata:
     name: 블리자드 VI
     id: 2221007-0-vi
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 블리자드
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 블리자드
 data:
   id: 2221007-0-vi
   name: 블리자드 VI
-  representative_name: 블리자드
   cooldown_duration: 45000
   delay: 690
   damage: "{{ 330 + 10 * skill_level }}"
@@ -448,13 +461,16 @@ metadata:
     name: 블리자드 VI(패시브)
     id: 2221007-1-passive-vi
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 블리자드
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 블리자드
 data:
   id: 2221007-1-passive-vi
   name: 블리자드 VI(패시브)
-  representative_name: 블리자드(패시브)
   delay: 0
   cooldown_duration: 0
   damage: "{{ 220 + skill_level * 5 }}"

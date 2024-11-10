@@ -44,9 +44,9 @@ class GearIdPatch(Patch):
 
         return name
 
-    def apply(self, raw):
+    def apply(self, raw, payload: dict | None = None):
         if isinstance(raw, list):
-            return [self.apply(arg) for arg in raw]
+            return [self.apply(arg, payload) for arg in raw]
 
         if isinstance(raw, (int, float, str)):
             return raw

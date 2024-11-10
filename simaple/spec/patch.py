@@ -1,6 +1,6 @@
 import re
 from abc import ABCMeta, abstractmethod
-from typing import Any, Union, cast
+from typing import Any, TypeVar, Union, cast
 
 import pydantic
 from pydantic import BaseModel, PrivateAttr
@@ -10,7 +10,7 @@ from simaple.spec._math import evaluate_expression
 
 class Patch(BaseModel, metaclass=ABCMeta):
     @abstractmethod
-    def apply(self, raw: dict) -> dict:
+    def apply(self, raw, payload: dict | None = None) -> dict:
         """Modify gien raw-dict"""
 
 
@@ -23,7 +23,7 @@ class DFSTraversePatch(Patch):
     def patch_dict(self, k, v, origin: dict):
         """Modify partial dictionary"""
 
-    def apply(self, raw: dict) -> dict:
+    def apply(self, raw, payload: dict | None = None) -> dict:
         return cast(dict, self._apply(raw, raw))
 
     def _apply(self, raw: Union[list, dict], origin: dict) -> Any:

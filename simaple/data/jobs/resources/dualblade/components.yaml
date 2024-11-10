@@ -351,16 +351,22 @@ metadata:
     name: 팬텀 블로우 VI
     id: 4361000-0
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 팬텀 블로우
   - ArithmeticPatch
-  - VSkillImprovementPatch
-  - PassiveHyperskillPatch
-  - SkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 팬텀 블로우
+  - name: PassiveHyperskillPatch
+    payload:
+      level_reference_name: 팬텀 블로우
+  - name: SkillImprovementPatch
+    payload:
+      level_reference_name: 팬텀 블로우
 data:
   id: 4361000-0
   name: 팬텀 블로우 VI
-  representative_name: "팬텀 블로우"
-
   cooldown_duration: 0
   delay: "{{ apply_attack_speed(720) }}"
   damage: "{{ 350 + 6 * skill_level }}"
@@ -380,14 +386,16 @@ metadata:
     name: 아수라 VI
     id: 4361001-0
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 팬텀 블로우
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 팬텀 블로우
 data:
   id: 4361001-0
   name: 아수라 VI
-  representative_name: "아수라"
-
   damage: "{{ 600 + skill_level * 17 }}"
   hit: 6
   cooldown_duration: 60_000

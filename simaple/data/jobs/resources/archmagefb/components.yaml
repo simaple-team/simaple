@@ -452,14 +452,19 @@ metadata:
     name: 플레임 스윕 VI
     id: 400021410-0
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 플레임 스윕
   - ArithmeticPatch
-  - VSkillImprovementPatch
-  - PassiveHyperskillPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 플레임 스윕
+  - name: PassiveHyperskillPatch
+    payload:
+      level_reference_name: 플레임 스윕
 data:
   id: 2121006-0
   name: 플레임 스윕 VI
-  representative_name: 플레임 스윕
   delay: 600
   damage: "{{ 235 + 4 * skill_level }}"
   hit: 7
@@ -481,14 +486,19 @@ metadata:
     name: 미스트 이럽션 VI
     id: 400021412-0
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 미스트 이럽션
   - ArithmeticPatch
-  - VSkillImprovementPatch
-  - PassiveHyperskillPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 미스트 이럽션
+  - name: PassiveHyperskillPatch
+    payload:
+      level_reference_name: 미스트 이럽션
 data:
   id: 2121003-0
   name: 미스트 이럽션 VI
-  representative_name: 미스트 이럽션
   cooldown_duration: 8000
   delay: 720
   red: true
@@ -507,13 +517,16 @@ metadata:
     name: 플레임 헤이즈 VI
     id: 2121011-0
 patch:
-  - SkillLevelPatch
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 플레임 헤이즈
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 플레임 헤이즈
 data:
   id: 2121011-0
   name: 플레임 헤이즈 VI
-  representative_name: 플레임 헤이즈
   cooldown_duration: 10000
   delay: 1080
   red: true

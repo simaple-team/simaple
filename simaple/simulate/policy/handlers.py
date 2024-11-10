@@ -81,32 +81,30 @@ def get_next_elapse_time(events: list[Event]) -> float:
 def exec_cast(op: Operation, events: list[Event]) -> ActionGeneratorType:
     target_name = op.name
 
-    action = {"name":target_name, "method":"use", "payload":None}
+    action = {"name": target_name, "method": "use", "payload": None}
     events = yield action
 
     elapse_time = get_next_elapse_time(events)
     if elapse_time == 0:
         return
 
-    yield {"name":"*", "method":"elapse", "payload":elapse_time}
+    yield {"name": "*", "method": "elapse", "payload": elapse_time}
 
 
 @BehaviorStrategy.operation_handler
 def exec_use(op: Operation, events: list[Event]) -> ActionGeneratorType:
-    _ = yield {
-        "name":op.name, "method":"use", "payload":None
-    }
+    _ = yield {"name": op.name, "method": "use", "payload": None}
 
 
 @BehaviorStrategy.operation_handler
 def exec_elapse(op: Operation, events: list[Event]) -> ActionGeneratorType:
-    _ = yield {"name":"*", "method":"elapse", "payload":op.time}
+    _ = yield {"name": "*", "method": "elapse", "payload": op.time}
 
 
 @BehaviorStrategy.operation_handler
 def exec_resolve(op: Operation, events: list[Event]) -> ActionGeneratorType:
     elapse_time = get_next_elapse_time([ev for ev in events if ev["name"] == op.name])
-    _ = yield {"name": "*", "method":"elapse", "payload":elapse_time}
+    _ = yield {"name": "*", "method": "elapse", "payload": elapse_time}
 
 
 @BehaviorStrategy.operation_handler
