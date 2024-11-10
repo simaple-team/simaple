@@ -1,5 +1,5 @@
 import copy
-from typing import Any, TypedDict, TypeVar, Union
+from typing import Any, TypedDict, TypeVar, Union, cast
 
 import pydantic
 
@@ -11,7 +11,7 @@ from simaple.spec.patch import DFSTraversePatch, Patch
 
 def _get_referencing_skill_name(raw: dict[str, Any], payload: dict | None) -> str:
     if payload is not None:
-        return payload["level_reference_name"]
+        return cast(str, payload["level_reference_name"])
 
     assert isinstance(raw["name"], str)
     return raw["name"]
@@ -20,7 +20,7 @@ def _get_referencing_skill_name(raw: dict[str, Any], payload: dict | None) -> st
 class PassiveHyperskillPatch(Patch):
     hyper_skills: list[PassiveHyperskillInterface]
 
-    def apply(self, raw, payload: dict | None = None) -> dict:
+    def apply(self, raw: dict[str, Any], payload: dict | None = None) -> dict[str, Any]:
         output = raw
 
         skill_name = _get_referencing_skill_name(raw, payload)
@@ -41,7 +41,7 @@ class VSkillImprovementPatch(Patch):
 
     improvements: dict[str, int] = pydantic.Field(default_factory=dict)
 
-    def apply(self, raw, payload: dict | None = None) -> dict:
+    def apply(self, raw: dict[str, Any], payload: dict | None = None) -> dict[str, Any]:
         output = copy.deepcopy(raw)
         try:
             improvement_scale = output.pop("v_improvement")
@@ -90,7 +90,7 @@ class HexaSkillImprovementPatch(Patch):
 
         raise ValueError(f"Invalid level: {level}")
 
-    def apply(self, raw, payload: dict | None = None) -> dict:
+    def apply(self, raw: dict[str, Any], payload: dict | None = None) -> dict[str, Any]:
         output = copy.deepcopy(raw)
         previous_modifier = Stat.model_validate(output.get("modifier", {}))
 
@@ -106,7 +106,7 @@ class HexaSkillImprovementPatch(Patch):
 class SkillImprovementPatch(Patch):
     improvements: list[SkillImprovement]
 
-    def apply(self, raw, payload: dict | None = None) -> dict:
+    def apply(self, raw: dict[str, Any], payload: dict | None = None) -> dict[str, Any]:
         output = raw
 
         for improvement in self.improvements:
