@@ -112,6 +112,11 @@ class SkillImprovementPatch(Patch):
         for improvement in self.improvements:
             output = improvement.modify(output)
 
+        if output == raw:
+            raise ValueError(
+                f"At least one improvement should be applied if skill improvement patch defined"
+            )
+
         return output
 
 
