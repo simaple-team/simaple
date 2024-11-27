@@ -3,6 +3,7 @@ import pytest
 from simaple.core import ActionStat, ExtendedStat, Stat
 from simaple.request.adapter.skill_loader._converter import (
     _get_passive_skill_effect_from_description,
+    get_combat_power_related_stat,
     compute_hexa_stat,
     compute_passive_skill_stat,
     get_zero_order_skill_effect,
@@ -78,6 +79,25 @@ def test_hexa_stat_with_main_stat(hexa_stat_response_2):
 
 def test_get_passive_effect(skill_0_response):
     zero_order_passive_effect, liberated = get_zero_order_skill_effect(skill_0_response)
+    assert zero_order_passive_effect == ExtendedStat(
+        stat=Stat(
+            STR=5 + 10,
+            DEX=5 + 10,
+            INT=5 + 10,
+            LUK=5 + 10,
+            attack_power=5 + 10 + 30 + (8 + 7 + 7),
+            magic_attack=5 + 10 + 30 + (8 + 7 + 7),
+            final_damage_multiplier=10,
+            boss_damage_multiplier=35,
+            ignored_defence=35,
+        ),
+        action_stat=ActionStat(buff_duration=15),
+    )
+    assert liberated is True
+
+
+def test_get_combat_power_related_stat(skill_0_response):
+    zero_order_passive_effect, liberated = get_combat_power_related_stat(skill_0_response)
     assert zero_order_passive_effect == ExtendedStat(
         stat=Stat(
             STR=5 + 10,

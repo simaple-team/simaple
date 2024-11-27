@@ -292,3 +292,14 @@ def get_zero_order_skill_effect(
         ),
         _has_liberated_skill,
     )
+
+
+def get_combat_power_related_stat(
+    response: CharacterSkillResponse,
+) -> tuple[ExtendedStat, bool]:
+    """
+    전투력 계산에 반영되는 0차 스킬 효과를 반환합니다.
+
+    TODO: 아직 예외로 적용되는 스킬이 없습니다.
+    """
+    return get_zero_order_skill_effect(response)

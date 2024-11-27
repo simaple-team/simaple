@@ -127,6 +127,17 @@ class CharacterSkillLoader(ABC):
         pass
 
     @abstractmethod
+    def load_combat_power_related_stat(
+        self,
+        character_name: str,
+    ) -> tuple[ExtendedStat, bool]:
+        """
+        0차 스킬로부터 얻는 패시브 스탯을 반환합니다.
+        더불어, 해방 무기 장착 여부도 반환합니다.
+        """
+        pass
+
+    @abstractmethod
     def load_hexa_skill_levels(
         self, character_name: str
     ) -> tuple[dict[str, int], dict[str, int]]:

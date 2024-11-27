@@ -3,6 +3,7 @@ from simaple.request.adapter.skill_loader._converter import (
     compute_hexa_stat,
     compute_passive_skill_stat,
     get_zero_order_skill_effect,
+    get_combat_power_related_stat,
 )
 from simaple.request.external.nexon.api.character.skill import (
     get_every_skill_levels,
@@ -46,6 +47,19 @@ class NexonAPICharacterSkillLoader(CharacterSkillLoader):
             },
         )
         return get_zero_order_skill_effect(response)
+
+
+    def load_combat_power_related_stat(
+        self,
+        character_name: str,
+    ) -> tuple[ExtendedStat, bool]:
+        response = self._client.session(character_name).request(
+            get_skill_response,
+            {
+                "character_skill_grade": "0",
+            },
+        )
+        return get_combat_power_related_stat(response)
 
     def load_hexa_skill_levels(
         self, character_name: str
