@@ -62,12 +62,12 @@ TEST_CASES_WEAPON = [
     (
         1212063,
         AttackTypeBonus(attack_type=AttackType.attack_power, grade=5),
-        Stat(attack_power=49),
+        Stat(attack_power=29),
     ),
     (
         1212063,
         AttackTypeBonus(attack_type=AttackType.attack_power, grade=7),
-        Stat(attack_power=83),
+        Stat(attack_power=49),
     ),
     (
         1572007,

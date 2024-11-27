@@ -314,8 +314,7 @@ class BonusCalculator(GearImprovementCalculator):
             (StatProps.STR_multiplier, BonusType.all_stat_multiplier),
         ]
 
-        for single_property in single_properties:
-            stat_type, bonus_type = single_property
+        for stat_type, bonus_type in single_properties:
             if stat.get(stat_type) > 0:
                 error = True
                 for grade in grades:
