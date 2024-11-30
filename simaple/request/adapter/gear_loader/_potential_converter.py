@@ -45,7 +45,9 @@ def all_stat_provider(dependency: int) -> ExtendedStat:
 
 def level_stat_provider(target: StatProps) -> StatProvider_:
     def _provider(dependency: int) -> ExtendedStat:
-        return ExtendedStat(level_stat=LevelStat.model_validate({target: dependency}))
+        return ExtendedStat(
+            level_stat=LevelStat.model_validate({target.value: dependency})
+        )
 
     return _provider
 
