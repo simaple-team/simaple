@@ -80,6 +80,10 @@ class GearLoader(ABC):
     def load_gear_related_stat(self, character_name: str) -> ExtendedStat:
         pass
 
+    @abstractmethod
+    def get_combat_power_weapon_replacement(self, character_name: str) -> Stat:
+        ...
+
 
 class CharacterBasicLoader(ABC):
     @abstractmethod
@@ -132,7 +136,7 @@ class CharacterSkillLoader(ABC):
         character_name: str,
     ) -> tuple[ExtendedStat, bool]:
         """
-        0차 스킬로부터 얻는 패시브 스탯을 반환합니다.
+        전투력 계산에 포함되는 0차 스킬의 효과 총계를 반환합니다.
         더불어, 해방 무기 장착 여부도 반환합니다.
         """
         pass

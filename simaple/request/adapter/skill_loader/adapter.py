@@ -3,7 +3,6 @@ from simaple.request.adapter.skill_loader._converter import (
     compute_hexa_stat,
     compute_passive_skill_stat,
     get_zero_order_skill_effect,
-    get_combat_power_related_stat,
 )
 from simaple.request.external.nexon.api.character.skill import (
     get_every_skill_levels,
@@ -48,7 +47,6 @@ class NexonAPICharacterSkillLoader(CharacterSkillLoader):
         )
         return get_zero_order_skill_effect(response)
 
-
     def load_combat_power_related_stat(
         self,
         character_name: str,
@@ -59,7 +57,7 @@ class NexonAPICharacterSkillLoader(CharacterSkillLoader):
                 "character_skill_grade": "0",
             },
         )
-        return get_combat_power_related_stat(response)
+        return get_zero_order_skill_effect(response, ["연합의 의지"])
 
     def load_hexa_skill_levels(
         self, character_name: str

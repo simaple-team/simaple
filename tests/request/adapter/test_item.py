@@ -1,7 +1,12 @@
 from simaple.core import ActionStat, Stat
 from simaple.gear.gear_repository import GearRepository
 from simaple.request.adapter.gear_loader._cashitem_converter import get_cash_item_stat
-from simaple.request.adapter.gear_loader._converter import get_equipments, get_symbols
+from simaple.request.adapter.gear_loader._converter import (
+    _get_regularized_weapon,
+    get_equipments,
+    get_symbols,
+    get_weapon_replacement,
+)
 from simaple.request.adapter.gear_loader._gearset_converter import get_equipment_stat
 from simaple.request.adapter.gear_loader._pet_converter import (
     get_pet_equip_stat_from_response,
@@ -73,3 +78,41 @@ def test_get_equipment_stat(character_item_equipment_response: CharacterItemEqui
 def test_get_set_item_stats(set_effect_response: SetEffectResponse):
     stat = get_set_item_stats(set_effect_response)
     assert stat.critical_damage == 5
+
+
+def test_get_regularized_weapon() -> None:
+    gear_repository = GearRepository()
+
+    regularized_weapon = _get_regularized_weapon(
+        "제네시스 스태프",
+        Stat.model_validate(
+            {
+                "INT": 55,
+                "MMP": 3000,
+                "attack_power": 92,
+                "magic_attack": 250,
+            }
+        ),
+        22,
+        Stat(magic_attack=72),
+    )
+    assert regularized_weapon.sum_stat() == Stat(
+        INT=350.0,
+        LUK=295.0,
+        MHP=255.0,
+        MMP=3255.0,
+        attack_power=541.0,
+        boss_damage_multiplier=30.0,
+        magic_attack=832.0,
+        ignored_defence=20.0,
+    )
+
+
+def test_get_weapon_replacement(
+    character_item_equipment_response: CharacterItemEquipment,
+):
+    gear_repository = GearRepository()
+    resp = get_weapon_replacement(character_item_equipment_response, gear_repository)
+    assert resp == Stat(
+        magic_attack=-173.0,
+    )

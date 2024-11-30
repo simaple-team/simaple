@@ -7,10 +7,10 @@ def test_propensity_response(union_artifact_response):
     assert artifact.get_extended_stat() == ExtendedStat.model_validate(
         {
             "stat": {
-                "INT_static": 150,
-                "STR_static": 150,
-                "DEX_static": 150,
-                "LUK_static": 150,
+                "INT": 150,
+                "STR": 150,
+                "DEX": 150,
+                "LUK": 150,
                 "attack_power": 30,
                 "magic_attack": 30,
                 "critical_rate": 20,

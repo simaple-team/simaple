@@ -19,8 +19,8 @@ def test_union_raiders_response(character_union_raiders_response):
     "expression, expected",
     [
         ("크리티컬 데미지 20.00% 증가", ExtendedStat(stat=Stat(critical_damage=20.00))),
-        ("INT 25 증가", ExtendedStat(stat=Stat(INT_static=25))),
-        ("LUK 5 증가", ExtendedStat(stat=Stat(LUK_static=5))),
+        ("INT 25 증가", ExtendedStat(stat=Stat(INT=25))),
+        ("LUK 5 증가", ExtendedStat(stat=Stat(LUK=5))),
         (
             "보스 몬스터 공격 시 데미지 40% 증가",
             ExtendedStat(stat=Stat(boss_damage_multiplier=40)),
