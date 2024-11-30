@@ -102,7 +102,7 @@ class DamageLogic(BaseModel, metaclass=TaggedNamespacedABCMeta(kind="DamageLogic
     def get_compat_power(self, stat: Stat, use_genesis_weapon: bool = True) -> float:
         return (
             (self.get_base_stat_factor(stat) * 0.01)
-            * (self.get_attack_type_factor(stat))
+            * int(self.get_attack_type_factor(stat))
             * (1 + (stat.boss_damage_multiplier + stat.damage_multiplier) * 0.01)
             * (1 + 0.01 * (35 + stat.critical_damage))
             * (1 + (0.1 if use_genesis_weapon else 0))

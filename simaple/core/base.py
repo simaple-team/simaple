@@ -232,15 +232,15 @@ class Stat(BaseModel):
     def get(self, prop: StatProps):
         return getattr(self, prop.value)
 
-    def get_base_stat_coefficient(self, base_stat_type: BaseStatType) -> float:
+    def get_base_stat_coefficient(self, base_stat_type: BaseStatType) -> int:
         if base_stat_type == BaseStatType.STR:
-            return self.STR * (self.STR_multiplier * 0.01 + 1) + self.STR_static
+            return int(self.STR * (self.STR_multiplier * 0.01 + 1) + self.STR_static)
         if base_stat_type == BaseStatType.DEX:
-            return self.DEX * (self.DEX_multiplier * 0.01 + 1) + self.DEX_static
+            return int(self.DEX * (self.DEX_multiplier * 0.01 + 1) + self.DEX_static)
         if base_stat_type == BaseStatType.INT:
-            return self.INT * (self.INT_multiplier * 0.01 + 1) + self.INT_static
+            return int(self.INT * (self.INT_multiplier * 0.01 + 1) + self.INT_static)
         if base_stat_type == BaseStatType.LUK:
-            return self.LUK * (self.LUK_multiplier * 0.01 + 1) + self.LUK_static
+            return int(self.LUK * (self.LUK_multiplier * 0.01 + 1) + self.LUK_static)
 
         raise ValueError
 
