@@ -10,55 +10,55 @@ data:
   effects: 
   - {}
   - stat:
-      STR_static: 15
-      DEX_static: 15
-      INT_static: 15
-      LUK_static: 15
+      STR: 15
+      DEX: 15
+      INT: 15
+      LUK: 15
   - stat:
-      STR_static: 30
-      DEX_static: 30
-      INT_static: 30
-      LUK_static: 30
+      STR: 30
+      DEX: 30
+      INT: 30
+      LUK: 30
   - stat:
-      STR_static: 45
-      DEX_static: 45
-      INT_static: 45
-      LUK_static: 45
+      STR: 45
+      DEX: 45
+      INT: 45
+      LUK: 45
   - stat:
-      STR_static: 60
-      DEX_static: 60
-      INT_static: 60
-      LUK_static: 60
+      STR: 60
+      DEX: 60
+      INT: 60
+      LUK: 60
   - stat:
-      STR_static: 75
-      DEX_static: 75
-      INT_static: 75
-      LUK_static: 75
+      STR: 75
+      DEX: 75
+      INT: 75
+      LUK: 75
   - stat:
-      STR_static: 90
-      DEX_static: 90
-      INT_static: 90
-      LUK_static: 90
+      STR: 90
+      DEX: 90
+      INT: 90
+      LUK: 90
   - stat:
-      STR_static: 105
-      DEX_static: 105
-      INT_static: 105
-      LUK_static: 105
+      STR: 105
+      DEX: 105
+      INT: 105
+      LUK: 105
   - stat:
-      STR_static: 120
-      DEX_static: 120
-      INT_static: 120
-      LUK_static: 120
+      STR: 120
+      DEX: 120
+      INT: 120
+      LUK: 120
   - stat:
-      STR_static: 135
-      DEX_static: 135
-      INT_static: 135
-      LUK_static: 135
+      STR: 135
+      DEX: 135
+      INT: 135
+      LUK: 135
   - stat:
-      STR_static: 150
-      DEX_static: 150
-      INT_static: 150
-      LUK_static: 150
+      STR: 150
+      DEX: 150
+      INT: 150
+      LUK: 150
 ---
 kind: ArtifactEffect 
 version: simaple.io/ArtifactEffect

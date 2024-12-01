@@ -3,7 +3,11 @@ from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository
 from simaple.gear.symbol_gear import SymbolGear
 from simaple.request.adapter.gear_loader._cashitem_converter import get_cash_item_stat
-from simaple.request.adapter.gear_loader._converter import get_equipments, get_symbols
+from simaple.request.adapter.gear_loader._converter import (
+    get_equipments,
+    get_symbols,
+    get_weapon_replacement,
+)
 from simaple.request.adapter.gear_loader._gearset_converter import get_equipment_stat
 from simaple.request.adapter.gear_loader._pet_converter import (
     get_pet_equip_stat_from_response,
@@ -64,3 +68,10 @@ class NexonAPIGearLoader(GearLoader):
         return equipment_stat + ExtendedStat(
             stat=(pet_equipment_stat + symbol_stat + set_item_stat + cash_item_stat)
         )
+
+    def get_combat_power_weapon_replacement(self, character_name: str) -> Stat:
+        resp = self._client.session(character_name).request(
+            get_character_item_equipment_response
+        )
+
+        return get_weapon_replacement(resp, self._gear_repository)

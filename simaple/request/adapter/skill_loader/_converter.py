@@ -257,6 +257,7 @@ def _get_passive_skill_effect_from_description(
 
 def get_zero_order_skill_effect(
     response: CharacterSkillResponse,
+    ignored_skill_names: list[str] = [],
 ) -> tuple[ExtendedStat, bool]:
     """
     0차 스킬의 효과를 추정합니다.
@@ -265,7 +266,7 @@ def get_zero_order_skill_effect(
         skill["skill_name"] for skill in response["character_skill"]
     ]
 
-    _ignored_skill_names = []
+    _ignored_skill_names = ignored_skill_names
     _skill_effect_map = {
         skill["skill_name"]: _get_passive_skill_effect_from_description(skill)
         for skill in response["character_skill"]

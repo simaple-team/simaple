@@ -47,6 +47,18 @@ class NexonAPICharacterSkillLoader(CharacterSkillLoader):
         )
         return get_zero_order_skill_effect(response)
 
+    def load_combat_power_related_stat(
+        self,
+        character_name: str,
+    ) -> tuple[ExtendedStat, bool]:
+        response = self._client.session(character_name).request(
+            get_skill_response,
+            {
+                "character_skill_grade": "0",
+            },
+        )
+        return get_zero_order_skill_effect(response, ["연합의 의지"])
+
     def load_hexa_skill_levels(
         self, character_name: str
     ) -> tuple[dict[str, int], dict[str, int]]:

@@ -120,5 +120,66 @@
     
         "zero": "라피스 9형",
         "kinesis": "아케인셰이드 ESP리미터"
+    },
+
+    "제네시스 무기": {
+        "hero": "제네시스 투핸드소드",
+        "darkknight": "제네시스 스피어",
+        "paladin": "제네시스 투핸드소드",
+    
+        "bishop": "제네시스 스태프",
+        "archmagefb": "제네시스 스태프",
+        "archmagetc": "제네시스 스태프",
+    
+        "nightlord": "제네시스 가즈",
+        "shadower": "제네시스 대거",
+        "dualblade": "제네시스 대거",
+    
+        "bowmaster": "제네시스 보우",
+        "sniper": "제네시스 크로스보우",
+        "pathfinder": "제네시스 에인션트 보우",
+    
+        "corsair": "제네시스 피스톨",
+        "buccaneer": "제네시스 클로",
+        "cannoneer": "제네시스 시즈건",
+    
+        "soulmaster": "제네시스 투핸드소드",
+        "flamewizard": "제네시스 스태프",
+        "windbreaker": "제네시스 보우",
+        "nightwalker" : "제네시스 가즈",
+        "striker": "제네시스 클로",
+    
+        "mihile": "제네시스 세이버",
+    
+        "demonavenger": "제네시스 데스페라도",
+        "demonslayer": "제네시스 해머",
+    
+        "battlemage": "제네시스 스태프",
+        "wildhunter": "제네시스 크로스보우",
+        "mechanic": "제네시스 피스톨",
+        "zenon": "제네시스 에너지체인",
+        "blaster": "제네시스 엘라하",
+    
+        "evan": "제네시스 스태프",
+        "luminous": "제네시스 샤이닝로드",
+        "mercedes": "제네시스 듀얼보우건",
+        "phantom": "제네시스 케인",
+        "eunwol": "제네시스 클로",
+        "aran": "제네시스 폴암",
+    
+        "kaiser": "제네시스 투핸드소드",
+        "kain": "제네시스 브레스 슈터",
+        "cadena": "제네시스 체인",
+        "angelicbuster": "제네시스 소울슈터",
+    
+        "adele": "제네시스 튜너",
+        "illium": "제네시스 매직 건틀렛",
+        "ark": "제네시스 클로",
+    
+        "lara": "제네시스 완드",
+        "hoyoung": "제네시스 창세선",
+    
+        "zero": "제네시스 라피스",
+        "kinesis": "제네시스 ESP리미터"
     }
 }

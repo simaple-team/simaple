@@ -1,8 +1,13 @@
 from loguru import logger
 
 from simaple.core import Stat
+from simaple.core.base import AttackType
+from simaple.data.baseline.patch import kms_weapon_alias
+from simaple.gear.compute.bonus import BonusCalculator
 from simaple.gear.gear import Gear
 from simaple.gear.gear_repository import GearRepository
+from simaple.gear.improvements.bonus import AttackTypeBonus
+from simaple.gear.improvements.starforce import Starforce
 from simaple.gear.symbol_gear import SymbolGear
 from simaple.request.adapter.gear_loader._potential_converter import (
     get_potential,
@@ -111,6 +116,93 @@ def get_equipments(
         for item_element in item_equipment["item_equipment"]
     ]
     return gears
+
+
+def _get_regularized_weapon(
+    weapon_name: str, add_option: Stat, starforce: int, etc_option: Stat
+):
+    gear_repository = GearRepository()
+    calculator = BonusCalculator()
+
+    weapon_class = f"{weapon_name.split()[0]} 무기"
+    weapon = gear_repository.get_by_name(weapon_name)
+    reference_weapon = gear_repository.get_by_name(
+        kms_weapon_alias()[weapon_class]["bowmaster"]
+    )
+
+    bonuses = calculator.compute(add_option, weapon)
+    uses_magic = weapon.meta.base_stat.magic_attack > 0
+
+    my_weapon_attack_ref = (
+        weapon.meta.base_stat.magic_attack
+        if uses_magic
+        else weapon.meta.base_stat.attack_power
+    )
+    reference_weapon_attack_ref = reference_weapon.meta.base_stat.attack_power
+    delta = reference_weapon_attack_ref - my_weapon_attack_ref
+    base_stat_delta = (
+        Stat(magic_attack=delta) if uses_magic else Stat(attack_power=delta)
+    )
+    weapon = weapon.add_stat(base_stat_delta)
+
+    weapon = weapon.add_stat(etc_option)
+    improvement = Starforce(star=starforce).calculate_improvement(
+        weapon.meta, weapon.sum_stat()
+    )
+    weapon = weapon.add_stat(improvement)
+
+    attack_power_bonus = 0
+    for bonus in bonuses:
+        if not isinstance(bonus, AttackTypeBonus):
+            continue
+
+        bonus.attack_type = AttackType.attack_power
+        attack_power_bonus = int(bonus.calculate_improvement(
+            reference_weapon.meta
+        ).attack_power)
+
+    if uses_magic:
+        add_option = add_option + Stat(
+            magic_attack=(attack_power_bonus - add_option.magic_attack)
+        )
+    else:
+        add_option = add_option + Stat(
+            attack_power=(attack_power_bonus - add_option.attack_power)
+        )
+
+    weapon = weapon.add_stat(add_option)
+    return weapon
+
+
+def get_weapon_replacement(
+    item_equipment: CharacterItemEquipment, gear_repository: GearRepository
+) -> Stat:
+    gear_response = [
+        equipment
+        for equipment in item_equipment["item_equipment"]
+        if equipment["item_equipment_slot"] == "무기"
+    ]
+    assert len(gear_response) == 1, "Only one weapon is allowed"
+    weapon_item_element = gear_response[0]
+
+    original_weapon = _get_gear(weapon_item_element, gear_repository)
+    regularized_weapon = _get_regularized_weapon(
+        weapon_item_element["item_name"],
+        _get_stat(weapon_item_element["item_add_option"]),
+        weapon_item_element["starforce"],
+        _get_stat(weapon_item_element["item_etc_option"]),
+    )
+
+    return Stat(
+        attack_power=regularized_weapon.stat.attack_power
+        - original_weapon.stat.attack_power,
+        magic_attack=regularized_weapon.stat.magic_attack
+        - original_weapon.stat.magic_attack,
+        INT=regularized_weapon.stat.INT - original_weapon.stat.INT,
+        DEX=regularized_weapon.stat.DEX - original_weapon.stat.DEX,
+        STR=regularized_weapon.stat.STR - original_weapon.stat.STR,
+        LUK=regularized_weapon.stat.LUK - original_weapon.stat.LUK,
+    )
 
 
 def _get_symbol(symbol_element: CharacterSymbolElement) -> SymbolGear:

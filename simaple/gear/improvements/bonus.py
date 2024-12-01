@@ -3,7 +3,7 @@ from typing import Annotated, Literal, Optional, Tuple
 
 from pydantic import conint
 
-from simaple.core import Stat
+from simaple.core import Stat, StatProps
 from simaple.core.base import AttackType, BaseStatType
 from simaple.gear.gear import GearMeta
 from simaple.gear.gear_type import GearType
@@ -93,11 +93,9 @@ class AttackTypeBonus(Bonus):
                 else [1, 2.222, 3.63, 5.325, 7.32, 8.777, 10.25]
             )
 
-            basis = (
-                meta.base_stat.attack_power
-                if meta.base_stat.attack_power > meta.base_stat.magic_attack
-                else meta.base_stat.magic_attack
-            )
+            basis = meta.base_stat.get(StatProps(self.attack_type.value))
+            if basis == 0:
+                basis = meta.base_stat.attack_power
 
             if meta.type in (GearType.sword_zb, GearType.sword_zl):
                 if meta.type == GearType.sword_zl:

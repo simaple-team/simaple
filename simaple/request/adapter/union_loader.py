@@ -157,13 +157,13 @@ def _get_stat_from_occupation_description(
 
     match (option_name, is_percentage):
         case ("STR", False):
-            return ExtendedStat(stat=Stat(STR_static=option_value))
+            return ExtendedStat(stat=Stat(STR=option_value))
         case ("DEX", False):
-            return ExtendedStat(stat=Stat(DEX_static=option_value))
+            return ExtendedStat(stat=Stat(DEX=option_value))
         case ("INT", False):
-            return ExtendedStat(stat=Stat(INT_static=option_value))
+            return ExtendedStat(stat=Stat(INT=option_value))
         case ("LUK", False):
-            return ExtendedStat(stat=Stat(LUK_static=option_value))
+            return ExtendedStat(stat=Stat(LUK=option_value))
         case ("마력", False):
             return ExtendedStat(stat=Stat(magic_attack=option_value))
         case ("공격력", False):
