@@ -676,3 +676,30 @@ data:
   hit: 0.65
   disable_validity: True
   v_improvement: 2
+---
+kind: Component
+version: simaple.io/DOTEmittingAttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 메기도 플레임 VI
+    id: 2121052-0
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 메기도 플레임 VI
+  - ArithmeticPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 메기도 플레임
+data:
+  id: 2121052-vi
+  name: 메기도 플레임 VI
+  delay: 690
+  cooldown_duration: 50_000
+  damage: "{{ (330 + 11 * skill_level) * (1 + 0.55 * 10) / 11 }}"
+  hit: "{{ 5 * 11 }}"
+  v_improvement: 2
+
+  dot_damage: "{{ 770 + 7 * skill_level }}"
+  dot_lasting_duration: 30_000
