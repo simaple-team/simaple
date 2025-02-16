@@ -434,11 +434,11 @@ data:
   binds:
     drain_stack: ".퍼번트 드레인.drain_stack"
 
-  first_damage: "{{ 3600 + 120 * skill_level }}"
-  first_hit: 48
+  first_damage: "{{ 270 + 9 * skill_level }}"
+  first_hit: "{{ 12 * 17 * 2 }}" # 버그로 2회 발생함
 
-  second_damage: "{{ 2700 + 90 * skill_level }}"
-  second_hit: 96
+  second_damage: "{{ 260 + 9 * skill_level }}"
+  second_hit: "{{ 15 * 42 }}"
 
   cooldown_duration: 360_000
   delay: 6600
