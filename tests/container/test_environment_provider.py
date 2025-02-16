@@ -29,6 +29,13 @@ def test_minimal_environment_provider_passes_skill_levels():
         "플레임 스윕 VI": 1,
         "미스트 이럽션 VI": 1,
         "플레임 헤이즈 VI": 1,
+        "메테오 VI": 1,
+        "메테오 VI(패시브)": 1,
+        "이그나이트 VI": 1,
+        "이프리트 VI": 1,
+        "파이어 오라 VI": 1,
+        "메기도 플레임 VI": 1,
+        "포이즌 리젼 VI": 1,
     }
 
 
@@ -59,4 +66,11 @@ def test_baseline_environment_provider_passes_skill_levels():
         "플레임 스윕 VI": 1,
         "미스트 이럽션 VI": 1,
         "플레임 헤이즈 VI": 1,
+        "메테오 VI": 1,
+        "메테오 VI(패시브)": 1,
+        "이그나이트 VI": 1,
+        "이프리트 VI": 1,
+        "파이어 오라 VI": 1,
+        "메기도 플레임 VI": 1,
+        "포이즌 리젼 VI": 1,
     }

@@ -77,6 +77,13 @@ class Consumable(Entity):
     def consume(self):
         self.stack -= 1
 
+    def consume_all(self):
+        self.stack = 0
+
+    def reset(self, stack: int, time_left: float):
+        self.stack = stack
+        self.time_left = time_left
+
 
 class Cycle(Entity):
     tick: int

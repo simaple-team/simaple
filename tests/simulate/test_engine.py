@@ -45,9 +45,9 @@ provider:
         combat_orders_level: 1
 ---
 CAST "오버로드 마나"
-CAST "이프리트"
+CAST "이프리트 VI"
 CAST "메디테이션"
-CAST "파이어 오라"
+CAST "파이어 오라 VI"
 CAST "인피니티"
 ELAPSE 78000
 
@@ -59,7 +59,7 @@ CAST "플레임 헤이즈 VI"
 CAST "에픽 어드벤쳐"
 CAST "소울 컨트랙트"
 CAST "리스트레인트 링"
-CAST "메기도 플레임"
+CAST "메기도 플레임 VI"
 CAST "인페르날 베놈"
 CAST "퓨리 오브 이프리트"
 CAST "포이즌 노바"

@@ -234,7 +234,9 @@ metadata:
 patch:
   - SkillLevelPatch
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 메테오
 data:
   id: 2121007-1
   name: 메테오(패시브)
@@ -434,11 +436,11 @@ data:
   binds:
     drain_stack: ".퍼번트 드레인.drain_stack"
 
-  first_damage: "{{ 3600 + 120 * skill_level }}"
-  first_hit: 48
+  first_damage: "{{ 270 + 9 * skill_level }}"
+  first_hit: "{{ 12 * 17 * 2 }}" # 버그로 2회 발생함
 
-  second_damage: "{{ 2700 + 90 * skill_level }}"
-  second_hit: 96
+  second_damage: "{{ 260 + 9 * skill_level }}"
+  second_hit: "{{ 15 * 42 }}"
 
   cooldown_duration: 360_000
   delay: 6600
@@ -454,7 +456,7 @@ metadata:
 patch:
   - name: SkillLevelPatch
     payload:
-      level_reference_name: 플레임 스윕
+      level_reference_name: 플레임 스윕 VI
   - ArithmeticPatch
   - name: VSkillImprovementPatch
     payload:
@@ -488,7 +490,7 @@ metadata:
 patch:
   - name: SkillLevelPatch
     payload:
-      level_reference_name: 미스트 이럽션
+      level_reference_name: 미스트 이럽션 VI
   - ArithmeticPatch
   - name: VSkillImprovementPatch
     payload:
@@ -519,7 +521,7 @@ metadata:
 patch:
   - name: SkillLevelPatch
     payload:
-      level_reference_name: 플레임 헤이즈
+      level_reference_name: 플레임 헤이즈 VI
   - ArithmeticPatch
   - name: VSkillImprovementPatch
     payload:
@@ -535,4 +537,243 @@ data:
   v_improvement: 2
 
   dot_damage: "{{ 205 + 4 * skill_level }}"
+  dot_lasting_duration: 20_000
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 이그나이트 VI
+    id: 2100010-vi
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 이그나이트 VI
+  - ArithmeticPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 이그나이트
+data:
+  id: 2100010-vi
+  name: 이그나이트 VI
+  delay: 0
+  damage: "{{ 45 + skill_level }}"
+  hit: 4.5
+  cooldown_duration: 0
+  disable_validity: True
+  v_improvement: 4
+---
+kind: Component
+version: simaple.io/IfrittComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 이프리트 VI
+    id: 2121005-0
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 이프리트 VI
+  - ArithmeticPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 이프리트
+data:
+  id: 2121005-vi
+  name: 이프리트 VI
+  damage: 0
+  delay: 600
+  cooldown_duration: 0
+  hit: 0
+
+  periodic_initial_delay: 1_890 # TODO: check summon.summoned / summon.summoned(810?) + summon.attack1.attackAfter(1080)
+  periodic_interval: 3_030
+  periodic_damage: "{{ 168 + skill_level * 2 }}"
+  periodic_hit: 3
+  lasting_duration: 270_000
+
+  v_improvement: 2
+
+  dot_damage: "{{ 155 + 2 * skill_level }}"
+  dot_lasting_duration: 4_000
+---
+kind: Component
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 파이어 오라 VI
+    id: 2121054-0
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 파이어 오라 VI
+  - ArithmeticPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 파이어 오라
+data:
+  id: 2121054-vi
+  name: 파이어 오라 VI
+  damage: 0
+  delay: 0
+  hit: 0
+  cooldown_duration: 0
+
+  periodic_interval: 3_000
+  periodic_damage: "{{ 440 + skill_level * 12 }}"
+  periodic_hit: 2
+  lasting_duration: 999_999_999
+
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 메테오 VI
+    id: 2121007-vi
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 메테오 VI
+  - ArithmeticPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 메테오
+data:
+  id: 2121007-vi
+  name: 메테오 VI
+  cooldown_duration: 45000
+  delay: 690
+  damage: "{{ 340 + 12 * skill_level }}"
+  hit: 12
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 메테오 VI(패시브)
+    id: 2121007-vi1
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 메테오 VI
+  - ArithmeticPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 메테오
+data:
+  id: 2121007-vi1
+  name: 메테오 VI(패시브)
+  delay: 0
+  cooldown_duration: 0
+  damage: "{{ 233 + 5 * skill_level }}"
+  hit: 0.65
+  disable_validity: True
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/DOTEmittingAttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 메기도 플레임 VI
+    id: 2121052-0
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 메기도 플레임 VI
+  - ArithmeticPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 메기도 플레임
+data:
+  id: 2121052-vi
+  name: 메기도 플레임 VI
+  delay: 690
+  cooldown_duration: 50_000
+  damage: "{{ (330 + 11 * skill_level) * (1 + 0.55 * 10) / 11 }}"
+  hit: "{{ 5 * 11 }}"
+  v_improvement: 2
+
+  dot_damage: "{{ 770 + 7 * skill_level }}"
+  dot_lasting_duration: 30_000
+
+---
+kind: Component
+version: simaple.io/PoisonRegionComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 포이즌 리젼
+    id: 2111013-0
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 포이즌 리젼
+  - ArithmeticPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 포이즌 리젼
+data:
+  id: 2111013-0
+  name: 포이즌 리젼
+  delay: 750
+  cooldown_duration: 60_000
+
+  lasting_duration: 60_000
+
+  explode_damage: 200
+  explode_hit: 4
+  explode_multiple: 3
+
+  stack_interval: 750
+  maximum_stack: 3
+
+  v_improvement: 2
+
+  default_skill_level: 14
+  dot_damage: "{{ 204 + 3 * skill_level }}"
+  dot_lasting_duration: 20_000
+
+---
+kind: Component
+version: simaple.io/PoisonRegionComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 포이즌 리젼 VI
+    id: 2111013-vi
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 포이즌 리젼 VI
+  - ArithmeticPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 포이즌 리젼
+data:
+  id: 2111013-vi
+  name: 포이즌 리젼 VI
+  delay: 750
+  cooldown_duration: 60_000
+
+  lasting_duration: 60_000
+
+  explode_damage: "{{ 220 + 4 * skill_level }}"
+  explode_hit: 4
+  explode_multiple: 3
+
+  stack_interval: 750
+  maximum_stack: 3
+
+  v_improvement: 2
+
+  default_skill_level: 14
+  dot_damage: "{{ 217 + 3 * skill_level }}"
   dot_lasting_duration: 20_000
