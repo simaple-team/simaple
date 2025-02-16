@@ -20,7 +20,7 @@ def archmagefb_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("메테오"))
     usecase.use_component(component("메테오(패시브)"))
     usecase.use_component(component("이프리트 VI"))
-    usecase.use_component(component("파이어 오라"))
+    usecase.use_component(component("파이어 오라 VI"))
     usecase.use_component(component("이그나이트 VI"))
     usecase.use_component(component("포이즌 미스트"))
     usecase.use_component(component("포이즌 체인"))

@@ -36,6 +36,7 @@ data:
     플레임 헤이즈: 플레임 헤이즈 VI
     이그나이트: 이그나이트 VI
     이프리트: 이프리트 VI
+    파이어 오라: 파이어 오라 VI
   component_groups:
     - archmagefb
     - common

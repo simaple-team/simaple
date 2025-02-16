@@ -595,3 +595,33 @@ data:
 
   dot_damage: "{{ 155 + 2 * skill_level }}"
   dot_lasting_duration: 4_000
+---
+kind: Component
+version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 파이어 오라 VI
+    id: 2121054-0
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 파이어 오라 VI
+  - ArithmeticPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 파이어 오라
+data:
+  id: 2121054-vi
+  name: 파이어 오라 VI
+  damage: 0
+  delay: 0
+  hit: 0
+  cooldown_duration: 0
+
+  periodic_interval: 3_000
+  periodic_damage: "{{ 440 + skill_level * 12 }}"
+  periodic_hit: 2
+  lasting_duration: 999_999_999
+
+  v_improvement: 2
