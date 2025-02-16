@@ -561,3 +561,37 @@ data:
   cooldown_duration: 0
   disable_validity: True
   v_improvement: 4
+---
+kind: Component
+version: simaple.io/IfrittComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 이프리트 VI
+    id: 2121005-0
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 이프리트 VI
+  - ArithmeticPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 이프리트
+data:
+  id: 2121005-vi
+  name: 이프리트 VI
+  damage: 0
+  delay: 600
+  cooldown_duration: 0
+  hit: 0
+
+  periodic_initial_delay: 1_890 # TODO: check summon.summoned / summon.summoned(810?) + summon.attack1.attackAfter(1080)
+  periodic_interval: 3_030
+  periodic_damage: "{{ 168 + skill_level * 2 }}"
+  periodic_hit: 3
+  lasting_duration: 270_000
+
+  v_improvement: 2
+
+  dot_damage: "{{ 155 + 2 * skill_level }}"
+  dot_lasting_duration: 4_000
