@@ -454,7 +454,7 @@ metadata:
 patch:
   - name: SkillLevelPatch
     payload:
-      level_reference_name: 플레임 스윕
+      level_reference_name: 플레임 스윕 VI
   - ArithmeticPatch
   - name: VSkillImprovementPatch
     payload:
@@ -488,7 +488,7 @@ metadata:
 patch:
   - name: SkillLevelPatch
     payload:
-      level_reference_name: 미스트 이럽션
+      level_reference_name: 미스트 이럽션 VI
   - ArithmeticPatch
   - name: VSkillImprovementPatch
     payload:
@@ -519,7 +519,7 @@ metadata:
 patch:
   - name: SkillLevelPatch
     payload:
-      level_reference_name: 플레임 헤이즈
+      level_reference_name: 플레임 헤이즈 VI
   - ArithmeticPatch
   - name: VSkillImprovementPatch
     payload:
@@ -536,3 +536,28 @@ data:
 
   dot_damage: "{{ 205 + 4 * skill_level }}"
   dot_lasting_duration: 20_000
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 이그나이트 VI
+    id: 2100010-vi
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 이그나이트 VI
+  - ArithmeticPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 이그나이트
+data:
+  id: 2100010-vi
+  name: 이그나이트 VI
+  delay: 0
+  damage: "{{ 45 + skill_level }}"
+  hit: 4.5
+  cooldown_duration: 0
+  disable_validity: True
+  v_improvement: 4

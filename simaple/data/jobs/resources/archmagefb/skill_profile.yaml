@@ -34,6 +34,7 @@ data:
     플레임 스윕: 플레임 스윕 VI
     미스트 이럽션: 미스트 이럽션 VI
     플레임 헤이즈: 플레임 헤이즈 VI
+    이그나이트: 이그나이트 VI
   component_groups:
     - archmagefb
     - common
