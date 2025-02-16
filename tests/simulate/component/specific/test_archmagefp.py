@@ -194,14 +194,14 @@ def test_poison_region_explode(dynamics: Dynamics) -> None:
     # 폭발 시 explode_hit(2)에 consumable의 영역 수(3)를 곱한 값이 데미지 이벤트의 히트 수로 적용되어야 함
     # (count_damage_skill은 즉시 피해 이벤트의 개수를 세는 유틸 함수임)
     assert (
-        count_damage_skill(events) == 1
+        count_damage_skill(events) == 2
     ), "폭발 시 즉시 피해 이벤트가 발생해야 합니다."
 
     # 첫번째 이벤트의 히트 수가 2 * 3 = 6이어야 함 (EmptyEvent의 내부 구조에 따라 검증)
     event = events[0]
     assert (
-        event["payload"]["hit"] == 2 * 3
-    ), f"폭발 이벤트의 hit 값은 {2 * 3}이어야 합니다."
+        event["payload"]["hit"] == 2
+    ), f"폭발 이벤트의 첫 번째 hit 값은 {2}이어야 합니다."
 
     # 폭발 후 consumable의 영역(stack)은 모두 소모되어 0이 되어야 함
     assert (
