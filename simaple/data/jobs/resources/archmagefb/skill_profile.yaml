@@ -40,6 +40,7 @@ data:
     메테오: 메테오 VI
     메테오(패시브): 메테오 VI(패시브)
     메기도 플레임: 메기도 플레임 VI
+    포이즌 리젼: 포이즌 리젼 VI
   component_groups:
     - archmagefb
     - common
