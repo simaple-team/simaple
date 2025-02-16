@@ -234,7 +234,9 @@ metadata:
 patch:
   - SkillLevelPatch
   - ArithmeticPatch
-  - VSkillImprovementPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 메테오
 data:
   id: 2121007-1
   name: 메테오(패시브)
@@ -624,4 +626,53 @@ data:
   periodic_hit: 2
   lasting_duration: 999_999_999
 
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 메테오 VI
+    id: 2121007-vi
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 메테오 VI
+  - ArithmeticPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 메테오
+data:
+  id: 2121007-vi
+  name: 메테오 VI
+  cooldown_duration: 45000
+  delay: 690
+  damage: "{{ 340 + 12 * skill_level }}"
+  hit: 12
+  v_improvement: 2
+---
+kind: Component
+version: simaple.io/AttackSkillComponent
+metadata:
+  label:
+    group: archmagefb
+    name: 메테오 VI(패시브)
+    id: 2121007-vi1
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 메테오 VI
+  - ArithmeticPatch
+  - name: VSkillImprovementPatch
+    payload:
+      level_reference_name: 메테오
+data:
+  id: 2121007-vi1
+  name: 메테오 VI(패시브)
+  delay: 0
+  cooldown_duration: 0
+  damage: "{{ 233 + 5 * skill_level }}"
+  hit: 0.65
+  disable_validity: True
   v_improvement: 2

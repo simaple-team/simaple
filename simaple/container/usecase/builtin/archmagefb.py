@@ -17,8 +17,8 @@ def archmagefb_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("텔레포트 마스터리"))
     usecase.use_component(component("포이즌 노바"))
     usecase.use_component(component("도트 퍼니셔"))
-    usecase.use_component(component("메테오"))
-    usecase.use_component(component("메테오(패시브)"))
+    usecase.use_component(component("메테오 VI"))
+    usecase.use_component(component("메테오 VI(패시브)"))
     usecase.use_component(component("이프리트 VI"))
     usecase.use_component(component("파이어 오라 VI"))
     usecase.use_component(component("이그나이트 VI"))
@@ -48,11 +48,11 @@ def archmagefb_usecase(environment: SimulationEnvironment) -> Usecase:
 
     usecase.listen(("미스트 이럽션 VI", "use"), component("포이즌 노바").reducer("trigger"))
 
-    usecase.listen(("플레임 스윕 VI", "use.emitted.global.damage"), component("메테오(패시브)").reducer("use"))
-    usecase.listen(("플레임 헤이즈 VI", "use.emitted.global.damage"), component("메테오(패시브)").reducer("use"))
-    usecase.listen(("미스트 이럽션 VI", "use.emitted.global.damage"), component("메테오(패시브)").reducer("use"))
-    usecase.listen(("이그나이트 VI", "use.emitted.global.damage"), component("메테오(패시브)").reducer("use"))
-    usecase.listen(("이프리트 VI", "elapse.emitted.global.damage"), component("메테오(패시브)").reducer("use"))
+    usecase.listen(("플레임 스윕 VI", "use.emitted.global.damage"), component("메테오 VI(패시브)").reducer("use"))
+    usecase.listen(("플레임 헤이즈 VI", "use.emitted.global.damage"), component("메테오 VI(패시브)").reducer("use"))
+    usecase.listen(("미스트 이럽션 VI", "use.emitted.global.damage"), component("메테오 VI(패시브)").reducer("use"))
+    usecase.listen(("이그나이트 VI", "use.emitted.global.damage"), component("메테오 VI(패시브)").reducer("use"))
+    usecase.listen(("이프리트 VI", "elapse.emitted.global.damage"), component("메테오 VI(패시브)").reducer("use"))
 
     usecase.listen(("플레임 스윕 VI", "use.emitted.global.damage"), component("이그나이트 VI").reducer("use"))
     usecase.listen(("플레임 헤이즈 VI", "use.emitted.global.damage"), component("이그나이트 VI").reducer("use"))

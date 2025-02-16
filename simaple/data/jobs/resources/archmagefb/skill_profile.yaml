@@ -22,7 +22,6 @@ data:
     - 포이즌 리전
     - 텔레포트 마스터리
     - 메테오
-    - 메테오(패시브)
   hexa_improvement_names:
     - 도트 퍼니셔
     - 포이즌 노바
@@ -37,6 +36,8 @@ data:
     이그나이트: 이그나이트 VI
     이프리트: 이프리트 VI
     파이어 오라: 파이어 오라 VI
+    메테오: 메테오 VI
+    메테오(패시브): 메테오 VI(패시브)
   component_groups:
     - archmagefb
     - common
