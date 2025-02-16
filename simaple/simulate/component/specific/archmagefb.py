@@ -859,9 +859,7 @@ class PoisonRegionComponent(
         state["consumable"] = consumable
 
         return state, [
-            EmptyEvent.dealt(
-                self.explode_damage, self.explode_hit
-            ),
+            EmptyEvent.dealt(self.explode_damage, self.explode_hit),
             EmptyEvent.dealt(
                 self.explode_damage * 0.6, (current_areas - 1) * self.explode_hit
             ),
