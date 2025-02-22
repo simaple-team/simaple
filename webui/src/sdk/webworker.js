@@ -10,7 +10,7 @@ async function loadPyodideAndPackages() {
   });
 
   const micropip = self.pyodide.pyimport("micropip");
-  await micropip.install(["loguru", "lark", "numpy", "pyyaml"]);
+  await micropip.install(["loguru", "lark", "numpy", "pyyaml", "requests"]);
 
   await micropip.install(
     `${location.origin}/${globalThis.SIMAPLE_FILE_NAME}`,
