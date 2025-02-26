@@ -3,8 +3,8 @@ from typing import Callable
 from simaple.container.simulation import SimulationEnvironment, get_skill_components
 from simaple.simulate.component.base import Component
 
-
 ComponentFunc = Callable[[str], Component]
+
 
 def get_component_loader(
     environment: SimulationEnvironment,

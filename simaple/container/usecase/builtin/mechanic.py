@@ -1,7 +1,7 @@
 from simaple.container.simulation import SimulationEnvironment
+from simaple.container.usecase.builtin.common import define_crest_of_the_solar
 from simaple.container.usecase.builtin.util import get_component_loader
 from simaple.simulate.usecase import Usecase
-from simaple.container.usecase.builtin.common import define_crest_of_the_solar
 
 
 def mechanic_usecase(environment: SimulationEnvironment) -> Usecase:
