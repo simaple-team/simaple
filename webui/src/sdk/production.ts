@@ -49,10 +49,10 @@ const pySimaple: PySimaple = {
   runPlan: (plan) => sendMessage({ method: "runPlan", plan }),
   runPlanWithHint: (previousPlan, history, plan) =>
     sendMessage({ method: "runPlanWithHint", previousPlan, history, plan }),
-  getInitialPlanFromBaseline: (baselineEnvironmentProvider) =>
+  getInitialPlanFromMetadata: (metadata) =>
     sendMessage({
-      method: "getInitialPlanFromBaseline",
-      baselineEnvironmentProvider,
+      method: "getInitialPlanFromMetadata",
+      metadata,
     }),
   hasEnvironment: (plan) => sendMessage({ method: "hasEnvironment", plan }),
   provideEnvironmentAugmentedPlan: (plan) =>

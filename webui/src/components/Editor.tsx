@@ -20,6 +20,15 @@ import { useWorkspace } from "../hooks/useWorkspace";
 import { parser } from "../parser";
 import CreateBaselineFileDialog from "./CreateBaselineFileDialog";
 import ErrorDialog from "./ErrorDialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import CreateNexonApiFileDialog from "./CreateNexonApiFileDialog";
+import { Dialog } from "./ui/dialog";
+import { match } from "ts-pattern";
 
 const parserWithMetadata = parser.configure({
   props: [styleTags({})],
@@ -124,6 +133,9 @@ const myTheme = EditorView.theme({
 
 export function Editor() {
   const [isRunning, setIsRunning] = useState(false);
+  const [activeDialog, setActiveDialog] = useState<
+    "baseline" | "nexonApi" | undefined
+  >(undefined);
   const { plan, setPlan, skillNames, run, errorMessage, clearErrorMessage } =
     useWorkspace();
 
@@ -166,9 +178,36 @@ export function Editor() {
         onChange={(value) => setPlan(value)}
       />
       <div className="flex gap-2 p-2">
-        <CreateBaselineFileDialog>
-          <Button variant="outline">새 파일</Button>
-        </CreateBaselineFileDialog>
+        <Dialog
+          open={activeDialog !== undefined}
+          onOpenChange={(open) => !open && setActiveDialog(undefined)}
+        >
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">새 파일</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent collisionPadding={8}>
+              <DropdownMenuItem onSelect={() => setActiveDialog("baseline")}>
+                수동
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => setActiveDialog("nexonApi")}>
+                API
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          {match(activeDialog)
+            .with("baseline", () => (
+              <CreateBaselineFileDialog
+                onSubmit={() => setActiveDialog(undefined)}
+              />
+            ))
+            .with("nexonApi", () => (
+              <CreateNexonApiFileDialog
+                onSubmit={() => setActiveDialog(undefined)}
+              />
+            ))
+            .otherwise(() => null)}
+        </Dialog>
         <Button
           disabled={isRunning || plan.trim().length === 0}
           onClick={handleRun}

@@ -10,6 +10,7 @@ from simaple.api.models.simulation import (
     PlayLogResponse,
     _Report,
 )
+from simaple.container.api_environment_provider import NexonAPIEnvironmentProvider
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.plan_metadata import PlanMetadata
 from simaple.container.simulation import get_damage_calculator, get_skill_components
@@ -107,98 +108,6 @@ def run_plan(
     )
 
 
-def has_environment(plan: str) -> bool:
-    """plan이 environment 필드를 가지고 있는지 확인합니다."""
-    plan_metadata_dict, _ = parse_simaple_runtime(plan.strip())
-    plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
-
-    return plan_metadata.environment is not None and plan_metadata.environment != {}
-
-
-def provide_environment_augmented_plan(plan: str) -> str:
-    """plan을 받아서 environment 필드를 새로 쓴 plan을 반환합니다."""
-    metadata_dict, _ = parse_simaple_runtime(plan.strip())
-    metadata = PlanMetadata.model_validate(metadata_dict)
-
-    if metadata.provider is None:
-        raise ValueError("Character provider is not provided")
-
-    simulation_environment = metadata.provider.get_simulation_environment()
-    metadata.environment = simulation_environment
-    _, original_operations = (
-        plan.split("\n---")[0],
-        "\n---".join(plan.split("\n---")[1:]),
-    )
-
-    augmented_metadata = yaml.safe_dump(
-        json.loads(metadata.model_dump_json()),
-        indent=2,
-        allow_unicode=True,
-    )
-    return f"---\n{augmented_metadata}\n---\n{original_operations}"
-
-
-class MaximumDealingIntervalResult(pydantic.BaseModel):
-    model_config = pydantic.ConfigDict(extra="forbid")
-
-    damage: float
-    start: int
-    end: int
-
-
-def compute_maximum_dealing_interval(
-    plan: str,
-    interval: int,
-) -> MaximumDealingIntervalResult:
-    """
-    interval as ms.
-    """
-    plan_metadata_dict, commands = parse_simaple_runtime(plan.strip())
-
-    plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
-    if plan_metadata.environment is None or plan_metadata.environment == {}:
-        raise ValueError("Environment field is not provided")
-
-    environment = plan_metadata.get_environment()
-    engine = get_engine(environment)
-
-    for command in commands:
-        engine.exec(command)
-
-    report = list(engine.simulation_entries())
-
-    damage, _start, _end = MaximumDealingIntervalFeature(
-        interval=interval
-    ).find_maximum_dealing_interval(report, get_damage_calculator(environment))
-    return MaximumDealingIntervalResult(damage=damage, start=_start, end=_end)
-
-
-def get_initial_plan_from_baseline(
-    environment_provider: BaselineEnvironmentProvider,
-) -> str:
-    """
-    baseline environment provider를 받아서 example plan을 생성합니다.
-    """
-    base_plan = get_example_plan(environment_provider.jobtype)
-    metadata_dict, _ = parse_simaple_runtime(base_plan.strip())
-
-    metadata_dict["provider"] = {
-        "name": environment_provider.get_name(),
-        "data": environment_provider.model_dump(),
-    }
-    metadata = PlanMetadata.model_validate(metadata_dict)
-
-    _, original_operations = (
-        base_plan.split("\n---")[0],
-        "\n---".join(base_plan.split("\n---")[1:]),
-    )
-
-    augmented_metadata = yaml.safe_dump(
-        json.loads(metadata.model_dump_json()), indent=2, allow_unicode=True
-    )
-    return f"---\n{augmented_metadata}\n---\n{original_operations}"
-
-
 def run_plan_with_hint(
     previous_plan: str, previous_history: list[OperationLogResponse], plan: str
 ) -> list[OperationLogResponse]:
@@ -261,6 +170,65 @@ def run_plan_with_hint(
     return previous_history[: cache_count + 1] + new_operation_logs
 
 
+def has_environment(plan: str) -> bool:
+    """plan이 environment 필드를 가지고 있는지 확인합니다."""
+    plan_metadata_dict, _ = parse_simaple_runtime(plan.strip())
+    plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
+
+    return plan_metadata.environment is not None and plan_metadata.environment != {}
+
+
+def provide_environment_augmented_plan(plan: str) -> str:
+    """plan을 받아서 environment 필드를 새로 쓴 plan을 반환합니다."""
+    metadata_dict, _ = parse_simaple_runtime(plan.strip())
+    metadata = PlanMetadata.model_validate(metadata_dict)
+
+    if metadata.provider is None:
+        raise ValueError("Character provider is not provided")
+
+    simulation_environment = metadata.provider.get_simulation_environment()
+    metadata.environment = simulation_environment
+    _, original_operations = (
+        plan.split("\n---")[0],
+        "\n---".join(plan.split("\n---")[1:]),
+    )
+
+    augmented_metadata = yaml.safe_dump(
+        json.loads(metadata.model_dump_json()),
+        indent=2,
+        allow_unicode=True,
+    )
+    return f"---\n{augmented_metadata}\n---\n{original_operations}"
+
+
+def get_initial_plan_from_metadata(
+    metadata_dict: dict,
+) -> str:
+    """
+    provider가 포함된 Metadata dict로부터 example plan을 생성합니다.
+    """
+    metadata = PlanMetadata.model_validate(metadata_dict)
+
+    if metadata.provider is None:
+        raise ValueError("Character provider is not provided")
+
+    simulation_environment = metadata.provider.get_simulation_environment()
+    metadata.environment = simulation_environment
+
+    base_plan = get_example_plan(simulation_environment.jobtype)
+    _, base_plan_operations = (
+        base_plan.split("\n---")[0],
+        "\n---".join(base_plan.split("\n---")[1:]),
+    )
+
+    augmented_metadata = yaml.safe_dump(
+        json.loads(metadata.model_dump_json()),
+        indent=2,
+        allow_unicode=True,
+    )
+    return f"---\n{augmented_metadata}\n---\n{base_plan_operations}"
+
+
 def get_all_component(
     plan: str,
 ) -> list[Component]:
@@ -274,3 +242,38 @@ def get_all_component(
     skills = get_skill_components(environment)
 
     return skills
+
+
+class MaximumDealingIntervalResult(pydantic.BaseModel):
+    model_config = pydantic.ConfigDict(extra="forbid")
+
+    damage: float
+    start: int
+    end: int
+
+
+def compute_maximum_dealing_interval(
+    plan: str,
+    interval: int,
+) -> MaximumDealingIntervalResult:
+    """
+    interval as ms.
+    """
+    plan_metadata_dict, commands = parse_simaple_runtime(plan.strip())
+
+    plan_metadata = PlanMetadata.model_validate(plan_metadata_dict)
+    if plan_metadata.environment is None or plan_metadata.environment == {}:
+        raise ValueError("Environment field is not provided")
+
+    environment = plan_metadata.get_environment()
+    engine = get_engine(environment)
+
+    for command in commands:
+        engine.exec(command)
+
+    report = list(engine.simulation_entries())
+
+    damage, _start, _end = MaximumDealingIntervalFeature(
+        interval=interval
+    ).find_maximum_dealing_interval(report, get_damage_calculator(environment))
+    return MaximumDealingIntervalResult(damage=damage, start=_start, end=_end)

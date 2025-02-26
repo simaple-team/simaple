@@ -3,13 +3,12 @@ import yaml
 
 from simaple.api.base import (
     compute_maximum_dealing_interval,
-    get_initial_plan_from_baseline,
+    get_initial_plan_from_metadata,
     has_environment,
     provide_environment_augmented_plan,
     run_plan,
     run_plan_with_hint,
 )
-from simaple.container.environment_provider import BaselineEnvironmentProvider
 from simaple.container.simulation import SimulationEnvironment
 from simaple.core import JobType
 
@@ -38,7 +37,7 @@ environment:
     weapon_attack_power: 0
     passive_skill_level: 0
     combat_orders_level: 1
-    skill_levels: 
+    skill_levels:
         블리자드 VI: 10
     weapon_pure_attack_power: 0
     jobtype: archmagetc
@@ -197,19 +196,27 @@ def test_compute_maximum_dealing_interval(fixture_environment_given_plan):
     assert result.damage > 0
 
 
-def test_get_initial_plan_from_baseline():
-    given_environment = BaselineEnvironmentProvider(
-        tier="Legendary",
-        jobtype=JobType("archmagetc"),
-        level=270,
-        artifact_level=0,
-        passive_skill_level=0,
-        combat_orders_level=1,
+def test_get_initial_plan_from_metadata_baseline():
+    output = get_initial_plan_from_metadata(
+        {
+            "provider": {
+                "name": "BaselineEnvironmentProvider",
+                "data": {
+                    "tier": "Legendary",
+                    "jobtype": "adele",
+                    "level": 270,
+                    "passive_skill_level": 0,
+                    "combat_orders_level": 1,
+                    "artifact_level": 40,
+                    "v_skill_level": 30,
+                    "v_improvements_level": 60,
+                    "hexa_improvements_level": 10,
+                },
+            }
+        }
     )
-
-    output = get_initial_plan_from_baseline(given_environment)
     assert output.find("CAST")
-    assert not has_environment(output)
+    assert has_environment(output)
 
 
 @pytest.mark.parametrize(

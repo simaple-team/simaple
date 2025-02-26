@@ -11,13 +11,14 @@ import pydantic
 
 from simaple.api.base import (
     get_all_component,
-    get_initial_plan_from_baseline,
+    get_initial_plan_from_metadata,
     has_environment,
     provide_environment_augmented_plan,
     run_plan,
     run_plan_with_hint,
 )
 from simaple.api.models.simulation import OperationLogResponse
+from simaple.container.api_environment_provider import NexonAPIEnvironmentProvider
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 
 BaseModelT = TypeVar("BaseModelT", bound=pydantic.BaseModel)
@@ -64,11 +65,8 @@ def provideEnvironmentAugmentedPlan(plan: str) -> str:
     return provide_environment_augmented_plan(plan)
 
 
-def getInitialPlanFromBaseline(environment_provider_dict: dict) -> str:
-    environment_provider = _pyodide_reveal_base_model(
-        environment_provider_dict, BaselineEnvironmentProvider
-    )
-    return get_initial_plan_from_baseline(environment_provider)
+def getInitialPlanFromMetadata(metadata_dict: dict) -> str:
+    return get_initial_plan_from_metadata(metadata_dict)
 
 
 def runPlanWithHint(
