@@ -17,6 +17,7 @@ def archmagetc_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("아이스 오라"))
     usecase.use_component(component("라이트닝 스피어"))
     usecase.use_component(component("아이스 에이지"))
+    usecase.use_component(component("아이스 에이지 (지면)"))
     usecase.use_component(component("썬더 브레이크"))
     usecase.use_component(component("스피릿 오브 스노우"))
     usecase.use_component(component("주피터 썬더"))
@@ -39,11 +40,14 @@ def archmagetc_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("메이플월드 여신의 축복"))
     usecase.use_component(component("평범한 몬스터"))
 
+    usecase.listen(("아이스 에이지", "use.emitted.global.damage"), component("아이스 에이지 (지면)").reducer("use"))
+
     usecase.listen(("프로즌 오브 VI", "elapse.emitted.global.damage"), component("프로스트 이펙트").reducer("increase_step"))
     usecase.listen(("블리자드", "use.emitted.global.damage"), component("프로스트 이펙트").reducer("increase_step"))
     usecase.listen(("엘퀴네스", "elapse.emitted.global.damage"), component("프로스트 이펙트").reducer("increase_step"))
     usecase.listen(("아이스 오라", "elapse.emitted.global.damage"), component("프로스트 이펙트").reducer("increase_step"))
-    usecase.listen(("아이스 에이지", "elapse.emitted.global.damage"), component("프로스트 이펙트").reducer("increase_step"))
+    usecase.listen(("아이스 에이지", "use.emitted.global.damage"), component("프로스트 이펙트").reducer("increase_step"))
+    usecase.listen(("아이스 에이지 (지면)", "elapse.emitted.global.damage"), component("프로스트 이펙트").reducer("increase_step"))
     usecase.listen(("스피릿 오브 스노우", "elapse.emitted.global.damage"), component("프로스트 이펙트").reducer("increase_three"))
 
     #usecase.listen(("체인 라이트닝 VI", "use.emitted.global.damage"), component("블리자드(패시브)").reducer("use"))

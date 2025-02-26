@@ -232,7 +232,7 @@ data:
   v_improvement: 2
 ---
 kind: Component
-version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
+version: simaple.io/AttackSkillComponent
 metadata:
   label:
     group: archmagetc
@@ -249,11 +249,34 @@ data:
   delay: 660
   hit: 10
   cooldown_duration: 60_000
+---
+kind: Component
+version: simaple.io/PeriodicDamageSkillComponent
+metadata:
+  label:
+    group: archmagetc
+    name: 아이스 에이지 (지면)
+    id: 400021002-1
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 아이스 에이지
+  - ArithmeticPatch
+  - name: HexaSkillImprovementPatch
+    payload:
+      level_reference_name: 아이스 에이지
+data:
+  id: 400021002-1
+  name: 아이스 에이지 (지면)
 
+  delay: 0
   periodic_interval: 810
   periodic_damage: "{{ 125 + skill_level * 5 }}"
   periodic_hit: 6 # 3 * 2
   lasting_duration: 15_000
+
+  cooldown_duration: 0
+  disable_validity: True
 ---
 kind: Component
 version: simaple.io/ThunderBreak
