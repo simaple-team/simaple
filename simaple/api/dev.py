@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 import simaple.api.base as api
 from simaple.api.models.simulation import OperationLogResponse
+from simaple.container.api_environment_provider import NexonAPIEnvironmentProvider
 from simaple.container.environment_provider import BaselineEnvironmentProvider
 
 app = FastAPI()
@@ -42,9 +43,9 @@ def provide_environment_augmented_plan(req: PlanRequest):
     return api.provide_environment_augmented_plan(req.plan)
 
 
-@app.post("/getInitialPlanFromBaseline")
-def get_initial_plan_from_baseline(baseline: BaselineEnvironmentProvider):
-    return api.get_initial_plan_from_baseline(baseline)
+@app.post("/getInitialPlanFromMetadata")
+def get_initial_plan_from_metadata(metadata_dict: dict):
+    return api.get_initial_plan_from_metadata(metadata_dict)
 
 
 @app.post("/runPlanWithHint")

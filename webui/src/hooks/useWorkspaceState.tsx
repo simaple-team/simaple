@@ -1,14 +1,11 @@
 import { pySimaple } from "@/sdk";
-import {
-  BaselineEnvironmentProvider,
-  OperationLogResponse,
-} from "@/sdk/models";
+import { OperationLogResponse } from "@/sdk/models";
 import { useLocalStorageValue } from "@react-hookz/web";
+import { ok } from "neverthrow";
 import * as React from "react";
 import { useEffect, useMemo } from "react";
-import { usePreference } from "./usePreference";
-import { ok } from "neverthrow";
 import { match } from "ts-pattern";
+import { usePreference } from "./usePreference";
 
 type WorkspaceProviderProps = { children: React.ReactNode };
 
@@ -99,9 +96,9 @@ function useWorkspaceState() {
     setErrorMessage("");
   }, []);
 
-  const getInitialPlanFromBaseline = React.useCallback(
-    (baseline: BaselineEnvironmentProvider) => {
-      return pySimaple.getInitialPlanFromBaseline(baseline);
+  const getInitialPlanFromMetadata = React.useCallback(
+    (metadata: Parameters<typeof pySimaple.getInitialPlanFromMetadata>[0]) => {
+      return pySimaple.getInitialPlanFromMetadata(metadata);
     },
     [],
   );
@@ -117,7 +114,7 @@ function useWorkspaceState() {
     errorMessage,
     clearErrorMessage,
     run,
-    getInitialPlanFromBaseline,
+    getInitialPlanFromMetadata,
   };
 }
 

@@ -4,6 +4,7 @@ import {
   OperationLogResponse,
   SkillComponent,
 } from "./models";
+import { NexonApiEnvironmentProvider } from "./models/NexonApiEnvironmentProvider.schema";
 
 export interface PySimaple {
   ready(): ResultAsync<null, string>;
@@ -13,9 +14,18 @@ export interface PySimaple {
     history: OperationLogResponse[],
     plan: string,
   ): ResultAsync<OperationLogResponse[], string>;
-  getInitialPlanFromBaseline(
-    baselineEnvironmentProvider: BaselineEnvironmentProvider,
-  ): ResultAsync<string, string>;
+  getInitialPlanFromMetadata(metadata: {
+    author?: string;
+    provider:
+      | {
+          name: "BaselineEnvironmentProvider";
+          data: BaselineEnvironmentProvider;
+        }
+      | {
+          name: "NexonAPIEnvironmentProvider";
+          data: NexonApiEnvironmentProvider;
+        };
+  }): ResultAsync<string, string>;
   hasEnvironment(plan: string): ResultAsync<boolean, string>;
   provideEnvironmentAugmentedPlan(plan: string): ResultAsync<string, string>;
   getAllComponent(plan: string): ResultAsync<SkillComponent[], string>;

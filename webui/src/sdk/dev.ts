@@ -34,12 +34,9 @@ export const pySimaple: PySimaple = {
       }),
       (error: any) => error.message,
     ),
-  getInitialPlanFromBaseline: (baselineEnvironmentProvider) =>
+  getInitialPlanFromMetadata: (metadata) =>
     ResultAsync.fromPromise(
-      fetcher(
-        `${API_ENDPOINT}/getInitialPlanFromBaseline`,
-        baselineEnvironmentProvider,
-      ),
+      fetcher(`${API_ENDPOINT}/getInitialPlanFromMetadata`, metadata),
       (error: any) => error.message,
     ),
   hasEnvironment: (plan) =>
