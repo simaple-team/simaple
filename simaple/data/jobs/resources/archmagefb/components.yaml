@@ -723,23 +723,24 @@ patch:
 data:
   id: 2111013-0
   name: 포이즌 리젼
-  delay: 750
-  cooldown_duration: 60_000
+  props:
+    delay: 750
+    cooldown_duration: 60_000
 
-  lasting_duration: 60_000
+    lasting_duration: 60_000
 
-  explode_damage: 200
-  explode_hit: 4
-  explode_multiple: 3
+    explode_damage: 200
+    explode_hit: 4
+    explode_multiple: 3
 
-  stack_interval: 750
-  maximum_stack: 3
+    stack_interval: 750
+    maximum_stack: 3
+
+    dot_damage: "{{ 204 + 3 * skill_level }}"
+    dot_lasting_duration: 20_000
 
   v_improvement: 2
-
   default_skill_level: 14
-  dot_damage: "{{ 204 + 3 * skill_level }}"
-  dot_lasting_duration: 20_000
 
 ---
 kind: Component
@@ -760,20 +761,22 @@ patch:
 data:
   id: 2111013-vi
   name: 포이즌 리젼 VI
-  delay: 750
-  cooldown_duration: 60_000
+  props:
+    delay: 750
+    cooldown_duration: 60_000
 
-  lasting_duration: 60_000
+    lasting_duration: 60_000
 
-  explode_damage: "{{ 220 + 4 * skill_level }}"
-  explode_hit: 4
-  explode_multiple: 3
+    explode_damage: "{{ 220 + 4 * skill_level }}"
+    explode_hit: 4
+    explode_multiple: 3
 
-  stack_interval: 750
-  maximum_stack: 3
+    stack_interval: 750
+    maximum_stack: 3
+
+    dot_damage: "{{ 217 + 3 * skill_level }}"
+    dot_lasting_duration: 20_000
 
   v_improvement: 2
 
   default_skill_level: 14
-  dot_damage: "{{ 217 + 3 * skill_level }}"
-  dot_lasting_duration: 20_000
