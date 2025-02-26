@@ -656,4 +656,4 @@ data:
   periodic_interval: 1_200
   periodic_damage: "{{ 1440 + skill_level * 48 }}" # 툴팁 상으로는 1448 + skill_level * 48이나, 실제 반영되는 값이 다름
   periodic_hit: 15
-  lasting_duration: 30_000
+  lasting_duration: 34_860 # 30000 + 4860
