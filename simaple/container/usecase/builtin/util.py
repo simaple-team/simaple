@@ -4,9 +4,11 @@ from simaple.container.simulation import SimulationEnvironment, get_skill_compon
 from simaple.simulate.component.base import Component
 
 
+ComponentFunc = Callable[[str], Component]
+
 def get_component_loader(
     environment: SimulationEnvironment,
-) -> Callable[[str], Component]:
+) -> ComponentFunc:
     components = {skill.name: skill for skill in get_skill_components(environment)}
 
     def get_component(name: str) -> Component:
