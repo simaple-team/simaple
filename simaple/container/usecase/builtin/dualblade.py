@@ -20,6 +20,7 @@ def dualblade_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("블레이드 스톰"))
     usecase.use_component(component("카르마 퓨리"))
     usecase.use_component(component("블레이드 토네이도"))
+    usecase.use_component(component("블레이드 토네이도 (태풍)"))
     usecase.use_component(component("헌티드 엣지 - 나찰"))
     usecase.use_component(component("얼티밋 다크 사이트"))
     usecase.use_component(component("팬텀 블로우 VI"))
@@ -38,6 +39,7 @@ def dualblade_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("레디 투 다이"))
 
     usecase.listen(("써든레이드", "use.emitted.global.delay"), component("파이널 컷").reducer("sudden_raid"))
+    usecase.listen(("블레이드 토네이도", "use.emitted.global.damage"), component("블레이드 토네이도 (태풍)").reducer("use"))
 
     usecase.listen(("파이널 컷", "use.emitted.global.damage"), component("파이널 컷(버프)").reducer("use"))
     usecase.listen(("플래시 뱅", "use.emitted.global.delay"), component("플래시 뱅(버프)").reducer("use"))
@@ -53,7 +55,7 @@ def dualblade_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.listen(("블레이드 스톰", "elapse.emitted.global.damage"), component("히든 블레이드").reducer("trigger"))
     usecase.listen(("카르마 퓨리", "elapse.emitted.global.damage"), component("히든 블레이드").reducer("trigger"))
     usecase.listen(("블레이드 토네이도", "use.emitted.global.damage"), component("히든 블레이드").reducer("trigger"))
-    usecase.listen(("블레이드 토네이도", "elapse.emitted.global.damage"), component("히든 블레이드").reducer("trigger"))
+    usecase.listen(("블레이드 토네이도 (태풍)", "elapse.emitted.global.damage"), component("히든 블레이드").reducer("trigger"))
     usecase.listen(("헌티드 엣지 - 나찰", "use.emitted.global.damage"), component("히든 블레이드").reducer("trigger"))
 
     usecase.listen(("팬텀 블로우", "use.emitted.global.damage"), component("헌티드 엣지 - 나찰").reducer("use"))
@@ -71,7 +73,7 @@ def dualblade_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.listen(("블레이드 스톰", "elapse.emitted.global.damage"), component("카르마 블레이드 (업보의 칼날)").reducer("trigger"))
     usecase.listen(("카르마 퓨리", "elapse.emitted.global.damage"), component("카르마 블레이드 (업보의 칼날)").reducer("trigger"))
     usecase.listen(("블레이드 토네이도", "use.emitted.global.damage"), component("카르마 블레이드 (업보의 칼날)").reducer("trigger"))
-    usecase.listen(("블레이드 토네이도", "elapse.emitted.global.damage"), component("카르마 블레이드 (업보의 칼날)").reducer("trigger"))
+    usecase.listen(("블레이드 토네이도 (태풍)", "elapse.emitted.global.damage"), component("카르마 블레이드 (업보의 칼날)").reducer("trigger"))
     usecase.listen(("헌티드 엣지 - 나찰", "use.emitted.global.damage"), component("카르마 블레이드 (업보의 칼날)").reducer("trigger"))
 
 

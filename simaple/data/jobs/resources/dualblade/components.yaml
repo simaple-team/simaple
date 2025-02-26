@@ -259,9 +259,8 @@ data:
 
   default_skill_level: 30
 ---
-# TODO: 1명의 적에게는 최대 6번까지만 회오리 발생
 kind: Component
-version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
+version: simaple.io/AttackSkillComponent
 metadata:
   label:
     group: dualblade
@@ -281,6 +280,37 @@ data:
   cooldown_duration: 12_000
   red: true
 
+  modifier:
+    ignored_defence: 100
+
+  default_skill_level: 30
+
+  # addons:
+  #   - when: use
+  #     destination: 블레이드 토네이도 (태풍)
+  #     method: use
+---
+# TODO: 1명의 적에게는 최대 6번까지만 회오리 발생
+kind: Component
+version: simaple.io/PeriodicDamageSkillComponent
+metadata:
+  label:
+    group: dualblade
+    name: 블레이드 토네이도 (태풍)
+    id: 400041042-0
+patch:
+  - SkillLevelPatch
+  - ArithmeticPatch
+data:
+  id: 400041042-0
+  name: 블레이드 토네이도 (태풍)
+
+  listening_actions:
+    "블레이드 토네이도.use.emitted.global.delay": use
+
+  cooldown_duration: 0
+  delay: 0
+
   periodic_interval: 120
   periodic_damage: "{{ 400 + skill_level * 16 }}"
   periodic_hit: 6
@@ -290,6 +320,7 @@ data:
     ignored_defence: 100
 
   default_skill_level: 30
+  disable_validity: True
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
