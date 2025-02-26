@@ -1,4 +1,5 @@
 from simaple.container.simulation import SimulationEnvironment
+from simaple.container.usecase.builtin.common import define_crest_of_the_solar
 from simaple.container.usecase.builtin.util import get_component_loader
 from simaple.simulate.usecase import Usecase
 
@@ -6,6 +7,8 @@ from simaple.simulate.usecase import Usecase
 def mechanic_usecase(environment: SimulationEnvironment) -> Usecase:
     mechanic_component = get_component_loader(environment)
     usecase = Usecase()
+
+    usecase = define_crest_of_the_solar(usecase, mechanic_component)
 
     usecase.use_component(mechanic_component("로디드 다이스"))
     usecase.use_component(mechanic_component("메탈아머: 탱크"))
@@ -30,7 +33,6 @@ def mechanic_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(mechanic_component("쓸만한 샤프 아이즈"))
     usecase.use_component(mechanic_component("쓸만한 하이퍼 바디"))
     usecase.use_component(mechanic_component("스파이더 인 미러"))
-    usecase.use_component(mechanic_component("크레스트 오브 더 솔라"))
     usecase.use_component(mechanic_component("리스트레인트 링"))
     usecase.use_component(mechanic_component("리스크테이커 링"))
     usecase.use_component(mechanic_component("웨폰퍼프-D 링"))

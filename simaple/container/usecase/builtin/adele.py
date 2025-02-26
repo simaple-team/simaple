@@ -1,4 +1,5 @@
 from simaple.container.simulation import SimulationEnvironment
+from simaple.container.usecase.builtin.common import define_crest_of_the_solar
 from simaple.container.usecase.builtin.util import get_component_loader
 from simaple.simulate.usecase import Usecase
 
@@ -7,6 +8,8 @@ from simaple.simulate.usecase import Usecase
 def adele_usecase(environment: SimulationEnvironment) -> Usecase:
     component = get_component_loader(environment)
     usecase = Usecase()
+
+    usecase = define_crest_of_the_solar(usecase, component)
 
     usecase.use_component(component("에테르"))
     usecase.use_component(component("레조넌스"))
@@ -33,7 +36,6 @@ def adele_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("쓸만한 샤프 아이즈"))
     usecase.use_component(component("쓸만한 하이퍼 바디"))
     usecase.use_component(component("스파이더 인 미러"))
-    usecase.use_component(component("크레스트 오브 더 솔라"))
     usecase.use_component(component("리스트레인트 링"))
     usecase.use_component(component("리스크테이커 링"))
     usecase.use_component(component("레이스 오브 갓"))

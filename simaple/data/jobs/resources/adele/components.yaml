@@ -152,7 +152,7 @@ data:
 ---
 # TODO: 최종 폭발
 kind: Component
-version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageSkillComponent
 metadata:
   label:
     group: adele
@@ -167,8 +167,6 @@ data:
   id: 151111001-0
   name: 테리토리
   delay: 420
-  damage: 0
-  hit: 0
 
   cooldown_duration: 30_000
   red: true
@@ -429,7 +427,7 @@ data:
   default_skill_level: 30
 ---
 kind: Component
-version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageSkillComponent
 metadata:
   label:
     group: adele
@@ -444,8 +442,6 @@ data:
   name: 인피니트
 
   delay: 540
-  damage: 0
-  hit: 0
 
   cooldown_duration: 180_000
   red: true
@@ -458,7 +454,7 @@ data:
   default_skill_level: 30
 ---
 kind: Component
-version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageSkillComponent
 metadata:
   label:
     group: adele
@@ -473,9 +469,6 @@ data:
   name: 리스토어
 
   delay: 720
-  damage: 0
-  hit: 0
-
   cooldown_duration: 180_000
   red: true
 
