@@ -748,9 +748,30 @@ class PoisonRegionState(TypedDict):
     dynamics: Dynamics
 
 
-class PoisonRegionComponentProps(TypedDict):
-    id: str
-    name: str
+# class PoisonRegionComponentProps(TypedDict):
+#     id: str
+#     name: str
+#     delay: float
+
+#     cooldown_duration: float
+
+#     lasting_duration: float
+
+#     dot_damage: float
+#     dot_lasting_duration: float
+
+#     explode_damage: float
+#     explode_hit: int
+#     explode_multiple: int
+
+#     stack_interval: float
+#     maximum_stack: int
+
+
+from pydantic import BaseModel
+
+
+class PoisonRegionComponentProps(BaseModel):
     delay: float
 
     cooldown_duration: float
@@ -771,45 +792,19 @@ class PoisonRegionComponentProps(TypedDict):
 class PoisonRegionComponent(
     Component,
 ):
-    delay: float
-    cooldown_duration: float
-    lasting_duration: float
-    dot_damage: float
-    dot_lasting_duration: float
-    explode_damage: float
-    explode_hit: int
-    explode_multiple: int
-
-    stack_interval: float
-    maximum_stack: int
+    props: PoisonRegionComponentProps
 
     def get_default_state(self) -> PoisonRegionState:
         return {
             "cooldown": Cooldown(time_left=0),
             "lasting": Lasting(time_left=0),
             "consumable": Consumable(
-                maximum_stack=self.maximum_stack,
+                maximum_stack=self.props.maximum_stack,
                 stack=0,
-                cooldown_duration=self.stack_interval,
+                cooldown_duration=self.props.stack_interval,
                 time_left=0,
             ),
             "dynamics": Dynamics.model_validate({"stat": {}}),
-        }
-
-    def get_props(self) -> PoisonRegionComponentProps:
-        return {
-            "id": self.id,
-            "name": self.name,
-            "delay": self.delay,
-            "cooldown_duration": self.cooldown_duration,
-            "lasting_duration": self.lasting_duration,
-            "dot_damage": self.dot_damage,
-            "dot_lasting_duration": self.dot_lasting_duration,
-            "explode_damage": self.explode_damage,
-            "explode_hit": self.explode_hit,
-            "explode_multiple": self.explode_multiple,
-            "stack_interval": self.stack_interval,
-            "maximum_stack": self.maximum_stack,
         }
 
     @reducer_method
@@ -817,18 +812,22 @@ class PoisonRegionComponent(
         state, event = lasting_trait.start_lasting_with_cooldown(
             state,
             {},
-            **self.get_props(),
+            **{
+                "x": 3,
+            },
             apply_buff_duration=False,
         )
 
         event += [
             simple_attack.get_dot_event(
-                self.name, self.dot_damage, self.dot_lasting_duration
+                self.name, 
+                self.props.dot_damage, 
+                self.props.dot_lasting_duration
             )
         ]
 
         consumable = state["consumable"].model_copy()
-        consumable.reset(1, self.stack_interval)
+        consumable.reset(1, self.props.stack_interval)
 
         state["consumable"] = consumable
 
@@ -837,7 +836,7 @@ class PoisonRegionComponent(
     @reducer_method
     def elapse(self, time: float, state: PoisonRegionState):
         state, event = lasting_trait.elapse_lasting_with_cooldown(
-            state, {"time": time}, **self.get_props()
+            state, {"time": time}, **self.props.model_dump()
         )
 
         consumable = state["consumable"].model_copy()
@@ -859,12 +858,12 @@ class PoisonRegionComponent(
         state["consumable"] = consumable
 
         return state, [
-            EmptyEvent.dealt(self.explode_damage, self.explode_hit),
+            EmptyEvent.dealt(self.props.explode_damage, self.props.explode_hit),
             EmptyEvent.dealt(
-                self.explode_damage * 0.6, (current_areas - 1) * self.explode_hit
+                self.props.explode_damage * 0.6, (current_areas - 1) * self.props.explode_hit
             ),
         ]
 
     @view_method
     def validity(self, state: PoisonRegionState):
-        return cooldown_trait.validity_view(state, **self.get_props())
+        return cooldown_trait.validity_view(state, **self.props.model_dump())
