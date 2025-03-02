@@ -1,14 +1,14 @@
-from typing import Optional, TypedDict
 from itertools import accumulate
+from typing import Optional, TypedDict
 
 import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
 import simaple.simulate.component.trait.periodic_trait as periodic_trait
 from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic, Schedule
+from simaple.simulate.component.feature import DamageSchedule
 from simaple.simulate.component.view import Running
 from simaple.simulate.event import EmptyEvent
 from simaple.simulate.global_property import Dynamics
-from simaple.simulate.component.feature import DamageSchedule
 
 
 class ScheduledDamageSkillState(TypedDict):
@@ -61,7 +61,10 @@ class ScheduledDamageSkillComponent(
 
     @reducer_method
     def elapse(self, time: float, state: ScheduledDamageSkillState):
-        cooldown, schedule = state["cooldown"].model_copy(), state["schedule"].model_copy()
+        cooldown, schedule = (
+            state["cooldown"].model_copy(),
+            state["schedule"].model_copy(),
+        )
         cooldown.elapse(time)
 
         index_start, index_end = schedule.elapse(time)
@@ -79,14 +82,17 @@ class ScheduledDamageSkillComponent(
         if not state["cooldown"].available:
             return state, [self.event_provider.rejected()]
 
-        cooldown, schedule = state["cooldown"].model_copy(), state["schedule"].model_copy()
+        cooldown, schedule = (
+            state["cooldown"].model_copy(),
+            state["schedule"].model_copy(),
+        )
 
         cooldown.set_time_left(
             state["dynamics"].stat.calculate_cooldown(self.cooldown_duration)
         )
         index_start, index_end = schedule.start()
 
-        state["cooldown"] = cooldown    
+        state["cooldown"] = cooldown
         state["schedule"] = schedule
 
         return state, [

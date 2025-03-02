@@ -312,6 +312,7 @@ class Schedule(Entity):
     """
     Emit (previous index, current index) when time elapse
     """
+
     scheduled_times: list[float]
     timer: float = 999_999_999
     index: int = 0
@@ -329,4 +330,3 @@ class Schedule(Entity):
         prev_index = self.index
         self.index = len([time for time in self.scheduled_times if time <= self.timer])
         return prev_index, self.index
-

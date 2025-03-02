@@ -11,9 +11,9 @@ import simaple.simulate.component.common.mob
 import simaple.simulate.component.common.multiple_hit_hexa_skill
 import simaple.simulate.component.common.periodic_damage_skill
 import simaple.simulate.component.common.periodic_with_finish_skill
+import simaple.simulate.component.common.scheduled_damage_skill
 import simaple.simulate.component.common.stackable_buff_skill
 import simaple.simulate.component.common.synergy_skill
 import simaple.simulate.component.common.temporal_enhancing_attack_skill
 import simaple.simulate.component.common.triggable_buff_skill
 import simaple.simulate.component.common.triple_periodic_damage_hexa_skill
-import simaple.simulate.component.common.scheduled_damage_skill

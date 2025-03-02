@@ -35,7 +35,6 @@ def scheduled_damage_skill_state(
     }
 
 
-
 def test_scheduled_damage_skill_use(
     scheduled_damage_skill: ScheduledDamageSkillComponent,
     scheduled_damage_skill_state: ScheduledDamageSkillState,
