@@ -157,9 +157,9 @@ def _get_regularized_weapon(
             continue
 
         bonus.attack_type = AttackType.attack_power
-        attack_power_bonus = int(bonus.calculate_improvement(
-            reference_weapon.meta
-        ).attack_power)
+        attack_power_bonus = int(
+            bonus.calculate_improvement(reference_weapon.meta).attack_power
+        )
 
     if uses_magic:
         add_option = add_option + Stat(

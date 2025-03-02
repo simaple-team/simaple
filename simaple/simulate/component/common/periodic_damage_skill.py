@@ -5,20 +5,19 @@ import simaple.simulate.component.trait.periodic_trait as periodic_trait
 from simaple.simulate.component.base import Component, reducer_method, view_method
 from simaple.simulate.component.entity import Cooldown, Periodic
 from simaple.simulate.component.view import Running
+from simaple.simulate.event import EmptyEvent
 from simaple.simulate.global_property import Dynamics
 
 
-class PeriodicDamageState(TypedDict):
+class PeriodicDamageSkillState(TypedDict):
     cooldown: Cooldown
     periodic: Periodic
     dynamics: Dynamics
 
 
-class PeriodicDamageConfiguratedAttackSkillComponentProps(TypedDict):
+class PeriodicDamageSkillComponentProps(TypedDict):
     id: str
     name: str
-    damage: float
-    hit: float
     delay: float
     cooldown_duration: float
     periodic_initial_delay: Optional[float]
@@ -28,12 +27,10 @@ class PeriodicDamageConfiguratedAttackSkillComponentProps(TypedDict):
     lasting_duration: float
 
 
-class PeriodicDamageConfiguratedAttackSkillComponent(
+class PeriodicDamageSkillComponent(
     Component,
 ):
     name: str
-    damage: float
-    hit: float
     delay: float
 
     cooldown_duration: float
@@ -45,7 +42,7 @@ class PeriodicDamageConfiguratedAttackSkillComponent(
 
     lasting_duration: float
 
-    def get_default_state(self) -> PeriodicDamageState:
+    def get_default_state(self) -> PeriodicDamageSkillState:
         return {
             "cooldown": Cooldown(time_left=0),
             "periodic": Periodic(
@@ -56,12 +53,10 @@ class PeriodicDamageConfiguratedAttackSkillComponent(
             "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 
-    def get_props(self) -> PeriodicDamageConfiguratedAttackSkillComponentProps:
+    def get_props(self) -> PeriodicDamageSkillComponentProps:
         return {
             "id": self.id,
             "name": self.name,
-            "damage": self.damage,
-            "hit": self.hit,
             "delay": self.delay,
             "cooldown_duration": self.cooldown_duration,
             "periodic_initial_delay": self.periodic_initial_delay,
@@ -72,27 +67,31 @@ class PeriodicDamageConfiguratedAttackSkillComponent(
         }
 
     @reducer_method
-    def elapse(self, time: float, state: PeriodicDamageState):
-        return periodic_trait.elapse_periodic_with_cooldown(
+    def elapse(self, time: float, state: PeriodicDamageSkillState):
+        state, events = periodic_trait.elapse_periodic_with_cooldown(
             state,
             {"time": time},
             **self.get_props(),
         )
 
+        return state, events
+
     @reducer_method
-    def use(self, _: None, state: PeriodicDamageState):
+    def use(self, _: None, state: PeriodicDamageSkillState):
         return periodic_trait.start_periodic_with_cooldown(
             state,
             {},
             **self.get_props(),
+            damage=0,
+            hit=0,
         )
 
     @view_method
-    def validity(self, state: PeriodicDamageState):
+    def validity(self, state: PeriodicDamageSkillState):
         return cooldown_trait.validity_view(state, **self.get_props())
 
     @view_method
-    def running(self, state: PeriodicDamageState) -> Running:
+    def running(self, state: PeriodicDamageSkillState) -> Running:
         return periodic_trait.running_view(
             state,
             **self.get_props(),

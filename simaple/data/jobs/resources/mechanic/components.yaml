@@ -265,7 +265,7 @@ data:
   apply_buff_duration: False
 ---
 kind: Component
-version: simaple.io/PeriodicDamageConfiguratedAttackSkillComponent
+version: simaple.io/PeriodicDamageSkillComponent
 metadata:
   label:
     group: mechanic
@@ -278,9 +278,7 @@ patch:
 data:
   id: 35121052-0
   name: 디스토션 필드
-  damage: 0
   delay: "{{ apply_attack_speed(900) }}"
-  hit: 0
   cooldown_duration: 8_000
 
   periodic_initial_delay: 690
