@@ -25,6 +25,7 @@ def archmagetc_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("스피릿 오브 스노우"))
     usecase.use_component(component("주피터 썬더"))
     usecase.use_component(component("프로즌 라이트닝"))
+    usecase.use_component(component("프로즌 라이트닝 (마력 개화)"))
     usecase.use_component(component("체인 라이트닝 VI"))
     usecase.use_component(component("프로즌 오브 VI"))
     usecase.use_component(component("블리자드 VI"))
@@ -41,6 +42,8 @@ def archmagetc_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("인피니티"))
     usecase.use_component(component("메이플월드 여신의 축복"))
     usecase.use_component(component("평범한 몬스터"))
+
+    usecase.listen(("프로즌 라이트닝", "use.emitted.global.delay"), component("프로즌 라이트닝 (마력 개화)").reducer("use"))
 
     usecase.listen(("아이스 에이지", "use.emitted.global.damage"), component("아이스 에이지 (지면)").reducer("use"))
 

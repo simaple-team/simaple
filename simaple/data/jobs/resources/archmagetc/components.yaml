@@ -351,7 +351,7 @@ data:
   max_count: 30
 ---
 kind: Component
-version: simaple.io/PeriodicDamageConfiguratedHexaSkillComponent
+version: simaple.io/ScheduledDamageSkillComponent
 metadata:
   label:
     group: archmagetc
@@ -363,19 +363,209 @@ patch:
 data:
   id: 2241500-0
   name: 프로즌 라이트닝
-  damage_and_hits:
-    - damage: "{{ 395 + skill_level * 14 }}"
-      hit: "{{7 * 32}}"
-    - damage: "{{ 398 + skill_level * 14 }}"
-      hit: "{{12 * 24}}"
+  damage_schedule:
+    - damage: "{{ 395 + skill_level * 14 }}" # 1
+      hit: 7
+      time: 1320
+    - damage: "{{ 395 + skill_level * 14 }}" # 2
+      hit: 7
+      time: 120
+    - damage: "{{ 395 + skill_level * 14 }}" # 3
+      hit: 7
+      time: 120
+    - damage: "{{ 395 + skill_level * 14 }}" # 4
+      hit: 7
+      time: 120
+    - damage: "{{ 395 + skill_level * 14 }}" # 5
+      hit: 7
+      time: 120
+    - damage: "{{ 395 + skill_level * 14 }}" # 6
+      hit: 7
+      time: 120
+    - damage: "{{ 395 + skill_level * 14 }}" # 7
+      hit: 7
+      time: 120
+    - damage: "{{ 395 + skill_level * 14 }}" # 8
+      hit: 7
+      time: 120
+    - damage: "{{ 395 + skill_level * 14 }}" # 9
+      hit: 7
+      time: 120
+    - damage: "{{ 395 + skill_level * 14 }}" # 10
+      hit: 7
+      time: 120
+    - damage: "{{ 395 + skill_level * 14 }}" # 11
+      hit: 7
+      time: 120
+    - damage: "{{ 395 + skill_level * 14 }}" # 12
+      hit: 7
+      time: 90
+    - damage: "{{ 395 + skill_level * 14 }}" # 13
+      hit: 7
+      time: 90
+    - damage: "{{ 395 + skill_level * 14 }}" # 14
+      hit: 7
+      time: 90
+    - damage: "{{ 395 + skill_level * 14 }}" # 15
+      hit: 7
+      time: 90
+    - damage: "{{ 395 + skill_level * 14 }}" # 16
+      hit: 7
+      time: 90
+    - damage: "{{ 395 + skill_level * 14 }}" # 17
+      hit: 7
+      time: 90
+    - damage: "{{ 395 + skill_level * 14 }}" # 18
+      hit: 7
+      time: 90
+    - damage: "{{ 395 + skill_level * 14 }}" # 19
+      hit: 7
+      time: 90
+    - damage: "{{ 395 + skill_level * 14 }}" # 20
+      hit: 7
+      time: 90
+    - damage: "{{ 395 + skill_level * 14 }}" # 21
+      hit: 7
+      time: 90
+    - damage: "{{ 395 + skill_level * 14 }}" # 22
+      hit: 7
+      time: 60
+    - damage: "{{ 395 + skill_level * 14 }}" # 23
+      hit: 7
+      time: 60
+    - damage: "{{ 395 + skill_level * 14 }}" # 24
+      hit: 7
+      time: 60
+    - damage: "{{ 395 + skill_level * 14 }}" # 25
+      hit: 7
+      time: 60
+    - damage: "{{ 395 + skill_level * 14 }}" # 26
+      hit: 7
+      time: 60
+    - damage: "{{ 395 + skill_level * 14 }}" # 27
+      hit: 7
+      time: 60
+    - damage: "{{ 395 + skill_level * 14 }}" # 28
+      hit: 7
+      time: 60
+    - damage: "{{ 395 + skill_level * 14 }}" # 29
+      hit: 7
+      time: 60
+    - damage: "{{ 395 + skill_level * 14 }}" # 30
+      hit: 7
+      time: 60
+    - damage: "{{ 395 + skill_level * 14 }}" # 31
+      hit: 7
+      time: 60
+    - damage: "{{ 395 + skill_level * 14 }}" # 32
+      hit: 7
+      time: 60
+    - damage: "{{ 398 + skill_level * 14 }}" # 1
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 2
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 3
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 4
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 5
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 6
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 7
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 8
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 9
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 10
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 11
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 12
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 13
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 14
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 15
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 16
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 17
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 18
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 19
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 20
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 21
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 22
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 23
+      hit: 12
+      time: 30
+    - damage: "{{ 398 + skill_level * 14 }}" # 24
+      hit: 12
+      time: 30
 
   delay: 4_020
   cooldown_duration: 360_000
 
+---
+kind: Component
+version: simaple.io/PeriodicDamageSkillComponent
+metadata:
+  label:
+    group: archmagetc
+    name: 프로즌 라이트닝 (마력 개화)
+    id: 2241500-1
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 프로즌 라이트닝
+  - ArithmeticPatch
+data:
+  id: 2241500-1
+  name: 프로즌 라이트닝 (마력 개화)
+
+  listening_actions:
+    프로즌 라이트닝.use.emitted.global.delay: use
+
+  delay: 0
+
+  periodic_initial_delay: 4_020
   periodic_interval: 2_000
   periodic_damage: "{{ 840 + skill_level * 28 }}"
   periodic_hit: 9
   lasting_duration: 30_000
+
+  cooldown_duration: 0
+  disable_validity: True
 ---
 kind: Component
 version: simaple.io/ChainLightningVIComponent
