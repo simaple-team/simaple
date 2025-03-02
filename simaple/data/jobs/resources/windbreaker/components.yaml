@@ -34,7 +34,7 @@ data:
     attack_power: 15
 ---
 kind: Component
-version: simaple.io/SynergySkillComponent
+version: simaple.io/AttackSkillComponent
 metadata:
   label:
     group: windbreaker
@@ -47,16 +47,32 @@ patch:
 data:
   id: 13111021-0
   name: 핀포인트 피어스
+  delay: 690
   damage: 340
   hit: 2
+  cooldown_duration: 10_000
+  v_improvement: 3
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 핀포인트 피어스#버프
+    id: 13111021-1
+data:
+  id: 13111021-1
+  name: 핀포인트 피어스#버프
+  delay: 0
   cooldown_duration: 0
-  delay: 690
+  disable_validity: True
 
-  lasting_duration: 60_000
-  synergy:
+  stat:
     damage_multiplier: 15
     ignored_defence: 15
-  v_improvement: 3
+
+  lasting_duration: 60_000
+  apply_buff_duration: false
 ---
 kind: Component
 version: simaple.io/BuffSkillComponent
