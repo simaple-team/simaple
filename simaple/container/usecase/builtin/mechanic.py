@@ -29,6 +29,7 @@ def mechanic_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(mechanic_component("매시브 파이어: IRON-B VI (폭발)"))
     usecase.use_component(mechanic_component("호밍 미사일 VI"))
     usecase.use_component(mechanic_component("그라운드 제로"))
+    usecase.use_component(mechanic_component("그라운드 제로 (대규모 폭격)"))
     usecase.use_component(mechanic_component("소울 컨트랙트"))
     usecase.use_component(mechanic_component("쓸만한 샤프 아이즈"))
     usecase.use_component(mechanic_component("쓸만한 하이퍼 바디"))
@@ -41,6 +42,11 @@ def mechanic_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(mechanic_component("오버 드라이브"))
     usecase.use_component(mechanic_component("평범한 몬스터"))
     usecase.use_component(mechanic_component("메이플월드 여신의 축복"))
+
+    usecase.listen(
+        ("그라운드 제로", "use.emitted.global.delay"),
+        mechanic_component("그라운드 제로 (대규모 폭격)").reducer("use"),
+    )
 
     usecase.listen(
         ("매시브 파이어: IRON-B VI", "use.emitted.global.damage"),

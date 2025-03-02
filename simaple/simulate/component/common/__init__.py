@@ -17,3 +17,4 @@ import simaple.simulate.component.common.synergy_skill
 import simaple.simulate.component.common.temporal_enhancing_attack_skill
 import simaple.simulate.component.common.triggable_buff_skill
 import simaple.simulate.component.common.triple_periodic_damage_hexa_skill
+import simaple.simulate.component.common.scheduled_damage_skill
