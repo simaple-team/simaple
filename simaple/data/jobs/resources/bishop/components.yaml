@@ -323,7 +323,7 @@ data:
 
 ---
 kind: Component
-version: simaple.io/TriplePeriodicDamageHexaComponent
+version: simaple.io/ScheduledDamageSkillComponent
 metadata:
   label:
     group: bishop
@@ -336,32 +336,292 @@ data:
   id: 2341500-0
   name: 홀리 어드밴트
 
-  damage_and_hits:
-    - damage: "{{ 270 + skill_level * 10 }}"
-      hit: "{{8 * 25}}"
-    - damage: "{{ 235 + skill_level * 8 }}"
-      hit: "{{12 * 35}}"
-
   delay: 3_660
   cooldown_duration: 360_000
+  damage_schedule: # TODO: time에 multiAttackInfo 적용하기
+    - damage: "{{ 270 + skill_level * 10 }}" # 1
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 2
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 3
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 4
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 5
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 6
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 7
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 8
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 9
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 10
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 11
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 12
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 13
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 14
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 15
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 16
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 17
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 18
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 19
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 20
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 21
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 22
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 23
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 24
+      hit: 8
+      time: 0
+    - damage: "{{ 270 + skill_level * 10 }}" # 25
+      hit: 8
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 1
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 2
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 3
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 4
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 5
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 6
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 7
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 8
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 9
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 10
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 11
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 12
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 13
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 14
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 15
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 16
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 17
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 18
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 19
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 20
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 21
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 22
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 23
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 24
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 25
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 26
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 27
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 28
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 29
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 30
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 31
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 32
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 33
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 34
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 35
+      hit: 12
+      time: 0
+    - damage: "{{ 235 + skill_level * 8 }}" # 36
+      hit: 12
+      time: 0
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: bishop
+    name: 홀리 어드밴트#버프
+    id: 2341500-1
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 홀리 어드밴트
+  - ArithmeticPatch
+data:
+  id: 2341500-1
+  name: 홀리 어드밴트#버프
 
-  periodic_01:
-    interval: 3_000
-    damage: "{{ 245 + skill_level * 9 }}"
-    hit: 14
-  periodic_02:
-    interval: 5_000
-    damage: "{{ 260 + skill_level * 8 }}"
-    hit: 12
-  periodic_03:
-    interval: 4_000
-    damage: "{{ 300 + skill_level * 10 }}"
-    hit: 12
+  delay: 0
+  cooldown_duration: 0
+  disable_validity: True
 
   lasting_duration: 60_000
 
-  synergy:
+  stat:
     final_damage_multiplier: 5
+---
+kind: Component
+version: simaple.io/PeriodicDamageSkillComponent
+metadata:
+  label:
+    group: bishop
+    name: 홀리 어드밴트#균형의 대천사
+    id: 2341500-2
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 홀리 어드밴트
+  - ArithmeticPatch
+data:
+  id: 2341500-2
+  name: 홀리 어드밴트#균형의 대천사
+
+  delay: 0
+  cooldown_duration: 0
+  disable_validity: True
+
+  periodic_interval: 3_000
+  periodic_damage: "{{ 245 + skill_level * 9 }}"
+  periodic_hit: 14
+  lasting_duration: 60_000
+---
+kind: Component
+version: simaple.io/PeriodicDamageSkillComponent
+metadata:
+  label:
+    group: bishop
+    name: 홀리 어드밴트#복수의 대천사
+    id: 2341500-3
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 홀리 어드밴트
+  - ArithmeticPatch
+data:
+  id: 2341500-3
+  name: 홀리 어드밴트#복수의 대천사
+
+  delay: 0
+  cooldown_duration: 0
+  disable_validity: True
+
+  periodic_interval: 5_000
+  periodic_damage: "{{ 260 + skill_level * 8 }}"
+  periodic_hit: 12
+  lasting_duration: 60_000
+---
+kind: Component
+version: simaple.io/PeriodicDamageSkillComponent
+metadata:
+  label:
+    group: bishop
+    name: 홀리 어드밴트#자애의 대천사
+    id: 2341500-3
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 홀리 어드밴트
+  - ArithmeticPatch
+data:
+  id: 2341500-3
+  name: 홀리 어드밴트#자애의 대천사
+
+  delay: 0
+  cooldown_duration: 0
+  disable_validity: True
+
+  periodic_interval: 4_000
+  periodic_damage: "{{ 300 + skill_level * 10 }}"
+  periodic_hit: 12
+  lasting_duration: 60_000
 ---
 kind: Component
 version: simaple.io/HexaAngelRayComponent

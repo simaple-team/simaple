@@ -28,3 +28,13 @@ class PeriodicFeature(pydantic.BaseModel):
     hit: float
     interval: float
     initial_delay: Optional[float] = pydantic.Field(default=None)
+
+
+class DamageSchedule(pydantic.BaseModel):
+    """
+    Jointly contains damage and hit.
+    """
+
+    damage: float
+    hit: float
+    time: float

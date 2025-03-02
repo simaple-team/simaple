@@ -414,7 +414,7 @@ data:
   v_improvement: 2
 ---
 kind: Component
-version: simaple.io/TriplePeriodicDamageHexaComponent
+version: simaple.io/ScheduledDamageSkillComponent
 metadata:
   label:
     group: windbreaker
@@ -426,26 +426,86 @@ patch:
 data:
   id: 13141500-0
   name: 미스트랄 스프링
-
-  damage_and_hits:
-    - damage: "{{ 830 + skill_level * 28 }}"
-      hit: "{{ 10 * 13 }}"
-
   delay: 4_560
   cooldown_duration: 360_000
+  damage_schedule:
+    - damage: "{{ 830 + skill_level * 28 }}"
+      hit: "{{ 10 * 13 }}"
+      time: 4_560
+---
+kind: Component
+version: simaple.io/PeriodicDamageSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 미스트랄 스프링 (정령의 기운)
+    id: 13141500-vi1
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 미스트랄 스프링
+  - ArithmeticPatch
+data:
+  id: 2341500-2
+  name: 미스트랄 스프링 (정령의 기운)
 
-  periodic_01:
-    interval: 3_000
-    damage: "{{ 660 + skill_level * 22 }}"
-    hit: "{{ 5 * 13 }}"
-  periodic_02:
-    interval: 3_000
-    damage: "{{ 720 + skill_level * 24 }}"
-    hit: "{{ 6 * 5 }}"
-  periodic_03:
-    interval: 3_000
-    damage: "{{ 645 + skill_level * 21 }}"
-    hit: "{{ 7 * 3 }}"
+  delay: 0
+  cooldown_duration: 0
+  disable_validity: True
 
-  lasting_duration: 24_560
-  synergy: {}
+  periodic_interval: 3_000
+  periodic_damage: "{{ 660 + skill_level * 22 }}"
+  periodic_hit: "{{ 5 * 13 }}"
+  lasting_duration: 20_000
+---
+kind: Component
+version: simaple.io/PeriodicDamageSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 미스트랄 스프링 (신난 정령의 기운)
+    id: 13141500-vi1
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 미스트랄 스프링
+  - ArithmeticPatch
+data:
+  id: 2341500-2
+  name: 미스트랄 스프링 (신난 정령의 기운)
+
+  delay: 0
+  cooldown_duration: 0
+  disable_validity: True
+
+  periodic_interval: 3_000
+  periodic_damage: "{{ 720 + skill_level * 24 }}"
+  periodic_hit: "{{ 6 * 5 }}"
+  lasting_duration: 20_000
+
+---
+kind: Component
+version: simaple.io/PeriodicDamageSkillComponent
+metadata:
+  label:
+    group: windbreaker
+    name: 미스트랄 스프링 (거센 정령의 기운)
+    id: 13141500-vi1
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 미스트랄 스프링
+  - ArithmeticPatch
+data:
+  id: 2341500-2
+  name: 미스트랄 스프링 (거센 정령의 기운)
+
+  delay: 0
+  cooldown_duration: 0
+  disable_validity: True
+
+  periodic_interval: 3_000
+  periodic_damage: "{{ 645 + skill_level * 21 }}"
+  periodic_hit: "{{ 7 * 3 }}"
+
+  lasting_duration: 20_000

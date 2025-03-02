@@ -23,6 +23,11 @@ def bishop_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("피스메이커"))
     usecase.use_component(component("디바인 퍼니시먼트"))
     usecase.use_component(component("홀리 어드밴트"))
+    usecase.use_component(component("홀리 어드밴트#버프"))
+    usecase.use_component(component("홀리 어드밴트#균형의 대천사"))
+    usecase.use_component(component("홀리 어드밴트#복수의 대천사"))
+    usecase.use_component(component("홀리 어드밴트#자애의 대천사"))
+
     usecase.use_component(component("엔젤레이 VI"))
     usecase.use_component(component("트라이엄프 페더 VI"))
     usecase.use_component(component("소울 컨트랙트"))
@@ -39,8 +44,10 @@ def bishop_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("제네시스"))
     usecase.use_component(component("평범한 몬스터"))
 
-    #usecase.listen(("엔젤레이", "use.emitted.global.damage"), component("트라이엄프 페더").reducer("trigger"))
-    #usecase.listen(("제네시스", "use.emitted.global.damage"), component("트라이엄프 페더").reducer("trigger"))
+    usecase.listen(("홀리 어드밴트", "use.emitted.global.delay"), component("홀리 어드밴트#버프").reducer("use"))
+    usecase.listen(("홀리 어드밴트", "use.emitted.global.delay"), component("홀리 어드밴트#균형의 대천사").reducer("use"))
+    usecase.listen(("홀리 어드밴트", "use.emitted.global.delay"), component("홀리 어드밴트#복수의 대천사").reducer("use"))
+    usecase.listen(("홀리 어드밴트", "use.emitted.global.delay"), component("홀리 어드밴트#자애의 대천사").reducer("use"))
 
     usecase.listen(("디바인 퍼니시먼트", "use.emitted.global.damage"), component("엔젤레이 VI").reducer("stack"))
 

@@ -37,6 +37,14 @@ def windbreaker_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("시그너스 팔랑크스"))
     usecase.use_component(component("초월자 시그너스의 축복"))
     usecase.use_component(component("크리티컬 리인포스"))
+    usecase.use_component(component("미스트랄 스프링"))
+    usecase.use_component(component("미스트랄 스프링 (정령의 기운)"))
+    usecase.use_component(component("미스트랄 스프링 (신난 정령의 기운)"))
+    usecase.use_component(component("미스트랄 스프링 (거센 정령의 기운)"))
+
+    usecase.listen(("미스트랄 스프링", "use.emitted.global.delay"), component("미스트랄 스프링 (정령의 기운)").reducer("use"))
+    usecase.listen(("미스트랄 스프링", "use.emitted.global.delay"), component("미스트랄 스프링 (신난 정령의 기운)").reducer("use"))
+    usecase.listen(("미스트랄 스프링", "use.emitted.global.delay"), component("미스트랄 스프링 (거센 정령의 기운)").reducer("use"))
 
     usecase.listen(("핀포인트 피어스", "use.emitted.global.damage"), component("스톰 브링어").reducer("trigger"))
     usecase.listen(("천공의 노래", "elapse.emitted.global.damage"), component("스톰 브링어").reducer("trigger"))
