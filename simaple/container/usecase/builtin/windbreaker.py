@@ -14,6 +14,7 @@ def windbreaker_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("엘리멘트 : 스톰"))
     usecase.use_component(component("세컨드 윈드"))
     usecase.use_component(component("핀포인트 피어스"))
+    usecase.use_component(component("핀포인트 피어스#버프"))
     usecase.use_component(component("시그너스 나이츠"))
     usecase.use_component(component("샤프 아이즈"))
     usecase.use_component(component("스톰 브링어"))
@@ -41,6 +42,8 @@ def windbreaker_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("미스트랄 스프링 (정령의 기운)"))
     usecase.use_component(component("미스트랄 스프링 (신난 정령의 기운)"))
     usecase.use_component(component("미스트랄 스프링 (거센 정령의 기운)"))
+
+    usecase.listen(("핀포인트 피어스", "use.emitted.global.delay"), component("핀포인트 피어스#버프").reducer("use"))
 
     usecase.listen(("미스트랄 스프링", "use.emitted.global.delay"), component("미스트랄 스프링 (정령의 기운)").reducer("use"))
     usecase.listen(("미스트랄 스프링", "use.emitted.global.delay"), component("미스트랄 스프링 (신난 정령의 기운)").reducer("use"))

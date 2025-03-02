@@ -20,7 +20,10 @@ def bishop_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("프레이"))
     usecase.use_component(component("엔젤 오브 리브라"))
     usecase.use_component(component("엔젤릭 터치"))
+    usecase.use_component(component("엔젤릭 터치#버프"))
     usecase.use_component(component("피스메이커"))
+    usecase.use_component(component("피스메이커#버프"))
+
     usecase.use_component(component("디바인 퍼니시먼트"))
     usecase.use_component(component("홀리 어드밴트"))
     usecase.use_component(component("홀리 어드밴트#버프"))
@@ -43,6 +46,9 @@ def bishop_usecase(environment: SimulationEnvironment) -> Usecase:
     usecase.use_component(component("메이플월드 여신의 축복"))
     usecase.use_component(component("제네시스"))
     usecase.use_component(component("평범한 몬스터"))
+
+    usecase.listen(("엔젤릭 터치", "use.emitted.global.delay"), component("엔젤릭 터치#버프").reducer("use"))
+    usecase.listen(("피스메이커", "use.emitted.global.delay"), component("피스메이커#버프").reducer("use"))
 
     usecase.listen(("홀리 어드밴트", "use.emitted.global.delay"), component("홀리 어드밴트#버프").reducer("use"))
     usecase.listen(("홀리 어드밴트", "use.emitted.global.delay"), component("홀리 어드밴트#균형의 대천사").reducer("use"))
