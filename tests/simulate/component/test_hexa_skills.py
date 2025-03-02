@@ -5,10 +5,6 @@ from simaple.simulate.component.common.multiple_hit_hexa_skill import (
     MultipleHitHexaSkillComponent,
     MultipleHitHexaSkillState,
 )
-from simaple.simulate.component.common.periodic_damage_configurated_hexa_skill import (
-    PeriodicDamageConfiguratedHexaSkillComponent,
-    PeriodicDamageHexaState,
-)
 from simaple.simulate.component.common.triple_periodic_damage_hexa_skill import (
     TriplePeriodicDamageHexaComponent,
     TriplePeriodicDamageHexaComponentState,
@@ -50,47 +46,6 @@ def test_multiple_hit_skill(
     assert events[0]["payload"] == {"damage": 100, "hit": 1.0, "modifier": None}
     assert events[1]["payload"] == {"damage": 200, "hit": 3.0, "modifier": None}
     assert events[2]["payload"] == {"time": 30.0}
-
-
-@pytest.fixture
-def periodic_damage_component():
-    component = PeriodicDamageConfiguratedHexaSkillComponent(
-        id="test",
-        name="periodic-damage-component",
-        damage_and_hits=[{"damage": 100, "hit": 1}, {"damage": 200, "hit": 3}],
-        delay=30,
-        periodic_interval=120,
-        periodic_damage=50,
-        periodic_hit=3,
-        lasting_duration=1_000,
-        cooldown_duration=30_000,
-    )
-    return component
-
-
-@pytest.fixture
-def periodic_damage_state(
-    periodic_damage_component: PeriodicDamageConfiguratedHexaSkillComponent,
-    dynamics: Dynamics,
-):
-    return {
-        **periodic_damage_component.get_default_state(),
-        "dynamics": dynamics,
-    }
-
-
-def test_periodic_damage_component_emit_initial_damage(
-    periodic_damage_component: PeriodicDamageConfiguratedHexaSkillComponent,
-    periodic_damage_state: PeriodicDamageHexaState,
-):
-    # given
-    _, events = periodic_damage_component.use(None, periodic_damage_state)
-
-    # then
-    assert events[0]["payload"] == {"damage": 100, "hit": 1.0, "modifier": None}
-    assert events[1]["payload"] == {"damage": 200, "hit": 3.0, "modifier": None}
-    assert events[2]["payload"] == {"damage": 0, "hit": 0.0, "modifier": None}
-    assert events[3]["payload"] == {"time": 30.0}
 
 
 @pytest.fixture
