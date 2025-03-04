@@ -251,7 +251,7 @@ data:
     final_damage_multiplier: 10
 ---
 kind: Component
-version: simaple.io/SynergySkillComponent
+version: simaple.io/AttackSkillComponent
 metadata:
   label:
     group: bishop
@@ -264,14 +264,29 @@ data:
   damage: 350
   hit: 5
   cooldown_duration: 10_000
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: bishop
+    name: 엔젤릭 터치#버프
+    id: 2301010-1
+data:
+  id: 2301010-1
+  name: 엔젤릭 터치#버프
+  delay: 0
+  cooldown_duration: 0
+  disable_validity: True
 
-  synergy:
+  stat:
     ignored_defence: 44
 
   lasting_duration: 60_000
+  apply_buff_duration: false
 ---
 kind: Component
-version: simaple.io/SynergySkillComponent
+version: simaple.io/AttackSkillComponent
 metadata:
   label:
     group: bishop
@@ -288,8 +303,30 @@ data:
   damage: "{{ 350 + 14 * skill_level }}"
   hit: 16
   cooldown_duration: 10_000
+---
+kind: Component
+version: simaple.io/BuffSkillComponent
+metadata:
+  label:
+    group: bishop
+    name: 피스메이커#버프
+    id: 400021070-1
+patch:
+  - name: SkillLevelPatch
+    payload:
+      level_reference_name: 피스메이커
+  - ArithmeticPatch
+  - name: HexaSkillImprovementPatch
+    payload:
+      level_reference_name: 피스메이커
+data:
+  id: 400021070-1
+  name: 피스메이커#버프
+  delay: 0
+  cooldown_duration: 0
+  disable_validity: True
 
-  synergy:
+  stat:
     damage_multiplier: "{{ 5 + skill_level // 5 }}"
 
   lasting_duration: 8_000
