@@ -26,6 +26,8 @@ class PeriodicDamageSkillComponentProps(TypedDict):
     periodic_hit: float
     lasting_duration: float
 
+    finish_damage: Optional[float]
+    finish_hit: Optional[float]
 
 class PeriodicDamageSkillComponent(
     Component,
@@ -41,6 +43,9 @@ class PeriodicDamageSkillComponent(
     periodic_hit: float
 
     lasting_duration: float
+
+    finish_damage: Optional[float] = None
+    finish_hit: Optional[float] = None
 
     def get_default_state(self) -> PeriodicDamageSkillState:
         return {
@@ -64,15 +69,30 @@ class PeriodicDamageSkillComponent(
             "periodic_damage": self.periodic_damage,
             "periodic_hit": self.periodic_hit,
             "lasting_duration": self.lasting_duration,
+            "finish_damage": self.finish_damage,
+            "finish_hit": self.finish_hit,
         }
 
     @reducer_method
     def elapse(self, time: float, state: PeriodicDamageSkillState):
+        was_running = state["periodic"].enabled()
         state, events = periodic_trait.elapse_periodic_with_cooldown(
             state,
             {"time": time},
             **self.get_props(),
         )
+        is_running = state["periodic"].enabled()
+
+        # 종료 시점에 데미지 추가
+        if (
+            self.finish_hit is not None
+            and self.finish_damage is not None
+            and was_running
+            and not is_running
+        ):  
+            events.append(
+                self.event_provider.dealt(self.finish_damage, self.finish_hit)
+            )
 
         return state, events
 
