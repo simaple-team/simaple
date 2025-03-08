@@ -1,1 +1,1 @@
-globalThis.SIMAPLE_FILE_NAME = "simaple-0.0.0dev+locald6412d7d-py3-none-any.whl"
+globalThis.SIMAPLE_FILE_NAME = "simaple-0.0.0dev+localf0b2da85-py3-none-any.whl"

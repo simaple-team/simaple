@@ -12,3 +12,5 @@ report.tsv
 .workspace/
 .simaple
 scripts/.simaple.memo
+**/.tool-versions
+.ipynb_checkpoints/
