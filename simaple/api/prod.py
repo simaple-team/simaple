@@ -66,6 +66,7 @@ def provideEnvironmentAugmentedPlan(plan: str) -> str:
 
 
 def getInitialPlanFromMetadata(metadata_dict: dict) -> str:
+    metadata_dict = cast(dict, metadata_dict.to_py())  # type: ignore
     return get_initial_plan_from_metadata(metadata_dict)
 
 

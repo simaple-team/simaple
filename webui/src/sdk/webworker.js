@@ -62,6 +62,9 @@ self.onmessage = async (event) => {
         result = pyodide.getAllComponent(params.plan);
         result = result.toJs({ dict_converter: Object.fromEntries });
         break;
+      case "getInitialPlanFromMetadata":
+        result = pyodide.getInitialPlanFromMetadata(params.metadata);
+        break;
       default:
         throw new Error(`Unknown method: ${method}`);
     }
