@@ -1,0 +1,340 @@
+스나이핑 VI:
+  template: '스나이핑 : MP {v1} 소비, {v2}%의 데미지로 9번 공격
+
+    적중한 적에게 표식을 남김
+
+    인핸스 스나이핑 : MP {v4} 소비, {v5}%의 데미지로 10번 공격
+
+    표식이 새겨진 적 적중 시 {v7}%의 데미지로 5번 공격하는 추가타 발생
+
+    얼티밋 스나이핑 : MP {v9} 소비
+
+    {v10}%의 데미지로 10번 공격하는 화살을 2발 발사
+
+    표식이 새겨진 적 적중 시 {v13}%의 데미지로 5번 공격하는 추가타 발생
+
+    스나이핑, 인핸스 스나이핑, 얼티밋 스나이핑은 몬스터 방어율 {v15}% 무시, 추가 크리티컬 확률 100%'
+  level_equations:
+    v1:
+      a: 1
+      b: 60
+      divisor: 3
+      equation: (skill_level // 3) + 60
+    v2:
+      a: 6
+      b: 490
+      divisor: 1
+      equation: skill_level * 6 + 490
+    v4:
+      a: 2
+      b: 120
+      divisor: 3
+      equation: (skill_level // 3) * 2 + 120
+    v5:
+      a: 5
+      b: 485
+      divisor: 1
+      equation: skill_level * 5 + 485
+    v7:
+      a: 3
+      b: 320
+      divisor: 1
+      equation: skill_level * 3 + 320
+    v9:
+      a: 2
+      b: 120
+      divisor: 3
+      equation: (skill_level // 3) * 2 + 120
+    v10:
+      a: 3
+      b: 255
+      divisor: 1
+      equation: skill_level * 3 + 255
+    v13:
+      a: 3
+      b: 320
+      divisor: 1
+      equation: skill_level * 3 + 320
+    v15:
+      a: 1
+      b: 30
+      divisor: 3
+      equation: (skill_level // 3) + 30
+피어싱 VI:
+  template: "피어싱 : MP {v1} 소비, 최대 8명의 적을 관통하며 {v3}%의 데미지로 5번 공격\n 화살이 적을 관통할 때마다 최종\
+    \ 데미지가 15%씩 증가, 증가하는 데미지 간에는 곱 적용\n 처음 관통한 적 근처에 화살 조각이 튀어 최대 3명의 적을 {v7}%의 데미지로\
+    \ 4번 공격\n인핸스 피어싱 : MP {v9} 소비, 최대 10명의 적을 {v11}%의 데미지로 6번 공격, 소멸 지점에서 화살이 폭발하여\
+    \ 최대 10명의 적을 {v14}%의 데미지로 10번 추가 공격 \n얼티밋 피어싱 : MP {v16} 소비, 최대 10명의 적을 {v18}%의\
+    \ 데미지로 6번 공격, 소멸 지점에서 화살이 폭발하여 최대 10명의 적을 {v21}%의 데미지로 10번 추가 공격\n[패시브 효과 : 스나이핑\
+    \ VI 데미지 {v23}%p, 인핸스 스나이핑 VI 데미지 {v24}%p, 인핸스 스나이핑 VI 추가타 데미지 {v25}%p, 얼티밋 스나이핑\
+    \ VI 데미지 {v26}%p, 얼티밋 스나이핑 VI 추가타 데미지 {v27}%p 증가]"
+  level_equations:
+    v1:
+      a: 1
+      b: 55
+      divisor: 3
+      equation: (skill_level // 3) + 55
+    v3:
+      a: 6
+      b: 375
+      divisor: 1
+      equation: skill_level * 6 + 375
+    v7:
+      a: 7
+      b: 385
+      divisor: 1
+      equation: skill_level * 7 + 385
+    v9:
+      a: 1
+      b: 100
+      divisor: 3
+      equation: (skill_level // 3) + 100
+    v11:
+      a: 7
+      b: 460
+      divisor: 1
+      equation: skill_level * 7 + 460
+    v14:
+      a: 4
+      b: 305
+      divisor: 1
+      equation: skill_level * 4 + 305
+    v16:
+      a: 1
+      b: 100
+      divisor: 3
+      equation: (skill_level // 3) + 100
+    v18:
+      a: 7
+      b: 470
+      divisor: 1
+      equation: skill_level * 7 + 470
+    v21:
+      a: 4
+      b: 320
+      divisor: 1
+      equation: skill_level * 4 + 320
+    v23:
+      a: 3
+      b: 0
+      divisor: 1
+      equation: skill_level * 3
+    v24:
+      a: 5
+      b: 0
+      divisor: 1
+      equation: skill_level * 5
+    v25:
+      a: 2
+      b: 0
+      divisor: 1
+      equation: skill_level * 2
+    v26:
+      a: 2
+      b: 0
+      divisor: 1
+      equation: skill_level * 2
+    v27:
+      a: 2
+      b: 0
+      divisor: 1
+      equation: skill_level * 2
+프리져 VI:
+  template: 'MP {v1} 소비, 270초 동안 프리져 소환
+
+    프리져는 최대 6명의 적을 {v4}%의 데미지로 3번 공격
+
+    공격에 맞은 적은 3초 동안 빙결
+
+    [패시브 효과 : 스나이핑 VI 데미지 {v7}%p, 인핸스 스나이핑 VI 데미지 {v8}%p, 인핸스 스나이핑 VI 추가타 데미지 {v9}%p,
+    얼티밋 스나이핑 VI 데미지 {v10}%p, 얼티밋 스나이핑 VI 추가타 데미지 {v11}%p 증가]'
+  level_equations:
+    v4:
+      a: 5
+      b: 330
+      divisor: 1
+      equation: skill_level * 5 + 330
+    v7:
+      a: 4
+      b: 0
+      divisor: 1
+      equation: skill_level * 4
+    v8:
+      a: 3
+      b: 5
+      divisor: 1
+      equation: skill_level * 3 + 5
+    v9:
+      a: 4
+      b: 0
+      divisor: 1
+      equation: skill_level * 4
+    v10:
+      a: 3
+      b: 2
+      divisor: 1
+      equation: skill_level * 3 + 2
+    v11:
+      a: 3
+      b: 0
+      divisor: 1
+      equation: skill_level * 3
+볼트 스위프트 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 7번 공격
+
+    재사용 대기시간 7초'
+  level_equations:
+    v1:
+      a: 1
+      b: 100
+      divisor: 3
+      equation: (skill_level // 3) + 100
+    v3:
+      a: 7
+      b: 470
+      divisor: 1
+      equation: skill_level * 7 + 470
+파이널 어택 VI:
+  template: '[파이널 어택류 스킬] 60% 확률로 {v2}% 데미지의 파이널 어택 발동
+
+    [패시브 효과 : 스나이핑 VI 데미지 {v3}%p, 인핸스 스나이핑 VI 데미지 {v4}%p, 인핸스 스나이핑 VI 추가타 데미지 {v5}%p,
+    얼티밋 스나이핑 VI 데미지 {v6}%p, 얼티밋 스나이핑 VI 추가타 데미지 {v7}%p 증가]'
+  level_equations:
+    v2:
+      a: 4
+      b: 220
+      divisor: 1
+      equation: skill_level * 4 + 220
+    v3:
+      a: 1
+      b: 0
+      divisor: 1
+      equation: skill_level
+    v4:
+      a: 1
+      b: 0
+      divisor: 1
+      equation: skill_level
+    v5:
+      a: 1
+      b: 0
+      divisor: 1
+      equation: skill_level
+    v6:
+      a: 1
+      b: 0
+      divisor: 1
+      equation: skill_level
+    v7:
+      a: 1
+      b: 0
+      divisor: 1
+      equation: skill_level
+롱 레인지 트루샷 VI:
+  template: 'MP {v1} 소비, 최대 12명의 적을 {v3}%의 데미지로 9번 공격하는 타격이 6회 발생
+
+    재사용 대기시간 40초'
+  level_equations:
+    v1:
+      a: 1
+      b: 345
+      divisor: 2
+      equation: (skill_level // 2) + 345
+    v3:
+      a: 6
+      b: 372
+      divisor: 1
+      equation: skill_level * 6 + 372
+파이널 에임:
+  template: 'MP 1200 소비, 시전 동작 중 무적
+
+    최대 15명의 적을 {v3}%의 데미지로 7번 공격하는 파동 35회 발생
+
+    이후 최대 15명의 적을 {v7}%의 데미지로 13번 공격하는 화살 35회 명중
+
+    파이널 에임 적중 시 스플릿 애로우의 화살 최대 13번까지만 발생
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 26
+      b: 780
+      divisor: 1
+      equation: skill_level * 26 + 780
+    v7:
+      a: 29
+      b: 840
+      divisor: 1
+      equation: skill_level * 29 + 840
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      10: 37
+      2: 12
+      1: 10
+      4: 16
+      3: 14
+      9: 26
+      7: 22
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+트루 스나이핑 강화:
+  template: 트루 스나이핑의 최종 데미지 {v1}% 증가
+  level_equations:
+    v1:
+      a: 1
+      b: 10
+      divisor: 1
+      equation: skill_level + 10
+스플릿 애로우 강화:
+  template: 스플릿 애로우의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      27: 47
+      30: 60
+      10: 25
+      11: 26
+      22: 42
+      1: 11
+      5: 15
+      3: 13
+      2: 12
+      6: 16
+      7: 17
+      4: 14
+차지드 애로우 강화:
+  template: 차지드 애로우의 최종 데미지 {v1}% 증가
+  level_equations:
+    v1:
+      a: 1
+      b: 10
+      divisor: 1
+      equation: skill_level + 10
+리피팅 크로스보우 카트리지 강화:
+  template: 리피팅 크로스보우 카트리지의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      10: 25
+      30: 60
+      3: 13
+      1: 11
+      4: 14
+      9: 19
+      2: 12

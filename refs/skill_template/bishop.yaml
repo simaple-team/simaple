@@ -1,0 +1,310 @@
+엔젤레이 VI:
+  template: 'MP {v1} 소비, 최대 4명의 적을 {v3}%의 데미지로 14번 공격하고 나를 포함한 파티원의 HP를 최대 HP의 10%
+    만큼 회복
+
+    성검 12회 적중 시 심판의 천사가 나타나 적을 추가 공격
+
+    심판의 천사 : 최대 15명의 적을 {v8}%의 데미지로 10번 공격'
+  level_equations:
+    v1:
+      a: 1
+      b: 60
+      divisor: 3
+      equation: (skill_level // 3) + 60
+    v3:
+      a: 4
+      b: 235
+      divisor: 1
+      equation: skill_level * 4 + 235
+    v8:
+      a: 9
+      b: 550
+      divisor: 1
+      equation: skill_level * 9 + 550
+빅뱅 VI:
+  template: 'MP {v1} 소비, 최대 10명의 적을 {v3}%의 데미지로 4번 공격
+
+    신성 폭발 : MP {v5} 소비, 최대 12명의 적을 {v7}%의 데미지로 6번 공격
+
+    재발동 대기시간 6초
+
+    빅뱅 및 신성 폭발의 일반 몬스터 공격 시 데미지 50% 증가'
+  level_equations:
+    v3:
+      a: 10
+      b: 520
+      divisor: 1
+      equation: skill_level * 10 + 520
+    v7:
+      a: 9
+      b: 445
+      divisor: 1
+      equation: skill_level * 9 + 445
+트라이엄프 페더 VI:
+  template: 'MP {v1} 소비, 180초 동안 지속
+
+    자신이 직접 공격하는 스킬 적중 시 4초 동안 적을 찾아 {v4}%의 데미지로 4번 공격하는 천사의 날개 깃털 6개 생성
+
+    하나의 적에게 여러 개의 날개 깃털 적중 시 두 번째 날개 깃털부터 최종 데미지 50% 감소
+
+    날개 깃털 재생성 대기시간 3초
+
+    재사용 대기시간 60초'
+  level_equations:
+    v4:
+      a: 6
+      b: 390
+      divisor: 1
+      equation: skill_level * 6 + 390
+엔젤릭 터치 VI:
+  template: 'MP {v1} 소비, 최대 6명의 적을 {v3}%의 데미지로 7번 공격
+
+    공격 당한 적은 60초 동안 방어율 44% 감소하는 디버프 적용
+
+    천사가 공격한 위치에 성물 생성
+
+    성물 : 90초 동안 소환, 최대 10명의 적에게 엔젤릭 터치와 동일한 디버프를 10초 동안 적용, 엔젤릭 터치의 디버프와 중첩 적용되지 않음
+
+    재사용 대기시간 10초'
+  level_equations:
+    v3:
+      a: 8
+      b: 350
+      divisor: 1
+      equation: skill_level * 8 + 350
+파운틴 포 엔젤 VI:
+  template: 'MP {v1} 소비, 60초 동안 지속
+
+    일정 시간마다 최대 8명의 적을 {v4}%의 데미지로 5번 공격
+
+    재사용 대기시간 30초'
+  level_equations:
+    v4:
+      a: 4
+      b: 190
+      divisor: 1
+      equation: skill_level * 4 + 190
+바하뮤트 VI:
+  template: 'MP {v1} 소비, 270초 동안 바하뮤트 소환
+
+    바하뮤트는 최대 5명의 적을 {v4}%의 데미지로 3번 공격
+
+    [패시브 효과 : 엔젤레이 VI 데미지 {v6}%p 증가, 엔젤레이 VI 심판의 천사 데미지 {v7}%p 증가, 엔젤레이 VI 심판의 천사
+    발동에 필요한 성검 적중 횟수 {v8}회 감소]'
+  level_equations:
+    v1:
+      a: 1
+      b: 120
+      divisor: 2
+      equation: (skill_level // 2) + 120
+    v4:
+      a: 6
+      b: 192
+      divisor: 1
+      equation: skill_level * 6 + 192
+    v6:
+      a: 1
+      b: 5
+      divisor: 2
+      equation: (skill_level // 2) + 5
+    v7:
+      a: 1
+      b: 5
+      divisor: 1
+      equation: skill_level + 5
+제네시스 VI:
+  template: 'MP {v1} 소비, 최대 15명의 적을 {v3}%의 데미지로 10번 공격, 추가 크리티컬 확률 20%
+
+    재사용 대기시간 30초
+
+    [패시브 효과 : [파이널 어택류 스킬] 직접 공격하는 공격 스킬 적중 시 {v7}% 확률로 {v8}%의 데미지로 공격하는 천사의 응징 발생]'
+  level_equations:
+    v1:
+      a: 4
+      b: 290
+      divisor: 3
+      equation: (skill_level // 3) * 4 + 290
+    v3:
+      a: 16
+      b: 345
+      divisor: 1
+      equation: skill_level * 16 + 345
+    v8:
+      a: 7
+      b: 195
+      divisor: 1
+      equation: skill_level * 7 + 195
+헤븐즈 도어 VI:
+  template: 'MP {v1} 소비, 최대 15명의 적을 {v3}% 데미지로 10번 공격, 동시에 주위 파티원에게 HP가 0이 되는 것을 한
+    번 무시하는 버프 지급
+
+    재사용 대기시간 60초
+
+    버프를 받은 파티원은 600초 동안 헤븐즈 도어의 버프를 다시 받을 수 없음'
+  level_equations:
+    v1:
+      a: 2
+      b: 500
+      divisor: 1
+      equation: skill_level * 2 + 500
+    v3:
+      a: 8
+      b: 565
+      divisor: 1
+      equation: skill_level * 8 + 565
+홀리 어드밴트:
+  template: 'MP 1500 소비, 시전 동작 중 무적
+
+    대천사들이 강림하며 최대 15명의 적을 {v3}%의 데미지로 8번 공격하는 참격이 25회, {v6}%의 데미지로 12번 공격하는 참격이 35회
+    발생
+
+    60초 동안 최종 데미지 5% 증가 및 균형, 복수, 자애의 대천사가 현현
+
+    대천사는 최대 12명의 적을 공격, 재강림 대기시간 3초
+
+    균형의 대천사 : 3초마다 {v14}%의 데미지로 14번 공격
+
+    복수의 대천사 : 5초마다 {v17}%의 데미지로 12번 공격
+
+    자애의 대천사 : 4초마다 {v20}%의 데미지로 12번 공격
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 10
+      b: 270
+      divisor: 1
+      equation: skill_level * 10 + 270
+    v6:
+      a: 8
+      b: 235
+      divisor: 1
+      equation: skill_level * 8 + 235
+    v14:
+      a: 9
+      b: 245
+      divisor: 1
+      equation: skill_level * 9 + 245
+    v17:
+      a: 8
+      b: 260
+      divisor: 1
+      equation: skill_level * 8 + 260
+    v20:
+      a: 10
+      b: 300
+      divisor: 1
+      equation: skill_level * 10 + 300
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      12: 41
+      10: 37
+      13: 43
+      20: 67
+      30: 100
+      19: 55
+      2: 12
+      11: 39
+      1: 10
+      6: 20
+      22: 71
+      23: 73
+      4: 16
+      5: 18
+      3: 14
+      7: 22
+      9: 26
+      16: 49
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+프레이 강화:
+  template: '프레이 사용 시 비숍의 최종 데미지 {v1}% 추가 증가, 프레이로 인한 다른 최종 데미지 증가 효과와 합적용
+
+    [패시브 효과 : 올스탯 {v2} 증가]'
+  level_equations:
+    v1:
+      a: 1
+      b: 2
+      divisor: 2
+      equation: (skill_level // 2) + 2
+    v2:
+      a: 3
+      b: 0
+      divisor: 1
+      equation: skill_level * 3
+엔젤 오브 리브라 강화:
+  template: 엔젤 오브 리브라의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      20: 40
+      3: 13
+      10: 25
+      23: 43
+      4: 14
+      30: 60
+      2: 12
+      7: 17
+      1: 11
+      11: 26
+      25: 45
+      9: 19
+      5: 15
+      6: 16
+피스메이커 강화:
+  template: 피스메이커의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      9: 19
+      21: 41
+      10: 25
+      24: 44
+      4: 14
+      20: 40
+      2: 12
+      1: 11
+      11: 26
+      3: 13
+디바인 퍼니시먼트 강화:
+  template: 디바인 퍼니시먼트의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      22: 42
+      20: 40
+      23: 43
+      10: 25
+      21: 41
+      19: 34
+      12: 27
+      17: 32
+      16: 31
+      11: 26
+      2: 12
+      1: 11
+      4: 14
+      13: 28
+      5: 15
+      18: 33
+      8: 18
+      3: 13
+      9: 19
+      15: 30

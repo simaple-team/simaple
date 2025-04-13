@@ -1,0 +1,480 @@
+폴링 더스트 VI:
+  template: 'MP {v1} 소비, 최대 12명의 적을 {v3}%의 데미지로 8번 공격
+
+    폴링 더스트 카트리지는 10초마다 1개씩 준비되며 최대 2개까지 소지 가능'
+  level_equations:
+    v1:
+      a: 1
+      b: 110
+      divisor: 2
+      equation: (skill_level // 2) + 110
+    v3:
+      a: 14
+      b: 490
+      divisor: 1
+      equation: skill_level * 14 + 490
+'[발현] 폴링 더스트 VI':
+  template: 'MP {v1} 소비, 최대 12명의 적을 {v3}%의 데미지로 10번 공격 후 악의가 분출되어 최대 15명의 적을 {v6}%의
+    데미지로 15번 추가 공격
+
+    재발현 대기시간 14초'
+  level_equations:
+    v1:
+      a: 1
+      b: 110
+      divisor: 2
+      equation: (skill_level // 2) + 110
+    v3:
+      a: 16
+      b: 550
+      divisor: 1
+      equation: skill_level * 16 + 550
+    v6:
+      a: 12
+      b: 395
+      divisor: 1
+      equation: skill_level * 12 + 395
+'[처형] 포이즌 니들 VI':
+  template: 'MP {v1} 소비, 최대 6명의 적을 {v3}%의 데미지로 8번 공격 후 최대 6명의 적을 {v6}%의 데미지로 8번 연속
+    공격, 연속 공격에 맞은 적은 12초 동안 초당 {v9}%의 도트 데미지
+
+    연속 공격 종료 시 최대 6명의 적을 {v11}%의 데미지로 10번 공격하는 마무리 일격 발동
+
+    재사용 대기시간 15초'
+  level_equations:
+    v1:
+      a: 2
+      b: 120
+      divisor: 3
+      equation: (skill_level // 3) * 2 + 120
+    v3:
+      a: 11
+      b: 380
+      divisor: 1
+      equation: skill_level * 11 + 380
+    v6:
+      a: 9
+      b: 280
+      divisor: 1
+      equation: skill_level * 9 + 280
+    v9:
+      a: 10
+      b: 320
+      divisor: 1
+      equation: skill_level * 10 + 320
+    v11:
+      a: 7
+      b: 250
+      divisor: 1
+      equation: skill_level * 7 + 250
+스트라이크 애로우 VI:
+  template: "MP {v1} 소비, 최대 6명의 적을 {v3}%의 데미지로 5번 공격\r\n\n화살 파편 : 스트라이크 애로우에 적중되지\
+    \ 않은 적 최대 2명을 {v6}%의 데미지로 5번 공격"
+  level_equations:
+    v1:
+      a: 1
+      b: 25
+      divisor: 3
+      equation: (skill_level // 3) + 25
+    v3:
+      a: 9
+      b: 400
+      divisor: 1
+      equation: skill_level * 9 + 400
+    v6:
+      a: 7
+      b: 360
+      divisor: 1
+      equation: skill_level * 7 + 360
+'[발현] 스트라이크 애로우 VI':
+  template: 'MP {v1} 소비, 최대 6명의 적을 {v3}%의 데미지로 8번 공격
+
+    재발현 대기시간 1초'
+  level_equations:
+    v1:
+      a: 1
+      b: 25
+      divisor: 3
+      equation: (skill_level // 3) + 25
+    v3:
+      a: 14
+      b: 600
+      divisor: 1
+      equation: skill_level * 14 + 600
+스캐터링 샷 VI:
+  template: 'MP {v1} 소비, {v2}%의 데미지로 4번 공격하는 화살 6발 발사
+
+    화살 당 최대 2명의 적 공격 가능, 일반 몬스터 공격 시 데미지 30% 증가
+
+    1명의 적이 여러 개의 화살을 동시에 맞을 경우 2번째 화살부터 최종 데미지 50% 감소
+
+    스캐터링 샷 카트리지는 6초마다 1개씩 준비되며 최대 3개까지 소지 가능'
+  level_equations:
+    v1:
+      a: 1
+      b: 45
+      divisor: 3
+      equation: (skill_level // 3) + 45
+    v2:
+      a: 6
+      b: 268
+      divisor: 1
+      equation: skill_level * 6 + 268
+'[발현] 스캐터링 샷 VI':
+  template: "MP {v1} 소비, {v2}%의 데미지로 4번 공격하는 화살 7개 발사\n 일반 몬스터 공격 시 데미지 30% 증가\n1명의\
+    \ 적이 여러 개의 화살을 동시에 맞을 경우 2번째 화살부터 최종 데미지 50% 감소\n재발현 대기시간 6초"
+  level_equations:
+    v1:
+      a: 1
+      b: 45
+      divisor: 3
+      equation: (skill_level // 3) + 45
+    v2:
+      a: 11
+      b: 420
+      divisor: 1
+      equation: skill_level * 11 + 420
+'[처형] 테어링 나이프 VI':
+  template: 'MP {v1} 소비, 최대 4명의 적을 {v3}%의 데미지로 7번 공격
+
+    재사용 대기시간 4.50초'
+  level_equations:
+    v1:
+      a: 1
+      b: 50
+      divisor: 4
+      equation: (skill_level // 4) + 50
+    v3:
+      a: 13
+      b: 500
+      divisor: 1
+      equation: skill_level * 13 + 500
+'[처형] 체인 시클 VI':
+  template: 'MP {v1} 소비, 최대 5명의 적을 {v3}%의 데미지로 6번 공격한 후 최대 5명의 적을 {v6}%의 데미지로 14번
+    공격하는 마무리 일격
+
+    재사용 대기 시간 7초'
+  level_equations:
+    v1:
+      a: 1
+      b: 100
+      divisor: 5
+      equation: (skill_level // 5) + 100
+    v3:
+      a: 7
+      b: 315
+      divisor: 1
+      equation: skill_level * 7 + 315
+    v6:
+      a: 8
+      b: 283
+      divisor: 1
+      equation: skill_level * 8 + 283
+드래곤 팡 VI:
+  template: '{v1}초 동안 소환
+
+    카인이 직접 공격하는 스킬 적중 시 공격 모드가 되어 목표한 적에게 이동 후 {v2}%의 데미지로 4번 공격하는 드래곤 바이트 발동, 공격
+    모드 발동 후 최대 7번 드래곤 바이트 시전 후 복귀
+
+    일반 몬스터 공격 시 데미지 {v5}% 증가
+
+    최대 3개까지 소환 가능
+
+    공격 모드 발동 대기시간 3초'
+  level_equations:
+    v1:
+      a: 1
+      b: 45
+      divisor: 2
+      equation: (skill_level // 2) + 45
+    v2:
+      a: 5
+      b: 287
+      divisor: 1
+      equation: skill_level * 5 + 287
+    v5:
+      a: 1
+      b: 50
+      divisor: 1
+      equation: skill_level + 50
+샤프트 브레이크 VI:
+  template: 'MP {v1} 소비, 최대 3명의 적을 {v3}%의 데미지로 3번 관통 공격
+
+    붕괴 시 최대 7명을 끌어당긴 후 폭발, 폭발은 10명의 적을 {v7}%의 데미지로 10번 공격
+
+    샤프트 브레이크 카트리지는 8초마다 1개씩 준비되며 최대 3개까지 소지 가능'
+  level_equations:
+    v1:
+      a: 1
+      b: 67
+      divisor: 3
+      equation: (skill_level // 3) + 67
+    v3:
+      a: 5
+      b: 285
+      divisor: 1
+      equation: skill_level * 5 + 285
+    v7:
+      a: 5
+      b: 235
+      divisor: 1
+      equation: skill_level * 5 + 235
+'[발현] 샤프트 브레이크 VI':
+  template: 'MP {v1} 소비, 최대 3명의 적을 {v3}%의 데미지로 3번 관통 공격
+
+    붕괴 시 최대 7명을 끌어당긴 후 폭발, 폭발은 최대 10명의 적을 {v7}%의 데미지로 10번 공격
+
+    회오리는 최대 10명의 적을 {v10}%의 데미지로 3번 지속 공격
+
+    재발현 대기시간 11초'
+  level_equations:
+    v1:
+      a: 1
+      b: 67
+      divisor: 3
+      equation: (skill_level // 3) + 67
+    v3:
+      a: 11
+      b: 452
+      divisor: 1
+      equation: skill_level * 11 + 452
+    v7:
+      a: 12
+      b: 510
+      divisor: 1
+      equation: skill_level * 12 + 510
+    v10:
+      a: 2
+      b: 91
+      divisor: 1
+      equation: skill_level * 2 + 91
+'[처형] 팬텀 블레이드 VI':
+  template: MP {v1} 소비, 최대 4명의 적을 {v3}%의 데미지로 6번 공격
+  level_equations:
+    v1:
+      a: 1
+      b: 30
+      divisor: 5
+      equation: (skill_level // 5) + 30
+    v3:
+      a: 11
+      b: 415
+      divisor: 1
+      equation: skill_level * 11 + 415
+리메인 인센스 VI:
+  template: '발현 스킬 사용 시 및 타나토스 디센트로 인한 죽음의 영역 발동 시 10초 동안 유지되는 결정 생성, 사용한 스킬에 따라 생성
+    개수 변경
+
+    활성화 시 결정마다 1명의 적을 {v3}%의 데미지로 4번 공격, 일반 몬스터 공격 시 데미지 {v5}% 증가
+
+    재생성 대기시간 0.3초'
+  level_equations:
+    v3:
+      a: 5
+      b: 270
+      divisor: 1
+      equation: skill_level * 5 + 270
+    v5:
+      a: 2
+      b: 100
+      divisor: 1
+      equation: skill_level * 2 + 100
+데스 블레싱 VI:
+  template: '50명의 적 처치 시 최대 HP 5% 회복
+
+    보스 몬스터에게 죽음의 축복 실현 시 최대 HP의 3% 회복
+
+    최대 90초 동안 유지 및 15번까지 중첩 가능
+
+    축복 실현 : 죽음의 축복 소모 후 {v6}%의 데미지로 10번 공격 후 공로 버프 획득
+
+    공로 버프 : 5초 동안 죽음의 축복/처형 스킬 최종 데미지 28% 증가, 축복 실현 시킬 수 있는 처형 스킬 적중 시 12의 맬리스 생성
+
+    [패시브 효과 : 어나일레이션 악의의 영지 발동 중 데스 블레싱의 데미지 {v11}%p 증가]'
+  level_equations:
+    v6:
+      a: 10
+      b: 330
+      divisor: 1
+      equation: skill_level * 10 + 330
+    v11:
+      a: 7
+      b: 40
+      divisor: 1
+      equation: skill_level * 7 + 40
+체이싱 샷 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 추적하여 {v3}%의 데미지로 6번 공격하는 화살 3번 발사, 일반 몬스터 공격 시
+    데미지 30% 증가
+
+    재사용 대기시간 {v7}초'
+  level_equations:
+    v1:
+      a: 1
+      b: 300
+      divisor: 1
+      equation: skill_level + 300
+    v3:
+      a: 10
+      b: 376
+      divisor: 1
+      equation: skill_level * 10 + 376
+    v7:
+      a: -1
+      b: 25
+      divisor: 3
+      equation: -(skill_level // 3) + 25
+스니키 스나이핑 VI:
+  template: 'MP {v1} 소비, 최대 1.4초까지 키다운 가능, 최대 12명의 적을 {v5}%의 데미지로 10번 공격하는 충격 5회 발생
+
+    스니키 스나이핑 카트리지는 40초마다 1개씩 준비되며 최대 1개까지 소지 가능'
+  level_equations:
+    v1:
+      a: 2
+      b: 350
+      divisor: 1
+      equation: skill_level * 2 + 350
+    v5:
+      a: 6
+      b: 205
+      divisor: 1
+      equation: skill_level * 6 + 205
+'[발현/처형] 스니키 스나이핑 VI':
+  template: 'MP {v1} 소비, 최대 1.6초까지 키다운 가능, 최대 12명의 적을 {v5}%의 데미지로 12번 공격하는 충격이 5회
+    발생
+
+    재발현 대기시간 60초'
+  level_equations:
+    v1:
+      a: 2
+      b: 350
+      divisor: 1
+      equation: skill_level * 2 + 350
+    v5:
+      a: 8
+      b: 308
+      divisor: 1
+      equation: skill_level * 8 + 308
+어나일레이션:
+  template: 'MP 1200 소비, 시전 동작 중 무적
+
+    블랙 노바의 힘을 해방하며 최대 15명의 적을 {v3}%의 데미지로 8번 공격하는 파동 33회 발동 후, 방출된 힘에 의해 {v6}%의 데미지로
+    14번 공격하는 참격 12회 발동
+
+    악의의 영지 : 30초 동안 지속, 데스 블레싱이 {v10}%의 데미지로 12번 공격, 인카네이션 적용시 {v12}%의 데미지로 15번 공격
+
+    죽음의 축복 최대 중첩 제한 20개로 증가, 일정 시간마다 주위 최대 10명의 적에게 죽음의 축복을 내림
+
+    데스 블레싱 발동 시 최대 3명의 적을 {v17}%의 데미지로 15번 공격하는 마룡의 숨결 2회 발동, 재발동 대기시간 0.25초
+
+    마룡의 숨결 발동 시 처형 스킬의 재사용 대기시간 1초 감소
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 14
+      b: 410
+      divisor: 1
+      equation: skill_level * 14 + 410
+    v6:
+      a: 18
+      b: 560
+      divisor: 1
+      equation: skill_level * 18 + 560
+    v10:
+      a: 9
+      b: 455
+      divisor: 1
+      equation: skill_level * 9 + 455
+    v12:
+      a: 9
+      b: 485
+      divisor: 1
+      equation: skill_level * 9 + 485
+    v17:
+      a: 22
+      b: 660
+      divisor: 1
+      equation: skill_level * 22 + 660
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      10: 37
+      1: 10
+      20: 67
+      5: 18
+      2: 12
+      4: 16
+      6: 20
+      11: 39
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+드래곤 버스트 강화:
+  template: 드래곤 버스트의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      10: 25
+      17: 32
+      20: 40
+      15: 30
+      2: 12
+      1: 11
+      3: 13
+      4: 14
+      5: 15
+페이탈 블리츠 강화:
+  template: 페이탈 블리츠의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      10: 25
+      16: 31
+      20: 40
+      13: 28
+      1: 11
+      2: 12
+      3: 13
+      5: 15
+타나토스 디센트 강화:
+  template: 타나토스 디센트의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      10: 25
+      22: 42
+      20: 40
+      14: 29
+      2: 12
+      1: 11
+      3: 13
+      4: 14
+      5: 15
+그립 오브 애거니 강화:
+  template: 그립 오브 애거니의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      10: 25
+      11: 26
+      17: 32
+      20: 40
+      13: 28
+      5: 15
+      24: 44
+      2: 12
+      1: 11
+      3: 13
+      4: 14

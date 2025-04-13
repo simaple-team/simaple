@@ -5,6 +5,9 @@ from typing import Sequence, TypedDict
 
 import yaml
 
+from simaple.core.jobtype import JobType
+from tqdm import tqdm
+
 # --- TypedDict Definitions ---
 
 
@@ -410,27 +413,31 @@ def main():
     """Main function to process skill data and generate template file."""
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
-    input_yaml_path = Path("refs/skill_info.yaml")
-    output_yaml_path = Path("skill_template.yaml")
+    for job_type in tqdm(JobType):
+        if job_type == JobType.virtual_maplestory_m:
+            continue
 
-    raw_data = load_yaml_data(input_yaml_path)
-    if raw_data is None:
-        return
+        input_yaml_path = Path(f"refs/skill_status/{job_type.value}.yaml")
+        output_yaml_path = Path(f"refs/skill_template/{job_type.value}.yaml")
 
-    # Safely access nested structure
-    skill_info_input: SkillInfoInput = raw_data.get("skill_info", {}).get(
-        "response_at_6", {}
-    )
-    if not skill_info_input:
-        logging.warning("'response_at_6' data not found or empty in skill_info.yaml")
-        # Proceed with empty dict if not found
+        raw_data = load_yaml_data(input_yaml_path)
+        if raw_data is None:
+            return
 
-    # --- Processing Pipeline ---
-    result_step1 = process_skill_info(skill_info_input)
-    result_step2 = postprocess_remove_constants(result_step1)
-    final_result = regress_level_equations(result_step2)
+        # Safely access nested structure
+        skill_info_input: SkillInfoInput = raw_data.get("skill_info", {}).get(
+            "response_at_6", {}
+        )
+        if not skill_info_input:
+            logging.warning("'response_at_6' data not found or empty in skill_info.yaml")
+            # Proceed with empty dict if not found
 
-    save_yaml_data(final_result, output_yaml_path)
+        # --- Processing Pipeline ---
+        result_step1 = process_skill_info(skill_info_input)
+        result_step2 = postprocess_remove_constants(result_step1)
+        final_result = regress_level_equations(result_step2)
+
+        save_yaml_data(final_result, output_yaml_path)
 
 
 if __name__ == "__main__":

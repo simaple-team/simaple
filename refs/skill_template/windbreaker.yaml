@@ -1,0 +1,281 @@
+천공의 노래 VI:
+  template: 공격당 MP {v1} 소비, 최대 4명의 적을 발당 {v3}%의 데미지로 공격
+  level_equations:
+    v3:
+      a: 20
+      b: 555
+      divisor: 1
+      equation: skill_level * 20 + 555
+트라이플링 윔 VI:
+  template: "적을 타격할 때 50% 확률로 정령의 기운이 최대 5개 발생하여 {v3}%의 데미지로 주위의 적을 랜덤하게 공격\n 20%\
+    \ 확률로 {v5}%의 데미지를 주는 강화된 정령의 기운 발생"
+  level_equations:
+    v3:
+      a: 7
+      b: 315
+      divisor: 1
+      equation: skill_level * 7 + 315
+    v5:
+      a: 11
+      b: 420
+      divisor: 1
+      equation: skill_level * 11 + 420
+스톰 브링어 VI:
+  template: MP {v1} 소비, 200초 동안 공격 시 45% 확률로 거대한 화살을 소환하여 {v4}%의 데미지로 추가 공격
+  level_equations:
+    v1:
+      a: 1
+      b: 70
+      divisor: 3
+      equation: (skill_level // 3) + 70
+    v4:
+      a: 17
+      b: 700
+      divisor: 1
+      equation: skill_level * 17 + 700
+페어리 턴 VI:
+  template: MP {v1} 소비, 최대 7명의 적을 뒤로 밀쳐내며 {v3}%의 데미지로 5번 공격
+  level_equations:
+    v1:
+      a: 1
+      b: 36
+      divisor: 5
+      equation: (skill_level // 5) + 36
+    v3:
+      a: 7
+      b: 415
+      divisor: 1
+      equation: skill_level * 7 + 415
+몬순 VI:
+  template: 'MP {v1} 소비, 최대 15명의 적을 {v3}%의 데미지로 12번 공격, 30초 동안 1초마다 {v7}%의 도트 데미지
+
+    재사용 대기시간 30초'
+  level_equations:
+    v1:
+      a: 2
+      b: 350
+      divisor: 1
+      equation: skill_level * 2 + 350
+    v3:
+      a: 8
+      b: 465
+      divisor: 1
+      equation: skill_level * 8 + 465
+    v7:
+      a: 4
+      b: 216
+      divisor: 1
+      equation: skill_level * 4 + 216
+스톰 윔 VI:
+  template: 'MP {v1} 소비, 30초 동안 공격 시 30% 확률로 거센 정령의 기운이 추가로 나타나 {v4}%의 데미지로 공격
+
+    재사용 대기시간 120초'
+  level_equations:
+    v1:
+      a: 1
+      b: 200
+      divisor: 1
+      equation: skill_level + 200
+    v4:
+      a: 11
+      b: 605
+      divisor: 1
+      equation: skill_level * 11 + 605
+아네모이:
+  template: 'MP {v1} 소비, 아네모이가 현신하며 최대 12명의 적을 {v3}%의 데미지로 15번 공격, 이후 20초 동안 일정 시간마다
+    최대 10명의 적을 {v7}%의 데미지로 10번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v1:
+      a: 1
+      b: 35
+      divisor: 5
+      equation: (skill_level // 5) + 35
+    v3:
+      a: 27
+      b: 923
+      divisor: 1
+      equation: skill_level * 27 + 923
+    v7:
+      a: 31
+      b: 949
+      divisor: 1
+      equation: skill_level * 31 + 949
+미스트랄 스프링:
+  template: 'MP 1200 소비, 시전 동작 중 무적
+
+    에메랄드에 깃든 정령의 기운으로 최대 15명의 적을 {v3}%의 데미지로 10번 공격하는 바람의 칼날이 13회 발생
+
+    공격 종료 후 20초 동안 바람의 샘이 정령의 기운을 생성하여 적을 공격
+
+    재설치 대기시간 3초
+
+    정령의 기운 : {v8}%의 데미지로 5번 공격하는 정령의 기운 13개 생성
+
+    신난 정령의 기운 : {v11}%의 데미지로 6번 공격하는 신난 정령의 기운 5개 생성
+
+    거센 정령의 기운 : {v14}%의 데미지로 7번 공격하는 거센 정령의 기운 3개 생성
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 28
+      b: 830
+      divisor: 1
+      equation: skill_level * 28 + 830
+    v8:
+      a: 22
+      b: 660
+      divisor: 1
+      equation: skill_level * 22 + 660
+    v11:
+      a: 24
+      b: 720
+      divisor: 1
+      equation: skill_level * 24 + 720
+    v14:
+      a: 21
+      b: 645
+      divisor: 1
+      equation: skill_level * 21 + 645
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      10: 37
+      30: 100
+      8: 24
+      1: 10
+      12: 41
+      9: 26
+      6: 20
+      20: 67
+      4: 16
+      2: 12
+      11: 39
+      18: 53
+      15: 47
+      13: 43
+      3: 14
+      5: 18
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+하울링 게일 강화:
+  template: 하울링 게일의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      3: 13
+      30: 60
+      10: 25
+      13: 28
+      17: 32
+      9: 19
+      14: 29
+      19: 34
+      20: 40
+      1: 11
+      15: 30
+      11: 26
+      2: 12
+      18: 33
+      7: 17
+      4: 14
+      5: 15
+아이들 윔 강화:
+  template: 아이들 윔의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      1: 11
+      30: 60
+      11: 26
+      10: 25
+      9: 19
+      8: 18
+      15: 30
+      12: 27
+      2: 12
+      7: 17
+      3: 13
+      4: 14
+      13: 28
+      5: 15
+윈드 월 강화:
+  template: 윈드 월의 최종 데미지 {v1}%, 엘리멘트 개수 {v2}개, 지속시간 {v3}초로 증가
+  levels:
+    v1:
+      1: 11
+      30: 60
+      3: 13
+      9: 19
+      10: 25
+      18: 33
+      11: 26
+      5: 15
+      13: 28
+      2: 12
+      4: 14
+      6: 16
+    v2:
+      1: 304
+      30: 400
+      3: 310
+      9: 330
+      10: 334
+      18: 360
+      11: 337
+      5: 317
+      13: 344
+      2: 307
+      4: 314
+      6: 320
+    v3:
+      1: 46
+      30: 60
+      3: 47
+      9: 50
+      10: 50
+      18: 54
+      11: 51
+      5: 48
+      13: 52
+      2: 46
+      4: 47
+      6: 48
+볼텍스 스피어 강화:
+  template: 볼텍스 스피어의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      1: 11
+      30: 60
+      19: 34
+      10: 25
+      2: 12
+      15: 30
+      20: 40
+      14: 29
+      11: 26
+      7: 17
+      9: 19
+      3: 13
+      4: 14
+      6: 16
+      13: 28
+      8: 18
+      5: 15

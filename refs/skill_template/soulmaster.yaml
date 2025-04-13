@@ -1,0 +1,220 @@
+솔라 슬래시 VI:
+  template: MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 6번 공격
+  level_equations:
+    v3:
+      a: 10
+      b: 530
+      divisor: 1
+      equation: skill_level * 10 + 530
+솔루나 파워:
+  template: "MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 5번 공격하는 햇살의\n 검기와 달빛의 검기가 연속으로 발동 \n\
+    재사용 대기시간 20초"
+  level_equations:
+    v1:
+      a: 1
+      b: 50
+      divisor: 3
+      equation: (skill_level // 3) + 50
+    v3:
+      a: 100
+      b: 3500
+      divisor: 1
+      equation: skill_level * 100 + 3500
+코스믹 샤워 VI:
+  template: 'MP {v1} 소비, 모든 코스믹 오브를 소비하여 유성우 지대 생성
+
+    유성우 지대 : 45초 동안 최대 6명의 적을 {v4}%의 데미지로 3번 공격
+
+    소비한 코스믹 오브 1개당 유성우의 지속 시간 3초 증가
+
+    일반 몬스터 공격 시 데미지 50% 증가
+
+    재사용 대기시간 30초'
+  level_equations:
+    v1:
+      a: 1
+      b: 35
+      divisor: 3
+      equation: (skill_level // 3) + 35
+    v4:
+      a: 15
+      b: 290
+      divisor: 1
+      equation: skill_level * 15 + 290
+코스믹 버스트 VI:
+  template: 'MP {v1} 소비, 모든 코스믹 오브를 소비하여 코스믹 오브 방출
+
+    방출된 코스믹 오브는 각각 1명의 적을 추적하여 {v3}%의 데미지로 4번 공격
+
+    1명의 적이 코스믹 오브를 여러 번 맞을 경우 두 번째 오브부터 최종 데미지 30% 감소
+
+    소비한 코스믹 오브 1개당 재사용 대기시간 1초 감소
+
+    재사용 대기시간 15초'
+  level_equations:
+    v1:
+      a: 1
+      b: 50
+      divisor: 3
+      equation: (skill_level // 3) + 50
+    v3:
+      a: 20
+      b: 480
+      divisor: 1
+      equation: skill_level * 20 + 480
+솔루나 슬래시 VI:
+  template: 'MP {v1} 소비, 최대 7명의 적을 {v3}%의 데미지로 6번 공격
+
+    재사용 대기시간 5초
+
+    [패시브 효과 : 코스믹 샤워 VI의 데미지 {v6}%p, 코스믹 버스트 VI의 데미지 {v7}%p 증가]'
+  level_equations:
+    v1:
+      a: 1
+      b: 102
+      divisor: 2
+      equation: (skill_level // 2) + 102
+    v3:
+      a: 7
+      b: 260
+      divisor: 1
+      equation: skill_level * 7 + 260
+    v6:
+      a: 2
+      b: 10
+      divisor: 1
+      equation: skill_level * 2 + 10
+    v7:
+      a: 3
+      b: 15
+      divisor: 1
+      equation: skill_level * 3 + 15
+솔루나 파워 II:
+  template: '햇살의 검기와 달빛의 검기가 발동한 이후 최대 8명의 적을 {v2}%의 데미지로 5번 공격하는 천상의 폭발 12회 발생
+
+    재사용 대기시간 20초'
+  level_equations:
+    v2:
+      a: 17
+      b: 360
+      divisor: 1
+      equation: skill_level * 17 + 360
+아스트랄 블리츠:
+  template: 'MP 1200 소비, 시전 동작 중 무적
+
+    최대 15명의 적을 {v3}%의 데미지로 5번 공격하는 참격이 48회 발생
+
+    이후 최대 15명의 적을 {v7}%의 데미지로 7번 공격하는 태초의 폭발이 24회 발생
+
+    사용 시 20초 동안 최종 데미지 {v11}% 증가
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 35
+      b: 1050
+      divisor: 1
+      equation: skill_level * 35 + 1050
+    v7:
+      a: 34
+      b: 1042
+      divisor: 1
+      equation: skill_level * 34 + 1042
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      30: 100
+      10: 37
+      1: 10
+      20: 67
+      15: 47
+      3: 14
+      2: 12
+      4: 16
+      9: 26
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+코스모스 강화:
+  template: 코스모스의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      15: 30
+      12: 27
+      1: 11
+      11: 26
+      6: 16
+      5: 15
+      4: 14
+      8: 18
+      2: 12
+      10: 25
+      20: 40
+      3: 13
+      9: 19
+엘리시온 강화:
+  template: 엘리시온의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      25: 45
+      10: 25
+      12: 27
+      24: 44
+      20: 40
+      4: 14
+      8: 18
+      18: 33
+      11: 26
+      5: 15
+      15: 30
+      16: 31
+      9: 19
+      1: 11
+      7: 17
+      3: 13
+      6: 16
+      2: 12
+      17: 32
+소울 이클립스 강화:
+  template: 소울 이클립스의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      1: 11
+      10: 25
+      13: 28
+      3: 13
+      9: 19
+      5: 15
+      4: 14
+      2: 12
+플레어 슬래시 강화:
+  template: 플레어 슬래시의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      1: 11
+      3: 13
+      10: 25
+      2: 12
+      5: 15
+      4: 14
+      9: 19

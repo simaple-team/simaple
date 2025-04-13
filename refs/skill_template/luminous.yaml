@@ -1,0 +1,220 @@
+앱솔루트 킬 VI:
+  template: 'MP {v1} 소비, 최대 3명의 적에게 빛과 어둠의 검 낙하
+
+    빛과 어둠의 검은 최대 3명의 적을 {v4}%의 데미지로 7번 공격
+
+    빛과 어둠의 검은 한 명의 적에게는 최대 한 번까지만 충돌 발생
+
+    추가 크리티컬 확률 100%, 몬스터 방어율 {v7}% 추가 무시
+
+    재사용 대기시간 10초'
+  level_equations:
+    v1:
+      a: 1
+      b: 60
+      divisor: 3
+      equation: (skill_level // 3) + 60
+    v4:
+      a: 7
+      b: 485
+      divisor: 1
+      equation: skill_level * 7 + 485
+라이트 리플렉션 VI:
+  template: MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 4번 공격
+  level_equations:
+    v1:
+      a: 2
+      b: 81
+      divisor: 5
+      equation: (skill_level // 5) * 2 + 81
+    v3:
+      a: 11
+      b: 480
+      divisor: 1
+      equation: skill_level * 11 + 480
+엔드리스 다크니스:
+  template: 'MP 80 소비, 최대 6명의 적을 {v3}%의 데미지로 5번 공격
+
+    재발동 대기시간 2초
+
+    [패시브 효과 : 앱솔루트 킬 VI 데미지 {v6}%p 증가]'
+  level_equations:
+    v3:
+      a: 25
+      b: 830
+      divisor: 1
+      equation: skill_level * 25 + 830
+    v6:
+      a: 3
+      b: 40
+      divisor: 1
+      equation: skill_level * 3 + 40
+아포칼립스 VI:
+  template: MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 7번 공격
+  level_equations:
+    v1:
+      a: 1
+      b: 103
+      divisor: 2
+      equation: (skill_level // 2) + 103
+    v3:
+      a: 12
+      b: 408
+      divisor: 1
+      equation: skill_level * 12 + 408
+이터널 라이트니스:
+  template: 'MP 80 소비, 최대 6명의 적을 {v3}%의 데미지로 7번 공격
+
+    재발동 대기시간 2초'
+  level_equations:
+    v3:
+      a: 25
+      b: 605
+      divisor: 1
+      equation: skill_level * 25 + 605
+트와일라잇 노바 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 공격
+
+    선파이어 : {v3}%의 데미지로 7번 공격하는 폭발 3회 발생
+
+    이클립스 : {v6}%의 데미지로 7번 공격하는 폭발 3회 발생
+
+    이퀄리브리엄 : {v9}%의 데미지로 7번 공격하는 폭발 4회 발생
+
+    재사용 대기시간 15초'
+  level_equations:
+    v1:
+      a: 1
+      b: 81
+      divisor: 3
+      equation: (skill_level // 3) + 81
+    v3:
+      a: 40
+      b: 430
+      divisor: 1
+      equation: skill_level * 40 + 430
+    v6:
+      a: 40
+      b: 430
+      divisor: 1
+      equation: skill_level * 40 + 430
+    v9:
+      a: 25
+      b: 375
+      divisor: 1
+      equation: skill_level * 25 + 375
+하모닉 패러독스:
+  template: 'MP 3000 소비, 적용 중인 이퀄리브리엄의 지속시간 10초 증가, 시전 동작 중 무적
+
+    최대 3.5초 동안 키다운하여 최대 15명의 적을 {v6}%의 데미지로 7번 공격하는 조화의 사념체 소환
+
+    키다운 종료 시 조화의 사념체의 힘이 해방되며 15명의 적을 {v9}%의 데미지로 7번 공격하는 폭발이 39회 발생하는 진리의 권능 실현
+
+    재사용 대기시간 360초'
+  level_equations:
+    v6:
+      a: 50
+      b: 1500
+      divisor: 1
+      equation: skill_level * 50 + 1500
+    v9:
+      a: 26
+      b: 758
+      divisor: 1
+      equation: skill_level * 26 + 758
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      10: 37
+      30: 100
+      5: 18
+      20: 67
+      4: 16
+      1: 10
+      8: 24
+      3: 14
+      2: 12
+      13: 43
+      19: 55
+      9: 26
+      11: 39
+      6: 20
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+진리의 문 강화:
+  template: 진리의 문의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      1: 11
+      30: 60
+      23: 43
+      8: 18
+      2: 12
+퍼니싱 리소네이터 강화:
+  template: 퍼니싱 리소네이터의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      4: 14
+      30: 60
+      20: 40
+      10: 25
+      12: 27
+      2: 12
+      1: 11
+      8: 18
+      3: 13
+      7: 17
+빛과 어둠의 세례 강화:
+  template: 빛과 어둠의 세례의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      10: 25
+      30: 60
+      27: 47
+      12: 27
+      17: 32
+      29: 49
+      4: 14
+      8: 18
+      3: 13
+      6: 16
+      9: 19
+      13: 28
+      1: 11
+      2: 12
+      11: 26
+      5: 15
+리버레이션 오브 강화:
+  template: 리버레이션 오브의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      5: 15
+      30: 60
+      10: 25
+      13: 28
+      2: 12
+      4: 14
+      1: 11
+      11: 26
+      8: 18
+      15: 30
+      3: 13
+      12: 27
+      9: 19

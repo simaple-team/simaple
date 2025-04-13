@@ -1,0 +1,338 @@
+크래프트:자벨린 VI:
+  template: 'MP {v1} 소비, 최대 5명의 적을 {v3}%의 데미지로 3번 공격
+
+    자벨린 적중 시 {v5}%의 데미지로 공격하는 파편 2개 생성
+
+    자벨린을 크리스탈 또는 적에 적중 시 크리스탈 파편 1개 획득, 자벨린 1회에 크리스탈 파편은 최대 1개까지 획득 가능
+
+    크리스탈 파편을 30개 획득 시 다음 자벨린이 인챈트 자벨린으로 발동
+
+    인챈트 자벨린 : 자벨린 한 번에 3개 투척, 크리스탈 25 차지
+
+    인챈트 자벨린으로 생성된 자벨린 파편은 하나의 적에게 적중 시 두번째 자벨린 파편부터 최종 데미지 50% 감소'
+  level_equations:
+    v3:
+      a: 5
+      b: 430
+      divisor: 1
+      equation: skill_level * 5 + 430
+    v5:
+      a: 2
+      b: 140
+      divisor: 1
+      equation: skill_level * 2 + 140
+글로리 윙:자벨린 VI:
+  template: 'MP {v1} 소비, 최대 5명의 적을 {v3}%의 데미지로 6번 공격
+
+    자벨린 적중 시 {v5}%의 데미지로 3번 공격하는 매직 미사일 3개 생성
+
+    자벨린 적중 시 영광의 크리스탈 파편 1개 획득, 자벨린 1회에 영광의 크리스탈 파편은 최대 1개까지 획득 가능
+
+    크리스탈 파편을 10개 획득 시 다음 자벨린이 인챈트 자벨린으로 발동
+
+    인챈트 자벨린 : 자벨린 한 번에 3개 투척
+
+    인챈트 자벨린으로 생성된 매직 미사일은 하나의 적에게 적중 시 두번째 매직 미사일부터 최종 데미지 50% 감소'
+  level_equations:
+    v3:
+      a: 6
+      b: 745
+      divisor: 1
+      equation: skill_level * 6 + 745
+    v5:
+      a: 4
+      b: 255
+      divisor: 1
+      equation: skill_level * 4 + 255
+리액션:디스트럭션 VI:
+  template: 'MP {v1} 소비, 최대 10명의 적을 {v3}%의 데미지로 6번 공격하는 기운이 2번 발동, 보스 몬스터 공격 시 데미지
+    20% 증가
+
+    재발동 대기시간 4초'
+  level_equations:
+    v1:
+      a: 3
+      b: 175
+      divisor: 3
+      equation: (skill_level // 3) * 3 + 175
+    v3:
+      a: 12
+      b: 785
+      divisor: 1
+      equation: skill_level * 12 + 785
+리액션:도미네이션 VI:
+  template: 'MP {v1} 소비, 최대 12명의 적을 {v3}%의 데미지로 5번 공격
+
+    재발동 대기시간 4초 '
+  level_equations:
+    v1:
+      a: 2
+      b: 50
+      divisor: 3
+      equation: (skill_level // 3) * 2 + 50
+    v3:
+      a: 12
+      b: 555
+      divisor: 1
+      equation: skill_level * 12 + 555
+글로리 윙:모탈 윙비트 VI:
+  template: 'MP {v1} 소비, 최대 15명의 적을 {v3}%의 데미지로 15번 공격하는 마력 폭풍이 5번 발생
+
+    [패시브 효과 : 인챈트 자벨린의 데미지 {v6}%p 증가]'
+  level_equations:
+    v1:
+      a: 10
+      b: 140
+      divisor: 5
+      equation: (skill_level // 5) * 10 + 140
+    v3:
+      a: 20
+      b: 1600
+      divisor: 1
+      equation: skill_level * 20 + 1600
+    v6:
+      a: 4
+      b: 50
+      divisor: 1
+      equation: skill_level * 4 + 50
+리요 VI:
+  template: 'MP {v1} 소비, {v2}초 동안 소환, 공격 목표에게 이동하여 일정 간격으로 {v3}%의 데미지로 지속 공격
+
+    40회 공격 시 공격 종료'
+  level_equations:
+    v1:
+      a: 1
+      b: 90
+      divisor: 2
+      equation: (skill_level // 2) + 90
+    v2:
+      a: 3
+      b: 180
+      divisor: 1
+      equation: skill_level * 3 + 180
+    v3:
+      a: 8
+      b: 264
+      divisor: 1
+      equation: skill_level * 8 + 264
+마키나 VI:
+  template: 'MP {v1} 소비, {v2}초 동안 소환
+
+    최대 5명의 적을 {v4}%의 데미지로 4번 공격
+
+    크리스탈 이동 시 이동 경로 상의 적을 1회 공격'
+  level_equations:
+    v1:
+      a: 1
+      b: 100
+      divisor: 2
+      equation: (skill_level // 2) + 100
+    v2:
+      a: 3
+      b: 180
+      divisor: 1
+      equation: skill_level * 3 + 180
+    v4:
+      a: 12
+      b: 375
+      divisor: 1
+      equation: skill_level * 12 + 375
+크리스탈 스킬:데우스 VI:
+  template: 'MP {v1} 소비, 30초 동안 소환
+
+    데우스는 최대 10명의 적을 {v4}%의 데미지로 5번 공격
+
+    위성 : 최대 5개 소환, 위성은 한명의 적에게는 최대 3개까지 소환되며 {v8}%의 데미지로 지속 공격, 위성당 최대 40회까지 공격 가능'
+  level_equations:
+    v1:
+      a: 3
+      b: 300
+      divisor: 2
+      equation: (skill_level // 2) * 3 + 300
+    v4:
+      a: 31
+      b: 530
+      divisor: 1
+      equation: skill_level * 31 + 530
+    v8:
+      a: 5
+      b: 82
+      divisor: 1
+      equation: skill_level * 5 + 82
+크래프트:롱기누스 VI:
+  template: 'MP {v1} 소비
+
+    최대 10명의 적을 {v3}%의 데미지로 12번 공격
+
+    적 또는 크리스탈에 적중 시 크래프트:자벨린 VI의 크리스탈 파편 2개, 글로리 윙:자벨린 VI의 영광의 크리스탈 파편 3개 획득
+
+    보스 몬스터 공격 시 데미지 20% 증가, 추가 크리티컬 확률 100%
+
+    크리스탈 스킬:글로리 윙 중 보스 몬스터 공격 시 데미지 20% 추가 증가
+
+    재사용 대기시간 15초'
+  level_equations:
+    v1:
+      a: 1
+      b: 150
+      divisor: 1
+      equation: skill_level + 150
+    v3:
+      a: 28
+      b: 950
+      divisor: 1
+      equation: skill_level * 28 + 950
+커스 마크 완성 VI:
+  template: '커스 마크가 새겨진 적을 공격하면 커스 마크 중첩 개수와 상관 없이 {v1}% 데미지의 추가 타격 발생
+
+    [패시브 효과 : 크래프트:자벨린 VI, 크래프트:인챈트 자벨린의 데미지 {v2}%p 증가]'
+  level_equations:
+    v1:
+      a: 20
+      b: 200
+      divisor: 1
+      equation: skill_level * 20 + 200
+    v2:
+      a: 1
+      b: 0
+      divisor: 1
+      equation: skill_level
+롱기누스 존 VI:
+  template: 'MP {v1} 소비, 최대 12명의 적을 {v3}%의 데미지로 5번 공격하는 폭발이 4회 발동
+
+    시전 동작 중 무적
+
+    재사용 대기시간 120초 '
+  level_equations:
+    v1:
+      a: 3
+      b: 200
+      divisor: 2
+      equation: (skill_level // 2) * 3 + 200
+    v3:
+      a: 16
+      b: 1050
+      divisor: 1
+      equation: skill_level * 16 + 1050
+언리미티드 크리스탈:
+  template: 'MP 1200 소비, 시전 동작 중 무적
+
+    글로리 윙 지속 중 사용 시 글로리 윙 지속시간 10초 증가
+
+    최대 15명의 적을 {v4}%의 데미지로 8번 공격하는 마력 폭발이 12회, {v7}%의 데미지로 10번 공격하는 마력 폭발이 13회, {v10}%의
+    데미지로 15번 공격하는 마력 폭발이 16회 발생
+
+    20초 동안 무한의 크리스탈 소환
+
+    크리스탈에 리액션 발생 시 무한의 크리스탈에서 최대 15명의 적을 {v15}%의 데미지로 15번 공격하는 공명 발생, 공명 재발동 시간 1초
+
+    공명이 3번 발생하면 다음 공명 대신 {v19}%의 데미지로 2번 공격하는 크리스탈 결정이 25개 생성, 크리스탈 결정 재생성 대기시간 2초
+
+    재사용 대기시간 360초'
+  level_equations:
+    v4:
+      a: 20
+      b: 600
+      divisor: 1
+      equation: skill_level * 20 + 600
+    v7:
+      a: 22
+      b: 670
+      divisor: 1
+      equation: skill_level * 22 + 670
+    v10:
+      a: 25
+      b: 750
+      divisor: 1
+      equation: skill_level * 25 + 750
+    v15:
+      a: 32
+      b: 960
+      divisor: 1
+      equation: skill_level * 32 + 960
+    v19:
+      a: 20
+      b: 600
+      divisor: 1
+      equation: skill_level * 20 + 600
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      30: 100
+      13: 43
+      10: 37
+      20: 67
+      1: 10
+      15: 47
+      2: 12
+      4: 16
+      9: 26
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+크리스탈 이그니션 강화:
+  template: 크리스탈 이그니션, 리액션:스펙트럼의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      20: 40
+      12: 27
+      19: 34
+      10: 25
+      9: 19
+      6: 16
+      5: 15
+      2: 12
+      1: 11
+      3: 13
+      4: 14
+그람홀더 강화:
+  template: 그람홀더의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      9: 19
+      2: 12
+      10: 25
+      8: 18
+      1: 11
+소울 오브 크리스탈 강화:
+  template: '소울 오브 크리스탈의 리액션 스킬 최종 데미지 반영률 {v1}%, 글로리 윙 사용 시 소멸한 영혼의 크리스탈 1개당 데미지
+    증가량 {v3}%로 증가
+
+    [패시브 효과 : 올스탯 {v4} 증가]'
+  level_equations:
+    v4:
+      a: 3
+      b: 0
+      divisor: 1
+      equation: skill_level * 3
+크리스탈 게이트 강화:
+  template: 크리스탈 게이트의 최종 데미지 {v1}% 증가, 지속시간 {v2}초, 버프의 마력 증가량 {v3}로 증가
+  level_equations:
+    v2:
+      a: 1
+      b: 160
+      divisor: 1
+      equation: skill_level + 160
+    v3:
+      a: 1
+      b: 65
+      divisor: 1
+      equation: skill_level + 65

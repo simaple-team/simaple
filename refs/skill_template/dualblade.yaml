@@ -1,0 +1,288 @@
+팬텀 블로우 VI:
+  template: 'MP {v1} 소비, 최대 4명의 적을 {v3}%의 데미지로 6번 공격
+
+    몬스터의 방어율 {v5}% 무시'
+  level_equations:
+    v1:
+      a: 1
+      b: 45
+      divisor: 4
+      equation: (skill_level // 4) + 45
+    v3:
+      a: 6
+      b: 350
+      divisor: 1
+      equation: skill_level * 6 + 350
+아수라 VI:
+  template: 'MP {v1} 소비, 최대 3초 동안 최대 10명의 적을 {v4}%의 데미지로 6번 공격
+
+    몬스터의 방어율 100% 무시
+
+    지속 시간 동안 이동 및 점프가 가능하며 스킬 재사용 시 즉시 취소
+
+    재사용 대기시간 60초
+
+    [패시브 효과 : 팬텀 블로우 VI 데미지 {v8}%p 증가]'
+  level_equations:
+    v1:
+      a: 1
+      b: 300
+      divisor: 1
+      equation: skill_level + 300
+    v4:
+      a: 17
+      b: 600
+      divisor: 1
+      equation: skill_level * 17 + 600
+    v8:
+      a: 2
+      b: 46
+      divisor: 1
+      equation: skill_level * 2 + 46
+히든 블레이드 VI:
+  template: 'MP {v1} 소비, 데미지 10% 증가
+
+    [파이널 어택류 스킬] 90초 동안 100%의 확률로 직접 공격하는 공격 스킬에 {v5}%의 추가타 발생'
+  level_equations:
+    v1:
+      a: 1
+      b: 215
+      divisor: 2
+      equation: (skill_level // 2) + 215
+    v5:
+      a: 6
+      b: 300
+      divisor: 1
+      equation: skill_level * 6 + 300
+생자필멸:
+  template: 'MP {v1} 소비, 공용 스킬을 제외한 자신이 직접 공격하는 스킬 15회 적중 시 최대 8명의 적을 {v4}%의 데미지로
+    6번 공격하는 야차의 난도가 4회 발동
+
+    재발동 대기시간 1초'
+  level_equations:
+    v1:
+      a: 1
+      b: 52
+      divisor: 2
+      equation: (skill_level // 2) + 52
+    v4:
+      a: 5
+      b: 275
+      divisor: 1
+      equation: skill_level * 5 + 275
+블레이드 퓨리 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 5번 공격
+
+    6초마다 퓨리어스 제트로 강화
+
+    퓨리어스 제트 : MP {v6} 소비, 최대 12명의 적을 {v8}%의 데미지로 6번 공격
+
+    [패시브 효과 : 팬텀 블로우 VI 데미지 {v10}%p 증가]'
+  level_equations:
+    v1:
+      a: 1
+      b: 66
+      divisor: 3
+      equation: (skill_level // 3) + 66
+    v3:
+      a: 7
+      b: 370
+      divisor: 1
+      equation: skill_level * 7 + 370
+    v8:
+      a: 7
+      b: 380
+      divisor: 1
+      equation: skill_level * 7 + 380
+    v10:
+      a: 1
+      b: 12
+      divisor: 1
+      equation: skill_level + 12
+써든레이드 VI:
+  template: 'MP {v1} 소비, 최대 15명의 적을 {v3}%의 데미지로 7번 공격, 10초 동안 1초당 {v7}%의 도트 데미지
+
+    재사용 대기시간 14초
+
+    [패시브 효과 : 생자필멸의 데미지 {v9}%p 증가]'
+  level_equations:
+    v1:
+      a: 1
+      b: 325
+      divisor: 2
+      equation: (skill_level // 2) + 325
+    v3:
+      a: 12
+      b: 660
+      divisor: 1
+      equation: skill_level * 12 + 660
+    v7:
+      a: 7
+      b: 380
+      divisor: 1
+      equation: skill_level * 7 + 380
+    v9:
+      a: 10
+      b: 100
+      divisor: 1
+      equation: skill_level * 10 + 100
+카르마 블레이드:
+  template: 'MP 1200 소비, 시전 동작 중 무적
+
+    업화의 신이 강림하며 15명의 적을 {v3}%의 데미지로 5번 공격하는 참격이 6회 발생 후, {v6}%의 데미지로 7번 공격하는 참격이 20회
+    발생
+
+    20초 동안 공격 적중 시 업보의 칼날을 1개 소모하여 최대 3명의 적을 {v12}%의 데미지로 7번 공격하는 추가 타격 발생, 재발동 대기시간
+    0.1초
+
+    업보의 칼날은 35개까지 사용 가능
+
+    업보의 칼날을 전부 사용 혹은 지속시간 종료 시 업화의 신이 직접 현현하여 15명의 적을 {v18}%의 데미지로 7번 공격하는 참격이 30회
+    발생
+
+    업화의 신 현현 시 1초 동안 무적 및 업화의 신 현현은 상태 이상을 무시하고 발동 가능
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 16
+      b: 480
+      divisor: 1
+      equation: skill_level * 16 + 480
+    v6:
+      a: 15
+      b: 450
+      divisor: 1
+      equation: skill_level * 15 + 450
+    v12:
+      a: 20
+      b: 624
+      divisor: 1
+      equation: skill_level * 20 + 624
+    v18:
+      a: 18
+      b: 560
+      divisor: 1
+      equation: skill_level * 18 + 560
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      30: 100
+      10: 37
+      1: 10
+      15: 47
+      20: 67
+      2: 12
+      11: 39
+      8: 24
+      5: 18
+      13: 43
+      14: 45
+      12: 41
+      4: 16
+      3: 14
+      6: 20
+      9: 26
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+블레이드 스톰 강화:
+  template: 블레이드 스톰의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      25: 45
+      11: 26
+      20: 40
+      10: 25
+      15: 30
+      14: 29
+      2: 12
+      18: 33
+      6: 16
+      21: 41
+      9: 19
+      5: 15
+      26: 46
+      12: 27
+      1: 11
+      4: 14
+      3: 13
+      7: 17
+카르마 퓨리 강화:
+  template: 카르마 퓨리의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      10: 25
+      9: 19
+      20: 40
+      12: 27
+      19: 34
+      29: 49
+      11: 26
+      13: 28
+      14: 29
+      2: 12
+      1: 11
+      4: 14
+      3: 13
+      8: 18
+      5: 15
+      7: 17
+블레이드 토네이도 강화:
+  template: 블레이드 토네이도의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      20: 40
+      9: 19
+      17: 32
+      19: 34
+      10: 25
+      16: 31
+      13: 28
+      14: 29
+      11: 26
+      5: 15
+      2: 12
+      3: 13
+      12: 27
+      21: 41
+      4: 14
+      1: 11
+      7: 17
+      8: 18
+헌티드 엣지 강화:
+  template: 헌티드 엣지의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      2: 12
+      1: 11
+      28: 48
+      7: 17
+      10: 25
+      18: 33
+      12: 27
+      3: 13
+      8: 18
+      4: 14
+      6: 16
+      9: 19

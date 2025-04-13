@@ -1,0 +1,295 @@
+체인 라이트닝 VI:
+  template: 'MP {v1} 소비, 최대 7명의 적을 {v3}%의 데미지로 10번 공격, 100% 확률로 5초 동안 기절, 추가 크리티컬
+    확률 30%
+
+    적에게 공격 적중 시 {v8}%의 확률로 범위 내의 적 위치에 전류 지대 생성
+
+    7초마다 100%의 확률로 전류 지대 생성
+
+    전류 지대 : 4초 동안 지속, 최대 6명의 적을 {v13}%의 데미지로 2번 공격
+
+    전류 지대 1개당 최대 4번 공격 가능하며, 최대 공격 횟수 도달 시 소멸
+
+    전류 지대는 맵 내에 최대 4개까지 생성 가능'
+  level_equations:
+    v1:
+      a: 1
+      b: 50
+      divisor: 4
+      equation: (skill_level // 4) + 50
+    v3:
+      a: 3
+      b: 245
+      divisor: 1
+      equation: skill_level * 3 + 245
+    v8:
+      a: 1
+      b: 20
+      divisor: 2
+      equation: (skill_level // 2) + 20
+    v13:
+      a: 2
+      b: 80
+      divisor: 1
+      equation: skill_level * 2 + 80
+프로즌 오브 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 공격하는 프로즌 오브 생성
+
+    한명의 적에게는 최대 20번까지만 공격
+
+    재사용 대기시간 5초'
+  level_equations:
+    v1:
+      a: 1
+      b: 50
+      divisor: 3
+      equation: (skill_level // 3) + 50
+    v3:
+      a: 6
+      b: 248
+      divisor: 1
+      equation: skill_level * 6 + 248
+블리자드 VI:
+  template: 'MP {v1} 소비, 최대 15명의 적을 {v3}%의 데미지로 12번 공격
+
+    재사용 대기시간 45초
+
+    패시브 효과
+
+    [파이널 어택류 스킬] : 직접 공격하는 공격 스킬 사용 시 70% 확률로 단일 적에게 {v7}%의 데미지로 공격하는 블리자드를 떨어뜨림
+
+    라이트닝 스피어의 지속 데미지 {v8}%p 증가, 피니시 공격 데미지 {v9}%p 증가'
+  level_equations:
+    v1:
+      a: 1
+      b: 298
+      divisor: 1
+      equation: skill_level + 298
+    v3:
+      a: 10
+      b: 330
+      divisor: 1
+      equation: skill_level * 10 + 330
+    v7:
+      a: 5
+      b: 250
+      divisor: 1
+      equation: skill_level * 5 + 250
+    v8:
+      a: 1
+      b: 11
+      divisor: 2
+      equation: (skill_level // 2) + 11
+    v9:
+      a: 2
+      b: 73
+      divisor: 1
+      equation: skill_level * 2 + 73
+라이트닝 스피어 VI:
+  template: '키다운 스킬, 공격당 MP {v1} 소비, 최대 15명의 적을 일정 간격 마다 {v3}% 데미지로 15번 공격, 최대 2초
+    동안 키다운 가능, 키다운 종료 시 {v6}%의 데미지로 15번 공격하는 피니시 공격 발동
+
+    재사용 대기시간 60초'
+  level_equations:
+    v1:
+      a: 1
+      b: 30
+      divisor: 5
+      equation: (skill_level // 5) + 30
+    v3:
+      a: 3
+      b: 167
+      divisor: 1
+      equation: skill_level * 3 + 167
+    v6:
+      a: 15
+      b: 843
+      divisor: 1
+      equation: skill_level * 15 + 843
+크라이오 쇼크:
+  template: MP {v1} 소비, 빙결 중첩 감소 13회마다 적을 {v3}%의 데미지로 15번 공격하는 쇼크 발생
+  level_equations:
+    v1:
+      a: 1
+      b: 40
+      divisor: 3
+      equation: (skill_level // 3) + 40
+    v3:
+      a: 13
+      b: 700
+      divisor: 1
+      equation: skill_level * 13 + 700
+썬더 스피어 VI:
+  template: 'MP {v1} 소비, 120초 지속되는 번개 구체 소환, 번개 구체는 최대 6명의 적을 {v4}%의 데미지로 3번 공격
+
+    아래 방향키와 함께 재사용 시 60초 동안 구체를 제자리에 고정, 고정된 구체는 최대 6명의 적을 {v8}%의 데미지로 3번 공격
+
+    일반 몬스터 공격 시 데미지 {v10}%p 증가
+
+    구체 고정 재사용 대기시간 30초
+
+    [패시브 효과 : 크라이오 쇼크의 데미지 {v12}%p 증가]'
+  level_equations:
+    v1:
+      a: 1
+      b: 55
+      divisor: 3
+      equation: (skill_level // 3) + 55
+    v4:
+      a: 6
+      b: 407
+      divisor: 1
+      equation: skill_level * 6 + 407
+    v8:
+      a: 6
+      b: 407
+      divisor: 1
+      equation: skill_level * 6 + 407
+    v10:
+      a: 1
+      b: 170
+      divisor: 3
+      equation: (skill_level // 3) + 170
+    v12:
+      a: 20
+      b: 87
+      divisor: 1
+      equation: skill_level * 20 + 87
+엘퀴네스 VI:
+  template: 'MP {v1} 소비, 270초 동안 엘퀴네스 소환
+
+    엘퀴네스는 최대 5명의 적을 {v4}%의 데미지로 3번 공격'
+  level_equations:
+    v4:
+      a: 3
+      b: 140
+      divisor: 1
+      equation: skill_level * 3 + 140
+프로즌 라이트닝:
+  template: 'MP 1500 소비, 시전 동작 중 무적
+
+    얼음과 번개의 융합 마법으로 최대 15명의 적을 {v3}%의 데미지로 7번 공격하는 충격파 32회 발생 후, {v6}%의 데미지로 12번 공격하는
+    충격파 24회 발생
+
+    30초 동안 번개가 흐르는 동토 구현
+
+    2초마다 동토 내의 적의 몸 속에 침투한 얼음과 번개의 마력을 개화시켜 적을 추가 공격
+
+    마력 개화 : 최대 15명의 적을 {v12}%의 데미지로 15번 공격
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 14
+      b: 395
+      divisor: 1
+      equation: skill_level * 14 + 395
+    v6:
+      a: 14
+      b: 398
+      divisor: 1
+      equation: skill_level * 14 + 398
+    v12:
+      a: 28
+      b: 840
+      divisor: 1
+      equation: skill_level * 28 + 840
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      15: 47
+      28: 83
+      30: 100
+      13: 43
+      2: 12
+      10: 37
+      16: 49
+      7: 22
+      1: 10
+      5: 18
+      19: 55
+      20: 67
+      3: 14
+      14: 45
+      4: 16
+      8: 24
+      9: 26
+      11: 39
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+아이스 에이지 강화:
+  template: 아이스 에이지의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      1: 11
+      10: 25
+      30: 60
+      16: 31
+      8: 18
+      4: 14
+      3: 13
+      2: 12
+썬더 브레이크 강화:
+  template: 썬더 브레이크의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      1: 11
+      30: 60
+      5: 15
+      13: 28
+      3: 13
+      22: 42
+      4: 14
+      11: 26
+      10: 25
+      2: 12
+      12: 27
+      9: 19
+      7: 17
+스피릿 오브 스노우 강화:
+  template: 스피릿 오브 스노우의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      1: 11
+      30: 60
+      5: 15
+      21: 41
+      10: 25
+      15: 30
+      4: 14
+      11: 26
+      7: 17
+      2: 12
+      3: 13
+주피터 썬더 강화:
+  template: 주피터 썬더의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      1: 11
+      30: 60
+      5: 15
+      10: 25
+      2: 12
+      20: 40
+      4: 14
+      11: 26
+      8: 18
+      3: 13
+      9: 19

@@ -5,7 +5,9 @@ from pathlib import Path
 from typing import Any, TypedDict
 
 import aiohttp
+from loguru import logger
 import yaml
+from tqdm import tqdm
 
 from simaple.core.jobtype import JobType
 from simaple.request.external.nexon.api.character.common import (
@@ -94,11 +96,11 @@ async def get_skill_info_async(
 
 async def process_characters(characters: list[IndividualCharacter]) -> dict[str, Any]:
     merged_skills = {}
-    semaphore = asyncio.Semaphore(40)  # 최대 40개의 동시 요청 제한
+    semaphore = asyncio.Semaphore(10)  # 최대 40개의 동시 요청 제한
 
     async with aiohttp.ClientSession() as session:
         tasks = []
-        for character in characters:
+        for character in tqdm(characters):
 
             async def process_character(character: IndividualCharacter):
                 async with semaphore:
@@ -127,21 +129,24 @@ async def process_characters(characters: list[IndividualCharacter]) -> dict[str,
 
 
 async def main():
-    job_type = JobType.archmagetc
-    characters = load_characters(job_type)
+    for job_type in JobType:
+        if job_type == JobType.virtual_maplestory_m:
+            continue
 
-    merged_skills = await process_characters(characters[:40:2] + characters[-40::2])
+        characters = load_characters(job_type)
+        merged_skills = await process_characters(characters)
 
-    # 결과를 파일로 저장
-    output_path = Path("refs/skill_info.yaml")
-    with open(output_path, "w", encoding="utf-8") as f:
-        yaml.dump(
-            {"skill_info": merged_skills},
-            f,
-            allow_unicode=True,
-            sort_keys=False,
-            indent=2,
-        )
+        # 결과를 파일로 저장
+        logger.info(f"Saving {job_type.value} skills")
+        output_path = Path(f"refs/skill_status/{job_type.value}.yaml")
+        with open(output_path, "w", encoding="utf-8") as f:
+            yaml.dump(
+                {"skill_info": merged_skills},
+                f,
+                allow_unicode=True,
+                sort_keys=False,
+                indent=2,
+            )
 
 
 if __name__ == "__main__":

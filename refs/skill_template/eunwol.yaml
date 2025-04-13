@@ -1,0 +1,286 @@
+귀참 VI:
+  template: MP {v1} 소비, 최대 4명의 적을 {v3}%의 데미지로 12번 공격
+  level_equations:
+    v3:
+      a: 6
+      b: 295
+      divisor: 1
+      equation: skill_level * 6 + 295
+여우령 VI:
+  template: 'MP {v1} 소비, 직접 공격하는 스킬 적중 시 {v2}%의 확률로 여우령 소환
+
+    보스 몬스터에게 폭류권 적중 시에는 10%의 확률로 소환
+
+    여우령은 {v4}%의 데미지로 2번 공격
+
+    최대 3번 공격 후 소멸
+
+    [패시브 효과 : 귀참 VI 데미지 {v7}%p, 호주개시 데미지 {v8}%p 증가]'
+  level_equations:
+    v4:
+      a: 3
+      b: 262
+      divisor: 1
+      equation: skill_level * 3 + 262
+    v7:
+      a: 1
+      b: 10
+      divisor: 1
+      equation: skill_level + 10
+    v8:
+      a: 2
+      b: 33
+      divisor: 1
+      equation: skill_level * 2 + 33
+폭류권 VI:
+  template: "1타당 MP {v2} 소비 \n1타 : 최대 8명의 적을 {v5}%의 데미지로 4번 공격\n2타 : 최대 8명의 적을 {v9}%의\
+    \ 데미지로 4번 공격\n3타 : 최대 8명의 적을 {v13}%의 데미지로 4번 공격, 공격당한 적은 100% 확률로 3초 동안 기절\n모든\
+    \ 공격이 일반 몬스터 공격 시 데미지 {v17}%p 증가"
+  level_equations:
+    v2:
+      a: 1
+      b: 20
+      divisor: 3
+      equation: (skill_level // 3) + 20
+    v5:
+      a: 5
+      b: 251
+      divisor: 1
+      equation: skill_level * 5 + 251
+    v9:
+      a: 5
+      b: 251
+      divisor: 1
+      equation: skill_level * 5 + 251
+    v13:
+      a: 5
+      b: 251
+      divisor: 1
+      equation: skill_level * 5 + 251
+    v17:
+      a: 5
+      b: 210
+      divisor: 1
+      equation: skill_level * 5 + 210
+사혼 각인 VI:
+  template: 'MP {v1} 소비, 최대 10명의 적을 {v3}%의 데미지로 8번 크리티컬 공격
+
+    죽음의 표식 : 15초 동안 1초당 {v7}%의 도트 데미지
+
+    도트 데미지를 입을 때 마다 피해량의 1% 만큼 자신의 HP 회복
+
+    재사용 대기시간 54초
+
+    [패시브 효과 : 분혼 격참의 데미지 {v10}%p 증가]'
+  level_equations:
+    v1:
+      a: 1
+      b: 120
+      divisor: 1
+      equation: skill_level + 120
+    v3:
+      a: 19
+      b: 658
+      divisor: 1
+      equation: skill_level * 19 + 658
+    v7:
+      a: 7
+      b: 274
+      divisor: 1
+      equation: skill_level * 7 + 274
+    v10:
+      a: 12
+      b: 302
+      divisor: 1
+      equation: skill_level * 12 + 302
+천귀야참:
+  template: '1타당 MP {v2} 소비, 스킬 키를 연타하여 최대 3타까지 공격 가능
+
+    1타 : 최대 12명의 적을 {v6}%의 데미지로 10번 공격
+
+    2타 : 최대 12명의 적을 {v10}%의 데미지로 10번 공격
+
+    3타 : 최대 15명의 적을 {v14}%의 데미지로 11번 공격하는 정권이 8회 발동
+
+    재사용 대기시간 20초'
+  level_equations:
+    v2:
+      a: 1
+      b: 60
+      divisor: 1
+      equation: skill_level + 60
+    v6:
+      a: 31
+      b: 1485
+      divisor: 1
+      equation: skill_level * 31 + 1485
+    v10:
+      a: 31
+      b: 1485
+      divisor: 1
+      equation: skill_level * 31 + 1485
+    v14:
+      a: 8
+      b: 365
+      divisor: 1
+      equation: skill_level * 8 + 365
+소혼 장막 VI:
+  template: 'MP {v1} 소비, 60초 동안 지속되는 소혼 장막 소환
+
+    장막은 일정 간격마다 최대 10명의 적을 {v4}%의 데미지로 8번 공격
+
+    재사용 대기시간 30초
+
+    [패시브 효과 : 정령의 화신의 데미지 {v7}%p, 귀참 VI의 데미지 {v8}%p 증가]'
+  level_equations:
+    v1:
+      a: 1
+      b: 30
+      divisor: 2
+      equation: (skill_level // 2) + 30
+    v4:
+      a: 5
+      b: 407
+      divisor: 1
+      equation: skill_level * 5 + 407
+    v7:
+      a: 1
+      b: 60
+      divisor: 1
+      equation: skill_level + 60
+    v8:
+      a: 3
+      b: 14
+      divisor: 1
+      equation: skill_level * 3 + 14
+호신강림:
+  template: 'MP 1200 소비, 시전 동작 중 무적
+
+    여우신과 공명하며 최대 15명의 적을 {v3}%의 데미지로 11번 공격하는 빛이
+
+    28회 발생
+
+    이후 정령의 힘이 각성하며 {v6}%의 데미지로 13번 공격하는 파동이 28회 발생
+
+    마지막으로 {v9}%의 데미지로 14번 공격하는 마무리 일격이 30회 발생
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 10
+      b: 300
+      divisor: 1
+      equation: skill_level * 10 + 300
+    v6:
+      a: 13
+      b: 390
+      divisor: 1
+      equation: skill_level * 13 + 390
+    v9:
+      a: 14
+      b: 420
+      divisor: 1
+      equation: skill_level * 14 + 420
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      30: 100
+      10: 37
+      20: 67
+      9: 26
+      1: 10
+      2: 12
+      3: 14
+      12: 41
+      8: 24
+      6: 20
+      16: 49
+      4: 16
+      5: 18
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+환혼요호진 강화:
+  template: 환혼요호진의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      16: 31
+      10: 25
+      9: 19
+      6: 16
+      4: 14
+      1: 11
+      7: 17
+      15: 30
+      14: 29
+      5: 15
+      2: 12
+      8: 18
+      3: 13
+귀문진 강화:
+  template: 귀문진의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      16: 31
+      5: 15
+      3: 13
+      10: 25
+      12: 27
+      9: 19
+      1: 11
+      7: 17
+      2: 12
+      6: 16
+      4: 14
+진 귀참 강화:
+  template: 진 귀참의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      25: 45
+      9: 19
+      15: 30
+      10: 25
+      16: 31
+      1: 11
+      5: 15
+      4: 14
+      2: 12
+      8: 18
+      17: 32
+      3: 13
+      6: 16
+파쇄 연권 강화:
+  template: 파쇄 연권의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      16: 31
+      5: 15
+      3: 13
+      9: 19
+      7: 17
+      10: 25
+      1: 11
+      2: 12
+      4: 14
+      11: 26
+      6: 16

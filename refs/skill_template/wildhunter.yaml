@@ -1,0 +1,250 @@
+와일드 발칸 VI:
+  template: '공격 당 MP {v1} 소비, 발 당 {v2}%의 데미지, 시전 중 140의 속도로 이동, 보스 몬스터 공격 시 데미지 {v4}%
+    증가
+
+    야성 : 어나더 바이트 발동 시 100% 확률로 30초 동안 유지, 50중첩 도달 시 10초 동안 와일드 발칸의 연사 속도 증가'
+  level_equations:
+    v2:
+      a: 5
+      b: 380
+      divisor: 1
+      equation: skill_level * 5 + 380
+클로우 컷 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 4번 공격
+
+    공격 시 최대 HP의 7% 회복
+
+    어나더 바이트 디버프가 없는 적 공격 시 100% 확률로 디버프 발생, 이후 공격 시 30% 확률로 어나더 바이트 디버프 추가 발생
+
+    재사용 대기시간 5초'
+  level_equations:
+    v3:
+      a: 6
+      b: 520
+      divisor: 1
+      equation: skill_level * 6 + 520
+프로보크 VI:
+  template: "MP {v1} 소비, 최대 10명의 적을 30초 동안 도발 \n재사용 대기시간 20초"
+  levels:
+    v1:
+      24: 54
+      30: 55
+      25: 54
+      15: 53
+      7: 52
+      9: 52
+      4: 51
+      16: 53
+      6: 51
+      5: 51
+      8: 52
+      1: 51
+      3: 51
+크로스 로드 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 2번 공격
+
+    100% 확률로 3초 동안 기절
+
+    어나더 바이트 디버프가 없는 적 공격 시 100% 확률로 디버프 발생, 이후 공격 시 90% 확률로 어나더 바이트 디버프 추가 발생
+
+    재사용 대기시간 7초'
+  level_equations:
+    v3:
+      a: 6
+      b: 555
+      divisor: 1
+      equation: skill_level * 6 + 555
+소닉붐 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 6번 공격
+
+    어나더 바이트 디버프가 없는 적 공격 시 100% 확률로 디버프 발생, 이후 공격 시 40% 확률로 어나더 바이트 디버프 추가 발생
+
+    재사용 대기시간 6초'
+  level_equations:
+    v3:
+      a: 6
+      b: 548
+      divisor: 1
+      equation: skill_level * 6 + 548
+재규어 소울 VI:
+  template: 'MP {v1} 소비, 최대 10명의 적을 {v3}%의 데미지로 12번 공격
+
+    공격당한 적은 10초 동안 행동 불가 상태, 재규어 소울로 적에게 준 데미지에 따라 행동 불가 지속시간 최대 100% 증가
+
+    공격 시 100% 확률로 어나더 바이트 디버프 발생
+
+    재사용 대기시간 120초'
+  level_equations:
+    v1:
+      a: 1
+      b: 300
+      divisor: 1
+      equation: skill_level + 300
+    v3:
+      a: 4
+      b: 342
+      divisor: 1
+      equation: skill_level * 4 + 342
+플래쉬 레인 VI:
+  template: 'MP {v1} 소비, 최대 15명의 적을 {v3}%의 데미지로 11번 공격
+
+    재사용 대기시간 12초'
+  level_equations:
+    v3:
+      a: 7
+      b: 436
+      divisor: 1
+      equation: skill_level * 7 + 436
+서먼 재규어 VI:
+  template: 'MP {v1} 소비, 최대 6명의 적을 {v3}%의 데미지로 공격하는 재규어 소환
+
+    재규어가 공격 시 15%의 확률로 최대 3회까지 중첩되고 20초 동안 지속되는 디버프 발생
+
+    어나더 바이트 : [파이널 어택류 스킬] 디버프에 걸린 적을 석궁을 사용하는 스킬로 공격하면 중첩 당 {v7}%의 데미지로 추가 공격
+
+    재사용 대기시간 1초'
+  level_equations:
+    v3:
+      a: 8
+      b: 430
+      divisor: 1
+      equation: skill_level * 8 + 430
+    v7:
+      a: 4
+      b: 200
+      divisor: 1
+      equation: skill_level * 4 + 200
+어시스턴트 헌팅 유닛 VI:
+  template: 'MP {v1} 소비, 60초 동안 설치되어 5초 공격 후 2초 동안 장전을 반복
+
+    매 공격마다 최대 8명의 적을 {v6}%의 데미지로 3번 공격
+
+    재사용 대기시간 8초'
+  level_equations:
+    v1:
+      a: 1
+      b: 65
+      divisor: 3
+      equation: (skill_level // 3) + 65
+    v6:
+      a: 3
+      b: 162
+      divisor: 1
+      equation: skill_level * 3 + 162
+드릴 컨테이너 VI:
+  template: 'MP {v1} 소비, 60초 동안 드릴 컨테이너 설치
+
+    드릴 컨테이너는 일정 간격마다 최대 10명의 적을 {v4}%의 데미지로 공격
+
+    재사용 대기시간 30초'
+  level_equations:
+    v4:
+      a: 9
+      b: 469
+      divisor: 1
+      equation: skill_level * 9 + 469
+파이널 어택 VI:
+  template: '[파이널 어택류 스킬] 71%의 확률로 {v2}%의 데미지로 공격하는 파이널 어택 발동'
+  level_equations:
+    v2:
+      a: 8
+      b: 410
+      divisor: 1
+      equation: skill_level * 8 + 410
+네이쳐스 빌리프:
+  template: 'MP 1200 소비, 시전 동작 중 무적
+
+    최대 15명의 적을 {v3}%의 데미지로 7번 공격하는 파동 12회 발동 이후 최대 15명의 적을 {v7}%의 데미지로 14번 공격하는 포효
+    23회 발동
+
+    영혼의 공명 : 30초 동안 지속, 재규어 스킬을 포함한 와일드헌터의 공격 스킬 사용 시 최대 12명의 적을 {v12}%의 데미지로 10번
+    공격하는 참격이 6회 발동, 재발동 대기시간 2초
+
+    모든 공격은 100% 확률로 어나더 바이트 디버프 발생
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 32
+      b: 990
+      divisor: 1
+      equation: skill_level * 32 + 990
+    v7:
+      a: 35
+      b: 1050
+      divisor: 1
+      equation: skill_level * 35 + 1050
+    v12:
+      a: 32
+      b: 990
+      divisor: 1
+      equation: skill_level * 32 + 990
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      30: 100
+      14: 45
+      2: 12
+      1: 10
+      3: 14
+      10: 37
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+재규어 스톰 강화:
+  template: 재규어 스톰으로 소환된 재규어의 최종 데미지 반영률 {v1}%, 아래 방향키와 함께 사용 시 최종 데미지 반영률 {v2}%로
+    증가
+  level_equations:
+    v1:
+      a: 1
+      b: 90
+      divisor: 1
+      equation: skill_level + 90
+    v2:
+      a: 5
+      b: 210
+      divisor: 1
+      equation: skill_level * 5 + 210
+재규어 맥시멈 강화:
+  template: 재규어 맥시멈의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      2: 12
+      11: 26
+      1: 11
+      7: 17
+와일드 발칸 Type X 강화:
+  template: 와일드 발칸 Type X의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      9: 19
+      1: 11
+      5: 15
+      4: 14
+      2: 12
+와일드 그레네이드 강화:
+  template: 와일드 그레네이드의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      20: 40
+      1: 11
+      5: 15
+      3: 13
+      2: 12
