@@ -1,15 +1,24 @@
 import os
 import yaml
+import asyncio
+import aiohttp
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 from simaple.core.jobtype import JobType
+from tqdm import tqdm
 
 from simaple.request.external.nexon.api.character.skill import (
     get_every_skill_levels,
     AggregatedCharacterSkillResponse,
+    get_every_skill_levels_async,
 )
-from simaple.request.external.nexon.api.character.common import CharacterIDWithDate, get_character_ocid
+from simaple.request.external.nexon.api.character.common import (
+    CharacterIDWithDate,
+    get_character_ocid,
+    get_nexon_api_header,
+    get_character_ocid_async,
+)
 from typing import TypedDict
 
 
@@ -54,50 +63,70 @@ def clean_skill_info(skill_info: AggregatedCharacterSkillResponse) -> dict[str, 
     return result
 
 
-def get_skill_info(character: IndividualCharacter) -> dict[str, Any]:
+async def get_skill_info_async(session: aiohttp.ClientSession, character: IndividualCharacter) -> dict[str, Any] | None:
     host = "https://open.api.nexon.com"
     access_token = os.environ["NEXON_API_KEY"]
     date = (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d")
 
-    ocid = get_character_ocid(host, access_token, character["name"])
+    ocid = await get_character_ocid_async(session, host, access_token, character["name"])
+    if ocid is None:
+        return None
     
     # 스킬 정보 가져오기
     skill_payload = CharacterIDWithDate(ocid=ocid, date=date)
-    skill_info = get_every_skill_levels(host, access_token, skill_payload)
+    skill_info = await get_every_skill_levels_async(session, host, access_token, skill_payload)
     
-    return {
-        "skill_info": clean_skill_info(skill_info),
-    }
+    try:
+        return {
+            "skill_info": clean_skill_info(skill_info),
+        }
+    except KeyError:
+        print(skill_info)
+        return None
 
-from tqdm import tqdm
 
-def main():
+async def process_characters(characters: list[IndividualCharacter]) -> dict[str, Any]:
+    merged_skills = {}
+    semaphore = asyncio.Semaphore(40)  # 최대 40개의 동시 요청 제한
+
+    async with aiohttp.ClientSession() as session:
+        tasks = []
+        for character in characters:
+            async def process_character(character: IndividualCharacter):
+                async with semaphore:
+                    return await get_skill_info_async(session, character)
+
+            tasks.append(process_character(character))
+
+        results = await asyncio.gather(*tasks)
+        
+        for skill_info in results:
+            if skill_info is None:
+                continue
+            
+            skill_data = skill_info["skill_info"]
+            for response_at, skills in skill_data.items():
+                if response_at not in merged_skills:
+                    merged_skills[response_at] = {}
+                
+                for skill_name, skill_list in skills.items():
+                    if skill_name not in merged_skills[response_at]:
+                        merged_skills[response_at][skill_name] = []
+                    
+                    merged_skills[response_at][skill_name].extend(skill_list)
+    
+    return merged_skills
+
+async def main():
     job_type = JobType.archmagetc
     characters = load_characters(job_type)
-    merged_skills = {}
     
-    # 모든 ocid의 스킬 정보를 수집
-    for character in tqdm(characters[:30:2]):
-        skill_info = get_skill_info(character)["skill_info"]
-
-        # 각 response_at에 대해 처리
-        for response_at, skills in skill_info.items():
-            if response_at not in merged_skills:
-                merged_skills[response_at] = {}
-            
-            # 각 스킬에 대해 처리
-            for skill_name, skill_list in skills.items():
-                if skill_name not in merged_skills[response_at]:
-                    merged_skills[response_at][skill_name] = []
-                
-                # 새로운 스킬 정보 추가
-                merged_skills[response_at][skill_name].extend(skill_list)
+    merged_skills = await process_characters(characters[:40:2] + characters[-40::2])
     
     # 결과를 파일로 저장
     output_path = Path("refs/skill_info.yaml")
     with open(output_path, "w", encoding="utf-8") as f:
         yaml.dump({"skill_info": merged_skills}, f, allow_unicode=True, sort_keys=False, indent=2)
 
-
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

@@ -6,6 +6,8 @@ from simaple.request.external.nexon.api.character.common import (
     CharacterIDWithDate,
     get_nexon_api_header,
 )
+import aiohttp
+import asyncio
 
 
 class CharacterSkillDescription(TypedDict):
@@ -90,6 +92,18 @@ def get_skill_response(
             allow_redirects=True,
         ).json(),
     )
+
+
+async def get_skill_response_async(
+    session: aiohttp.ClientSession, host: str, access_token: str, payload: CharacterSkillPayLoad
+) -> CharacterSkillResponse:
+    async with session.get(
+        f"{host}/maplestory/v1/character/skill",
+        headers=get_nexon_api_header(access_token),
+        params=cast(dict, payload),
+        allow_redirects=True,
+    ) as response:
+        return await response.json()
 
 
 def get_every_skill_levels(
@@ -196,3 +210,38 @@ def get_every_skill_levels(
             },
         ),
     }
+
+
+async def get_every_skill_levels_async(
+    session: aiohttp.ClientSession, host: str, access_token: str, payload: CharacterIDWithDate
+) -> AggregatedCharacterSkillResponse:
+    skill_grades = [
+        ("0", "response_at_0"),
+        ("1", "response_at_1"),
+        ("1.5", "response_at_1_and_half"),
+        ("2", "response_at_2"),
+        ("2.5", "response_at_2_and_half"),
+        ("3", "response_at_3"),
+        ("4", "response_at_4"),
+        ("5", "response_at_5"),
+        ("6", "response_at_6"),
+        ("hyperpassive", "response_at_hyper_passive"),
+        ("hyperactive", "response_at_hyper_active"),
+    ]
+    
+    tasks = []
+    for grade, response_key in skill_grades:
+        task = get_skill_response_async(
+            session,
+            host,
+            access_token,
+            {
+                "ocid": payload["ocid"],
+                "date": payload["date"],
+                "character_skill_grade": grade,
+            },
+        )
+        tasks.append((response_key, task))
+    
+    results = await asyncio.gather(*[task for _, task in tasks])
+    return cast(AggregatedCharacterSkillResponse, {key: result for (key, _), result in zip(tasks, results)})
