@@ -1,6 +1,6 @@
 import re
 from abc import ABCMeta, abstractmethod
-from typing import Any, TypeVar, Union, cast
+from typing import Any, Union, cast
 
 import pydantic
 from pydantic import BaseModel, PrivateAttr

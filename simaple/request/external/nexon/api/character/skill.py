@@ -1,13 +1,13 @@
+import asyncio
 from typing import TypedDict, cast
 
+import aiohttp
 import requests
 
 from simaple.request.external.nexon.api.character.common import (
     CharacterIDWithDate,
     get_nexon_api_header,
 )
-import aiohttp
-import asyncio
 
 
 class CharacterSkillDescription(TypedDict):
@@ -95,7 +95,10 @@ def get_skill_response(
 
 
 async def get_skill_response_async(
-    session: aiohttp.ClientSession, host: str, access_token: str, payload: CharacterSkillPayLoad
+    session: aiohttp.ClientSession,
+    host: str,
+    access_token: str,
+    payload: CharacterSkillPayLoad,
 ) -> CharacterSkillResponse:
     async with session.get(
         f"{host}/maplestory/v1/character/skill",
@@ -213,7 +216,10 @@ def get_every_skill_levels(
 
 
 async def get_every_skill_levels_async(
-    session: aiohttp.ClientSession, host: str, access_token: str, payload: CharacterIDWithDate
+    session: aiohttp.ClientSession,
+    host: str,
+    access_token: str,
+    payload: CharacterIDWithDate,
 ) -> AggregatedCharacterSkillResponse:
     skill_grades = [
         ("0", "response_at_0"),
@@ -228,7 +234,7 @@ async def get_every_skill_levels_async(
         ("hyperpassive", "response_at_hyper_passive"),
         ("hyperactive", "response_at_hyper_active"),
     ]
-    
+
     tasks = []
     for grade, response_key in skill_grades:
         task = get_skill_response_async(
@@ -242,6 +248,9 @@ async def get_every_skill_levels_async(
             },
         )
         tasks.append((response_key, task))
-    
+
     results = await asyncio.gather(*[task for _, task in tasks])
-    return cast(AggregatedCharacterSkillResponse, {key: result for (key, _), result in zip(tasks, results)})
+    return cast(
+        AggregatedCharacterSkillResponse,
+        {key: result for (key, _), result in zip(tasks, results)},
+    )

@@ -55,7 +55,7 @@ test = ["coverage", "typetest", "formatting-check"]
 
 
 [tool.ruff.lint]
-select = ["I"]
+extend-select = ["I"]
 
 
 [tool.pytest.ini_options]

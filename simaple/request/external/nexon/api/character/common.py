@@ -1,7 +1,8 @@
 from typing import TypedDict, cast
 
-import requests
 import aiohttp
+import requests
+
 
 class CharacterIDWithDate(TypedDict):
     ocid: str
@@ -28,7 +29,6 @@ def get_character_ocid(
     ).json()
 
     return cast(str, resp["ocid"])
-
 
 
 async def get_character_ocid_async(

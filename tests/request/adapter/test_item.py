@@ -81,8 +81,6 @@ def test_get_set_item_stats(set_effect_response: SetEffectResponse):
 
 
 def test_get_regularized_weapon() -> None:
-    gear_repository = GearRepository()
-
     regularized_weapon = _get_regularized_weapon(
         "제네시스 스태프",
         Stat.model_validate(
