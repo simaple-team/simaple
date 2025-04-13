@@ -1,0 +1,4 @@
+- jobType: archmagetc
+  targets: 
+  - ocid: ec9558763e9b8fbcb338f8b2c571f734efe8d04e6d233bd35cf2fabdeb93fb0d
+  - ocid: 4f733cf63fe3479b627d1f70cc6abb19efe8d04e6d233bd35cf2fabdeb93fb0d
