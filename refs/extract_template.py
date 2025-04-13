@@ -4,9 +4,9 @@ from pathlib import Path
 from typing import Sequence, TypedDict
 
 import yaml
+from tqdm import tqdm
 
 from simaple.core.jobtype import JobType
-from tqdm import tqdm
 
 # --- TypedDict Definitions ---
 
@@ -429,7 +429,9 @@ def main():
             "response_at_6", {}
         )
         if not skill_info_input:
-            logging.warning("'response_at_6' data not found or empty in skill_info.yaml")
+            logging.warning(
+                "'response_at_6' data not found or empty in skill_info.yaml"
+            )
             # Proceed with empty dict if not found
 
         # --- Processing Pipeline ---

@@ -106,7 +106,7 @@ async def get_skill_response_async(
         params=cast(dict, payload),
         allow_redirects=True,
     ) as response:
-        return await response.json()
+        return cast(CharacterSkillResponse, await response.json())
 
 
 def get_every_skill_levels(

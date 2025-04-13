@@ -5,8 +5,8 @@ from pathlib import Path
 from typing import Any, TypedDict
 
 import aiohttp
-from loguru import logger
 import yaml
+from loguru import logger
 from tqdm import tqdm
 
 from simaple.core.jobtype import JobType
