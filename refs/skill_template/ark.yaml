@@ -1,0 +1,359 @@
+플레인 차지드라이브 VI:
+  template: 'MP {v1} 소비, {v2}%의 데미지로 최대 7명의 적을 3번 공격
+
+    플레인 스펠 : 스펠 불릿 사용 시 {v5}%의 데미지로 1번 공격하는 플레인 스펠 2개 생성
+
+    플레인 버프 : 플레인 스펠 적중 시 60초 동안 이동속도 20, 스탠스 확률 50% 증가'
+  level_equations:
+    v1:
+      a: 1
+      b: 20
+      divisor: 3
+      equation: (skill_level // 3) + 20
+    v2:
+      a: 10
+      b: 600
+      divisor: 1
+      equation: skill_level * 10 + 600
+    v5:
+      a: 6
+      b: 415
+      divisor: 1
+      equation: skill_level * 6 + 415
+스칼렛 차지드라이브 VI:
+  template: 'MP {v1} 소비, {v2}%의 데미지로 최대 7명의 적을 3번 공격
+
+    돌진 후 {v5}%의 데미지로 최대 7명의 적을 3번 공격하는 불길 발생
+
+    재사용 대기시간 3초
+
+    스칼렛 스펠 : 스펠 불릿 사용 시 {v9}%의 데미지로 최대 8명의 적을 5번 공격하는 스칼렛 스펠 생성
+
+    스칼렛 버프 : 스칼렛 스펠 적중 시 60초 동안 공격력 30, 크리티컬 확률 20% 증가'
+  level_equations:
+    v1:
+      a: 1
+      b: 35
+      divisor: 3
+      equation: (skill_level // 3) + 35
+    v2:
+      a: 6
+      b: 385
+      divisor: 1
+      equation: skill_level * 6 + 385
+    v5:
+      a: 6
+      b: 385
+      divisor: 1
+      equation: skill_level * 6 + 385
+    v9:
+      a: 4
+      b: 235
+      divisor: 1
+      equation: skill_level * 4 + 235
+거스트 차지드라이브 VI:
+  template: 'MP {v1} 소비, {v2}%의 데미지로 최대 7명의 적을 6번 공격
+
+    재사용 대기시간 5초
+
+    거스트 스펠 : 스펠 불릿 사용 시 주위의 적을 끌어들인 후 {v6}%의 데미지로 최대 12명의 적을 4번 공격하는 거스트 스펠 생성
+
+    거스트 버프 : 거스트 스펠 적중 시 60초 동안 공격 속도 1단계, 회피율 25% 증가'
+  level_equations:
+    v2:
+      a: 7
+      b: 435
+      divisor: 1
+      equation: skill_level * 7 + 435
+    v6:
+      a: 4
+      b: 250
+      divisor: 1
+      equation: skill_level * 4 + 250
+어비스 차지드라이브 VI:
+  template: 'HP {v1}, MP {v2} 소비
+
+    {v3}%의 데미지로 최대 8명의 적을 4번 공격, 심연의 마력은 {v6}%의 데미지로 최대 8명의 적을 6번 공격
+
+    재사용 대기시간 9초
+
+    어비스 스펠 : 스펠 불릿 사용 시 3초 동안 일정 간격으로 최대 8명의 적에게 {v12}%의 데미지로 2번 공격하는 어비스 스펠 생성
+
+    어비스 버프 : 어비스 스펠 적중 시 60초 동안 데미지 20%, 보스 몬스터 공격 시 데미지 {v16}%, 방어율 무시 20% 증가'
+  level_equations:
+    v3:
+      a: 6
+      b: 370
+      divisor: 1
+      equation: skill_level * 6 + 370
+    v6:
+      a: 7
+      b: 450
+      divisor: 1
+      equation: skill_level * 7 + 450
+    v12:
+      a: 1
+      b: 85
+      divisor: 1
+      equation: skill_level + 85
+깨어난 심연:
+  template: '플레인 차지드라이브에서 다른 스킬을 연계하여 적을 공격했을 때 스펙터의 기운 10개 생성, 스펙터 잠식 상태에서 공격 적중
+    시 기운을 소모하여 적중한 모든 적에게 {v2}%의 데미지로 3번 공격하는 심연의 칼날 생성
+
+    스펙터의 기운 최대 생성 제한 300개
+
+    인피니티 스펠, 가장 오래된 심연 사용 시 스펙터의 기운 300개 추가 생성'
+  level_equations:
+    v2:
+      a: 16
+      b: 980
+      divisor: 1
+      equation: skill_level * 16 + 980
+지워지지 않는 상처 VI:
+  template: '최대 8명의 적을 {v2}%의 데미지로 6번 공격
+
+    공격 적중 시 최대 HP의 2% 회복
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 돌아오는 증오 데미지 {v6}%p,
+
+    돌아오는 증오 VI 데미지 {v7}%p 증가]'
+  level_equations:
+    v2:
+      a: 12
+      b: 630
+      divisor: 1
+      equation: skill_level * 12 + 630
+    v6:
+      a: 11
+      b: 150
+      divisor: 1
+      equation: skill_level * 11 + 150
+    v7:
+      a: 2
+      b: 0
+      divisor: 1
+      equation: skill_level * 2
+채워지지 않는 굶주림 VI:
+  template: '최대 8명의 적을 {v2}%의 데미지로 7번 공격
+
+    공격 적중 시 최대 HP의 5% 회복
+
+    재사용 대기시간 5초
+
+    [패시브 효과 : 멈출 수 없는 충동, 멈출 수 없는 본능 데미지 {v6}%p 증가]'
+  level_equations:
+    v2:
+      a: 11
+      b: 650
+      divisor: 1
+      equation: skill_level * 11 + 650
+    v6:
+      a: 7
+      b: 40
+      divisor: 1
+      equation: skill_level * 7 + 40
+걷잡을 수 없는 혼돈 VI:
+  template: '최대 12명의 적을 {v2}%의 데미지로 12번 공격
+
+    공격 적중 시 최대 HP의 3% 회복
+
+    재사용 대기시간 9초'
+  level_equations:
+    v2:
+      a: 9
+      b: 610
+      divisor: 1
+      equation: skill_level * 9 + 610
+돌아오는 증오 VI:
+  template: '다가오는 죽음이 적중했을 때 20%의 확률로 심연의 징표를 남기고 스킬 사용 시 일정 범위 안의 징표를 활성화하여 징표마다
+    최대 8명의 적을 {v3}%의 데미지로 8번 공격
+
+    징표 최대 생성 제한 12개, 최대 유지 시간 20초
+
+    자동 모드 시 활성화되는 최대 징표 제한 8개
+
+    재사용 대기시간 12초'
+  level_equations:
+    v3:
+      a: 7
+      b: 725
+      divisor: 1
+      equation: skill_level * 7 + 725
+황홀한 구속 VI:
+  template: 'HP {v1} 소비, 1명의 적을 {v3}%의 데미지로 6번 공격, 대상은 10초 동안 행동 불가 상태, 해당 공격으로 적에게
+    준 데미지에 따라 행동 불가 지속시간 최대 100% 증가
+
+    이후 8.1초 동안 일정 간격마다 최대 12명의 적을 {v10}%의 데미지로 3번 공격
+
+    스킬 종료 시 최대 12명의 적을 {v13}%의 데미지로 8번 공격하는 폭발이 7회 발생
+
+    재사용 대기시간 120초'
+  level_equations:
+    v1:
+      a: 5
+      b: 1100
+      divisor: 1
+      equation: skill_level * 5 + 1100
+    v3:
+      a: 16
+      b: 720
+      divisor: 1
+      equation: skill_level * 16 + 720
+    v10:
+      a: 10
+      b: 600
+      divisor: 1
+      equation: skill_level * 10 + 600
+    v13:
+      a: 4
+      b: 255
+      divisor: 1
+      equation: skill_level * 4 + 255
+끝없는 고통 VI:
+  template: '최대 3초 동안 키다운 가능
+
+    일정 간격마다 최대 5명의 적을 {v3}%의 데미지로 3번 공격, 키다운 종료 혹은 최대 키다운 유지시간 경과 시 심연의 파수꾼 발동
+
+    심연의 파수꾼 : 최대 12명의 적을 {v6}%의 데미지로 12번 공격하는 참격이 10회 발동하고 공격 적중 시 최대 HP의 20% 회복
+
+    재사용 대기시간 60초'
+  level_equations:
+    v3:
+      a: 6
+      b: 396
+      divisor: 1
+      equation: skill_level * 6 + 396
+    v6:
+      a: 3
+      b: 246
+      divisor: 1
+      equation: skill_level * 3 + 246
+잊혀지지 않는 악몽 VI:
+  template: 'HP 85 소비, 최대 6명의 적을 {v3}%의 데미지로 7번 공격
+
+    재사용 대기시간 2초
+
+    [패시브 효과 : 다가오는 죽음 데미지 {v6}%p 증가]'
+  level_equations:
+    v3:
+      a: 8
+      b: 470
+      divisor: 1
+      equation: skill_level * 8 + 470
+    v6:
+      a: 2
+      b: 0
+      divisor: 1
+      equation: skill_level * 2
+잊혀지지 않는 흉몽 VI:
+  template: '최대 6명의 적을 {v2}%의 데미지로 7번 공격
+
+    공격 적중 시 최대 HP의 1% 회복'
+  level_equations:
+    v2:
+      a: 8
+      b: 480
+      divisor: 1
+      equation: skill_level * 8 + 480
+가장 오래된 심연:
+  template: 'MP 1500 소비, 시전 동작 중 무적
+
+    일정 시간마다 최대 15명의 적을 {v3}%의 데미지로 14번 공격하는 근원의 침식이 68회 발생, 30초 동안 일정 시간마다 최대 15명의
+    적을 {v8}%의 데미지로 공격하는 심연의 손아귀 15개 발생
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 18
+      b: 561
+      divisor: 1
+      equation: skill_level * 18 + 561
+    v8:
+      a: 29
+      b: 860
+      divisor: 1
+      equation: skill_level * 29 + 860
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      30: 100
+      10: 37
+      25: 77
+      20: 67
+      6: 20
+      12: 41
+      1: 10
+      3: 14
+      5: 18
+      11: 39
+      2: 12
+      7: 22
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+근원의 기억 강화:
+  template: 근원의 기억의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      18: 33
+      1: 11
+      5: 15
+      24: 44
+      2: 12
+      10: 25
+      6: 16
+      4: 14
+      3: 13
+인피니티 스펠 강화:
+  template: 인피니티 스펠 지속 중 다가오는 죽음의 데미지 {v1}%p 증가
+  level_equations:
+    v1:
+      a: 7
+      b: 0
+      divisor: 1
+      equation: skill_level * 7
+새어 나오는 악몽/새어 나오는 흉몽 강화:
+  template: 새어 나오는 악몽/새어 나오는 흉몽의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      16: 31
+      1: 11
+      4: 14
+      5: 15
+      2: 12
+      6: 16
+      10: 25
+영원히 굶주리는 짐승 강화:
+  template: 영원히 굶주리는 짐승의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      20: 40
+      15: 30
+      4: 14
+      1: 11
+      30: 60
+      7: 17
+      3: 13
+      10: 25
+      8: 18
+      13: 28
+      2: 12
+      9: 19

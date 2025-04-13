@@ -1,0 +1,361 @@
+체인아츠:스트로크 VI:
+  template: 'MP {v1} 소비
+
+    1타 : 최대 4명의 적을 {v4}%의 데미지로 2번 공격
+
+    2타 : 최대 8명의 적을 {v8}%의 데미지로 5번 공격, 공격 시 100% 확률로 5초 동안 슬로우
+
+    강화 2타 : 10초 마다 준비되며 최대 3번까지 사용 가능
+
+    최대 8명의 적을 {v16}%의 데미지로 5번 공격 후 {v18}%의 데미지로 10번 공격하는 충격파 발생
+
+    체인아츠:스트로크를 제외한 1타 직후 사용하는 스킬의 최종 데미지 {v21}% 증가'
+  level_equations:
+    v4:
+      a: 5
+      b: 150
+      divisor: 1
+      equation: skill_level * 5 + 150
+    v8:
+      a: 5
+      b: 410
+      divisor: 1
+      equation: skill_level * 5 + 410
+    v16:
+      a: 5
+      b: 410
+      divisor: 1
+      equation: skill_level * 5 + 410
+    v18:
+      a: 18
+      b: 450
+      divisor: 1
+      equation: skill_level * 18 + 450
+웨폰 버라이어티 VI:
+  template: '무기 교체 시 30초 동안 버프 1 스택당 모든 공격 스킬의 최종 데미지 11% 증가, 체인아츠를 제외한 사용 가능 소환 무기
+    스킬 최대 개수만큼 중첩 가능
+
+    버프 중첩 및 갱신 시 {v4}%의 데미지로 최대 7명의 적을 4번 공격하는 추가타 발생
+
+    추가타 발생 시 2초 동안 다크 사이트 및 최대 HP의 7%의 피해를 막아주는 보호막 생성
+
+    보호막은 최대 HP의 25%만큼 누적 가능하며 초당 현재 보호막의 30% + 50씩 소멸
+
+    추가타 재발동 대기시간 : 0.2초'
+  level_equations:
+    v4:
+      a: 7
+      b: 450
+      divisor: 1
+      equation: skill_level * 7 + 450
+서먼 커팅 시미터 VI:
+  template: 'MP {v1} 소비, 최대 6명의 적을 {v3}%의 데미지로 5번 공격
+
+    재사용 대기시간 4초'
+  level_equations:
+    v3:
+      a: 11
+      b: 519
+      divisor: 1
+      equation: skill_level * 11 + 519
+서먼 스크래칭 클로 VI:
+  template: 'MP {v1} 소비, 최대 10명의 적을 {v3}%의 데미지로 4번 공격
+
+    재사용 대기시간 3초'
+  level_equations:
+    v3:
+      a: 11
+      b: 550
+      divisor: 1
+      equation: skill_level * 11 + 550
+서먼 스로잉 윙대거 VI:
+  template: "MP {v1} 소비, 7초 동안 일정 간격마다 1명의 적을 {v4}%의 데미지로 \n1번 공격하는 수리검 소환\n7초가 지난\
+    \ 경우 자동 폭발하며 스킬키를 재입력하여 수동 폭발 가능\n폭발 시 최대 8명의 적을 {v8}%의 데미지로 3번 공격\n재사용 대기시간 10초"
+  level_equations:
+    v4:
+      a: 11
+      b: 519
+      divisor: 1
+      equation: skill_level * 11 + 519
+    v8:
+      a: 17
+      b: 783
+      divisor: 1
+      equation: skill_level * 17 + 783
+서먼 비팅 니들배트 VI:
+  template: 'MP {v1} 소비
+
+    1타 : 최대 8명의 적을 {v4}%의 데미지로 12번 공격
+
+    2타 : 최대 8명의 적을 {v8}%의 데미지로 13번 공격
+
+    3타 : 최대 10명의 적을 {v12}%의 데미지로 14번 공격
+
+    공격 시 100%의 확률로 30초 동안 혼미 상태 이상 효과가 적용되어 적의 공격력 20% 감소
+
+    재사용 대기시간 12초'
+  level_equations:
+    v1:
+      a: 1
+      b: 40
+      divisor: 4
+      equation: (skill_level // 4) + 40
+    v4:
+      a: 7
+      b: 358
+      divisor: 1
+      equation: skill_level * 7 + 358
+    v8:
+      a: 10
+      b: 483
+      divisor: 1
+      equation: skill_level * 10 + 483
+    v12:
+      a: 15
+      b: 710
+      divisor: 1
+      equation: skill_level * 15 + 710
+체인아츠:크러시 VI:
+  template: 'MP {v1} 소비, 최대 15명의 적을 {v3}%의 데미지로 15번 공격
+
+    공격 적중 시 웨폰 버라이어티 최대로 중첩, 지속 시간 15초로 적용
+
+    재사용 대기시간 30초'
+  level_equations:
+    v1:
+      a: 1
+      b: 300
+      divisor: 1
+      equation: skill_level + 300
+    v3:
+      a: 14
+      b: 547
+      divisor: 1
+      equation: skill_level * 14 + 547
+서먼 슈팅 샷건 VI:
+  template: 'MP {v1} 소비
+
+    가까운 거리 : 최대 6명의 적을 {v3}%의 데미지로 7번 공격
+
+    중간 거리 : 최대 6명의 적을 {v6}%의 데미지로 7번 공격
+
+    먼 거리 : 최대 6명의 적을 {v9}%의 데미지로 7번 공격
+
+    재사용 대기시간 5초'
+  level_equations:
+    v3:
+      a: 11
+      b: 610
+      divisor: 1
+      equation: skill_level * 11 + 610
+    v6:
+      a: 10
+      b: 537
+      divisor: 1
+      equation: skill_level * 10 + 537
+    v9:
+      a: 9
+      b: 488
+      divisor: 1
+      equation: skill_level * 9 + 488
+서먼 슬래싱 나이프 VI:
+  template: 'MP {v1} 소비, 최대 4명의 적을 {v3}%의 데미지로 8번 공격, 적중 시 100%의 확률로 30초 동안 공포에 빠지게
+    하여 적의 방어율 30% 감소
+
+    재사용 대기시간 10초'
+  level_equations:
+    v3:
+      a: 9
+      b: 532
+      divisor: 1
+      equation: skill_level * 9 + 532
+서먼 릴리싱 봄 VI:
+  template: 'MP {v1} 소비, 1초 후 폭발하는 폭탄 설치, 폭탄은 최대 8명의 적을 {v4}%의 데미지로 6번 공격
+
+    재사용 대기시간 8초'
+  level_equations:
+    v4:
+      a: 12
+      b: 640
+      divisor: 1
+      equation: skill_level * 12 + 640
+서먼 스트라이킹 브릭 VI:
+  template: 'MP {v1} 소비, 최대 7명의 적을 {v3}%의 데미지로 7번 공격
+
+    재사용 대기시간 8초'
+  level_equations:
+    v1:
+      a: 1
+      b: 46
+      divisor: 5
+      equation: (skill_level // 5) + 46
+    v3:
+      a: 11
+      b: 585
+      divisor: 1
+      equation: skill_level * 11 + 585
+체인아츠:테이크다운 VI:
+  template: "MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 2번 공격\n공격당한 적은 10초 동안 행동 불가 상태 적용\n\
+    체인아츠:테이크다운으로 적에게 준 데미지에 따라 행동 불가 지속시간 최대 100% 증가\n시전 후 5초 동안 웨폰 버라이어티 추가타 발동 횟수에\
+    \ 따라 공격 강도가 \n3단계로 나뉘는 난타 발생, 발동 횟수를 시간 내에 충족하지 않으면 최소 단계의 난타 발생, 시간 내에 최대 발동\
+    \ 횟수를 충족하면 난타 즉시 발생\n난타 : 웨폰 버라이어티 발동 횟수가 0, 3, 5회 이상일 때 단계에 따라 묶은 위치에서 최대 10명의\
+    \ 적을 {v13}%/{v14}%/{v15}%의 데미지로 15번 공격 후 최대 10명의 적을 {v18}%/{v19}%/{v20}%의 데미지로\
+    \ 10번 공격하는 마무리 일격 발동\n연속 공격 중 타격에 따라 최대 10명의 적을 {v23}%의 데미지로 4번 공격하는 충격파 발생, 모든\
+    \ 공격은 방어율 80% 추가 무시\n재사용 대기시간 118초"
+  level_equations:
+    v1:
+      a: 1
+      b: 252
+      divisor: 1
+      equation: skill_level + 252
+    v3:
+      a: 6
+      b: 328
+      divisor: 1
+      equation: skill_level * 6 + 328
+    v13:
+      a: 16
+      b: 842
+      divisor: 1
+      equation: skill_level * 16 + 842
+    v14:
+      a: 18
+      b: 960
+      divisor: 1
+      equation: skill_level * 18 + 960
+    v15:
+      a: 21
+      b: 1080
+      divisor: 1
+      equation: skill_level * 21 + 1080
+    v18:
+      a: 5
+      b: 270
+      divisor: 1
+      equation: skill_level * 5 + 270
+    v19:
+      a: 7
+      b: 378
+      divisor: 1
+      equation: skill_level * 7 + 378
+    v20:
+      a: 10
+      b: 540
+      divisor: 1
+      equation: skill_level * 10 + 540
+    v23:
+      a: 12
+      b: 655
+      divisor: 1
+      equation: skill_level * 12 + 655
+프로페셔널 에이전트 VI:
+  template: 'MP {v1} 소비, 30초 동안 웨폰 버라이어티의 최종 데미지 증가량 2배로 적용
+
+    공격 적중 시 최대 6명의 적을 {v5}%의 데미지로 3번 공격하는 폭발 생성
+
+    재사용 대기시간 180초'
+  level_equations:
+    v1:
+      a: 3
+      b: 500
+      divisor: 1
+      equation: skill_level * 3 + 500
+    v5:
+      a: 5
+      b: 275
+      divisor: 1
+      equation: skill_level * 5 + 275
+체인아츠:매서커:
+  template: 'MP 1200 소비, 시전 동작 중 무적
+
+    최대 15명의 적을 공격
+
+    1차 연계 공격 : {v4}%의 데미지로 8번 공격하는 참격이 54회 발생
+
+    2차 연계 공격 : {v8}%의 데미지로 9번 공격하는 참격이 17회 발생
+
+    3차 연계 공격 : {v12}%의 데미지로 14번 공격하는 폭발이 60회 발생
+
+    재사용 대기시간 360초'
+  level_equations:
+    v4:
+      a: 12
+      b: 340
+      divisor: 1
+      equation: skill_level * 12 + 340
+    v8:
+      a: 12
+      b: 370
+      divisor: 1
+      equation: skill_level * 12 + 370
+    v12:
+      a: 13
+      b: 390
+      divisor: 1
+      equation: skill_level * 13 + 390
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      30: 100
+      1: 10
+      10: 37
+      2: 12
+      5: 18
+      6: 20
+      4: 16
+      7: 22
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+체인아츠:퓨리 강화:
+  template: 체인아츠:퓨리의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      1: 11
+      2: 12
+      4: 14
+A.D 오드넌스 강화:
+  template: A.D 오드넌스의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      4: 14
+      1: 11
+      5: 15
+      2: 12
+      6: 16
+      3: 13
+체인아츠:메일스트롬 강화:
+  template: 체인아츠:메일스트롬의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      1: 11
+      2: 12
+      3: 13
+      4: 14
+웨폰 버라이어티 피날레 강화:
+  template: 웨폰 버라이어티 피날레의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      1: 11
+      2: 12
+      4: 14

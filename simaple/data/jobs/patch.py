@@ -1,5 +1,5 @@
 import copy
-from typing import Any, TypedDict, TypeVar, Union, cast
+from typing import Any, Union, cast
 
 import pydantic
 
@@ -114,7 +114,7 @@ class SkillImprovementPatch(Patch):
 
         if output == raw:
             raise ValueError(
-                f"At least one improvement should be applied if skill improvement patch defined"
+                "At least one improvement should be applied if skill improvement patch defined"
             )
 
         return output

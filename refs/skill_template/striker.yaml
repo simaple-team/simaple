@@ -1,0 +1,250 @@
+섬멸 VI:
+  template: 'MP {v1} 소비, 최대 3명의 적을 {v3}%의 데미지로 7번 공격
+
+    적중한 적에게 90초 동안 유지되는 번개의 낙인 생성'
+  level_equations:
+    v1:
+      a: 1
+      b: 70
+      divisor: 3
+      equation: (skill_level // 3) + 70
+    v3:
+      a: 4
+      b: 350
+      divisor: 1
+      equation: skill_level * 4 + 350
+낙뢰:
+  template: '번개의 낙인이 찍힌 적을 섬멸 VI, 파도를 제외한 직접 공격하는 스킬로 공격 시 {v1}%의 데미지로 3번 공격하는 낙뢰
+    발생
+
+    해파를 제외한 연쇄 스킬, 창뇌연격의 연계 공격, 뇌명벽해파는 공격 시 낙뢰 대신 {v3}%의 데미지로 5번 공격하는 거대 벼락 발생
+
+    보스 몬스터 공격 시 데미지 40% 증가, 몬스터 방어율 무시 20% 증가'
+  level_equations:
+    v1:
+      a: 6
+      b: 200
+      divisor: 1
+      equation: skill_level * 6 + 200
+    v3:
+      a: 6
+      b: 160
+      divisor: 1
+      equation: skill_level * 6 + 160
+벽력 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 5번 공격
+
+    벽력섬 : MP {v5} 소비, 최대 12명의 적을 {v7}%의 데미지로 5번 공격
+
+    발동 시 캐릭터가 보는 방향을 향해 전진하는 해파 발생, 벽력섬에 의해 발동되는 해파는 재사용 대기시간 미적용
+
+    재발동 대기시간 6초
+
+    [패시브 효과 : 낙뢰의 거대 벼락 데미지 {v10}%p 증가]'
+  level_equations:
+    v1:
+      a: 1
+      b: 77
+      divisor: 4
+      equation: (skill_level // 4) + 77
+    v3:
+      a: 6
+      b: 335
+      divisor: 1
+      equation: skill_level * 6 + 335
+    v5:
+      a: 1
+      b: 80
+      divisor: 3
+      equation: (skill_level // 3) + 80
+    v7:
+      a: 6
+      b: 365
+      divisor: 1
+      equation: skill_level * 6 + 365
+    v10:
+      a: 9
+      b: 90
+      divisor: 1
+      equation: skill_level * 9 + 90
+태풍 VI:
+  template: 'MP {v1} 소비, 뇌전 버프 2개 이상 누적 시 사용 가능
+
+    누적한 뇌전 버프를 모두 사용하여 최대 8명의 적을 {v4}%의 데미지로 5번 공격, 뇌전 버프가 최대로 누적됐을 때 사용 시 데미지 {v6}%p
+    증가
+
+    사용한 뇌전 버프 1개당 데미지 3% 증가 버프가 95초 동안 지속
+
+    단, 해당 스킬은 뇌전 버프를 발동시키지 않음
+
+    재사용 대기시간 12초'
+  level_equations:
+    v1:
+      a: 1
+      b: 49
+      divisor: 3
+      equation: (skill_level // 3) + 49
+    v4:
+      a: 15
+      b: 381
+      divisor: 1
+      equation: skill_level * 15 + 381
+    v6:
+      a: 5
+      b: 100
+      divisor: 1
+      equation: skill_level * 5 + 100
+해신강림 VI:
+  template: 'MP {v1} 소비, 최대 15명의 적을 {v3}%의 데미지로 7번 공격, 시전 동작 중 무적
+
+    재사용 대기시간 45초'
+  level_equations:
+    v1:
+      a: 2
+      b: 350
+      divisor: 1
+      equation: skill_level * 2 + 350
+    v3:
+      a: 15
+      b: 930
+      divisor: 1
+      equation: skill_level * 15 + 930
+해파 VI:
+  template: 'MP {v1} 소비, 스킬 연계 시 재발동 대기시간이 아니라면 생성
+
+    일정 방향으로 흐르며 최대 5명의 적을 {v3}%의 데미지로 5번 공격
+
+    2700 만큼 이동하거나 공격한 적의 수가 24명 도달 시 소멸
+
+    한명의 적에게는 최대 1번까지만 공격
+
+    재발동 대기시간 12초
+
+    [패시브 효과 : 섬멸 VI의 데미지 {v9}%p 증가]'
+  level_equations:
+    v1:
+      a: 1
+      b: 80
+      divisor: 2
+      equation: (skill_level // 2) + 80
+    v3:
+      a: 20
+      b: 410
+      divisor: 1
+      equation: skill_level * 20 + 410
+    v9:
+      a: 1
+      b: 17
+      divisor: 1
+      equation: skill_level + 17
+해신강체:
+  template: '연계 스킬 적중 시 2초 동안 최대 HP의 {v2}%의 피해를 막는 보호막 생성
+
+    보호막은 최대 HP의 {v3}%만큼 누적 가능하며 초당 현재 보호막의 {v4}% + {v5}씩 소멸'
+  level_equations:
+    v4:
+      a: -1
+      b: 35
+      divisor: 3
+      equation: -(skill_level // 3) + 35
+뇌명벽해파:
+  template: "MP 1200 소비, 시전 동작 중 무적\n최대 15명의 적을 {v3}%의 데미지로 5번 공격하는 충격파가 32회 발동 후\n\
+    \ {v6}%의 데미지로 7번 공격하는 충격파가 62회 발동\n재사용 대기시간 360초"
+  level_equations:
+    v3:
+      a: 23
+      b: 700
+      divisor: 1
+      equation: skill_level * 23 + 700
+    v6:
+      a: 23
+      b: 680
+      divisor: 1
+      equation: skill_level * 23 + 680
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      30: 100
+      10: 37
+      3: 14
+      1: 10
+      2: 12
+      16: 49
+      8: 24
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+신뇌합일 강화:
+  template: 신뇌합일의 최종 데미지 {v1}% 증가, 지속시간 {v2}초, 최종 데미지 증가량 {v3}%로 증가
+  levels:
+    v1:
+      30: 60
+      19: 34
+      20: 40
+      13: 28
+      7: 17
+      1: 11
+      3: 13
+    v2:
+      30: 62
+      19: 59
+      20: 59
+      13: 57
+      7: 55
+      1: 53
+      3: 53
+    v3:
+      30: 32
+      19: 31
+      20: 31
+      13: 30
+      7: 29
+      1: 28
+      3: 28
+교아탄 강화:
+  template: 교아탄의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      3: 13
+      10: 25
+      4: 14
+      1: 11
+      2: 12
+뇌신창격 강화:
+  template: 뇌신창격의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      8: 18
+      10: 25
+      4: 14
+      2: 12
+      1: 11
+창뇌연격 강화:
+  template: 창뇌연격의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      3: 13
+      10: 25
+      9: 19
+      1: 11
+      4: 14
+      2: 12

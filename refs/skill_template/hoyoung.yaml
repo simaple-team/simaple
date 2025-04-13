@@ -1,0 +1,287 @@
+'멸화염 : 천 VI':
+  template: 'MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 6번 공격, 사용 후 초상비 및 근두운 사용 초기화
+
+    재사용 대기시간 8초'
+  level_equations:
+    v3:
+      a: 5
+      b: 405
+      divisor: 1
+      equation: skill_level * 5 + 405
+'멸화염 : 허/실 VI':
+  template: '멸화염 : 천 사용 후 멸화염 : 허 또는 멸화염 : 실로 연계 가능, 최대 8명의 적을 {v2}%의 데미지로 6번 공격'
+  level_equations:
+    v2:
+      a: 5
+      b: 405
+      divisor: 1
+      equation: skill_level * 5 + 405
+'지진쇄 : 지 VI':
+  template: 'MP {v1} 소비, 최대 10명의 적을 {v3}%의 데미지로 6번 공격, 일반 몬스터의 경우 5초 동안 기절
+
+    재사용 대기시간 6초'
+  level_equations:
+    v1:
+      a: 1
+      b: 90
+      divisor: 2
+      equation: (skill_level // 2) + 90
+    v3:
+      a: 6
+      b: 470
+      divisor: 1
+      equation: skill_level * 6 + 470
+'지진쇄 : 허/실 VI':
+  template: '지진쇄 : 지 사용 후 지진쇄 : 허 또는 지진쇄 : 실로 연계 가능, 암석 끝으로 순간 이동한 후 최대 10명의 적을 {v2}%의
+    데미지로 6번 공격'
+  level_equations:
+    v2:
+      a: 6
+      b: 470
+      divisor: 1
+      equation: skill_level * 6 + 470
+'금고봉 : 인 VI':
+  template: 'MP {v1} 소비, 최대 10명의 적을 {v3}%의 데미지로 10번 공격한 후 {v5}%의 데미지로 8번 공격하며 마무리
+    일격
+
+    보스 몬스터 공격 시 데미지 30% 증가
+
+    재사용 대기시간 11초'
+  level_equations:
+    v1:
+      a: 1
+      b: 110
+      divisor: 2
+      equation: (skill_level // 2) + 110
+    v3:
+      a: 6
+      b: 275
+      divisor: 1
+      equation: skill_level * 6 + 275
+    v5:
+      a: 11
+      b: 500
+      divisor: 1
+      equation: skill_level * 11 + 500
+천지만물:
+  template: '천/지/인 속성 연계 3단계 3번 달성 시 다음에 사용하는 멸화염 : 천 VI, 지진쇄 : 지 VI, 금고봉 : 인 VI,
+    파초풍 : 천 VI, 토파류 : 지 VI, 여의선 : 인 VI 강화
+
+    강화된 천/지/인 도술 사용 후 40초 동안 최종 데미지 {v4}% 증가
+
+    재사용 대기시간 30초'
+  levels:
+    v4:
+      30: 10
+      20: 8
+      9: 6
+      24: 9
+      19: 8
+      12: 7
+      27: 9
+      18: 8
+      17: 7
+      6: 6
+      2: 5
+      16: 7
+      7: 6
+      5: 5
+      1: 5
+      15: 7
+      4: 5
+      3: 5
+'파초풍 : 천 VI':
+  template: MP 50 소비, 최대 6명의 적을 {v3}% 데미지로 5번 공격
+  level_equations:
+    v3:
+      a: 4
+      b: 300
+      divisor: 1
+      equation: skill_level * 4 + 300
+'파초풍 : 천 허/실 VI':
+  template: '파초풍 : 천 사용 후 파초풍 : 허 또는 파초풍 : 실로 연계 가능, 적에게 닿으면 최대 6명의 적을 {v2}% 데미지로
+    5번 공격'
+  level_equations:
+    v2:
+      a: 4
+      b: 300
+      divisor: 1
+      equation: skill_level * 4 + 300
+'토파류 : 지 VI':
+  template: MP 44 소비, 최대 6명의 적을 {v3}%의 데미지로 4번 공격
+  level_equations:
+    v3:
+      a: 10
+      b: 450
+      divisor: 1
+      equation: skill_level * 10 + 450
+'토파류 : 지 허/실 VI':
+  template: '토파류 : 지 사용 후 토파류 : 허 또는 토파류 : 실로 연계 가능, 최대 6명의 적을 {v2}% 데미지로 4번 공격'
+  level_equations:
+    v2:
+      a: 10
+      b: 450
+      divisor: 1
+      equation: skill_level * 10 + 450
+'여의선 : 인 VI':
+  template: MP 18 소비, 최대 5명의 적을 {v3}%의 데미지로 5번 공격
+  level_equations:
+    v3:
+      a: 8
+      b: 618
+      divisor: 1
+      equation: skill_level * 8 + 618
+환영 분신부 VI:
+  template: '부적 도력 100 소비, 200초 동안 공격 시 분신 3개 생성
+
+    각 분신은 {v4}%의 데미지로 4번 공격, 일반 몬스터 공격 시 데미지 20% 증가
+
+    단, 분신이 생성된 다음 1.5초 동안 다시 생성되지 않음'
+  level_equations:
+    v4:
+      a: 4
+      b: 266
+      divisor: 1
+      equation: skill_level * 4 + 266
+추적 귀화부 VI:
+  template: 부적 도력 100 소비, 90초 동안 도깨비불을 2마리 소환, 1.8초 마다 적을 추적한 후 최대 5명의 적을 {v7}%의 데미지로
+    5번 공격
+  level_equations:
+    v7:
+      a: 4
+      b: 249
+      divisor: 1
+      equation: skill_level * 4 + 249
+'권술 : 흡성와류 VI':
+  template: '두루마리 도력 900 소비, 40초 동안 최대 6명의 적을 {v4}%의 데미지로 6번 공격하는 소용돌이 생성
+
+    공격 적중 횟수 4회당 정기를 1개 흡수할 수 있고 최대 9개까지 흡수 가능, 보스 몬스터를 공격했다면 정기를 3배로 흡수
+
+    스킬 재사용 시 소용돌이가 소멸하며 정기 1개당 파티원의 최대 HP와 MP의 5% 회복'
+  level_equations:
+    v4:
+      a: 5
+      b: 315
+      divisor: 1
+      equation: skill_level * 5 + 315
+'권술 : 호접지몽 VI':
+  template: '두루마리 도력 900 소비, 200초 동안 최종 데미지 10% 증가 및 공격 시
+
+    {v4}%의 데미지로 공격하는 나비를 5마리 소환
+
+    단, 나비가 생성된 다음 1초 동안 다시 생성되지 않음'
+  level_equations:
+    v4:
+      a: 6
+      b: 405
+      divisor: 1
+      equation: skill_level * 6 + 405
+'선기 : 파천황':
+  template: 'MP 1500 소비, 시전 동작 중 무적
+
+    키다운을 유지하여 최대 5초 동안 최대 15명의 적을 {v4}%의 데미지로 8번 공격 후 선기를 통해 {v6}%의 데미지로 15번 공격
+
+    키다운 종료 혹은 최대 키다운 유지시간 경과 시 최대 15명의 적을 {v9}%의 데미지로 14번 공격하는 천지개벽 61회 발생
+
+    시전 시 천지만물 버프 적용
+
+    재사용 대기시간 360초'
+  level_equations:
+    v4:
+      a: 17
+      b: 503
+      divisor: 1
+      equation: skill_level * 17 + 503
+    v6:
+      a: 21
+      b: 610
+      divisor: 1
+      equation: skill_level * 21 + 610
+    v9:
+      a: 18
+      b: 537
+      divisor: 1
+      equation: skill_level * 18 + 537
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      21: 69
+      10: 37
+      30: 100
+      20: 67
+      1: 10
+      2: 12
+      9: 26
+      6: 20
+      5: 18
+      4: 16
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+'선기 : 극대 분신난무 강화':
+  template: '선기 : 극대 분신난무 지속 중 분신이 환영 분신부에서 {v1}%p 증가한 데미지로 강화'
+  level_equations:
+    v1:
+      a: 12
+      b: 440
+      divisor: 1
+      equation: skill_level * 12 + 440
+'권술 : 산령소환 강화':
+  template: '권술 : 산령소환의 최종 데미지 {v1}% 증가'
+  levels:
+    v1:
+      30: 60
+      12: 27
+      9: 19
+      6: 16
+      10: 25
+      1: 11
+      4: 14
+      2: 12
+      3: 13
+'선기 : 강림 괴력난신 강화':
+  template: '선기 : 강림 괴력난신의 최종 데미지 {v1}% 증가'
+  levels:
+    v1:
+      30: 60
+      12: 27
+      16: 31
+      6: 16
+      19: 34
+      4: 14
+      10: 25
+      5: 15
+      1: 11
+      2: 12
+      3: 13
+'선기 : 천지인 환영 강화':
+  template: '선기 : 천지인 환영의 최종 데미지 {v1}% 증가'
+  levels:
+    v1:
+      30: 60
+      15: 30
+      14: 29
+      5: 15
+      20: 40
+      11: 26
+      2: 12
+      4: 14
+      10: 25
+      1: 11
+      3: 13

@@ -1,0 +1,207 @@
+블래스트 VI:
+  template: MP {v1} 소비, 최대 4명의 적을 {v3}%의 데미지로 10번 공격
+  level_equations:
+    v3:
+      a: 5
+      b: 385
+      divisor: 1
+      equation: skill_level * 5 + 385
+디바인 저지먼트 VI:
+  template: '블래스트로 공격한 적에게 신성 낙인을 새김
+
+    신성 낙인 : 최대 30초 동안 유지, 5번까지 중첩 시 낙인이 폭발하며 1명의 적을 {v4}%의 데미지로 10번 공격, 몬스터 방어율 20%
+    추가 무시'
+  level_equations:
+    v4:
+      a: 13
+      b: 770
+      divisor: 1
+      equation: skill_level * 13 + 770
+디바인 차지 VI:
+  template: 'MP {v1} 소비, 최대 11명의 적을 {v3}%의 데미지로 4번 공격, 100% 확률로 10초 동안 침묵
+
+    디바인 스티그마 VI : MP {v7} 소비, 최대 13명의 적을 {v9}%의 데미지로 7번 공격, 재발동 대기시간 6초'
+  level_equations:
+    v3:
+      a: 9
+      b: 454
+      divisor: 1
+      equation: skill_level * 9 + 454
+    v9:
+      a: 9
+      b: 479
+      divisor: 1
+      equation: skill_level * 9 + 479
+폴링 저스티스:
+  template: '공용 스킬을 제외한 팔라딘이 직접 사용하는 스킬 적중 시 2.5초 동안 최대 8명의 적을 {v4}%의 데미지로 6번 공격하는
+    심판의 망치 소환
+
+    한명의 적에게는 최대 15번까지만 공격 발생
+
+    재발동 대기시간 30초'
+  level_equations:
+    v4:
+      a: 20
+      b: 891
+      divisor: 1
+      equation: skill_level * 20 + 891
+생츄어리 VI:
+  template: 'MP {v1} 소비, 최대 15명의 적을 {v3}%의 데미지로 8번 공격하는 충격이 4회 발동, 보스 몬스터 공격 시 데미지
+    30% 증가
+
+    재사용 대기시간 14초
+
+    [패시브 효과 : 블래스트 VI의 데미지 {v8}%p, 디바인 저지먼트 VI의 데미지 {v9}%p 증가]'
+  level_equations:
+    v1:
+      a: 1
+      b: 60
+      divisor: 1
+      equation: skill_level + 60
+    v3:
+      a: 2
+      b: 177
+      divisor: 1
+      equation: skill_level * 2 + 177
+    v8:
+      a: 2
+      b: 20
+      divisor: 1
+      equation: skill_level * 2 + 20
+    v9:
+      a: 6
+      b: 230
+      divisor: 1
+      equation: skill_level * 6 + 230
+파이널 어택 VI:
+  template: '[파이널 어택류 스킬] 공격 적중 시 65%의 확률로 {v2}%의 데미지로 2번 추가 공격'
+  level_equations:
+    v2:
+      a: 2
+      b: 100
+      divisor: 1
+      equation: skill_level * 2 + 100
+라이징 저스티스:
+  template: '폴링 저스티스 발동 시 5개의 빛무리에서 각각 심판의 편린 4개 생성
+
+    각 심판의 편린은 {v3}%의 데미지로 6번 공격'
+  level_equations:
+    v3:
+      a: 15
+      b: 610
+      divisor: 1
+      equation: skill_level * 15 + 610
+세이크리드 바스티온:
+  template: 'MP 1200 소비, 시전 동작 중 무적
+
+    최대 15명의 적을 {v3}%의 데미지로 9번 공격하는 충격파가 28회 발동 후, {v6}%의 데미지로 14번 공격하는 충격파가 17회 발동
+
+    30초 동안 성역 생성, 성역 내에서 팔라딘이 공격 시 최대 5명의 적에게 {v11}%의 데미지로 13번 공격하는 심판의 빛 발동, 심판의
+    빛은 적에게 신성 낙인을 새김, 재발동 대기시간 0.5초
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 13
+      b: 397
+      divisor: 1
+      equation: skill_level * 13 + 397
+    v6:
+      a: 15
+      b: 445
+      divisor: 1
+      equation: skill_level * 15 + 445
+    v11:
+      a: 20
+      b: 600
+      divisor: 1
+      equation: skill_level * 20 + 600
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      30: 100
+      20: 67
+      14: 45
+      10: 37
+      6: 20
+      1: 10
+      13: 43
+      3: 14
+      8: 24
+      5: 18
+      4: 16
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+홀리 유니티 강화:
+  template: 홀리 유니티로 증가하는 최종 데미지 {v1}%, 결속 대상에게 시전되는 공격 스킬의 최종 데미지 {v2}%로 증가
+  level_equations:
+    v2:
+      a: 1
+      b: 45
+      divisor: 2
+      equation: (skill_level // 2) + 45
+블래스드 해머 강화:
+  template: 블래스드 해머의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      10: 25
+      16: 31
+      9: 19
+      4: 14
+      2: 12
+      1: 11
+      17: 32
+      3: 13
+      5: 15
+      11: 26
+그랜드 크로스 강화:
+  template: 그랜드 크로스의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      20: 40
+      2: 12
+      10: 25
+      8: 18
+      9: 19
+      17: 32
+      22: 42
+      1: 11
+      3: 13
+      11: 26
+      4: 14
+      5: 15
+      6: 16
+마이티 묠니르 강화:
+  template: 마이티 묠니르의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      10: 25
+      13: 28
+      9: 19
+      2: 12
+      1: 11
+      12: 27
+      25: 45
+      6: 16
+      3: 13
+      5: 15

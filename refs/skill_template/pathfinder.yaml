@@ -1,0 +1,255 @@
+카디널 블래스트 VI:
+  template: MP {v1} 소비, 화살 폭발 시 최대 8명의 적을 {v3}%의 데미지로 5번 공격
+  level_equations:
+    v3:
+      a: 11
+      b: 660
+      divisor: 1
+      equation: skill_level * 11 + 660
+에디셔널 블래스트 VI:
+  template: '렐릭이 블래스트 문양일 때 카디널 디스차지 사용 시 {v1}% 확률로 {v2}개의 마법 화살 생성
+
+    생성된 마법 화살은 2초 동안 주위의 적을 추적하여 폭발하며 최대 4명의 적을 {v5}%의 데미지로 3번 공격
+
+    동일한 적을 공격 시 두번째 폭발부터 최종 데미지 30% 감소
+
+    20초마다 마법 화살 적중 시 적에게서 저주 화살 {v9}개 생성
+
+    저주 화살 : 최대 4명의 적을 {v11}%의 데미지로 4번 공격'
+  level_equations:
+    v5:
+      a: 3
+      b: 240
+      divisor: 1
+      equation: skill_level * 3 + 240
+    v9:
+      a: 1
+      b: 6
+      divisor: 3
+      equation: (skill_level // 3) + 6
+    v11:
+      a: 2
+      b: 120
+      divisor: 1
+      equation: skill_level * 2 + 120
+카디널 디스차지 VI:
+  template: MP {v1} 소비, 최대 7명의 적을 {v3}%의 데미지로 5번 공격하는 화살 발사
+  level_equations:
+    v1:
+      a: 1
+      b: 40
+      divisor: 3
+      equation: (skill_level // 3) + 40
+    v3:
+      a: 5
+      b: 325
+      divisor: 1
+      equation: skill_level * 5 + 325
+에디셔널 디스차지 VI:
+  template: '렐릭이 디스차지 문양일 때 카디널 블래스트 사용 시 45% 확률로 4개의 마법 화살 생성
+
+    생성된 마법 화살은 2초 동안 주위의 적을 추적하여 {v4}%의 데미지로 3번 공격
+
+    1명의 적이 여러 개의 마법 화살을 동시에 맞을 경우 2번째 마법 화살부터 최종 데미지 30% 감소'
+  level_equations:
+    v4:
+      a: 3
+      b: 185
+      divisor: 1
+      equation: skill_level * 3 + 185
+엣지 오브 레조넌스 VI:
+  template: '렐릭 게이지 100 소비, 최대 8명의 적을 {v3}%의 데미지로 6번 공격
+
+    고대의 저주 디버프 하나당 최종 데미지 10% 증가
+
+    4번 사용 시 다음 공격 강화된 엣지 오브 레조넌스로 대체
+
+    에인션트 임팩트 : 최대 8명의 적을 {v8}%의 데미지로 10번 공격
+
+    재사용 대기시간 15초'
+  level_equations:
+    v3:
+      a: 29
+      b: 920
+      divisor: 1
+      equation: skill_level * 29 + 920
+    v8:
+      a: 34
+      b: 591
+      divisor: 1
+      equation: skill_level * 34 + 591
+카디널 트랜지션 VI:
+  template: 'MP {v1}, 신속의 기운 1개 소비. 도착 지점 주위 최대 7명의 적을 {v4}%의 데미지로 5번 공격
+
+    신속의 기운은 7초마다 1개씩 준비되며 최대 5개까지 저장 가능
+
+    스킬을 시전하는 동안 적의 어떠한 공격에도 밀려나지 않으며, 피격당한 적은 고대의 저주 디버프 1개 중첩'
+  level_equations:
+    v4:
+      a: 11
+      b: 599
+      divisor: 1
+      equation: skill_level * 11 + 599
+에인션트 아스트라 VI:
+  template: '1초당 렐릭 게이지 65 소비, 일정 간격마다 최대 7명의 적을 {v4}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v4:
+      a: 4
+      b: 360
+      divisor: 1
+      equation: skill_level * 4 + 360
+콤보 어썰트 VI:
+  template: '렐릭 게이지 50 소비
+
+    활대 공격 :  최대 4명의 적을 {v3}%의 데미지로 7번 공격, 피격 당한 적은 고대의 저주 디버프 1개 중첩
+
+    화살 공격 : 최대 10명의 적을 {v7}%의 데미지로 7번 공격
+
+    재사용 대기시간 15초'
+  level_equations:
+    v3:
+      a: 7
+      b: 555
+      divisor: 1
+      equation: skill_level * 7 + 555
+    v7:
+      a: 7
+      b: 630
+      divisor: 1
+      equation: skill_level * 7 + 630
+레이븐 VI:
+  template: 'MP {v1} 소비, 270초 동안 레이븐 소환
+
+    최대 6명의 적을 {v4}%의 데미지로 공격'
+  level_equations:
+    v4:
+      a: 5
+      b: 435
+      divisor: 1
+      equation: skill_level * 5 + 435
+렐릭 마테리얼라이즈:
+  template: '렐릭 게이지 50 소비 시 통제된 저주 1개 생성
+
+    통제된 저주 최대 생성 제한 50
+
+    공격 적중 시 통제된 저주 1개를 소모하여 적중한 모든 적에게 {v5}%의 데미지로 8번 공격하는 저주의 불길 발생'
+  level_equations:
+    v5:
+      a: 4
+      b: 405
+      divisor: 1
+      equation: skill_level * 4 + 405
+포세이큰 렐릭:
+  template: 'MP 1500 소비, 시전 동작 중 무적
+
+    최대 15명의 적을 {v3}%의 데미지로 9번 공격하는 파동 24회 발동 이후 최대 15명의 적을 {v7}%의 데미지로 14번 공격하는 폭발이
+    30회 발동
+
+    30초 동안 렐릭 해방
+
+    렐릭 해방 : 에인션트/인챈트 포스 스킬의 최종 데미지 {v11}% 증가, 직전과 다른 카디널 포스 스킬 사용 시 100% 확률로 최대 4명의
+    적을 {v14}%의 데미지로 5번 공격하는 마법 화살 1개 생성, 직접 공격하는 스킬 적중 시 고대의 분노 발동
+
+    고대의 분노 : [에인션트 포스] 최대 10명의 적을 {v18}%의 데미지로 15번 공격하는 저주 폭발 3회 발동, 재발동 대기시간 10초
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 26
+      b: 775
+      divisor: 1
+      equation: skill_level * 26 + 775
+    v7:
+      a: 26
+      b: 765
+      divisor: 1
+      equation: skill_level * 26 + 765
+    v11:
+      a: 1
+      b: 5
+      divisor: 3
+      equation: (skill_level // 3) + 5
+    v14:
+      a: 27
+      b: 810
+      divisor: 1
+      equation: skill_level * 27 + 810
+    v18:
+      a: 21
+      b: 650
+      divisor: 1
+      equation: skill_level * 21 + 650
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      1: 10
+      10: 37
+      2: 12
+      3: 14
+      4: 16
+      11: 39
+      5: 18
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+얼티밋 블래스트 강화:
+  template: 얼티밋 블래스트의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      1: 11
+      9: 19
+      4: 14
+      3: 13
+      5: 15
+      6: 16
+      10: 25
+      2: 12
+레이븐 템페스트/이볼브 템페스트 강화:
+  template: 레이븐 템페스트/이볼브 템페스트의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      5: 15
+      7: 17
+      14: 29
+      10: 25
+      4: 14
+      9: 19
+      3: 13
+      2: 12
+      1: 11
+      6: 16
+옵시디언 배리어 강화:
+  template: 옵시디언 배리어의 최종 데미지 {v1}% 증가, 지속시간 {v2}초, 피해 감소율 {v3}%, 문양으로 강화된 경우 피해 감소율
+    {v4}%로 증가
+  level_equations:
+    v2:
+      a: 1
+      b: 13
+      divisor: 4
+      equation: (skill_level // 4) + 13
+렐릭 언바운드 강화:
+  template: 렐릭 언바운드의 최종 데미지 {v1}% 증가
+  level_equations:
+    v1:
+      a: 1
+      b: 10
+      divisor: 1
+      equation: skill_level + 10

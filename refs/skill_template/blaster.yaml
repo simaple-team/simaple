@@ -1,0 +1,285 @@
+매그넘 펀치 VI:
+  template: 'MP {v1} 소비, 최대 7명의 적을 {v3}%의 데미지로 3번 공격
+
+    매그넘 펀치 VI 사용 시 리볼빙 캐논이 자동 발동'
+  level_equations:
+    v3:
+      a: 13
+      b: 595
+      divisor: 1
+      equation: skill_level * 13 + 595
+더블 팡 VI:
+  template: 'MP {v1} 소비, 최대 7명의 적을 {v3}%의 데미지로 4번 공격
+
+    더블 팡 VI 사용 시 리볼빙 캐논이 자동 발동'
+  level_equations:
+    v3:
+      a: 11
+      b: 505
+      divisor: 1
+      equation: skill_level * 11 + 505
+릴리즈 파일 벙커 VI:
+  template: '사용 시 파일 벙커를 이용해 최대 10명의 적을 8번 직접 공격
+
+    이후 최대 10명의 적을 6번 공격하는 충격파 발생
+
+    실린더 게이지에 따라 직접 공격의 데미지가 달라지고 더 많은 충격파 발생
+
+    릴리즈 파일 벙커 5회 사용 시 버스트 파일 벙커 사용 가능 상태로 돌입
+
+    [실린더 게이지 3칸] {v7}%의 데미지로 직접 공격
+
+    {v8}%의 데미지의 충격파A 발생
+
+    [실린더 게이지 4칸] {v10}%의 데미지로 직접 공격
+
+    충격파A 발생 후 {v11}% 데미지의 충격파B 추가 발생
+
+    [실린더 게이지 5칸] {v13}%의 데미지로 직접 공격
+
+    충격파 A, B 발생 후 {v14}% 데미지의 충격파C 추가 발생
+
+    [실린더 게이지 6칸] {v16}%의 데미지로 직접 공격
+
+    충격파 A, B, C 발생 후 {v17}% 데미지의 충격파D 추가 발생
+
+    사용 후 7초 동안 과열되어 실린더 게이지가 최대치가 되며 실린더 게이지 충전 및 릴리즈 파일 벙커 사용 불가, 이후 실린더 게이지 초기화'
+  level_equations:
+    v7:
+      a: 5
+      b: 370
+      divisor: 1
+      equation: skill_level * 5 + 370
+    v8:
+      a: 8
+      b: 430
+      divisor: 1
+      equation: skill_level * 8 + 430
+    v10:
+      a: 6
+      b: 415
+      divisor: 1
+      equation: skill_level * 6 + 415
+    v11:
+      a: 6
+      b: 350
+      divisor: 1
+      equation: skill_level * 6 + 350
+    v13:
+      a: 8
+      b: 500
+      divisor: 1
+      equation: skill_level * 8 + 500
+    v14:
+      a: 6
+      b: 360
+      divisor: 1
+      equation: skill_level * 6 + 360
+    v16:
+      a: 15
+      b: 710
+      divisor: 1
+      equation: skill_level * 15 + 710
+    v17:
+      a: 10
+      b: 430
+      divisor: 1
+      equation: skill_level * 10 + 430
+버스트 파일 벙커:
+  template: '실린더 게이지 6칸 필요
+
+    최대 10명의 적을 {v3}%의 데미지로 10번 공격하는 초강력 폭발이 6번 발생
+
+    버스트 파일 벙커는 충격파를 발생시키지 않음
+
+    사용 후 7초 동안 과열되어 실린더 게이지가 최대치가 되며 실린더 게이지 충전 및 릴리즈 파일 벙커 사용 불가, 이후 실린더 게이지 초기화'
+  level_equations:
+    v3:
+      a: 10
+      b: 490
+      divisor: 1
+      equation: skill_level * 10 + 490
+리볼빙 캐논 마스터리 VI:
+  template: '[파이널 어택류 스킬] 건틀렛 리볼버를 이용한 직접 공격 적중 시 최대 6명의 적을 {v2}%의 데미지로 공격하는 추가 타격
+    발생'
+  level_equations:
+    v2:
+      a: 11
+      b: 370
+      divisor: 1
+      equation: skill_level * 11 + 370
+해머 스매시 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 6번 공격
+
+    공격 당한 적은 60초 동안 약점이 드러나고 해당 적에 대한 블래스터의 공격은 최종 데미지 10%가 증가되어 적용
+
+    [패시브 효과 : 매그넘 펀치 VI의 데미지 {v7}%p, 더블 팡 VI의 데미지 {v8}%p 증가]'
+  level_equations:
+    v3:
+      a: 5
+      b: 327
+      divisor: 1
+      equation: skill_level * 5 + 327
+    v7:
+      a: 7
+      b: 15
+      divisor: 3
+      equation: (skill_level // 3) * 7 + 15
+    v8:
+      a: 6
+      b: 10
+      divisor: 3
+      equation: (skill_level // 3) * 6 + 10
+쇼크 웨이브 펀치 VI:
+  template: 'MP {v1} 소비, 최대 6명의 적을 {v3}%의 데미지로 6번 공격
+
+    일반 몬스터 공격 시 데미지 {v5}% 증가'
+  level_equations:
+    v1:
+      a: 1
+      b: 71
+      divisor: 3
+      equation: (skill_level // 3) + 71
+    v3:
+      a: 4
+      b: 195
+      divisor: 1
+      equation: skill_level * 4 + 195
+    v5:
+      a: 5
+      b: 230
+      divisor: 1
+      equation: skill_level * 5 + 230
+리볼빙 캐논 VI:
+  template: '불릿 1개 소비, 키다운 시 불릿 리로드
+
+    매그넘 펀치 및 더블 팡 사용 시 리볼빙 캐논이 자동 발동되어 최대 6명의 적을 {v3}%의 데미지로 4번 공격'
+  level_equations:
+    v3:
+      a: 13
+      b: 285
+      divisor: 1
+      equation: skill_level * 13 + 285
+허리케인 믹서 VI:
+  template: 'MP {v1} 소비, 최대 12명의 적을 {v3}% 데미지로 5번 공격
+
+    공격 적중 시 콤비네이션 트레이닝 최대로 중첩, 지속시간 12초로 적용
+
+    재사용 대기시간 {v6}초'
+  level_equations:
+    v1:
+      a: 1
+      b: 61
+      divisor: 3
+      equation: (skill_level // 3) + 61
+    v3:
+      a: 39
+      b: 1350
+      divisor: 1
+      equation: skill_level * 39 + 1350
+파이널 디스트로이어:
+  template: 'MP 1200 소비, 시전 동작 중 무적
+
+    최대 15명의 적을 {v3}%의 데미지로 10번 공격하는 열기가 43회 발생
+
+    이후 최대 15명의 적을 {v7}%의 데미지로 14번 공격하는 폭발 30회 발생
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 25
+      b: 750
+      divisor: 1
+      equation: skill_level * 25 + 750
+    v7:
+      a: 26
+      b: 770
+      divisor: 1
+      equation: skill_level * 26 + 770
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      30: 100
+      21: 69
+      10: 37
+      1: 10
+      20: 67
+      3: 14
+      4: 16
+      8: 24
+      2: 12
+      14: 45
+      5: 18
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+벙커 버스터 강화:
+  template: 벙커 버스터의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      10: 25
+      6: 16
+      2: 12
+      9: 19
+      3: 13
+      5: 15
+      1: 11
+      4: 14
+발칸 펀치 강화:
+  template: 발칸 펀치의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      13: 28
+      10: 25
+      1: 11
+      9: 19
+      4: 14
+      3: 13
+      2: 12
+      5: 15
+버닝 브레이커 강화:
+  template: 버닝 브레이커의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      20: 40
+      10: 25
+      2: 12
+      4: 14
+      1: 11
+      9: 19
+      5: 15
+애프터이미지 쇼크 강화:
+  template: 애프터이미지 쇼크의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      22: 42
+      20: 40
+      30: 60
+      12: 27
+      28: 48
+      10: 25
+      1: 11
+      4: 14
+      9: 19
+      3: 13
+      5: 15
+      2: 12

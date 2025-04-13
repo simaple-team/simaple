@@ -1,0 +1,320 @@
+서클 오브 마나 VI:
+  template: "MP {v1} 소비 \n[1타]: 최대 8명의 적을 {v4}%의 데미지로 4번 공격\n[2타]: 최대 8명의 적을 {v8}%의\
+    \ 데미지로 4번 공격"
+  level_equations:
+    v1:
+      a: 1
+      b: 45
+      divisor: 4
+      equation: (skill_level // 4) + 45
+    v4:
+      a: 8
+      b: 315
+      divisor: 1
+      equation: skill_level * 8 + 315
+    v8:
+      a: 9
+      b: 355
+      divisor: 1
+      equation: skill_level * 9 + 355
+서클 오브 썬더 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 5번 공격
+
+    미르 스킬을 사용한 후 서클 오브 마나 사용 중 혹은 엎드린 상태에서 서클 오브 썬더를 사용하면 서클 오브 썬더가 발동되지 않고 융합 스킬을
+    발동할 수 있지만 소비 MP가 3배로 증가'
+  level_equations:
+    v1:
+      a: 1
+      b: 81
+      divisor: 5
+      equation: (skill_level // 5) + 81
+    v3:
+      a: 9
+      b: 460
+      divisor: 1
+      equation: skill_level * 9 + 460
+드래곤 스위프트 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 4번 공격, 3.5초 동안 지속
+
+    재사용 대기시간 8초'
+  level_equations:
+    v3:
+      a: 8
+      b: 550
+      divisor: 1
+      equation: skill_level * 8 + 550
+스위프트 오브 썬더 VI:
+  template: 'MP {v1} 소비, 지점별 충돌시마다 최대 8명의 적을 {v3}%의 데미지로 9번 공격
+
+    동일한 적이 중첩해서 충돌에 맞을 때마다 충돌의 최종 데미지 60% 감소'
+  level_equations:
+    v3:
+      a: 30
+      b: 1400
+      divisor: 1
+      equation: skill_level * 30 + 1400
+스위프트 오브 윈드 VI:
+  template: 'MP {v1} 소비, 최대 5명의 적에게 {v3}%의 데미지로 2번 공격하는 바람 칼날 5개 발사, 3.5초 지속
+
+    일반 몬스터 공격 시 데미지 75%p 증가
+
+    여러 개의 바람 칼날이 1명의 적을 공격하면 바람 칼날의 최종 데미지 35% 감소'
+  level_equations:
+    v1:
+      a: 1
+      b: 60
+      divisor: 5
+      equation: (skill_level // 5) + 60
+    v3:
+      a: 6
+      b: 520
+      divisor: 1
+      equation: skill_level * 6 + 520
+서클 오브 어스 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 5번 공격
+
+    미르 스킬을 사용한 후 서클 오브 마나 사용 중 혹은 엎드린 상태에서 서클 오브 어스를 사용하면 서클 오브 어스가 발동되지 않고 융합 스킬을
+    발동할 수 있지만 소비 MP가 3배로 증가'
+  level_equations:
+    v3:
+      a: 9
+      b: 460
+      divisor: 1
+      equation: skill_level * 9 + 460
+드래곤 다이브 VI:
+  template: 'MP {v1} 소비, 최대 6명의 적을 {v3}%의 데미지로 3번 공격, 3.5초 동안 지속
+
+    재사용 대기시간 8초'
+  level_equations:
+    v3:
+      a: 11
+      b: 352
+      divisor: 1
+      equation: skill_level * 11 + 352
+다이브 오브 어스 VI:
+  template: 'MP {v1} 소비, 바위를 형성하고 공격한 후 세 지점에 충돌하여 공격, 공격 시 마다 최대 6명의 적을 {v3}%의 데미지로
+    10번 공격
+
+    동일한 적이 중첩해서 충돌에 맞을 때마다 충돌의 최종 데미지 50% 감소'
+  level_equations:
+    v3:
+      a: 33
+      b: 1110
+      divisor: 1
+      equation: skill_level * 33 + 1110
+다이브 오브 썬더 VI:
+  template: 'MP {v1} 소비, 4초 동안 일정 간격마다 {v3}%의 데미지로 공격하는 전기 구체 4개 생성
+
+    전기 구체는 적을 타격하거나 일정 시간이 지나면 소멸'
+  level_equations:
+    v3:
+      a: 7
+      b: 376
+      divisor: 1
+      equation: skill_level * 7 + 376
+서클 오브 윈드 VI:
+  template: 'MP {v1} 소비, 최대 6명의 적을 {v3}%의 데미지로 5번 공격하며 밀어냄
+
+    미르 스킬을 사용한 후 서클 오브 마나 사용 중 혹은 엎드린 상태에서 서클 오브 윈드를 사용하면 서클 오브 윈드가 발동되지 않고 융합 스킬을
+    발동할 수 있지만 소비 MP가 3배로 증가'
+  level_equations:
+    v3:
+      a: 9
+      b: 460
+      divisor: 1
+      equation: skill_level * 9 + 460
+드래곤 브레스 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 5번 공격, 3초 동안 지속
+
+    재사용 대기시간 10초
+
+    '
+  level_equations:
+    v3:
+      a: 8
+      b: 265
+      divisor: 1
+      equation: skill_level * 8 + 265
+브레스 오브 어스 VI:
+  template: MP {v1} 소비, 최대 4명의 적을 {v3}%의 데미지로 6번 공격
+  level_equations:
+    v3:
+      a: 6
+      b: 297
+      divisor: 1
+      equation: skill_level * 6 + 297
+브레스 오브 윈드 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 6번 공격, 3.5초 동안 지속
+
+    HP가 30% 이하로 남은 적에게 데미지 65%p증가'
+  level_equations:
+    v3:
+      a: 12
+      b: 223
+      divisor: 1
+      equation: skill_level * 12 + 223
+마법 잔해 VI:
+  template: '융합 스킬에 피격 당한 적 근처에서 짙은 마력의 마법 잔해 1개 생성, 재생성 대기시간 0.4초, 최대 생성 제한 15개,
+    발동 시 MP {v5} 소비
+
+    최대 15명의 적에게 분산되어 발사, {v7}%의 데미지로 1번 공격, 마법 잔해 5개 당 데미지 {v10}%p증가, 생성된 마법 잔해는 사용하지
+    않고 일정 시간이 지나면 소멸'
+  level_equations:
+    v7:
+      a: 10
+      b: 127
+      divisor: 1
+      equation: skill_level * 10 + 127
+    v10:
+      a: 8
+      b: 113
+      divisor: 1
+      equation: skill_level * 8 + 113
+드래곤 스파킹 VI:
+  template: '[파이널 어택류 스킬] 100%의 확률로 {v2}%의 데미지로 공격하는 드래곤 스파킹 발동'
+  level_equations:
+    v2:
+      a: 13
+      b: 165
+      divisor: 1
+      equation: skill_level * 13 + 165
+조디악 버스트:
+  template: 'MP 1500 소비, 시전 동작 중 무적
+
+    최대 15명의 적을 {v3}%의 데미지로 15번 공격하는 마력이 24회 발생
+
+    45초 동안 공격 스킬 적중 시 최대 15명의 적에게 {v8}%의 데미지로
+
+    8번 공격하는 유성우 9개 발생
+
+    유성우 재발동 대기시간 3초
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 18
+      b: 580
+      divisor: 1
+      equation: skill_level * 18 + 580
+    v8:
+      a: 18
+      b: 540
+      divisor: 1
+      equation: skill_level * 18 + 540
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      20: 67
+      10: 37
+      2: 12
+      11: 39
+      30: 100
+      9: 26
+      1: 10
+      3: 14
+      5: 18
+      15: 47
+      4: 16
+      6: 20
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+엘리멘탈 블래스트 강화:
+  template: 엘리멘탈 블래스트의 최종 데미지 {v1}% 증가, 재사용 대기시간 {v2}초로 감소
+  levels:
+    v1:
+      30: 60
+      17: 32
+      25: 45
+      18: 33
+      9: 19
+      11: 26
+      1: 11
+      12: 27
+      4: 14
+      10: 25
+      2: 12
+      5: 15
+      3: 13
+    v2:
+      30: 40
+      17: 45
+      25: 40
+      18: 45
+      9: 50
+      11: 50
+      1: 55
+      12: 50
+      4: 55
+      10: 50
+      2: 55
+      5: 55
+      3: 55
+드래곤 브레이크 강화:
+  template: 드래곤 브레이크, 임페리얼 브레스, 브레이크-돌아와!의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      14: 29
+      20: 40
+      10: 25
+      3: 13
+      1: 11
+      6: 16
+      9: 19
+      4: 14
+      15: 30
+      2: 12
+      5: 15
+조디악 레이 강화:
+  template: 조디악 레이의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      20: 40
+      10: 25
+      18: 33
+      4: 14
+      1: 11
+      9: 19
+      5: 15
+      6: 16
+      17: 32
+      3: 13
+      2: 12
+      13: 28
+스파이럴 오브 마나 강화:
+  template: 스파이럴 오브 마나의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      20: 40
+      26: 46
+      10: 25
+      24: 44
+      11: 26
+      19: 34
+      3: 13
+      2: 12
+      7: 17
+      4: 14
+      1: 11
+      6: 16
+      5: 15
+      9: 19

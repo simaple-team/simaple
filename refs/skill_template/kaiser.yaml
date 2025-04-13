@@ -1,0 +1,240 @@
+기가 슬래셔 VI:
+  template: 'MP {v1} 소비, 최대 3명의 적을 {v3}%의 데미지로 9번 공격
+
+    파이널 피규레이션 : MP {v5} 소비, 최대 4명의 적을 {v7}%의 데미지로 11번 공격'
+  level_equations:
+    v1:
+      a: 1
+      b: 60
+      divisor: 3
+      equation: (skill_level // 3) + 60
+    v3:
+      a: 6
+      b: 400
+      divisor: 1
+      equation: skill_level * 6 + 400
+    v5:
+      a: 1
+      b: 70
+      divisor: 3
+      equation: (skill_level // 3) + 70
+    v7:
+      a: 6
+      b: 400
+      divisor: 1
+      equation: skill_level * 6 + 400
+소드 스트라이크 VI:
+  template: MP {v1} 소비, 최대 12명의 적을 {v3}%의 데미지로 5번 공격
+  level_equations:
+    v1:
+      a: 1
+      b: 60
+      divisor: 4
+      equation: (skill_level // 4) + 60
+    v3:
+      a: 10
+      b: 530
+      divisor: 1
+      equation: skill_level * 10 + 530
+윌 오브 소드 VI:
+  template: 'MP {v1} 소비, 3초마다 장비중인 무기의 분신 5개 소환
+
+    소환 후 윌 오브 소드 : 차지 사용 시 각각의 무기는 적에게 날아가 꽂히며 {v4}%의 데미지로 4번 공격하고 파이널 피규레이션 효과가 지속
+    중인 경우에는 공격 횟수가 1회 증가
+
+    [드래곤 블로우] : {v7}%의 데미지로 10번 공격하는 추가 공격 발생'
+  level_equations:
+    v1:
+      a: 1
+      b: 70
+      divisor: 4
+      equation: (skill_level // 4) + 70
+    v4:
+      a: 8
+      b: 535
+      divisor: 1
+      equation: skill_level * 8 + 535
+    v7:
+      a: 40
+      b: 2600
+      divisor: 1
+      equation: skill_level * 40 + 2600
+인퍼널 브레스 VI:
+  template: 'MP {v1} 소비, 최대 15명의 적에게 {v3}%의 데미지로 14번 공격
+
+    인퍼널 브레스 2회 사용 시 다음 공격 강화
+
+    얼티밋 인퍼널 브레스 : 최대 15명의 적을 {v7}%의 데미지로 8번 공격하는 브레스 4회 발생
+
+    재사용 대기시간 19초'
+  level_equations:
+    v1:
+      a: 1
+      b: 72
+      divisor: 3
+      equation: (skill_level // 3) + 72
+    v3:
+      a: 51
+      b: 1650
+      divisor: 1
+      equation: skill_level * 51 + 1650
+    v7:
+      a: 33
+      b: 1070
+      divisor: 1
+      equation: skill_level * 33 + 1070
+윙비트 VI:
+  template: "MP {v1} 소비, 15초 동안 최대 8명의 적을 {v4}%의 데미지로 최대 40번 공격\n보스 몬스터를 제외한 적에게 40%\
+    \ 확률로 5초 동안 슬로우\n[패시브 효과 : 기가 슬래셔 VI의 데미지 {v8}%p, 드라코 슬래셔의 데미지 \n{v9}%p 증가]"
+  level_equations:
+    v1:
+      a: 1
+      b: 35
+      divisor: 4
+      equation: (skill_level // 4) + 35
+    v4:
+      a: 6
+      b: 214
+      divisor: 1
+      equation: skill_level * 6 + 214
+    v8:
+      a: 2
+      b: 15
+      divisor: 1
+      equation: skill_level * 2 + 15
+    v9:
+      a: 3
+      b: 20
+      divisor: 1
+      equation: skill_level * 3 + 20
+페트리파이드 VI:
+  template: "MP {v1} 소비, 60초 동안 일정 간격마다 최대 8명의 적을 {v4}%의 데미지로 \n3번 공격하는 용의 화신 소환\n\
+    보스 몬스터를 제외한 적에게 75% 확률로 3초 동안 슬로우\n일반 몬스터 공격 시 데미지 50% 증가"
+  level_equations:
+    v1:
+      a: 1
+      b: 35
+      divisor: 4
+      equation: (skill_level // 4) + 35
+    v4:
+      a: 10
+      b: 430
+      divisor: 1
+      equation: skill_level * 10 + 430
+마이트 오브 노바:
+  template: 'MP 1200 소비, 시전 동작 중 무적, 적용 중인 파이널 피규레이션의 지속 시간 10초 증가
+
+    선대들의 의지가 이어져 최대 15명의 적을 {v4}%의 데미지로 8번 공격하는 참격이 14회 발생
+
+    이후 최대 15명의 적을 {v8}%의 데미지로 13번 공격하는 마무리 일격 47회 발생
+
+    재사용 대기시간 360초'
+  level_equations:
+    v4:
+      a: 39
+      b: 1187
+      divisor: 1
+      equation: skill_level * 39 + 1187
+    v8:
+      a: 32
+      b: 949
+      divisor: 1
+      equation: skill_level * 32 + 949
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      30: 100
+      10: 37
+      14: 45
+      20: 67
+      5: 18
+      1: 10
+      15: 47
+      6: 20
+      18: 53
+      11: 39
+      2: 12
+      3: 14
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+가디언 오브 노바 강화:
+  template: 가디언 오브 노바의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      11: 26
+      15: 30
+      5: 15
+      20: 40
+      1: 11
+      2: 12
+      10: 25
+      7: 17
+      6: 16
+      19: 34
+      3: 13
+      13: 28
+'윌 오브 소드 : 스트라이크 강화':
+  template: '윌 오브 소드 : 스트라이크의 최종 데미지 {v1}% 증가'
+  levels:
+    v1:
+      30: 60
+      12: 27
+      20: 40
+      5: 15
+      10: 25
+      1: 11
+      2: 12
+      3: 13
+      4: 14
+드라코 슬래셔 강화:
+  template: 드라코 슬래셔의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      24: 44
+      20: 40
+      3: 13
+      13: 28
+      10: 25
+      7: 17
+      5: 15
+      29: 49
+      2: 12
+      1: 11
+      8: 18
+      9: 19
+      4: 14
+드래곤 블레이즈 강화:
+  template: 드래곤 블레이즈의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      26: 46
+      23: 43
+      7: 17
+      11: 26
+      2: 12
+      10: 25
+      20: 40
+      8: 18
+      1: 11
+      5: 15
+      3: 13

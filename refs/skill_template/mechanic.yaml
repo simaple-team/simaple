@@ -1,0 +1,228 @@
+'매시브 파이어 : SPLASH-F VI':
+  template: MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 4번 공격
+  level_equations:
+    v1:
+      a: 1
+      b: 80
+      divisor: 3
+      equation: (skill_level // 3) + 80
+    v3:
+      a: 11
+      b: 415
+      divisor: 1
+      equation: skill_level * 11 + 415
+호밍 미사일 VI:
+  template: MP 70 소비, 최대 12명의 적을 {v3}%의 데미지로 동시 조준 및 타격
+  level_equations:
+    v3:
+      a: 5
+      b: 400
+      divisor: 1
+      equation: skill_level * 5 + 400
+디스토션 필드 VI:
+  template: 'MP {v1} 소비, 4초 동안 일정 간격마다 최대 8명의 적을 {v4}%의 데미지로 2번 공격
+
+    재사용 대기시간 8초
+
+    30초마다 인텐스 디스토션 필드로 강화
+
+    인텐스 디스토션 필드 : MP {v8} 소비, 2초 동안 일정 간격마다 최대 8명의 적을 {v11}%의 데미지로 3번 공격 후 폭발하여 최대
+    8명의 적을 {v14}%의 데미지로 15번 공격'
+  level_equations:
+    v1:
+      a: 1
+      b: 270
+      divisor: 3
+      equation: (skill_level // 3) + 270
+    v4:
+      a: 9
+      b: 450
+      divisor: 1
+      equation: skill_level * 9 + 450
+    v8:
+      a: 1
+      b: 285
+      divisor: 2
+      equation: (skill_level // 2) + 285
+    v11:
+      a: 15
+      b: 790
+      divisor: 1
+      equation: skill_level * 15 + 790
+    v14:
+      a: 23
+      b: 1300
+      divisor: 1
+      equation: skill_level * 23 + 1300
+'로봇 런처 : RM7 VI':
+  template: 'MP {v1} 소비, 98초 동안 로봇 런처 설치
+
+    일정 간격마다 최대 2명의 적을 {v4}%의 데미지로 3번 공격, 지속시간 경과 시 자폭하여 최대 6명의 적을 {v7}%의 데미지로 3번 공격'
+  level_equations:
+    v4:
+      a: 7
+      b: 395
+      divisor: 1
+      equation: skill_level * 7 + 395
+    v7:
+      a: 10
+      b: 525
+      divisor: 1
+      equation: skill_level * 10 + 525
+마그네틱 필드 VI:
+  template: 'MP {v1} 소비, 자기장 코일을 3개 설치했을 경우 98초 동안 마그네틱 필드 생성
+
+    일정 간격마다 범위 내 최대 10명의 적을 {v5}%의 데미지로 공격, 공격 적중 시 기절, 지속시간 경과 시 자폭하여 최대 6명의 적을 {v7}%의
+    데미지로 3번 공격
+
+    [패시브 효과 : 매시브 파이어 : IRON-B VI의 2차 폭발 공격 데미지 {v10}%p 증가]'
+  level_equations:
+    v1:
+      a: 1
+      b: 80
+      divisor: 3
+      equation: (skill_level // 3) + 80
+    v5:
+      a: 13
+      b: 705
+      divisor: 1
+      equation: skill_level * 13 + 705
+    v7:
+      a: 12
+      b: 646
+      divisor: 1
+      equation: skill_level * 12 + 646
+    v10:
+      a: 2
+      b: 100
+      divisor: 1
+      equation: skill_level * 2 + 100
+'로봇 팩토리 : RM1 VI':
+  template: 'MP {v1} 소비, 98초 동안 로봇 팩토리 설치
+
+    자폭하여 최대 4명의 적을 {v4}%의 데미지로 3번 공격하는 토이 로봇 3초마다 3개 소환, 로봇 팩토리는 지속시간 경과 시 자폭하여 최대
+    6명의 적을 {v9}%의 데미지로 5번 공격'
+  level_equations:
+    v1:
+      a: 1
+      b: 110
+      divisor: 2
+      equation: (skill_level // 2) + 110
+    v4:
+      a: 10
+      b: 525
+      divisor: 1
+      equation: skill_level * 10 + 525
+    v9:
+      a: 11
+      b: 600
+      divisor: 1
+      equation: skill_level * 11 + 600
+그라운드 제로:
+  template: 'MP 1800 소비, 시전 동작 중 무적
+
+    최대 15명의 적을 {v3}%의 데미지로 8번 공격하는 지진 10회 발동 이후 최대 15명의 적을 {v7}%의 데미지로 15번 공격하는 폭발
+    32회 발동
+
+    대규모 폭격 : 30초 동안 지속, 일정 시간마다 최대 15명의 적을 {v12}%의 데미지로 15번 공격하는 폭격 발동
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 34
+      b: 1020
+      divisor: 1
+      equation: skill_level * 34 + 1020
+    v7:
+      a: 33
+      b: 990
+      divisor: 1
+      equation: skill_level * 33 + 990
+    v12:
+      a: 48
+      b: 1448
+      divisor: 1
+      equation: skill_level * 48 + 1448
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      22: 71
+      17: 51
+      6: 20
+      13: 43
+      1: 10
+      20: 67
+      10: 37
+      2: 12
+      3: 14
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+'멀티플 옵션 : M-FL 강화':
+  template: '멀티플 옵션 : M-FL의 최종 데미지 {v1}% 증가'
+  levels:
+    v1:
+      3: 13
+      25: 45
+      7: 17
+      20: 40
+      4: 14
+      30: 60
+      1: 11
+      2: 12
+      6: 16
+마이크로 미사일 컨테이너 강화:
+  template: 마이크로 미사일 컨테이너의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      10: 25
+      11: 26
+      20: 40
+      2: 12
+      12: 27
+      1: 11
+      15: 30
+      18: 33
+      8: 18
+      4: 14
+메탈아머 전탄발사 강화:
+  template: 메탈아머 전탄발사의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      20: 40
+      30: 60
+      10: 25
+      7: 17
+      1: 11
+      2: 12
+      6: 16
+메카 캐리어 강화:
+  template: 메카 캐리어의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      20: 40
+      30: 60
+      3: 13
+      10: 25
+      2: 12
+      1: 11
+      9: 19
+      4: 14
+      6: 16

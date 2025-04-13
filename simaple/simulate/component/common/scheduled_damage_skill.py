@@ -1,13 +1,10 @@
 from itertools import accumulate
-from typing import Optional, TypedDict
+from typing import TypedDict
 
 import simaple.simulate.component.trait.cooldown_trait as cooldown_trait
-import simaple.simulate.component.trait.periodic_trait as periodic_trait
 from simaple.simulate.component.base import Component, reducer_method, view_method
-from simaple.simulate.component.entity import Cooldown, Periodic, Schedule
+from simaple.simulate.component.entity import Cooldown, Schedule
 from simaple.simulate.component.feature import DamageSchedule
-from simaple.simulate.component.view import Running
-from simaple.simulate.event import EmptyEvent
 from simaple.simulate.global_property import Dynamics
 
 

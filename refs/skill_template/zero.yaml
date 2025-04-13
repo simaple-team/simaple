@@ -1,0 +1,534 @@
+기가 크래시 VI:
+  template: '타임 포스 15 소비, 최대 7명의 적을 {v3}%의 데미지로 6번 공격
+
+    재사용 대기시간 15초'
+  level_equations:
+    v3:
+      a: 4
+      b: 280
+      divisor: 1
+      equation: skill_level * 4 + 280
+점핑 크래시 VI:
+  template: "타임 포스 17 소비, 최대 7명의 적을 {v3}%의 데미지로 6번 공격 \n[충격파]: 발생하여 최대 7명의 적을 {v6}%의\
+    \ 데미지로 3번 공격"
+  level_equations:
+    v3:
+      a: 4
+      b: 240
+      divisor: 1
+      equation: skill_level * 4 + 240
+    v6:
+      a: 4
+      b: 240
+      divisor: 1
+      equation: skill_level * 4 + 240
+어스 브레이크 VI:
+  template: "타임 포스 19 소비, 최대 7명의 적을 {v3}%의 데미지로 10번 공격\n[충격파]: 최대 7명의 적을 {v6}%의 데미지로\
+    \ 10번 추가 공격 \n[전기 지역]: 최대 7명의 적을 5초 동안 1초 간격으로 {v11}%의 도트 데미지, 일반 몬스터 공격 시 데미지\
+    \ {v12}%p 증가"
+  level_equations:
+    v3:
+      a: 6
+      b: 430
+      divisor: 1
+      equation: skill_level * 6 + 430
+    v6:
+      a: 5
+      b: 305
+      divisor: 1
+      equation: skill_level * 5 + 305
+    v11:
+      a: 6
+      b: 365
+      divisor: 1
+      equation: skill_level * 6 + 365
+    v12:
+      a: 4
+      b: 220
+      divisor: 1
+      equation: skill_level * 4 + 220
+윈드 커터 VI:
+  template: "타임 포스 17 소비, 최대 8명의 적을 {v3}%의 데미지로 8번 공격 \n[소용돌이]: 최대 8명의 적을 0.5초 마다\
+    \ {v8}%의 데미지로 3번 공격하는 소용돌이 3초 동안 생성\n재사용 대기시간 15초"
+  level_equations:
+    v3:
+      a: 3
+      b: 175
+      divisor: 1
+      equation: skill_level * 3 + 175
+    v8:
+      a: 2
+      b: 115
+      divisor: 1
+      equation: skill_level * 2 + 115
+윈드 스트라이크 VI:
+  template: 타임 포스 19 소비, 최대 8명의 적을 {v3}%의 데미지로 8번 공격
+  level_equations:
+    v3:
+      a: 4
+      b: 280
+      divisor: 1
+      equation: skill_level * 4 + 280
+스톰 브레이크 VI:
+  template: "타임 포스 21 소비, 최대 8명의 적을 {v3}%의 데미지로 10번 공격\n[소용돌이]: 최대 8명의 적을 0.5초 마다\
+    \ {v8}%의 데미지로 4번 공격하는 소용돌이 3.0초 동안 생성 \n[전기 지역]: 최대 8명의 적에게 4초 동안 1초 간격으로 {v15}%의\
+    \ 도트 데미지, 일반 몬스터 공격 시 데미지 {v16}%p 증가"
+  level_equations:
+    v3:
+      a: 6
+      b: 355
+      divisor: 1
+      equation: skill_level * 6 + 355
+    v8:
+      a: 6
+      b: 355
+      divisor: 1
+      equation: skill_level * 6 + 355
+    v15:
+      a: 4
+      b: 250
+      divisor: 1
+      equation: skill_level * 4 + 250
+    v16:
+      a: 4
+      b: 210
+      divisor: 1
+      equation: skill_level * 4 + 210
+타임 피스:
+  template: '어시스트 4회 적중 시 시간의 흔적 3개 생성
+
+    시간의 흔적은 한 맵에 최대 10개까지 존재 가능하며, 반대 제로의 공격 적중 시 시간의 결정으로 활성화
+
+    흔적 재생성 대기시간 2초
+
+    시간의 결정 : {v5}%의 데미지로 4번 공격'
+  level_equations:
+    v5:
+      a: 16
+      b: 960
+      divisor: 1
+      equation: skill_level * 16 + 960
+터닝 드라이브 VI:
+  template: '타임 포스 11 소비, 최대 6명의 적을 {v3}%의 데미지로 6번 공격
+
+    재사용 대기시간 10초
+
+    [패시브 효과 : 타임 피스 시간의 흔적 생성량 1개 증가, 시간의 흔적 맵 내 생성 제한 3개 증가]'
+  level_equations:
+    v3:
+      a: 6
+      b: 285
+      divisor: 1
+      equation: skill_level * 6 + 285
+휠 윈드 VI:
+  template: 1초당 타임 포스 13 소비, 최대 6명의 적을 {v4}%의 데미지로 2번 공격, 7초 동안 공격 지속
+  level_equations:
+    v4:
+      a: 5
+      b: 215
+      divisor: 1
+      equation: skill_level * 5 + 215
+롤링 커브 VI:
+  template: '타임 포스 13 소비, 최대 8명의 적을 {v3}%의 데미지로 12번 공격
+
+    공격하며 검기 3개씩 2회 발생
+
+    [검기]: 최대 8명의 적을 {v8}%의 데미지로 3번 공격
+
+    하나의 적이 여러 개의 검기에 적중 시 두번째 검기부터 최종 데미지 70% 감소
+
+    재사용 대기시간 10초'
+  level_equations:
+    v3:
+      a: 9
+      b: 395
+      divisor: 1
+      equation: skill_level * 9 + 395
+    v8:
+      a: 15
+      b: 450
+      divisor: 1
+      equation: skill_level * 15 + 450
+롤링 어썰터 VI:
+  template: '타임 포스 15 소비, 최대 8명의 적을 {v3}%의 데미지로 12번 공격
+
+    공격하며 검기 3개씩 2회 발생
+
+    [검기]: 최대 8명의 적을 {v8}%의 데미지로 4번 공격
+
+    하나의 적이 여러 개의 검기에 적중 시 두번째 검기부터 최종 데미지 70% 감소'
+  level_equations:
+    v3:
+      a: 9
+      b: 410
+      divisor: 1
+      equation: skill_level * 9 + 410
+    v8:
+      a: 20
+      b: 490
+      divisor: 1
+      equation: skill_level * 20 + 490
+프론트 슬래시 VI:
+  template: '타임 포스 7 소비, 최대 6명의 적을 {v3}%의 데미지로 6번 공격
+
+    재사용 대기시간 5초'
+  level_equations:
+    v3:
+      a: 4
+      b: 226
+      divisor: 1
+      equation: skill_level * 4 + 226
+스로잉 웨폰 VI:
+  template: 타임 포스 9 소비, 최대 6명의 적을 {v3}%의 데미지로 4번 공격, 한 명의 적에게 최대 5번까지 충돌 발생
+  level_equations:
+    v3:
+      a: 5
+      b: 720
+      divisor: 1
+      equation: skill_level * 5 + 720
+플래시 어썰터 VI:
+  template: '타임 포스 9 소비, 최대 8명의 적을 {v3}%의 데미지로 8번 공격
+
+    재사용 대기시간 5초'
+  level_equations:
+    v3:
+      a: 3
+      b: 177
+      divisor: 1
+      equation: skill_level * 3 + 177
+스핀 커터 VI:
+  template: "타임 포스 11 소비, 최대 8명의 적을 {v3}%의 데미지로 10번 공격 \n[검기]: 최대 8명의 적을 {v6}%의 데미지로\
+    \ 4번 공격, 일반 몬스터 공격 시 데미지 {v8}%p 증가"
+  level_equations:
+    v3:
+      a: 5
+      b: 285
+      divisor: 1
+      equation: skill_level * 5 + 285
+    v6:
+      a: 3
+      b: 143
+      divisor: 1
+      equation: skill_level * 3 + 143
+    v8:
+      a: 1
+      b: 102
+      divisor: 1
+      equation: skill_level + 102
+어퍼 슬래시 VI:
+  template: '타임 포스 3 소비, 최대 6명의 적을 {v3}%의 데미지로 6번 공격
+
+    [패시브 효과 : 기가 크래시 VI의 데미지 {v5}%p 증가, 점핑 크래시 VI의 데미지 {v6}%p 증가, 점핑 크래시 VI 충격파의 데미지
+    {v7}%p 증가, 어스 브레이크 VI의 데미지 {v8}%p 증가, 어스 브레이크 VI 충격파의 데미지 {v9}%p 증가, 어스 브레이크 VI
+    전기 지역의 데미지 {v10}%p 증가]'
+  level_equations:
+    v3:
+      a: 3
+      b: 217
+      divisor: 1
+      equation: skill_level * 3 + 217
+    v5:
+      a: 2
+      b: 0
+      divisor: 1
+      equation: skill_level * 2
+    v6:
+      a: 2
+      b: 0
+      divisor: 1
+      equation: skill_level * 2
+    v7:
+      a: 1
+      b: 0
+      divisor: 1
+      equation: skill_level
+    v8:
+      a: 2
+      b: 0
+      divisor: 1
+      equation: skill_level * 2
+    v9:
+      a: 1
+      b: 0
+      divisor: 1
+      equation: skill_level
+    v10:
+      a: 2
+      b: 0
+      divisor: 1
+      equation: skill_level * 2
+파워 스텀프 VI:
+  template: "타임 포스 5 소비, 최대 6명의 적을 {v3}%의 데미지로 9번 공격 \n[충격파]: 최대 6명의 적을 {v6}%의 데미지로\
+    \ 9번 공격, 대상은 100%의 확률로 3초 동안 기절"
+  level_equations:
+    v3:
+      a: 3
+      b: 342
+      divisor: 1
+      equation: skill_level * 3 + 342
+    v6:
+      a: 3
+      b: 342
+      divisor: 1
+      equation: skill_level * 3 + 342
+문 스트라이크 VI:
+  template: '타임 포스 3 소비, 최대 8명의 적을 {v3}%의 데미지로 6번 공격
+
+    [패시브 효과 : 윈드 커터 VI의 데미지 {v5}%p 증가, 윈드 커터 VI 소용돌이의 데미지 {v6}%p 증가, 윈드 스트라이크의 데미지
+    {v7}%p 증가, 스톰 브레이크 VI의 데미지 {v8}%p 증가, 스톰 브레이크 VI 소용돌이의 데미지 {v9}%p 증가, 스톰 브레이크
+    VI 전기 지역의 데미지 {v10}%p 증가]'
+  level_equations:
+    v3:
+      a: 2
+      b: 131
+      divisor: 1
+      equation: skill_level * 2 + 131
+    v5:
+      a: 1
+      b: 0
+      divisor: 1
+      equation: skill_level
+    v6:
+      a: 1
+      b: 0
+      divisor: 1
+      equation: skill_level
+    v7:
+      a: 1
+      b: 0
+      divisor: 1
+      equation: skill_level
+    v8:
+      a: 2
+      b: 0
+      divisor: 1
+      equation: skill_level * 2
+    v9:
+      a: 2
+      b: 0
+      divisor: 1
+      equation: skill_level * 2
+    v10:
+      a: 2
+      b: 0
+      divisor: 1
+      equation: skill_level * 2
+피어스 쓰러스트 VI:
+  template: 타임 포스 5 소비, 최대 8명의 적을 {v3}%의 데미지로 6번 공격
+  level_equations:
+    v3:
+      a: 3
+      b: 185
+      divisor: 1
+      equation: skill_level * 3 + 185
+쉐도우 스트라이크 VI:
+  template: "타임 포스 7 소비, 최대 8명의 적을 {v3}%의 데미지로 8번 공격 \n[검기]: 최대 8명의 적을 {v6}%의 데미지로\
+    \ 1번 공격"
+  level_equations:
+    v3:
+      a: 4
+      b: 211
+      divisor: 1
+      equation: skill_level * 4 + 211
+    v6:
+      a: 6
+      b: 334
+      divisor: 1
+      equation: skill_level * 6 + 334
+쉐도우 레인 VI:
+  template: "타임 포스 50 소비 \n[베타]: 최대 15명의 적을 {v3}%의 데미지로 14번 공격 \n[알파]: 최대 15명의 적을\
+    \ {v6}%의 데미지로 14번 공격\n재사용 대기시간 300초"
+  level_equations:
+    v3:
+      a: 25
+      b: 875
+      divisor: 1
+      equation: skill_level * 25 + 875
+    v6:
+      a: 25
+      b: 875
+      divisor: 1
+      equation: skill_level * 25 + 875
+인피니트 레조넌스:
+  template: '자신이 직접 공격하는 스킬이 적중할 때마다 30초 동안 공격력 {v2} 증가
+
+    최대 3회 중첩'
+  level_equations:
+    v2:
+      a: 1
+      b: 15
+      divisor: 1
+      equation: skill_level + 15
+크로노 트리거:
+  template: '타임 포스 40 소비, 시전 동작 중 무적
+
+    사용 시 디텍트와 스트렝스 효과 최대 중첩으로 적용
+
+    허상의 거울이 깨져 15명의 적을 {v3}%의 데미지로 6번 공격하는 참격이 17회 발생
+
+    초월자의 힘을 각성하여 최대 15명의 적을 {v7}%의 데미지로 8번 공격하는 시간 왜곡 22회 발생
+
+    이후 최대 15명의 적을 {v11}%의 데미지로 14번 공격하는 마무리 일격 32회 발생
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 23
+      b: 710
+      divisor: 1
+      equation: skill_level * 23 + 710
+    v7:
+      a: 23
+      b: 710
+      divisor: 1
+      equation: skill_level * 23 + 710
+    v11:
+      a: 24
+      b: 710
+      divisor: 1
+      equation: skill_level * 24 + 710
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      16: 49
+      5: 18
+      1: 10
+      30: 100
+      10: 37
+      20: 67
+      15: 47
+      11: 39
+      8: 24
+      6: 20
+      19: 55
+      4: 16
+      3: 14
+      9: 26
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+리미트 브레이크 강화:
+  template: 리미트 브레이크의 최종 데미지 {v1}% 증가, 지속시간 {v2}초, 최종 데미지 증가량 {v3}%로 증가
+  levels:
+    v1:
+      30: 60
+      1: 11
+      28: 48
+      19: 34
+      9: 19
+      8: 18
+      4: 14
+      29: 49
+      10: 25
+      7: 17
+      11: 26
+      13: 28
+      21: 41
+      5: 15
+      15: 30
+      2: 12
+      3: 13
+    v2:
+      30: 30
+      1: 26
+      28: 30
+      19: 29
+      9: 27
+      8: 27
+      4: 26
+      29: 30
+      10: 27
+      7: 27
+      11: 27
+      13: 28
+      21: 29
+      5: 26
+      15: 28
+      2: 26
+      3: 26
+    v3:
+      30: 46
+      1: 37
+      28: 46
+      19: 43
+      9: 39
+      8: 39
+      4: 38
+      29: 46
+      10: 40
+      7: 39
+      11: 40
+      13: 41
+      21: 43
+      5: 38
+      15: 41
+      2: 37
+      3: 37
+조인트 어택 강화:
+  template: 조인트 어택의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      1: 11
+      11: 26
+      22: 42
+      19: 34
+      10: 25
+      4: 14
+      8: 18
+      6: 16
+      2: 12
+      3: 13
+      5: 15
+      12: 27
+쉐도우 플래시 강화:
+  template: 쉐도우 플래시의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      1: 11
+      11: 26
+      22: 42
+      20: 40
+      19: 34
+      12: 27
+      5: 15
+      9: 19
+      10: 25
+      4: 14
+      3: 13
+      2: 12
+      6: 16
+에고 웨폰 강화:
+  template: 에고 웨폰의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      1: 11
+      11: 26
+      22: 42
+      19: 34
+      12: 27
+      6: 16
+      10: 25
+      2: 12
+      4: 14
+      3: 13
+      9: 19
+      5: 15

@@ -10,7 +10,6 @@ from simaple.api.base import (
     run_plan_with_hint,
 )
 from simaple.container.simulation import SimulationEnvironment
-from simaple.core import JobType
 
 
 @pytest.fixture

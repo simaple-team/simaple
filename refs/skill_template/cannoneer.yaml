@@ -1,0 +1,255 @@
+캐논 버스터 VI:
+  template: MP {v1} 소비, {v2}%의 데미지로 최대 8명의 적을 4번 공격, 추가 크리티컬 확률 {v5}%, 적 방어율 무시 {v6}%
+  level_equations:
+    v1:
+      a: 1
+      b: 75
+      divisor: 3
+      equation: (skill_level // 3) + 75
+    v2:
+      a: 13
+      b: 850
+      divisor: 1
+      equation: skill_level * 13 + 850
+    v6:
+      a: 1
+      b: 20
+      divisor: 3
+      equation: (skill_level // 3) + 20
+캐논 바주카 VI:
+  template: MP {v1} 소비, {v2}% 데미지로 최대 8명의 적을 4번 공격
+  level_equations:
+    v1:
+      a: 1
+      b: 75
+      divisor: 4
+      equation: (skill_level // 4) + 75
+    v2:
+      a: 8
+      b: 600
+      divisor: 1
+      equation: skill_level * 8 + 600
+미니 캐논볼 VI:
+  template: 'MP {v1} 소비, 최대 8명의 적을 {v3}%의 데미지로 5번 공격
+
+    폭탄은 4초 마다 1개씩 준비되며 최대 5개까지 소지 가능
+
+    캐논 바주카 도중 사용 시 시전 동작 없음
+
+    재사용 대기시간 0.50초'
+  level_equations:
+    v3:
+      a: 19
+      b: 1110
+      divisor: 1
+      equation: skill_level * 19 + 1110
+마그네틱 앵커 VI:
+  template: 'MP {v1} 소비, 65초 동안 마그네틱 앵커 설치
+
+    마그네틱 앵커는 적을 끌어당기며 최대 8명의 적을 {v4}%의 데미지로 공격
+
+    소멸 시 최대 8명의 적을 {v6}%의 데미지로 공격'
+  level_equations:
+    v4:
+      a: 7
+      b: 580
+      divisor: 1
+      equation: skill_level * 7 + 580
+    v6:
+      a: 10
+      b: 800
+      divisor: 1
+      equation: skill_level * 10 + 800
+전함 노틸러스 VI:
+  template: 'MP {v1} 소비, 최대 15명의 적을 {v3}%의 데미지로 5번 공격
+
+    재사용 대기시간 30초'
+  level_equations:
+    v1:
+      a: 1
+      b: 350
+      divisor: 1
+      equation: skill_level + 350
+    v3:
+      a: 7
+      b: 560
+      divisor: 1
+      equation: skill_level * 7 + 560
+롤링 캐논 레인보우 VI:
+  template: 'MP 330 소비, 10초 동안 캐논포 소환
+
+    캐논포는 일정 시간마다 최대 10명의 적을 {v4}%의 데미지로 5번 공격
+
+    맥스 캐논 레인보우 : MP 330 소비, 10초 동안 캐논포 소환
+
+    캐논포는 일정 시간마다 최대 10명의 적을 {v9}%의 데미지로 5번 공격
+
+    연락망은 90초 마다 1개씩 증가하며 최대 2개까지 소지 가능
+
+    [패시브 효과 : 캐논 버스터 VI의 데미지 {v14}%p 증가]'
+  level_equations:
+    v4:
+      a: 38
+      b: 660
+      divisor: 1
+      equation: skill_level * 38 + 660
+    v9:
+      a: 44
+      b: 680
+      divisor: 1
+      equation: skill_level * 44 + 680
+    v14:
+      a: 4
+      b: 0
+      divisor: 1
+      equation: skill_level * 4
+서포트 몽키 트윈스 VI:
+  template: 'MP 80 소비, 62초 동안 포병 소환, 포병은 각각 {v3}%의 데미지로 공격
+
+    재사용 대기시간 10초'
+  level_equations:
+    v3:
+      a: 25
+      b: 340
+      divisor: 1
+      equation: skill_level * 25 + 340
+몽키 퓨리어스 VI:
+  template: 'MP 70 소비, 최대 10명의 적을 {v3}%의 데미지로 3번 공격
+
+    100% 확률로 60초 동안 1초마다 {v8}%의 도트 데미지, 해당 적에게 데미지 {v9}% 증가
+
+    스킬 재사용 시 즉시 폭발하며 최대 10명의 적을 {v11}%의 데미지로 3번 공격
+
+    재사용 대기시간 10초, 적중한 적이 없다면 재사용 대기시간 5초 감소'
+  level_equations:
+    v3:
+      a: 4
+      b: 194
+      divisor: 1
+      equation: skill_level * 4 + 194
+    v8:
+      a: 4
+      b: 216
+      divisor: 1
+      equation: skill_level * 4 + 216
+    v9:
+      a: 1
+      b: 40
+      divisor: 2
+      equation: (skill_level // 2) + 40
+    v11:
+      a: 4
+      b: 194
+      divisor: 1
+      equation: skill_level * 4 + 194
+슈퍼 캐논 익스플로젼:
+  template: 'MP 1200 소비, 시전 동작 중 무적
+
+    최대 15명의 적을 {v3}%의 데미지로 4번 공격하는 폭격이 68회 발생
+
+    이후 최대 15명의 적을 {v7}%의 데미지로 5번 공격하는 대폭발이 52회 발생
+
+    재사용 대기시간 360초'
+  level_equations:
+    v3:
+      a: 32
+      b: 960
+      divisor: 1
+      equation: skill_level * 32 + 960
+    v7:
+      a: 37
+      b: 1110
+      divisor: 1
+      equation: skill_level * 37 + 1110
+솔 야누스:
+  template: 'HP 500 소비, 솔 야누스의 모습을 결정
+
+    재사용 대기시간 3초
+
+    [패시브 효과 : 경험치 획득량 {v3}% 증가] '
+  levels:
+    v3:
+      30: 100
+      20: 67
+      9: 26
+      10: 37
+      7: 22
+      1: 10
+      2: 12
+      4: 16
+      6: 20
+      3: 14
+'솔 야누스 : 새벽':
+  template: '최대 HP의 10% 소비
+
+    {v2}초 동안 순환의 고리 소환, 최대 {v3}개까지 소환 가능
+
+    순환의 고리 : 최대 10명의 적을 {v5}%의 데미지로 6번 공격
+
+    재사용 대기시간 60초'
+  level_equations:
+    v5:
+      a: 10
+      b: 390
+      divisor: 1
+      equation: skill_level * 10 + 390
+빅 휴즈 기간틱 캐논볼 강화:
+  template: 빅 휴즈 기간틱 캐논볼의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      12: 27
+      20: 40
+      14: 29
+      10: 25
+      17: 32
+      3: 13
+      4: 14
+      9: 19
+      1: 11
+      2: 12
+      11: 26
+      8: 18
+      6: 16
+      5: 15
+ICBM 강화:
+  template: ICBM의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      14: 29
+      10: 25
+      1: 11
+      2: 12
+스페셜 몽키 에스코트 강화:
+  template: 스페셜 몽키 에스코트의 최종 데미지 {v1}% 증가
+  levels:
+    v1:
+      30: 60
+      20: 40
+      10: 25
+      2: 12
+      1: 11
+      3: 13
+      4: 14
+풀 메이커 강화:
+  template: 풀 메이커의 최종 데미지 {v1}% 증가, 포격 발동 횟수 {v2}회로 증가, 보급품은 첫 번째, 20번째 포격에 함께 투하
+  levels:
+    v1:
+      30: 60
+      22: 42
+      10: 25
+      7: 17
+      1: 11
+      4: 14
+      2: 12
+      3: 13
+    v2:
+      30: 30
+      22: 28
+      10: 24
+      7: 23
+      1: 21
+      4: 22
+      2: 21
+      3: 21
