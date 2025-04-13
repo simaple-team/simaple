@@ -114,6 +114,7 @@ SQLAlchemy = "^1.4.45"
 scipy = "^1.11.2"
 pydantic-settings = "^2.0.3"
 lark = "^1.1.7"
+lxml = "^5.3.1"
 
 [tool.poetry.group.dev.dependencies]
 poethepoet = "^0.28.0"
@@ -138,6 +139,7 @@ inline-snapshot = "^0.13.3"
 pytest-watcher = "^0.4.3"
 uvicorn = { extras = ["standard"], version = "^0.31.0" }
 fastapi = "^0.115.0"
+tqdm = "^4.67.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
