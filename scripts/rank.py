@@ -7,7 +7,6 @@ from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.simulation import get_damage_calculator
 from simaple.container.usecase.builtin import get_engine
 from simaple.core import JobType
-from simaple.core.jobtype import JobType
 from simaple.simulate.policy.parser import parse_simaple_runtime
 from simaple.simulate.report.feature import MaximumDealingIntervalFeature
 

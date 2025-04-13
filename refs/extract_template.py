@@ -1,20 +1,24 @@
-import yaml
-import re
 import logging
-from typing import  TypedDict, Any, Sequence
+import re
 from pathlib import Path
+from typing import Sequence, TypedDict
+
+import yaml
 
 # --- TypedDict Definitions ---
+
 
 class SkillLevelDataInput(TypedDict):
     level: int
     skill_effect: str | None
 
+
 SkillInfoInput = dict[str, list[SkillLevelDataInput]]
 
 ExtractedValues = dict[str, int | float | str]
-LevelValues = dict[int, int | float | str] # Level -> Value
-ProcessedLevels = dict[str, LevelValues] # VarName -> LevelValues
+LevelValues = dict[int, int | float | str]  # Level -> Value
+ProcessedLevels = dict[str, LevelValues]  # VarName -> LevelValues
+
 
 class LevelEquation(TypedDict):
     a: int
@@ -22,26 +26,34 @@ class LevelEquation(TypedDict):
     divisor: int
     equation: str
 
-SkillLevelEquations = dict[str, LevelEquation] # VarName -> LevelEquation
+
+SkillLevelEquations = dict[str, LevelEquation]  # VarName -> LevelEquation
 
 
 class _ProcessedSkillData(TypedDict):
     template: str
+
+
 class ProcessedSkillData(_ProcessedSkillData, total=False):
     levels: ProcessedLevels
     level_equations: SkillLevelEquations
 
-FinalResult = dict[str, ProcessedSkillData] # SkillName -> ProcessedSkillData
+
+FinalResult = dict[str, ProcessedSkillData]  # SkillName -> ProcessedSkillData
 
 # --- SciPy Dependency Handling ---
 try:
     from scipy.stats import linregress
+
     SCIPY_AVAILABLE = True
 except ImportError:
     SCIPY_AVAILABLE = False
-    logging.warning("scipy library not found. Level equation regression requires 'pip install scipy'. Skipping equation regression.")
+    logging.warning(
+        "scipy library not found. Level equation regression requires 'pip install scipy'. Skipping equation regression."
+    )
 
 # --- Helper Functions ---
+
 
 def _escape_and_create_regex(template: str) -> tuple[re.Pattern | None, list[str]]:
     """Escapes template and creates a regex pattern with named capture groups."""
@@ -68,6 +80,7 @@ def _escape_and_create_regex(template: str) -> tuple[re.Pattern | None, list[str
         logging.error(f"Regex compilation failed for template: {template}\nError: {e}")
         return None, []
 
+
 def _parse_value(value_str: str) -> int | float | str:
     """Tries to parse string value to int or float."""
     value_str = value_str.strip()
@@ -77,14 +90,15 @@ def _parse_value(value_str: str) -> int | float | str:
         try:
             return float(value_str)
         except ValueError:
-            return value_str # Keep as string if parsing fails
+            return value_str  # Keep as string if parsing fails
+
 
 def _calculate_equation_error(
     levels: Sequence[int],
     values: Sequence[int | float | str],
     a: int,
     b: int,
-    divisor: int
+    divisor: int,
 ) -> float:
     """Calculates the total absolute error for the equation."""
     total_error = 0.0
@@ -95,9 +109,12 @@ def _calculate_equation_error(
             total_error += abs(val - predicted_val)
         else:
             # Handle non-numeric values if necessary, here we assume they shouldn't exist for regression
-            logging.warning(f"Non-numeric value '{val}' encountered for level {lvl} during error calculation.")
-            return float('inf') # Indicate error or incompatibility
+            logging.warning(
+                f"Non-numeric value '{val}' encountered for level {lvl} during error calculation."
+            )
+            return float("inf")  # Indicate error or incompatibility
     return total_error
+
 
 def _format_equation_string(a: int, b: int, divisor: int) -> str:
     """Formats the equation string for readability."""
@@ -121,12 +138,14 @@ def _format_equation_string(a: int, b: int, divisor: int) -> str:
         prefix = f" {sign} " if equation_parts and b != 0 else (sign if b < 0 else "")
         # Add b if it's non-zero or if it's the only term (a=0 case)
         if b != 0 or not equation_parts:
-             equation_parts.append(f"{prefix}{abs(b)}")
+            equation_parts.append(f"{prefix}{abs(b)}")
 
     equation = "".join(equation_parts)
-    return equation if equation else "0" # Return "0" if a=0 and b=0
+    return equation if equation else "0"  # Return "0" if a=0 and b=0
+
 
 # --- Core Logic Functions ---
+
 
 def extract_values_from_template(text: str, template: str) -> ExtractedValues | None:
     """Extracts values from text based on the template using regex."""
@@ -144,6 +163,7 @@ def extract_values_from_template(text: str, template: str) -> ExtractedValues | 
     }
     return extracted_data
 
+
 def generate_template_from_integers(text: str | None) -> str:
     """Generates a template string by replacing integers with placeholders."""
     if text is None:
@@ -153,7 +173,7 @@ def generate_template_from_integers(text: str | None) -> str:
     last_end = 0
     v_index = 1
     # Regex to find integers (including negative)
-    for match in re.finditer(r'-?\d+', text):
+    for match in re.finditer(r"-?\d+", text):
         start, end = match.span()
         template_parts.append(text[last_end:start])
         template_parts.append(f"{{v{v_index}}}")
@@ -162,6 +182,7 @@ def generate_template_from_integers(text: str | None) -> str:
 
     template_parts.append(text[last_end:])
     return "".join(template_parts)
+
 
 def process_skill_info(skill_info_input: SkillInfoInput) -> FinalResult:
     """Processes raw skill info to create templates and level parameters."""
@@ -173,25 +194,29 @@ def process_skill_info(skill_info_input: SkillInfoInput) -> FinalResult:
 
         base_effect: str | None = None
         for data in skill_level_data_list:
-            if data.get('skill_effect') is not None:
-                base_effect = data['skill_effect']
+            if data.get("skill_effect") is not None:
+                base_effect = data["skill_effect"]
                 break
 
         if base_effect is None:
-            logging.warning(f"Skill '{skill_name}': No valid skill_effect found. Skipping.")
+            logging.warning(
+                f"Skill '{skill_name}': No valid skill_effect found. Skipping."
+            )
             continue
 
         template = generate_template_from_integers(base_effect)
         if not template:
-            logging.warning(f"Skill '{skill_name}': Failed to generate template. Skipping.")
+            logging.warning(
+                f"Skill '{skill_name}': Failed to generate template. Skipping."
+            )
             continue
 
         params: ProcessedLevels = {}
         skill_data: ProcessedSkillData = {"template": template}
 
         for target_data in skill_level_data_list:
-            current_effect = target_data.get('skill_effect')
-            level = target_data.get('level')
+            current_effect = target_data.get("skill_effect")
+            level = target_data.get("level")
 
             if current_effect is None or level is None:
                 continue
@@ -211,9 +236,10 @@ def process_skill_info(skill_info_input: SkillInfoInput) -> FinalResult:
 
     return result
 
+
 def postprocess_remove_constants(processed_data: FinalResult) -> FinalResult:
     """Removes constant variables from levels and embeds them into the template."""
-    skills_to_update: dict[str, list[str]] = {} # SkillName -> [VarNamesToRemove]
+    skills_to_update: dict[str, list[str]] = {}  # SkillName -> [VarNamesToRemove]
 
     for skill_name, skill_details in processed_data.items():
         if "levels" not in skill_details or not skill_details["levels"]:
@@ -256,14 +282,13 @@ def postprocess_remove_constants(processed_data: FinalResult) -> FinalResult:
 
     return processed_data
 
+
 def regress_level_equations(
-    processed_data: FinalResult,
-    max_divisor: int = 5,
-    error_threshold: float = 1e-6
+    processed_data: FinalResult, max_divisor: int = 5, error_threshold: float = 1e-6
 ) -> FinalResult:
     """Regresses level equations of the form value = (level // divisor) * a + b."""
     if not SCIPY_AVAILABLE:
-        return processed_data # Skip if scipy is not available
+        return processed_data  # Skip if scipy is not available
 
     for skill_name, skill_details in processed_data.items():
         if "levels" not in skill_details or not skill_details["levels"]:
@@ -274,16 +299,20 @@ def regress_level_equations(
 
         for var_name, level_values in levels_data.items():
             # Need at least two points with numeric values for regression
-            numeric_points = {lvl: val for lvl, val in level_values.items() if isinstance(val, (int, float))}
+            numeric_points = {
+                lvl: val
+                for lvl, val in level_values.items()
+                if isinstance(val, (int, float))
+            }
             if len(numeric_points) < 2:
                 continue
 
             points = sorted(numeric_points.items())
             levels = [p[0] for p in points]
-            values = [p[1] for p in points] # Now guaranteed numeric
+            values = [p[1] for p in points]  # Now guaranteed numeric
 
             best_fit_params: LevelEquation | None = None
-            min_total_error = float('inf')
+            min_total_error = float("inf")
 
             for divisor in range(1, max_divisor + 1):
                 transformed_levels = [lvl // divisor for lvl in levels]
@@ -294,37 +323,45 @@ def regress_level_equations(
                     if len(set(values)) == 1:
                         current_a = 0
                         current_b = values[0]
-                        total_error = _calculate_equation_error(levels, values, current_a, current_b, divisor)
+                        total_error = _calculate_equation_error(
+                            levels, values, current_a, current_b, divisor
+                        )
                     else:
-                        continue # Cannot fit line if x is constant but y varies
+                        continue  # Cannot fit line if x is constant but y varies
                 else:
                     try:
-                        slope, intercept, r_value, p_value, std_err = linregress(transformed_levels, values)
+                        slope, intercept, r_value, p_value, std_err = linregress(
+                            transformed_levels, values
+                        )
                         current_a: int = round(slope)
                         current_b: int = round(intercept)
-                        total_error = _calculate_equation_error(levels, values, current_a, current_b, divisor)
+                        total_error = _calculate_equation_error(
+                            levels, values, current_a, current_b, divisor
+                        )
                     except ValueError:
-                        continue # linregress failed
+                        continue  # linregress failed
 
                 if total_error < min_total_error:
                     min_total_error = total_error
                     # Only consider fits below the error threshold as valid
                     if total_error <= error_threshold:
-                         best_fit_params = {
+                        best_fit_params = {
                             "a": current_a,
                             "b": current_b,
                             "divisor": divisor,
-                            "equation": _format_equation_string(current_a, current_b, divisor) # Format here
-                         }
+                            "equation": _format_equation_string(
+                                current_a, current_b, divisor
+                            ),  # Format here
+                        }
                     else:
-                        best_fit_params = None # Reset if error is too high, even if minimal so far
-
+                        best_fit_params = (
+                            None  # Reset if error is too high, even if minimal so far
+                        )
 
             if best_fit_params:
                 level_equations[var_name] = best_fit_params
             # else:
             #     logging.info(f"Skill '{skill_name}', Var '{var_name}': Could not find fitting equation (min error: {min_total_error:.4f}).")
-
 
         if level_equations:
             skill_details["level_equations"] = level_equations
@@ -332,7 +369,9 @@ def regress_level_equations(
 
     return processed_data
 
+
 # --- Main Execution ---
+
 
 def load_yaml_data(file_path: Path) -> dict | None:
     """Loads data from a YAML file."""
@@ -340,7 +379,7 @@ def load_yaml_data(file_path: Path) -> dict | None:
         logging.error(f"YAML file not found: {file_path}")
         return None
     try:
-        with file_path.open('r', encoding='utf-8') as f:
+        with file_path.open("r", encoding="utf-8") as f:
             return yaml.safe_load(f)
     except yaml.YAMLError as e:
         logging.error(f"Error reading YAML file {file_path}: {e}")
@@ -349,36 +388,42 @@ def load_yaml_data(file_path: Path) -> dict | None:
         logging.error(f"Error opening YAML file {file_path}: {e}")
         return None
 
+
 def save_yaml_data(data: dict, file_path: Path) -> bool:
     """Saves data to a YAML file."""
     try:
-        with file_path.open('w', encoding='utf-8') as f:
-            yaml.dump(data, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
+        with file_path.open("w", encoding="utf-8") as f:
+            yaml.dump(
+                data, f, allow_unicode=True, sort_keys=False, default_flow_style=False
+            )
         logging.info(f"Successfully generated {file_path}")
         return True
     except IOError as e:
         logging.error(f"Error writing to YAML file {file_path}: {e}")
         return False
-    except yaml.YAMLError as e: # Should not happen with dump, but good practice
+    except yaml.YAMLError as e:  # Should not happen with dump, but good practice
         logging.error(f"Error during YAML serialization for {file_path}: {e}")
         return False
 
+
 def main():
     """Main function to process skill data and generate template file."""
-    logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
-    input_yaml_path = Path('refs/skill_info.yaml')
-    output_yaml_path = Path('skill_template.yaml')
+    input_yaml_path = Path("refs/skill_info.yaml")
+    output_yaml_path = Path("skill_template.yaml")
 
     raw_data = load_yaml_data(input_yaml_path)
     if raw_data is None:
         return
 
     # Safely access nested structure
-    skill_info_input: SkillInfoInput = raw_data.get('skill_info', {}).get('response_at_6', {})
+    skill_info_input: SkillInfoInput = raw_data.get("skill_info", {}).get(
+        "response_at_6", {}
+    )
     if not skill_info_input:
-       logging.warning("'response_at_6' data not found or empty in skill_info.yaml")
-       # Proceed with empty dict if not found
+        logging.warning("'response_at_6' data not found or empty in skill_info.yaml")
+        # Proceed with empty dict if not found
 
     # --- Processing Pipeline ---
     result_step1 = process_skill_info(skill_info_input)
@@ -387,5 +432,6 @@ def main():
 
     save_yaml_data(final_result, output_yaml_path)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
