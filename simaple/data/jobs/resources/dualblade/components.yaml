@@ -98,7 +98,7 @@ data:
     final_damage_multiplier: "{{ 10 + skill_level }}"
 
   default_skill_level: 30
-  disable_validity: True
+  disable_access: True
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -136,7 +136,7 @@ data:
   lasting_duration: 60000
   stat:
     damage_multiplier: 10
-  disable_validity: True
+  disable_access: True
 ---
 kind: Component
 version: simaple.io/TriggableBuffSkillComponent
@@ -320,7 +320,7 @@ data:
     ignored_defence: 100
 
   default_skill_level: 30
-  disable_validity: True
+  disable_access: True
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -346,7 +346,7 @@ data:
     ignored_defence: 30
 
   default_skill_level: 30
-  disable_validity: True
+  disable_access: True
 ---
 kind: Component
 version: simaple.io/UltimateDarkSightComponent

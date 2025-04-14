@@ -215,7 +215,7 @@ data:
   hit: 1
   combat_orders_enabled: true
   default_skill_level: 30
-  disable_validity: True
+  disable_access: True
   v_improvement: 2
   cooldown_duration: 0
 ---
@@ -452,7 +452,7 @@ data:
   delay: 0
   damage: "{{ 180 + 7 * skill_level }}"
   hit: 3
-  disable_validity: True
+  disable_access: True
   v_improvement: 2
   cooldown_duration: 0
 ---
@@ -654,7 +654,7 @@ data:
 
   delay: 0
   cooldown_duration: 0
-  disable_validity: True
+  disable_access: True
 
   periodic_initial_delay: 4_860
   periodic_interval: 1_200

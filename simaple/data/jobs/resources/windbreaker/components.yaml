@@ -65,7 +65,7 @@ data:
   name: 핀포인트 피어스#버프
   delay: 0
   cooldown_duration: 0
-  disable_validity: True
+  disable_access: True
 
   stat:
     damage_multiplier: 15
@@ -467,7 +467,7 @@ data:
 
   delay: 0
   cooldown_duration: 0
-  disable_validity: True
+  disable_access: True
 
   periodic_interval: 3_000
   periodic_damage: "{{ 660 + skill_level * 22 }}"
@@ -492,7 +492,7 @@ data:
 
   delay: 0
   cooldown_duration: 0
-  disable_validity: True
+  disable_access: True
 
   periodic_interval: 3_000
   periodic_damage: "{{ 720 + skill_level * 24 }}"
@@ -518,7 +518,7 @@ data:
 
   delay: 0
   cooldown_duration: 0
-  disable_validity: True
+  disable_access: True
 
   periodic_interval: 3_000
   periodic_damage: "{{ 645 + skill_level * 21 }}"

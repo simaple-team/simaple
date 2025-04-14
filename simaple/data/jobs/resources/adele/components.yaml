@@ -74,7 +74,7 @@ data:
 
   v_improvement: 2
 
-  disable_validity: True
+  disable_access: True
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -120,7 +120,7 @@ data:
     final_damage_multiplier: 5
     ignored_defence: 5
 
-  disable_validity: True
+  disable_access: True
 ---
 kind: Component
 version: simaple.io/AdeleCreationComponent
@@ -148,7 +148,7 @@ data:
 
   v_improvement: 2
 
-  disable_validity: True
+  disable_access: True
 ---
 # TODO: 최종 폭발
 kind: Component
@@ -259,7 +259,7 @@ data:
   stat:
     ignored_defence: 10
 
-  disable_validity: True
+  disable_access: True
 ---
 kind: Component
 version: simaple.io/AdeleBlossomComponent
@@ -364,7 +364,7 @@ data:
     damage_multiplier: 20
     ignored_defence: 10
 
-  disable_validity: True
+  disable_access: True
 ---
 kind: Component
 version: simaple.io/AttackSkillComponent
@@ -504,7 +504,7 @@ data:
 
   default_skill_level: 30
 
-  disable_validity: True
+  disable_access: True
 ---
 kind: Component
 version: simaple.io/AdeleStormComponent
@@ -643,7 +643,7 @@ data:
 
   v_improvement: 2
 
-  disable_validity: True
+  disable_access: True
 ---
 kind: Component
 version: simaple.io/AdeleOrderComponent

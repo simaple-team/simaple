@@ -3,7 +3,7 @@ from typing import Optional
 import pydantic
 
 from simaple.core.base import Stat
-from simaple.simulate.component.base import ComponentInformation
+from simaple.simulate.component.base import Accessiblity, ComponentInformation
 from simaple.simulate.view import AggregationView
 
 
@@ -34,6 +34,15 @@ class KeydownView(pydantic.BaseModel):
     name: str
     time_left: float
     running: bool
+
+
+class AccessiblityParentView(AggregationView):
+    def aggregate(self, representations: list[Accessiblity]):
+        return representations
+
+    @classmethod
+    def get_installation_pattern(cls):
+        return r".*\.accessiblity"
 
 
 class InformationParentView(AggregationView):

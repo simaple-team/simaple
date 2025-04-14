@@ -46,6 +46,9 @@ class OperationEngine(Protocol):
     def reload(self, previous_operation_logs: list[OperationLog]) -> None:
         ...
 
+    def current_index(self) -> int:
+        ...
+
 
 def was_no_op(logs: list[PlayLog]) -> bool:
     total_events = sum(len(playlog.events) for playlog in logs)
@@ -116,6 +119,9 @@ class BasicOperationEngine:
     def simulation_entries(self) -> Generator[SimulationEntry, None, None]:
         for playlog in self._history.playlogs():
             yield self.get_simulation_entry(playlog)
+
+    def current_index(self) -> int:
+        return len(self._history) - 1
 
     def rollback(self, idx: int):
         self._history.discard_after(idx)
