@@ -14,6 +14,7 @@ from simaple.container.usecase.builtin import (
 from simaple.core import JobType
 from simaple.core.base import ActionStat
 from simaple.simulate.component.view import (
+    AccessiblityParentView,
     BuffParentView,
     InformationParentView,
     KeydownParentView,
@@ -65,6 +66,9 @@ def get_engine(environment: SimulationEnvironment):
     usecase.add_view("buff", BuffParentView.build(usecase.build_viewset()))
     usecase.add_view("running", RunningParentView.build(usecase.build_viewset()))
     usecase.add_view("keydown", KeydownParentView.build(usecase.build_viewset()))
+    usecase.add_view(
+        "accessiblity", AccessiblityParentView.build(usecase.build_viewset())
+    )
 
     store = bare_store(environment.character.action_stat)
     return usecase.create_engine(store)

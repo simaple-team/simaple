@@ -1,10 +1,9 @@
 import inspect
 from abc import abstractmethod
 from functools import wraps
-from typing import Any, Callable, Optional, TypeVar, Union, cast
+from typing import Any, Callable, Optional, TypeVar, Union
 
 from pydantic import BaseModel, ConfigDict, Field
-from typing_extensions import TypedDict
 
 from simaple.core import Stat
 from simaple.simulate.core import Action, ActionSignature, Event
@@ -132,7 +131,10 @@ def view_use_store(store_name, bounded_stores: dict[str, str]):
                 assert entity is not None
                 my_entities[name] = entity
 
-            state = state_type(**my_entities)
+            if state_type == Any:
+                state = my_entities
+            else:
+                state = state_type(**my_entities)
 
             view = viewer(state)
             return view
@@ -244,9 +246,16 @@ def _old_signature_to_new_signature(old_signature: str) -> ActionSignature:
     return split[0], ".".join(split[1:])
 
 
-class ComponentInformation(TypedDict):
-    id: int
+class ComponentInformation(BaseModel):
+    id: str
     name: str
+    props: Any
+
+
+class Accessiblity(BaseModel):
+    id: str
+    name: str
+    hidden: bool = False
 
 
 class Component(BaseModel, metaclass=ComponentMetaclass):
@@ -268,6 +277,7 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
     id: str
     name: str
     modifier: Optional[Stat] = None
+    disable_access: bool = False
 
     binds: dict[str, str] = Field(default_factory=dict)
     addons: list[_ComponentAddon] = Field(default_factory=list)
@@ -349,5 +359,13 @@ class Component(BaseModel, metaclass=ComponentMetaclass):
         }
 
     @view_method
+    def accessiblity(self, _: Any) -> Accessiblity:
+        return Accessiblity(id=self.id, name=self.name, hidden=self.disable_access)
+
+    @view_method
     def info(self, _: Any) -> ComponentInformation:
-        return cast(ComponentInformation, self.model_dump())
+        return ComponentInformation(
+            id=self.id,
+            name=self.name,
+            props=self.model_dump(),
+        )
