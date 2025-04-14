@@ -126,7 +126,7 @@ data:
   damage: "{{ 100 + 4 * skill_level }}"
   hit: "{{ 0.02 * skill_level }}"
   default_skill_level: 30
-  disable_validity: True
+  disable_access: True
   v_improvement: 2
 ---
 kind: Component
@@ -276,7 +276,7 @@ data:
   lasting_duration: 15_000
 
   cooldown_duration: 0
-  disable_validity: True
+  disable_access: True
 ---
 kind: Component
 version: simaple.io/ThunderBreak
@@ -565,7 +565,7 @@ data:
   lasting_duration: 30_000
 
   cooldown_duration: 0
-  disable_validity: True
+  disable_access: True
 ---
 kind: Component
 version: simaple.io/ChainLightningVIComponent
@@ -683,7 +683,7 @@ data:
   damage: "{{ 220 + skill_level * 5 }}"
   hit: "{{ 0.7 }}"
   default_skill_level: 30
-  disable_validity: True
+  disable_access: True
   v_improvement: 2
 ---
 kind: SkillImprovement

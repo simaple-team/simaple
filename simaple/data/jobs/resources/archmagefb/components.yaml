@@ -146,7 +146,7 @@ data:
   id: 2111007-0
   name: 텔레포트 마스터리
   cooldown_duration: 0
-  delay: 0
+  delay: 300
   damage: 272
   hit: 1
 ---
@@ -245,7 +245,7 @@ data:
   damage: "{{ 100 + 4 * skill_level }}"
   hit: "{{ 0.02 * skill_level }}"
   default_skill_level: 30
-  disable_validity: True
+  disable_access: True
   v_improvement: 2
 ---
 kind: Component
@@ -321,7 +321,7 @@ data:
   damage: 40
   hit: 4.5
   cooldown_duration: 0
-  disable_validity: True
+  disable_access: True
   v_improvement: 4
 ---
 kind: Component
@@ -334,7 +334,7 @@ metadata:
 data:
   id: 2111003-0
   name: 포이즌 미스트
-  delay: 0
+  delay: 300
   cooldown_duration: 0
 
   periodic_interval: 1_000
@@ -555,7 +555,7 @@ data:
   damage: "{{ 45 + skill_level }}"
   hit: 4.5
   cooldown_duration: 0
-  disable_validity: True
+  disable_access: True
   v_improvement: 4
 ---
 kind: Component
@@ -666,7 +666,7 @@ data:
   cooldown_duration: 0
   damage: "{{ 233 + 5 * skill_level }}"
   hit: 0.65
-  disable_validity: True
+  disable_access: True
   v_improvement: 2
 ---
 kind: Component
