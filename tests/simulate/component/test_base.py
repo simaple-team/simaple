@@ -23,7 +23,7 @@ class TestRegularizeReturnedEvent:
         """None 입력이 빈 리스트를 반환하는지 테스트"""
         assert regularize_returned_event(None) == []
 
-    def test_single_event(self):
+    def test_single_event(self) -> None:
         """단일 이벤트가 리스트로 변환되는지 테스트"""
         event: Event = {
             "name": "test",
@@ -34,7 +34,7 @@ class TestRegularizeReturnedEvent:
         }
         assert regularize_returned_event(event) == [event]
 
-    def test_event_list(self):
+    def test_event_list(self) -> None:
         """이벤트 리스트가 그대로 반환되는지 테스트"""
         events: list[Event] = [
             {
@@ -56,7 +56,7 @@ class TestRegularizeReturnedEvent:
 
 
 class TestTagEventsByMethodName:
-    def test_tag_events(self):
+    def test_tag_events(self) -> None:
         """이벤트에 메서드 이름으로 태그가 추가되는지 테스트"""
         events: list[Event] = [
             {
@@ -85,7 +85,7 @@ class TestTagEventsByMethodName:
         assert tagged_events[2]["tag"] == Tag.ACCEPT
         assert tagged_events[2]["name"] == "owner"
 
-    def test_accept_reject_tags(self):
+    def test_accept_reject_tags(self) -> None:
         """ACCEPT 또는 REJECT 태그가 있는 경우 추가 이벤트가 생성되지 않는지 테스트"""
         events: list[Event] = [
             {
@@ -135,7 +135,7 @@ class ComponentA(Component):
 
 
 class TestComponent:
-    def test_component_initialization(self):
+    def test_component_initialization(self) -> None:
         """컴포넌트 초기화와 기본 속성 테스트"""
         component = ComponentA(id="test_id", name="test_component")
 
@@ -144,14 +144,14 @@ class TestComponent:
         assert component.modifier is None
         assert component.disable_access is False
 
-    def test_component_reducers(self):
+    def test_component_reducers(self) -> None:
         """컴포넌트의 리듀서 메서드가 올바르게 등록되는지 테스트"""
         component = ComponentA(id="test_id", name="test_component")
 
         # __reducers__에 메서드가 등록되었는지 확인
         assert "increment" in component.__reducers__  # type: ignore
 
-    def test_component_views(self):
+    def test_component_views(self) -> None:
         """컴포넌트의 뷰 메서드가 올바르게 등록되는지 테스트"""
         component = ComponentA(id="test_id", name="test_component")
 
@@ -162,7 +162,7 @@ class TestComponent:
 
     @patch("simaple.simulate.component.base.compile_into_unsafe_reducer")
     @patch("simaple.simulate.component.base.event_tagged_reducer")
-    def test_get_unsafe_reducers(self, mock_event_tagged_reducer, mock_compile):
+    def test_get_unsafe_reducers(self, mock_event_tagged_reducer, mock_compile) -> None:
         """get_unsafe_reducers 메서드가 올바른 형식의 리듀서를 반환하는지 테스트"""
         component = ComponentA(id="test_id", name="test_component")
 
@@ -182,7 +182,7 @@ class TestComponent:
 
 
 class TestEventTaggedReducer:
-    def test_event_tagged_reducer(self):
+    def test_event_tagged_reducer(self) -> None:
         """event_tagged_reducer가 이벤트에 메서드 이름으로 태그를 추가하는지 테스트"""
         event_provider = NamedEventProvider("test_component")
 
@@ -213,7 +213,7 @@ class TestEventTaggedReducer:
 
 
 class TestNoOpReducer:
-    def test_no_op_reducer(self):
+    def test_no_op_reducer(self) -> None:
         """no_op_reducer가 빈 이벤트 리스트를 반환하는지 테스트"""
         mock_action: Action = {"name": "test", "method": "test", "payload": {}}
         mock_store = MagicMock()
@@ -224,9 +224,9 @@ class TestNoOpReducer:
 
 
 class TestCreateBindingWithStore:
-    def test_create_binding_with_store(self):
+    def test_create_binding_with_store(self) -> None:
         """_create_binding_with_store가 올바른 속성 주소를 생성하는지 테스트"""
-        bindings = {"prop1": ".custom.prop1"}
+        bindings: dict[str, str] = {"prop1": ".custom.prop1"}
         property_address = _create_binding_with_store(
             "test_component", ["prop1", "prop2"], bindings
         )
@@ -236,7 +236,7 @@ class TestCreateBindingWithStore:
 
 
 class TestStoreInteraction:
-    def test_init_component_store(self):
+    def test_init_component_store(self) -> None:
         """init_component_store가 스토어에 컴포넌트 상태를 초기화하는지 테스트"""
         mock_store = MagicMock(spec=Store)
         mock_local_store = MagicMock()
