@@ -12,7 +12,7 @@ interface SkillComponentExtra extends SkillComponent {
   periodic_interval?: number;
   periodic_damage?: number;
   periodic_hit?: number;
-  disable_validity?: boolean;
+  disable_access?: boolean;
   stat?: Stat;
   modifier?: Stat;
   lasting_duration?: number;
@@ -91,7 +91,7 @@ function SkillComponentCard(props: { skillComponent: SkillComponentExtra }) {
     periodic_interval,
     stat,
     modifier,
-    disable_validity,
+    disable_access,
     lasting_duration,
     apply_buff_duration,
     maximum_keydown_time,
@@ -189,7 +189,7 @@ function SkillComponentCard(props: { skillComponent: SkillComponentExtra }) {
                 </TableCell>
               </TableRow>
             ) : null}
-            {disable_validity ? (
+            {disable_access ? (
               <TableRow>
                 <TableCell>직접 시전 불가</TableCell>
                 <TableCell>예</TableCell>
