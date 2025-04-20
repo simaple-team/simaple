@@ -1,5 +1,5 @@
 import os
-from typing import Any, Dict, List, Optional, Tuple, Type, Union
+from typing import Any, Dict, List, Optional, Tuple, TypedDict, Callable
 
 import numpy as np
 import torch
@@ -64,7 +64,9 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
         self,
         observation_space: gym.spaces.Space,
         action_space: gym.spaces.Space,
-        lr_schedule: callable,
+        lr_schedule: Callable,
+        logit_bias: list[float] | None = None,
+        running_penalty: float = 7.0,
         *args,
         **kwargs
     ):
@@ -72,6 +74,9 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
         if "features_extractor_class" not in kwargs:
             kwargs["features_extractor_class"] = CustomMaskableFeatureExtractor
         
+        self.logit_bias = torch.tensor(logit_bias, dtype=torch.float32)
+        self.running_penalty = running_penalty
+
         super().__init__(
             observation_space,
             action_space,
@@ -101,7 +106,14 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
             action_mask = observation['action_mask']
             # 마스크가 0인 위치에 큰 음수값을 할당하여 선택 확률을 0에 가깝게 만듦
             action_logits = action_logits + (action_mask - 1) * 1e9
-        
+
+        if self.logit_bias is not None:
+            action_logits = action_logits + self.logit_bias
+
+        if "running_mask" in observation:
+            running_mask = observation["running_mask"]
+            action_logits = action_logits - running_mask * self.running_penalty
+
         # 확률 분포 생성
         dist = self.action_dist.proba_distribution(action_logits)
         
@@ -112,7 +124,7 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
             action = dist.sample()
         
         return action
-    
+
     def forward(self, obs: Dict[str, torch.Tensor], deterministic: bool = False) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """
         Actor-Critic 포워드 패스 (액션, 가치, 로그 확률)
@@ -181,7 +193,6 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
 
 class SimapleEnv(gym.Env):
     """Stable Baselines 3용 심플 환경 클래스"""
-    
     def __init__(self, player: SimaplePlayer, damage_calculator: DamageCalculator, target_time=50_000, max_steps=1000):
         super(SimapleEnv, self).__init__()
         
@@ -199,7 +210,7 @@ class SimapleEnv(gym.Env):
             self.player.get_all_actions(), 
             self.player.get_state_info()
         )
-        
+
         # 액션 및 관찰 공간 정의
         n_actions = len(self.player.get_all_actions())
         self.action_space = spaces.Discrete(n_actions)
@@ -209,9 +220,10 @@ class SimapleEnv(gym.Env):
         logger.info(f"State dimension: {state_dim}")
         self.observation_space = spaces.Dict({
             'state': spaces.Box(low=-np.inf, high=np.inf, shape=(state_dim,), dtype=np.float32),
-            'action_mask': spaces.Box(low=0, high=1, shape=(n_actions,), dtype=np.float32)
+            'action_mask': spaces.Box(low=0, high=1, shape=(n_actions,), dtype=np.float32),
+            "running_mask": spaces.Box(low=0, high=1, shape=(n_actions,), dtype=np.float32)
         })
-        
+
         # 액션 목록 저장
         self.all_actions = self.player.get_all_actions()
     
@@ -233,7 +245,8 @@ class SimapleEnv(gym.Env):
         # Dict 형태의 관찰 상태 반환
         return {
             'state': state_tensor.numpy(),
-            'action_mask': action_mask.numpy()
+            'action_mask': action_mask.numpy(),
+            "running_mask": self.get_running_mask().numpy()
         }, {
             'step': self.current_step,
             'time': self.current_time,
@@ -291,7 +304,8 @@ class SimapleEnv(gym.Env):
         # Dict 형태의 관찰 상태 반환
         observation = {
             'state': next_state_tensor.numpy(),
-            'action_mask': next_action_mask.numpy()
+            'action_mask': next_action_mask.numpy(),
+            "running_mask": self.get_running_mask().numpy()
         }
         
         return observation, reward, done, done, info
@@ -318,7 +332,17 @@ class SimapleEnv(gym.Env):
         except Exception as e:
             logger.error(f"액션 시뮬레이션 중 오류: {e}")
             return None, 0
-    
+
+    def get_running_mask(self) -> torch.Tensor:
+        """실행 중인 스킬 마스크 반환"""
+        running = self.player.get_state_info()["running"]
+        mask = torch.zeros(len(self.all_actions))
+        for name, running_info in running.items():
+            if running_info.lasting_duration and running_info.name in self.all_actions:
+                mask[self.all_actions.index(name)] = 1
+
+        return mask
+
     def render(self, mode='human'):
         """환경 렌더링 (선택적)"""
         if mode == 'human':
@@ -401,8 +425,8 @@ def setup_simulation_env(
     
     engine = get_engine(environment)
     damage_calculator = get_damage_calculator(environment)
-    player = SimaplePlayer(engine)
-    
+    player = SimaplePlayer(engine, environment.jobtype)
+
     # 학습용 환경 생성
     train_env = SimapleEnv(player, damage_calculator, target_time, max_steps)
     
@@ -410,7 +434,7 @@ def setup_simulation_env(
     check_env(train_env)
     
     # 평가용 환경 생성
-    eval_player = SimaplePlayer(get_engine(environment))
+    eval_player = SimaplePlayer(get_engine(environment), environment.jobtype)
     eval_env = SimapleEnv(eval_player, damage_calculator, target_time, max_steps)
     
     return train_env, plan_metadata_dict, eval_env

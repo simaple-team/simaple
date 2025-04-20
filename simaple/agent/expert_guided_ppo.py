@@ -28,6 +28,7 @@ from simaple.agent.common_ppo import (
     evaluate_model,
     SimapleEnv,
 )
+from simaple.agent.bias import generate_logit_bias
 
 from simaple.agent.buffer import TrajectoryMemory, Trajectory
 
@@ -263,9 +264,18 @@ def run_bc_ppo_training(
     policy_kwargs = dict(
         net_arch=[dict(pi=[128, 128], vf=[128, 128])],
         features_extractor_class=CustomMaskableFeatureExtractor,
-        features_extractor_kwargs=dict(features_dim=128)
+        features_extractor_kwargs=dict(features_dim=128),
+        logit_bias=generate_logit_bias(
+            all_skill_names=env.player.get_all_actions(),
+            buff_skill_names=env.player.get_buff_skills(),
+            damage_skill_names=env.player.get_damage_skills(),
+            buff_skill_bonus=1.0,
+            damage_skill_bonus=0.5,
+            buff_priority_bonus=0.5,
+            damage_priority_bonus=0.5,
+        ),
+        running_penalty=2.1
     )
-    
 
     # 행동 클로닝으로 사전 학습
     if expert_actions:
@@ -311,7 +321,7 @@ def run_bc_ppo_training(
             gamma=gamma,
             verbose=1,
             tensorboard_log=log_dir,
-            policy_kwargs=policy_kwargs
+            policy_kwargs=policy_kwargs,
         )
         
         # 사전 학습된 가중치 로드

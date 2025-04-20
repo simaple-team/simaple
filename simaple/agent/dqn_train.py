@@ -1,4 +1,6 @@
 import os
+from typing import Optional
+
 import numpy as np
 import torch
 import gymnasium as gym
@@ -14,6 +16,10 @@ from simaple.agent.common_ppo import (
     evaluate_model,
     SaveOperationsCallback
 )
+from simaple.agent.bias import generate_logit_bias
+
+# 전문가 관련 컴포넌트 임포트
+from simaple.agent.buffer import TrajectoryMemory, load_actions_from_file, compile_expert_trajectory
 
 # Stable Baselines 3 임포트
 from stable_baselines3 import DQN
@@ -72,11 +78,17 @@ class MaskableDQNPolicy(DQNPolicy):
     액션 마스킹이 적용된 DQN 정책
     """
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self,
+                 *args, 
+                 logit_bias: list[float] | None = None,
+                 running_penalty: float = 2.1,
+                 **kwargs):
         super().__init__(*args, **kwargs)
         self.features_extractor = self.make_features_extractor()
+        self.logit_bias = logit_bias
+        self.running_penalty = running_penalty
 
-    def _predict(self, observation, deterministic=False):
+    def _predict(self, observation: dict[str, np.ndarray], deterministic=False):
         """
         관찰 상태에서 액션 예측 (마스킹 적용)
         """
@@ -86,14 +98,21 @@ class MaskableDQNPolicy(DQNPolicy):
             q_values = self.q_net(obs_tensor)
             
             # 액션 마스크 적용
-            if isinstance(obs_tensor, dict) and 'action_mask' in obs_tensor:
+            if 'action_mask' in obs_tensor:
                 action_mask = obs_tensor['action_mask']
                 # 마스크가 0인 위치에 큰 음수값 할당
                 q_values = q_values + (action_mask - 1) * 1e6
 
+            if self.logit_bias is not None:
+                q_values = q_values + torch.tensor(self.logit_bias, dtype=torch.float32)
+
+            if 'running_mask' in obs_tensor:
+                running_mask = observation["running_mask"]
+                q_values = q_values - running_mask * self.running_penalty
+
             # 최대 Q-값을 갖는 액션 선택
             actions = q_values.argmax(dim=1).cpu().numpy()
-            return actions
+            return actions[0]
 
 
 class MaskedDQN(DQN):
@@ -135,7 +154,7 @@ class MaskedDQN(DQN):
         # 부모 클래스 초기화
         super().__init__(
             MaskableDQNPolicy,
-            env,
+            env=env,
             learning_rate=learning_rate,
             buffer_size=buffer_size,
             learning_starts=learning_starts,
@@ -276,6 +295,7 @@ class MaskedDQN(DQN):
 
 def run_dqn_training(
     plan_file: str,
+    expert_guide_file: Optional[str] = None,  # 전문가 가이드 파일 경로 추가
     num_timesteps=100000,
     learning_rate=0.001,
     buffer_size=10000,
@@ -290,7 +310,8 @@ def run_dqn_training(
     exploration_final_eps=0.05,
     target_time=50_000,
     max_steps=200,
-    log_dir="./logs/dqn"
+    log_dir="./logs/dqn",
+    expert_demonstrations_ratio=0.1  # 전문가 데모로 버퍼를 초기화할 비율
 ):
     """DQN 알고리즘으로 에이전트 학습"""
     # 로그 디렉토리 생성
@@ -317,7 +338,15 @@ def run_dqn_training(
     policy_kwargs = dict(
         features_extractor_class=CustomFeatureExtractor,
         features_extractor_kwargs=dict(features_dim=128),
-        net_arch=[256, 256]
+        net_arch=[256, 256],
+        logit_bias=generate_logit_bias(
+            all_skill_names=env.player.get_all_actions(),
+            buff_skill_names=env.player.get_buff_skills(),
+            damage_skill_names=env.player.get_damage_skills(),
+            buff_skill_bonus=1.0,
+            damage_skill_bonus=0.5,
+        ),
+        running_penalty=2.1
     )
 
     # 마스킹 지원 DQN 모델 생성
@@ -339,6 +368,42 @@ def run_dqn_training(
         policy_kwargs=policy_kwargs
     )
     
+    # 전문가 가이드가 제공된 경우, 리플레이 버퍼 초기화
+    if expert_guide_file and os.path.exists(expert_guide_file):
+        logger.info(f"전문가 가이드 파일 로드: {expert_guide_file}")
+        
+        # TrajectoryMemory 초기화 및 전문가 데이터 로드
+        memory = TrajectoryMemory(expert_guide_file, env)
+        memory_size = len(memory.buffer)
+        logger.info(f"전문가 트레젝토리 로드 완료: {memory_size} 개 샘플")
+        
+        # 전문가 데이터를 리플레이 버퍼에 추가
+        expert_buffer_size = int(buffer_size * expert_demonstrations_ratio)
+        expert_buffer_size = min(expert_buffer_size, memory_size)
+        
+        # 리플레이 버퍼 속성 확인
+        if expert_buffer_size > 0 and hasattr(model, 'replay_buffer') and model.replay_buffer is not None:
+            logger.info(f"리플레이 버퍼를 {expert_buffer_size}개의 전문가 샘플로 초기화 시도")
+            
+            # 리플레이 버퍼 초기화 시도
+            buffer_initialized = 0
+            for i in range(min(expert_buffer_size, len(memory.buffer))):
+                trajectory = memory.buffer[i]
+
+                # 데이터 추출 및 numpy 배열로 변환
+                state: dict[str, np.ndarray] = trajectory["state"]
+                action = np.array(trajectory["action"], dtype=np.int64)
+                reward = np.array(trajectory["reward"], dtype=np.float32)
+                next_state: dict[str, np.ndarray] = trajectory["next_state"]
+                done = np.array(trajectory["done"], dtype=np.float32)
+
+                # 여러 리플레이 버퍼 API를 지원하기 위한 예외 처리
+                # 참고: 타입 체커에서는 에러가 발생할 수 있으나 실행 시에는 동작할 수 있음
+                model.replay_buffer.add(state, next_state, action, reward, done, [{}])
+                buffer_initialized += 1
+
+            logger.info(f"리플레이 버퍼 초기화 완료: {buffer_initialized}개 샘플 추가됨")
+
     # 학습 실행
     logger.info(f"DQN 학습 시작: {num_timesteps} 타임스텝, 목표 시간: {target_time}초")
     model.learn(total_timesteps=num_timesteps, callback=callbacks)

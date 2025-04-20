@@ -3,7 +3,8 @@ import os
 from typing import Any  
 
 import torch
-
+import yaml
+from simaple.core.jobtype import JobType
 import fire
 from simaple.simulate.component.base import Stat
 import numpy as np
@@ -72,9 +73,24 @@ class BaselineStateEncoder(StateEncoder):
         return mask
 
 
+
+class SkillPriority(TypedDict):
+    """스킬 우선순위"""
+    buff_skill_priority: list[str]
+    damage_skill_priority: list[str]
+    name: str
+
+
+def get_skill_priority(job_name: str) -> SkillPriority:
+    with open(os.path.join(os.path.dirname(__file__), "hint", f"{job_name}.yaml"), "r") as f:
+        return yaml.safe_load(f)
+
+
+
 class SimaplePlayer:
-    def __init__(self, engine: OperationEngine):
+    def __init__(self, engine: OperationEngine, job: JobType):
         self.engine = engine
+        self.skill_priority = get_skill_priority(job.value)
 
     def get_all_actions(self) -> list[str]:
         """사용 가능한 모든 액션 목록 반환"""
@@ -92,7 +108,15 @@ class SimaplePlayer:
             if validity.name in accessible_names:
                 all_actions.append(validity.name)
 
-        return all_actions
+        return sorted(all_actions)
+
+    def get_buff_skills(self) -> list[str]:
+        """버프 스킬 목록 반환"""
+        return self.skill_priority["buff_skill_priority"]
+
+    def get_damage_skills(self) -> list[str]:
+        """데미지 스킬 목록 반환"""
+        return self.skill_priority["damage_skill_priority"]
 
     def get_valid_actions(self) -> list[str]:
         """현재 상태에서 유효한 액션 목록 반환"""
