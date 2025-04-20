@@ -29,6 +29,8 @@ from simaple.agent.common_ppo import (
     SimapleEnv,
 )
 
+from simaple.agent.buffer import TrajectoryMemory, Trajectory
+
 # Stable Baselines 3 임포트
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
@@ -37,47 +39,13 @@ from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.vec_env import DummyVecEnv
 
 
-class ExpertDataset:
-    """전문가 시연 데이터셋 클래스"""
-    
-    def __init__(self, expert_guide_file: str):
-        """
-        전문가 가이드 파일에서 액션 시퀀스를 로드합니다.
-        
-        Args:
-            expert_guide_file: 전문가 가이드 파일 경로
-        """
-        self.expert_guide_file = expert_guide_file
-        self.metadata_dict = {}
-        self.expert_actions = []
-        self.load_expert_actions()
-    
-    def load_expert_actions(self):
-        """전문가 가이드 파일에서 액션 시퀀스 로드"""
-        with open(self.expert_guide_file, "r") as f:
-            plan_metadata_dict, operations = parse_simaple_runtime(f.read())
-        
-        for operation in operations:
-            if operation.command_type == "operation":
-                self.expert_actions.append(operation.name)
-
-        logger.info(f"전문가 가이드에서 {len(self.expert_actions)}개의 액션을 로드했습니다.")
-
-    def get_expert_actions(self) -> List[str]:
-        """추출된 전문가 액션 시퀀스 반환"""
-        return self.expert_actions
-    
-    def get_metadata(self) -> dict:
-        """추출된 메타데이터 반환"""
-        return self.metadata_dict
-
-
 class BehavioralCloningTrainer:
     """행동 클로닝을 통한 사전 학습 클래스"""
     
     def __init__(
         self, 
         env: SimapleEnv,
+        memory: TrajectoryMemory,
         expert_actions: List[str],
         policy_kwargs: Optional[dict] = None,
         learning_rate: float = 0.0003,
@@ -94,6 +62,7 @@ class BehavioralCloningTrainer:
         self.env = env
         self.expert_actions = expert_actions
         self.learning_rate = learning_rate
+        self.memory = memory
         
         # 정책 초기화
         self.policy_kwargs = policy_kwargs or {
@@ -114,36 +83,13 @@ class BehavioralCloningTrainer:
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = torch.optim.Adam(self.policy.parameters(), lr=self.learning_rate)
     
-    def collect_expert_demonstrations(self) -> Tuple[List[Dict], List[int]]:
-        """전문가 데모 데이터셋 생성"""
-        expert_states = []
-        expert_action_indices = []
-
-        obs, _ = self.env.reset()
-
-        for action_name in self.expert_actions:
-            if action_name in self.env.all_actions:
-                action_idx = self.env.all_actions.index(action_name)
-                expert_states.append(obs)
-                expert_action_indices.append(action_idx)
-                # 환경에서 액션 수행
-                obs, _, done, _, info = self.env.step(action_idx)
-                if done:
-                    break
-            else:
-                logger.warning(f"알 수 없는 액션: {action_name}. 건너뜁니다.")
-        
-        logger.info(f"전문가 데모의 리워드: {info['total_reward']}")
-        logger.info(f"{len(expert_states)}개의 전문가 데모 수집 완료")
-        return expert_states, expert_action_indices
-    
     def train(self, epochs=10, batch_size=32) -> MaskableActorCriticPolicy:
         """행동 클로닝 학습 수행"""
-        expert_states, expert_action_indices = self.collect_expert_demonstrations()
+        obs_batch, actions_batch, _, _, _ = self.memory.sample(batch_size)
 
         # duplicate N=20 times
-        expert_states = expert_states * 20
-        expert_action_indices = expert_action_indices * 20
+        expert_states = obs_batch * 20
+        expert_action_indices = actions_batch * 20
 
         if not expert_states:
             logger.warning("전문가 데모가 없습니다. 학습을 건너뜁니다.")
@@ -307,10 +253,7 @@ def run_bc_ppo_training(
     expert_actions = []
     if expert_guide_file and os.path.exists(expert_guide_file):
         logger.info(f"전문가 가이드 파일 로드: {expert_guide_file}")
-        expert_dataset = ExpertDataset(expert_guide_file)
-        expert_actions = expert_dataset.get_expert_actions()
-        metadata = expert_dataset.get_metadata()
-        
+        memory = TrajectoryMemory(expert_guide_file, env)
         # 전문가 가이드 정보 출력
         logger.info(f"전문가 액션 수: {len(expert_actions)}")
         if len(expert_actions) > 0:
@@ -323,11 +266,13 @@ def run_bc_ppo_training(
         features_extractor_kwargs=dict(features_dim=128)
     )
     
+
     # 행동 클로닝으로 사전 학습
     if expert_actions:
         logger.info("행동 클로닝(BC) 사전 학습 시작")
         bc_trainer = BehavioralCloningTrainer(
             env=env,
+            memory=memory,
             expert_actions=expert_actions,
             policy_kwargs=policy_kwargs,
             learning_rate=bc_learning_rate
