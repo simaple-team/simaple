@@ -42,8 +42,8 @@ class Infinity(Component):
 
     def get_default_state(self) -> InfinityState:
         return {
-            "cooldown": Cooldown(time_left=0),
-            "lasting": Lasting(time_left=0),
+            "cooldown": Cooldown(time_left=0, cooldown_duration=self.cooldown_duration),
+            "lasting": Lasting(time_left=0, assigned_duration=self.lasting_duration),
             "dynamics": Dynamics.model_validate({"stat": {}}),
         }
 

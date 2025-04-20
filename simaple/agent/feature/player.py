@@ -25,66 +25,20 @@ class StateInfo(TypedDict):
     info: dict[str, ComponentInformation]
     buff: Stat | None
     running: dict[str, Running]
+    validity: dict[str, Validity]
     keydown: dict[str, KeydownView]
     clock: float
 
 
-class StateEncoder(ABC):
-    @abstractmethod
-    def encode_state(self, state_info: StateInfo) -> torch.Tensor:
-        ...
-
-    @abstractmethod
-    def encode_action_mask(self, valid_actions: list[str]) -> torch.Tensor:
-        ...
-
-
-class BaselineStateEncoder(StateEncoder):
-    def __init__(self, actions: list[str], initial_state_for_build: StateInfo):
-        self.actions = actions
-        self.initial_state_for_build = initial_state_for_build
-        
-        self._action_map: dict[str, int] = {action: idx for idx, action in enumerate(actions)}
-
-        self._running_names: list[str] = sorted(
-            [name for name in initial_state_for_build["running"].keys()]
-        )
-        self._keydown_names: list[str] = sorted(
-            [name for name in initial_state_for_build["keydown"].keys()]
-        )
-        self._info_names: list[str] = sorted([name for name in initial_state_for_build["info"].keys()])
-
-    def encode_state(self, state_info: StateInfo) -> torch.Tensor:
-        return torch.cat([
-            encode_buff_as_tensor(state_info["buff"]),
-            encode_running_as_tensor(state_info["running"]),
-            encode_keydown_as_tensor(state_info["keydown"]),
-            encode_info_as_tensor(state_info["info"]),
-        ])
-
-    def encode_action_mask(self, valid_actions: list[str]) -> torch.Tensor:
-        mask = torch.zeros(len(self.actions))
-
-        for action in valid_actions:
-            action_idx = self._action_map.get(action)
-            if action_idx is not None:
-                mask[action_idx] = 1
-
-        return mask
-
-
-
 class SkillPriority(TypedDict):
-    """스킬 우선순위"""
     buff_skill_priority: list[str]
     damage_skill_priority: list[str]
     name: str
 
 
 def get_skill_priority(job_name: str) -> SkillPriority:
-    with open(os.path.join(os.path.dirname(__file__), "hint", f"{job_name}.yaml"), "r") as f:
+    with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "hint", f"{job_name}.yaml"), "r") as f:
         return yaml.safe_load(f)
-
 
 
 class SimaplePlayer:
@@ -150,6 +104,10 @@ class SimaplePlayer:
             kd.name: kd
             for kd in viewer("keydown")
         }
+        validity_dict: dict[str, Validity] = {
+            v.name: v
+            for v in viewer("validity")
+        }
         clock: float = viewer("clock")
         info_dict: dict[str, ComponentInformation] = {
             info.name: info
@@ -160,6 +118,7 @@ class SimaplePlayer:
             info=info_dict, 
             buff=buff,
             running=running_dict,
+            validity=validity_dict,
             keydown=keydown_dict,
             clock=clock,
         )

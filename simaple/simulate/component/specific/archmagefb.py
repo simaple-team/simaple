@@ -562,8 +562,8 @@ class InfernalVenom(
 
     def get_default_state(self) -> InfernalVenomState:
         return {
-            "cooldown": Cooldown(time_left=0),
-            "lasting": Lasting(time_left=0),
+            "cooldown": Cooldown(time_left=0, cooldown_duration=self.cooldown_duration),
+            "lasting": Lasting(time_left=0, assigned_duration=self.lasting_duration),
             "drain_stack": FerventDrainStack(count=5, max_count=5),
             "dynamics": Dynamics.model_validate({"stat": {}}),
         }

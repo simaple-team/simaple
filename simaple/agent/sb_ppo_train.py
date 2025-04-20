@@ -4,13 +4,11 @@ import fire
 
 from simaple.agent.common_ppo import (
     MaskableActorCriticPolicy,
-    CustomMaskableFeatureExtractor,
     SaveOperationsCallback,
     setup_simulation_env,
     evaluate_model
 )
-
-# Stable Baselines 3 임포트
+from simaple.agent.model.skill_network import SkillFeaturesExtractor
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.monitor import Monitor
@@ -37,7 +35,7 @@ def run_training_sb3(
     )
     
     # 환경을 Monitor로 감싸기
-    env = Monitor(env, log_dir)
+    monitor_env = Monitor(env, log_dir)
     eval_env = Monitor(eval_env, os.path.join(log_dir, "eval"))
     
     # 콜백 설정
@@ -49,13 +47,18 @@ def run_training_sb3(
     # 모델 생성
     policy_kwargs = dict(
         net_arch=[dict(pi=[128, 128], vf=[128, 128])],
-        features_extractor_class=CustomMaskableFeatureExtractor,
-        features_extractor_kwargs=dict(features_dim=128)
+        features_extractor_class=SkillFeaturesExtractor,
+        features_extractor_kwargs=dict(
+            skill_embedding_dim=32,
+            validity_embedding_dim=8,
+            features_dim=16
+        ),
+        running_penalty=2.1
     )
     
     model = PPO(
         MaskableActorCriticPolicy,
-        env,
+        monitor_env,
         learning_rate=learning_rate,
         gamma=gamma,
         verbose=1,
