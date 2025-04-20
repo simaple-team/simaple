@@ -186,7 +186,6 @@ class SimapleEnv(gym.Env):
         super(SimapleEnv, self).__init__()
         
         self.player = player
-        self.engine = player.engine
         self.damage_calculator = damage_calculator
         self.target_time = target_time
         self.max_steps = max_steps
@@ -218,7 +217,7 @@ class SimapleEnv(gym.Env):
     
     def reset(self, seed=None):
         """환경 초기화"""
-        self.engine.rollback(0)
+        self.player.engine.rollback(0)
         self.current_step = 0
         self.current_time = 0
         self.total_reward = 0
@@ -305,12 +304,12 @@ class SimapleEnv(gym.Env):
         
         try:
             # 액션 실행
-            operation_log = self.engine.exec(operation)
+            operation_log = self.player.engine.exec(operation)
             
             # 데미지 계산
             total_damage = 0
             for playlog in operation_log.playlogs:
-                entry = self.engine.get_simulation_entry(playlog)
+                entry = self.player.engine.get_simulation_entry(playlog)
                 for damage_log in entry.damage_logs:
                     total_damage += self.damage_calculator.get_damage(damage_log)
             
@@ -353,7 +352,7 @@ class SaveOperationsCallback(BaseCallback):
                 self.best_reward = episode_reward
                 # 오퍼레이션 저장
                 operations = []
-                engine = self.eval_env.env.unwrapped.engine
+                engine = self.eval_env.env.unwrapped.player.engine
                 if hasattr(engine, 'operation_logs'):
                     operations = [op for op in engine.operation_logs()]
                 
@@ -373,7 +372,7 @@ class SaveOperationsCallback(BaseCallback):
                     if operations:
                         for op in operations[1:]:
                             if hasattr(op, 'command'):
-                                f.write(f"{op.command.command} {op.command.name}\n")
+                                f.write(f"{op.command.command} \"{op.command.name}\"\n")
 
                 logger.info(f"새로운 최고 보상: {self.best_reward:.2f}. 오퍼레이션 저장됨.")
             else:
