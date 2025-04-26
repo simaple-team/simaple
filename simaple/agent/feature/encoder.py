@@ -78,6 +78,7 @@ class Observation(TypedDict):
     running_mask: np.ndarray
     skill_ids: np.ndarray
     clock: np.ndarray
+    cooldown_zero: np.ndarray
 
 
 class ObservationAsTensor(TypedDict):
@@ -89,7 +90,9 @@ class ObservationAsTensor(TypedDict):
     running_mask: torch.Tensor
     skill_ids: torch.Tensor
     clock: torch.Tensor
-    
+    common_feature: torch.Tensor
+    cooldown_zero: torch.Tensor
+
 
 def encode_state_info(skill_names: list[str], state_info: StateInfo) -> Observation:
     running_tensors = []
@@ -98,6 +101,7 @@ def encode_state_info(skill_names: list[str], state_info: StateInfo) -> Observat
     action_mask = []
     running_mask = []
     skill_ids = []
+    cooldown_zero = []
 
     buff = state_info["buff"]
     if buff is None:
@@ -106,6 +110,8 @@ def encode_state_info(skill_names: list[str], state_info: StateInfo) -> Observat
     for idx, name in enumerate(skill_names):
         running = state_info["running"].get(name)
         validity = state_info["validity"].get(name)
+        info = state_info["info"].get(name)
+        assert info is not None
 
         action_masked = (
             float(validity is not None and validity.valid)
@@ -116,6 +122,7 @@ def encode_state_info(skill_names: list[str], state_info: StateInfo) -> Observat
 
         running_tensors.append(encode_running(running))
         validity_tensors.append(encode_validity_continuous(validity))
+        cooldown_zero.append(info.props["cooldown_duration"] == 0)
         validity_discrete_tensors.append(encode_validity_discrete(validity))
         action_mask.append(action_masked)
         running_mask.append(running_masked)
@@ -126,6 +133,7 @@ def encode_state_info(skill_names: list[str], state_info: StateInfo) -> Observat
         "running": np.array(running_tensors, dtype=np.float32),
         "validity": np.array(validity_tensors, dtype=np.float32),
         "validity_discrete": np.concatenate(validity_discrete_tensors, dtype=np.int64),
+        "cooldown_zero": np.array(cooldown_zero, dtype=np.int32),
         "action_mask": np.array(action_mask, dtype=np.int32),
         "running_mask": np.array(running_mask, dtype=np.int32),
         "skill_ids": np.array(skill_ids, dtype=np.int64),

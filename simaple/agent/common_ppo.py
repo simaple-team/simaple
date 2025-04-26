@@ -28,6 +28,7 @@ from stable_baselines3.common.policies import ActorCriticPolicy
 from stable_baselines3.common import utils
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
 from simaple.agent.model.skill_network import SkillFeaturesExtractor
+from simaple.agent.model.actor_critic import SkillValueNetwork
 
 class MaskableActorCriticPolicy(ActorCriticPolicy):
     """
@@ -40,6 +41,7 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
         action_space: gym.spaces.Space,
         lr_schedule: Callable,
         running_penalty: float = 7.0,
+        embed_dim: int = 32,
         *args,
         **kwargs
     ):
@@ -48,6 +50,8 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
             kwargs["features_extractor_class"] = SkillFeaturesExtractor
         
         self.running_penalty = running_penalty
+        self.skill_count = action_space.n
+        self.embed_dim = embed_dim
 
         super().__init__(
             observation_space,
@@ -56,7 +60,20 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
             *args,
             **kwargs
         )
-    
+
+    def _build_mlp_extractor(self) -> None:
+        """
+        MLP 추출기 빌드
+        """
+        self.mlp_extractor = SkillValueNetwork(
+            self.features_dim,
+            skill_count=self.skill_count,
+            embed_dim=self.embed_dim,
+            num_transformer_layers=3,
+            num_heads=8,
+            dropout=0.1,
+        )
+
     def _predict(self, observation: Dict[str, torch.Tensor], deterministic: bool = False) -> torch.Tensor:
         """
         액션 마스크를 적용하여 액션 예측
@@ -69,7 +86,7 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
             pi_features, vf_features = features
             latent_pi = self.mlp_extractor.forward_actor(pi_features)
             latent_vf = self.mlp_extractor.forward_critic(vf_features)
-        
+
         # 액션 로짓 계산
         action_logits = self.action_net(latent_pi)
         

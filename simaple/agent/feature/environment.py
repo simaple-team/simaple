@@ -51,6 +51,7 @@ class SimapleEnv(gym.Env):
         self.total_reward = 0
 
         self.all_actions = self.player.get_all_actions()
+        logger.info(self.all_actions)
 
         # 액션 및 관찰 공간 정의
         n_actions = len(self.all_actions)
@@ -72,6 +73,7 @@ class SimapleEnv(gym.Env):
             "validity_discrete": int_as_space(sampled_state["validity_discrete"]),
             "action_mask": int_as_space(sampled_state["action_mask"]),
             "running_mask": int_as_space(sampled_state["running_mask"]),
+            "cooldown_zero": int_as_space(sampled_state["cooldown_zero"]),
             "skill_ids": spaces.Box(low=0, high=n_actions, shape=sampled_state["skill_ids"].shape, dtype=np.int64),
             "clock": float_as_space(sampled_state["clock"]),
         })

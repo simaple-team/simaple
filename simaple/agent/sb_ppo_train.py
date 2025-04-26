@@ -17,9 +17,9 @@ from stable_baselines3.common.monitor import Monitor
 def run_training_sb3(
     plan_file: str,
     num_timesteps=100000,
-    learning_rate=0.0003,
+    learning_rate=0.0001,
     gamma=0.99,
-    target_time=50_000,
+    target_time=25_000,
     max_steps=200,
     log_dir="./logs"
 ):
@@ -49,18 +49,21 @@ def run_training_sb3(
         net_arch=[dict(pi=[128, 128], vf=[128, 128])],
         features_extractor_class=SkillFeaturesExtractor,
         features_extractor_kwargs=dict(
-            skill_embedding_dim=32,
+            skill_embedding_dim=64,
             validity_embedding_dim=8,
-            features_dim=16
+            features_dim=32
         ),
         running_penalty=2.1
     )
-    
+
     model = PPO(
         MaskableActorCriticPolicy,
         monitor_env,
         learning_rate=learning_rate,
         gamma=gamma,
+        stats_window_size=1000,
+        batch_size=256,
+        n_epochs=40,
         verbose=1,
         tensorboard_log=log_dir,
         policy_kwargs=policy_kwargs
