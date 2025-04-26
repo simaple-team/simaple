@@ -17,7 +17,7 @@ from stable_baselines3.common.monitor import Monitor
 def run_training_sb3(
     plan_file: str,
     num_timesteps=100000,
-    learning_rate=0.0001,
+    learning_rate=0.001,
     gamma=0.99,
     target_time=25_000,
     max_steps=200,

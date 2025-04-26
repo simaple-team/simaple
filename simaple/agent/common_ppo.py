@@ -69,9 +69,9 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
             self.features_dim,
             skill_count=self.skill_count,
             embed_dim=self.embed_dim,
-            num_transformer_layers=3,
-            num_heads=8,
-            dropout=0.1,
+            num_transformer_layers=1,
+            num_heads=4,
+            dropout=0.0,
         )
 
     def _predict(self, observation: Dict[str, torch.Tensor], deterministic: bool = False) -> torch.Tensor:

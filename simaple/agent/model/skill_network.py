@@ -22,6 +22,40 @@ from stable_baselines3.common import utils
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
 
 
+
+class TransformerBlock(nn.Module):
+    """
+    트랜스포머 블록 구현: Multi-head self-attention + Feed Forward Network
+    """
+    def __init__(
+        self, 
+        embed_dim: int, 
+        num_heads: int = 4, 
+        ff_dim: int = 64, 
+        dropout: float = 0.1
+    ):
+        super().__init__()
+        self.attention = nn.MultiheadAttention(embed_dim, num_heads, dropout=dropout, batch_first=True)
+        self.norm1 = nn.LayerNorm(embed_dim)
+        self.norm2 = nn.LayerNorm(embed_dim)
+        self.ff = nn.Sequential(
+            nn.Linear(embed_dim, ff_dim),
+            nn.ReLU(),
+            nn.Linear(ff_dim, embed_dim),
+            nn.Dropout(dropout)
+        )
+        self.dropout = nn.Dropout(dropout)
+        
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # Multi-head self-attention with residual connection and layer normalization
+        attended, _ = self.attention(x, x, x)
+        x = self.norm1(x + self.dropout(attended))
+        
+        # Feed-forward network with residual connection and layer normalization
+        x = self.norm2(x + self.dropout(self.ff(x)))
+        return x
+
+
 class SkillFeaturesExtractor(BaseFeaturesExtractor):
     """
     액션 마스킹을 지원하는 특성 추출기
@@ -76,6 +110,8 @@ class SkillFeaturesExtractor(BaseFeaturesExtractor):
             nn.Linear(64, features_dim),
             nn.ReLU(),
         )
+
+
 
     def forward(self, observation: ObservationAsTensor) -> torch.Tensor:
         batch_size = observation['skill_ids'].size(0)

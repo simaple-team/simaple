@@ -113,7 +113,6 @@ class SkillValueNetwork(nn.Module):
         """
         # Transformer를 통해 피처 처리
         transformed_features = self._process_features(features)
-        
         # Policy(Actor) 네트워크 처리
         latent_policy = self.forward_actor(transformed_features)
         
@@ -132,6 +131,8 @@ class SkillValueNetwork(nn.Module):
         Returns:
             [batch_size, skill_count, latent_dim_pi] 형태의 정책 벡터
         """
+        features = features[:, :-2, :]
+
         actor_latent_vector = self.policy_net(features)
         return th.squeeze(actor_latent_vector, dim=-1)
 
@@ -145,6 +146,7 @@ class SkillValueNetwork(nn.Module):
         Returns:
             [batch_size, latent_dim_vf] 형태의 가치 벡터
         """
+        features = features[:, :-2, :]
         critic_latent_vector = self.value_net(features)
         return th.squeeze(critic_latent_vector, dim=-1)
 
