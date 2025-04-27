@@ -110,9 +110,7 @@ class SimapleEnv(gym.Env):
         
         # 유효하지 않은 액션 처리
         if action_name not in valid_actions:
-            logger.warning(f"선택된 액션이 유효하지 않음: {action_name}")
-            # 페널티 부여
-            reward = -5.0
+            reward = -100.0
             next_state_info = self.player.get_state_info()
         else:
             # 액션 실행
@@ -187,3 +185,19 @@ class SimapleEnv(gym.Env):
         if mode == 'human':
             logger.info(f"Step: {self.current_step}, Time: {self.current_time:.1f}, Reward: {self.total_reward:.2f}")
         return None
+
+    def export_operations(self) -> List[OperationLog]:
+        """실행된 모든 오퍼레이션 내역 반환"""
+        return list(self.player.engine.operation_logs())
+
+    def export_as_file(self, file_path: str, plan_metadata_dict: dict):
+        operations = self.export_operations()
+        with open(file_path, "w") as f:
+            f.write("---\n")
+            yaml.dump(plan_metadata_dict, f)
+            f.write("---\n")
+            if operations:
+                for op in operations[1:]:
+                    op_is_command = cast(Operation, op.command)
+                    f.write(f"{op_is_command.command} \"{op_is_command.name}\"\n")
+

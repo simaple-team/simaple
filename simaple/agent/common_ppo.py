@@ -55,6 +55,17 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
             **kwargs
         )
 
+    def apply_mask(self, action_logits: torch.Tensor, observation: Dict[str, torch.Tensor]) -> torch.Tensor:
+        if 'action_mask' in observation:
+            action_mask = observation['action_mask']
+            action_logits = action_logits + (action_mask - 1) * 1e9
+
+        if "running_mask" in observation:
+            running_mask = observation["running_mask"]
+            action_logits = action_logits - running_mask * self.running_penalty
+
+        return action_logits
+
     def _predict(self, observation: Dict[str, torch.Tensor], deterministic: bool = False) -> torch.Tensor:
         """
         액션 마스크를 적용하여 액션 예측
@@ -68,23 +79,10 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
             latent_pi = self.mlp_extractor.forward_actor(pi_features)
             latent_vf = self.mlp_extractor.forward_critic(vf_features)
 
-        # 액션 로짓 계산
         action_logits = self.action_net(latent_pi)
-        
-        # 액션 마스크 적용
-        if 'action_mask' in observation:
-            action_mask = observation['action_mask']
-            # 마스크가 0인 위치에 큰 음수값을 할당하여 선택 확률을 0에 가깝게 만듦
-            action_logits = action_logits + (action_mask - 1) * 1e9
-
-        if "running_mask" in observation:
-            running_mask = observation["running_mask"]
-            action_logits = action_logits - running_mask * self.running_penalty
-
-        # 확률 분포 생성
+        action_logits = self.apply_mask(action_logits, observation)
         dist = self.action_dist.proba_distribution(action_logits)
         
-        # 결정적 또는 확률적 액션 선택
         if deterministic:
             action = dist.mode()
         else:
@@ -106,20 +104,9 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
 
         values = self.value_net(latent_vf)
         action_logits = self.action_net(latent_pi)
-        
-        # 액션 마스크 적용
-        if 'action_mask' in obs:
-            action_mask = obs['action_mask']
-            action_logits = action_logits + (action_mask - 1) * 1e9
-
-        if "running_mask" in obs:
-            running_mask = obs["running_mask"]
-            action_logits = action_logits - running_mask * self.running_penalty
-
-        # 확률 분포 생성
+        action_logits = self.apply_mask(action_logits, obs)
         dist = self.action_dist.proba_distribution(action_logits)
-        
-        # 액션 선택
+
         if deterministic:
             actions = dist.mode()
         else:
@@ -127,7 +114,7 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
         
         # 로그 확률 계산
         log_probs = dist.log_prob(actions)
-        
+
         return actions, values, log_probs
     
     def evaluate_actions(self, obs: Dict[str, torch.Tensor], actions: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
@@ -143,20 +130,8 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
             latent_vf = self.mlp_extractor.forward_critic(vf_features)
         
         action_logits = self.action_net(latent_pi)
-        
-        # 액션 마스크 적용
-        if 'action_mask' in obs:
-            action_mask = obs['action_mask']
-            action_logits = action_logits + (action_mask - 1) * 1e9
-
-        if "running_mask" in obs:
-            running_mask = obs["running_mask"]
-            action_logits = action_logits - running_mask * self.running_penalty
-
-        # 확률 분포 생성
+        action_logits = self.apply_mask(action_logits, obs)
         dist = self.action_dist.proba_distribution(action_logits)
-        
-        # 로그 확률 및 엔트로피 계산
         log_probs = dist.log_prob(actions)
         entropy = dist.entropy()
         
@@ -175,14 +150,17 @@ class SaveOperationsCallback(BaseCallback):
         self.eval_env = eval_env
         self.save_path = save_path
         self.best_reward = -float("inf")
-    
+
+    def get_internal_env(self) -> SimapleEnv:
+        return self.eval_env.env
+
     def _on_step(self) -> bool:
         """정기적으로 평가 및 저장"""
         if self.n_calls % 1000 == 0:  # 1000 스텝마다 평가
             episode_reward = 0.0
             obs, _ = self.eval_env.reset()
             done = False
-            
+
             while not done:
                 action, _ = self.model.predict(obs, deterministic=True)
                 obs, reward, done, _, info = self.eval_env.step(action)
@@ -191,29 +169,7 @@ class SaveOperationsCallback(BaseCallback):
             if episode_reward > self.best_reward:
                 self.best_reward = episode_reward
                 # 오퍼레이션 저장
-                operations = []
-                engine = self.eval_env.env.unwrapped.player.engine
-                if hasattr(engine, 'operation_logs'):
-                    operations = [op for op in engine.operation_logs()]
-                
-                with open(os.path.join(self.save_path, "best_operations.txt"), "w") as f:
-                    for op in operations:
-                        if hasattr(op, 'playlogs') and op.playlogs:
-                            if hasattr(op, 'command'):
-                                try:
-                                    f.write(f"{op.playlogs[0].clock} {op.command}\n")
-                                except:
-                                    f.write(f"{op.playlogs[0].clock}\n")
-
-                with open(os.path.join(self.save_path, "best_operations.simaple"), "w") as f:
-                    f.write("---\n")
-                    yaml.dump(self.plan_metadata_dict, f)
-                    f.write("---\n")
-                    if operations:
-                        for op in operations[1:]:
-                            if hasattr(op, 'command'):
-                                f.write(f"{op.command.command} \"{op.command.name}\"\n")
-
+                self.get_internal_env().export_as_file(os.path.join(self.save_path, "best_operations.txt"), self.plan_metadata_dict)
                 logger.info(f"새로운 최고 보상: {self.best_reward:.2f}. 오퍼레이션 저장됨.")
             else:
                 logger.info(f"현재 보상: {episode_reward:.2f}, 최고 보상: {self.best_reward:.2f}")
@@ -222,7 +178,8 @@ class SaveOperationsCallback(BaseCallback):
 
 def setup_simulation_env(
     plan_file: str,
-    target_time: int = 50_000,
+    target_time: int = 150_000,
+    eval_target_time: int = 25_000,
     max_steps: int = 1000
 ) -> Tuple[SimapleEnv, Dict, SimapleEnv]:
     """시뮬레이션 환경을 설정하고 학습 및 평가용 환경을 반환"""
@@ -239,20 +196,16 @@ def setup_simulation_env(
         plan_metadata.get_environment_provider_config()  # type: ignore
     )
     
-    engine = get_engine(environment)
-    damage_calculator = get_damage_calculator(environment)
-    player = SimaplePlayer(engine, environment.jobtype)
-
-    # 학습용 환경 생성
-    train_env = SimapleEnv(player, damage_calculator, target_time, max_steps)
+    player = SimaplePlayer(get_engine(environment), environment.jobtype)
+    train_env = SimapleEnv(player, get_damage_calculator(environment), target_time, max_steps)
     
     # 환경 검증
     check_env(train_env)
     
     # 평가용 환경 생성
     eval_player = SimaplePlayer(get_engine(environment), environment.jobtype)
-    eval_env = SimapleEnv(eval_player, damage_calculator, target_time, max_steps)
-    
+    eval_env = SimapleEnv(eval_player, get_damage_calculator(environment), eval_target_time, max_steps)
+
     return train_env, plan_metadata_dict, eval_env
 
 

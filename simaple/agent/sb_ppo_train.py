@@ -109,7 +109,7 @@ def run_training_sb3(
     lr_schedule_type="linear",
     warmup_fraction=0.05,
     gamma=0.99,
-    target_time=50_000,
+    target_time=25_000,
     max_steps=200,
     log_dir="./logs"
 ):
@@ -121,19 +121,19 @@ def run_training_sb3(
     
     # 시뮬레이션 환경 설정
     env, plan_metadata_dict, eval_env = setup_simulation_env(
-        plan_file, target_time, max_steps
+        plan_file, target_time, 25_000, max_steps
     )
     
     # 환경을 Monitor로 감싸기
     monitor_env = Monitor(env, log_dir)
-    eval_env = Monitor(eval_env, os.path.join(log_dir, "eval"))
+    monitor_eval_env = Monitor(eval_env, os.path.join(log_dir, "eval"))
 
     # 평가 콜백 설정 (학습 중 주기적으로 평가 및 로깅)
     eval_callback = EvalCallback(
-        eval_env,
+        monitor_eval_env,
         best_model_save_path=os.path.join(models_dir, "best_model"),
         log_path=log_dir,
-        eval_freq=5000,
+        eval_freq=1000,
         deterministic=True,
         render=False,
         verbose=1,
@@ -142,7 +142,7 @@ def run_training_sb3(
     # 콜백 설정
     callbacks = [
         CheckpointCallback(save_freq=10000, save_path=models_dir, name_prefix="ppo_model"),
-        SaveOperationsCallback(eval_env, plan_metadata_dict, log_dir),
+        SaveOperationsCallback(monitor_eval_env, plan_metadata_dict, log_dir),
         eval_callback
     ]
     
@@ -164,7 +164,7 @@ def run_training_sb3(
         features_extractor_kwargs=dict(
             skill_embedding_dim=32,
             validity_embedding_dim=8,
-            features_dim=8,
+            features_dim=16,
         ),
         running_penalty=2.1,
         net_arch=[] # type: ignore
@@ -179,7 +179,7 @@ def run_training_sb3(
         batch_size=64,
         n_epochs=32,
         verbose=1,
-        ent_coef=0.3,
+        ent_coef=0.2,
         tensorboard_log=log_dir,
         policy_kwargs=policy_kwargs
     )
@@ -201,7 +201,7 @@ def run_training_sb3(
     
     # 학습된 모델 평가
     print("\n학습된 모델 평가")
-    evaluate_model(model, eval_env)
+    evaluate_model(model, eval_env, 1)
     
     return model
 
@@ -209,7 +209,7 @@ def run_training_sb3(
 def run_evaluation_sb3(plan_file: str, model_path="./logs/models/ppo_final.zip", target_time=50_000, max_steps=1000):
     """저장된 SB3 PPO 모델로 평가만 수행"""
     # 시뮬레이션 환경 설정
-    env, _, _ = setup_simulation_env(plan_file, target_time, max_steps)
+    env, _, _ = setup_simulation_env(plan_file, target_time, 25_000, max_steps)
     
     # 모델 로드
     if os.path.exists(model_path):

@@ -74,6 +74,7 @@ class SkillFeaturesExtractor(BaseFeaturesExtractor):
             skill_embedding_dim + validity_embedding_dim 
             + running_mask_embedding_dim + action_mask_embedding_dim + cooldown_zero_embedding_dim
             + (12 * 2)  # Continuous
+            + 4 # Clock
         )
 
         self.skill_embedding_net = nn.Sequential(
@@ -87,15 +88,17 @@ class SkillFeaturesExtractor(BaseFeaturesExtractor):
         self.buff_embedding_network = nn.Sequential(
             nn.Linear(27, features_dim),
             nn.GELU(),
+            nn.Linear(features_dim, features_dim),
         )
 
         self.clock_embedding_network = nn.Sequential(
             nn.Linear(4, features_dim),
             nn.GELU(),
+            nn.Linear(features_dim, features_dim),
         )
 
         self.transformer_layers = nn.ModuleList([
-            TransformerBlock(features_dim, num_heads=2, dropout=0.0, ff_dim=32) for _ in range(2)
+            TransformerBlock(features_dim, num_heads=4, dropout=0.0, ff_dim=32) for _ in range(1)
         ])
 
         # self.feature_to_latent = nn.Sequential(
@@ -113,6 +116,8 @@ class SkillFeaturesExtractor(BaseFeaturesExtractor):
         action_mask_embedding = self.action_mask_embedding(observation['action_mask'].to(torch.int64))
         cooldown_zero_embedding = self.cooldown_zero_embedding(observation['cooldown_zero'].to(torch.int64))
 
+        repeated_clock_embedding = observation['clock'].unsqueeze(1).repeat(1, self.total_skill_count, 1)
+
         sequential_features = torch.cat([
             skill_embedding,
             validity_embedding,
@@ -121,6 +126,7 @@ class SkillFeaturesExtractor(BaseFeaturesExtractor):
             cooldown_zero_embedding,
             observation['running'],
             observation['validity'],
+            repeated_clock_embedding,
         ], dim=-1)
 
         encoded_features = self.skill_embedding_net(sequential_features)
