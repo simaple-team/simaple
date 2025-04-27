@@ -10,25 +10,20 @@ import yaml
 
 from simaple.container.memoizer import PersistentStorageMemoizer
 from simaple.container.plan_metadata import PlanMetadata
-from simaple.container.simulation import get_damage_calculator, DamageCalculator
+from simaple.container.simulation import get_damage_calculator
 from simaple.container.usecase.builtin import get_engine
-from simaple.simulate.policy.base import Operation, OperationLog
+
 from simaple.simulate.policy.parser import parse_simaple_runtime
 from simaple.agent.feature.environment import SimapleEnv
 from simaple.agent.feature.player import SimaplePlayer
 from loguru import logger
 
-# Stable Baselines 3 임포트
-from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
-from stable_baselines3.common.callbacks import BaseCallback, CheckpointCallback
+from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.monitor import Monitor
-from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.policies import ActorCriticPolicy
-from stable_baselines3.common import utils
-from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
+
 from simaple.agent.model.skill_network import SkillFeaturesExtractor
-from simaple.agent.model.actor_critic import SkillValueNetwork
 
 class MaskableActorCriticPolicy(ActorCriticPolicy):
     """

@@ -1,24 +1,10 @@
-import os
-from typing import Any, Dict, List, Optional, Tuple, TypedDict, Callable, cast
-
-import numpy as np
+from typing import cast
 import torch
 import gymnasium as gym
-from gymnasium import spaces
 from torch import nn
 import torch
-import yaml
 
-from loguru import logger
 from simaple.agent.feature.encoder import ObservationAsTensor
-# Stable Baselines 3 임포트
-from stable_baselines3 import PPO
-from stable_baselines3.common.env_checker import check_env
-from stable_baselines3.common.callbacks import BaseCallback, CheckpointCallback
-from stable_baselines3.common.monitor import Monitor
-from stable_baselines3.common.vec_env import DummyVecEnv
-from stable_baselines3.common.policies import ActorCriticPolicy
-from stable_baselines3.common import utils
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
 
 
@@ -99,17 +85,13 @@ class SkillFeaturesExtractor(BaseFeaturesExtractor):
         
         self.total_skill_count = total_skill_count
         self.buff_embedding_network = nn.Sequential(
-            nn.Linear(27, 64),
-            nn.ReLU(),
-            nn.Linear(64, features_dim),
-            nn.ReLU(),
+            nn.Linear(27, features_dim),
+            nn.GELU(),
         )
-        
+
         self.clock_embedding_network = nn.Sequential(
-            nn.Linear(4, 64),
-            nn.ReLU(),
-            nn.Linear(64, features_dim),
-            nn.ReLU(),
+            nn.Linear(4, features_dim),
+            nn.GELU(),
         )
 
         self.transformer_layers = nn.ModuleList([

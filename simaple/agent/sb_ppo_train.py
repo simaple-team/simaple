@@ -13,7 +13,7 @@ from simaple.agent.model.skill_network import SkillFeaturesExtractor
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.monitor import Monitor
-
+from stable_baselines3.common.callbacks import EvalCallback
 
 def linear_schedule(initial_value: float, final_value: float = 0.0):
     """
@@ -104,9 +104,9 @@ def warmup_linear_schedule(initial_value: float, final_value: float = 0.0, warmu
 def run_training_sb3(
     plan_file: str,
     num_timesteps=100000,
-    learning_rate=0.0003,
-    final_learning_rate=0.0001,
-    lr_schedule_type="warmup_linear",
+    learning_rate=0.00003,
+    final_learning_rate=0.00003,
+    lr_schedule_type="linear",
     warmup_fraction=0.05,
     gamma=0.99,
     target_time=50_000,
@@ -127,11 +127,23 @@ def run_training_sb3(
     # 환경을 Monitor로 감싸기
     monitor_env = Monitor(env, log_dir)
     eval_env = Monitor(eval_env, os.path.join(log_dir, "eval"))
-    
+
+    # 평가 콜백 설정 (학습 중 주기적으로 평가 및 로깅)
+    eval_callback = EvalCallback(
+        eval_env,
+        best_model_save_path=os.path.join(models_dir, "best_model"),
+        log_path=log_dir,
+        eval_freq=5000,
+        deterministic=True,
+        render=False,
+        verbose=1,
+    )
+
     # 콜백 설정
     callbacks = [
         CheckpointCallback(save_freq=10000, save_path=models_dir, name_prefix="ppo_model"),
-        SaveOperationsCallback(eval_env, plan_metadata_dict, log_dir)
+        SaveOperationsCallback(eval_env, plan_metadata_dict, log_dir),
+        eval_callback
     ]
     
     # 학습률 스케줄러 설정
@@ -167,7 +179,7 @@ def run_training_sb3(
         batch_size=64,
         n_epochs=32,
         verbose=1,
-        ent_coef=0.2,
+        ent_coef=0.3,
         tensorboard_log=log_dir,
         policy_kwargs=policy_kwargs
     )

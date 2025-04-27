@@ -96,7 +96,7 @@ class SimapleEnv(gym.Env):
         # Dict 형태의 관찰 상태 반환
         return state_tensor, {
             'step': self.current_step,
-            'time': self.current_time,
+            'time': (self.target_time - self.current_time),
             'valid_actions': valid_actions
         }
 
@@ -141,7 +141,7 @@ class SimapleEnv(gym.Env):
         # 정보 업데이트
         info = {
             'step': self.current_step,
-            'time': self.current_time,
+            'time': (self.target_time - self.current_time),
             'action': action_name,
             'valid_actions': new_valid_actions,
             'total_reward': self.total_reward
