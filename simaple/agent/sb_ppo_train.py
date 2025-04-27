@@ -109,7 +109,7 @@ def run_training_sb3(
     lr_schedule_type="linear",
     warmup_fraction=0.05,
     gamma=0.99,
-    target_time=25_000,
+    target_time=300_000,
     max_steps=200,
     log_dir="./logs"
 ):
@@ -164,10 +164,10 @@ def run_training_sb3(
         features_extractor_kwargs=dict(
             skill_embedding_dim=32,
             validity_embedding_dim=8,
-            features_dim=16,
+            features_dim=4,
         ),
         running_penalty=2.1,
-        net_arch=[] # type: ignore
+        net_arch=[64, 64] # type: ignore
     )
 
     model = PPO(

@@ -98,15 +98,14 @@ class SkillFeaturesExtractor(BaseFeaturesExtractor):
         )
 
         self.transformer_layers = nn.ModuleList([
-            TransformerBlock(features_dim, num_heads=4, dropout=0.0, ff_dim=32) for _ in range(1)
+            TransformerBlock(features_dim, num_heads=4, dropout=0.0, ff_dim=32) for _ in range(0)
         ])
 
-        # self.feature_to_latent = nn.Sequential(
-        #     nn.Linear(features_dim, features_dim // 2),
-        #     nn.ReLU(),
-        #     nn.Linear(features_dim // 2, final_features_dim)
-        # )
-        self.feature_to_latent = nn.Linear(features_dim, final_features_dim)
+        self.feature_to_latent = nn.Sequential(
+            nn.Linear(features_dim, features_dim // 2),
+            nn.ReLU(),
+            nn.Linear(features_dim // 2, final_features_dim)
+        )
 
     def forward(self, observation: ObservationAsTensor) -> torch.Tensor:
         batch_size = observation['skill_ids'].size(0)
@@ -148,7 +147,6 @@ class SkillFeaturesExtractor(BaseFeaturesExtractor):
             buff_expanded,
             clock_expanded
         ], dim=1)
-        
 
         for layer in self.transformer_layers:
             skill_features_with_globals = layer(skill_features_with_globals)
