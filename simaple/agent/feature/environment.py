@@ -112,7 +112,7 @@ class SimapleEnv(gym.Env):
         if action_name not in valid_actions:
             logger.warning(f"선택된 액션이 유효하지 않음: {action_name}")
             # 페널티 부여
-            reward = -0.1
+            reward = -5.0
             next_state_info = self.player.get_state_info()
         else:
             # 액션 실행

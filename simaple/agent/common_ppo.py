@@ -50,7 +50,6 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
             kwargs["features_extractor_class"] = SkillFeaturesExtractor
         
         self.running_penalty = running_penalty
-        self.skill_count = action_space.n
         self.embed_dim = embed_dim
 
         super().__init__(
@@ -59,19 +58,6 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
             lr_schedule,
             *args,
             **kwargs
-        )
-
-    def _build_mlp_extractor(self) -> None:
-        """
-        MLP 추출기 빌드
-        """
-        self.mlp_extractor = SkillValueNetwork(
-            self.features_dim,
-            skill_count=self.skill_count,
-            embed_dim=self.embed_dim,
-            num_transformer_layers=1,
-            num_heads=4,
-            dropout=0.0,
         )
 
     def _predict(self, observation: Dict[str, torch.Tensor], deterministic: bool = False) -> torch.Tensor:
@@ -130,7 +116,11 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
         if 'action_mask' in obs:
             action_mask = obs['action_mask']
             action_logits = action_logits + (action_mask - 1) * 1e9
-        
+
+        if "running_mask" in obs:
+            running_mask = obs["running_mask"]
+            action_logits = action_logits - running_mask * self.running_penalty
+
         # 확률 분포 생성
         dist = self.action_dist.proba_distribution(action_logits)
         
@@ -163,7 +153,11 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
         if 'action_mask' in obs:
             action_mask = obs['action_mask']
             action_logits = action_logits + (action_mask - 1) * 1e9
-        
+
+        if "running_mask" in obs:
+            running_mask = obs["running_mask"]
+            action_logits = action_logits - running_mask * self.running_penalty
+
         # 확률 분포 생성
         dist = self.action_dist.proba_distribution(action_logits)
         
@@ -198,7 +192,7 @@ class SaveOperationsCallback(BaseCallback):
                 action, _ = self.model.predict(obs, deterministic=True)
                 obs, reward, done, _, info = self.eval_env.step(action)
                 episode_reward += float(reward)
-            
+
             if episode_reward > self.best_reward:
                 self.best_reward = episode_reward
                 # 오퍼레이션 저장

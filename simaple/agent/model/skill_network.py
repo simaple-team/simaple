@@ -65,6 +65,7 @@ class SkillFeaturesExtractor(BaseFeaturesExtractor):
                  skill_embedding_dim: int = 32,
                  validity_embedding_dim: int = 8,
                  features_dim: int = 16,
+                 final_features_dim: int = 1,
                  running_mask_embedding_dim: int = 8,
                  action_mask_embedding_dim: int = 8,
                  cooldown_zero_embedding_dim: int = 8):
@@ -72,7 +73,7 @@ class SkillFeaturesExtractor(BaseFeaturesExtractor):
         # For type checking
         observation_space_as_typed = cast(ObservationAsTensor, observation_space)
         total_skill_count = observation_space_as_typed['skill_ids'].shape[0]
-        total_features_dim = features_dim
+        total_features_dim = (final_features_dim) * (total_skill_count + 2)
 
         super().__init__(observation_space, total_features_dim)
 
@@ -111,7 +112,16 @@ class SkillFeaturesExtractor(BaseFeaturesExtractor):
             nn.ReLU(),
         )
 
+        self.transformer_layers = nn.ModuleList([
+            TransformerBlock(features_dim, num_heads=2, dropout=0.0, ff_dim=32) for _ in range(2)
+        ])
 
+        # self.feature_to_latent = nn.Sequential(
+        #     nn.Linear(features_dim, features_dim // 2),
+        #     nn.ReLU(),
+        #     nn.Linear(features_dim // 2, final_features_dim)
+        # )
+        self.feature_to_latent = nn.Linear(features_dim, final_features_dim)
 
     def forward(self, observation: ObservationAsTensor) -> torch.Tensor:
         batch_size = observation['skill_ids'].size(0)
@@ -151,4 +161,9 @@ class SkillFeaturesExtractor(BaseFeaturesExtractor):
             clock_expanded
         ], dim=1)
         
-        return skill_features_with_globals
+
+        for layer in self.transformer_layers:
+            skill_features_with_globals = layer(skill_features_with_globals)
+
+        latent_features = self.feature_to_latent(skill_features_with_globals)
+        return latent_features.reshape(batch_size, -1)
