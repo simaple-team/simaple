@@ -7,7 +7,8 @@ from simaple.agent.common_ppo import (
     MaskableActorCriticPolicy,
     SaveOperationsCallback,
     setup_simulation_env,
-    evaluate_model
+    evaluate_model,
+    EnvironmentReduceCallback
 )
 from simaple.agent.model.skill_network import SkillFeaturesExtractor
 from stable_baselines3 import PPO
@@ -104,12 +105,12 @@ def warmup_linear_schedule(initial_value: float, final_value: float = 0.0, warmu
 def run_training_sb3(
     plan_file: str,
     num_timesteps=100000,
-    learning_rate=0.00003,
-    final_learning_rate=0.00003,
-    lr_schedule_type="linear",
+    learning_rate=0.0003,
+    final_learning_rate=0.00001,
+    lr_schedule_type="warmup_linear",
     warmup_fraction=0.05,
     gamma=0.99,
-    target_time=300_000,
+    target_time=25_000,
     max_steps=200,
     log_dir="./logs"
 ):
@@ -143,7 +144,11 @@ def run_training_sb3(
     callbacks = [
         CheckpointCallback(save_freq=10000, save_path=models_dir, name_prefix="ppo_model"),
         SaveOperationsCallback(monitor_eval_env, plan_metadata_dict, log_dir),
-        eval_callback
+        eval_callback,
+        # EnvironmentReduceCallback(env, [
+        #     (15000, 300_000),
+        #     (20000, 25_000),
+        # ])
     ]
     
     # 학습률 스케줄러 설정
@@ -167,7 +172,7 @@ def run_training_sb3(
             features_dim=4,
         ),
         running_penalty=2.1,
-        net_arch=[64, 64] # type: ignore
+        net_arch=[] # type: ignore
     )
 
     model = PPO(

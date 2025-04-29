@@ -51,7 +51,7 @@ class SkillFeaturesExtractor(BaseFeaturesExtractor):
                  skill_embedding_dim: int = 32,
                  validity_embedding_dim: int = 8,
                  features_dim: int = 16,
-                 final_features_dim: int = 1,
+                 final_features_dim: int = 2,
                  running_mask_embedding_dim: int = 8,
                  action_mask_embedding_dim: int = 8,
                  cooldown_zero_embedding_dim: int = 8):
@@ -98,7 +98,7 @@ class SkillFeaturesExtractor(BaseFeaturesExtractor):
         )
 
         self.transformer_layers = nn.ModuleList([
-            TransformerBlock(features_dim, num_heads=4, dropout=0.0, ff_dim=32) for _ in range(0)
+            TransformerBlock(features_dim, num_heads=4, dropout=0.0, ff_dim=32) for _ in range(1)
         ])
 
         self.feature_to_latent = nn.Sequential(

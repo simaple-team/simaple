@@ -293,7 +293,7 @@ patch:
 data:
   id: 2121054-0
   name: 파이어 오라
-  delay: 0
+  delay: 120
   cooldown_duration: 0
 
   periodic_interval: 3_000
@@ -610,7 +610,7 @@ patch:
 data:
   id: 2121054-vi
   name: 파이어 오라 VI
-  delay: 0
+  delay: 120
   cooldown_duration: 0
 
   periodic_interval: 3_000

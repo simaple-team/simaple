@@ -78,14 +78,17 @@ class SimapleEnv(gym.Env):
             "clock": float_as_space(sampled_state["clock"]),
         })
         logger.info(self.observation_space)
-    
+
+    def set_target_time(self, target_time: int):
+        self.target_time = target_time
+
     def reset(self, seed=None):
         """환경 초기화"""
         self.player.engine.rollback(0)
         self.current_step = 0
         self.current_time = 0
         self.total_reward = 0
-        
+
         # 초기 상태 정보 및 유효한 액션
         state_info = self.player.get_state_info()
         valid_actions = self.player.get_valid_actions()
@@ -128,6 +131,9 @@ class SimapleEnv(gym.Env):
                 # 종료 여부 확인
                 done = self.current_time >= self.target_time or self.current_step >= self.max_steps
         
+        action_cost = -0.01
+        reward += action_cost
+
         # 상태 업데이트
         self.current_step += 1
         self.total_reward += reward

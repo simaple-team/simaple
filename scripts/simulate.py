@@ -91,15 +91,28 @@ def run(plan_file: str):
 
     report = list(engine.simulation_entries())
 
-    feature = MaximumDealingIntervalFeature(30000)
     damage_share.show()
-    damage, _start, _end = feature.find_maximum_dealing_interval(
-        report, damage_calculator
-    )
 
-    print(
-        f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {environment.jobtype}"
+    # Total damage and total elapsed time
+    total_damage = sum(
+        [
+            damage_calculator.get_damage(damage_log)
+            for entry in report
+            for damage_log in entry.damage_logs
+        ]
     )
+    total_elapsed_time = report[-1].clock - report[0].clock
+    print(f"Total damage: {total_damage:,} ( {total_damage / 1_000_000_000_000:.3f}조 )")
+    print(f"Total elapsed time: {total_elapsed_time:.0f}s")
+
+    # feature = MaximumDealingIntervalFeature(30000)
+    # damage, _start, _end = feature.find_maximum_dealing_interval(
+    #     report, damage_calculator
+    # )
+
+    # print(
+    #     f"{engine.get_current_viewer()('clock')} | {damage:,} ( {damage / 1_000_000_000_000:.3f}조 ) / 30s - {environment.jobtype}"
+    # )
 
 
 def run_from_cli():

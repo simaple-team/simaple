@@ -141,6 +141,31 @@ class MaskableActorCriticPolicy(ActorCriticPolicy):
         return values, log_probs, entropy
 
 
+class EnvironmentReduceCallback(BaseCallback):
+    """환경 초기화 콜백"""
+    
+    def __init__(self, env: SimapleEnv, 
+                 step_schedule: list[tuple[int, int]],
+                 verbose=0):
+        super(EnvironmentReduceCallback, self).__init__(verbose)
+        self.env = env
+        self.step_schedule = sorted(step_schedule, key=lambda x: x[0])
+
+    def get_computed_target_time(self, step: int) -> int:
+        for threshold, target_time in self.step_schedule:
+            if step <= threshold:
+                return target_time
+        return self.step_schedule[-1][1]
+
+    def _on_step(self) -> bool:
+        """환경 초기화"""
+        target_time = self.get_computed_target_time(self.num_timesteps)
+        if self.env.target_time != target_time: 
+            logger.info(f"환경 초기화: {target_time}")
+            self.env.set_target_time(int(target_time))
+        return True
+
+
 class SaveOperationsCallback(BaseCallback):
     """최고 모델의 오퍼레이션을 저장하는 콜백"""
     
@@ -173,6 +198,9 @@ class SaveOperationsCallback(BaseCallback):
                 logger.info(f"새로운 최고 보상: {self.best_reward:.2f}. 오퍼레이션 저장됨.")
             else:
                 logger.info(f"현재 보상: {episode_reward:.2f}, 최고 보상: {self.best_reward:.2f}")
+
+            self.get_internal_env().export_as_file(os.path.join(self.save_path, "current_operations.txt"), self.plan_metadata_dict)
+
         return True
 
 
@@ -197,14 +225,24 @@ def setup_simulation_env(
     )
     
     player = SimaplePlayer(get_engine(environment), environment.jobtype)
-    train_env = SimapleEnv(player, get_damage_calculator(environment), target_time, max_steps)
+    train_env = SimapleEnv(
+        player, 
+        get_damage_calculator(environment), 
+        target_time, 
+        max_steps=max_steps
+    )
     
     # 환경 검증
     check_env(train_env)
     
     # 평가용 환경 생성
     eval_player = SimaplePlayer(get_engine(environment), environment.jobtype)
-    eval_env = SimapleEnv(eval_player, get_damage_calculator(environment), eval_target_time, max_steps)
+    eval_env = SimapleEnv(
+        eval_player, 
+        get_damage_calculator(environment), 
+        eval_target_time, 
+        max_steps=max_steps,
+    )
 
     return train_env, plan_metadata_dict, eval_env
 
